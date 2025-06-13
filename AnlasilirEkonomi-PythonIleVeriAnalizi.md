@@ -311,7 +311,7 @@ plt.show()
 
 Excelde z-score çevirimini standartlaştırma formülü ile yapıyoruz. **Standartlastırma exceli var.**
 
-### 2.4.1 z-score örnekleri
+### z-score örnekleri
 
 ```Python
 import numpy as np
