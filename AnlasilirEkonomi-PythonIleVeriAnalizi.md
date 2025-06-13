@@ -171,7 +171,7 @@ veri.groupby("Cinsiyet").mean()
 
 Örnekleme yapılarak popülasyon için çıkarım yapılan istatistik türüdür. 
 
-## Merkezi Limit Teoremi
+## 2.1 Merkezi Limit Teoremi
 
 Uygun bir şekilde seçilen örneklem yapısı tüm popülasyona benzeyecektir.
 
@@ -251,8 +251,29 @@ plt.show()
 
 ## 2.2 Standart Hata Nedir?
 
+![image](https://github.com/user-attachments/assets/314cba26-d8a9-4952-9003-6faf2a24c5b6)
 
 
+Çekilen örneklemlerin sayısı arttıkça örneklem kümesinin ortalaması popülasyon ortalamasına yakınsar. Örneklem çektikçe örneklem kümesinin ortalaması ile popülasyon ortalamasına yaklaşır. Bir popülasyondan seçilebilecek olası örneklemlerin ortalamalarınının standart sapmasına standart hata denir.
+
+Düşük standart sapma ve düşük standart hata isteniyor.
+
+[Dağılım oluşturma sitesi](https://onlinestatbook.com/stat_sim/sampling_dist/index.html)
+
+## 2.3 Seaborn Kütüphanesi
+
+```Python
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.random.normal(35,1,10000) #ortalama, standart sapma, adet
+
+sns.histplot(x)
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/670b0509-10aa-487e-8b26-123348c6817b)
 
 
 
