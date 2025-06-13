@@ -384,8 +384,11 @@ plt.show()
 
 ## 2.5 z-table
 
+z-score tablosu;
 
+![image](https://github.com/user-attachments/assets/8c8405b8-9b66-4d9e-8729-6dc7b7191581)
 
+[Z skor online hesaplayıcı](https://homepage.divms.uiowa.edu/~mbognar/applets/normal.html)
 
 
 
