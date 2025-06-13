@@ -81,10 +81,52 @@ Pearson çarpıklık ölçüsü, Xort ile mod değerinin farkının standart sap
 Pearson çarpıklık ölçüsü pozitif ise sağa çarpık negatif ise sola çarpıktır.
 Excelde çarpıklık fonksiyonuyla bulunabilir.
 
+### Basıklık (Kurtosis)
 
+![image](https://github.com/user-attachments/assets/195b8d56-421f-4e3a-8a83-27200049ab55)
 
+![image](https://github.com/user-attachments/assets/03d808fd-7c0a-47d4-b55d-dde946db9605)
+
+![image](https://github.com/user-attachments/assets/17e25227-7fba-4404-8b79-f907ae49a329)
+
+Kurtosis değerinin sınırı 3 olarak kabul edilir.
+
+[Normal dağılım hesaplamak için site](https://www.desmos.com/calculator/jxzs8fz9qr?lang=tr)
+
+Excelde basıklık fonksiyonuyla kullanılır. 3'ten büyükse sivri bir dağılım küçükse basık bir dağılım var deriz.
+
+## 1.3 Ek Bilgi
+
+Python kullanım fonksiyonları;
+
+- ortalama: veri.mean()
+- medyan: veri.median()
+- %25 quantile: veri.quantile(q=0.25)
+- Medyan %50 quantile: veri.quantile(q=0.50)
+- %75 quantile: veri.quantile(q=0.75)
+- standart sapma: veri.std()
+- varyans: veri.var()
+- basıklık: veri.kurtosis()
+- çarpıklık: veri.skew()
+
+Eğer dağılımını bilmediğin bir Tarih sıralı verinin histogramıyla karşılaşırsan, her satırın bir öncekiyle olan farkını bulabilirsin. Farklarını gösterince normal dağılıma benzer bir dağılıma ulaşırsın.
+
+## 1.4 Örnekler
+
+```Python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+veri = pd.read_excel("/kaggle/input/satis-deneme/Satis.xlsx")
+
+veri.describe()
+```
+
+![image](https://github.com/user-attachments/assets/676c0d2d-0f8d-46d3-8067-77f3afec3887)
 
 
 ### 
 ## 
 # 
+```Python
+```
