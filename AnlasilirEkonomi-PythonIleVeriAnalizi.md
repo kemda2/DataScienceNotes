@@ -124,9 +124,117 @@ veri.describe()
 
 ![image](https://github.com/user-attachments/assets/676c0d2d-0f8d-46d3-8067-77f3afec3887)
 
+```Python
+veri["Cinsiyet"].describe()
+```
+
+![image](https://github.com/user-attachments/assets/40cd920b-bf17-42a6-b576-a012c92bc277)
+
+```Python
+veri["Cinsiyet"].value_counts()
+```
+
+![image](https://github.com/user-attachments/assets/9b1a3b39-9dfd-42af-b696-a8cc613e2a7e)
+
+```Python
+veri["Cinsiyet"].value_counts(normalize = True) *100
+```
+
+![image](https://github.com/user-attachments/assets/881d4e1c-2fb7-4d75-8e9d-81dfe8033a11)
+
+```Python
+plt.hist(veri["Yaş"], bins = 50)
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/54c931db-65c2-46b8-923f-83e727fe2e3f)
+
+```Python
+veri["Yaş"].skew()
+```
+
+![image](https://github.com/user-attachments/assets/49ff66fc-b74c-4680-93b1-6df7a4d97b32)
+
+```Python
+veri["Yaş"].kurtosis()
+```
+
+![image](https://github.com/user-attachments/assets/214696d0-5e87-42bc-aac2-569a24be6e81)
+
+```Python
+veri.groupby("Cinsiyet").mean()
+```
+
+![image](https://github.com/user-attachments/assets/1167e8f9-9fca-42f7-9e09-7e6ad4776e02)
+
+# 2 Çıkarımsal İstatistik
+
+Örnekleme yapılarak popülasyon için çıkarım yapılan istatistik türüdür. 
+
+## Merkezi Limit Teoremi
+
+Uygun bir şekilde seçilen örneklem yapısı tüm popülasyona benzeyecektir.
+
+Eğer bir popülasyonda anket almak gibi defalarca veri almaya devam edersek örneklemin ortalamasının dağılımı bizi normal dağılıma götürür.
+
+Popülasyondan 30 adet örneklemin ortalamasını alırsak normal dağılıma ulaşırız.
+
+### Örnekler
+
+```Python
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Uniform bir dağılım elde etmek
+yas = np.random.uniform(low = 18, high = 72, size = 40000)
+yas
+```
+
+![image](https://github.com/user-attachments/assets/f67d5298-5ef3-40b8-a391-4c8debd69049)
+
+```Python
+yas.mean()
+```
+
+![image](https://github.com/user-attachments/assets/67dc9f30-0ee4-4252-89f0-e9e79f88710c)
+
+```Python
+plt.hist(yas)
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/0008b5db-f202-4d3a-ac9a-9bc5bc8ef5ea)
+
+```Python
+import random
+orneklem = random.choices(yas,k=5)
+orneklem
+```
+
+![image](https://github.com/user-attachments/assets/f4a63e32-def3-4f8e-a13c-3892e6876e08)
+
+```Python
+import random
+orneklem = [np.mean(random.choices(yas, k=1)) for _ in range(1000)] # 1000 kez örneklem çekiyor. 
+plt.hist(orneklem)
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/b714f0ef-dc3b-4ca5-a174-3695a7a5084c)
+
+```Python
+import random
+orneklem = [np.mean(random.choices(yas, k=2)) for _ in range(1000)] # 1000 kez örneklem çekiyor. 
+plt.hist(orneklem)
+plt.show()
+```
+
+
+
+```Python
+
+```
 
 ### 
 ## 
 # 
-```Python
-```
