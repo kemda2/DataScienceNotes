@@ -390,6 +390,238 @@ z-score tablosu;
 
 [Z skor online hesaplayıcı](https://homepage.divms.uiowa.edu/~mbognar/applets/normal.html)
 
+### z-table örnekler
+
+Ortalaması 5,3 ve sapması 1 olan normal dağılımda P(x<4.5) olasılğını arıyoruz.
+
+z-score = (4,5-5,3)/1 = -0,8
+
+4,5 değerinin ortalama değeri olan 5,3 ile arasındaki yüzde %28,81 olarak bulunur. %50 den bu değer çıkarılırsa %21,19 olarak olasılığı bulunur.
+
+![image](https://github.com/user-attachments/assets/a0ddbaaa-a38d-4f96-9b95-603dcac53ddd)
+
+```Python
+from scipy.stats import norm
+
+olasılık = norm(loc=5.3, scale=1).cdf(4.5)
+olasılık
+```
+![image](https://github.com/user-attachments/assets/4c899f15-aff5-4f2d-914c-7c146f182f83)
+
+4.5 ile 6.5 arasında olma olasılığı;
+
+```Python
+from scipy.stats import norm
+
+olasılık = norm(loc=5.3, scale=1).cdf(6.5) - norm(loc=5.3, scale=1).cdf(4.5)
+olasılık
+```
+
+![image](https://github.com/user-attachments/assets/1b1746ee-c1a2-4f01-8500-b8281c2e34e3)
+
+⚠⚠⚠ cdf hep sol tarafta kalan alanın olasılığını verir.
+
+-----
+
+Bir kamu bankası personel alımı için ilana çıkmış ve iş için başvuran çok sayıda adaya, ekonomi, maliye, finans, işletme, hukuk alanlarında hazırlanan bir test uygulamıştır. Adayların uygulanan testte aldıkları puanların ortalaması 60 ve standart sapması 12 hesaplanmıştır. Adayların aldıkları puanların normal dağıldığı bilindiğine göre;
+
+1. Tesadüfen seçilecek bir adayın 60-70 arasında puan almış olma olasılığı nedir?
+
+Ortalama 60 olduğuna göre;
+* 60'ın z-score değeri (60-60) / 12 ile 0 bulunur.
+* 70'ın z-score değeri (70-60) / 12 ile 0,83 bulunur.
+
+0,83 z-score için tablodaki değer % 29,67 bulunmuştur.
+
+![image](https://github.com/user-attachments/assets/20751e10-d28f-432f-b8ad-a98a6e137bef)
+
+```Python
+from scipy.stats import norm
+
+olasılık = norm(loc=60, scale=12).cdf(70) - 0.5
+olasılık
+```
+
+2. Tesadüfen seçilecek bir adayın 45-60 arasında puan almış olması olasılığı nedir?
+
+* 60'ın z-score değeri (60-60) / 12 ile 0 bulunur.
+* 70'ın z-score değeri (45-60) / 12 ile -1,25 bulunur.
+
+1,25 z-score  için tablodan % 39,44 olarak bulunmuştur.
+
+![image](https://github.com/user-attachments/assets/fa54735f-d9e7-422a-b78d-bca5938b2280)
+
+```Python
+from scipy.stats import norm
+
+olasılık = 0.5 - norm(loc=60, scale=12).cdf(45)
+olasılık
+```
+
+![image](https://github.com/user-attachments/assets/2e7a0765-242a-4a8b-b44c-18ba49dc5456)
+
+3. Tesadüfen seçilecek bir adayın 45'den az puan alma olasılığı nedir?
+
+![image](https://github.com/user-attachments/assets/1c17c060-b32e-4735-ab1f-eb846faf09b6)
+
+```Python
+from scipy.stats import norm
+
+olasılık = norm(loc=60, scale=12).cdf(45)
+olasılık
+```
+
+![image](https://github.com/user-attachments/assets/64389478-f1d5-42a5-a58b-ca2bcc9b3285)
+
+-----
+
+İmal edilen ampullerin ortalama ömrü 800 saat, standart sapması 40 saattir. Ampulün ömrünün normal dağılım gösterdiği bilindiğine göre bir ampulün;
+
+⚠⚠⚠ DİKKAT bu tarz sorularda birimler aynı olmalı.
+
+1. 778 saatten daha fazla bir ömre sahip olması olasılığını bulunuz?
+
+778'in z-score değeri (778-800) / 40 ile -0,55 bulunur. Tablodan 0,55 z-score değerinin yüzdesi %21 olarak bulunur. %21 + %50 = %71 bulunur.
+
+![image](https://github.com/user-attachments/assets/433a446a-62b8-45ef-83e7-70f0501c1b07)
+
+```Python
+from scipy.stats import norm
+
+ust = norm(loc=800, scale=40).cdf(1600) # 1600 1, 800 0
+alt = norm(loc=800, scale=40).cdf(778)
+olasılık = ust - alt
+olasılık
+```
+
+![image](https://github.com/user-attachments/assets/947a19b4-a645-4708-aa27-4d300d421aed)
+
+2. 834 saatten daha az bir ömre sahip olması olasılığını bulunuz?
+
+834'ün z-score değeri (834-800) / 40 ile 0,85 bulunur. Tablodan 0,85 z-score değerinin yüzdesi %30 olarak bulunur. %30 + %50 = %80 bulunur.
+
+![image](https://github.com/user-attachments/assets/bf3972d2-abf8-4618-b857-4086cfdaf2c1)
+
+```Python
+from scipy.stats import norm
+
+olasılık = norm(loc=800, scale=40).cdf(834)
+olasılık
+```
+
+![image](https://github.com/user-attachments/assets/49b5d493-4ee0-47f2-add7-34f72fd204c3)
+
+3. 778 saat ile 834 saat arasında bir ömre sahip olması olasılığını bulunuz?
+
+778'in z-score değeri (778-800) / 40 ile -0,55 bulunur.
+834'ın z-score değeri (45-60) / 12 ile 0,85 bulunur.
+
+Tabloda karşılıkları toplanarak %21 + %30 = %51 bulunur.
+
+```Python
+from scipy.stats import norm
+
+ust = norm(loc=800, scale=40).cdf(834) # 1600 1, 800 0
+alt = norm(loc=800, scale=40).cdf(778)
+olasılık = ust - alt
+olasılık
+```
+
+![image](https://github.com/user-attachments/assets/d8649d08-bc0b-4d86-b450-e483e4933f19)
+
+-----
+
+Bir imalathanede üretilen millerin çaplarının ortalaması 3.0005 inç ve standart sapmalarının ise 0.001 inç olan normal dağılıma uyduğu tespit edilmiştir. Üretilen miller eğer 3.000 +- 0,002 inç aralığının dışında iseler bu miller hatalı Üretim kabul edilmektedir. Buna göre toplam Üretimdeki hatalı ürün miktarım bulunuz?
+
+Ortalama = 3.0005
+
+Sapma = 0.001
+
+z-score1 = (3,002 - 3,0005) / 0.001 = 0.0015 / 0.001 = 1,5
+
+z-score2 = (2,998 - 3,0005) / 0.001 = -0.0025 / 0.001 = -2,5
+
+Doğru ürün oranı %49,38 + %43,32 = % 92,7
+
+Hatalı ürün oranı 100 - 92,7 = %7,3
+
+```Python
+from scipy.stats import norm
+
+ust = norm(loc=3.0005, scale=0.001).cdf(3.002)
+alt = norm(loc=3.0005, scale=0.001).cdf(2.998)
+
+olasılık = ust - alt
+olasılık
+```
+
+![image](https://github.com/user-attachments/assets/f0f1e120-7c53-40fd-ab79-5bc09959a437)
+
+%92,69 ürünler doğru olduğuna göre hatalı ürün yüzdesi %7,31'dir.
+
+## 2.6 Serbestlik Derecesi
+
+toplamları 15 olan 3 sayı seçin denildiğinde 2 sayı seçebiliriz ve 3. sayı otamatik olarak belli olur. Benzer şekilde ortalama alırken popülasyonu da örneklemi de n'e bölerken, standart sapma alırken popülasyonu n'e bölerken örneklemi n-1'e bölmemizin sebebi bütün değerlerden ortalamayı çıkarıptoplarsak sonuç hep sıfırdır. (Bu aynı zamanda neden karelerini alıp karekökünü aldığımızın da cevabıdır.) Bu yüzden son rakamı hep tahmin edebiliriz. Bunun için örneklem standart sapmasında n-1 ile formulü oluştururuz.
+
+## 2.7 Student'in t Dağılımı
+
+Örneklem sayısı 30'un altında kaldığında t dağılım yapısı kullanılır. T dağılımında serbestlik derecesi yükseldikçe normal dağılıma yakınsar.
+
+```Python
+import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+np.random.seed(0)
+
+veri1t=stats.t.rvs(loc=0,df=1,size=15)
+veri2t=stats.t.rvs(loc=0,df=2,size=15)
+veri5t=stats.t.rvs(loc=0,df=5,size=15)
+veri20t=stats.t.rvs(loc=0,df=20,size=15)
+
+sns.distplot(veri1t,color="red",hist=False)
+sns.distplot(veri2t,color="blue",hist=False)
+sns.distplot(veri5t,color="green",hist=False)
+sns.distplot(veri20t,color="black",hist=False)
+plt.xlim(-5,5)
+plt.show()
+
+# sns.displot(veri1t,color="green",kde=True)
+# plt.xlim(-5,5)
+# plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/4b360e0d-dc2f-488d-a44e-c1ded269cb66)
+
+## 2.8 Tahmin Teorisi
+
+- Nokta tahmin: sonucu direk bir sayıyla tahmin etmek.
+- Aralık tahmini: sonucu bir aralık olarak tahmin etmek. İki türü vardır:
+  - Güven aralığı
+  - Bayes tipi güvenilir aralık
+ 
+Aralık Tahmini
+- Tek popülasyon
+  - Ortalama tahmini için;
+    - Popülasyon standart sapması biliniyorsa Z tablosu
+    - Popülasyon standart sapması bilinmiyorsa ve n>30 ise Z tablosu
+    - Popülasyon standart sapması bilinmiyorsa ve n<=30 ise T tablosu
+  - Standart Sapma tahmini için;
+    - Ki Kare Tablosu
+  - Oran tahmini için;
+    - Z tablo
+- İki popülasyon
+  - Ortalama farkı tahmini için;
+    - Popülasyon standart sapması biliniyorsa Z tablosu
+    - Popülasyon standart sapması bilinmiyorsa varyans testleri
+
+## 2.9 Normal Dağılım Ortalama Güven Aralığı
+
+![image](https://github.com/user-attachments/assets/a5311594-8e57-4d1f-bc4b-76890b4a8ad7)
+
+
+
 
 
 ```Python
