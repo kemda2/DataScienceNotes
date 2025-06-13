@@ -275,6 +275,118 @@ plt.show()
 
 ![image](https://github.com/user-attachments/assets/670b0509-10aa-487e-8b26-123348c6817b)
 
+```Python
+sns.displot(x, kde = True, color = "r")
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/6307e164-bb97-4319-8bd7-6bec30ba5fe0)
+
+```Python
+sns.kdeplot(x, color = "g")
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/89ab0aaa-4de0-4720-b479-655f935a6b15)
+
+```Python
+sns.boxplot(x=x, color="g")
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/f60185e0-c82d-45fb-9532-bc83c12d9012)
+
+```Python
+sns.lineplot(x=np.arange(len(x)), y=x)
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/8824edcd-3118-44d4-a13d-f7422e8cfbc3)
+
+## 2.4 z-score
+
+![image](https://github.com/user-attachments/assets/2dda3d2c-758d-4d65-bc14-60b15c6e91a3)
+
+![image](https://github.com/user-attachments/assets/1ebdb74b-aeda-404c-b6ae-4b7f1c37d25a)
+
+Excelde z-score çevirimini standartlaştırma formülü ile yapıyoruz. **Standartlastırma exceli var.**
+
+### 2.4.1 z-score örnekleri
+
+```Python
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+np.random.seed(35)
+
+veri = np.random.normal(35,2,40000)
+veri
+```
+
+![image](https://github.com/user-attachments/assets/ba57ca99-1f4c-4b71-a62c-28e07949cab3)
+
+```Python
+sns.displot(veri, kde = True, height=8, aspect=1.5)
+plt.title("Veri Dağılım Grafiği", fontsize=15, loc="right", c="red")
+plt.xlabel("Veriler", fontsize=15, c="red")
+plt.ylabel("Frekanslar", fontsize=15, c="red")
+plt.axvline(x=np.mean(veri), linestyle = "--", linewidth = 2.5, label = "Ortalama", c="red")
+plt.axvline(x=np.mean(veri) - np.std(veri), linestyle = "--", linewidth = 2.5, label = "Ortalama - 1 Standart Sapma", c="orange")
+plt.axvline(x=np.mean(veri) + np.std(veri), linestyle = "--", linewidth = 2.5, label = "Ortalama + 1 Standart Sapma", c="orange")
+plt.legend() # axvline çizgi için gerekli
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/d73cfe64-59ba-44e3-8702-4a0436176b4c)
+
+```Python
+veriz = (veri - np.mean(veri)) / np.std(veri)
+
+sns.displot(veriz, kde = True, height=8, aspect=1.5)
+plt.title("Veri Dağılım Grafiği", fontsize=15, loc="right", c="red")
+plt.xlabel("Veriler", fontsize=15, c="red")
+plt.ylabel("Frekanslar", fontsize=15, c="red")
+plt.xlim(-3,3)
+plt.axvline(x=np.mean(veriz), linestyle = "--", linewidth = 2.5, label = "Ortalama", c="red")
+plt.axvline(x=np.mean(veriz) - np.std(veriz), linestyle = "--", linewidth = 2.5, label = "1 Standart Sapma", c="black")
+plt.axvline(x=np.mean(veriz) + np.std(veriz), linestyle = "--", linewidth = 2.5, c="black")
+plt.axvline(x=np.mean(veriz) - 2*np.std(veriz), linestyle = "--", linewidth = 2.5, label = "2 Standart Sapma", c="blue")
+plt.axvline(x=np.mean(veriz) + 2*np.std(veriz), linestyle = "--", linewidth = 2.5, c="blue")
+plt.legend() # axvline çizgi için gerekli
+plt.tight_layout()
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/573eb2d7-f94c-49aa-a613-11fa254989fa)
+
+```Python
+from scipy import stats
+
+veriz = stats.zscore(veri) # Standartlaştırma veya normalizasyon
+
+sns.displot(veriz, kde = True, height=8, aspect=1.5)
+plt.title("Veri Dağılım Grafiği", fontsize=15, loc="right", c="red")
+plt.xlabel("Veriler", fontsize=15, c="red")
+plt.ylabel("Frekanslar", fontsize=15, c="red")
+plt.xlim(-3,3)
+plt.axvline(x=np.mean(veriz), linestyle = "--", linewidth = 2.5, label = "Ortalama", c="red")
+plt.axvline(x=np.mean(veriz) - np.std(veriz), linestyle = "--", linewidth = 2.5, label = "1 Standart Sapma", c="black")
+plt.axvline(x=np.mean(veriz) + np.std(veriz), linestyle = "--", linewidth = 2.5, c="black")
+plt.axvline(x=np.mean(veriz) - 2*np.std(veriz), linestyle = "--", linewidth = 2.5, label = "2 Standart Sapma", c="blue")
+plt.axvline(x=np.mean(veriz) + 2*np.std(veriz), linestyle = "--", linewidth = 2.5, c="blue")
+plt.legend() # axvline çizgi için gerekli
+plt.tight_layout()
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/edce1494-bd97-47b2-959c-940fec71cb01)
+
+## 2.5 z-table
+
+
+
+
 
 
 ```Python
