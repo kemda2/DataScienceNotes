@@ -240,6 +240,20 @@ plt.show()
 
 ![image](https://github.com/user-attachments/assets/116b0f09-f5d2-480b-82c2-c1cfccbb6733)
 
+```Python
+import random
+orneklem = [np.mean(random.choices(yas, k=30)) for _ in range(1000)] # 1000 kez örneklem çekiyor. 
+plt.hist(orneklem)
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/dbb90183-0124-417f-90c9-ca9bb5c1fc30)
+
+## 2.2 Standart Hata Nedir?
+
+
+
+
 
 
 ```Python
