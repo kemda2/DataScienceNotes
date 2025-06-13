@@ -229,6 +229,17 @@ plt.hist(orneklem)
 plt.show()
 ```
 
+![image](https://github.com/user-attachments/assets/363c9e5e-e7ab-4fbe-960a-bc849e2a3941)
+
+```Python
+import random
+orneklem = [np.mean(random.choices(yas, k=10)) for _ in range(1000)] # 1000 kez örneklem çekiyor. 
+plt.hist(orneklem)
+plt.show()
+```
+
+![image](https://github.com/user-attachments/assets/116b0f09-f5d2-480b-82c2-c1cfccbb6733)
+
 
 
 ```Python
