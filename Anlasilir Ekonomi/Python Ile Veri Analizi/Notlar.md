@@ -1117,6 +1117,102 @@ $$ z = \frac{-4}{3} $$
 $$ z = -1,333 $$
 $$ P(x) = \\% 9.2 $$
 
+```Python
+from scipy import stats
+
+olasılık=stats.norm.pdf(x=11, loc=15, scale=3)
+olasılık
+
+# 0.05467002489199788
+```
+Bu değer olasılığı vermez. Normal dağılım sürekli olduğundan 11 değerinin F(x) karşılığını verir. Bu yüzden sürekli yapılarda pdf fonksiyonunun cdf fonksiyonuyla integralini almamız gerekir.
+
+```Python
+from scipy import stats
+
+olasılık=stats.norm.cdf(x=11, loc=15, scale=3)
+olasılık
+
+# 0.09121121972586788
+```
+
+⚠️⚠️⚠️F(x) kümülatif (birikimli) fonksiyon **(CDF)**, f(x) **(PMF)** gösteriminde kullanılır.
+
+
+```Python
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+x=[0,1,2,3]
+p=[1/8,3/8,3/8,1/8]
+
+plt.bar(x,p)
+plt.show()
+```
+
+![image](./images/dagilimhistogrami.png)
+
+Bu dağılımı kümülatif göstermek için;
+
+```Python
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+x=[0,1,2,3]
+p=[1/8,3/8,3/8,1/8]
+
+cum=[]
+
+for i in range(0,len(p)):
+    if len(cum) == 0:
+        cum.append(p[0])
+    else:
+        cum.append(p[i]+cum[i-1])
+
+cum
+
+# [0.125, 0.5, 0.875, 1.0]
+```
+
+```Python
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+x=[0,1,2,3]
+p=[1/8,3/8,3/8,1/8]
+
+cum=[]
+
+for i in range(0,len(p)):
+    if len(cum) == 0:
+        cum.append(p[0])
+    else:
+        cum.append(p[i]+cum[i-1])
+
+plt.plot(x,cum,drawstyle="steps")
+plt.show()
+```
+![image](./images/kumulatifgrafik.png)
+
+```Python
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+x=np.random.randn(10000)
+pdf=stats.norm.pdf(x)
+sns.lineplot(x=x,y=pdf)
+plt.show()
+```
+![image](./images/cdfpdfgrafik.png)
+
+## 3.3 Bernoulli dağılımı
+
+
 
 
 
@@ -1131,5 +1227,5 @@ $$ P(x) = \\% 9.2 $$
 ## 3.3
 # 4
 
-https://www.youtube.com/watch?v=sebHs7Tqkw0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=42&ab_channel=Anla%C5%9F%C4%B1l%C4%B1rEkonomi
-6:12
+https://www.youtube.com/watch?v=N9MCfKdjKik&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=42&ab_channel=Anla%C5%9F%C4%B1l%C4%B1rEkonomi
+0:00
