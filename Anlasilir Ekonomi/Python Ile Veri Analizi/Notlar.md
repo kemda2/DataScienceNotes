@@ -1115,7 +1115,7 @@ Bir hastanede belirli bir hastalıkla ilgili bulunan hastaların tansiyonların�
 $$ z = \frac{11 - 15}{\sqrt{9}} $$
 $$ z = \frac{-4}{3} $$
 $$ z = -1,333 $$
-$$ P(x) = \%1 $$
+$$ P(x) = \% 9.2 $$
 
 
 
