@@ -83,10 +83,13 @@ Excelde çarpıklık fonksiyonuyla bulunabilir.
 
 ### Basıklık (Kurtosis)
 
+![kurtosis](./images/kurtosis.png)
 ![image](https://github.com/user-attachments/assets/195b8d56-421f-4e3a-8a83-27200049ab55)
 
+![positivenegativekurtosis](./images/positivenegativekurtosis.png)
 ![image](https://github.com/user-attachments/assets/03d808fd-7c0a-47d4-b55d-dde946db9605)
 
+![leptokurticplatykurtic](./images/leptokurticplatykurtic.png)
 ![image](https://github.com/user-attachments/assets/17e25227-7fba-4404-8b79-f907ae49a329)
 
 Kurtosis değerinin sınırı 3 olarak kabul edilir.
