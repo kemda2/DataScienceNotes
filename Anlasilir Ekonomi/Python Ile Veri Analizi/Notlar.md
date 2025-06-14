@@ -166,7 +166,7 @@ veri["Yaş"].kurtosis()
 veri.groupby("Cinsiyet").mean()
 ```
 
-![image](https://github.com/user-attachments/assets/1167e8f9-9fca-42f7-9e09-7e6ad4776e02)
+![image](./images/cinsmean.png)
 
 # 2 Çıkarımsal İstatistik
 
