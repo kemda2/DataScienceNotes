@@ -1092,7 +1092,7 @@ Kesikli değişkenlerde olasılık dağılımı
 
 ![image](./images/dagilimhistogrami.png)
 
-Yukardaki yapıya olasılık kütle fonksiyonu (PMF) diyoruz. Kesikli Olasılık dağılımı gösteren bir örnektir.
+Yukardaki yapıya olasılık kütle fonksiyonu **(PMF)** diyoruz. Kesikli Olasılık dağılımı gösteren bir örnektir.
 
 ![image](./images/hist30.png)
 
