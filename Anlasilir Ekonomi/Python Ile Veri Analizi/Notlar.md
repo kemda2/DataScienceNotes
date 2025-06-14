@@ -314,7 +314,7 @@ plt.show()
 
 Excelde z-score çevirimini standartlaştırma formülü ile yapıyoruz. **Standartlastırma exceli var.**
 
-### z-score örnekleri
+### Örnekler
 
 ```Python
 import numpy as np
@@ -373,7 +373,7 @@ z-score tablosu;
 
 [Z skor online hesaplayıcı](https://homepage.divms.uiowa.edu/~mbognar/applets/normal.html)
 
-### z-table örnekler
+### Örnekler
 
 Ortalaması 5,3 ve sapması 1 olan normal dağılımda P(x<4.5) olasılğını arıyoruz.
 
@@ -634,7 +634,7 @@ z-score değerleri;
 - %95 için 1,96
 - %90 için 1,65
 
-### Normal Dağılım Ortalama Güven Aralığı Python Uygulama 
+### Örnekler 
 
 Rassal olarak seçilen fabrikadaki 100 ürünün (n 30 dan büyükse z tablosu kullanılır) ortalama ağırlık 1040 gr, standart sapması ise 25 gr'dır. Fabrikadaki tüm ürünlerin (popülasyon) ortalama ağırlıkları %95 güven aralığında kaçtır?
 
@@ -922,6 +922,18 @@ E(X) = 0 + 3/8 + 6/8 + 3/8 = 1,5
 ---
 
 Sürekli veri için;
+
+$$F(x) = 3/7 \cdot X^2$$
+$$E(x) = \int_1^2 x \cdot \frac37  \cdot  x^2 \,dx$$
+$$E(x) = \frac37  \cdot \int_1^2 x \cdot  x^2 \,dx$$
+$$E(x) = \frac37  \cdot \int_1^2 x^3 \,dx$$
+$$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$$
+$$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$$
+$$E(x) = \frac37  \cdot (\frac{2^4}4 - \frac{1^4}4)$$
+$$E(x) = \frac37  \cdot \frac{15}4$$
+$$E(x) = \frac{45}{28}$$
+
+### Örnekler
 
 ```Python
 
