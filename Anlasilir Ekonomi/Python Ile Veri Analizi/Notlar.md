@@ -1205,7 +1205,9 @@ import numpy as np
 
 x=np.random.randn(10000)
 pdf=stats.norm.pdf(x)
+cdf=stats.norm.cdf(x)
 sns.lineplot(x=x,y=pdf)
+sns.lineplot(x=x,y=cdf)
 plt.show()
 ```
 ![image](./images/cdfpdfgrafik.png)
