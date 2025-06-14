@@ -999,6 +999,104 @@ Bilet Fiyatı: 5 TL
 
 Sürekli bu oyunu oynarsak kazancımız -1,76 TL'dir.
 
+## 2.14 Büyük Sayılar Yasası
+
+![image](./images/para1.png)
+![image](./images/para2.png)
+![image](./images/para3.png)
+
+100 atış yazılsa beklenen değer 50 gelecektir.
+
+$$E(x) = n \cdot P(x)$$
+$$E(x) = 100 \cdot 0.5$$
+$$E(x) = 50$$
+
+Yukarıdaki gibi atış yapmaya devam edersek beklenen değerlerin ortalaması %50'ye (beklenen değere yani olasılığa) yaklaşacaktır.
+
+```Python
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+liste=[]
+
+for i in np.arange(0,5):
+  denemesayisi=i+1
+  yt=np.random.randint(0,2,size=denemesayisi)
+  yolasilik=np.mean(yt)
+  liste.append(denemesayisi)
+  print("Deneme Sayısı: {}--------Ortalama: {}".format(denemesayisi,yolasilik))
+
+Deneme Sayısı: 1--------Ortalama: 0.0
+Deneme Sayısı: 2--------Ortalama: 0.5
+Deneme Sayısı: 3--------Ortalama: 0.6666666666666666
+Deneme Sayısı: 4--------Ortalama: 0.5
+Deneme Sayısı: 5--------Ortalama: 0.8
+```
+
+```Python
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+liste=[]
+
+for i in np.arange(0,101):
+    denemesayisi=i+1
+    yt=np.random.randint(0,2,size=denemesayisi)
+    yolasilik=np.mean(yt)
+    liste.append(yolasilik)
+
+sns.lineplot(data=liste,linewidth=2)
+plt.xlabel("Deneme Sayısı")
+plt.ylabel("Ortalama")
+plt.ylim(0,1)
+plt.axhline(0.5,linestyle="--",linewidth=1.5,color="red")
+plt.show()
+```
+
+![image](./images/deneme5.png)
+
+```Python
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+liste=[]
+
+for i in np.arange(0,101):
+    denemesayisi=i**3
+    yt=np.random.randint(0,2,size=denemesayisi)
+    yolasilik=np.mean(yt)
+    liste.append(yolasilik)
+
+sns.lineplot(data=liste,linewidth=2)
+plt.xlabel("Deneme Sayısı")
+plt.ylabel("Ortalama")
+plt.ylim(0,1)
+plt.axhline(0.5,linestyle="--",linewidth=1.5,color="red")
+plt.show()
+```
+
+![image](./images/deneme100.png)
+
+## 2.15 Olasılık Dağılımı Nedir?
+
+Kesikli değişkenlerde olasılık dağılımı
+
+![image](./images/olasdag.png)
+
+![image](./images/dagilimhistogrami.png)
+
+## 2.16 Olasılık kütle ve yoğunluk fonksiyonları
+
+
+
+
+
+
+
+
 
 
 
@@ -1009,5 +1107,5 @@ Sürekli bu oyunu oynarsak kazancımız -1,76 TL'dir.
 ![image](./images/.png)
 
 ### 
-## 
-# 
+## 2.17
+# 3
