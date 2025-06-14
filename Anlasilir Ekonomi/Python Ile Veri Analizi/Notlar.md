@@ -76,7 +76,6 @@ Negatif yönde çarpık olursa ortalama < medyan < mode şeklinde bir dağılım
 Pozitif yönde çarpık olursa mode < medyan < ortalama şeklinde bir dağılım olur.
 
 ![pearsoncarpiklik](./images/pearsoncarpiklik.png)
-![image](https://github.com/user-attachments/assets/4cb0c5cc-5fe5-4025-af0b-35f3572890e0)
 
 Pearson çarpıklık ölçüsü, Xort ile mod değerinin farkının standart sapmaya bölümü veya Xort ile medyan değerinin farkının 3 katının standart sapmaya bölümü ile bulunur.
 Pearson çarpıklık ölçüsü pozitif ise sağa çarpık negatif ise sola çarpıktır.
