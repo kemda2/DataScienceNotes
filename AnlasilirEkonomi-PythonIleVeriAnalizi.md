@@ -620,8 +620,60 @@ Aralık Tahmini
 
 ![image](https://github.com/user-attachments/assets/a5311594-8e57-4d1f-bc4b-76890b4a8ad7)
 
+Genelde kullanılan 3 çeşit güven aralığı vardır;
+- %99
+- %95
+- %90
 
+⚠⚠⚠ En çok kullanılan %95'dir.
 
+z-score değerleri;
+
+- %99 için 2,58
+- %95 için 1,96
+- %90 için 1,65
+
+$$
+P\left( \bar{X} - Z_{score} \cdot \frac{\theta}{\sqrt{n}} < \mu < \bar{X} + Z_{score} \cdot \frac{\theta}{\sqrt{n}} \right) = 1 - \alpha
+$$
+
+Açıklamalar:
+
+* $\bar{X}$: Örneklem ortalaması
+* $\mu$: Popülasyon ortalaması (bilinmeyen parametre)
+* $\theta$: Anakütle standart sapması
+* $n$: Örneklem büyüklüğü
+* $\alpha$: Anlamlılık düzeyi (örneğin $\alpha = 0.05$)
+* $Z_{score}$: Standart normal dağılımdan yüzdelik değeri (örneğin %95 güven düzeyi için 1.96)
+
+Rassal olarak seçilen fabrikadaki 100 ürünün (n 30 dan büyükse z tablosu kullanılır) ortalama ağırlık 1040 gr, standart sapması ise 25 gr'dır. Fabrikadaki tüm ürünlerin (popülasyon) ortalama ağırlıkları %95 güven aralığında kaçtır?
+
+$1040 - 1.96 \cdot \frac{25}{\sqrt{100}} < \mu < 1040 + 1.96 \cdot \frac{25}{\sqrt{100}}$
+
+$1040 - 1.96 \cdot 2.5 < \mu < 1040 + 1.96 \cdot 2.5$
+
+$1040 - 4.9 < \mu < 1040 + 4.9$
+
+$1035.1 < \mu < 1044.9$
+
+### Normal Dağılım Ortalama Güven Aralığı Python Uygulama 
+
+Bir fabrikada rassal olarak seçilen 100 ürünün ortalama ağırlığı 1040 gr, standart sapması 25gr olarak bulunmuştur. Bu fabrikada uretilen tum ürünlerin ortalama ağırlıkları %95 güven aralığında kaçtır?
+
+```Python
+import numpy as np
+from scipy import stats
+
+n=100
+xort=1040
+xstandart=25
+guven=0.95
+
+aralık=stats.norm.interval(confidence=guven, loc=xort, scale=xstandart/np.sqrt(n))
+aralık
+```
+
+![image](https://github.com/user-attachments/assets/35838e88-0117-43ac-ba89-2ef3a82eaba3)
 
 
 ```Python
