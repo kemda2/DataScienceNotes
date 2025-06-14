@@ -388,8 +388,9 @@ from scipy.stats import norm
 
 olasılık = norm(loc=5.3, scale=1).cdf(4.5)
 olasılık
+
+# 0.21185539858339675
 ```
-![image](https://github.com/user-attachments/assets/4c899f15-aff5-4f2d-914c-7c146f182f83)
 
 4.5 ile 6.5 arasında olma olasılığı;
 
@@ -398,9 +399,9 @@ from scipy.stats import norm
 
 olasılık = norm(loc=5.3, scale=1).cdf(6.5) - norm(loc=5.3, scale=1).cdf(4.5)
 olasılık
-```
 
-![image](https://github.com/user-attachments/assets/1b1746ee-c1a2-4f01-8500-b8281c2e34e3)
+# 0.673074931194895
+```
 
 ⚠⚠⚠ cdf hep sol tarafta kalan alanın olasılığını verir.
 
@@ -416,13 +417,15 @@ Ortalama 60 olduğuna göre;
 
 0,83 z-score için tablodaki değer % 29,67 bulunmuştur.
 
-![image](https://github.com/user-attachments/assets/20751e10-d28f-432f-b8ad-a98a6e137bef)
+![image](./images/kamu1.png)
 
 ```Python
 from scipy.stats import norm
 
 olasılık = norm(loc=60, scale=12).cdf(70) - 0.5
 olasılık
+
+# 0.29767161903635686
 ```
 
 2. Tesadüfen seçilecek bir adayın 45-60 arasında puan almış olması olasılığı nedir?
@@ -432,29 +435,29 @@ olasılık
 
 1,25 z-score  için tablodan % 39,44 olarak bulunmuştur.
 
-![image](https://github.com/user-attachments/assets/fa54735f-d9e7-422a-b78d-bca5938b2280)
+![image](./images/kamu2.png)
 
 ```Python
 from scipy.stats import norm
 
 olasılık = 0.5 - norm(loc=60, scale=12).cdf(45)
 olasılık
-```
 
-![image](https://github.com/user-attachments/assets/2e7a0765-242a-4a8b-b44c-18ba49dc5456)
+# 0.39435022633314465
+```
 
 3. Tesadüfen seçilecek bir adayın 45'den az puan alma olasılığı nedir?
 
-![image](https://github.com/user-attachments/assets/1c17c060-b32e-4735-ab1f-eb846faf09b6)
+![image](./images/kamu3.png)
 
 ```Python
 from scipy.stats import norm
 
 olasılık = norm(loc=60, scale=12).cdf(45)
 olasılık
-```
 
-![image](https://github.com/user-attachments/assets/64389478-f1d5-42a5-a58b-ca2bcc9b3285)
+# 0.10564977366685535
+```
 
 -----
 
@@ -466,7 +469,7 @@ olasılık
 
 778'in z-score değeri (778-800) / 40 ile -0,55 bulunur. Tablodan 0,55 z-score değerinin yüzdesi %21 olarak bulunur. %21 + %50 = %71 bulunur.
 
-![image](https://github.com/user-attachments/assets/433a446a-62b8-45ef-83e7-70f0501c1b07)
+![image](./images/ampul1.png)
 
 ```Python
 from scipy.stats import norm
@@ -475,24 +478,24 @@ ust = norm(loc=800, scale=40).cdf(1600) # 1600 1, 800 0
 alt = norm(loc=800, scale=40).cdf(778)
 olasılık = ust - alt
 olasılık
-```
 
-![image](https://github.com/user-attachments/assets/947a19b4-a645-4708-aa27-4d300d421aed)
+# 0.7088403132116536
+```
 
 2. 834 saatten daha az bir ömre sahip olması olasılığını bulunuz?
 
 834'ün z-score değeri (834-800) / 40 ile 0,85 bulunur. Tablodan 0,85 z-score değerinin yüzdesi %30 olarak bulunur. %30 + %50 = %80 bulunur.
 
-![image](https://github.com/user-attachments/assets/bf3972d2-abf8-4618-b857-4086cfdaf2c1)
+![image](./images/ampul2.png)
 
 ```Python
 from scipy.stats import norm
 
 olasılık = norm(loc=800, scale=40).cdf(834)
 olasılık
-```
 
-![image](https://github.com/user-attachments/assets/49b5d493-4ee0-47f2-add7-34f72fd204c3)
+# 0.8023374568773076
+```
 
 3. 778 saat ile 834 saat arasında bir ömre sahip olması olasılığını bulunuz?
 
@@ -501,6 +504,8 @@ olasılık
 
 Tabloda karşılıkları toplanarak %21 + %30 = %51 bulunur.
 
+![image](./images/ampul3.png)
+
 ```Python
 from scipy.stats import norm
 
@@ -508,9 +513,9 @@ ust = norm(loc=800, scale=40).cdf(834) # 1600 1, 800 0
 alt = norm(loc=800, scale=40).cdf(778)
 olasılık = ust - alt
 olasılık
-```
 
-![image](https://github.com/user-attachments/assets/d8649d08-bc0b-4d86-b450-e483e4933f19)
+# 0.5111777700889613
+```
 
 -----
 
@@ -528,6 +533,8 @@ Doğru ürün oranı %49,38 + %43,32 = % 92,7
 
 Hatalı ürün oranı 100 - 92,7 = %7,3
 
+![image](./images/uretim.png)
+
 ```Python
 from scipy.stats import norm
 
@@ -536,9 +543,9 @@ alt = norm(loc=3.0005, scale=0.001).cdf(2.998)
 
 olasılık = ust - alt
 olasılık
-```
 
-![image](https://github.com/user-attachments/assets/f0f1e120-7c53-40fd-ab79-5bc09959a437)
+# 0.9269831334053148
+```
 
 %92,69 ürünler doğru olduğuna göre hatalı ürün yüzdesi %7,31'dir.
 
@@ -570,12 +577,12 @@ sns.distplot(veri20t,color="black",hist=False)
 plt.xlim(-5,5)
 plt.show()
 
-# sns.displot(veri1t,color="green",kde=True)
-# plt.xlim(-5,5)
-# plt.show()
+sns.displot(veri1t,color="green",kde=True)
+plt.xlim(-5,5)
+plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/4b360e0d-dc2f-488d-a44e-c1ded269cb66)
+![image](./images/tdagilim.png)
 
 ## 2.8 Tahmin Teorisi
 
@@ -601,7 +608,18 @@ Aralık Tahmini
 
 ## 2.9 Normal Dağılım Ortalama Güven Aralığı
 
-![image](https://github.com/user-attachments/assets/a5311594-8e57-4d1f-bc4b-76890b4a8ad7)
+$$
+P\left( \bar{X} - Z_{score} \cdot \frac{\theta}{\sqrt{n}} < \mu < \bar{X} + Z_{score} \cdot \frac{\theta}{\sqrt{n}} \right) = 1 - \alpha
+$$
+
+Açıklamalar:
+
+* $\bar{X}$: Örneklem ortalaması
+* $\mu$: Popülasyon ortalaması (bilinmeyen parametre)
+* $\theta$: Anakütle standart sapması
+* $n$: Örneklem büyüklüğü
+* $\alpha$: Anlamlılık düzeyi (örneğin $\alpha = 0.05$)
+* $Z_{score}$: Standart normal dağılımdan yüzdelik değeri (örneğin %95 güven düzeyi için 1.96)
 
 Genelde kullanılan 3 çeşit güven aralığı vardır;
 - %99
@@ -616,18 +634,7 @@ z-score değerleri;
 - %95 için 1,96
 - %90 için 1,65
 
-$$
-P\left( \bar{X} - Z_{score} \cdot \frac{\theta}{\sqrt{n}} < \mu < \bar{X} + Z_{score} \cdot \frac{\theta}{\sqrt{n}} \right) = 1 - \alpha
-$$
-
-Açıklamalar:
-
-* $\bar{X}$: Örneklem ortalaması
-* $\mu$: Popülasyon ortalaması (bilinmeyen parametre)
-* $\theta$: Anakütle standart sapması
-* $n$: Örneklem büyüklüğü
-* $\alpha$: Anlamlılık düzeyi (örneğin $\alpha = 0.05$)
-* $Z_{score}$: Standart normal dağılımdan yüzdelik değeri (örneğin %95 güven düzeyi için 1.96)
+### Normal Dağılım Ortalama Güven Aralığı Python Uygulama 
 
 Rassal olarak seçilen fabrikadaki 100 ürünün (n 30 dan büyükse z tablosu kullanılır) ortalama ağırlık 1040 gr, standart sapması ise 25 gr'dır. Fabrikadaki tüm ürünlerin (popülasyon) ortalama ağırlıkları %95 güven aralığında kaçtır?
 
@@ -638,10 +645,6 @@ $1040 - 1.96 \cdot 2.5 < \mu < 1040 + 1.96 \cdot 2.5$
 $1040 - 4.9 < \mu < 1040 + 4.9$
 
 $1035.1 < \mu < 1044.9$
-
-### Normal Dağılım Ortalama Güven Aralığı Python Uygulama 
-
-Bir fabrikada rassal olarak seçilen 100 ürünün ortalama ağırlığı 1040 gr, standart sapması 25gr olarak bulunmuştur. Bu fabrikada uretilen tum ürünlerin ortalama ağırlıkları %95 güven aralığında kaçtır?
 
 ```Python
 import numpy as np
@@ -654,14 +657,277 @@ guven=0.95
 
 aralık=stats.norm.interval(confidence=guven, loc=xort, scale=xstandart/np.sqrt(n))
 aralık
+
+# (1035.1000900386498, 1044.8999099613502)
 ```
 
-![image](https://github.com/user-attachments/assets/35838e88-0117-43ac-ba89-2ef3a82eaba3)
+---
 
+85 ev sahibi ile yapılan bir ankette, ev bakımına aylık olarak ortalama 67$ (standart sapma = 14$) harcadıkları tespit edilmiştir. Tum ev sahiplerinin aylık ev bakım harcamaları için %95 güven aralığını oluşturunuz.
+
+```Python
+import numpy as np
+from scipy import stats
+
+n=85
+xort=67
+xstandart=14
+guven=0.95
+
+aralik = stats.norm.interval(confidence=guven, loc=xort, scale=xstandart/np.sqrt(n))
+aralik
+
+# (64.02376880867953, 69.97623119132047)
+```
+
+---
+
+Piyasaya yeni sürülen bir ürünün uzunluğunun standart sapması 2cm'dir. Rastgele seçilen 16 ürünün ortalama uzunluğu 4 cm olarak hesaplanmıştır.%95 güvenle anakütle ortalamasını tahmin ediniz?
+
+```Python
+import numpy as np
+from scipy import stats
+
+n=16
+xort=4
+xstandart=2 
+guven=0.95
+
+# n 30'dan küçük ve normalde T tablosu kullanmak gerekir. 
+# Ama popülasyonun sapması (fabrika çıkışlı bütün ürünlerin) bilindiği için Z tablosu kullanılır.
+
+aralik = stats.norm.interval(loc=xort, confidence=guven, scale=xstandart/np.sqrt(n))
+aralik
+
+# (3.020018007729973, 4.979981992270027)
+```
+---
+
+Bir fabrikada üretilen margarin paketlerinin ağırlığının varyansı 100 gr'dır. Rastgele seçilen 25 paketin ağırlığının ortalaması 120 gr'dır. Ana kütle ortalamasını %90 ve %99 guvenle tahmin ediniz.
+
+```Python
+import numpy as np
+from scipy import stats
+
+n=25
+xort=120
+xstandart=np.sqrt(100) # varyans standart sapmanın karesidir. 
+guven1=0.90
+guven2=0.99
+
+# n 30'dan küçük ve normalde T tablosu kullanmak gerekir. 
+# Ama popülasyonun varyansı (fabrika çıkışlı bütün ürünlerin) bilindiği için Z tablosu kullanılır.
+
+aralik1 = stats.norm.interval(loc=xort, confidence=guven1, scale=xstandart/np.sqrt(n))
+print(aralik1)
+aralik2 = stats.norm.interval(loc=xort, confidence=guven2, scale=xstandart/np.sqrt(n))
+print(aralik2)
+
+# (116.71029274609705, 123.28970725390295)
+# (114.8483413929022, 125.1516586070978)
+```
+---
+
+Bir firmanın ürettiği ürünlerin 100 tanesi rassal örneklem olarak seçilmiştir. Ortalama ağırlık 385gr ve standart sapması 12gr olarak hesaplanmıştır. Üretilen ürünlerin ortalama ağırlığını %95 güven düzeyi ile belirleyiniz?
+
+```Python
+import numpy as np
+from scipy import stats
+
+n=100
+xort=385
+xstandart=12 
+guven=0.95
+
+aralik = stats.norm.interval(loc=xort, confidence=guven, scale=xstandart/np.sqrt(n))
+aralik
+
+# (382.64804321855195, 387.35195678144805)
+```
+
+## 2.10 T Dağılım Ortalama Güven Aralığı
+
+![image](./images/ttablosu.png)
+
+n = 30 
+
+ortalama =140 
+
+standart sapma = 25 
+
+güven aralığı = %95 
+
+serbestlik derecesi = 29 ve standart sapması bilinmiyor. (n 30 a eşit veya daha küçükse ve popülasyon sapması bilinmiyorsa t tablosu kullanılır.)
+
+Öncelikle serbestlik derecesiyle güven aralığının 1 değerinden çıkarılmasıyla elde edilen 0,05 alfa değeri kullanılarak tablodan t değeri 2,045 bulunur.
+
+Xort - t * (sapma / sqrt(n)) < M < Xort + t * (sapma / sqrt(n)) 
+
+140 - 2,045 * (25 / sqrt(30)) < M < 140 + 2,045 * (25 / sqrt(30))
+
+130,666 < M < 149,334
+
+```Python
+import numpy as np
+from scipy import stats
+
+n=30
+xort=140
+xssapma=25
+guven=0.95
+sderecesi = n-1
+
+aralik = stats.t.interval(confidence=guven, loc=xort, df=sderecesi, scale=xssapma/np.sqrt(n))
+aralik
+
+# (130.6648465810475, 149.3351534189525)
+```
+---
+
+Rassal olarak seçilen 20 bilgisayarın tamirat maliyetleri kaydedilmiştir. Ortalama 216,53$ örneklemin standart sapması 15.86$. Tüm bilgisayarların ortalama tamirat maliyetlerini %95 güven ile tahmin ediniz diyor
+
+```Python
+import numpy as np
+from scipy import stats
+
+n=20
+xort=216.53
+xssapma=15.86
+guven=0.95
+sderecesi = n-1
+
+aralik = stats.t.interval(confidence=guven, loc=xort, df=sderecesi, scale=xssapma/np.sqrt(n))
+aralik
+
+(209.10729151418025, 223.95270848581976)
+```
+
+## 2.11 İki Popülasyon Ortalama Farkı Güven Aralığı
+
+Bir fabrikada A ve B ürünlerinin ağırlıklarının varyansları sırasıyla 164gr ve 216gr. A ürününden 28 adet, B ürününden 30 adet örneklem alındığında A ürününün ortalama ağırlığı 32gr B ürününün ortalama ağırlığı 26gr çıkmıştır. Bu verilere göre A ve B ürünlerinin ortalama ağırhklarının farkını %95 güven aralığında bulunuz?
+
+```Python
+# Ürünlerin (popülasyonun) varyansı verilmiş. Z tablosu kullanılacak.
+import numpy as np
+from scipy import stats
+
+na=28
+nb=30
+
+vara=164
+varb=216
+
+orta=32
+ortb=26
+
+guven=0.95
+
+aralik=stats.norm.interval(confidence=guven,loc=(orta-ortb),scale=np.sqrt((vara/na)+(varb/nb)))
+aralik
+
+# (-1.0822649344425628, 13.082264934442563)
+```
+---
+
+İngilizce ve Fransızca eğitim alan iki öğrenci grubundan sırasıyla 30 ve 40 öğrenci seçiliyor. İngilizce grubu öğrencilerinin dil öğrenme süre ortalaması 182 gün, Fransızca grubu için 176 gün olarak hesaplanıyor. Aynı gruplar için varyanslar sırasıyla 196 gün ve 144 gün olarak hesaplanıyor. Bu iki farklı dil kursuna giden ekiplerin öğrenme süreleri arasındaki fark %95 güven ile kaç gündür?
+
+```Python
+# Öğrenci sayısı 30'a eşit veya 30'dan büyük olduğu için z tablosu kullanılacak.
+import numpy as np
+from scipy import stats
+
+na=30
+nb=40
+
+vara=196
+varb=144
+
+orta=182
+ortb=176
+
+guven=0.95
+
+aralik=stats.norm.interval(confidence=guven,loc=(orta-ortb),scale=np.sqrt((vara/na)+(varb/nb)))
+aralik
+
+# (-0.2391331702703008, 12.2391331702703)
+```
+---
+
+2 farklı hasta grubu arasında 8 ve 10 bireylerden oluşan örneklemler çekilmiştir. Bu iki grubun bir virüse karşı reaksiyon verme zaman ortalamaları sırasıyla 3 ve 2.7'dir. Birleştirilmiş varyans 0.05 olarak hesaplandığına göre bu iki farklı hasta grubunun virüse karşı verdiği reaksiyon zaman farklarını %95 güven ile bulunuz?
+
+Birleştirilmiş varyans formülü;
+
+![image](./images/birvar.png)
+
+```Python
+import numpy as np
+from scipy import stats
+
+na=8
+nb=10
+
+birvar = 0.05
+
+orta=3
+ortb=2.7
+
+guven=0.95
+
+n = (1/na) + (1/nb)
+
+aralik=stats.t.interval(confidence=guven, df=(na+nb-2), loc=(orta-ortb), scale=np.sqrt(n*birvar))
+aralik
+
+# (0.07515008811712867, 0.524849911882871)
+```
+
+## 2.12 Rassal Değişken Nedir?
+
+Olasılık: bir şeyin olmasının veya olmamasının matematiksel değeridir.
+
+Olasılık dağılımı: bütün potansiyel sonuçları x eksenine yerleştirip olasılık değerlerini y eksenine yerleştiren bir dağılımdır.
+
+Bir zarın olasılık dağılımı (uniform);
+
+![image](./images/zaruniform.png)
+
+## 2.13 Beklenen Değer Nedir?
+
+Kesikli veri için;
+
+![image](./images/kesikliformul.png)
+
+Sürekli veri için
+
+![image](./images/surekliformul.png)
+
+hilesiz bir zar bir defa havaya atıldığını varsayalım. Zar üzerinden gelecek değerin beklenen değeri kaçtır?
+
+![image](./images/xcarpipx.png)
+
+E(X) = 1/6 + 2/6 + 3/6 + 4/6 + 5/6 + 6/6 = 21/6 = 3,5
+
+---
+
+Hilesiz bir madeni parayı üç kez havaya attığımızı varsayıyoruz. Bu üç atışta yazı gelme olasılığının beklenen değerini hesaplayalım.
+
+
+![image](./images/yaziolasilik.png)
+
+![image](./images/yazideger.png)
+
+E(X) = 0 + 3/8 + 6/8 + 3/8 = 1,5
+
+---
+
+Sürekli veri için;
 
 ```Python
 
 ```
+
+![image](./images/.png)
 
 ### 
 ## 
