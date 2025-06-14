@@ -70,7 +70,6 @@ Excelde tüm popülasyonun varyansıysa var P, örneklem ise var S kullanılır.
 ### Çarpıklık (Skewness)
 
 ![carpiklik](./images/carpiklik.png)
-![image](https://github.com/user-attachments/assets/b7926963-b61a-4320-b0de-6b3e4f57b962)
 
 Ortadaki veri simetrik dağılım. Simetrik dağılımda uç değer olmaz. Ortalama, Medyan ve Mode çok yakın veya eşit.
 Negatif yönde çarpık olursa ortalama < medyan < mode şeklinde bir dağılım olur.
