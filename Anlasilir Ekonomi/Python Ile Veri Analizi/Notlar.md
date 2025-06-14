@@ -908,6 +908,19 @@ hilesiz bir zar bir defa havaya atıldığını varsayalım. Zar üzerinden gele
 
 E(X) = 1/6 + 2/6 + 3/6 + 4/6 + 5/6 + 6/6 = 21/6 = 3,5
 
+```Python
+from scipy import stats
+
+x=[1,2,3,4,5,6]
+
+p=[1/6,1/6,1/6,1/6,1/6,1/6]
+
+beklenendeg=stats.rv_discrete(values=([x],[p])).expect()
+beklenendeg
+
+# 3.5
+```
+
 ---
 
 Hilesiz bir madeni parayı üç kez havaya attığımızı varsayıyoruz. Bu üç atışta yazı gelme olasılığının beklenen değerini hesaplayalım.
@@ -919,11 +932,25 @@ Hilesiz bir madeni parayı üç kez havaya attığımızı varsayıyoruz. Bu ü�
 
 E(X) = 0 + 3/8 + 6/8 + 3/8 = 1,5
 
+```Python
+from scipy import stats
+
+x=[0,1,2,3]
+
+p=[1/8,3/8,3/8,1/8]
+
+beklenendeg=stats.rv_discrete(values=([x],[p])).expect()
+beklenendeg
+
+# 1.5
+```
+
 ---
 
 Sürekli veri için;
 
 $$F(x) = 3/7 \cdot X^2$$
+$$E(x) = \int_1^2 x \cdot F(x) \,dx$$
 $$E(x) = \int_1^2 x \cdot \frac37  \cdot  x^2 \,dx$$
 $$E(x) = \frac37  \cdot \int_1^2 x \cdot  x^2 \,dx$$
 $$E(x) = \frac37  \cdot \int_1^2 x^3 \,dx$$
@@ -932,8 +959,48 @@ $$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$$
 $$E(x) = \frac37  \cdot (\frac{2^4}4 - \frac{1^4}4)$$
 $$E(x) = \frac37  \cdot \frac{15}4$$
 $$E(x) = \frac{45}{28}$$
+$$E(x) = 1,607$$
 
-### Örnekler
+```Python
+from scipy import stats
+import scipy.integrate
+
+def f(x):
+    return (3/7)*x**3 # x * 3/7 x**2
+
+beklenendeg=scipy.integrate.quad (f,1,2)
+beklenendeg[0]
+
+# 1.6071428571428572
+```
+---
+
+| İkramiye Adeti | İkramiye Miktarı (TL) |
+|---------------:|----------------------:|
+|            160 |               200000  |
+|           1761 |                10000  |
+|          17245 |                 1000  |
+|          54061 |                  200  |
+|         740386 |                  100  |
+|        2768685 |                   50  |
+|       11557684 |                   20  |
+|       15933969 |                   10  |
+|       19586461 |                    5  |
+
+İkramiye Olan Bilet Sayısı: 50.660.412
+
+Toplam Bilet Sayısı: 240.937.000
+
+İkramiye Olmayan Bilet Sayısı: 190.276.588
+
+Bilet Fiyatı: 5 TL
+
+![image](./images/ikramiye.png)
+
+Sürekli bu oyunu oynarsak kazancımız -1,76 TL'dir.
+
+
+
 
 ```Python
 
