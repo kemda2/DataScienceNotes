@@ -121,25 +121,27 @@ veri = pd.read_excel("/kaggle/input/satis-deneme/Satis.xlsx")
 
 veri.describe()
 ```
-![image](./images/454888813-676c0d2d-0f8d-46d3-8067-77f3afec3887.png)
+
+![describe](./images/describe.png)
+
 
 ```Python
 veri["Cinsiyet"].describe()
 ```
 
-![image](https://github.com/user-attachments/assets/40cd920b-bf17-42a6-b576-a012c92bc277)
+![cinsiyetdescribe](./images/cinsiyetdescribe.png)
 
 ```Python
 veri["Cinsiyet"].value_counts()
 ```
 
-![image](https://github.com/user-attachments/assets/9b1a3b39-9dfd-42af-b696-a8cc613e2a7e)
+![cinsiyetvalues](./images/cinsiyetvalues.png)
 
 ```Python
 veri["Cinsiyet"].value_counts(normalize = True) *100
 ```
 
-![image](https://github.com/user-attachments/assets/881d4e1c-2fb7-4d75-8e9d-81dfe8033a11)
+![cinsiyetvaluesnor](./images/cinsiyetvaluesnor.png)
 
 ```Python
 plt.hist(veri["Yaş"], bins = 50)
