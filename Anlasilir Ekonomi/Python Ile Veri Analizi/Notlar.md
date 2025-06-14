@@ -152,15 +152,15 @@ plt.show()
 
 ```Python
 veri["Yaş"].skew()
-```
 
-![image](./images/yasskew.png)
+# 0.024461786786661114
+```
 
 ```Python
 veri["Yaş"].kurtosis()
-```
 
-![image](./images/yaskurtosis.png)
+# -0.18269821709302603
+```
 
 ```Python
 veri.groupby("Cinsiyet").mean()
@@ -188,13 +188,16 @@ import matplotlib.pyplot as plt
 
 # Uniform bir dağılım elde etmek
 yas = np.random.uniform(low = 18, high = 72, size = 40000)
-yas
-```
+yas 
 
-![image](https://github.com/user-attachments/assets/f67d5298-5ef3-40b8-a391-4c8debd69049)
+# array([69.06428513, 35.3954505 , 21.27415043, ..., 49.2332403 ,
+#        42.29571594, 20.79167345])
+```
 
 ```Python
 yas.mean()
+
+# 44.96710755555197
 ```
 
 ![image](https://github.com/user-attachments/assets/67dc9f30-0ee4-4252-89f0-e9e79f88710c)
