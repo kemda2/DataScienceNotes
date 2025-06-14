@@ -608,9 +608,9 @@ Aralık Tahmini
 
 ## 2.9 Normal Dağılım Ortalama Güven Aralığı
 
-$$
+$
 P\left( \bar{X} - Z_{score} \cdot \frac{\theta}{\sqrt{n}} < \mu < \bar{X} + Z_{score} \cdot \frac{\theta}{\sqrt{n}} \right) = 1 - \alpha
-$$
+$
 
 Açıklamalar:
 
@@ -949,17 +949,17 @@ beklenendeg
 
 Sürekli veri için;
 
-$$F(x) = 3/7 \cdot X^2$$
-$$E(x) = \int_1^2 x \cdot F(x) \,dx$$
-$$E(x) = \int_1^2 x \cdot \frac37  \cdot  x^2 \,dx$$
-$$E(x) = \frac37  \cdot \int_1^2 x \cdot  x^2 \,dx$$
-$$E(x) = \frac37  \cdot \int_1^2 x^3 \,dx$$
-$$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$$
-$$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$$
-$$E(x) = \frac37  \cdot (\frac{2^4}4 - \frac{1^4}4)$$
-$$E(x) = \frac37  \cdot \frac{15}4$$
-$$E(x) = \frac{45}{28}$$
-$$E(x) = 1,607$$
+$F(x) = 3/7 \cdot X^2$
+$E(x) = \int_1^2 x \cdot F(x) \,dx$
+$E(x) = \int_1^2 x \cdot \frac37  \cdot  x^2 \,dx$
+$E(x) = \frac37  \cdot \int_1^2 x \cdot  x^2 \,dx$
+$E(x) = \frac37  \cdot \int_1^2 x^3 \,dx$
+$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$
+$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$
+$E(x) = \frac37  \cdot (\frac{2^4}4 - \frac{1^4}4)$
+$E(x) = \frac37  \cdot \frac{15}4$
+$E(x) = \frac{45}{28}$
+$E(x) = 1,607$
 
 ```Python
 from scipy import stats
@@ -1007,9 +1007,9 @@ Sürekli bu oyunu oynarsak kazancımız -1,76 TL'dir.
 
 100 atış yazılsa beklenen değer 50 gelecektir.
 
-$$E(x) = n \cdot P(x)$$
-$$E(x) = 100 \cdot 0.5$$
-$$E(x) = 50$$
+$E(x) = n \cdot P(x)$
+$E(x) = 100 \cdot 0.5$
+$E(x) = 50$
 
 Yukarıdaki gibi atış yapmaya devam edersek beklenen değerlerin ortalaması %50'ye (beklenen değere yani olasılığa) yaklaşacaktır.
 
