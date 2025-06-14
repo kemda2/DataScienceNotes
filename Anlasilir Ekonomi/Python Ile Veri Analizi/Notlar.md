@@ -148,19 +148,19 @@ plt.hist(veri["Yaş"], bins = 50)
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/54c931db-65c2-46b8-923f-83e727fe2e3f)
+![yashist](./images/yashist.png)
 
 ```Python
 veri["Yaş"].skew()
 ```
 
-![image](https://github.com/user-attachments/assets/49ff66fc-b74c-4680-93b1-6df7a4d97b32)
+![image](./images/yasskew.png)
 
 ```Python
 veri["Yaş"].kurtosis()
 ```
 
-![image](https://github.com/user-attachments/assets/214696d0-5e87-42bc-aac2-569a24be6e81)
+![image](./images/yaskurtosis.png)
 
 ```Python
 veri.groupby("Cinsiyet").mean()
