@@ -549,11 +549,11 @@ olasılık
 
 %92,69 ürünler doğru olduğuna göre hatalı ürün yüzdesi %7,31'dir.
 
-## 2.6 Serbestlik Derecesi
+## 2.6 Serbestlik derecesi
 
 toplamları 15 olan 3 sayı seçin denildiğinde 2 sayı seçebiliriz ve 3. sayı otamatik olarak belli olur. Benzer şekilde ortalama alırken popülasyonu da örneklemi de n'e bölerken, standart sapma alırken popülasyonu n'e bölerken örneklemi n-1'e bölmemizin sebebi bütün değerlerden ortalamayı çıkarıptoplarsak sonuç hep sıfırdır. (Bu aynı zamanda neden karelerini alıp karekökünü aldığımızın da cevabıdır.) Bu yüzden son rakamı hep tahmin edebiliriz. Bunun için örneklem standart sapmasında n-1 ile formulü oluştururuz.
 
-## 2.7 Student'in t Dağılımı
+## 2.7 Student'in t dağılımı
 
 Örneklem sayısı 30'un altında kaldığında t dağılım yapısı kullanılır. T dağılımında serbestlik derecesi yükseldikçe normal dağılıma yakınsar.
 
@@ -584,7 +584,7 @@ plt.show()
 
 ![image](./images/tdagilim.png)
 
-## 2.8 Tahmin Teorisi
+## 2.8 Tahmin teorisi
 
 - Nokta tahmin: sonucu direk bir sayıyla tahmin etmek.
 - Aralık tahmini: sonucu bir aralık olarak tahmin etmek. İki türü vardır:
@@ -606,7 +606,7 @@ Aralık Tahmini
     - Popülasyon standart sapması biliniyorsa Z tablosu
     - Popülasyon standart sapması bilinmiyorsa varyans testleri
 
-## 2.9 Normal Dağılım Ortalama Güven Aralığı
+## 2.9 Normal dağılım ortalama güven aralığı
 
 $$
 P\left( \bar{X} - Z_{score} \cdot \frac{\theta}{\sqrt{n}} < \mu < \bar{X} + Z_{score} \cdot \frac{\theta}{\sqrt{n}} \right) = 1 - \alpha
@@ -745,7 +745,7 @@ aralik
 # (382.64804321855195, 387.35195678144805)
 ```
 
-## 2.10 T Dağılım Ortalama Güven Aralığı
+## 2.10 t dağılım ortalama güven aralığı
 
 ![image](./images/ttablosu.png)
 
@@ -802,7 +802,7 @@ aralik
 (209.10729151418025, 223.95270848581976)
 ```
 
-## 2.11 İki Popülasyon Ortalama Farkı Güven Aralığı
+## 2.11 İki popülasyon ortalama farkı güven aralığı
 
 Bir fabrikada A ve B ürünlerinin ağırlıklarının varyansları sırasıyla 164gr ve 216gr. A ürününden 28 adet, B ürününden 30 adet örneklem alındığında A ürününün ortalama ağırlığı 32gr B ürününün ortalama ağırlığı 26gr çıkmıştır. Bu verilere göre A ve B ürünlerinin ortalama ağırhklarının farkını %95 güven aralığında bulunuz?
 
@@ -882,7 +882,7 @@ aralik
 # (0.07515008811712867, 0.524849911882871)
 ```
 
-## 2.12 Rassal Değişken Nedir?
+## 2.12 Rassal değişken nedir?
 
 Olasılık: bir şeyin olmasının veya olmamasının matematiksel değeridir.
 
@@ -892,7 +892,7 @@ Bir zarın olasılık dağılımı (uniform);
 
 ![image](./images/zaruniform.png)
 
-## 2.13 Beklenen Değer Nedir?
+## 2.13 Beklenen değer nedir?
 
 Kesikli veri için;
 
@@ -999,7 +999,7 @@ Bilet Fiyatı: 5 TL
 
 Sürekli bu oyunu oynarsak kazancımız -1,76 TL'dir.
 
-## 2.14 Büyük Sayılar Yasası
+## 2.14 Büyük sayılar yasası
 
 ![image](./images/para1.png)
 ![image](./images/para2.png)
@@ -1080,7 +1080,7 @@ plt.show()
 
 ![image](./images/deneme100.png)
 
-## 2.15 Olasılık Dağılımı Nedir?
+## 2.15 Olasılık dağılımı nedir?
 
 Kesikli değişkenlerde olasılık dağılımı
 
@@ -1090,15 +1090,21 @@ Kesikli değişkenlerde olasılık dağılımı
 
 ## 2.16 Olasılık kütle ve yoğunluk fonksiyonları
 
+![image](./images/dagilimhistogrami.png)
 
+Yukardaki yapıya olasılık kütle fonksiyonu (PMF) diyoruz. Kesikli Olasılık dağılımı gösteren bir örnektir.
 
+![image](./images/hist30.png)
 
+$$
+E(x) = \int_{-\infty}^{\infty} x \cdot F(x) \, dx
+$$
 
+Sürekli değişkenlerde ise bu şekilde olasılık değeri yoktur. İntegral alan hesabı ile olasılık değeri bulunur. Grafikteki sol eksen asla sürekli değişkenlerde olasılık değeri vermez, frekansı verir. $-\infty$ ile $\infty$ arası olasılık değeri hesaplanırsa bütün olasılıkları kapsadığı için sonuç 1 olur.
 
+Sürekli değişken yapısında bu yapıya Olasılık yoğunluk fonksiyonu **(PDF)** denir.
 
-
-
-
+## 2.17 Birikimli dağılım fonksiyonu
 
 ```Python
 
@@ -1107,5 +1113,5 @@ Kesikli değişkenlerde olasılık dağılımı
 ![image](./images/.png)
 
 ### 
-## 2.17
+## 2.18
 # 3
