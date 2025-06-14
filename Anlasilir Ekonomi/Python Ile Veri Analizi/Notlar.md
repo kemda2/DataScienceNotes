@@ -1129,3 +1129,6 @@ $$ P(x) = \%1 $$
 ### 
 ## 3.3
 # 4
+
+https://www.youtube.com/watch?v=sebHs7Tqkw0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=42&ab_channel=Anla%C5%9F%C4%B1l%C4%B1rEkonomi
+6:12
