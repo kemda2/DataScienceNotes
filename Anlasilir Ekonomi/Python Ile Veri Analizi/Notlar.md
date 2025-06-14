@@ -1088,7 +1088,9 @@ Kesikli değişkenlerde olasılık dağılımı
 
 ![image](./images/dagilimhistogrami.png)
 
-## 2.16 Olasılık kütle ve yoğunluk fonksiyonları
+# 3 Fonksiyonlar
+
+## 3.1 Olasılık kütle ve yoğunluk fonksiyonları
 
 ![image](./images/dagilimhistogrami.png)
 
@@ -1104,7 +1106,19 @@ Sürekli değişkenlerde ise bu şekilde olasılık değeri yoktur. İntegral al
 
 Sürekli değişken yapısında bu yapıya Olasılık yoğunluk fonksiyonu **(PDF)** denir.
 
-## 2.17 Birikimli dağılım fonksiyonu
+## 3.2 Birikimli dağılım fonksiyonu
+
+Bir hastanede belirli bir hastalıkla ilgili bulunan hastaların tansiyonlarının ortalaması 15, varyansları ise 9 olduğu biliniyor ve bu yapının normal dağılıma sahip olduğu biliniyor. Bu hastalar içerisinden rastgele seçilen bir hastanın tansiyonunun 11'den küçük olma olasılığı nedir?
+
+![image](./images/birikim.png)
+
+$$ z = \frac{11 - 15}{\sqrt{9}} $$
+$$ z = \frac{-4}{3} $$
+$$ z = -1,333 $$
+$$ P(x) = \%1 $$
+
+
+
 
 ```Python
 
@@ -1113,5 +1127,5 @@ Sürekli değişken yapısında bu yapıya Olasılık yoğunluk fonksiyonu **(PD
 ![image](./images/.png)
 
 ### 
-## 2.18
-# 3
+## 3.3
+# 4
