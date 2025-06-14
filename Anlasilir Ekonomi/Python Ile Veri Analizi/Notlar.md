@@ -608,18 +608,18 @@ Aralık Tahmini
 
 ## 2.9 Normal Dağılım Ortalama Güven Aralığı
 
-$
+$$
 P\left( \bar{X} - Z_{score} \cdot \frac{\theta}{\sqrt{n}} < \mu < \bar{X} + Z_{score} \cdot \frac{\theta}{\sqrt{n}} \right) = 1 - \alpha
-$
+$$
 
 Açıklamalar:
 
-* $\bar{X}$: Örneklem ortalaması
-* $\mu$: Popülasyon ortalaması (bilinmeyen parametre)
-* $\theta$: Anakütle standart sapması
-* $n$: Örneklem büyüklüğü
-* $\alpha$: Anlamlılık düzeyi (örneğin $\alpha = 0.05$)
-* $Z_{score}$: Standart normal dağılımdan yüzdelik değeri (örneğin %95 güven düzeyi için 1.96)
+* $$\bar{X}$$: Örneklem ortalaması
+* $$\mu$$: Popülasyon ortalaması (bilinmeyen parametre)
+* $$\theta$$: Anakütle standart sapması
+* $$n$$: Örneklem büyüklüğü
+* $$\alpha$$: Anlamlılık düzeyi (örneğin $$\alpha = 0.05$$)
+* $$Z_{score}$$: Standart normal dağılımdan yüzdelik değeri (örneğin %95 güven düzeyi için 1.96)
 
 Genelde kullanılan 3 çeşit güven aralığı vardır;
 - %99
@@ -638,13 +638,13 @@ z-score değerleri;
 
 Rassal olarak seçilen fabrikadaki 100 ürünün (n 30 dan büyükse z tablosu kullanılır) ortalama ağırlık 1040 gr, standart sapması ise 25 gr'dır. Fabrikadaki tüm ürünlerin (popülasyon) ortalama ağırlıkları %95 güven aralığında kaçtır?
 
-$1040 - 1.96 \cdot \frac{25}{\sqrt{100}} < \mu < 1040 + 1.96 \cdot \frac{25}{\sqrt{100}}$
+$$1040 - 1.96 \cdot \frac{25}{\sqrt{100}} < \mu < 1040 + 1.96 \cdot \frac{25}{\sqrt{100}}$$
 
-$1040 - 1.96 \cdot 2.5 < \mu < 1040 + 1.96 \cdot 2.5$
+$$1040 - 1.96 \cdot 2.5 < \mu < 1040 + 1.96 \cdot 2.5$$
 
-$1040 - 4.9 < \mu < 1040 + 4.9$
+$$1040 - 4.9 < \mu < 1040 + 4.9$$
 
-$1035.1 < \mu < 1044.9$
+$$1035.1 < \mu < 1044.9$$
 
 ```Python
 import numpy as np
@@ -663,7 +663,7 @@ aralık
 
 ---
 
-85 ev sahibi ile yapılan bir ankette, ev bakımına aylık olarak ortalama 67$ (standart sapma = 14$) harcadıkları tespit edilmiştir. Tum ev sahiplerinin aylık ev bakım harcamaları için %95 güven aralığını oluşturunuz.
+85 ev sahibi ile yapılan bir ankette, ev bakımına aylık olarak ortalama 67$$ (standart sapma = 14$$) harcadıkları tespit edilmiştir. Tum ev sahiplerinin aylık ev bakım harcamaları için %95 güven aralığını oluşturunuz.
 
 ```Python
 import numpy as np
@@ -784,7 +784,7 @@ aralik
 ```
 ---
 
-Rassal olarak seçilen 20 bilgisayarın tamirat maliyetleri kaydedilmiştir. Ortalama 216,53$ örneklemin standart sapması 15.86$. Tüm bilgisayarların ortalama tamirat maliyetlerini %95 güven ile tahmin ediniz diyor
+Rassal olarak seçilen 20 bilgisayarın tamirat maliyetleri kaydedilmiştir. Ortalama 216,53$$ örneklemin standart sapması 15.86$$. Tüm bilgisayarların ortalama tamirat maliyetlerini %95 güven ile tahmin ediniz diyor
 
 ```Python
 import numpy as np
@@ -949,17 +949,17 @@ beklenendeg
 
 Sürekli veri için;
 
-$F(x) = 3/7 \cdot X^2$
-$E(x) = \int_1^2 x \cdot F(x) \,dx$
-$E(x) = \int_1^2 x \cdot \frac37  \cdot  x^2 \,dx$
-$E(x) = \frac37  \cdot \int_1^2 x \cdot  x^2 \,dx$
-$E(x) = \frac37  \cdot \int_1^2 x^3 \,dx$
-$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$
-$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$
-$E(x) = \frac37  \cdot (\frac{2^4}4 - \frac{1^4}4)$
-$E(x) = \frac37  \cdot \frac{15}4$
-$E(x) = \frac{45}{28}$
-$E(x) = 1,607$
+$$F(x) = 3/7 \cdot X^2$$
+$$E(x) = \int_1^2 x \cdot F(x) \,dx$$
+$$E(x) = \int_1^2 x \cdot \frac37  \cdot  x^2 \,dx$$
+$$E(x) = \frac37  \cdot \int_1^2 x \cdot  x^2 \,dx$$
+$$E(x) = \frac37  \cdot \int_1^2 x^3 \,dx$$
+$$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$$
+$$E(x) = \frac37  \cdot \int_1^2 \frac{x^4}4$$
+$$E(x) = \frac37  \cdot (\frac{2^4}4 - \frac{1^4}4)$$
+$$E(x) = \frac37  \cdot \frac{15}4$$
+$$E(x) = \frac{45}{28}$$
+$$E(x) = 1,607$$
 
 ```Python
 from scipy import stats
@@ -1007,9 +1007,9 @@ Sürekli bu oyunu oynarsak kazancımız -1,76 TL'dir.
 
 100 atış yazılsa beklenen değer 50 gelecektir.
 
-$E(x) = n \cdot P(x)$
-$E(x) = 100 \cdot 0.5$
-$E(x) = 50$
+$$E(x) = n \cdot P(x)$$
+$$E(x) = 100 \cdot 0.5$$
+$$E(x) = 50$$
 
 Yukarıdaki gibi atış yapmaya devam edersek beklenen değerlerin ortalaması %50'ye (beklenen değere yani olasılığa) yaklaşacaktır.
 
