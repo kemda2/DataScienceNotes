@@ -1,6 +1,6 @@
 # Excel Ayarları
 
-## Excele Veri Çözücü Ekleme 
+## Excele veri çözücü ekleme 
 
 Eğer veri çözücü excelde gözükmüyorsa Dosya > Seçenekler > Eklentiler > Yönet: Excel eklentiler > Git > Çöz.. ile başlayan 3 eklentiyi aktifleştir. 
 
@@ -10,7 +10,7 @@ Veri çözüsü ile temel istatistik deyince kip değeri modu verir. Ek olarak y
 
 Normal dağılımda veri oluşturmak için Veri çözümleme > Rastgele sayı üretimi > Değişken sayısı: istediğimiz sütun miktarı, rastgele sayı adedi: istediğimiz sütun adedi, dağılım: dağılım türü seçip histogramını alırsak çan eğrisi gibi bir grafik çıkıyor.
 
-# Ölçek Türleri
+# Ölçek türleri
 
 - **Nominal:** Herhangi bir önem sıralaması yoktur. Kadın, Erkek gibi.
 - **Ordinal:** Önem derecesi olan ölçek. Çok Soğuk, Soğuk, Serin, Sıcak, Çok Sıcak gibi.
@@ -95,7 +95,7 @@ Kurtosis değerinin sınırı 3 olarak kabul edilir.
 
 Excelde basıklık fonksiyonuyla kullanılır. 3'ten büyükse sivri bir dağılım küçükse basık bir dağılım var deriz.
 
-## 1.3 Ek Bilgi
+## 1.3 Ek bilgi
 
 Python kullanım fonksiyonları;
 
@@ -168,11 +168,11 @@ veri.groupby("Cinsiyet").mean()
 
 ![image](./images/cinsmean.png)
 
-# 2 Çıkarımsal İstatistik
+# 2 Çıkarımsal istatistik
 
 Örnekleme yapılarak popülasyon için çıkarım yapılan istatistik türüdür. 
 
-## 2.1 Merkezi Limit Teoremi
+## 2.1 Merkezi limit teoremi
 
 Uygun bir şekilde seçilen örneklem yapısı tüm popülasyona benzeyecektir.
 
@@ -200,63 +200,63 @@ yas.mean()
 # 44.96710755555197
 ```
 
-![image](https://github.com/user-attachments/assets/67dc9f30-0ee4-4252-89f0-e9e79f88710c)
-
 ```Python
 plt.hist(yas)
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/0008b5db-f202-4d3a-ac9a-9bc5bc8ef5ea)
+![image](./images/yashist2.png)
 
 ```Python
 import random
 orneklem = random.choices(yas,k=5)
 orneklem
-```
 
-![image](https://github.com/user-attachments/assets/f4a63e32-def3-4f8e-a13c-3892e6876e08)
+# [34.32305248567211,
+#  64.0623590234868,
+#  33.06747583685961,
+#  56.207328531842954,
+#  59.87675708682805]
+```
 
 ```Python
 import random
-orneklem = [np.mean(random.choices(yas, k=1)) for _ in range(1000)] # 1000 kez örneklem çekiyor. 
+orneklem = [np.mean(random.choices(yas, k=1)) for _ in range(1000)] # 1000 kez 1 örneklem çekiyor. 
+plt.hist(orneklem)
+plt.show()
+```
+![image](./images/hist1.png)
+
+```Python
+import random
+orneklem = [np.mean(random.choices(yas, k=2)) for _ in range(1000)] # 1000 kez 2 örneklem çekiyor. 
 plt.hist(orneklem)
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/b714f0ef-dc3b-4ca5-a174-3695a7a5084c)
+![image](./images/hist2.png)
 
 ```Python
 import random
-orneklem = [np.mean(random.choices(yas, k=2)) for _ in range(1000)] # 1000 kez örneklem çekiyor. 
+orneklem = [np.mean(random.choices(yas, k=10)) for _ in range(1000)] # 1000 kez 10 örneklem çekiyor. 
 plt.hist(orneklem)
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/363c9e5e-e7ab-4fbe-960a-bc849e2a3941)
+![image](./images/hist10.png)
 
 ```Python
 import random
-orneklem = [np.mean(random.choices(yas, k=10)) for _ in range(1000)] # 1000 kez örneklem çekiyor. 
+orneklem = [np.mean(random.choices(yas, k=30)) for _ in range(1000)] # 1000 kez 30 örneklem çekiyor. 
 plt.hist(orneklem)
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/116b0f09-f5d2-480b-82c2-c1cfccbb6733)
+![image](./images/hist30.png)
 
-```Python
-import random
-orneklem = [np.mean(random.choices(yas, k=30)) for _ in range(1000)] # 1000 kez örneklem çekiyor. 
-plt.hist(orneklem)
-plt.show()
-```
+## 2.2 Standart hata nedir?
 
-![image](https://github.com/user-attachments/assets/dbb90183-0124-417f-90c9-ca9bb5c1fc30)
-
-## 2.2 Standart Hata Nedir?
-
-![image](https://github.com/user-attachments/assets/314cba26-d8a9-4952-9003-6faf2a24c5b6)
-
+![image](./images/shata.png)
 
 Çekilen örneklemlerin sayısı arttıkça örneklem kümesinin ortalaması popülasyon ortalamasına yakınsar. Örneklem çektikçe örneklem kümesinin ortalaması ile popülasyon ortalamasına yaklaşır. Bir popülasyondan seçilebilecek olası örneklemlerin ortalamalarınının standart sapmasına standart hata denir.
 
@@ -264,7 +264,7 @@ Düşük standart sapma ve düşük standart hata isteniyor.
 
 [Dağılım oluşturma sitesi](https://onlinestatbook.com/stat_sim/sampling_dist/index.html)
 
-## 2.3 Seaborn Kütüphanesi
+## 2.3 Seaborn kütüphanesi
 
 ```Python
 import seaborn as sns
@@ -276,42 +276,41 @@ x = np.random.normal(35,1,10000) #ortalama, standart sapma, adet
 sns.histplot(x)
 plt.show()
 ```
-
-![image](https://github.com/user-attachments/assets/670b0509-10aa-487e-8b26-123348c6817b)
+![image](./images/seahist.png)
 
 ```Python
 sns.displot(x, kde = True, color = "r")
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/6307e164-bb97-4319-8bd7-6bec30ba5fe0)
+![image](./images/seahist2.png)
 
 ```Python
 sns.kdeplot(x, color = "g")
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/89ab0aaa-4de0-4720-b479-655f935a6b15)
+![image](./images/seahist3.png)
 
 ```Python
 sns.boxplot(x=x, color="g")
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/f60185e0-c82d-45fb-9532-bc83c12d9012)
+![image](./images/seahist4.png)
 
 ```Python
 sns.lineplot(x=np.arange(len(x)), y=x)
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/8824edcd-3118-44d4-a13d-f7422e8cfbc3)
+![image](./images/seahist5.png)
 
 ## 2.4 z-score
 
-![image](https://github.com/user-attachments/assets/2dda3d2c-758d-4d65-bc14-60b15c6e91a3)
+![image](./images/z-score.png)
 
-![image](https://github.com/user-attachments/assets/1ebdb74b-aeda-404c-b6ae-4b7f1c37d25a)
+![image](./images/z-scoreformula.png)
 
 Excelde z-score çevirimini standartlaştırma formülü ile yapıyoruz. **Standartlastırma exceli var.**
 
@@ -326,9 +325,11 @@ np.random.seed(35)
 
 veri = np.random.normal(35,2,40000)
 veri
-```
 
-![image](https://github.com/user-attachments/assets/ba57ca99-1f4c-4b71-a62c-28e07949cab3)
+# array([31.22052658, 34.17281564, 33.46794798, ..., 30.91770669,
+#        36.07625002, 31.63870381])
+
+```
 
 ```Python
 sns.displot(veri, kde = True, height=8, aspect=1.5)
@@ -342,7 +343,7 @@ plt.legend() # axvline çizgi için gerekli
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/d73cfe64-59ba-44e3-8702-4a0436176b4c)
+![image](./images/veridagilim.png)
 
 ```Python
 veriz = (veri - np.mean(veri)) / np.std(veri)
@@ -362,35 +363,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-![image](https://github.com/user-attachments/assets/573eb2d7-f94c-49aa-a613-11fa254989fa)
-
-```Python
-from scipy import stats
-
-veriz = stats.zscore(veri) # Standartlaştırma veya normalizasyon
-
-sns.displot(veriz, kde = True, height=8, aspect=1.5)
-plt.title("Veri Dağılım Grafiği", fontsize=15, loc="right", c="red")
-plt.xlabel("Veriler", fontsize=15, c="red")
-plt.ylabel("Frekanslar", fontsize=15, c="red")
-plt.xlim(-3,3)
-plt.axvline(x=np.mean(veriz), linestyle = "--", linewidth = 2.5, label = "Ortalama", c="red")
-plt.axvline(x=np.mean(veriz) - np.std(veriz), linestyle = "--", linewidth = 2.5, label = "1 Standart Sapma", c="black")
-plt.axvline(x=np.mean(veriz) + np.std(veriz), linestyle = "--", linewidth = 2.5, c="black")
-plt.axvline(x=np.mean(veriz) - 2*np.std(veriz), linestyle = "--", linewidth = 2.5, label = "2 Standart Sapma", c="blue")
-plt.axvline(x=np.mean(veriz) + 2*np.std(veriz), linestyle = "--", linewidth = 2.5, c="blue")
-plt.legend() # axvline çizgi için gerekli
-plt.tight_layout()
-plt.show()
-```
-
-![image](https://github.com/user-attachments/assets/edce1494-bd97-47b2-959c-940fec71cb01)
+![image](./images/veridagilim2.png)
 
 ## 2.5 z-table
 
 z-score tablosu;
 
-![image](https://github.com/user-attachments/assets/8c8405b8-9b66-4d9e-8729-6dc7b7191581)
+![image](./images/z-table.png)
 
 [Z skor online hesaplayıcı](https://homepage.divms.uiowa.edu/~mbognar/applets/normal.html)
 
@@ -402,7 +381,7 @@ z-score = (4,5-5,3)/1 = -0,8
 
 4,5 değerinin ortalama değeri olan 5,3 ile arasındaki yüzde %28,81 olarak bulunur. %50 den bu değer çıkarılırsa %21,19 olarak olasılığı bulunur.
 
-![image](https://github.com/user-attachments/assets/a0ddbaaa-a38d-4f96-9b95-603dcac53ddd)
+![image](./images/cozum.png)
 
 ```Python
 from scipy.stats import norm
