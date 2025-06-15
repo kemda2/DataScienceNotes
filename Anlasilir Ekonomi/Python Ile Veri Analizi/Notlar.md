@@ -1250,6 +1250,7 @@ P = 4 / 52
 $ x = 1 $ papaz gelme ihtimalini gösterir.
 
 $$ x = 0 \rightarrow (\frac4{52})^0 \cdot (\frac{48}{52})^1 = \frac{48}{52} $$
+$$ x = 1 \rightarrow (\frac{48}{52})^0 \cdot (\frac{4}{52})^1 = \frac{4}{52} $$
 
 ![image](./images/bergrafik.png)
 
