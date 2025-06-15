@@ -881,8 +881,9 @@ aralik
 
 # (0.07515008811712867, 0.524849911882871)
 ```
+# 3 Dağılımlar
 
-## 2.12 Rassal değişken nedir?
+## 3.1 Rassal değişken nedir?
 
 Olasılık: bir şeyin olmasının veya olmamasının matematiksel değeridir.
 
@@ -892,7 +893,7 @@ Bir zarın olasılık dağılımı (uniform);
 
 ![image](./images/zaruniform.png)
 
-## 2.13 Beklenen değer nedir?
+## 3.2 Beklenen değer nedir?
 
 Kesikli veri için;
 
@@ -999,7 +1000,7 @@ Bilet Fiyatı: 5 TL
 
 Sürekli bu oyunu oynarsak kazancımız -1,76 TL'dir.
 
-## 2.14 Büyük sayılar yasası
+## 3.3 Büyük sayılar yasası
 
 ![image](./images/para1.png)
 ![image](./images/para2.png)
@@ -1080,7 +1081,7 @@ plt.show()
 
 ![image](./images/deneme100.png)
 
-## 2.15 Olasılık dağılımı nedir?
+## 3.4 Olasılık dağılımı nedir?
 
 Kesikli değişkenlerde olasılık dağılımı
 
@@ -1088,9 +1089,8 @@ Kesikli değişkenlerde olasılık dağılımı
 
 ![image](./images/dagilimhistogrami.png)
 
-# 3 Fonksiyonlar
 
-## 3.1 Olasılık kütle ve yoğunluk fonksiyonları
+## 3.5 Olasılık kütle ve yoğunluk fonksiyonları
 
 ![image](./images/dagilimhistogrami.png)
 
@@ -1106,7 +1106,7 @@ Sürekli değişkenlerde ise bu şekilde olasılık değeri yoktur. İntegral al
 
 Sürekli değişken yapısında bu yapıya Olasılık yoğunluk fonksiyonu **(PDF)** denir.
 
-## 3.2 Birikimli dağılım fonksiyonu
+## 3.6 Birikimli dağılım fonksiyonu
 
 Bir hastanede belirli bir hastalıkla ilgili bulunan hastaların tansiyonlarının ortalaması 15, varyansları ise 9 olduğu biliniyor ve bu yapının normal dağılıma sahip olduğu biliniyor. Bu hastalar içerisinden rastgele seçilen bir hastanın tansiyonunun 11'den küçük olma olasılığı nedir?
 
@@ -1212,7 +1212,7 @@ plt.show()
 ```
 ![image](./images/cdfpdfgrafik.png)
 
-## 3.3 Bernoulli dağılımı
+## 3.7 Bernoulli dağılımı
 
 ![image](./images/dagilimlar.png)
 
@@ -1300,7 +1300,7 @@ print("Varyans: {:.2f}".format(dagilim.var()))
 # Varyans: 0.0710
 ```
 
-## 3.4 Binom dağılımı
+## 3.8 Binom dağılımı
 
 
 
@@ -1311,7 +1311,7 @@ print("Varyans: {:.2f}".format(dagilim.var()))
 ![image](./images/.png)
 
 ### 
-## 3.5
+## 3.9
 # 4
 
 https://www.youtube.com/watch?v=N9MCfKdjKik&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=42&ab_channel=Anla%C5%9F%C4%B1l%C4%B1rEkonomi
