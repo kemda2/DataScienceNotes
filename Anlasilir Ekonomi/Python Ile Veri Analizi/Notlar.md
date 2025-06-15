@@ -1302,7 +1302,25 @@ print("Varyans: {:.2f}".format(dagilim.var()))
 
 ## 3.8 Binom dağılımı
 
+$$ f(x) = \binom{n}{x} \cdot P^x \cdot (1-P)^{(n-x)}$$
 
+$n$: deneme sayısı
+
+$$E(x) = n \cdot P$$
+$$\sigma^2_x = n \cdot P \cdot (1-P)$$
+
+$$ Y \rightarrow 0,5 \rightarrow P $$
+$$ T \rightarrow 0,5 \rightarrow 1-P $$
+
+Bernolli üzerinden incelersek;
+
+$$ P ( x = 1 ) = 0,5^1 \cdot 0,5^0 = 0,5 $$
+
+Binom üzerinden incelersek;
+
+$$ P ( x = 1 ) = \binom{1}{1} \cdot 0,5^1 \cdot 0,5^0 = 0,5 $$
+
+Bir deneme için Bernolli ve Binom üzerinden sonuç bulunabilir ama birden fazla deneme için sadece Binom kullanılır.
 
 ```Python
 
@@ -1313,6 +1331,7 @@ print("Varyans: {:.2f}".format(dagilim.var()))
 ### 
 ## 3.9
 # 4
+
 
 
 
