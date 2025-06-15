@@ -883,7 +883,7 @@ aralik
 ```
 # 3 Dağılımlar
 
-## 3.1 Rassal değişken nedir?
+## 3.1 Rassal değişken 
 
 Olasılık: bir şeyin olmasının veya olmamasının matematiksel değeridir.
 
@@ -893,7 +893,7 @@ Bir zarın olasılık dağılımı (uniform);
 
 ![image](./images/zaruniform.png)
 
-## 3.2 Beklenen değer nedir?
+## 3.2 Beklenen değer
 
 Kesikli veri için;
 
@@ -1081,7 +1081,7 @@ plt.show()
 
 ![image](./images/deneme100.png)
 
-## 3.4 Olasılık dağılımı nedir?
+## 3.4 Olasılık dağılımı
 
 Kesikli değişkenlerde olasılık dağılımı
 
