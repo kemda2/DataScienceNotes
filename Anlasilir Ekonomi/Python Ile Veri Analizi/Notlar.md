@@ -1251,6 +1251,7 @@ $ x = 1 $ papaz gelme ihtimalini gösterir.
 
 $$ x = 0 \rightarrow (\frac4{52})^0 \cdot (\frac{48}{52})^1 = \frac{48}{52} $$
 
+![image](./images/bergrafik.png)
 
 
 
