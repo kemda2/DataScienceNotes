@@ -1238,21 +1238,69 @@ $$ T \rightarrow (1/2)^0 \cdot (1/2)^1 = 0,5 $$
 $$ E(X) = P = 0,5 $$
 $$ \sigma^2_x = P \cdot (1 - P) = 0,5 \cdot 0,5 = 0,25 $$
 
+```Python
+from scipy import stats
+
+p=0.5
+
+dagilim=stats.bernoulli(p)
+
+tolasılık=dagilim.pmf(k=0)
+yolasılık=dagilim.pmf(k=1)
+
+print("Tura gelme olasılığı: {:.2f}".format(tolasılık))
+print("Yazı gelme olasılığı: {:.2f}".format(yolasılık))
+print("Beklenen değer: {:.2f}".format(dagilim.expect()))
+print("Varyans: {:.2f}".format(dagilim.var()))
+
+# Tura gelme olasılığı: 0.50
+# Yazı gelme olasılığı: 0.50
+# Beklenen değer: 0.50
+# Varyans: 0.25
+```
+
 ---
 
 Bir iskambil setinde papaz gelme olasılığı;
 
 Kart sayısı: 52
+
 Papaz sayısı: 4
 
-P = 4 / 52
+$$ P = \frac4{52} = 0,076 $$
 
 $ x = 1 $ papaz gelme ihtimalini gösterir.
 
-$$ x = 0 \rightarrow (\frac4{52})^0 \cdot (\frac{48}{52})^1 = \frac{48}{52} $$
-$$ x = 1 \rightarrow (\frac{48}{52})^0 \cdot (\frac{4}{52})^1 = \frac{4}{52} $$
+$$ x = 0 \rightarrow (\frac4{52})^0 \cdot (\frac{48}{52})^1 = \frac{48}{52} = 0,923 $$
+$$ x = 1 \rightarrow (\frac{48}{52})^0 \cdot (\frac{4}{52})^1 = \frac{4}{52} = 0,076 $$
 
 ![image](./images/bergrafik.png)
+
+$$ E(X) = P = \frac4{52} = 0,076 $$
+$$ \sigma^2_x = P \cdot (1 - P) = \frac{4}{52} \cdot \frac{48}{52} = 0,076 $$
+
+```Python
+from scipy import stats
+
+p = 4/52
+
+dagilim = stats.bernoulli(p)
+
+papazgelmeme = dagilim.pmf(k=0)
+papazgelme = dagilim.pmf(k=1)
+
+print("Papaz gelmeme olasılığı: {:.2f}".format(papazgelmeme))
+print("Papaz gelme olasılığı: {:.2f}".format(papazgelme))
+print("Beklenen değer: {:.2f}".format(dagilim.expect()))
+print("Varyans: {:.2f}".format(dagilim.var()))
+
+# Papaz gelmeme olasılığı: 0.9231
+# Papaz gelme olasılığı: 0.0769
+# Beklenen değer: 0.0769
+# Varyans: 0.0710
+```
+
+## 3.3 Binom dağılımı
 
 
 
@@ -1263,7 +1311,7 @@ $$ x = 1 \rightarrow (\frac{48}{52})^0 \cdot (\frac{4}{52})^1 = \frac{4}{52} $$
 ![image](./images/.png)
 
 ### 
-## 3.3
+## 3.4
 # 4
 
 https://www.youtube.com/watch?v=N9MCfKdjKik&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=42&ab_channel=Anla%C5%9F%C4%B1l%C4%B1rEkonomi
