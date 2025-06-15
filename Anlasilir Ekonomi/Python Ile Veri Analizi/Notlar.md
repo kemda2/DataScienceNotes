@@ -1234,6 +1234,24 @@ $$ T = 1/2 \rightarrow 1/2 = 1-P \rightarrow x = 0 $$
 
 $$ F(x) = P^x \cdot (1-P)^{1-x} $$
 $$ Y \rightarrow (1/2)^1 \cdot (1/2)^0 = 0,5 $$
+$$ T \rightarrow (1/2)^0 \cdot (1/2)^1 = 0,5 $$
+$$ E(X) = P = 0,5 $$
+$$ \sigma^2_x = P \cdot (1 - P) = 0,5 \cdot 0,5 = 0,25 $$
+
+---
+
+Bir iskambil setinde papaz gelme olasılığı;
+
+Kart sayısı: 52
+Papaz sayısı: 4
+
+P = 4 / 52
+
+$ x = 1 $ papaz gelme ihtimalini gösterir.
+
+$$ x = 0 \rightarrow (\frac4{52})^0 \cdot (\frac{48}{52})^1 = \frac{48}{52} $$
+
+
 
 
 ```Python
