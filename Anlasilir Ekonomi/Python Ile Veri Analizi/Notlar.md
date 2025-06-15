@@ -1314,5 +1314,8 @@ print("Varyans: {:.2f}".format(dagilim.var()))
 ## 3.9
 # 4
 
-https://www.youtube.com/watch?v=N9MCfKdjKik&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=42&ab_channel=Anla%C5%9F%C4%B1l%C4%B1rEkonomi
+
+
+
+https://www.youtube.com/watch?v=5HgOcPpifz0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=43&ab_channel=Anla%C5%9F%C4%B1l%C4%B1rEkonomi
 0:00
