@@ -1320,7 +1320,76 @@ Binom üzerinden incelersek;
 
 $$ P ( x = 1 ) = \binom{1}{1} \cdot 0,5^1 \cdot 0,5^0 = 0,5 $$
 
+```Python
+from scipy import stats
+
+p=0.5
+n=1
+
+dagilim=stats.binom(n,p)
+yazi=dagilim.pmf(k=1)
+yazi
+
+# 0.5
+```
+
 Bir deneme için Bernolli ve Binom üzerinden sonuç bulunabilir ama birden fazla deneme için sadece Binom kullanılır.
+
+Mesela $n$ = 3 için;
+
+$$ P ( x = 1 ) = \binom{3}{1} \cdot 0,5^1 \cdot 0,5^(3-1) $$
+$$ P ( x = 1 ) = 3 \cdot 0,5 \cdot 0,5^2 = 0,5 $$
+$$ P ( x = 1 ) = 0,375 = 3/8 $$
+
+3 para atma testinde de bu şekilde bulmuştuk.
+
+
+---
+
+Parayı 7 defa havaya attığımızda 3 defa yazı gelme olasılığı;
+
+$$ P = 0,5 $$
+$$ (1-P) = 0,5 $$
+$$ x = 3 $$
+$$ n = 7 $$
+
+$$ P ( x = 3 ) = \binom{7}{3} \cdot 0,5^3 \cdot 0,5^{(7-3)} $$
+$$ P ( x = 3 ) = 35 \cdot 0,125 \cdot 0,0625 $$
+$$ P ( x = 3 ) = 0,273 $$
+
+```Python
+from scipy import stats
+
+p=0.5
+n=7
+
+dagilim=stats.binom(n,p)
+yazi=dagilim.pmf(k=3)
+yazi
+
+# 0.2734374999999999 %27,3
+```
+
+Bir futbol takımının penaltı vuruşunu gole çevirme yüzdesinin %80 olduğunu biliyoruz. Bundan sonraki 5 penaltıdan 3 ünü 
+
+$$ P = 0,8 $$
+$$ n = 5 $$
+$$ x = 3 $$
+
+```Python
+from scipy import stats
+
+p=0.8
+n=5
+
+dagilim=stats.binom(n,p)
+gol=dagilim.pmf(k=3)
+gol
+
+# 0.2047 %20,47
+```
+
+
 
 ```Python
 
@@ -1336,5 +1405,6 @@ Bir deneme için Bernolli ve Binom üzerinden sonuç bulunabilir ama birden fazl
 
 
 
-https://www.youtube.com/watch?v=5HgOcPpifz0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=44
-10:50
+https://www.youtube.com/watch?v=5HgOcPpifz0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=45
+
+22:31
