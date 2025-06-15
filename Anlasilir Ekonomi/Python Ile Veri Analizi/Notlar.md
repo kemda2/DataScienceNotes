@@ -1336,5 +1336,5 @@ Bir deneme için Bernolli ve Binom üzerinden sonuç bulunabilir ama birden fazl
 
 
 
-https://www.youtube.com/watch?v=5HgOcPpifz0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=43&ab_channel=Anla%C5%9F%C4%B1l%C4%B1rEkonomi
-0:00
+https://www.youtube.com/watch?v=5HgOcPpifz0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=44
+10:50
