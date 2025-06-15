@@ -1225,6 +1225,15 @@ Bernoulli dağılımı kesikli bir dağılım olduğu için olasılık kütle fo
 $$ F(x) = P^x \cdot (1-P)^{1-x} $$
 $$ P(x = 0) = 1 - P $$
 $$ P(x = 1) = P $$
+$$ E(x) = P $$
+$$ \sigma^2_x = P \cdot (1 - P) $$
+
+Parayı atınca yazı gelme ihtimali;
+$$ Y = 1/2 \rightarrow 1/2 = P \rightarrow x = 1 $$
+$$ T = 1/2 \rightarrow 1/2 = 1-P \rightarrow x = 0 $$
+
+$$ F(x) = P^x \cdot (1-P)^{1-x} $$
+$$ Y \rightarrow (1/2)^1 \cdot (1/2)^0 = 0,5 $$
 
 
 ```Python
