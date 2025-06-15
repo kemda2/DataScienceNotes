@@ -1214,9 +1214,17 @@ plt.show()
 
 ## 3.3 Bernoulli dağılımı
 
+![image](./images/dagilimlar.png)
 
+Bernoulli dağılımı bir deney sonucunda başarılı ve başarısız olmak üzere bize sadece iki olası sonuç veren yapılardır.
 
+Mesela, bir madeni parayı bir defa havaya attığımızda iki olası sonuç vardır. Ya yazı gelir yada tura gelir.
 
+Bernoulli dağılımı kesikli bir dağılım olduğu için olasılık kütle fonksiyonudur. **(PMF)** 
+
+$$ F(x) = P^x \cdot (1-P)^{1-x} $$
+$$ P(x = 0) = 1 - P $$
+$$ P(x = 1) = P $$
 
 
 ```Python
