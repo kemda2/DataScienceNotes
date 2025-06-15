@@ -1300,7 +1300,7 @@ print("Varyans: {:.2f}".format(dagilim.var()))
 # Varyans: 0.0710
 ```
 
-## 3.3 Binom dağılımı
+## 3.4 Binom dağılımı
 
 
 
@@ -1311,7 +1311,7 @@ print("Varyans: {:.2f}".format(dagilim.var()))
 ![image](./images/.png)
 
 ### 
-## 3.4
+## 3.5
 # 4
 
 https://www.youtube.com/watch?v=N9MCfKdjKik&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=42&ab_channel=Anla%C5%9F%C4%B1l%C4%B1rEkonomi
