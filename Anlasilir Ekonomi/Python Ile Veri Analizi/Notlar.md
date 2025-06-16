@@ -1492,9 +1492,13 @@ olasılık
 # 0.009354601587329037 %0,93
 ```
 
+## 3.9 Poisson Dağılımı
 
+Bir saat içinde yoldan geçen araba sayısı veya üç sene içinde hastalığa yakalanma sayısı veya deprem, sel gibi nadir gerçekleşebilecek olaylar veya bir çağrı merkezine yarım saat içerisinde gelebilecek arama sayısı gibi bazı zaman dilimleri içerisinde saklı kalmış nadir gerçekleşebilecek olaylar için kullandığımız bir dağılım yapısıdır.
 
+Poisson dağılımı kullanabilmek için $\lambda$ denilen bir ortalama parametresine ihtiyacımız var.
 
+$ n>=50 $ ve $ P \cdot n < 5 $ olan olaylara **nadir olay** denir. 
 
 
 
@@ -1507,7 +1511,7 @@ olasılık
 $$  $$
 
 ### 
-## 3.9
+## 3.10
 # 4
 
 
