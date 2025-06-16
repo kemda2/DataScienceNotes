@@ -1502,7 +1502,31 @@ $ n>=50 $ ve $ P \cdot n < 5 $ olan olaylara **nadir olay** denir.
 
 Poisson dağılımı formülü;
 
-$$ f(x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!} $$
+$$ f(x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!} \\[1em]
+
+\lambda \rightarrow \text{ ortalama} \\[1em]
+
+x \rightarrow \text{ deneme sayısı} \\[1em]
+
+E(x) = \lambda \\[1em]
+
+\sigma^2_x = \lambda\\[1em]
+ 
+n \cdot p = \lambda \\[1em]
+
+p = \frac{\lambda}{n} \\[1em]
+
+n \rightarrow \infty \qquad p = \lambda \\[1em]
+
+\lim_{n \to \infty} \left(1 + \frac{x}{n}\right)^n = e^x \\[1em]
+
+\binom{n}{x} \cdot \left( \frac{\lambda}{n} \right)^x \cdot \left( 1 - \frac{\lambda}{n} \right) ^{n - x} \\[1em]
+
+\frac{n!}{(n-x)! \cdot x!} \cdot \left( \frac{\lambda}{n} \right)^x \cdot \left( 1 - \frac{\lambda}{n} \right) ^{n - x} \\[1em]
+$$
+
+
+
 
 ```Python
 
