@@ -881,6 +881,7 @@ aralik
 
 # (0.07515008811712867, 0.524849911882871)
 ```
+
 # 3 Dağılımlar
 
 ## 3.1 Rassal değişken 
@@ -1389,6 +1390,112 @@ gol
 # 0.2047 %20,47
 ```
 
+---
+
+Bir fabrikada üretilen bir ürünün her yüz tanesinin bir tanesinin kusurlu olarak üretildiği tespit edilmiştir. 10 tane ürünün tamamının kusursuz olması veya en fazla iki tanesinin kusurlu olması 
+
+$$ P = 0,01 $$
+
+```Python
+from scipy import stats
+
+p=0.01
+n=10
+
+dagilim=stats.binom(n,p)
+urun=dagilim.pmf(k=0)
+print(urun)
+
+# 0.9043820750088045
+```
+$$ P (X = 0) = 0.9043820750088045 = %90,43 $$
+
+```Python
+from scipy import stats
+
+p=0.01
+n=10
+
+dagilim=stats.binom(n,p)
+ürün0=dagilim.pmf(k=0)
+ürün1=dagilim.pmf(k=1)
+ürün2=dagilim.pmf(k=2)
+
+toplam= dagilim.cdf(x=2) # alternatif olarak kolay yol
+toplam 
+
+ürün0 + ürün1 + ürün2
+
+# 0.9998861508820942
+
+toplam
+
+# 0.9998861508820942
+```
+
+$$ P (X < 2) = P (X = 0) + P (X = 1) + P (X = 2) = 0.9998861508820942 = \% 99,98 $$
+
+en az 2 tane olma olasılığını sorsaydı 1-toplam üzerinden hesaplanır.
+
+---
+
+Mağazamızda haftalık olarak ürün iadesi konusunda bir olasılık modellemesi yapmak istiyoruz. Elimizdeki verilere göre haftalık ortalama her yüz satışın 10 tanesi iade ediliyor. Haftalık satış miktarı 50'dir. Bu durumda;
+
+$$ P = 0,10 $$
+$$ n = 50 $$
+
+- 50 satışta 5 tane iade gelme ihtimali nedir?
+$$ P (X = 5) = ? $$
+
+```Python
+from scipy import stats
+
+p=0.1
+n=50
+
+dagilim=stats.binom(n,p)
+olasılık=dagilim.pmf(k=5)
+olasılık
+
+# 0.18492460089521545 %18.50
+```
+
+- 50 satışta 15 taneden az iade gelme ihtimali nedir?
+$$ P (X < 15) = ? $$
+
+```Python
+from scipy import stats
+
+p=0.1
+n=50
+
+dagilim=stats.binom(n,p)
+olasılık=dagilim.cdf(x=15)
+olasılık
+
+# 0.9999825030783145 %99,99
+```
+
+- 50 satışta en az 10 adet iade gelme ihtimali nedir?
+$$ P (10 < X) = ? $$
+
+```Python
+from scipy import stats
+
+p=0.1
+n=50
+
+dagilim=stats.binom(n,p)
+olasılık=1-dagilim.cdf(x=10)
+olasılık
+
+# 0.009354601587329037 %0,93
+```
+
+
+
+
+
 
 
 ```Python
@@ -1396,6 +1503,8 @@ gol
 ```
 
 ![image](./images/.png)
+
+$$  $$
 
 ### 
 ## 3.9
