@@ -1500,7 +1500,9 @@ Poisson dağılımı kullanabilmek için $\lambda$ denilen bir ortalama parametr
 
 $ n>=50 $ ve $ P \cdot n < 5 $ olan olaylara **nadir olay** denir. 
 
+Poisson dağılımı formülü;
 
+$$ f(x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!} $$
 
 ```Python
 
@@ -1518,6 +1520,6 @@ $$  $$
 
 
 
-https://www.youtube.com/watch?v=5HgOcPpifz0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=45
+https://www.youtube.com/watch?v=dKymPdUh2KI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=44
 
-22:31
+15:31
