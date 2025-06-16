@@ -1460,7 +1460,7 @@ olasılık
 # 0.18492460089521545 %18.50
 ```
 
-- 50 satışta 15 taneden az iade gelme ihtimali nedir?
+>- 50 satışta 15 taneden az iade gelme ihtimali nedir?
 $$ P (X < 15) = ? $$
 
 ```Python
@@ -1476,7 +1476,7 @@ olasılık
 # 0.9999825030783145 %99,99
 ```
 
-- 50 satışta en az 10 adet iade gelme ihtimali nedir?
+>- 50 satışta en az 10 adet iade gelme ihtimali nedir?
 $$ P (10 < X) = ? $$
 
 ```Python
@@ -1500,7 +1500,7 @@ Poisson dağılımı kullanabilmek için $\lambda$ denilen bir ortalama parametr
 
 $ n>=50 $ ve $ P \cdot n < 5 $ olan olaylara **nadir olay** denir. 
 
-Poisson dağılımı formülü;
+>Poisson dağılımı formülü;
 
 $$ f(x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!} \\[1em]
 
@@ -1515,16 +1515,36 @@ E(x) = \lambda \\[1em]
 n \cdot p = \lambda \\[1em]
 
 p = \frac{\lambda}{n} \\[1em]
-
-n \rightarrow \infty \qquad p = \lambda \\[1em]
-
-\lim_{n \to \infty} \left(1 + \frac{x}{n}\right)^n = e^x \\[1em]
-
-\binom{n}{x} \cdot \left( \frac{\lambda}{n} \right)^x \cdot \left( 1 - \frac{\lambda}{n} \right) ^{n - x} \\[1em]
-
-\frac{n!}{(n-x)! \cdot x!} \cdot \left( \frac{\lambda}{n} \right)^x \cdot \left( 1 - \frac{\lambda}{n} \right) ^{n - x} \\[1em]
 $$
 
+### Örnekler
+
+>Bir çağrı merkezine 1 dakika içinde gelen araması sayısı ortalama 10 adettir.
+>1 dk içinde hiç arama gelmemesi ihtimali;
+$$
+f(x) = \frac{\lambda^x \cdot e^{-\lambda}}{x!} \\[1em]
+\lambda = 10 \qquad x=0 \\[1em]
+P(x=0) = \frac{10^0 \cdot 2,71^{-10}}{0!} \\[1em]
+P(x=0) = 2,71^{-10} \\[1em]
+P(x=0) = 0,00004 = \%0,004 \\[1em]
+$$
+
+```Python
+from scipy import stats
+
+ortalama = 10
+dagilim = stats.poisson(ortalama)
+p0 = dagilim.pmf(k=0)
+p0 * 100
+
+# 0.004539992976248485 = % 0,004
+```
+
+---
+
+>Elektrik ürünler satılan bir mağazada bir ürün üzerinden olasılık modelleme yapılmak isteniyor. Yapılan çalışmalara göre satışı nadir yapılan bir ürün. 1 yılda 1825 adet satılmış. Herhangi bir günde bu televizyondan 9 adet satılma ihtimali kaçtır?
+
+Öncelikle 
 
 
 
@@ -1534,7 +1554,7 @@ $$
 
 ![image](./images/.png)
 
-$$  $$
+$$
 
 ### 
 ## 3.10
