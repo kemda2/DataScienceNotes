@@ -1542,9 +1542,65 @@ p0 * 100
 
 ---
 
->Elektrik ürünler satılan bir mağazada bir ürün üzerinden olasılık modelleme yapılmak isteniyor. Yapılan çalışmalara göre satışı nadir yapılan bir ürün. 1 yılda 1825 adet satılmış. Herhangi bir günde bu televizyondan 9 adet satılma ihtimali kaçtır?
+>Elektrik ürünler satılan bir mağazada bir ürün üzerinden olasılık modelleme yapılmak isteniyor. Yapılan çalışmalara göre satışı nadir yapılan bir ürün. 1 yılda ortalama 1825 adet satılmış. Herhangi bir günde bu televizyondan 9 adet satılma ihtimali kaçtır?
 
-Öncelikle 
+Öncelikle yıllık ortalamayı günlük ortalamaya çevireceğiz. 
+
+$$
+\frac{1825}{365} = 5 
+$$
+
+$$
+P( x = 9 ) = ?
+$$
+
+```Python
+from scipy import stats
+
+ortalama = 5
+dagilim = stats.poisson(ortalama)
+p0 = dagilim.pmf(k=9)
+p0 * 100
+
+# 3.6265577415643713 = % 3,626
+```
+
+---
+
+> Bir X ülkesine çatı malzemesi satacağız. Ama bu ülkenin meteorolojik durumu bize sorun çıkartır mı bilmiyoruz. Ama garanti süresi bulmamız lazım. Ülke değerlerini incelediğimizde satacağımız ülkede 1 yılda ortalama 2 fırtına çıktığını gördük. 1 yılda 1 fırtına, 4 fırtına ve 5 fırtına olması ihtimalini ayrı ayrı bulunuz.
+
+```Python
+from scipy import stats
+
+ortalama = 2
+dagilim = stats.poisson(ortalama)
+p0 = dagilim.pmf(k=1)
+p0 * 100
+
+# 27.06705664732254 = % 27,067
+```
+
+```Python
+from scipy import stats
+
+ortalama = 2
+dagilim = stats.poisson(ortalama)
+p0 = dagilim.pmf(k=3)
+p0 * 100
+
+# 18.044704431548357 = % 18,044
+```
+
+```Python
+from scipy import stats
+
+ortalama = 2
+dagilim = stats.poisson(ortalama)
+p0 = dagilim.pmf(k=5)
+p0 * 100
+
+# 3.6089408863096724 = % 3,608
+```
 
 
 
@@ -1564,6 +1620,6 @@ $$
 
 
 
-https://www.youtube.com/watch?v=dKymPdUh2KI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=44
+https://www.youtube.com/watch?v=TWgC2zNI9SQ&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=45
 
-15:31
+22:44
