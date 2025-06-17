@@ -1827,4 +1827,4 @@ $$
 
 https://www.youtube.com/watch?v=yJDobrabK_M&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=47
 
-14:13
+19:42
