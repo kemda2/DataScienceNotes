@@ -1806,7 +1806,27 @@ olasılık
 
 > Bir ürünün tamir süresi hakkında bir modelleme yapmak istiyoruz ve bu ürünün tamir süresine baktığımız zaman bir buçuk saat ile dört saat arasında değişen bir yapıya uyduduğunu görüyoruz. Rastgele se ilen arızalı bir ürünün tamir süresinin İki saatten fazla olma olasılığı nedir?
 
+$$
+1,5 < x < 4 \\
+$$
 
+$$
+P(X>2) = 1 - P(X<2) 
+$$
+
+```Python
+from scipy import stats 
+
+a=1.5  
+b=4 
+
+dagilim=stats.uniform(a,b) 
+
+olasilik=dagilim.cdf(x=2) 
+1-olasilik
+
+# 0.875 = % 87,5
+```
 
 
 ```Python
@@ -1825,6 +1845,6 @@ $$
 
 
 
-https://www.youtube.com/watch?v=yJDobrabK_M&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=47
+https://www.youtube.com/watch?v=Cc_cOcFMCz0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=48
 
-19:42
+00:00
