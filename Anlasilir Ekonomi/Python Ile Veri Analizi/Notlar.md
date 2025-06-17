@@ -1775,6 +1775,6 @@ $$
 
 
 
-https://www.youtube.com/watch?v=TWgC2zNI9SQ&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=45
+https://www.youtube.com/watch?v=yJDobrabK_M&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=47
 
-22:44
+14:13
