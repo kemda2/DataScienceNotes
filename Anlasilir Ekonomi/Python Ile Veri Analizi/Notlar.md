@@ -1303,6 +1303,8 @@ print("Varyans: {:.2f}".format(dagilim.var()))
 
 ## 3.8 Binom dağılımı
 
+![image](./images/dagilimlar.png)
+
 $$ f(x) = \binom{n}{x} \cdot P^x \cdot (1-P)^{(n-x)}$$
 
 $n$: deneme sayısı
@@ -1494,6 +1496,8 @@ olasılık
 
 ## 3.9 Poisson Dağılımı
 
+![image](./images/dagilimlar.png)
+
 Bir saat içinde yoldan geçen araba sayısı veya üç sene içinde hastalığa yakalanma sayısı veya deprem, sel gibi nadir gerçekleşebilecek olaylar veya bir çağrı merkezine yarım saat içerisinde gelebilecek arama sayısı gibi bazı zaman dilimleri içerisinde saklı kalmış nadir gerçekleşebilecek olaylar için kullandığımız bir dağılım yapısıdır.
 
 Poisson dağılımı kullanabilmek için $\lambda$ denilen bir ortalama parametresine ihtiyacımız var.
@@ -1602,6 +1606,157 @@ p0 * 100
 # 3.6089408863096724 = % 3,608
 ```
 
+---
+
+>Marmara Bölgesi ile ilgili yaptığımız araştırmada bir yılda ortalama 6 deprem olduğu tespit edilmiştir. Önümüzdeki 1 yılda en fazla ve en az 3 deprem olma olasılığı nedir?
+
+P(x <= 3) = ?
+
+```Python
+from scipy import stats
+
+ortalama=6
+dagilim=stats.poisson(ortalama)
+
+p0=dagilim.cdf(x=3)
+p0 * 100
+
+# 15.120388277664784 = % 15,12
+```
+
+
+P(x > 3) = ?
+
+100 - 15,12 = % 84,88
+
+---
+
+> X ülkesinin Borsası incelediğimizde o borsanın endeksinin bir yılda Ortalama olarak 2 defa %10'dan daha fazla yükseldiği tespit edilmiştir. Önümüzdeki yılda bir defadan fazla %10'dan fazla yükselme olasılığı nedir?
+
+P (x > 1) = 1 - P(x <= 1) =?
+
+```Python
+from scipy import stats
+
+ortalama=2
+
+dagilim=stats.poisson(ortalama)
+p0=dagilim.cdf(x=1)
+
+(1-p0)*100
+
+# 59.3994150290162 = % 59,39
+```
+
+## 3.10 Kesikli Uniform Dağılımı
+
+![image](./images/dagilimlar.png)
+
+Uniform dağılım kesikli ve sürekli yapılar için farklı hesaplanır.
+
+$$ f(x) = \frac{1}{n} $$
+
+$$ E(x) = \frac{n+1}{2} $$
+
+$$ \sigma^2_x = \frac{n^2-1}{12} $$
+
+|X|P(X)|
+|:---:|:---:|
+|1|1/6|
+|2|1/6|
+|3|1/6|
+|4|1/6|
+|5|1/6|
+|6|1/6|
+
+![image](./images/UniformKesikli.png)
+
+$$
+E(X) = \frac{n+1}{2} = \frac{7}{2} = 3,5
+$$
+
+$$
+\sigma^2_x = \frac{n^2-1}{12} = \frac{35}{12} = 2,91
+$$
+
+> Bir zar atışında 5 gelme olasılığını bulalım. (Bu adım bütün sayılar için aynıdır.) Daha sonra beklenen değeri ve varyansı bulalım.
+
+```Python
+from scipy import stats
+
+n=6
+dagilim=stats.randint(1,n+1)
+
+olasılık=dagilim.pmf(k=5)
+olasılık
+
+# 0.16666666666666666 = % 16,66
+
+beklenen=dagilim.expect()
+beklenen
+
+# 3.5
+
+varyans = dagilim.var()
+varyans
+
+# 2.9166666666666665 = 2.91
+```
+
+> Attığımız bir zarın 3 ten küçük olma olasılığı nedir?
+
+P(x<3)=?
+
+```Python
+from scipy import stats
+
+n=6
+
+
+dagilim=stats.randint(1,n+1)
+olasılık=dagilim.cdf(x=3)
+olasılık
+
+# 0.5
+```
+
+P(x<2)=?
+
+```Python
+from scipy import stats
+
+n=6
+
+
+dagilim=stats.randint(1,n+1)
+olasılık=dagilim.cdf(x=2)
+olasılık
+
+# 0.3333333333333333 = 0.33
+```
+
+## 3.11 Sürekli Uniform Dağılımı
+
+![image](./images/dagilimlar.png)
+
+Sürekli üniform aralığında noktalar değil aralıklar bulunur. Yani, Q1 < x < Q2 şeklinde bir dağılım gözlemlenir.Olasılık değil fonksiyon değeri kullanılır.
+
+$a < x < b$ için;
+
+$$
+f(x) = \frac{1}{b-a}
+$$
+
+$$
+E(x) = \frac{a+b}{2}
+$$
+
+$$
+\sigma^2_x = \frac{(b-a)^2}{12}
+$$
+
+
+
 
 
 ```Python
@@ -1613,7 +1768,7 @@ p0 * 100
 $$
 
 ### 
-## 3.10
+## 3.12 
 # 4
 
 
