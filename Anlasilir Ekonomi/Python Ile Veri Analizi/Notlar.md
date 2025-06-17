@@ -1755,6 +1755,56 @@ $$
 \sigma^2_x = \frac{(b-a)^2}{12}
 $$
 
+### Örnekler
+
+> Bir otobüs durağında x numaralı bir otobüsü bekliyoruz ve bu otobüsün 15 dk bir geldiğini görüyoruz.
+
+$$
+f(x) = \frac{1}{b-a} = \frac{1}{15-0} = \frac{1}{15}  
+$$
+
+$$
+E(x) = \frac{a+b}{2} = \frac{0+15}{2} = 7,5
+$$
+
+```Python
+from scipy import stats
+
+a=0
+b=15
+
+dagilim=stats.uniform(a,b)
+
+beklenen=dagilim.expect()
+
+beklenen
+
+# 7.5
+```
+
+---
+
+> Bir kişinin bu otobüs durağında otobüsü 12,5 dakikadan daha az bekleme olasılığı nedir?
+
+$$P(X <= 12.5) = ?$$
+
+```Python
+from scipy import stats
+
+a=0
+b=15
+
+dagilim=stats.uniform(a,b)
+
+olasılık=dagilim.cdf(12.5)
+
+olasılık
+
+# 0.8333333333333334 = % 83,33
+```
+--- 
+
+> Bir ürünün tamir süresi hakkında bir modelleme yapmak istiyoruz ve bu ürünün tamir süresin baktığınız zaman
 
 
 
