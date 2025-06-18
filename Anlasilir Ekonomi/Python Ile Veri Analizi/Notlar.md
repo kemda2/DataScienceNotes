@@ -1912,7 +1912,43 @@ olas1l1k=dagilim.cdf(x=3500)
 
 ---
 
-> Yıllık ortalama
+> Yıllık ortalama yangından dolayı ortalama 4300 dönüm yandığı belirtiliyor. Varyans değeri 562500 ve dağılımın normal dağılım olduğu biliniyor. P(2500 < X < 4000)=?
+
+```Python
+from scipy import stats
+import numpy as np
+
+ortalama=4300
+varyans=562500
+
+dagilim=stats.norm(ortalama,np.sqrt(varyans))
+
+olasilik1=dagilim.cdf(x=4200)
+olasilik2=dagilim.cdf(x=2500)
+
+(olasilik1-olasilik2)*100
+
+# 43.876734745178986 = % 43,87
+```
+
+> P(3000 < X)=?
+
+```Python
+from scipy import stats
+import numpy as np
+
+ortalama=4300
+varyans=562500
+
+dagilim=stats.norm(ortalama,np.sqrt(varyans))
+
+olasilik1=dagilim.cdf(x=4200)
+
+(1-olasilik1)*100
+
+# 55.3035116623614 = % 55,30
+```
+
 
 
 
