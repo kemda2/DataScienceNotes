@@ -1942,13 +1942,67 @@ varyans=562500
 
 dagilim=stats.norm(ortalama,np.sqrt(varyans))
 
-olasilik1=dagilim.cdf(x=4200)
+olasilik1=dagilim.cdf(x=3000)
+olasilik2=dagilim.sf(x=3000)
 
 (1-olasilik1)*100
 
 # 55.3035116623614 = % 55,30
+
+olasilik2
+
+# 55.3035116623614 = % 55,30
 ```
 
+---
+
+> Ürettiğimiz bir ürünün ömrü 58 aydır. varyans değeri ise 100 aydır. Bu ürün için verilen garanti süresi 3 yıldır. Bir yılda 1.000.000 adet ürün üretiliyor. Bir yıllık süre içerisinde kaç tane ürün garantiye gelir? Dağılımın normal dağılım olduğu varsayılıyor.
+
+P(X<36)=?
+
+```Python
+from scipy import stats
+import numpy as np
+
+ortalama=58
+varyans=100
+
+dagilim=stats.norm(ortalama,np.sqrt(varyans))
+
+olasilik1=dagilim.cdf(x=3*12)
+
+olasilik1*100
+
+# 1.3903447513498595 = % 1,39
+
+olasilik1 * 1000000
+
+# 13903.447513498595 adet ütün garantiy gelir.
+```
+
+---
+
+> Bir yemek şirketindeki şikayetten sonra geçen teslimat süresi inceleniyor. Geçmiş verilere göre ortalama olarak bu süre 30 dakikadır. Varyans değeri ise 25 dakikadır. Verilerin normal dağıldığı tespit edildiğine göre teslimatın 22 ile 40 dakika arasında olma ihtimali nedir?
+
+P(20 < X < 40)=?
+
+```Python
+from scipy import stats
+import numpy as np
+
+ortalama=30
+varyans=25
+
+dagilim=stats.norm(ortalama,np.sqrt(varyans))
+
+olasilik1=dagilim.cdf(x=20)
+olasilik2=dagilim.cdf(x=40)
+
+(olasilik2 - olasilik1)*100
+# 95.44997361036415 = %95
+```
+
+# 4 Hipotez Testi
 
 
 
@@ -1960,8 +2014,8 @@ olasilik1=dagilim.cdf(x=4200)
 
 ### Örnekler
 ## 3.14 
-# 4
+# 5
 
-https://www.youtube.com/watch?v=2zt4ms80Oq4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=51
+https://www.youtube.com/watch?v=3BV48fJxSx0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=51
 
-05:21
+00:00
