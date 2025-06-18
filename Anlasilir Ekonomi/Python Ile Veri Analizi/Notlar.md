@@ -1828,6 +1828,15 @@ olasilik=dagilim.cdf(x=2)
 # 0.875 = % 87,5
 ```
 
+## 3.12 Normal (Gauss) Dağılımı 
+
+
+
+
+
+
+
+
 
 ```Python
 
@@ -1838,7 +1847,7 @@ olasilik=dagilim.cdf(x=2)
 $$
 
 ### 
-## 3.12 
+## 3.13 
 # 4
 
 
