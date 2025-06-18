@@ -1887,11 +1887,11 @@ olasılık*100
 
 X = Ürün sayısı
 
-Ortalama = 100
+Ortalama = 3000
 
 E(x) = 30 gün * 100 ortalama adedi = 3000
 
-$\sigma^2_x$ = 
+$\sigma^2_x$ = 90000
 
 
 
@@ -1899,16 +1899,20 @@ $\sigma^2_x$ =
 from scipy import stats
 import numpy as np
 
-ortalama=100
-varyans=100
+ortalama=3000
+varyans=90000
 
-dagilim=stats.norm(orta1ama,np.sqrt(varyans))
-olasılık=dagilim.cdf(x=518)
-olasılık*100
+dagilim=stats.norm(ortalama,np.sqrt(varyans))
+olas1l1k=dagilim.cdf(x=3500)
 
-# 96.40696808870743 = %96,40
+(1-olasılık)*100
+
+# 4.77903522728147 = %4,77
 ```
 
+---
+
+> Yıllık ortalama
 
 
 
