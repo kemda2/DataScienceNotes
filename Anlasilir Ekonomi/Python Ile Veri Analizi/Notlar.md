@@ -1896,6 +1896,6 @@ olasılık*100
 ## 3.14 
 # 4
 
-https://www.youtube.com/watch?v=Cc_cOcFMCz0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=48
+https://www.youtube.com/watch?v=2zt4ms80Oq4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=50
 
 00:00
