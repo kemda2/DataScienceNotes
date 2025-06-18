@@ -1881,7 +1881,33 @@ olasılık*100
 # 96.40696808870743 = %96,40
 ```
 
+### Örnekler 2
 
+>Ürüne gelen günlük talep miktarı 100 ve varyans değeri 3000 adettir. Verinin normal dağıldığı bilindiğine göre; 3500 adet stoğu bulunan ürünün bir ay içerisinde bitme ihtimali nedir?
+
+X = Ürün sayısı
+
+Ortalama = 100
+
+E(x) = 30 gün * 100 ortalama adedi = 3000
+
+$\sigma^2_x$ = 
+
+
+
+```Python
+from scipy import stats
+import numpy as np
+
+ortalama=100
+varyans=100
+
+dagilim=stats.norm(orta1ama,np.sqrt(varyans))
+olasılık=dagilim.cdf(x=518)
+olasılık*100
+
+# 96.40696808870743 = %96,40
+```
 
 
 
@@ -1896,6 +1922,6 @@ olasılık*100
 ## 3.14 
 # 4
 
-https://www.youtube.com/watch?v=2zt4ms80Oq4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=50
+https://www.youtube.com/watch?v=2zt4ms80Oq4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=51
 
-00:00
+05:21
