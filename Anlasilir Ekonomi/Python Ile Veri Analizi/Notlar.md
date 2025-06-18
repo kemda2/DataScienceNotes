@@ -1830,6 +1830,11 @@ olasilik=dagilim.cdf(x=2)
 
 ## 3.12 Normal (Gauss) Dağılımı 
 
+Binom açılımı;
+![image](./images/binomacilimi.png)
+
+Pascal Üçgeni;
+![image](./images/pascalucgeni.png)
 
 
 
