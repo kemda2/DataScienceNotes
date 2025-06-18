@@ -1831,12 +1831,55 @@ olasilik=dagilim.cdf(x=2)
 ## 3.12 Normal (Gauss) Dağılımı 
 
 Binom açılımı;
+
 ![image](./images/binomacilimi.png)
 
 Pascal Üçgeni;
+
 ![image](./images/pascalucgeni.png)
 
+## 3.13 Normal Dağılım Özellikleri
 
+Olasılık Fonksiyon Formülü;
+
+$$
+f(x) = \frac{1}{\sigma \cdot \sqrt{2 \cdot \pi}} \cdot e^{-\frac{1}{2} \cdot (\frac{x-\mu}{\sigma_x})^2}
+$$
+$$
+-\infty < x < \infty
+$$
+$$
+E(x) = \mu
+$$
+$$
+\text{Varyans} = \sigma^2_x
+$$
+$$
+\int_{-\infty}^{\infty} =  f(x)\,dx = 1
+$$
+
+### Örnekler
+
+> Bir fabrikada üretilen bir ürünün ortalama ağırlığı 500 gr, varyansı da 100 gramdır. Verinin normal dağıldığı bilindiğine göre; rassal olarak seçilen bir ürünün ağırlığının 518 gr'dan az olma ihtimali nedir?
+
+xort = 500
+P(x<518) = ?
+
+⚠⚠⚠ x<518 ve xort<518 olduğu için olasılık 0,5'ten fazla olmalı.
+
+```Python
+from scipy import stats
+import numpy as np
+
+ortalama=500
+varyans=100
+
+dagilim=stats.norm(orta1ama,np.sqrt(varyans))
+olasılık=dagilim.cdf(x=518)
+olasılık*100
+
+# 96.40696808870743 = %96,40
+```
 
 
 
@@ -1849,15 +1892,9 @@ Pascal Üçgeni;
 
 ![image](./images/.png)
 
-$$
-
-### 
-## 3.13 
+### Örnekler
+## 3.14 
 # 4
-
-
-
-
 
 https://www.youtube.com/watch?v=Cc_cOcFMCz0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=48
 
