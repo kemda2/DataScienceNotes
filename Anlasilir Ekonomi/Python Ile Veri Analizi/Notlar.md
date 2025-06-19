@@ -2019,7 +2019,12 @@ Aşağıdaki tablo, istatistikte yaygın olarak kullanılan **popülasyon parame
 | Standart Sapma | $\sigma_x$ | $s$ |
 
 Yukarıdaki tabloda verilen değerlerin birbiriyle uyumlu olması gerekmektedir.
-Hipotez testi bu iki parametre arasındaki örneklem hatasının neden kaynaklandığını açıklar.
+Hipotez testi bu iki parametre arasındaki örneklem hatasının şans eseri mi ortala çıktı yoksa böyle bir hata var mı onu açıklar.
+
+## 4.1 Boş ve Alternatif Hipotezler
+
+
+
 
 
 
@@ -2034,7 +2039,7 @@ Hipotez testi bu iki parametre arasındaki örneklem hatasının neden kaynaklan
 ![image](./images/.png)
 
 ### Örnekler
-## 3.14 
+## 4.2 
 # 5
 
 https://www.youtube.com/watch?v=3BV48fJxSx0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=51
