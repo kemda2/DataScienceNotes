@@ -2043,10 +2043,57 @@ $H_1$: $\mu$ > 20
 
 $H_0$ hipotezini reddedebileceğimiz bir yapıdır. 
 
+### Örnekler
 
+>Bir fabrikanın üretim bandındaki her bir ürünün ağırlığını ölçüyoruz Elinizdeki ağırlığı ölçen tartının %99'luk bir doğrulukla doğru ölçüm yapıyor.
 
+P = 0,99 $\qquad$ 1-P = 0,01
 
+100 tane örnek seçerek olasılığı belirliyoruz.
 
+$$ P(X=x) = \binom{n}{x} \cdot P^x \cdot (1-P)^{(n-x)}$$
+
+Olasılık Başarı dağılımına bakalım;
+
+```Python
+from scipy import stats
+
+p=0.99
+n=100
+
+dagilim=stats.binom(n,p).pmf(k=100)
+dagilim*100
+
+# 36.60323412732292
+
+dagilim=stats.binom(n,p).pmf(k=99)
+dagilim*100
+
+# 36.97296376497267
+
+dagilim=stats.binom(n,p).pmf(k=98)
+dagilim*100
+
+# 18.48648188248636
+
+dagilim=stats.binom(n,p).pmf(k=97)
+dagilim*100
+
+# 6.0999165807530735
+
+dagilim=stats.binom(n,p).pmf(k=96)
+dagilim*100
+
+# 1.494171485689519
+
+dagilim=stats.binom(n,p).pmf(k=95)
+dagilim*100
+
+# 0.2897787123761487
+```
+
+$H_0$ : $\mu$ = %99 $\qquad$
+$H_1$ : $\mu$ =! %99
 
 
 ```Python
@@ -2059,6 +2106,6 @@ $H_0$ hipotezini reddedebileceğimiz bir yapıdır.
 ## 4.3 
 # 5
 
-https://www.youtube.com/watch?v=3BV48fJxSx0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=51
+https://www.youtube.com/watch?v=69puGNk3gFE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=53
 
-00:00
+18:50
