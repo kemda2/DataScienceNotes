@@ -2004,6 +2004,13 @@ olasilik2=dagilim.cdf(x=40)
 
 # 4 Hipotez Testi
 
+>Hipotez Testinin 3 adımı;
+1. Varsayımda Bulunma
+1. Veri Toplama
+1. Kabul veya Ret
+
+**Örneklem hatası**, örnekten elde edilen sonuçlarla tüm evrenden elde edilmesi beklenen gerçek sonuçlar arasındaki farktır.
+
 
 
 ```Python
