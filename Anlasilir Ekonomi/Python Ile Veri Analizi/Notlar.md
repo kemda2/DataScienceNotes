@@ -2004,12 +2004,26 @@ olasilik2=dagilim.cdf(x=40)
 
 # 4 Hipotez Testi
 
->Hipotez Testinin 3 adımı;
+**Hipotez Testinin 3 adımı;**
 1. Varsayımda Bulunma
 1. Veri Toplama
 1. Kabul veya Ret
 
 **Örneklem hatası**, örnekten elde edilen sonuçlarla tüm evrenden elde edilmesi beklenen gerçek sonuçlar arasındaki farktır.
+
+Aşağıdaki tablo, istatistikte yaygın olarak kullanılan **popülasyon parametreleri** ve **örneklem parametreleri** arasındaki farkları kısa ve net şekilde göstermektedir:
+
+| **Tanım** | **Popülasyon Parametresi** | **Örneklem Parametresi** |
+| --- | --- | --- |
+| Ortalama | $\mu$ | $\bar{X}$ |
+| Standart Sapma | $\sigma_x$ | $s$ |
+
+Yukarıdaki tabloda verilen değerlerin birbiriyle uyumlu olması gerekmektedir.
+Hipotez testi bu iki parametre arasındaki örneklem hatasının neden kaynaklandığını açıklar.
+
+
+
+
 
 
 
