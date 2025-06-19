@@ -2023,8 +2023,25 @@ Hipotez testi bu iki parametre arasındaki örneklem hatasının şans eseri mi 
 
 ## 4.1 Boş ve Alternatif Hipotezler
 
+1. Hipotez kurulur; Boş hipotez $H_0$ ve Alternatif hipotez $H_1$ belirlenir.
+1. Anlamlılık seviyesinin belirlenmesi ($\alpha$)
+1. Olasılık dağılımının belirlenmesi (Merkezi limit teoremi)
+1. İstatistiksel testler (p değeri)
+1. $\alpha$ ve p değerleri karşılaştırarak hipotezin doğrulu yorumlanır.
 
+### Örnekler
 
+Aşı denediğimiz hastalarda fark olduğunu araştırıyoruz. Kan değeri 15'ten 20'nin üzerine çıkarsa fark olduğunu düşünüyoruz. Hipotezler;
+
+$H_0$: Fark Yok $\quad$ $H_1$: Fark Var
+
+$H_0$: $\mu$ = 20
+
+$H_1$: $\mu$ > 20
+
+## 4.2 Hipotez Testinde Anlamlılık Düzeyi ($\alpha$)
+
+$H_0$ hipotezini reddedebileceğimiz bir yapıdır. 
 
 
 
@@ -2039,7 +2056,7 @@ Hipotez testi bu iki parametre arasındaki örneklem hatasının şans eseri mi 
 ![image](./images/.png)
 
 ### Örnekler
-## 4.2 
+## 4.3 
 # 5
 
 https://www.youtube.com/watch?v=3BV48fJxSx0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=51
