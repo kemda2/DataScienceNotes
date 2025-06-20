@@ -2101,8 +2101,8 @@ Cihaz 100 üründen 95 tanesini doğru ölçtü. Bu da %99 doğruluk bilgisinin 
 
 > Bir seçim anketi yapıyorsunuz ve A partisinin önceki seçimdeki oy oranının %10 olduğunu biliyorsunuz. Ancak biz seçim anketinde bu durumun değişikliğe gidip gitmediği hakkında bilgi sahibi olmak istiyoruz. Bu yüzden 5 bin kişilik örnekten anket aldık ve oy verme oranı üzerinden ilerlediğimizde ortalamanın %20 olduğunu söylüyoruz. Değişiklik olup olmadığını inceleyeceğiz.
 
-$H_0 : \mu = \%10$ 
-$H_1 : \mu =! \%10$ 
+$$H_0 : \mu = \%10$$
+$$H_1 : \mu =! \%10$$ 
 
 %95 bir güven aralığı ile işlem yapacağız. $\alpha = 0,05$
 
@@ -2110,7 +2110,9 @@ $H_1 : \mu =! \%10$
 
 ## 4.3 Hipotez Testinde Tek ve Çift Kuyruk Yapısı
 
+Aşağıdaki gibi yapılara çif kuruk yapısı deniyor.
 
+![image](./images/tekkuyruk.png)
 
 
 
