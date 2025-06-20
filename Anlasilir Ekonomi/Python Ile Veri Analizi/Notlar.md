@@ -2152,6 +2152,18 @@ $$H_1 : \mu =! 300$$
 $$H_0 : \text{suçlu} $$
 $$H_1 : \text{suçsuz}$$ 
 
+## 4.5 Hipotez Testinde P Değeri
+
+$$
+P < \alpha \quad \text{ise } H_0 \text{ reddedilir. } \\[2mm]
+P >= \alpha \quad \text{ise } H_0 \text{ reddedilemez. }
+
+$$
+
+
+
+
+
 
 
 ```Python
@@ -2161,7 +2173,7 @@ $$H_1 : \text{suçsuz}$$
 ![image](./images/.png)
 
 ### Örnekler
-## 4.5 
+## 4.6 
 # 5
 
 https://www.youtube.com/watch?v=1d9JlL1yDcs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=56
