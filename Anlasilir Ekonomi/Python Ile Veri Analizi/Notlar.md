@@ -2114,6 +2114,43 @@ Aşağıdaki gibi yapılara çif kuruk yapısı deniyor.
 
 ![image](./images/tekkuyruk.png)
 
+### Örnekler
+
+>Bir araştırma sonucunda öğrencilerin okula gidip geldiği sürenin bir saatten fazla olduğu iddia edilmektedir. Güven yapısı %95 ise
+
+$$H_0 : \mu = 60$$
+$$H_1 : \mu > 60$$ 
+
+![image](./images/örnektekkuyruk.png)
+
+---
+
+>Ülkemize gelen turistlerin otelde konaklama sürelerinin on günden daha az olduğu iddia ediliyor.
+
+$$H_0 : \mu = 10$$
+$$H_1 : \mu < 10$$ 
+
+---
+
+>Marketlerde bulunan bir sütü ürünün 300 gram'dan farklı olduğu iddia ediliyor.
+
+$$H_0 : \mu = 300$$
+$$H_1 : \mu =! 300$$ 
+Çift kuyruk
+
+## 4.4 Hipotez Testinde Tip I ve Tip II Hatalar
+
+| Test Sonucu   | Gerçekte Doğru   | Gerçekte Yanlış    |
+| :-----------: | :--------------: | :----------------: |
+| **H₀ Doğru**  | Doğru Kabul      | Tip I Hata (α)     |
+| **H₀ Yanlış** | Tip II Hata (β)  | Doğru Reddetme     |
+
+### Örnekler
+
+>Bir kişinin suçlu olduğunu düşünüyoruz. Amacımız bu kişinin suçlu olduğunu ispat etmek. 
+
+$$H_0 : \text{suçlu} $$
+$$H_1 : \text{suçsuz}$$ 
 
 
 
@@ -2124,9 +2161,9 @@ Aşağıdaki gibi yapılara çif kuruk yapısı deniyor.
 ![image](./images/.png)
 
 ### Örnekler
-## 4.4 
+## 4.5 
 # 5
 
-https://www.youtube.com/watch?v=Za-3z-Hfvd0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=54
+https://www.youtube.com/watch?v=1d9JlL1yDcs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=56
 
 00:00
