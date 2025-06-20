@@ -2095,6 +2095,25 @@ dagilim*100
 $H_0$ : $\mu$ = %99 $\qquad$
 $H_1$ : $\mu$ =! %99
 
+Cihaz 100 üründen 95 tanesini doğru ölçtü. Bu da %99 doğruluk bilgisinin doğru olması ihtimalinin %0,28 olduğunu gösterir.
+
+---
+
+> Bir seçim anketi yapıyorsunuz ve A partisinin önceki seçimdeki oy oranının %10 olduğunu biliyorsunuz. Ancak biz seçim anketinde bu durumun değişikliğe gidip gitmediği hakkında bilgi sahibi olmak istiyoruz. Bu yüzden 5 bin kişilik örnekten anket aldık ve oy verme oranı üzerinden ilerlediğimizde ortalamanın %20 olduğunu söylüyoruz. Değişiklik olup olmadığını inceleyeceğiz.
+
+$H_0 : \mu = \%10$ 
+$H_1 : \mu =! \%10$ 
+
+%95 bir güven aralığı ile işlem yapacağız. $\alpha = 0,05$
+
+**P değeri** bulunarak %20'lik oranın nereye düştüğünü bulabiliriz.
+
+## 4.3 Hipotez Testinde Tek ve Çift Kuyruk Yapısı
+
+
+
+
+
 
 ```Python
 
@@ -2103,9 +2122,9 @@ $H_1$ : $\mu$ =! %99
 ![image](./images/.png)
 
 ### Örnekler
-## 4.3 
+## 4.4 
 # 5
 
-https://www.youtube.com/watch?v=69puGNk3gFE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=53
+https://www.youtube.com/watch?v=Za-3z-Hfvd0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=54
 
-18:50
+00:00
