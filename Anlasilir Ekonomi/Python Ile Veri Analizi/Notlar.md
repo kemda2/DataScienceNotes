@@ -2155,22 +2155,14 @@ $$H_1 : \text{suçsuz}$$
 ## 4.5 Hipotez Testinde P Değeri
 
 $$
-P < \alpha \quad \text{ise } H_0 \text{ reddedilir. } \\[2mm]
-P >= \alpha \quad \text{ise } H_0 \text{ reddedilemez. }
-
+P < \alpha \quad \text{ ise } \quad H_0 \text{ reddedilir. } \\[2mm]
+P >= \alpha \quad \text{ ise } \quad H_0 \text{ reddedilemez. }
 $$
 
 
 
 
 
-
-
-```Python
-
-```
-
-![image](./images/.png)
 
 ### Örnekler
 ## 4.6 
