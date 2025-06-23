@@ -2161,14 +2161,48 @@ $$
 
 Bu yüzden %95 güven aralığındaki olasılık alanını alfa değeriyle hesaplarız. Z tablosundan z score değerinin 1,96 olduğu bulunur. 
 
-$z_{istatistik} = \frac{X_{ort} - \mu}{}$
+$z_{istatistik} = \frac{X_{ort} - \mu}{\frac{\sigma}{\sqrt{n}}}$
 
 ### Örnekler
 
->Bir fabrikada üretilmekte olan vidaların boylarının ortalama olarak yüz milimetre olduğu tespit edilmiştir. Standart sapması 2 milimetredir. 
+>Bir fabrikada üretilmekte olan vidaların boylarının ortalama olarak yüz milimetre olduğu tespit edilmiştir. Standart sapması 2 milimetredir. Normal dağılım gösterdiği varsayılmaktadır. Makinalardaki bir arıza giderildikten sonra tekrardan bir ölçüm yapılıyor. 9 vidalık bir örneklem seçiliyor ve örneklem ortalaması yapısı 302 milimetre olarak tespit ediliyor. %95 güven aralığında makinalarda herhangi bir sıkıntı olup olmadığını hipotez testiyle test ediniz.  
 
 
+$\sigma = 2$
 
+$n = 9$
+
+$\bar{x} = 102$
+
+1. adım
+
+$\alpha = 1 - 0,95 = 0,05$
+
+2. adım
+
+$H_0: \mu = 100 \qquad H_1: \mu =! 100$  
+
+3. adım
+
+$z = \frac{102 - 100}{\frac{2}{\sqrt{9}}}$
+
+$z = \frac{2}{\frac{2}{3}}$
+
+$z_{Hesap} = 3$
+
+![image](./images/zhesap.png)
+
+3 değeri 1,96 değerinden büyük olduğu için $H_0$ reddedilir.
+
+> Bir üretim bandındaki ürünün ağırlığının 368 gramdan fazla olduğu iddia edilmektedir. 25 tane örneklem alıyoruz ve bu örneklemin ortalamasının 372,5 gram olduğunu buluyoruz. Bu durumda hesaplanan standart sapmanın ise 15 gram olduğu bulunduğuna göre %95 güven aralığında iddiayı test ediniz. Normal dağılım gösterdiği varsayılmaktadır.
+
+1. adım
+
+$\alpha = 1 - 0,95 = 0,05$
+
+2. adım
+
+$H_0: \mu = 368 \qquad H_1: \mu =! 100$  
 
 
 ### Örnekler
