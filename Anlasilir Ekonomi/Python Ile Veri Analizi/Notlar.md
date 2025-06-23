@@ -2161,7 +2161,7 @@ $$
 
 Bu yüzden %95 güven aralığındaki olasılık alanını alfa değeriyle hesaplarız. Z tablosundan z score değerinin 1,96 olduğu bulunur. 
 
-$z_{istatistik}$
+$z_{istatistik} = \frac{X_{ort} - \mu}{}$
 
 ### Örnekler
 
