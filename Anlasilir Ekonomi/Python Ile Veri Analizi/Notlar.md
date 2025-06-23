@@ -2209,6 +2209,6 @@ $H_0: \mu = 368 \qquad H_1: \mu =! 100$
 ## 4.6 
 # 5
 
-https://www.youtube.com/watch?v=hqgfCNdeED8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=57
+https://www.youtube.com/watch?v=hqgfCNdeED8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=58
 
-00:00
+12:00
