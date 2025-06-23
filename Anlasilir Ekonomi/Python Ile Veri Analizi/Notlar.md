@@ -2173,6 +2173,6 @@ Bu yüzden %95 güven aralığındaki olasılık alanını alfa değeriyle hesap
 ## 4.6 
 # 5
 
-https://www.youtube.com/watch?v=1d9JlL1yDcs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=56
+https://www.youtube.com/watch?v=hqgfCNdeED8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=57
 
 00:00
