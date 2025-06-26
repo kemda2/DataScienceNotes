@@ -2226,6 +2226,6 @@ $z_{Hesap} = 1,5$
 ## 5.1
 # 6
 
-https://www.youtube.com/watch?v=hqgfCNdeED8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=58
+https://www.youtube.com/watch?v=eIvoFhxT6zo&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=58
 
-12:00
+00:00
