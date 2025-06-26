@@ -2212,7 +2212,7 @@ $z = \frac{372,5 - 368}{\frac{15}{\sqrt{25}}}$
 
 $z_{Hesap} = 1,5$
 
-
+![image](./images/zhesap2.png)
 
 
 ### Örnekler
