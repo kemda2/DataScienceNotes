@@ -2214,10 +2214,17 @@ $z_{Hesap} = 1,5$
 
 ![image](./images/zhesap2.png)
 
+0,45 in $z_{tablo}$ değeri 1,64 olduğu ve $z_{hesap} < z_{tablo}$ olduğu için $H_0$ reddedilemez. 
+
+# 5 Test İstatistiği
+
+
+
+
 
 ### Örnekler
-## 4.6 
-# 5
+## 5.1
+# 6
 
 https://www.youtube.com/watch?v=hqgfCNdeED8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=58
 
