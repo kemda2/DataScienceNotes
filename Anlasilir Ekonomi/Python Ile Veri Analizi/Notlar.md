@@ -2202,7 +2202,17 @@ $\alpha = 1 - 0,95 = 0,05$
 
 2. adım
 
+Tek kuyruk yapısı;
+
 $H_0: \mu = 368 \qquad H_1: \mu =! 100$  
+
+3. adım
+
+$z = \frac{372,5 - 368}{\frac{15}{\sqrt{25}}}$
+
+$z_{Hesap} = 1,5$
+
+
 
 
 ### Örnekler
