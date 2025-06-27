@@ -2218,14 +2218,33 @@ $z_{Hesap} = 1,5$
 
 # 5 Test İstatistiği
 
+![image](./images/testcesitleri.png)
 
+Test çeşitleri aşağıdaki gibidir;
 
+- **Parametrik Test:** 
+- **Non-parametrik Test:**
 
+Her testin hem parametrik hem de non-parametrik versiyonu vardır. Parametrik test şartlarını karşılıyorsa parametrik, karşılamıyorsa non-parametrik test kullanılır.
+
+Parametrik test şartları;
+
+1. Verilerimizin normal dağıldığını bilmemiz gerekiyor.Bunu basıklık, çarpıklık, grafik gösterimi veya bazı istatistiksel testler ile anlayabiliriz. Normal dağılım değilse normal dağılıma çevirip çeviremeyeceğimizi inceleriz.
+
+2. Veriler normal dağılım göstermese bile Merkezi limit teoremi ile örneklemin çoğalmasıyla örneklemin dağılımının ortalamaları normal dağılım gösterir.
+
+3. Verilerin sürekli olması gerekiyor.
+
+Gruplar 2 veya daha fazlaysa (evli-bekar; ilkokul-ortaokul-lise-üniversite);
+
+4. Gruplar arası varyans (Varyans homojenliği veya varyans eşitliği de denir)
+
+Parametrik testler non-parametrik testlere göre daha güçlü bir test sonucu sunar.
 
 ### Örnekler
 ## 5.1
 # 6
 
-https://www.youtube.com/watch?v=eIvoFhxT6zo&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=58
+https://www.youtube.com/watch?v=STSl03HGbDU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=59
 
 00:00
