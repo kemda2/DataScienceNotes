@@ -2243,9 +2243,7 @@ Parametrik testler non-parametrik testlere göre daha güçlü bir test sonucu s
 
 ## 5.1 Normallik Varsayımı Testleri
 
-```python
 
-```
 
 
 ```python
@@ -2256,6 +2254,5 @@ Parametrik testler non-parametrik testlere göre daha güçlü bir test sonucu s
 ## 5.1
 # 6
 
-https://www.youtube.com/watch?v=STSl03HGbDU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=59
-
-00:00
+https://www.youtube.com/watch?v=STSl03HGbDU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=61
+02:50
