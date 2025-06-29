@@ -2235,11 +2235,19 @@ Parametrik test şartları;
 
 3. Verilerin sürekli olması gerekiyor.
 
-Gruplar 2 veya daha fazlaysa (evli-bekar; ilkokul-ortaokul-lise-üniversite);
+Gruplar 2 veya daha fazlaysa (evli-bekar; ilkokul-ortaokul-lise-üniversite)
 
 4. Gruplar arası varyans (Varyans homojenliği veya varyans eşitliği de denir)
 
 Parametrik testler non-parametrik testlere göre daha güçlü bir test sonucu sunar.
+
+## 5.1 Normallik Varsayımı Testleri
+
+```python
+
+```
+
+
 
 ### Örnekler
 ## 5.1
