@@ -2248,6 +2248,9 @@ Parametrik testler non-parametrik testlere göre daha güçlü bir test sonucu s
 ```
 
 
+```python
+
+```
 
 ### Örnekler
 ## 5.1
