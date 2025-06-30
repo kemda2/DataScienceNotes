@@ -2244,6 +2244,110 @@ Parametrik testler non-parametrik testlere göre daha güçlü bir test sonucu s
 ## 5.1 Normallik Varsayımı Testleri
 
 
+```python
+import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+np.random.seed(10)
+
+# veri=stats.norm.rvs(loc=38, scale=1, size=509)
+veri=stats.norm.rvs(loc=38,size=509)
+veri
+
+# array([39.3315865 , 38.71527897, 36.45459971, 37.99161615, 38.62133597, ... , 39.2750491 , 37.67116796, 37.85365919, 39.05843664, 37.88891956])
+
+# Çarpıklık, basıklık
+
+stats.kurtosis(veri)
+# 0.18786659023941032
+
+stats.skew(veri)
+# -0.07830984534404266
+
+# Grafikler
+sns.distplot(veri)
+plt.show()
+```
+
+![image](./images/normallik1.png)
+
+```python
+import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+np.random.seed(10)
+veri=stats.norm.rvs(1oc=38,size=500)
+
+stats.probplot(yeri,dist="norm",plot=plt)
+
+plt.show()
+```
+
+![image](./images/normallik2.png)
+
+## 5.2 Kolmogorov-Smirnov tek örneklem sınaması
+
+$H_0 = $ Normal Dağılım
+
+$H_1 = $ Normal Dağılım değil
+
+```python
+import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+np.random.seed(10)
+
+veri=stats.norm.rvs(loc=38,size=500)
+
+ks=stats.kstest(veri,cdf="norm",args=(veri.mean(),veri.std()))
+ks
+
+# KstestResult(statistic=np.float64(0.024206764619964294), pvalue=np.float64(0.9243169445892152), statistic_location=np.float64(38.62133597389048), statistic_sign=np.int8(1))
+
+print(f"{ks.pvalue:5f}")
+# 0.924317
+```
+
+0,92 > 0,05 
+
+P değeri, alpha değerinden büyük olduğu için H0 reddedilemez. Normal dağılımdır.
+
+## 5.3 Shapiro—Wilk sınaması
+
+$H_0 = $ Normal Dağılım
+
+$H_1 = $ Normal Dağılım değil
+
+```python
+import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+np.random.seed(10)
+
+veri=stats.norm.rvs(loc=38,size=500)
+sw=stats.shapiro(veri)
+
+print(f"{sw.pvalue:5f}")
+
+# 0.509577
+```
+
+0.50 > 0,05 
+
+P değeri, alpha değerinden büyük olduğu için H0 reddedilemez. Normal dağılımdır.
+
+
+
+
+
 
 
 ```python
@@ -2251,7 +2355,7 @@ Parametrik testler non-parametrik testlere göre daha güçlü bir test sonucu s
 ```
 
 ### Örnekler
-## 5.1
+## 5.3
 # 6
 
 https://www.youtube.com/watch?v=STSl03HGbDU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=61
