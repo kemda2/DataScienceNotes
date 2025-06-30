@@ -2358,5 +2358,5 @@ P değeri, alpha değerinden büyük olduğu için H0 reddedilemez. Normal dağ�
 ## 5.3
 # 6
 
-https://www.youtube.com/watch?v=STSl03HGbDU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=61
-02:50
+https://www.youtube.com/watch?v=esIcWyFK4Nc&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=60
+00:00
