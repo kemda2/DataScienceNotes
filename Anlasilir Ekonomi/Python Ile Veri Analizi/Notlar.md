@@ -2382,6 +2382,7 @@ Tek kuyruk için 0,45 için $z_{tablo}$ = 1,64
 
 $z_{tablo} > z_{hesap}$ olduğu için $H_0$ reddedilemez.
 
+ilk örnek bitti.
 
 ```python
 
