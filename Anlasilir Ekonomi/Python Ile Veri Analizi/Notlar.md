@@ -2383,6 +2383,29 @@ Tek kuyruk için 0,45 için $z_{tablo}$ = 1,64
 $z_{tablo} > z_{hesap}$ olduğu için $H_0$ reddedilemez.
 
 ```python
+# !pip install statsmodels
+
+from statsmodels.stats.weightstats import ztest
+
+veri=[95,70,120,65,130,38,110,90,60]
+
+alfa=0.05
+
+zhesap,p=ztest(veri,value=80,alternative="larger") # "smaller","two sided"
+
+print(zhesap,p)
+
+# 0.6339555069870142 0.26305492964421917
+
+if p<alfa:
+
+  print("Ho Reddedilir")
+
+else:
+  
+  print("Ho Reddedilemez")
+
+# Ho Reddedilemez
 
 ```
 
