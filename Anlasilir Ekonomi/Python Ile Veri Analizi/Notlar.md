@@ -2344,10 +2344,43 @@ print(f"{sw.pvalue:5f}")
 
 P değeri, alpha değerinden büyük olduğu için H0 reddedilemez. Normal dağılımdır.
 
+## 5.3 Tek Örneklem Z Testi
+
+ Tek örneklem Z testi, üzerinden popülasyon parametresi olan ortalama ( $\mu$ ) hakkında bilgi sahibi olmak için kullandığımız bir örneklem Yapısıdır.
+
+ Genel olarak çok fazla kullanılmaz.
+
+Amaç bir örneklem grubunun ortalamasının herhangi bir değerle karşılaştırılması üzerinedir. ( $\mu < a, \mu > b$ veya $\mu = 0$ gibi yapılarda kullanılır.)
+
+Kullanıldığı şartlar;
+
+- n > 30
+- Popülasyon standart sapmasını veya varyansını bilmek (Gerçek hayatta çok zor)
 
 
+> Bir ilde öğrencilerin okula okula gidiş dönüşte öğrencilerin harcadığı süre üzerinde hipotez testi oluşturuyoruz. Bu sürenin 80 dakikadan fazla olduğu iddia ediliyor. Popülasyonun standart sapmasının 21 dakika olduğu söyleniyor. 9 tane örneklem seçiliyor; 95, 70, 120, 65, 138, 38, 110, 90, 60. Bunun %95 güven ile test edilmesi isteniyor.
 
+9 örneklem sayısı 30'dan küçük ama şimdi kafaya takmayın dedi.
 
+$H_0: \mu = 80 \quad H_1 : \mu > 80 $
+
+9 Örneklemin ortalaması $\bar{x} = 86,44$
+
+Popülasyonun standart sapması $\sigma = 21$
+
+$z = \frac{\bar{x} - \mu}{\frac{\sigma}{\sqrt{n}}}$
+
+$z = \frac{86,44 - 80}{\frac{21}{\sqrt{9}}}$
+
+$z = \frac{6,44}{\frac{21}{3}}$
+
+$z = \frac{6,44}{7}$
+
+$z = 0,92$
+
+Tek kuyruk için 0,45 için $z_{tablo}$ = 1,64 
+
+$z_{tablo} > z_{hesap}$ olduğu için $H_0$ reddedilemez.
 
 
 ```python
@@ -2355,7 +2388,7 @@ P değeri, alpha değerinden büyük olduğu için H0 reddedilemez. Normal dağ�
 ```
 
 ### Örnekler
-## 5.3
+## 5.4
 # 6
 
 https://www.youtube.com/watch?v=esIcWyFK4Nc&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=60
