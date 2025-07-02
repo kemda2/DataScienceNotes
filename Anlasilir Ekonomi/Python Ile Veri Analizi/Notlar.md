@@ -2344,7 +2344,7 @@ print(f"{sw.pvalue:5f}")
 
 P değeri, alpha değerinden büyük olduğu için H0 reddedilemez. Normal dağılımdır.
 
-## 5.3 Tek Örneklem Z Testi
+## 5.4 Tek Örneklem Z Testi
 
  Tek örneklem Z testi, üzerinden popülasyon parametresi olan ortalama ( $\mu$ ) hakkında bilgi sahibi olmak için kullandığımız bir örneklem Yapısıdır.
 
@@ -2409,7 +2409,7 @@ else:
 
 ```
 
-## 5.4 Tek Örneklem T Testi
+## 5.5 Tek Örneklem T Testi
 
 $t_t = \frac{\bar{x} - \mu}{\frac{s}{\sqrt{n}}}$
 
@@ -2459,7 +2459,7 @@ $t_{tablo} < t_{hesap}\ $ olduğu için $H_0$ reddedilir. Doktor yorumu geçerli
 
 
 ### Örnekler
-## 5.5
+## 5.6
 # 6
 
 https://www.youtube.com/watch?v=uRVXSAs8cy4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=62
