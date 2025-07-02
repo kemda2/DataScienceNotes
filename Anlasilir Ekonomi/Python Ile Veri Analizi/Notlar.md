@@ -2368,15 +2368,15 @@ $H_0: \mu = 80 \quad H_1 : \mu > 80 $
 
 Popülasyonun standart sapması $\sigma = 21$
 
-$z = \frac{\bar{x} - \mu}{\frac{\sigma}{\sqrt{n}}}$
+$z_t = \frac{\bar{x} - \mu}{\frac{\sigma}{\sqrt{n}}}$
 
-$z = \frac{86,44 - 80}{\frac{21}{\sqrt{9}}}$
+$z_t = \frac{86,44 - 80}{\frac{21}{\sqrt{9}}}$
 
-$z = \frac{6,44}{\frac{21}{3}}$
+$z_t = \frac{6,44}{\frac{21}{3}}$
 
-$z = \frac{6,44}{7}$
+$z_t = \frac{6,44}{7}$
 
-$z = 0,92$
+$z_t = 0,92$
 
 Tek kuyruk için 0,45 için $z_{tablo}$ = 1,64 
 
@@ -2409,10 +2409,16 @@ else:
 
 ```
 
+## 5.4 Tek Örneklem T Testi
+
+$z_t = \frac{\bar{x} - \mu}{\frac{s}{\sqrt{n}}}$
+
+
+
 
 
 ### Örnekler
-## 5.4
+## 5.5
 # 6
 
 https://www.youtube.com/watch?v=esIcWyFK4Nc&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=60
