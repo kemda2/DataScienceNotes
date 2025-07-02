@@ -2411,8 +2411,19 @@ else:
 
 ## 5.4 Tek Örneklem T Testi
 
-$z_t = \frac{\bar{x} - \mu}{\frac{s}{\sqrt{n}}}$
+$t_t = \frac{\bar{x} - \mu}{\frac{s}{\sqrt{n}}}$
 
+s: Örneklem standart sapmasıdır.
+
+$H_0$ ve $H_1$ yapısı kurulur.
+
+$H_0: \mu=a \qquad H_1: \mu!=a$ yapısı kurulur. 
+
+Varsayımları;
+
+- Örneklem rassal olarak seçilir.
+- n<30 şartında güçlü sonuç verir.
+- uç değer barındırmamalı
 
 
 
@@ -2421,5 +2432,5 @@ $z_t = \frac{\bar{x} - \mu}{\frac{s}{\sqrt{n}}}$
 ## 5.5
 # 6
 
-https://www.youtube.com/watch?v=esIcWyFK4Nc&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=60
-00:00
+https://www.youtube.com/watch?v=uRVXSAs8cy4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=61
+12:04
