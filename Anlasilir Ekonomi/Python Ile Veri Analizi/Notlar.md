@@ -2425,6 +2425,36 @@ Varsayımları;
 - n<30 şartında güçlü sonuç verir.
 - uç değer barındırmamalı
 
+> Bir doktor kandaki x değerinin 200 den farklı olması gerektiğini öneriyor. Bunun için rassal 20 hasta seçiliyor. Bu hastaların kanındaki x değerlerinin ortalaması 311,2 olduğu biliniyor. Örneklem standart sapmasının 64,4 olduğu söyleniyor. Bu öneri %95 güvenle test ediniz.
+
+Popülasyon sapması $\mu$ değil örneklem sapması $s$ verildiği için t testi uygularız. 
+
+$H_0 : \mu = 200 \qquad H_1 : \mu =!\ 200$ 
+
+$t_t = \frac{\bar{x} - \mu}{\frac{s}{\sqrt{n}}}$
+
+$t_t = \frac{311,2 - 200}{\frac{64,4}{\sqrt{20}}}$
+
+$t_t = \frac{111,2}{14,40}$
+
+$t_t = 7,72$
+
+$\alpha = 0,05$
+
+Serbestlik derecesi = n - 1 = 19
+
+Çift yönlü,
+
+$t_{\frac{\alpha}{2}, n-1} = t_{0,025,\ 19} $
+
+Tablodan 19 ve 0,05 olan değer 2,093 olarak bulunur. 
+
+$t_{tablo} < t_{hesap}\ $ olduğu için $H_0$ reddedilir. Doktor yorumu geçerlidir.
+
+
+
+
+
 
 
 
@@ -2432,5 +2462,5 @@ Varsayımları;
 ## 5.5
 # 6
 
-https://www.youtube.com/watch?v=uRVXSAs8cy4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=61
-12:04
+https://www.youtube.com/watch?v=uRVXSAs8cy4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=62
+23:04
