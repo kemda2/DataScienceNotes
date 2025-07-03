@@ -2518,6 +2518,10 @@ $H_0: \mu_1=\mu_2 \qquad H_1: \mu_1\ !=\mu_2$
 
 yani $H_0$ gruplar arası fark yok der. $H_1$ gruplar arası fark var der. 
 
+$t_{hesap} = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{s^2 \cdot (\frac{1}{n_1} + \frac{1}{n_2})}}$
+
+
+
 
 ### Örnekler
 ## 5.7
