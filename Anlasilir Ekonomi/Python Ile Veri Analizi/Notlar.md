@@ -2452,8 +2452,62 @@ Tablodan 19 ve 0,05 olan değer 2,093 olarak bulunur.
 $t_{tablo} < t_{hesap}\ $ olduğu için $H_0$ reddedilir. Doktor yorumu geçerlidir.
 
 
+> Bir sınavda geçmiş veriler değerlendirilmiştir ve ortalamasının 28 olduğu görülmektedir. Bu sene yeni bir sınav sistemi deneniyor ve geçmiş senelerdeki sonuçlardan farklılık yaratıp yaratmadığını araştırıyoruz.  Rassal olarak 12 öğrenci seçilmiştir ve bu öğrencilere sınav yapılıyor. %95 güvenle test ediniz.
+
+$H_0 : \mu = 28 \\ H_1: \mu\ != 28 \\ \alpha = 0,05 $
+Sonuclar = [28, 29, 35, 37, 32, 26, 37, 39, 22, 29, 36, 38]
+
+```Python
+from scipy import stats
+import pandas as pd
+
+veri = [28, 29, 35, 37, 32, 26, 37, 39, 22, 29, 36, 38]
+
+alfa=0.05
+
+thesap,p=stats.ttest_1samp(veri,popmean=28,alternative="two-sided")
+
+thesap,p
+
+# 2.746194120979329, 0.019019642553313558
+
+if p<alfa:
+  print("Ho Reddedilir")
+else:
+  print("Ho Reddedilemez")
+
+# Ho Reddedilir
+```
+
+> Rapora göre günlük hata oranının ortalama 20 tane olduğu gözüküyor. Bunun doğru olup olmadığını bulmak çin 25 gün veri topluyoruz. %95 güvenle test ediniz.
+
+n = 25
+
+$H_0 : \mu = 20 \\ H_1: \mu\ != 20 \\ \alpha = 0,05 $
 
 
+```Python
+from scipy import stats
+import pandas as pd
+
+
+veri=[25, 26, 25, 20, 18, 29, 30, 32, 17, 23, 34, 27, 26, 30, 33, 32, 21, 21, 20, 11, 16, 14, 15, 18, 19]
+
+alfa=0.05
+
+thesap,p=stats.ttest_1samp(veri,popmean=20,alternative="two-sided")
+
+thesap,p
+
+# 2.5119047177847493, 0.019139687648655326
+
+if p<alfa:
+  print("Ho Reddedilir")
+else:
+  print("Ho Reddedilemez")
+
+# Ho Reddedilir
+```
 
 
 
@@ -2462,5 +2516,5 @@ $t_{tablo} < t_{hesap}\ $ olduğu için $H_0$ reddedilir. Doktor yorumu geçerli
 ## 5.6
 # 6
 
-https://www.youtube.com/watch?v=uRVXSAs8cy4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=62
-23:04
+https://www.youtube.com/watch?v=0Y7__HoDzWw&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=62
+00:00
