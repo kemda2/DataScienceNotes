@@ -2516,6 +2516,8 @@ Bu testi kullanmaktaki amacımız bir olgunun bu iki grubun üzerindeki etkileri
 $H_0: \mu=10 \qquad H_1: \mu!=10$ yerine; 
 $H_0: \mu_1=\mu_2 \qquad H_1: \mu_1\ !=\mu_2$
 
+yani $H_0$ gruplar arası fark yok der. $H_1$ gruplar arası fark var der. 
+
 
 ### Örnekler
 ## 5.7
