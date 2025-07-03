@@ -2520,6 +2520,19 @@ yani $H_0$ gruplar arası fark yok der. $H_1$ gruplar arası fark var der.
 
 $t_{hesap} = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{s^2 \cdot (\frac{1}{n_1} + \frac{1}{n_2})}}$
 
+Bu  formüldeki $s^2$;
+
+$s^2 = \frac{(n_1-1) \cdot s_1^2 + (n_2-1) \cdot s_2^2}{n_1+n_2-2} $
+
+$n_1+n_2-2 \quad$ t tablosunda istenen serbestlik derecesidir. Tabloda $t_{\alpha, n_1 + n_2 -2}$ arayacağız.
+
+Bu yapının varsayımları;
+
+- Çekilen örneklemler rassal olmalı.
+- Bağımlı değişken sürekli olmalı.
+- Bağımsız değişkenler kategorik olmalı.
+
+
 
 
 
