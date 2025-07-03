@@ -2509,12 +2509,19 @@ else:
 # Ho Reddedilir
 ```
 
+## 5.6 Bağımsız İki Örneklem T Testi
+
+Bu testi kullanmaktaki amacımız bir olgunun bu iki grubun üzerindeki etkileri arasında herhangi bir fark var mı yok mu incelemektir. Örneğin bir sınavda bu sınava giren öğrencilerden erkek ve kadın olan öğrencilerin aldığı puanların ortalamasının 30'dan farklı olup olmadığını incelersek 2 örneklem olur. **Bağımsız** kelimesi iki grup içerisinden çekilen örneklem yapılarının birbirleri ile bir ilgisinin olmaması durumunu söylüyor. **Bağımlı** olması için mesela bir diyet programının işe yarayıp
+yaramadığı hakkında bilgi sahibi olmak istiyorsanız bir örneklem grubu seçersiniz ve kadın ve erkek bu grup içerisinde bulunurlar. Bunları diyetten önce belli bir ölçüm 
+yaparsınız daha sonra diyet uygularsanız diyetten sonra yine aynı örneklemlerle ikinci bir test daha yaparsınız ve öncesi ve sonrası arasındaki ortalamada fark var mı bunu tespit etmeye çalışırsınız.
+
+
 
 
 
 ### Örnekler
-## 5.6
+## 5.7
 # 6
 
-https://www.youtube.com/watch?v=0Y7__HoDzWw&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=62
-00:00
+https://www.youtube.com/watch?v=0Y7__HoDzWw&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=63
+08:14
