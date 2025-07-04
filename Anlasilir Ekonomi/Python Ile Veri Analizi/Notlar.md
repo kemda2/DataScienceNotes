@@ -2677,6 +2677,42 @@ plt.legend(loc="upper right")
 plt.show()
 ```
 
+![image](./images/VaryanslarinHomojenligi2.png)
+
+>Bir örneklem yapısını birden fazla grup halinde bir popülasyondan çekiyorsam her iki grubun varyansları ile birlikte popülasyonun varyansına benzerlik gösterecektir. (Yani grubun varyansı hem popülasyon varyansına hem de diğer grupların varyansına yakın olacaktır.) Bu yüzden varyansların homojenliğini kontrol ederiz. Ortalama ve varyans yakınsa aynı popülasyondan çekilmiş denebilir. 
+
+```python
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+x1=stats.norm.rvs(loc=0,scale=1,size=1000)
+x11=np.random.choice(x1,size=750)
+x12=np.random.choice(x1,size=250)
+y=stats.norm.rvs(loc=0,scale=10,size=1000)
+
+x1var=np.var(x1)
+x11var=np.var(x11)
+x12var=np.var(x12)
+yvar=np.var(y)
+
+sns.set_theme()
+
+sns.kdeplot(x1,label="x1"+str(x1var))
+sns.kdeplot(x11,label="x11"+str(x11var))
+sns.kdeplot(x12,label="x12"+str(x12var))
+sns.kdeplot(y,label="y"+str(yvar))
+
+plt.legend(loc="upper right")
+plt.show()
+```
+
+![image](./images/VaryanslarinHomojenligi3.png)
+
+
+
+
 
 
 ### Örnekler
