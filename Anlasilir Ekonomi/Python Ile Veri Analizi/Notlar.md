@@ -2710,14 +2710,73 @@ plt.show()
 
 ![image](./images/VaryanslarinHomojenligi3.png)
 
+## 5.8 Bartlett ve Levene Testleri 
 
+İki veya daha fazla grubun varyanslarının eşit olup olmadığını değerlendirir. Levene testi f tablosunu kullanır, Bartlett testi ki-kare tablosunu kullanır. Normallik varsayımı varsa Bartlett yoksa Levene kullanır. 
 
-
-
+$H_0 : \sigma^2_A = \sigma^2_B \\[3mm] H_1 : \sigma^2_A\ != \sigma^2_B$
 
 ### Örnekler
-## 5.8
+
+
+```python
+
+import pandas as pd
+from scipy import stats
+
+veri = pd.DataFrame({
+    "Cinsiyet": [
+    "Kadın", "Kadın", "Erkek", "Erkek", "Erkek", "Erkek", "Kadın", "Erkek", "Erkek", "Kadın",
+    "Erkek", "Kadın", "Kadın", "Erkek", "Erkek", "Erkek", "Kadın", "Kadın", "Kadın", "Kadın",
+    "Erkek", "Erkek", "Kadın", "Erkek", "Erkek", "Kadın", "Kadın", "Kadın", "Kadın", "Erkek",
+    "Kadın", "Erkek", "Kadın", "Kadın"
+],
+    "Harcama": [
+    1252.717, 1249.566, 1250.583, 1250.592, 1250.141, 1249.533, 1250.713, 1251.465, 1249.569, 1249.546,
+    1250.560, 1249.411, 1250.794, 1252.109, 1249.228, 1250.150, 1249.454, 1250.298, 1249.297, 1250.168,
+    1250.559, 1250.760, 1249.573, 1251.547, 1248.559, 1248.735, 1249.523, 1249.246, 1249.534, 1248.553,
+    1249.588, 1250.058, 1248.554, 1248.514
+]
+})
+
+erkek=veri[veri["Cinsiyet"]=="Erkek"]
+kadın=veri[veri["Cinsiyet"]=="Kadın"]
+
+p1=stats.shapiro(erkek["Harcama"])
+p2=stats.shapiro(kadın["Harcama"])
+
+print(p1)
+print(p2)
+
+# ShapiroResult(statistic=np.float64(0.9637624469211384), pvalue=np.float64(0.7302480962555515))
+# ShapiroResult(statistic=np.float64(0.8334973947524276), pvalue=np.float64(0.004702334663604679))
+
+# İki p değeri de 0,05'ten büyük. Yani H0 hipotezinin reddedilemeyeceğini gösteriyor.
+
+h1=stats.levene(erkek["Harcama"],kadın["Harcama"])
+print(h1)
+
+# LeveneResult(statistic=np.float64(0.5406539502499811), pvalue=np.float64(0.4675170403804729))
+
+# Normallik varsayımı olduğu için levene değil bartlett kullanılmalı. Levene pythonda normal olmadığını varsayarak direk median değerine göre hesaplar. Ama normallik varsayımı varsa mean değerine göre hesaplanır.
+
+h1=stats.levene(erkek["Harcama"],kadın["Harcama"], center="mean")
+print(h1)
+
+# LeveneResult(statistic=np.float64(0.2216499933145069), pvalue=np.float64(0.6409791293233547))
+
+h2=stats.bartlett(erkek["Harcama"],kadın["Harcama"])
+print(h2)
+
+# BartlettResult(statistic=np.float64(0.012771315178131173), pvalue=np.float64(0.9100224339557562))
+
+```
+
+Bütün p değerleri 0,05'ten büyük olduğu için H0 reddedilemez. Varyanslar homojen.
+
+### Örnekler
+## 5.9 
 # 6
 
-https://www.youtube.com/watch?v=WNa61vWN4iE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=63
-05:17
+https://www.youtube.com/watch?v=WaJ9jfmf27I&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=65
+00:00
