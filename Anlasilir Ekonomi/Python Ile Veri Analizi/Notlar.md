@@ -2531,8 +2531,103 @@ Bu yapının varsayımları;
 - Çekilen örneklemler rassal olmalı.
 - Bağımlı değişken sürekli olmalı.
 - Bağımsız değişkenler kategorik olmalı.
+- Her bağısız değişken için normal dağılım olmalı.
+- n1 ve n2 bazı kaynaklara göre 25'ten bazılarına göre ise 15'ten büyük olmalıdır.
+- Aykırı değer olmamalıdır.
+- Varyansların eşitliği varsayımı (Eğer varyansların homojenliği dağılımı geçerli değilse yukarıda verilen $\ t_{hesap}\ $ formülü geçerli olacaktır, Eğer geçerli değilse Welch'in T testi kullanılacaktır)
+
+T tablosu;
+| df  | Tek Kuyruk α=0.05 | Tek Kuyruk α=0.01 | İki Kuyruk α=0.05 | İki Kuyruk α=0.01 |
+|:---:|:------------------:|:------------------:|:-------------------:|:-------------------:|
+| 1   | 6.314              | 31.821             | 12.706              | 63.657              |
+| 2   | 2.920              | 6.965              | 4.303               | 9.925               |
+| 3   | 2.353              | 4.541              | 3.182               | 5.841               |
+| 4   | 2.132              | 3.747              | 2.776               | 4.604               |
+| 5   | 2.015              | 3.365              | 2.571               | 4.032               |
+| 6   | 1.943              | 3.143              | 2.447               | 3.707               |
+| 7   | 1.895              | 2.998              | 2.365               | 3.499               |
+| 8   | 1.860              | 2.896              | 2.306               | 3.355               |
+| 9   | 1.833              | 2.821              | 2.262               | 3.250               |
+| 10  | 1.812              | 2.764              | 2.228               | 3.169               |
+| 11  | 1.796              | 2.718              | 2.201               | 3.106               |
+| 12  | 1.782              | 2.681              | 2.179               | 3.055               |
+| 13  | 1.771              | 2.650              | 2.160               | 3.012               |
+| 14  | 1.761              | 2.624              | 2.145               | 2.977               |
+| 15  | 1.753              | 2.602              | 2.131               | 2.947               |
+| 16  | 1.746              | 2.583              | 2.120               | 2.921               |
+| 17  | 1.740              | 2.567              | 2.110               | 2.898               |
+| 18  | 1.734              | 2.552              | 2.101               | 2.878               |
+| 19  | 1.729              | 2.539              | 2.093               | 2.861               |
+| 20  | 1.725              | 2.528              | 2.086               | 2.845               |
+| 21  | 1.721              | 2.518              | 2.080               | 2.831               |
+| 22  | 1.717              | 2.508              | 2.074               | 2.819               |
+| 23  | 1.714              | 2.500              | 2.069               | 2.807               |
+| 24  | 1.711              | 2.492              | 2.064               | 2.797               |
+| 25  | 1.708              | 2.485              | 2.060               | 2.787               |
+| 26  | 1.706              | 2.479              | 2.056               | 2.779               |
+| 27  | 1.703              | 2.473              | 2.052               | 2.771               |
+| 28  | 1.701              | 2.467              | 2.048               | 2.763               |
+| 29  | 1.699              | 2.462              | 2.045               | 2.756               |
+| 30  | 1.697              | 2.457              | 2.042               | 2.750               |
+| 40  | 1.684              | 2.423              | 2.021               | 2.704               |
+| 50  | 1.676              | 2.403              | 2.009               | 2.678               |
+| 60  | 1.671              | 2.390              | 2.000               | 2.660               |
+| 80  | 1.664              | 2.374              | 1.990               | 2.639               |
+| 100 | 1.660              | 2.364              | 1.984               | 2.626               |
+| 120 | 1.658              | 2.358              | 1.980               | 2.617               |
+| ∞   | 1.645              | 2.326              | 1.960               | 2.576               |
 
 
+
+### Örnekler
+
+A_Okulu = [280, 287, 280, 275, 279, 278, 289, 284, 288]
+B_Okulu = [281, 274, 270, 273, 276, 273, 281, 282, 284]
+
+> Aynı öğrenciler olmadığı için tekrarlı t testi yerine bağımsız t testi yapıyoruz. 9'ar örneklem alınmış. Varsayımların hepsinin geçerli olduğunu varsayıyoruz. %95 güven ile test ediniz.
+
+$H_0: \mu_A = \mu_B \\ H_1: \mu_A\ != \mu_B$
+
+$t_{hesap} = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{s^2 \cdot (\frac{1}{n_1} + \frac{1}{n_2})}}$
+
+$s^2 = \frac{(n_1-1) \cdot s_1^2 + (n_2-1) \cdot s_2^2}{n_1+n_2-2} $
+
+$s^2 = \frac{(9-1) \cdot 24,44^2 + (9-1) \cdot 24,61^2}{9+9-2} $
+
+$s^2 = \frac{8 \cdot 24,44^2 + 8 \cdot 24,61^2}{16} $
+
+$s^2 = 24,52 $
+
+$t_{hesap} = \frac{282,22 - 277,11}{\sqrt{24,52 \cdot (\frac{1}{9} + \frac{1}{9})}}$
+
+$t_{hesap} = 2,18$
+
+$t_{tablo} = 2,12$
+
+$t_{hesap} > t_{tablo} \\[3mm] H_0\ $ reddedilir. Bu iki okul sonuçları arasında fark vardır. 
+
+```Python
+from scipy import stats
+import pandas as pd
+
+A_Okulu = [280, 287, 280, 275, 279, 278, 289, 284, 288]
+B_Okulu = [281, 274, 270, 273, 276, 273, 281, 282, 284]
+
+veri=pd.DataFrame({"A Okulu":A_Okulu, "B Okulu":B_Okulu})
+alfa=0.05
+
+thesap,p=stats.ttest_ind(veri["A Okulu"],veri["B Okulu"],alternative="two-sided")
+
+print(thesap,p)
+# 2.1892354788555783 0.043749510241205485
+
+
+if p<alfa:
+    print("Ho Red")
+else:
+    print("Ho Reddedilemez")
+# Ho Red
+```
 
 
 
