@@ -2635,5 +2635,5 @@ else:
 ## 5.7
 # 6
 
-https://www.youtube.com/watch?v=0Y7__HoDzWw&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=63
-08:14
+https://www.youtube.com/watch?v=WNa61vWN4iE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=63
+00:00
