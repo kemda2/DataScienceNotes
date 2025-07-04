@@ -2653,6 +2653,32 @@ plt.show()
 
 ![image](./images/VaryanslarinHomojenligi.png)
 
+```python
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+x1=stats.norm.rvs(loc=0,scale=1,size=1000)
+x11=np.random.choice(x1,size=750)
+x12=np.random.choice(x1,size=250)
+
+x1var=np.var(x1)
+x11var=np.var(x11)
+x12var=np.var(x12)
+
+sns.set_theme()
+
+sns.kdeplot(x1,label="x1"+str(x1var))
+sns.kdeplot(x11,label="x11"+str(x11var))
+sns.kdeplotgxız,label="x12"+str(x12var))
+
+plt.legend(loc="upper right")
+plt.show()
+```
+
+
+
 ### Örnekler
 ## 5.8
 # 6
