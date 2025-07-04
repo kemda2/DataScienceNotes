@@ -2621,7 +2621,6 @@ thesap,p=stats.ttest_ind(veri["A Okulu"],veri["B Okulu"],alternative="two-sided"
 print(thesap,p)
 # 2.1892354788555783 0.043749510241205485
 
-
 if p<alfa:
     print("Ho Red")
 else:
@@ -2629,10 +2628,33 @@ else:
 # Ho Red
 ```
 
+## 5.7 Varyansların Homojenliği 
 
+```python
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+np.random.seed(0)
+
+x1 = stats.norm.rvs(loc=0, scale=1, size=1000)
+x2 = stats.norm.rvs(loc=0, scale=5, size=1000)
+x3 = stats.norm.rvs(loc=0, scale=10, size=1000)
+
+sns.set_theme() 
+sns.kdeplot(x1, label="x1")
+sns.kdeplot(x2, label="x2")
+sns.kdeplot(x3, label="x3")
+plt.legend(loc="upper right")
+ 
+plt.show()
+```
+
+![image](./images/VaryanslarinHomojenligi.png)
 
 ### Örnekler
-## 5.7
+## 5.8
 # 6
 
 https://www.youtube.com/watch?v=WNa61vWN4iE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=63
