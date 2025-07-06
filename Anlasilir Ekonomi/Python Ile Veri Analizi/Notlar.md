@@ -2839,9 +2839,148 @@ test
 
 Hiçbir H0 hipotezini reddedemediğimiz için %95 güven aralığında içen ile içmeyen arasında bir fark yoktur. 
 
+> Bir içecek firması müşterilerin eski ve yeni içeceklere dair tutumlarını topluyor.
+
+```python
+Grup = ["Eski","Eski","Eski","Eski","Eski",
+        "Eski","Eski","Eski","Eski","Eski",
+        "Yeni","Yeni","Yeni","Yeni","Yeni",
+        "Yeni","Yeni","Yeni","Yeni","Yeni"]
+
+Tutum = [12,8,6,16,12,
+         14,10,18,4,11,
+         13,17,19,11,20,
+         15,18,9,12,16]
+
+import pandas as pd
+from scipy import stats
+
+veri = pd.DataFrame({
+  "Grup": Grup, 
+  "Tutum":Tutum
+})
+
+sutun1="Grup"
+sutun2="Tutum"
+guven=0.95
+eski=veri[veri[sutun1]=="Eski"]
+yeni=veri[veri[sutun1]=="Yeni"]
+tur="two-sided" # 'less', 'greater', or 'two-sided'
+
+normeski=stats.shapiro(eski[sutun2])
+normyeni=stats.shapiro(yeni[sutun2])
+
+print("Normal Dağılım Varsayımı:")
+
+if normeski.pvalue > 1-guven:
+    print(f"p değeri: {normeski.pvalue}. Eski normal dağılımdır")
+else:
+    print(f"p değeri: {normeski.pvalue}. ⚠️⚠️⚠️Eski normal dağılım değildir")
+
+if normyeni.pvalue >1-guven:
+    print(f"p değeri: {normyeni.pvalue}. Yeni normal dağılımdır")
+else:
+    print(f"p değeri: {normyeni.pvalue}. ⚠️⚠️⚠️Yeni normal dağılım değildir")
 
 
+print("","Varyans Eşitliği Varsayımı:",sep="\n")
+homojen=stats.bartlett(eski[sutun2],yeni[sutun2])
 
+if homojen.pvalue > 1-guven:
+    print(f"p değeri: {homojen.pvalue}. Eşit varyans varsayımı geçerlidir")
+else:
+    print(f"p değeri: {homojen.pvalue}. ⚠️⚠️⚠️Eşit varyans varsayımı geçerli değildir")
+
+
+print("","Test Varsayımı:",sep="\n")
+test=stats.ttest_ind(eski[sutun2],yeni[sutun2],alternative=tur) 
+if test.pvalue > 1-guven:
+    print(f"p değeri: {test.pvalue}. Test varsayımı geçerlidir")
+else:
+    print(f"p değeri: {test.pvalue}. ⚠️⚠️⚠️Test varsayımı geçerli değildir")
+
+# Normal Dağılım Varsayımı:
+# p değeri: 0.983862169048342. Eski normal dağılımdır
+# p değeri: 0.8389775640203998. Yeni normal dağılımdır
+
+# Varyans Eşitliği Varsayımı:
+# p değeri: 0.33650466372349463. Eşit varyans varsayımı geçerlidir
+
+# Test Varsayımı:
+# p değeri: 0.04305271652983949. ⚠️⚠️⚠️Test varsayımı geçerli değildir
+```
+
+Test varsayımı geçerli olmadığı için H0 hipotezini reddederiz ve tutumlar arasında fark var deriz.
+
+eski ortalama: 11.1
+yeni ortalama: 15.0
+
+Yeni ürün daha fazla tutum sergilemiştir.
+
+> Aynı örnek farklı değerler
+
+Grup = ["Eski","Eski","Eski","Eski","Eski",
+        "Eski","Eski","Eski","Eski","Eski",
+        "Yeni","Yeni","Yeni","Yeni","Yeni",
+        "Yeni","Yeni","Yeni","Yeni","Yeni"]
+
+Tutum = [12,8,8,16,12,14,10,10,4,11,13,17,31,30,20,15,18,9,26,33]
+
+import pandas as pd
+from scipy import stats
+
+veri = pd.DataFrame({
+  "Grup": Grup, 
+  "Tutum":Tutum
+})
+
+guven=0.95
+eski=veri[veri["Grup"]=="Eski"]
+yeni=veri[veri["Grup"]=="Yeni"]
+sutun="Tutum"
+tur="two-sided" # 'less', 'greater', or 'two-sided'
+
+normeski=stats.shapiro(eski[sutun])
+normyeni=stats.shapiro(yeni[sutun])
+
+print("Normal Dağılım Varsayımı:")
+
+if normeski.pvalue > 1-guven:
+    print(f"p değeri: {normeski.pvalue}. Eski normal dağılımdır")
+else:
+    print(f"p değeri: {normeski.pvalue}. ⚠️⚠️⚠️Eski normal dağılım değildir")
+
+if normyeni.pvalue >1-guven:
+    print(f"p değeri: {normyeni.pvalue}. Yeni normal dağılımdır")
+else:
+    print(f"p değeri: {normyeni.pvalue}. ⚠️⚠️⚠️Yeni normal dağılım değildir")
+
+
+print("","Varyans Eşitliği Varsayımı:",sep="\n")
+homojen=stats.bartlett(eski[sutun],yeni[sutun])
+
+if homojen.pvalue > 1-guven:
+    print(f"p değeri: {homojen.pvalue}. Eşit varyans varsayımı geçerlidir")
+    
+    print("","Test Varsayımı:",sep="\n")
+    test=stats.ttest_ind(eski[sutun],yeni[sutun],alternative=tur) 
+    if test.pvalue > 1-guven:
+        print(f"p değeri: {test.pvalue}. Test varsayımı geçerlidir")
+    else:
+        print(f"p değeri: {test.pvalue}. ⚠️⚠️⚠️Test varsayımı geçerli değildir")
+        print("eski ortalama:",eski[sutun].mean())
+        print("yeni ortalama:",yeni[sutun].mean())
+else:
+    print(f"p değeri: {homojen.pvalue}. ⚠️⚠️⚠️Eşit varyans varsayımı geçerli değildir")
+
+    print("","Test Varsayımı:",sep="\n")
+    test=stats.ttest_ind(eski[sutun],yeni[sutun],alternative=tur,equal_var=False) 
+    if test.pvalue > 1-guven:
+        print(f"p değeri: {test.pvalue}. Test varsayımı geçerlidir")
+    else:
+        print(f"p değeri: {test.pvalue}. ⚠️⚠️⚠️Test varsayımı geçerli değildir")
+        print("eski ortalama:",eski[sutun].mean())
+        print("yeni ortalama:",yeni[sutun].mean())
 
 ### Örnekler
 ## 5.9 
