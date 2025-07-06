@@ -2837,6 +2837,11 @@ test
 
 0,17 0,05 değerinden büyük olduğu için H0  reddedilemez. İçen ile içmeyen arasında ortalama olarak herhangi bir fark yok.
 
+Hiçbir H0 hipotezini reddedemediğimiz için %95 güven aralığında içen ile içmeyen arasında bir fark yoktur. 
+
+
+
+
 
 ### Örnekler
 ## 5.9 
