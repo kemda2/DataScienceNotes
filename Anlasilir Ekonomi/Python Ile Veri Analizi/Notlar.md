@@ -2835,7 +2835,7 @@ test
 # TtestResult(statistic=1.3649261283323062, pvalue=0.17745895971860212, df=59.0)
 ```
 
-
+0,17 0,05 değerinden büyük olduğu için H0  reddedilemez. İçen ile içmeyen arasında ortalama olarak herhangi bir fark yok.
 
 
 ### Örnekler
