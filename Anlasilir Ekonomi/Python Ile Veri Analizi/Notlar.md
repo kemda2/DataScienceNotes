@@ -2774,16 +2774,26 @@ print(h2)
 
 Bütün p değerleri 0,05'ten büyük olduğu için H0 reddedilemez. Varyanslar homojen.
 
+
+
+>Sigara içme durumu ile nefes tutma süreleri kıyaslanıyor.
+
 ```python
 Sigara = ["Hayır","Hayır","Hayır","Evet","Evet","Evet","Evet","Evet","Hayır","Evet",
           "Hayır","Hayır","Hayır","Evet","Evet","Evet","Hayır","Hayır","Evet","Evet",
           "Hayır","Evet","Hayır","Hayır","Evet","Hayır","Hayır","Evet","Evet","Hayır",
-          "Evet","Hayır","Evet","Evet"]
+          "Evet","Hayır","Evet","Evet","Evet","Evet","Evet","Evet","Evet","Evet",
+          "Evet","Evet","Evet","Evet","Evet","Evet","Hayır","Hayır","Hayır","Hayır",
+          "Hayır","Hayır","Hayır","Hayır","Hayır","Hayır","Hayır","Hayır","Hayır","Hayır",
+          "Hayır"]
 
 Zaman = [15.06358,15.77698,15.34883,13.6725,12.02749,18.77513,17.25964,17.66879,14.5384,12.06482,
-         12.22138,2.4567,13.58266,15.0689,10.82145,18.34378,10.24611,15.01522,16.78425,15.81457,
+         12.22138,12.4567,13.58266,15.0689,10.82145,18.34378,10.24611,15.01522,16.78425,15.81457,
          16.84685,15.8199,14.50865,13.18201,19.63606,12.51304,16.10257,16.74138,19.86994,17.56927,
-         15.40599,14.81622,12.87322,14.08156]
+         15.40599,14.81622,12.87322,14.08156,20.84376,13.39095,16.22823,15.44857,15.48347,16.8586,
+         17.71843,13.7556,10.38391,17.06556,13.0717,12.21937,12.55556,11.88787,15.24795,13.64029,
+         15.59742,16.09101,16.09101,15.3031,19.70871,13.01566,14.89676,17.56927,14.57556,13.94187,
+         15.35008]
 
 import pandas as pd
 from scipy import stats
@@ -2793,9 +2803,18 @@ veri = pd.DataFrame({
   "Zaman":Zaman
 })
 
-Veri
+icen=veri[veri["Sigara"]=="Evet"]
+icmeyen=veri[veri["Sigara"]=="Hayır"]
+
+normicen=stats.shapiro(icen["Zaman"])
+normicmeyen=stats.shapiro(icmeyen["Zaman"])
+
+print(normicen,normicmeyen)
+# ShapiroResult(statistic=0.9823920122280293, pvalue=0.8849548009303411) 
+# ShapiroResult(statistic=0.9805439050132948, pvalue=0.8276780947961337)
 ```
 
+Her iki p değeri de alfa değeri olan 0.05'ten büyük olduğu için normal dağılım sergilenir.
 
 
 
