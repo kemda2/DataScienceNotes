@@ -3035,5 +3035,5 @@ else:
 ## 5.9 
 # 6
 
-https://www.youtube.com/watch?v=WaJ9jfmf27I&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=65
+https://www.youtube.com/watch?v=QeTq7DtR3VQ&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=66
 00:00
