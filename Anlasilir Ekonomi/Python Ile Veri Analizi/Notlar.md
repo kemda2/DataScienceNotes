@@ -2828,6 +2828,15 @@ homojen
 
 0,05'ten büyük olduğu için varyans homojenliği var.
 
+```python
+test=stats.ttest_ind(icen["Zaman"],icmeyen["Zaman"],alternative="Two—Sided")
+test
+
+# TtestResult(statistic=1.3649261283323062, pvalue=0.17745895971860212, df=59.0)
+```
+
+
+
 
 ### Örnekler
 ## 5.9 
