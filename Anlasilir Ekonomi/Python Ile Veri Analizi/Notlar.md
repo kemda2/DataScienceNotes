@@ -2774,6 +2774,25 @@ print(h2)
 
 Bütün p değerleri 0,05'ten büyük olduğu için H0 reddedilemez. Varyanslar homojen.
 
+```python
+Sigara = ["Hayır","Hayır","Hayır","Evet","Evet","Evet","Evet","Evet","Hayır","Evet",
+          "Hayır","Hayır","Hayır","Evet","Evet","Evet","Hayır","Hayır","Evet","Evet",
+          "Hayır","Evet","Hayır","Hayır","Evet","Hayır","Hayır","Evet","Evet","Hayır",
+          "Evet","Hayır","Evet","Evet"]
+
+Zaman = [15.06358,15.77698,15.34883,13.6725,12.02749,18.77513,17.25964,17.66879,14.5384,12.06482,
+         12.22138,2.4567,13.58266,15.0689,10.82145,18.34378,10.24611,15.01522,16.78425,15.81457,
+         16.84685,15.8199,14.50865,13.18201,19.63606,12.51304,16.10257,16.74138,19.86994,17.56927,
+         15.40599,14.81622,12.87322,14.08156]
+
+         
+```
+
+
+
+
+
+
 ### Örnekler
 ## 5.9 
 # 6
