@@ -2816,8 +2816,15 @@ print(normicen,normicmeyen)
 
 Her iki p değeri de alfa değeri olan 0.05'ten büyük olduğu için normal dağılım sergilenir.
 
+Varyansların homojenliği;
 
 
+```python
+homojen=stats.bartlett(icen["Zaman"], icmeyen["Zaman"])
+homojen
+
+# BartlettResult(statistic=3.253657343839216, pvalue=0.07126427845558947)
+```
 
 
 ### Örnekler
