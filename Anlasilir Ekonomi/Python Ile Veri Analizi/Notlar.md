@@ -2826,6 +2826,8 @@ homojen
 # BartlettResult(statistic=3.253657343839216, pvalue=0.07126427845558947)
 ```
 
+0,05'ten büyük olduğu için varyans homojenliği var.
+
 
 ### Örnekler
 ## 5.9 
