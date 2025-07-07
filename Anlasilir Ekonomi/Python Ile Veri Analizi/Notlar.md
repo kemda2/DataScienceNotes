@@ -3030,10 +3030,26 @@ else:
 # yeni ortalama: 21.2
 ```
 
+## 5.9 Bağımlı Örneklem T Testi
+
+Bir kanser hasta grubunda hastaların tedavi uygulanmadan önce ve tedavi uygulandıktan sonraki değerlerinde farklılık olup olmadığını ölçmeye yarayan testlerdir.
+
+$H_0: \mu_ö = \mu_s \\[3mm] H_1: \mu_ö\ != \mu_s$ 
+
+Varsayımları;
+
+- Örneklemler rassal olarak seçilmeli
+- Bağımsız değişken sürekli olmalı
+- Bağımlı değişken öncesi ve sonrası için normal dağılım göstermeli
+- Varyansların homojenliği
+
+$t=\frac{\bar{d}}{\frac{s}{\sqrt{n}}}$ 
+
+
 
 ### Örnekler
-## 5.9 
+## 5.10 
 # 6
 
 https://www.youtube.com/watch?v=QeTq7DtR3VQ&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=66
-00:00
+09:44
