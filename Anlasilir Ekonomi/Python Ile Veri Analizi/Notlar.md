@@ -3045,7 +3045,11 @@ Varsayımları;
 
 $t=\frac{\bar{d}}{\frac{s}{\sqrt{n}}}$ 
 
+$d = x_{önceki} - x_{sonraki}$
 
+$\bar{d}$ değeri $d$ değerlerinin ortalamasıdır.
+
+$s = \sqrt{\frac{\sum d^2 - \frac{(\sum d)^2}{n}}{n-1}}$
 
 ### Örnekler
 ## 5.10 
