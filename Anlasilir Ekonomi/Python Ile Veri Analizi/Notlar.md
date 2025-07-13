@@ -3052,6 +3052,104 @@ $\bar{d}$ değeri $d$ değerlerinin ortalamasıdır.
 $s = \sqrt{\frac{\sum d^2 - \frac{(\sum d)^2}{n}}{n-1}}$
 
 ### Örnekler
+
+> okulda yeni bir eğitim sistemi geliştirildi. Eğitim sisteminin öğrenciler üzerinde etkisi olup olmadığını %95 güven testiyle araştırıyoruz.
+
+$H_0: \mu_ö = \mu_s \\[3mm] H_1: \mu_ö\ != \mu_s\\[6mm] n=9$ 
+
+| Önce | Sonra | d  | d^2  |
+|------|-------|----|------|
+| 280  | 281   | -1 | 1    |
+| 287  | 274   | 13 | 169  |
+| 280  | 270   | 10 | 100  |
+| 275  | 273   | 2  | 4    |
+| 279  | 276   | 3  | 9    |
+| 278  | 273   | 5  | 25   |
+| 289  | 281   | 8  | 64   |
+| 284  | 282   | 2  | 4    |
+| 288  | 284   | 4  | 16   |
+
+Yukarıdaki tablodan;
+
+$n=9 \\[3mm] \bar{d} = 5,11 \\[3mm] \sum d^2 = 396 \\[3mm] \sum d = 46 \\[3mm] (\sum d)^2 = 2116 \\[6mm]$
+
+$s = \sqrt{\frac{\sum d^2 - \frac{(\sum d)^2}{n}}{n-1}}$
+
+$s = \sqrt{\frac{396 - \frac{2116}{9}}{8}}$
+
+$s = \sqrt{\frac{396 - 235,11}{8}}$
+
+$s = \sqrt{\frac{156,88}{8}}$
+
+$s = \sqrt{19,61}$
+
+$s = 4,428 \\[6mm]$
+
+$t=\frac{\bar{d}}{\frac{s}{\sqrt{n}}}$ 
+
+$t=\frac{5,11}{\frac{4,428}{\sqrt{9}}}$ 
+
+$t=\frac{5,11}{\frac{4,428}{3}}$ 
+
+$t=\frac{5,11}{1,476}$ 
+
+$t_{hesap}=3,46$ 
+
+$t_{tablo 8}=2,306$ 
+
+$t_{hesap}>t_{tablo 8}$ 
+
+$H_0$ reddedilir. Yeni sistem istatistiki olarak öğrenciler üzerinde fark yaratmaktadır. 
+
+
+
+```python
+once = [280, 287, 280, 275, 279, 278, 289, 284, 288]
+sonra = [281, 274, 270, 273, 276, 273, 281, 282, 284]
+
+import pandas as pd
+from scipy import stats
+
+veri = pd.DataFrame({
+  "Önce": once, 
+  "Sonra":sonra
+})
+
+test=stats.ttest_rel(veri["Önce"],veri["Sonra"],alternative="two—sided")
+
+# TtestResult(statistic=3.4624656756769143, pvalue=0.008536774716703749, df=8)
+```
+
+> Aşağıda rastgele seçilen 10 çalışanın
+
+| Çalışan | Önce | Sonra |
+|---------|------|-------|
+| 1       | 4    | 9     |
+| 2       | 4    | 10    |
+| 3       | 3    | 9     |
+| 4       | 5    | 9     |
+| 5       | 3    | 12    |
+| 6       | 5    | 10    |
+| 7       | 3    | 10    |
+| 8       | 5    | 8     |
+| 9       | 3    | 11    |
+| 10      | 2    | 9     |
+
+
+
+
+```python
+once = [4, 4, 3, 5, 3, 5, 3, 5, 3, 2]
+sonra = [9, 10, 9, 9, 12, 10, 10, 8, 11, 9]
+
+
+```
+
+
+
+
+
+### Örnekler
 ## 5.10 
 # 6
 
