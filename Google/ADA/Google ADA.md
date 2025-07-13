@@ -34,8 +34,6 @@ destekleyebilecek özelleştirilebilir bir iskele sunar.
 
 PACE modelinin her aşamasına daha yakından bakalım.
 
-<img src="attachment:ebed4156-9c62-49ec-881b-f1a21f24c0fc.png" width="500" />
-
 ![image](./images/ebed4156-9c62-49ec-881b-f1a21f24c0fc.png)
 
 #### **Plan**
