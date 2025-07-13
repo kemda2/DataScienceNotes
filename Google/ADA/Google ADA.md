@@ -168,29 +168,29 @@ uygulamalarınızı geliştirmenize yardımcı olmak için bu program için öze
 olarak tasarlanmıştır. PACE, her aşama arasında akan iletişim ile
 tamamlanmış bir devre gibi işlev görür. PACE\'nin tasarımı, gerektiğinde
 aşamalar arasında serbest dolaşıma izin vererek esnekliği teşvik eder.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 # 2 Python\'u kullanmaya başlayın {#2-pythonu-kullanmaya-başlayın}
-:::
 
-::: {.cell .markdown}
+
+ 
 ## Kodlama
-:::
 
-::: {.cell .code execution_count="1"}
+
+ 
 ``` python
 import pandas as pd
 dataframe = pd.read_csv("https://storage.googleapis.com/kagglesdsdata/competitions/3136/26502/train.csv?GoogleAccessId=web-data@kaggle-161607.iam.gserviceaccount.com&Expires=1721564819&Signature=fPHv7fKX3DCqcfShmJ8XlQV0CAQHdID0JZRyHwzUaPPKqVVPDQ3aCDLx%2BF4KpaQP2SzD83KlPWZIxUSfte80K5adU%2FYDf9yjRMTQOBOvReTfO3aAnGgULCPGG1JFHAUoTTVe8XEFeQfnwf80%2BeNBNvmkXdiKDx5AWztbt04npcVfnpXZJhNBOdUIe%2Fz90jChG1%2Fo43JAWsGBg4YwzPqNb03d2RC5LcPvm1ANtGieIOo82DExb4meMCRycfh6nayDyG0Jj6Kj6gp9M3ny50u0sRFohu5A2vyXArKr0mtPIODVdAxVUlRnUIl2RLmQ7%2Fq9ZxiMEbVlcL0fREHgMF%2BbPA%3D%3D&response-content-disposition=attachment%3B+filename%3Dtrain.csv")
 ```
-:::
 
-::: {.cell .code execution_count="2"}
+
+ {.cell .code execution_count="2"}
 ``` python
 dataframe.head(5)
 ```
 
-::: {.output .execute_result execution_count="2"}
+ {.output .execute_result execution_count="2"}
 ```{=html}
 <div>
 <style scoped>
@@ -304,15 +304,15 @@ dataframe.head(5)
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="3"}
+
+
+ {.cell .code execution_count="3"}
 ``` python
 dataframe[(dataframe['Age'] > 60) & (dataframe['Pclass'] == 3)]
 ```
 
-::: {.output .execute_result execution_count="3"}
+ {.output .execute_result execution_count="3"}
 ```{=html}
 <div>
 <style scoped>
@@ -426,16 +426,16 @@ dataframe[(dataframe['Age'] > 60) & (dataframe['Pclass'] == 3)]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="4"}
+
+
+ {.cell .code execution_count="4"}
 ``` python
 dataframe["2023 Fare"] = dataframe["Fare"] * 2
 dataframe.head(5)
 ```
 
-::: {.output .execute_result execution_count="4"}
+ {.output .execute_result execution_count="4"}
 ```{=html}
 <div>
 <style scoped>
@@ -555,27 +555,27 @@ dataframe.head(5)
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="5"}
+
+
+ {.cell .code execution_count="5"}
 ``` python
 dataframe.iloc[1][3]
 ```
 
-::: {.output .execute_result execution_count="5"}
+ {.output .execute_result execution_count="5"}
     'Cumings, Mrs. John Bradley (Florence Briggs Thayer)'
-:::
-:::
 
-::: {.cell .code execution_count="6"}
+
+
+ {.cell .code execution_count="6"}
 ``` python
 fare = dataframe.groupby(['Sex', 'Pclass']).agg({'Fare': ['count', 'sum']}) 
 fare['fare avg'] = fare['Fare']['sum']/fare['Fare']['count'] 
 fare
 ```
 
-::: {.output .execute_result execution_count="6"}
+ {.output .execute_result execution_count="6"}
 ```{=html}
 <div>
 <style scoped>
@@ -661,10 +661,10 @@ fare
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="7"}
+
+
+ {.cell .code execution_count="7"}
 ``` python
 import pandas as pd
 
@@ -673,7 +673,7 @@ df = pd.DataFrame(data=data)
 df
 ```
 
-::: {.output .execute_result execution_count="7"}
+ {.output .execute_result execution_count="7"}
 ```{=html}
 <div>
 <style scoped>
@@ -712,10 +712,10 @@ df
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="8"}
+
+
+ {.cell .code execution_count="8"}
 ``` python
 import numpy as np
 
@@ -724,7 +724,7 @@ df2 = pd.DataFrame(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]), columns=['a', 'b
 df2
 ```
 
-::: {.output .execute_result execution_count="8"}
+ {.output .execute_result execution_count="8"}
 ```{=html}
 <div>
 <style scoped>
@@ -772,10 +772,10 @@ df2
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="9"}
+
+
+ {.cell .code execution_count="9"}
 ``` python
 # Print class of first row 
 print(type(dataframe.iloc[0]))
@@ -784,18 +784,18 @@ print(type(dataframe.iloc[0]))
 print(type(dataframe['Name']))
 ```
 
-::: {.output .stream .stdout}
+ {.output .stream .stdout}
     <class 'pandas.core.series.Series'>
     <class 'pandas.core.series.Series'>
-:::
-:::
 
-::: {.cell .code execution_count="10"}
+
+
+ {.cell .code execution_count="10"}
 ``` python
 dataframe[['Name','Age']]
 ```
 
-::: {.output .execute_result execution_count="10"}
+ {.output .execute_result execution_count="10"}
 ```{=html}
 <div>
 <style scoped>
@@ -880,15 +880,15 @@ dataframe[['Name','Age']]
 <p>891 rows × 2 columns</p>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="11"}
+
+
+ {.cell .code execution_count="11"}
 ``` python
 dataframe.iloc[0]
 ```
 
-::: {.output .execute_result execution_count="11"}
+ {.output .execute_result execution_count="11"}
     PassengerId                          1
     Survived                             0
     Pclass                               3
@@ -903,15 +903,15 @@ dataframe.iloc[0]
     Embarked                             S
     2023 Fare                         14.5
     Name: 0, dtype: object
-:::
-:::
 
-::: {.cell .code execution_count="12"}
+
+
+ {.cell .code execution_count="12"}
 ``` python
 dataframe.iloc[[0]]
 ```
 
-::: {.output .execute_result execution_count="12"}
+ {.output .execute_result execution_count="12"}
 ```{=html}
 <div>
 <style scoped>
@@ -967,15 +967,15 @@ dataframe.iloc[[0]]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="13"}
+
+
+ {.cell .code execution_count="13"}
 ``` python
 dataframe.iloc[0:3]
 ```
 
-::: {.output .execute_result execution_count="13"}
+ {.output .execute_result execution_count="13"}
 ```{=html}
 <div>
 <style scoped>
@@ -1063,15 +1063,15 @@ dataframe.iloc[0:3]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="14"}
+
+
+ {.cell .code execution_count="14"}
 ``` python
 dataframe.iloc[0:3,[3,4]]
 ```
 
-::: {.output .execute_result execution_count="14"}
+ {.output .execute_result execution_count="14"}
 ```{=html}
 <div>
 <style scoped>
@@ -1115,15 +1115,15 @@ dataframe.iloc[0:3,[3,4]]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="15"}
+
+
+ {.cell .code execution_count="15"}
 ``` python
 dataframe.iloc[:,[3]]
 ```
 
-::: {.output .execute_result execution_count="15"}
+ {.output .execute_result execution_count="15"}
 ```{=html}
 <div>
 <style scoped>
@@ -1196,25 +1196,25 @@ dataframe.iloc[:,[3]]
 <p>891 rows × 1 columns</p>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="16"}
+
+
+ {.cell .code execution_count="16"}
 ``` python
 dataframe.iloc[0,3]
 ```
 
-::: {.output .execute_result execution_count="16"}
+ {.output .execute_result execution_count="16"}
     'Braund, Mr. Owen Harris'
-:::
-:::
 
-::: {.cell .code execution_count="17"}
+
+
+ {.cell .code execution_count="17"}
 ``` python
 dataframe.loc[0:3,['Name']]
 ```
 
-::: {.output .execute_result execution_count="17"}
+ {.output .execute_result execution_count="17"}
 ```{=html}
 <div>
 <style scoped>
@@ -1258,10 +1258,10 @@ dataframe.loc[0:3,['Name']]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .markdown}
+
+
+ 
   -------------------------------------------------------------------------------------------------------------------------------------------
   **Attribute**                                                                                                    **Description**
   ---------------------------------------------------------------------------------------------------------------- --------------------------
@@ -1288,9 +1288,9 @@ dataframe.loc[0:3,['Name']]
                                                                                                                    representation of the
                                                                                                                    dataframe
   -------------------------------------------------------------------------------------------------------------------------------------------
-:::
 
-::: {.cell .markdown}
+
+ 
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   **Method**                                                                                                                        **Description**
   --------------------------------------------------------------------------------------------------------------------------------- ----------------------------------------
@@ -1330,9 +1330,9 @@ dataframe.loc[0:3,['Name']]
   [where()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.where.html#pandas.DataFrame.where)                        Replaces values in the dataframe where a
                                                                                                                                     given condition is false
   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-:::
 
-::: {.cell .code execution_count="18"}
+
+ {.cell .code execution_count="18"}
 ``` python
 data = {'planet': ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'],
         'radius_km': [2440, 6052, 6371, 3390, 69911, 58232, 25362, 246221],
@@ -1343,7 +1343,7 @@ planets = pd.DataFrame(data)
 planets
 ```
 
-::: {.output .execute_result execution_count="18"}
+ {.output .execute_result execution_count="18"}
 ```{=html}
 <div>
 <style scoped>
@@ -1421,16 +1421,16 @@ planets
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="19"}
+
+
+ {.cell .code execution_count="19"}
 ``` python
 mask = planets['moons'] < 20
 mask
 ```
 
-::: {.output .execute_result execution_count="19"}
+ {.output .execute_result execution_count="19"}
     0     True
     1     True
     2     True
@@ -1440,15 +1440,15 @@ mask
     6    False
     7     True
     Name: moons, dtype: bool
-:::
-:::
 
-::: {.cell .code execution_count="20"}
+
+
+ {.cell .code execution_count="20"}
 ``` python
 planets[mask]
 ```
 
-::: {.output .execute_result execution_count="20"}
+ {.output .execute_result execution_count="20"}
 ```{=html}
 <div>
 <style scoped>
@@ -1508,15 +1508,15 @@ planets[mask]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="21"}
+
+
+ {.cell .code execution_count="21"}
 ``` python
 planets[planets['moons']<20]
 ```
 
-::: {.output .execute_result execution_count="21"}
+ {.output .execute_result execution_count="21"}
 ```{=html}
 <div>
 <style scoped>
@@ -1576,17 +1576,17 @@ planets[planets['moons']<20]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="22"}
+
+
+ {.cell .code execution_count="22"}
 ``` python
 mask = (planets['moons'] < 10) | (planets['moons'] > 50)
 
 mask
 ```
 
-::: {.output .execute_result execution_count="22"}
+ {.output .execute_result execution_count="22"}
     0     True
     1     True
     2     True
@@ -1596,15 +1596,15 @@ mask
     6    False
     7    False
     Name: moons, dtype: bool
-:::
-:::
 
-::: {.cell .code execution_count="23"}
+
+
+ {.cell .code execution_count="23"}
 ``` python
 planets[mask]
 ```
 
-::: {.output .execute_result execution_count="23"}
+ {.output .execute_result execution_count="23"}
 ```{=html}
 <div>
 <style scoped>
@@ -1670,16 +1670,16 @@ planets[mask]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="24"}
+
+
+ {.cell .code execution_count="24"}
 ``` python
 mask = (planets['moons'] > 20) & ~ (planets['moons'] == 80) & ~ (planets['radius_km'] < 50000)
 planets[mask]
 ```
 
-::: {.output .execute_result execution_count="24"}
+ {.output .execute_result execution_count="24"}
 ```{=html}
 <div>
 <style scoped>
@@ -1715,10 +1715,10 @@ planets[mask]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="25"}
+
+
+ {.cell .code execution_count="25"}
 ``` python
 data = {'planet': ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'],
         'radius_km': [2440, 6652, 6371, 3390, 69911, 58232, 25362, 24622], 
@@ -1733,7 +1733,7 @@ planets = pd.DataFrame(data)
 planets
 ```
 
-::: {.output .execute_result execution_count="25"}
+ {.output .execute_result execution_count="25"}
 ```{=html}
 <div>
 <style scoped>
@@ -1847,15 +1847,15 @@ planets
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="26"}
+
+
+ {.cell .code execution_count="26"}
 ``` python
 planets.groupby(['type']).sum()
 ```
 
-::: {.output .execute_result execution_count="26"}
+ {.output .execute_result execution_count="26"}
 ```{=html}
 <div>
 <style scoped>
@@ -1924,15 +1924,15 @@ planets.groupby(['type']).sum()
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="27"}
+
+
+ {.cell .code execution_count="27"}
 ``` python
 planets.groupby(['type']).sum()[['moons']]
 ```
 
-::: {.output .execute_result execution_count="27"}
+ {.output .execute_result execution_count="27"}
 ```{=html}
 <div>
 <style scoped>
@@ -1976,15 +1976,15 @@ planets.groupby(['type']).sum()[['moons']]
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="28"}
+
+
+ {.cell .code execution_count="28"}
 ``` python
 planets.groupby(['type','magnetic_field'])[['radius_km','moons','mean_temp_c']].mean()
 ```
 
-::: {.output .execute_result execution_count="28"}
+ {.output .execute_result execution_count="28"}
 ```{=html}
 <div>
 <style scoped>
@@ -2049,15 +2049,15 @@ planets.groupby(['type','magnetic_field'])[['radius_km','moons','mean_temp_c']].
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="29"}
+
+
+ {.cell .code execution_count="29"}
 ``` python
 planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', 'median'])
 ```
 
-::: {.output .execute_result execution_count="29"}
+ {.output .execute_result execution_count="29"}
 ```{=html}
 <div>
 <style scoped>
@@ -2136,15 +2136,15 @@ planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', 'med
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="30"}
+
+
+ {.cell .code execution_count="30"}
 ``` python
 planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', 'min', 'max'])
 ```
 
-::: {.output .execute_result execution_count="30"}
+ {.output .execute_result execution_count="30"}
 ```{=html}
 <div>
 <style scoped>
@@ -2238,15 +2238,15 @@ planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', 'min
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="31"}
+
+
+ {.cell .code execution_count="31"}
 ``` python
 planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg({'radius_km': ['mean'], 'moons' : ['min', 'max']})
 ```
 
-::: {.output .execute_result execution_count="31"}
+ {.output .execute_result execution_count="31"}
 ```{=html}
 <div>
 <style scoped>
@@ -2309,10 +2309,10 @@ planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg({'radius_km':
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="32"}
+
+
+ {.cell .code execution_count="32"}
 ``` python
 def percentile_90(x):
     return x.quantile(0.9)
@@ -2320,7 +2320,7 @@ def percentile_90(x):
 planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', percentile_90])
 ```
 
-::: {.output .execute_result execution_count="32"}
+ {.output .execute_result execution_count="32"}
 ```{=html}
 <div>
 <style scoped>
@@ -2399,10 +2399,10 @@ planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', perc
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .markdown}
+
+
+ 
 ### agg()
 
 [agg()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.agg.html)
@@ -2435,9 +2435,9 @@ Max(): Her gruptaki maksimum değer
 Std(): Her gruptaki değerlerin standart sapması
 
 Var(): Her gruptaki değerlerin varyansı
-:::
 
-::: {.cell .code execution_count="33"}
+
+ {.cell .code execution_count="33"}
 ``` python
 import numpy as np 
 import pandas as pd
@@ -2449,7 +2449,7 @@ df1 = pd.DataFrame(data)
 df1
 ```
 
-::: {.output .execute_result execution_count="33"}
+ {.output .execute_result execution_count="33"}
 ```{=html}
 <div>
 <style scoped>
@@ -2503,10 +2503,10 @@ df1
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="34"}
+
+
+ {.cell .code execution_count="34"}
 ``` python
 data = {'planet': ['Jupiter', 'Saturn', 'Uranus', 'Neptune'], 'radius km': [69911, 58232, 25362, 24622], 'moons': [80, 83, 27, 14],} 
 
@@ -2515,7 +2515,7 @@ df2 = pd.DataFrame(data)
 df2
 ```
 
-::: {.output .execute_result execution_count="34"}
+ {.output .execute_result execution_count="34"}
 ```{=html}
 <div>
 <style scoped>
@@ -2569,16 +2569,16 @@ df2
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="35"}
+
+
+ {.cell .code execution_count="35"}
 ``` python
 df3 = pd.concat([df1,df2], axis= 0)
 df3
 ```
 
-::: {.output .execute_result execution_count="35"}
+ {.output .execute_result execution_count="35"}
 ```{=html}
 <div>
 <style scoped>
@@ -2656,16 +2656,16 @@ df3
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="36"}
+
+
+ {.cell .code execution_count="36"}
 ``` python
 df3 = df3.reset_index(drop=True)
 df3
 ```
 
-::: {.output .execute_result execution_count="36"}
+ {.output .execute_result execution_count="36"}
 ```{=html}
 <div>
 <style scoped>
@@ -2743,10 +2743,10 @@ df3
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="37"}
+
+
+ {.cell .code execution_count="37"}
 ``` python
 import pandas as pd
 import numpy as np
@@ -2764,7 +2764,7 @@ df4 = pd.DataFrame(data)
 df4
 ```
 
-::: {.output .execute_result execution_count="37"}
+ {.output .execute_result execution_count="37"}
 ```{=html}
 <div>
 <style scoped>
@@ -2869,14 +2869,14 @@ df4
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
+
 ## Merge()
-:::
 
-::: {.cell .markdown}
+
+ 
 `<img src="attachment:e4431cde-a4bf-4002-bb07-310345a405f6.png" width="500" />`{=html}
 
 `<img src="attachment:8b26137f-69d0-4ae9-b889-0ef7573d19d5.png" width="500" />`{=html}
@@ -2886,15 +2886,15 @@ df4
 `<img src="attachment:4d43150c-3083-43d3-8d43-e74153aae593.png" width="500" />`{=html}
 
 `<img src="attachment:2cd36048-5019-42ed-a55d-299098daf825.png" width="500" />`{=html}
-:::
 
-::: {.cell .code execution_count="39"}
+
+ {.cell .code execution_count="39"}
 ``` python
 inner = pd.merge(df3, df4, on="planet", how='inner')
 inner
 ```
 
-::: {.output .execute_result execution_count="39"}
+ {.output .execute_result execution_count="39"}
 ```{=html}
 <div>
 <style scoped>
@@ -2995,16 +2995,16 @@ inner
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="40"}
+
+
+ {.cell .code execution_count="40"}
 ``` python
 outer = pd.merge(df3, df4, on="planet", how='outer')
 outer
 ```
 
-::: {.output .execute_result execution_count="40"}
+ {.output .execute_result execution_count="40"}
 ```{=html}
 <div>
 <style scoped>
@@ -3149,16 +3149,16 @@ outer
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="41"}
+
+
+ {.cell .code execution_count="41"}
 ``` python
 left = pd.merge(df3, df4, on="planet", how='left')
 left
 ```
 
-::: {.output .execute_result execution_count="41"}
+ {.output .execute_result execution_count="41"}
 ```{=html}
 <div>
 <style scoped>
@@ -3281,16 +3281,16 @@ left
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .code execution_count="42"}
+
+
+ {.cell .code execution_count="42"}
 ``` python
 right = pd.merge(df3, df4, on="planet", how='right')
 right
 ```
 
-::: {.output .execute_result execution_count="42"}
+ {.output .execute_result execution_count="42"}
 ```{=html}
 <div>
 <style scoped>
@@ -3413,20 +3413,20 @@ right
 </table>
 </div>
 ```
-:::
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
+
 # 3 Go Beyond the numbers {#3-go-beyond-the-numbers}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## EDA Prosesi
 
 ## **Görsel örnek**
-:::
 
-::: {.cell .markdown}
+
+ 
 Norveç\'teki iğne yapraklı bir ormandaki ağaçlar hakkında yalnızca 200
 satır ve beş sütun veriye sahip bir veri kümesi atandığını hayal edin.
 Tam analizinizi tamamlamak için 1.000\'den fazla satıra ve en az iki
@@ -3471,13 +3471,13 @@ nedenle, daha da fazla yineleme göreceksiniz.
 makine öğrenimi algoritmaları için hazır olduğunu ilan etmekte
 kendilerini rahat hissetmeden önce bir veri kümesinde EDA uygulamalarını
 birden çok kez gerçekleştirmeyi bekliyorlar.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Etik makine öğreniminde EDA\'nın önemi
-:::
 
-::: {.cell .markdown}
+
+ 
 Algoritmalar ve makine öğrenimi ağları bireyler, şirketler ve hatta
 hükümetler adına giderek daha fazla karar vermeye başladıkça, etik ve
 düzenleme tartışması giderek daha önemli hale geliyor. [Etik Yapay Zeka
@@ -3511,13 +3511,13 @@ Makine öğreniminin ötesinde, EDA neredeyse her önemli veritabanı
 kararına uygulanabilir. İleride, EDA\'nın birçok uygulaması ve
 yinelemeli ve sıralı olmayan bir yaklaşımın gerekliliği hakkında bilgi
 edineceksiniz.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Şematik Gösterim
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import pandas as pd
 import numpy as np
@@ -3636,9 +3636,9 @@ plt.xticks(rotation = 45, fontsize = 8) # Rotate x-axis labels and decrease font
 ```
 
 `<img src="attachment:97b8385f-6fba-49b4-bacc-4fab0e1a778c.png" width="800"/>`{=html}
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 df_by_quarter['number_strikes'].div(1000000)
 # Group 2016-2018 data by quarter and sum
@@ -3667,13 +3667,13 @@ plt.ylabel('Number of lightning strikes')
 plt.title('Number of lightning strikes per quarter (2016-2018)')
 plt.show()
 ```
-:::
 
-::: {.cell .markdown}
+
+ 
 `<img src="attachment:790f9cce-3dbd-4c6b-8df3-625799c72529.png" width="800"/>`{=html}
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 # Create two new columns
 df_by_quarter['quarter_number'] = df_by_quarter['quarter'].str[-2:]
@@ -3694,9 +3694,9 @@ plt.show()
 ```
 
 `<img src="attachment:076688a1-5d2b-4892-a395-75af614551cb.png" width="800"/>`{=html}
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 # Import statements
 import pandas as pd
@@ -3831,13 +3831,13 @@ plt.title("% of lightning strikes each Month (2016-2018)");
 ```
 
 `<img src="attachment:4d8c4331-8eda-40ab-b230-934936c2b999.png" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Histogramlar
-:::
 
-::: {.cell .markdown}
+
+ 
 Öğrendiğiniz gibi, keşif veri analizinin (EDA) amacı tam da adının
 söylediği şeydir: verileri araştırın ve analiz edin. Bir veri uzmanı
 olarak, neredeyse her zaman yol gösterici bir soru veya hedefle
@@ -4027,13 +4027,13 @@ gibi önemli alt kararları etkileyecektir. Ek olarak, verilerinizin
 şeklini bilmek, verilerinizin dağıtım eğilimlerini anlamanıza yardımcı
 olarak verilerinizin size anlattığı hikayeye ilişkin değerli bilgiler
 sağlar.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Veri Temizleme
-:::
 
-::: {.cell .markdown}
+
+ 
 Öğrendiğiniz gibi, veri temizleme ve doğrulama uygulamaları, eksik
 verileri, aykırı değerleri ve etiket kodlamasını işleme; yazım
 hatalarını kontrol etme ve kopyaları işleme dahil olmak üzere birkaç
@@ -4288,9 +4288,9 @@ misiniz? Aşağıdaki ek bağlantılara göz atın.
 
 -   [W3 Okulları: Pandalar - kopyaları
     kaldırma](https://www.w3schools.com/python/pandas/pandas_cleaning_duplicates.asp "W3 Okulları - Pandalar: Kopyaları kaldırma")
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import pandas as pd 
 import numpy as np
@@ -4388,9 +4388,9 @@ fig.show()
 ```
 
 `<img src="attachment:3758bbb8-b5d7-4b12-8922-e6a75fa98fa2.png" width="800"/>`{=html}
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 # Import statements
 import pandas as pd
@@ -4540,13 +4540,13 @@ print("Mean:"+readable_numbers(np.mean(df_without_outliers['number_of_strikes'])
 Mean:28.2M
 Median:28.8M
 ```
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## getdummies() ve cat.codes() {#getdummies-ve-catcodes}
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 # Load libraries.
 import datetime
@@ -4615,13 +4615,13 @@ plt.show()
 ```
 
 `<img src="attachment:5dee67f0-1b2d-481f-a1f8-587df4007de6.png" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Veri Dönüşümünde Diğer Yaklaşımlar
-:::
 
-::: {.cell .markdown}
+
+ 
 Bildiğiniz gibi, veriler bize birçok farklı biçimde geliyor. Kategorik
 veya nitel veri türleri için, veri uzmanlarının analizlerini tamamlamak,
 veri görselleştirmelerini tasarlamak veya makine öğrenimi
@@ -4765,13 +4765,13 @@ sayıda farklı kategorik değişken ve kendilerine özgü bir düzene sahip
 kategoriler için en iyisidir. Tek kullanımlı kodlama, daha küçük
 miktarlarda kategorik değişken ve sırası olmayan kategoriler için en
 iyisidir.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Tarih Farkı ve Görselleştirme
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 # Load libraries.
 import datetime
@@ -4845,13 +4845,13 @@ df_points = df[['latitude', 'longitude']].drop_duplicates() # Get unique points.
 p = px.scatter_geo(df_points, lat = 'latitude', lon = 'longitude') 
 p.show()
 ```
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Tableau'ya Genel Giriş
-:::
 
-::: {.cell .markdown}
+
+ 
 Öğrendiğiniz gibi, Tableau dünyanın dört bir yanındaki veri uzmanları
 tarafından kullanılan güçlü bir veri görselleştirme aracıdır. Google
 Data Analytics Profesyonel Sertifikasını aldıysanız, Tableau\'ya zaten
@@ -5077,17 +5077,17 @@ aşağıdaki bağlantıları kullanabilirsiniz:
     analiz etmek ve Tableau Genel profilinizde bir vizyon yayınlamak
     için adım adım
     kılavuz](https://www.tableau.com/blog/getting-ready-publish-your-first-data-visualization)
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 # 4 Power of statistic {#4-power-of-statistic}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Merkezi eğilim ölçüleri: Ortalama, medyan ve mod
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, **merkezi eğilim ölçümlerinin** bir veri kümesinin
 merkezini temsil eden değerler olduğunu öğrendiniz. Yeni bir veri
 kümesiyle çalışırken, verilerinizin merkezi konumunu belirlemek, temel
@@ -5243,21 +5243,21 @@ fazla bilgi edinmek için aşağıdaki kaynağı keşfedin:
     makal](https://www.abs.gov.au/websitedbs/D3310114.nsf/Home/Statistical+Language+-+measures+of+central+tendency#:~:text=There%20are%20three%20main%20measures,central%20value%20in%20the%20distribution.)esi,
     ortalama, medyan ve moda yararlı bir genel bakış sunar ve aykırı
     değerlerin merkezi eğilim ölçümlerini nasıl etkilediğini tartışır.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## 8, 10, 12 olan 3 bileşenli bir seri için standart sapma; {#8-10-12-olan-3-bileşenli-bir-seri-için-standart-sapma}
-:::
 
-::: {.cell .markdown}
+
+ 
 `<img src="attachment:00747c40-f484-478a-ae9a-a52a62ca8685.png" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Dağılım ölçüleri: Menzil, varyans ve standart sapma
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, **dağılım ölçümlerinin veri kümen** izin yayılımını veya
 veri değerlerinizdeki varyasyon miktarını tanımlamanıza izin verdiğini
 öğrendiniz. Standart sapma gibi dağılım ölçümleri, verilerinizin
@@ -5453,13 +5453,13 @@ fazla bilgi edinmek için aşağıdaki kaynakları keşfedin:
     makal](https://www150.statcan.gc.ca/n1/edu/power-pouvoir/ch12/5214891-eng.htm)esi,
     varyans ve standart sapmanın yararlı bir özetini sağlar, ve standart
     sapmanın bir dağılım ölçüsü olarak kullanışlılığını tartışır.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Konum ölçüleri: Yüzdelikler ve çeyrekler
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, **konum ölçümlerinin** bir veri kümesindeki diğer
 değerlere göre bir değerin konumunu belirlemenize izin verdiğini
 öğrendiniz. Merkez ve yayılma ile birlikte, değerlerinizin göreceli
@@ -5650,13 +5650,13 @@ edinmek için aşağıdaki kaynağa göz atın:
     sözlüğü](https://www.geo.fu-berlin.de/en/v/soga-py/Basics-of-statistics/index.html),
     yüzdelikler, çeyrekler, beş sayı özeti ve daha fazlası gibi konum
     ölçümlerinin net tanımlarını ve yararlı örneklerini sağlar.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Ortalama Okuma Oranını Bulma
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import numpy as np
 import pandas as pd
@@ -5687,13 +5687,13 @@ range_overall_li
 ```
 
 `<img src="attachment:78128c0f-9e44-481b-bdde-5688922d40e4.png" width="300"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Olasılığın Temel Kavramları
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, olasılığın belir **siz** liği ölçmek veya bir şeyin olma
 olasılığını tanımlamak için matematiği kullandığını öğrendiniz. Örneğin,
 yarın yağmur yağma ihtimali %80 veya belirli bir adayın seçimi kazanma
@@ -5866,13 +5866,13 @@ aşağıdaki kaynaklara bakın:
     not](https://people.richland.edu/james/lecture/m116/sequences/probability.html)
     ları, temel kavramların ve temel olasılık kurallarının yararlı bir
     özetini sağlar..
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Çoklu olayların olasılığı
-:::
 
-::: {.cell .markdown}
+
+ 
 Şimdiye kadar, tek olayların olasılığını hesaplamayı öğreniyorsunuz. Hem
 günlük yaşamda hem de veri çalışmasında birçok durum birden fazla olayı
 içerir. Gelecekteki bir veri uzmanı olarak, genellikle birden fazla olay
@@ -6041,13 +6041,13 @@ analizler için temel bir temeldir.
 Olasılık hakkında daha fazla bilgi edinmek için, aşağıdaki etkileşimli
 kılavuza bakın: [Görme
 Teorisi](https://seeing-theory.brown.edu/index.html#secondPage).
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Koşullu olasılık
-:::
 
-::: {.cell .markdown}
+
+ 
 Önceden, tek bir olay için ve iki veya daha fazla bağımsız olay için,
 örneğin iki ardışık jeton çevirme olasılığı hesapladınız. Koşullu
 olasılık, iki veya daha fazla bağımlı olay için geçerlidir.
@@ -6193,13 +6193,13 @@ kaynağa bakın:
 
 -   [Investopedia\"nın bu makalesi, bir iş bağlamında koşullu olasılığı
     tartışıyor.](https://www.investopedia.com/terms/c/conditional_probability.asp#:~:text=Conditional%20probability%20is%20defined%20as,succeeding%2C%20or%20conditional%2C%20event.)
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Genişletilmiş Bayes Teoremi
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, **Bayes teore** minin koşullu olasılığı belirlemek için
 bir matematik formülü olduğunu öğrendiniz. Teorem, adını Londra,
 İngiltere\'den 18. yüzyıl matematikçisi Thomas Bayes\'in adını almıştır.
@@ -6376,13 +6376,13 @@ atın:
 
 -   [Amerikan Epidemiyoloji Dergisi tarafından savcının yanılgısının
     açıklaması](https://academic.oup.com/aje/article/179/9/1125/103523)
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Ayrık olasılık dağılımları
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, veri profesyonellerinin farklı veri kümelerini
 modellemek ve verilerindeki önemli kalıpları belirlemek için olasılık
 dağılımlarını kullandığını öğrendiniz. Bir olasılık **dağılımının**
@@ -6580,13 +6580,13 @@ aşağıdaki kaynaklara bakın:
     esi, ayrık olasılık dağılımı kavramına genel bir bakış sağlar ve
     binom ve Poisson gibi belirli dağılım türleri hakkında daha fazla
     bilgi edinmek için bağlantılar sunar..
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Normal dağılımlı model verileri
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, sürekli olasılık dağılımları ve veri profesyonellerinin
 verilerini modellemesine nasıl yardımcı olduklarını öğreniyorsunuz.
 Sürekli olasılık dağılımlarının, bir dizi sayı içindeki tüm olası
@@ -6771,13 +6771,13 @@ edinmek için aşağıdaki kaynaklara göz atın:
 -   [Duke Üniversitesi\'nden bu makale, normal dağılımın temel
     özelliklerinin yararlı bir özetini
     sunmaktadır](https://sites.nicholas.duke.edu/statsreview/continuous-probability-distributions/)
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Standart Sapma ve Alt-Üst Limit Hesabı
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import numpy as np
 import pandas as pd
@@ -6833,13 +6833,13 @@ education_districtwise[(education_districtwise['Z_SCORE'] > 3) | (education_dist
 ```
 
 `<img src="attachment:50d17486-0aaf-42f2-aad2-7c6dfda540d0.png" width="800"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Örneklem ve popülasyon arasındaki ilişki
-:::
 
-::: {.cell .markdown}
+
+ 
 Daha önce, çıkarımsal **istatistiklerin sonuç çıkarmak** veya daha büyük
 bir popülasyon hakkında tahminlerde bulunmak için örnek verileri
 kullandığını öğrendiniz. Veri uzmanları, verileri hakkında değerli
@@ -6983,13 +6983,13 @@ Sonuç olarak, numunenizin kalitesi, paydaşlarla paylaştığınız
 içgörülerin kalitesini belirlemeye yardımcı olur. Bir popülasyon
 hakkında güvenilir çıkarımlar yapmak için, örneklemenizin popülasyonu
 temsil ettiğinden emin olun.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Örnekleme sürecinin aşamaları  {#örnekleme-sürecinin-aşamaları-}
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, örneklemeyi öğreniyorsunuz. Bir veri uzmanı olarak, her
 zaman örnek verilerle çalışacaksınız. Genellikle, bu daha önce diğer
 araştırmacılar tarafından toplanan örnek veriler olacaktır; bazen,
@@ -7142,13 +7142,13 @@ verilerinizin kalitesini etkileyebilir. İster diğer araştırmacılar
 tarafından toplanan verileri analiz ediyor olun, ister kendi başınıza
 bir anket yapıyor olun, örnekleme sürecini anlamak sizi daha iyi bir
 veri uzmanı haline getirecektir.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Olasılık örnekleme yöntemleri
-:::
 
-::: {.cell .markdown}
+
+ 
 Daha önce, iki ana örnekleme yöntemi türü olduğunu öğrendiniz: olasılık
 örneklemesi ve olasılık dışı örnekleme. **Olasılık örne** klemesi, bir
 [örnek](https://www.statisticshowto.com/sample/) oluşturmak için
@@ -7312,13 +7312,13 @@ yöntemleri, bir bütün olarak popülasyonu temsil eden bir örnek
 oluşturmak için size en iyi şansı verir. Temsili bir örnekle çalışmak,
 araştırdığınız popülasyon hakkında güvenilir çıkarımlar ve doğru
 tahminler yapmanıza olanak tanır.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Olasılıksız örnekleme yöntemleri
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, olasılık örnekleme yöntemlerinin rastgele seçim
 kullandığını ve bu da örnekleme yanlılığını önlemeye yardımcı olduğunu
 öğrendiniz. Rastgele seçilen bir örnek, popülasyonun tüm üyelerinin
@@ -7482,13 +7482,13 @@ Bir veri uzmanı olarak, örnek verileri toplamaya başladığınız andan
 sonuçlarınızı sunduğunuz ana kadar önyargı ve adalet hakkında
 düşünmelisiniz. Bazı yaygın önyargı biçimlerinin farkına vardığınızda,
 herhangi bir biçimde önyargı konusunda tetikte kalabilirsiniz.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Merkezi limit teoremi ile popülasyon parametrelerini çıkarma  {#merkezi-limit-teoremi-ile-popülasyon-parametrelerini-çıkarma-}
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, merkezi limit teoremini ve bunun çok çeşitli veri
 kümeleriyle çalışmanıza nasıl yardımcı olabileceğini öğrendiniz. Veri
 uzmanları, ekonomi, bilim, işletme ve diğer birçok alandaki veriler için
@@ -7627,13 +7627,13 @@ verileriniz olsa bile ortalama gibi popülasyon parametrelerini
 popülasyon ortalaması tahmininizin o kadar kesin olması muhtemeldir.
 İster araç ağırlığını ister yıllık maaşı ölçüyor olun, merkezi limit
 teoremi verilerinizi daha iyi anlamak için yararlı bir yöntemdir.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Ortalamanın örnekleme dağılımı
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, veri profesyonellerinin nüfus parametrelerini tahmin
 etmek için örnek istatistikleri nasıl kullandığını öğrendiniz. Örneğin,
 bir veri uzmanı, müşterilerin bir perakende web sitesinde geçirdikleri
@@ -7784,13 +7784,13 @@ istatistiksel çıkarım şeklidir. Örnekleme dağılımları, bir örnek
 istatistikle ilişkili belirsizliği tanımlar ve uygun istatistiksel
 çıkarımlar yapmanıza yardımcı olur. Bu önemlidir, çünkü paydaş kararları
 genellikle sağladığınız tahminlere dayanır.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Veri Numunesi Alma ve Tahminler Oluşturma
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import numpy as np
 import pandas as pd
@@ -7831,13 +7831,13 @@ mean_sample_means = estimate_df['estimate'].mean()
 mean_sample_means
 73.41124126000025
 ```
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Güven aralıkları: Doğru ve yanlış yorumlar  {#güven-aralıkları-doğru-ve-yanlış-yorumlar-}
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, veri profesyonellerinin bir tahmini çevreleyen
 belirsizliği tanımlamaya yardımcı olmak için güven aralıklarını
 kullandığını öğrendiniz. Verilerinizi daha iyi anlamak ve sonuçlarınızı
@@ -7986,13 +7986,13 @@ olduklarını da açıklamanız gerekebilir. Paydaşlarınızın kararlarını
 yanlış yorumlamaya dayandırmasını istemezsiniz. Sonuçlarınızı paydaşlara
 nasıl etkili bir şekilde ileteceğinizi anlamak, bir veri uzmanı olarak
 işinizin önemli bir parçasıdır.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Küçük bir örneklem boyutu için bir güven aralığı oluşturun
-:::
 
-::: {.cell .markdown}
+
+ 
 Şimdiye kadar, genellikle 30 veya daha fazla öğenin örnek boyutları
 olarak tanımlanan büyük örnek boyutları için güven aralıkları
 oluşturdunuz. Örneğin, yeni bir cep telefonunun ortalama pil ömrünü
@@ -8188,13 +8188,13 @@ fazla bilgi edinmek için aşağıdaki kaynaklara bakın:
     makalesi,](https://www.scribbr.com/statistics/t-distribution/) t
     dağılımına ve bir güven aralığı oluştururken nasıl kullanılacağına
     dair yararlı bir genel bakış içerir.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Veri Numunesi Alma ve Tahmini Standart Hatayı Bulma
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import numpy as np 
 import pandas as pd 
@@ -8224,13 +8224,13 @@ stats.norm.interval(alpha=0.95, loc=sample_mean, scale=estimated_standard_error)
 
 (71.42241096968617, 77.02478903031381)
 ```
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Sıfır ve alternatif hipotezler arasındaki farklar
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, **hipotez test** inin bir popülasyon parametresi
 hakkında bir varsayımı değerlendirmek için örnek verileri kullandığını
 öğrendiniz. Veri uzmanları, örnek verilerinden elde edilen kanıtların
@@ -8397,13 +8397,13 @@ için aşağıdaki kaynaklara bakın:
 -   [Statistics How To\'nun bu
     makalesi](https://www.statisticshowto.com/probability-and-statistics/null-hypothesis/),
     sıfır hipotezinin ayrıntılı bir tartışmasını içermektedir.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Tip I ve tip II hataları
-:::
 
-::: {.cell .markdown}
+
+ 
 Daha önce, sonuçlarınızın istatistiksel olarak anlamlı olup olmadığını
 veya tesadüfen meydana gelip gelmediğini belirlemeye yardımcı olmak için
 bir hipotez testi kullanabileceğinizi öğrendiniz. Bununla birlikte,
@@ -8569,13 +8569,13 @@ aşağıdaki kaynaklara bakın:
     makal](https://www.simplypsychology.org/type_I_and_type_II_errors.html)
     esi, Tip I ve Tip II hataları arasındaki farkların yararlı bir
     özetini içermektedir.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Verilerin istatistiksel önemi olup olmadığını belirleyin
-:::
 
-::: {.cell .markdown}
+
+ 
 Son zamanlarda, **istatistiksel anlamlılığın**, bir testin veya deneyin
 sonuçlarının yalnızca tesadüfen açıklanamayacağı iddiası olduğunu
 öğrendiniz. Bir hipotez testi, gözlemlenen verilerinizin istatistiksel
@@ -8732,13 +8732,13 @@ aşağıdaki kaynaklara bakın:
     makalesi](https://www.scribbr.com/statistics/statistical-significance/),
     istatistiksel anlamlılığa yararlı bir genel bakış sağlar ve çağdaş
     araştırmalarda kavramın bazı eleştirilerini tartışır..
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Tek kuyruklu ve iki kuyruklu testler
-:::
 
-::: {.cell .markdown}
+
+ 
 Daha önce, bir hipotez testinin tek kuyruklu veya iki kuyruklu
 olabileceğini öğrendiniz. Hipotez testinde bir kuyruk, bir dağılım
 eğrisinin her iki ucundaki kuyruğu ifade eder.
@@ -8909,13 +8909,13 @@ hipotez testi yürütmenin önemli bir parçasıdır. Analizinizin bağlamına
 bağlı olarak, etkileri tek bir yönde incelemek için tek kuyruklu bir
 test veya etkileri her iki yöndeki incelemek için iki kuyruklu bir test
 kullanmak isteyebilirsiniz.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## A/B testi  {#ab-testi-}
-:::
 
-::: {.cell .markdown}
+
+ 
 Daha önce, A/B testinin hangi sürümün daha iyi performans gösterdiğini
 bulmak için bir şeyin iki versiyonunu karşılaştırmanın bir yolu olduğunu
 öğrendiniz. Örneğin, bir veri uzmanı, bir web sayfasının iki sürümünü
@@ -9089,13 +9089,13 @@ etmelerine, müşteri deneyimini iyileştirmelerine ve çevrimiçi işlerini
 büyütmelerine yardımcı olmak için A/B testini kullanır. Bir A/B testinin
 genel amacını ve tasarımını anlamak, bir veri uzmanı olarak gelecekteki
 kariyerinizde faydalı olacaktır.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Deneysel Tasarım
-:::
 
-::: {.cell .markdown}
+
+ 
 Bu kurs boyunca, veri profesyonellerinin bir deneyin sonuçlarının
 istatistiksel olarak anlamlı olup olmadığını belirlemek için hipotez
 testini nasıl kullandıklarını tartıştık. Önceki senaryolarda, klinik
@@ -9309,13 +9309,13 @@ başkaları tarafından toplanan verileri kullanıyor olun, deneysel
 tasarımın temel ilkelerini anlamak önemlidir. Bu bilgi, klinik
 denemeler, A/B testleri ve daha fazlası gibi deneylerden elde edilen
 verileri analiz etmenize yardımcı olacaktır.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Örnek olay incelemesi: Ipsos: Bir pazar araştırması şirketi, reklamverenlerin daha etkili reklamlar oluşturmasına yardımcı olmak için A/B testini nasıl kullandı?  {#örnek-olay-incelemesi-ipsos-bir-pazar-araştırması-şirketi-reklamverenlerin-daha-etkili-reklamlar-oluşturmasına-yardımcı-olmak-için-ab-testini-nasıl-kullandı-}
-:::
 
-::: {.cell .markdown}
+
+ 
 Daha önce, A/B testinin hangi sürümün daha iyi performans gösterdiğini
 bulmak için bir şeyin iki versiyonunu karşılaştırmanın bir yolu olduğunu
 öğrendiniz. Örneğin, bir veri uzmanı, bir web sayfasının iki sürümünü
@@ -9539,13 +9539,13 @@ bilgi edinmek için aşağıdaki kaynakları keşfedin:
 -   Th [ink With Google\'ın bu web
     sitesi](https://www.thinkwithgoogle.com/feature/youtube-ad-sequencing-and-ad-recall/ad-sequencing?lang=en_US),
     araştırma projesinde yer alan beş sıralama yapısını sergiliyor.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## State21 ve State28 için filtreleme ve okuma yazma oranlarının ttest ve p değerini inceleme
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import pandas as pd 
 from scipy import stats
@@ -9574,17 +9574,17 @@ stats.ttest_ind(a=sampled_state21['OVERALL_LI'], b=sampled_state28['OVERALL_LI']
 ```
 
 `<img src="attachment:b3d9690a-22a7-44d5-b203-4d51eff30da1.png" width="900"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 # 5 Regresyon Analizi {#5-regresyon-analizi}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Sıradan en küçük kareleri keşfedin
-:::
 
-::: {.cell .markdown}
+
+ 
 Daha önce de belirtildiği gibi, regresyon modellemesinde en uygun
 çizgiyi bulmanın bir yolu, en iyisini bulana kadar farklı modelleri
 denemektir. Ancak basit doğrusal regresyon için, en iyi beta
@@ -9754,13 +9754,13 @@ keşfedebilirsiniz!
     (SOGA-py) kullanarak İstatistik ve Coğrafi Veri Analiz*
     *i.*](https://www.geo.fu-berlin.de/soga-py) *Yer Bilimleri Bölümü,
     Freie Universitaet Berlin*.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Korelasyon ve basit doğrusal regresyonun arkasındaki sezgi
-:::
 
-::: {.cell .markdown}
+
+ 
 Şimdiye kadar basit doğrusal regresyonun bir bağımsız değişken olan X
 ile bir sürekli bağımlı değişken Y arasındaki doğrusal ilişkiyi tahmin
 eden bir teknik olduğunu öğrendiniz, ayrıca regresyon çizgisinin
@@ -10029,13 +10029,13 @@ akılda tutulması gereken bazı önemli noktalar:
 -   Regresyon çizgisinin eğimir(S ⁣D y)S ⁣D xSD xr(SD y)​.
 
 -   Nokta (*x,*) *her* zaman regresyon çizgisindedir.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Basit doğrusal regresyonun dört ana varsayımı
-:::
 
-::: {.cell .markdown}
+
+ 
 Bu okumada, basit doğrusal regresyonun dört ana varsayımını,
 varsayımların karşılanıp karşılanmadığını nasıl kontrol edeceğinizi ve
 bir varsayım karşılanmazsa ne yapacağınızı gözden geçireceksiniz.
@@ -10348,13 +10348,13 @@ yaramazsa, farklı bir model denemeyi düşünmelisiniz.
 -   Q-Q grafikleri hakkında daha fazla bilgi: [Normal Nicel-Kuantil
     Grafikler (jbstatistik\'ten
     video)](https://www.youtube.com/watch?v=X9_ISJ0YpGw)
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Normal Dağılımın Doğrulanması
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import pandas as pd
 import seaborn as sns
@@ -10450,13 +10450,13 @@ plt.show()
 ```
 
 `<img src="attachment:274cc4b1-9570-4d66-b777-f3bd055a98fd.png" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Kod işlevleri ve dokümantasyon
-:::
 
-::: {.cell .markdown}
+
+ 
 Bu okumada, penguen verilerinin farklı bir alt kümesini kullanarak
 videolardaki bazı kodları inceleyeceksiniz. Bu okuma, statmodels
 belgelerine yaklaşırken bazı ipuçlarını da paylaşacaktır.. Bu, Python
@@ -10626,13 +10626,13 @@ unutmayın.
 
 -   Belgeler aradığınız cevabı içermiyorsa, başkalarının çalışmalarını
     kontrol etmek için her zaman internete başvurabilirsiniz.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Regresyondaki belirsizlik ölçülerini yorumlayın
-:::
 
-::: {.cell .markdown}
+
+ 
 Bu okumada, özellikle güven aralıkları, güven bantları ve p-değerleri
 aracılığıyla regresyon analizindeki belirsizliği keşfetmeye devam
 edeceğiz. Birlikte yapacağız:
@@ -10746,13 +10746,13 @@ bantlarının kullanışlı hale geldiği yer burasıdır.
 
 -   Her katsayı tahmini için, katsayının 0\'a eşit olduğu hipotezini
     test ediyoruz.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Basit doğrusal regresyon için değerlendirme metrikleri
-:::
 
-::: {.cell .markdown}
+
+ 
 Bu okumada, basit doğrusal regresyon için değerlendirme metrikleri
 hakkında daha kapsamlı bir genel bakış sağlayacağız. Önceki bir videoda
 R²\'yi ele aldık ve birkaç başka ölçümden, MAE ve MSE\'den bahsettik. Bu
@@ -10821,13 +10821,13 @@ bağımsız değişkene sahip olmayı açıklayan bir R² varyasyonudur.
 -   Deneyimlerinize ve bir metriğin ayrıntılarına dayanarak, bir
     regresyon modelini değerlendirmek için uygun bir metrik seçmek için
     en iyi kararınızı kullanabilirsiniz.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Korelasyona karşı nedensellik: Regresyon sonuçlarını yorumlayın
-:::
 
-::: {.cell .markdown}
+
+ 
 Önceki videolarda, korelasyonun nedensellik olmadığını öğrendiniz. Bu
 okumada, korelasyon ve nedensellik arasındaki farkları keşfetmeye devam
 edeceksiniz, böylece regresyon sonuçlarını sorumlu, dürüst ve etkili bir
@@ -10970,13 +10970,13 @@ veri ile ve farklı endüstrilerde daha büyük ölçekte uygulanabilir.
 -   Korelasyon analizleri, veri uzmanları için inanılmaz derecede
     yararlı bir araçtır ve ilginç içgörüler ve eyleme geçirilebilir
     sonraki adımlar sağlayabilir.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Çoklu lineer regresyon senaryoları
-:::
 
-::: {.cell .markdown}
+
+ 
 ### Okumanın Hedefleri
 
 Artık çoklu doğrusal regresyonun ne olduğunu öğrendiğinize göre, bu
@@ -11102,13 +11102,13 @@ kullanılabilir.
 -   ["Çok Değişkenli Regresyon Analizi \| STATA Veri Analizi
     Örnekleri."](https://stats.oarc.ucla.edu/stata/dae/multivariate-regression-analysis/)
     *UCLA: İstatistiksel Danışmanlık Grubu.*
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Çoklu doğrusal regresyon varsayımları ve çoklu doğrusallık
-:::
 
-::: {.cell .markdown}
+
+ 
 Önceki videolarda, doğrusal regresyon varsayımları hakkında bilgi
 edinmişsinizdir. Bu okumada, çoklu doğrusal regresyon varsayımları
 hakkındaki anlayışınızı genişletmek için bu bilgi tabanını
@@ -11326,13 +11326,13 @@ regresyon sonuçlarının yorumlanmasını zorlaştırabilir.
 
 -   Bir modelde çoklu doğrusallığı kaldırmak için değişken seçimi için
     farklı teknikler vardır.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## OLS Modeli Oluşturma
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import pandas as pd
 import seaborn as sns
@@ -11365,13 +11365,13 @@ model.summary()
 ```
 
 `<img src="attachment:5f280aed-ade2-4e28-a195-f63514ec6061.png" width="700"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Yetersiz ve aşırı uyum
-:::
 
-::: {.cell .markdown}
+
+ 
 Öğrendiğiniz gibi, modeli popülasyondan görünmeyen verilere uygulamak ve
 güvenilir sonuçlar elde etmek amacıyla ilgili popülasyondan örnek
 veriler kullanılarak çoklu regresyon modeli oluşturulur. **Yetersiz**
@@ -11550,13 +11550,13 @@ azaltabilirsiniz.
 -   [Birden çok, ayarlanmış ve tahmin edilen R-kare değerlerini tartışan
     bir
     blog](https://blog.minitab.com/en/adventures-in-statistics-2/multiple-regession-analysis-use-adjusted-r-squared-and-predicted-r-squared-to-include-the-correct-number-of-variables)
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Ki-kare testleri: Bağımsızlığa karşı uyumun iyiliği  {#ki-kare-testleri-bağımsızlığa-karşı-uyumun-iyiliği-}
-:::
 
-::: {.cell .markdown}
+
+ 
 Önceki derste, gruplar arasındaki önemli farklılıkları görmek için
 hipotez testlerinin nasıl kullanıldığını öğrendiniz. Ki-kare testleri,
 gözlemlenen bir veya daha fazla kategorik değişkenin beklenen
@@ -11912,13 +11912,13 @@ bilinmektedir. Bu nedenle, correction parametre False olarak ayarlandı.
     gibi, karar vermeyi yönlendirmek için sıfır hipotezi reddedip
     reddetmemeniz gerektiğini belirlemek için aynı hipotez test
     adımlarını izler.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## ANOVA hakkında daha fazla bilgi
-:::
 
-::: {.cell .markdown}
+
+ 
 Varyans analizinin - Anova - gruplar arasındaki ortalama farkını test
 eden bir grup istatistiksel teknik olduğunu öğrendiniz. ANOVA testi,
 kategorik bağımsız değişkenlere dayalı grup farklılıkları hakkında bir
@@ -12207,13 +12207,13 @@ ANOVA yalnızca aşağıdaki varsayımlar doğruysa çalışır:
     çıkarmaktan kaçınmak için verilerinizin bunları karşılayıp
     karşılamadığını kontrol etmek önemlidir. En azından, verileriniz
     hepsini karşılamıyorsa, bu ihlalleri tanımlayın.
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Python ile tek yönlü ve iki yönlü ANOVA testlerini keşfedin
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import pandas as pd
 import seaborn as sns
@@ -12264,13 +12264,13 @@ sm.stats.anova_lm(model2, typ = 2)
 ```
 
 `<img src="attachment:ffe3464c-7b88-4b00-a865-e956284ae4d3.png" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Python ile ANOVA post hoc testleri
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 import statsmodels.api as sm 
 from statsmodels.formula.api import ols
@@ -12296,13 +12296,13 @@ tukey_oneway.summary()
 Reject kısmı True olanlar için sıfır hipotezi reddedilebilir. (Fiyatlar
 farklı renkler için aynı.) False olanlar için rededilemez. (Fiyatlar
 farklı renkler için aynı değil.)
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Python ile lojistik regresyon modeli oluşturun
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 activity.describe()
 ```
@@ -12339,13 +12339,13 @@ sns.regplot(x="Acc (vertical)", y="LyingDown", data=activity, logistic=True)
 ```
 
 `<img src="attachment:4b921b19-1f3f-4768-95e3-b22c88ca13d4.png" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Bir binom lojistik regresyon modelini değerlendirin
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 # Split data into training and holdout samples 
 X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=42)
@@ -12373,13 +12373,13 @@ disp.plot()
 ```
 
 `<img src="attachment:9f24eeca-e13c-463c-a1bc-d67e81333678.png" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Lojistik regresyon sonuçlarını değerlendirmek için temel ölçümler
-:::
 
-::: {.cell .markdown}
+
+ 
 `<img src="attachment:1abd0eb3-38d3-45c8-8b02-6e92c0a4415f.png" width="500"/>`{=html}
 
 `<img src="attachment:48eb66c5-0950-4a14-9c61-1b0591dfea76.png" width="500"/>`{=html}
@@ -12393,13 +12393,13 @@ disp.plot()
 `<img src="attachment:da3a2c68-baa5-496c-9e19-c823721ecbac.png" width="500"/>`{=html}
 
 `<img src="attachment:8b36022d-b525-40dc-b987-ccab7172edcb.png" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Python\'da yaygın lojistik regresyon metrikleri
-:::
 
-::: {.cell .markdown}
+
+ 
 Lojistik regresyon, veri bilimindeki kategorik tahmin görevleri için
 güçlü bir tekniktir. Veri uzmanları, lojistik regresyon modellerinin
 performansını ölçmek için genellikle kesinlik, hatırlama ve doğruluk
@@ -12680,13 +12680,13 @@ anlamına gelir.
 -   [roc_auc_score:
     roc_auc_score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html#sklearn.metrics.roc_auc_score)
     işlevi ile ilgili belgeler
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Lojistik regresyon modellerini yorumlayın
-:::
 
-::: {.cell .markdown}
+
+ 
 Lojistik regresyon modelini yorumlamak, katsayıları ve hesaplama
 metriklerini incelemeyi içerir. Lojistik regresyon modelinizi eğitim
 verilerine uydurduktan sonra, Python\'daki kodu kullanarak modelden
@@ -12809,13 +12809,13 @@ kullanmayı düşünün.
     Bir modelden kesişme ve katsayıları kullanarak sklearn ve bunlara
     erişen Lojistik Regresyon modellerinin uygulanmasına yönelik
     dokümantasyon
-:::
 
-::: {.cell .markdown jp-MarkdownHeadingCollapsed="true"}
+
+
 ## Farklı regresyon türleri ile tahmin
-:::
 
-::: {.cell .markdown}
+
+ 
 Öğrendiğiniz gibi, bir veri uzmanı olarak çalışmalarınızda
 karşılaşacağınız temel regresyon teknikleri arasında doğrusal regresyon,
 hipotez testi ve lojistik regresyon yer alır. Amacınız verilerle
@@ -12968,59 +12968,59 @@ olmadığını belirleme) bir hipotez testini içerir.
     bakış sağlayan [bu
     makal](https://towardsdatascience.com/hypothesis-testing-for-data-scientists-everything-you-need-to-know-8c36ddde4cd2)
     eye göz atabilirsiniz.
-:::
 
-::: {.cell .markdown}
+
+ 
 # 6 Makine Öğrenmesinin Somunları ve Cıvataları {#6-makine-öğrenmesinin-somunları-ve-cıvataları}
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 ```
 
 `<img src="attachment:" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown}
+
+ 
 ## 
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 ```
 
 `<img src="attachment:" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown}
+
+ 
 ##  {#section}
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 ```
 
 `<img src="attachment:" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown}
+
+ 
 ##  {#section}
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 ```
 
 `<img src="attachment:" width="500"/>`{=html}
-:::
 
-::: {.cell .markdown}
+
+ 
 ##  {#section}
-:::
 
-::: {.cell .markdown}
+
+ 
 ``` python
 ```
 
 `<img src="attachment:" width="500"/>`{=html}
-:::
+
