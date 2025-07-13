@@ -3153,5 +3153,5 @@ sonra = [9, 10, 9, 9, 12, 10, 10, 8, 11, 9]
 ## 5.10 
 # 6
 
-https://www.youtube.com/watch?v=QeTq7DtR3VQ&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=66
-09:44
+https://www.youtube.com/watch?v=hbDpbPI1B20&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=67
+00:00
