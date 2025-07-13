@@ -3104,23 +3104,65 @@ $H_0$ reddedilir. Yeni sistem istatistiki olarak öğrenciler üzerinde fark yar
 
 
 ```python
-once = [280, 287, 280, 275, 279, 278, 289, 284, 288]
-sonra = [281, 274, 270, 273, 276, 273, 281, 282, 284]
-
 import pandas as pd
 from scipy import stats
 
+# Veri seti
 veri = pd.DataFrame({
-  "Önce": once, 
-  "Sonra":sonra
+    "Önce": [280, 287, 280, 275, 279, 278, 289, 284, 288], 
+    "Sonra": [281, 274, 270, 273, 276, 273, 281, 282, 284]
 })
 
-test=stats.ttest_rel(veri["Önce"],veri["Sonra"],alternative="two—sided")
+# Güven düzeyi
+guven = 0.95
+alpha = 1 - guven
 
-# TtestResult(statistic=3.4624656756769143, pvalue=0.008536774716703749, df=8)
+# Fark sütunu
+veri["Fark"] = veri["Önce"] - veri["Sonra"]
+
+once = veri["Önce"]
+sonra = veri["Sonra"]
+fark = veri["Fark"]
+
+# Shapiro-Wilk testi: farkların normal dağılıp dağılmadığı
+t, p = stats.shapiro(fark)
+print("Shapiro-Wilk Testi = %.4f, p-Value = %.4f" % (t, p))
+
+if p > alpha:
+    print("⚠️⚠️⚠️ Farklar normal dağılım gösteriyor.")
+else:
+    print("⚠️⚠️⚠️ Farklar normal dağılım göstermiyor.")
+
+# Bartlett testi: varyans eşitliği
+t, p = stats.bartlett(once, sonra)
+print("Bartlett Testi = %.4f, p-Value = %.4f" % (t, p))
+
+if p > alpha:
+    print("⚠️⚠️⚠️ İki grubun varyansları eşittir.")
+else:
+    print("⚠️⚠️⚠️ İki grubun varyansları eşit değildir.")
+
+# Eşleştirilmiş t-testi
+t, p = stats.ttest_rel(once, sonra, alternative="two-sided")
+print("Eşleştirilmiş t-Testi = %.4f, p-Value = %.4f" % (t, p))
+
+if p < alpha:
+    print("⚠️⚠️⚠️ Önce ve sonra arasında istatistiksel olarak anlamlı fark vardır.")
+else:
+    print("⚠️⚠️⚠️ Önce ve sonra arasında anlamlı fark yoktur.")
+
+# Shapiro-Wilk Testi = 0.9510, p-Value = 0.7010
+# ⚠️⚠️⚠️ Farklar normal dağılım gösteriyor.
+# Bartlett Testi = 1.1621, p-Value = 0.2810
+# ⚠️⚠️⚠️ İki grubun varyansları eşittir.
+# Eşleştirilmiş t-Testi = 3.4625, p-Value = 0.0085
+# ⚠️⚠️⚠️ Önce ve sonra arasında istatistiksel olarak anlamlı fark vardır.
+
 ```
 
-> Aşağıda rastgele seçilen 10 çalışanın
+Fark olduğuna göre eğitim sisteminin etkisi olmuştur.
+
+> Aşağıda rastgele seçilen 10 çalışanın excel eğitimi sonucunda yeteneklerinin artıp artmadığını ölçmek için test yapılmaktadır.
 
 | Çalışan | Önce | Sonra |
 |---------|------|-------|
@@ -3135,23 +3177,145 @@ test=stats.ttest_rel(veri["Önce"],veri["Sonra"],alternative="two—sided")
 | 9       | 3    | 11    |
 | 10      | 2    | 9     |
 
-
-
-
 ```python
-once = [4, 4, 3, 5, 3, 5, 3, 5, 3, 2]
-sonra = [9, 10, 9, 9, 12, 10, 10, 8, 11, 9]
+import pandas as pd
+from scipy import stats
 
+veri = pd.DataFrame({
+  "Önce": [4, 4, 3, 5, 3, 5, 3, 5, 3, 2], 
+  "Sonra":[9, 10, 9, 9, 12, 10, 10, 8, 11, 9]
+})
+
+# Güven düzeyi
+guven = 0.95
+alpha = 1 - guven
+
+# Fark sütunu
+veri["Fark"] = veri["Önce"] - veri["Sonra"]
+
+once = veri["Önce"]
+sonra = veri["Sonra"]
+fark = veri["Fark"]
+
+# Shapiro-Wilk testi: farkların normal dağılıp dağılmadığı
+t, p = stats.shapiro(fark)
+print("Shapiro-Wilk Testi = %.4f, p-Value = %.4f" % (t, p))
+
+if p > alpha:
+    print("⚠️⚠️⚠️ Farklar normal dağılım gösteriyor.")
+else:
+    print("⚠️⚠️⚠️ Farklar normal dağılım göstermiyor.")
+
+# Bartlett testi: varyans eşitliği
+t, p = stats.bartlett(once, sonra)
+print("Bartlett Testi = %.4f, p-Value = %.4f" % (t, p))
+
+if p > alpha:
+    print("⚠️⚠️⚠️ İki grubun varyansları eşittir.")
+else:
+    print("⚠️⚠️⚠️ İki grubun varyansları eşit değildir.")
+
+# Eşleştirilmiş t-testi
+t, p = stats.ttest_rel(once, sonra, alternative="two-sided")
+print("Eşleştirilmiş t-Testi = %.4f, p-Value = %.4f" % (t, p))
+
+if p < alpha:
+    print("⚠️⚠️⚠️ Önce ve sonra arasında istatistiksel olarak anlamlı fark vardır.")
+else:
+    print("⚠️⚠️⚠️ Önce ve sonra arasında anlamlı fark yoktur.")
+
+# Shapiro-Wilk Testi = 0.9837, p-Value = 0.9819
+# ⚠️⚠️⚠️ Farklar normal dağılım gösteriyor.
+# Bartlett Testi = 0.6236, p-Value = 0.4297
+# ⚠️⚠️⚠️ İki grubun varyansları eşittir.
+# Eşleştirilmiş t-Testi = -10.3923, p-Value = 0.0000
+# ⚠️⚠️⚠️ Önce ve sonra arasında istatistiksel olarak anlamlı fark vardır.
 
 ```
 
+Fark olduğuna göre excel eğitimi katkı sunmuştur deriz.
+
+> Geliştirdiğimiz bir motor yağının araçların performansı üzerindeki etkisi. 
+
+| Araç No |   Önce   |   Sonra   |
+|---------|----------|-----------|
+|    1    | 8,003467 | 5,311008  |
+|    2    | 5,857114 | 8,030393  |
+|    3    | 6,16466  | 8,283746  |
+|    4    | 7,655778 | 6,939923  |
+|    5    | 7,494805 | 8,473276  |
+|    6    | 7,027663 | 8,004745  |
+|    7    | 7,119754 | 6,401041  |
+|    8    | 6,646988 | 5,200559  |
+|    9    | 6,824398 | 7,271239  |
+|   10    | 8,860697 | 7,115501  |
+
+```python
+import pandas as pd
+from scipy import stats
+
+veri = pd.DataFrame({
+    'Araç No': [1,2,3,4,5,6,7,8,9,10], 
+    'Önce': [8.003467, 5.857114, 6.16466, 7.655778, 7.494805, 7.027663, 7.119754, 6.646988, 6.824398, 8.860697], 
+    'Sonra': [5.311008, 8.030393, 8.283746, 6.939923, 8.473276, 8.004745, 6.401041, 5.200559, 7.271239, 7.115501]
+    })
+
+# Güven düzeyi
+guven = 0.95
+alpha = 1 - guven
+
+# Fark sütunu
+veri["Fark"] = veri["Önce"] - veri["Sonra"]
+
+once = veri["Önce"]
+sonra = veri["Sonra"]
+fark = veri["Fark"]
+
+# Shapiro-Wilk testi: farkların normal dağılıp dağılmadığı
+t, p = stats.shapiro(fark)
+print("Shapiro-Wilk Testi = %.4f, p-Value = %.4f" % (t, p))
+
+if p > alpha:
+    print("⚠️⚠️⚠️ Farklar normal dağılım gösteriyor.")
+else:
+    print("⚠️⚠️⚠️ Farklar normal dağılım göstermiyor.")
+
+# Bartlett testi: varyans eşitliği
+t, p = stats.bartlett(once, sonra)
+print("Bartlett Testi = %.4f, p-Value = %.4f" % (t, p))
+
+if p > alpha:
+    print("⚠️⚠️⚠️ İki grubun varyansları eşittir.")
+else:
+    print("⚠️⚠️⚠️ İki grubun varyansları eşit değildir.")
+
+# Eşleştirilmiş t-testi
+t, p = stats.ttest_rel(once, sonra, alternative="two-sided")
+print("Eşleştirilmiş t-Testi = %.4f, p-Value = %.4f" % (t, p))
+
+if p < alpha:
+    print("⚠️⚠️⚠️ Önce ve sonra arasında istatistiksel olarak anlamlı fark vardır.")
+else:
+    print("⚠️⚠️⚠️ Önce ve sonra arasında anlamlı fark yoktur.")
+
+# Shapiro-Wilk Testi = 0.9473, p-Value = 0.6364
+# ⚠️⚠️⚠️ Farklar normal dağılım gösteriyor.
+# Bartlett Testi = 0.6581, p-Value = 0.4172
+# ⚠️⚠️⚠️ İki grubun varyansları eşittir.
+# Eşleştirilmiş t-Testi = 0.1191, p-Value = 0.9078
+# ⚠️⚠️⚠️ Önce ve sonra arasında anlamlı fark yoktur.
+```
+
+Fark olmadığına göre araç yakıt tüketimine katkısı olmamıştır deriz.
+
+## 5.10 Z Oran Testi 
 
 
 
 
 ### Örnekler
-## 5.10 
+## 5.11 
 # 6
 
-https://www.youtube.com/watch?v=hbDpbPI1B20&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=67
+https://www.youtube.com/watch?v=Izcl557nsT4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=70
 00:00
