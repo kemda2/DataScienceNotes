@@ -1,6 +1,6 @@
 # Google Advanced Data Analytics Sertifikasına genel bakış
 
-Merhaba ve **Google Gelişmiş Veri Analitiği Sertifik** asına hoş geldiniz! Bu sertifika programındaki sekiz kurs, bilginizi geliştirecek ve bir veri analitiği uzmanı olarak kariyerinizde büyümenize yardımcı olacaktır. Veri analitiğinde temel bir arka plan şiddetle teşvik edilir.
+Merhaba ve **Google Gelişmiş Veri Analitiği Sertifikası**'na hoş geldiniz! Bu sertifika programındaki sekiz kurs, bilginizi geliştirecek ve bir veri analitiği uzmanı olarak kariyerinizde büyümenize yardımcı olacaktır. Veri analitiğinde temel bir arka plan şiddetle teşvik edilir.
 
 ## Büyüyen bir alana girin
 
