@@ -3326,10 +3326,19 @@ $P = \frac{(n_1 \cdot \hat{P_1}) + (n_2 \cdot \hat{P_2})}{n_1 + n_2}$
 
 $\hat{P}$ örneklem oranıdır.
 
+### Örnekler
+
+> Erkeklerin haber izleme oranlarının kadınlardan daha fazla olduğu belirtiliyor. 50 kadın 50 erkek örneklem alınıyor. Erkeklerde 45 kadınlarda 40 kişinin haber izlediği görülüyor.
+
+$H_0: P_E = P_K \\[3mm] H_1: P_E\ > P_K \\[6mm] n_E = 50 \\[3mm] n_K = 50 \\[6mm] \hat{P_E} = \frac{45}{50} = 0,90 \\[3mm] \hat{P_K} = \frac{40}{50} = 0,80$
+
+
+
+
 
 ### Örnekler
 ## 5.11 
 # 6
 
 https://www.youtube.com/watch?v=Izcl557nsT4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=70
-00:00
+11:33
