@@ -3308,9 +3308,23 @@ else:
 
 Fark olmadığına göre araç yakıt tüketimine katkısı olmamıştır deriz.
 
-## 5.10 Z Oran Testi 
+## 5.10 Z Oran Testi (A/B testi)
 
+Grubun %40'ı veya 100 kişiden 60 kişi gibi bir inceleme yapılacaksa bu test kullanılır. Genellikle iş istatistiği kısmında kullanılır. 
 
+$H_0: P_A = P_B \\[3mm] H_1: P_A\ != P_B$
+
+(P proportion'ın kısaltması)
+
+Varsayımlar;
+
+$n_1$ ve $n_2$ 30 dan fazla sayıda olmalıdır.
+
+$z = \frac{\hat{P_1}-\hat{P_2}}{\sqrt{P \cdot (1-P) \cdot (\frac{1}{n_1} + \frac{1}{n_2})}}$
+
+$P = \frac{(n_1 \cdot \hat{P_1}) + (n_2 \cdot \hat{P_2})}{n_1 + n_2}$
+
+$\hat{P}$ örneklem oranıdır.
 
 
 ### Örnekler
