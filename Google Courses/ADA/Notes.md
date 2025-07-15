@@ -1330,7 +1330,6 @@ plt.ylabel('count')
 plt.title('Old Faithful geyser - time between eruptions')
 plt.show();
 ```
-![image](./images/3016.png)
 
 Bu durumda, çizilen veriler veri çerçevesinin saniye sütunudur. Kutular 40 saniyede başlar ve toplam 12 kutu için beşli adımlarla 100 saniyeye gider.
 
@@ -1362,7 +1361,7 @@ plt.title('Old Faithful geyser - time between eruptions')
 plt.show();
 ```
 
-![](attachment:4a6ad72c-ddc4-40f0-b8dd-1df91b5e5185.png)
+![image](./images/3016.png)
 
 ### **Önemli çıkarımlar**
 
