@@ -2234,6 +2234,95 @@ p = px.scatter_geo(df_points, lat = 'latitude', lon = 'longitude')
 p.show()
 ```
 
+## Tableau’ya Genel Giriş
 
+Öğrendiğiniz gibi, Tableau dünyanın dört bir yanındaki veri uzmanları tarafından kullanılan güçlü bir veri görselleştirme aracıdır. Google Data Analytics Profesyonel Sertifikasını aldıysanız, Tableau'ya zaten aşina olmalısınız. Veri Analitiği Sertifikasını tamamlamadıysanız aşağıdaki ve diğer videolarda bağlantılı kaynak materyallerini inceleyebilirsiniz. Tableau yazılımı, sizin gibi öğrencilerin yazılımın yeteneklerini sınırlı bir kapasitede test etmelerini sağlayan tarayıcı sürümü aracılığıyla ücretsiz olarak mevcuttur. Bu okumada, bu görselleştirme yazılımının ücretsiz kullanım, temel sürümü olan Tableau Public'e genel bir bakış verilecektir.
+
+### Tableau Public'in temellerini gözden geçirme
+
+Bu okumada, Tableau Public"de yer alan **veri kaynağının**  ve **tasarım ekranlarının** temel yapısı hakkında bilgi edineceksiniz. Veri kaynağı sayfası verileri girmek veya veri bağlamak için kullanılır ve tasarım sayfası veri görselleştirmeleri çizmek ve oluşturmak için kullanılır. Etkili ve ilgi çekici veri görselleştirmelerini başarılı bir şekilde tasarlamak için her ikisine de ihtiyaç vardır.
+
+**Not:** Tableau Public kurulum sürecini gözden geçirmek için [Tableau Public'de oturum açma hakkındaki okumaya bakın](https://www.coursera.org/learn/go-beyond-the-numbers-translate-data-into-insight/supplement/muYtK/how-to-sign-on-to-tableau-public).
+
+#### **Veri kaynağı sayfası**
+
+Görselleştirmeleri tasarlamaya başlamadan önce verilerinizi yüklemeniz gerekir. Tableau Genel profilinizi zaten ayarladığınızdan, yapmanız gereken tek şey oturum açmak ve gezinme çubuğunda Oluş **tur altında Web** Yaz **ma seçen** eğini seçmek.
+
+**Not:** Bu kursta Tableau için gereken her şey Web Yazma ile tamamlanabilir; Tableau _yazıl_ ımını indirmeniz gerekmez.
+
+##### **Tableau Genel Web Oluşturma**
+
+Web yazma, doğrudan bir web tarayıcısından görselleştirmeler oluşturmanıza olanak tanır. Herhangi bir yazılım indirmeden bir viz oluşturabilir misiniz? Evet! [Tableau Genel profilinizi zaten ayarladığınızdan, yapmanız gereken](https://www.tableau.com/community/blog/2022/9/beginners-guide-tableau-public) tek şey oturum açmak ve gezinme çubuğunda Oluş **tur altında Web** Yaz **ma seçen** eğini seçmek. Bu sertifika programının amaçları doğrultusunda Tableau Public uygulamasında ihtiyacınız olan her şeyi gerçekleştirebilirsiniz. Aşağıdaki kaynaklardaki talimatlar Tableau Public sayfasına atıfta bulunur.
+
+##### **Tableau Masaüstü Genel Sürümü**
+
+[Yazılımı doğrudan Mac veya PC'nize de indirebilirsiniz.](https://www.tableau.com/products/public/download) Public'in web sitesindeki gezinme çubuğunda **Oluştur**  altında **Tableau Desktop Public Edition**'ı seçin.
+
+_**Hatırlatma: Tableau Public yalnızca genel verileri analiz etmek ve paylaşmak için kullanılmalıdır.**_ _Yayınlanan tüm çalışma kitaplarına ve veri kümelerine herkes tarafından ücretsiz olarak erişilebilir olacaktır._
+
+Veri kümenizi yükledikten sonra, aşağıdaki resimde daire içine alınmış sayıları eşleştirmek için özetlenen aşağıdaki adımları uygulayabilirsiniz:
+
+![image](./images/3028.png)
+
+Aşağıdaki açıklamalar yukarıdaki resme karşılık gelir.
+
+1. Bu sol bölme, veri bağlantılarınızı ve dosyalarınızı içerir. Burada yüklediğiniz tüm dosyaları bir listede bulacaksınız, böylece birden fazla dosyayı ve/veya farklı veritabanlarına birden fazla bağlantıyı takip edebilirsiniz.
+    
+2. Veri bağlantıları penceresinin hemen sağında, Tableau Public"in belirli bir dosyada algıladığı tüm alanların bir listesi bulunur.. Yüklenen birden fazla dosyanız varsa, her dosyanın alanlarına erişmek için dosyayı açılır menüden seçebilirsiniz. Yaklaşan bir videoda öğreneceğiniz gibi, Tableau'nun alanları dosyanızdaki veri sütunlarından alınır. Tableau bu alanları otomatik olarak boyutlar veya hesaplamalar ve ayrık veya sürekli değişkenler olarak sıralar.
+    
+3. Sayfadaki en büyük bölme, sağ ortada, dosyanızın tüm sütunlarına birkaç veri satırı dahil Tableau alanları olarak erişmenizi sağlar. Soldaki bölmenin aksine, bu bölme yeni hesaplama alanları, gruplar, kümeler veya parametreler gibi halihazırda mevcut olanlara dayalı olarak yeni alanlar oluşturmanıza olanak tanır (gelecek videolarda bu özellikler hakkında daha fazla bilgi edineceksiniz). Bu bölmeyi verilerinizle doldurmak için “şimdi güncelle” veya “otomatik olarak güncelle” seçeneğini seçmeniz istenebilir. Durum buysa, güncel verilerle tutarlı bir şekilde çalıştığınızdan emin olmak için otomatik olarak güncelleme yapmak iyi bir uygulamadır. (Referans için - #5 'dan sonra aşağıdaki resmi inceleyin.)
+    
+4. Ekranın sağ üst köşesindeki mavi “Yayınla” düğmesi “kaydet” düğmeniz olarak işlev görür. Tableau Public tarayıcı tabanlı bir platform olduğundan, oluşturduğunuz ve kaydetmek istediğiniz her şey herkese açık hesabınızda yayınlanacaktır. İstenirse veri kaynaklarını ve veri görselleştirmelerini parolayla kilitlemenin veya gizlemenin yolları vardır, ancak Tableau Public yalnızca çalışmanızı kaydetmek için Yayınla alanını sunar. 'Yayınla' düğmesine tıkladığınızda, tasarım ilerlemenize bağlı olarak boş olabilecek veri tasarım sayfanıza otomatik olarak yönlendirilebilirsiniz. Endişelenmeyin. En son veri kümesi yüklemeleriniz veya veri tasarımlarınız hala kaydedildi; en son bulunduğunuz yere geri dönün ve görselleştirmenizi düzenlemeye devam edin.
+    
+5. Son olarak, veri tasarım sayfanıza gitmek için sayfanın sol alt köşesindeki düğmeler koleksiyonunu kullanacaksınız. Yeni bir çalışma sayfası, yeni bir gösterge tablosu ve yeni bir hikaye oluşturmak için düğme seçeneklerini bulacaksınız. Bu unsurlar bir sonraki bölümde tanıtılacaktır.
+
+![image](./images/3029.png)
+
+#### **Veri tasarım sayfası**
+
+Veri tasarımı sayfası, veri görselleştirmelerinizin oluşturulacağı yerdir. Veri tasarımı sayfasına gitmek için, 'Sayfa 1'e tıklayın veya önceki ilgili resimde #5 'de belirtildiği gibi yeni bir sayfa oluşturun. Bir veri tasarım sayfasını açmak için ilk tıkladığınızda, Tableau'nun 'Çıkarma Oluşturmak' olduğu sorulabilir. Bu, Tableau'nun görselleştirmelerde kullanılmak üzere sağlanan verileri çıkardığı anlamına gelir. Bu işlem birkaç dakika sürebilir. Burada, istediğiniz görselleştirme türünü oluşturmak için veri kaynağı alanlarınızı uygun raflara taşıyacaksınız. Bu sayfadan veri görselleştirmeleri veya tüm etkileşimli gösterge panoları oluşturabilirsiniz.
+
+![image](./images/3030.png)
+
+Aşağıdaki numaralandırılmış öğeler, yukarıdaki Tableau çalışma kitabı görüntüsünde görüntülenen sayılara karşılık gelir.
+
+1. En soldaki bu bölmede, ayrık ve sürekli boyutlar ve hesaplamalar listenizi bulacaksınız. Görselleştirmeler oluşturmak için bu değişkenleri bu sayfadaki farklı bölmelere taşıyacaksınız. Bu değişkenler hakkında daha sonra daha fazla bilgi edineceksiniz.
+    
+2. Hemen sağdaki bir sonraki bölmede “Sayfalar”, “Filtreler” ve “İşaretler” i bulacaksınız. Veri görselleştirmesini değiştirmek için herhangi bir boyutu veya hesaplamayı bu farklı alanlara taşıyabilirsiniz. Bu özellikleri gelecek videolarda nasıl kullanacağınızı öğreneceksiniz.
+    
+3. Sayfanın üst kısmında, menü çubuğunun hemen altında, değişken alanlarınızı taşımak için ana iki rafınız görevi gören iki boş satır vardır. “Sütunlar” ve “Satırlar” rafları, veri görselleştirmenizi istediğiniz gibi konumlandırmanıza yardımcı olur. Ayrıca bu satırların üzerinde, veri görselleştirmenizi değiştirmek için diğer seçeneklerle dolu bir araç çubuğu ve menü göreceksiniz.
+    
+4. Ekranın ortasında görselleştirmeniz için ana görüntüleme paneli bulunur. Öğeler ekleyip boyutlarınızı ve hesaplamalarınızı farklı alanlara sürükledikçe, bu panelde veri görselleştirmeniz üzerindeki etkisini fark edeceksiniz. Sağ üst köşede, kaydetme düğmesi görevi gören “Yayınla” düğmenizi ve “Beni Göster” açılır menüsünü bulacaksınız. “Bana Göster” açılır menüsünün altında, her birini oluşturmak için çeşitli veri görselleştirme türleri ve kılavuzları bulacaksınız.
+    
+5. Çalışmanızı [kaydetmeye ve paylaşmaya hazır olduğunuzda](https://help.tableau.com/current/pro/desktop/en-us/publish_workbooks_tableaupublic.htm), Tableau Genel profilinizde yayınlayın. Üst gezinme çubuğundaki “Yayınla” düğmesinin yanındaki aşağı oka tıklayarak çalışmanızı yayınlama seçeneklerini görüntüleyin.
+    
+
+### Tableau araçlarını incelemenin diğer yolları
+
+#### **Google Veri Analitiği Profesyonel Sertifikası**
+
+Daha önce de belirtildiği gibi, [Google Data Analytics Profesyonel Sertifika programı](https://www.coursera.org/professional-certificates/google-data-analytics) nı aldıysanız, Tableau ve Tableau Public'e zaten aşinasınız demektir. Öğrendiklerinizi gözden geçirmek için o programdaki [Tableau](https://www.coursera.org/learn/visualize-data/lecture/sLxV4/data-visualizations-with-tableau) 'yu kullanmaya başlayın dersine gidin.
+
+#### **TableAU.com**
+
+[Tableauau.com'u](https://www.tableau.com/) ziyaret ederek, Tableau Public (ücretsiz olan) Tableau Desktop, Tableau Mobile ve Tableau Server'a kadar çok sayıda ürün teklifini fark edeceksiniz. Her ürünün kendi kullanımı ve uzmanlığı vardır, ancak veri görselleştirme için ana unsurlar aynıdır. Veri görselleştirmeleriyle ilgili hemen hemen her konuda belirli makaleler bulmak için [Tableau Yardım sayfası](https://www.tableau.com/support/help?_ga=2.3466357.45238129.1654614666-316280037.1654614666)nda arama yapabilirsiniz.. Kullanıcıların ürünlerinin farklı özelliklerini öğrenmelerine yardımcı olmak için Tableau'da çeşitli eğitim kaynakları mevcuttur. Tableau, farklı ürünlerini öğrenmeye yardımcı olmak için çeşitli eğitim kaynakları sunar.
+
+### Önemli çıkarımlar
+
+Tableau güçlü bir veri görselleştirme aracıdır, ancak bu, onu yetkin bir şekilde kullanmanın çok fazla pratik ve deneyim gerektirdiği anlamına gelir. Kullanacağınız iki ana sayfa veri kaynağı ve veri tasarım sayfalarıdır. Tableau Yardımı ve Google Veri Analitiği Sertifika Programı ile Büyüme dahil olmak üzere sürecin her adımında size yardımcı olacak çok sayıda kaynak da mevcuttur.
+
+### Daha fazla bilgi için kaynaklar
+
+Sorun gidermenize yardımcı olmak veya daha fazla bilgi edinmek için aşağıdaki bağlantıları kullanabilirsiniz:
+
+- Verilerinizi başarıya ayarlamak için Tableau kaynak sayfasını kullanın: [Veri kaynaklarını ayarlama](https://help.tableau.com/current/pro/desktop/en-us/datasource_prepare.htm)
+    
+- Tableau Araçları ve Web Yazma Yardımı: [Grafikler tasarlayın ve verileri analiz edin](https://help.tableau.com/current/pro/desktop/en-us/design_and_analyze.htm)
+    
+- “Günün Vizi"ni ve platformda tasarlanan diğer güzel görüntüleri içeren Tableau Public “Keşfet” sayfası: [Tableau Public'e Hoş Geldiniz](https://public.tableau.com/app/discover)
+    
+- Tableau Public kullanmaya yeni başlayanlar için kılavuz: [Kendi verilerinize, yani yolculuğunuza başlamanıza yardımcı olacak adım adım kılavuz](https://www.google.com/url?q=https://www.tableau.com/blog/beginners-guide-tableau-public?_gl%3D1*uv0ojo*_ga*MjU5NjUyMzcuMTY1NDMwMDM4MQ..*_ga_8YLN0SNXVS*MTY5MTE4NzA1Mi4xMC4xLjE2OTExODcwNzcuMC4wLjA&sa=D&source=docs&ust=1691485449789685&usg=AOvVaw267xvonfqL2uCc_x_yXcip)
+    
+- İlk Veri Görselleştirmenizi Yayınlamaya Hazırlanmak: [Verileri analiz etmek ve Tableau Genel profilinizde bir vizyon yayınlamak için adım adım kılavuz](https://www.tableau.com/blog/getting-ready-publish-your-first-data-visualization)
 
 
