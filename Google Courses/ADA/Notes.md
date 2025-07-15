@@ -1369,8 +1369,370 @@ Histogramlar, veri uzmanlarının veri kümelerinin ve değişkenlerinin frekans
 
 ## Veri Temizleme
 
+Öğrendiğiniz gibi, veri temizleme ve doğrulama uygulamaları, eksik verileri, aykırı değerleri ve etiket kodlamasını işleme; yazım hatalarını kontrol etme ve kopyaları işleme dahil olmak üzere birkaç farklı adımı içerir. Bir veri uzmanı olarak, bu kategorilerdeki veri değerlerini en iyi nasıl ele alacağınızı bilmek sizin göreviniz olacaktır. Bu okumada, kopyaları işleme hakkında daha fazla bilgi edineceksiniz. Ayrıca, tekilleştirme işleminin bir veri kümesi için doğru strateji olup olmadığını belirlemeyi ve karar vermeyi öğreneceksiniz. Ek olarak, kopyaları işlemek için bazı yaygın Python işlevlerini öğreneceksiniz.
+
+### Yinelenenleri tanımlama
+
+Yinelenen değerlerin kaldırılıp kaldırılmayacağına dair herhangi bir karar vermeden önce, veri kümemizde yinelenen değerlerin olup olmadığını belirlemeliyiz.
+
+Kopyaları tanımlamanın basit bir yolu, Pandas duplicated() işlevini kullanmaktır. duplicated()DataFramesınıfın bir yöntemidir.
+
+Bu işlev, veri değerinin bir kopya olduğunu belirten “true” ve “false” benzersiz bir değer olduğunu belirten bir dizi “doğru/yanlış” çıktı döndürür.
+
+İşte beş satırlı bir veri çerçevesi örneği:
+
+```python
+df
+```
+
+| brand   | style   | rating |
+|---------|---------|--------|
+| Wowyow  | cistern | 4.0    |
+| Wowyow  | cistern | 4.0    |
+| Splaysh | jug     | 5.5    |
+| Splaysh | stock   | 3.3    |
+| Pipplee | stock   | 3.0    |
 
 
+duplicated() fonksiyonu kullanarak sonuç, birinin “Doğru” olarak işaretlenmiş olması ve bunun bir kopya olduğunu gösterir.
 
+```python
+print(df)
+```
+| brand   | style   | rating |
+|---------|---------|--------|
+| Wowyow  | cistern | 4.0    |
+| Wowyow  | cistern | 4.0    |
+| Splaysh | jug     | 5.5    |
+| Splaysh | stock   | 3.3    |
+| Pipplee | stock   | 3.0    |
+
+```python
+print(df.duplicated())
+```
+
+| Index | Value |
+|-------|-------|
+| 0     | False |
+| 1     | True  |
+| 2     | False |
+| 3     | False |
+| 4     | False |
+
+Tüm veri çerçevesi için kopyaları tanımlamak, tek bir sütundan veya dizinden farklı olacaktır. Fonksi duplicated() yonu tüm veri çerçevesi için kullandığınızda emin olun. İş duplicated() lev, yalnızca bir sütunda _bulunan tek tek eşleşen değerleri değil, yalnızca tam olarak eşleşen değerlere sahip tüm sat_ ırları döndürür. Bir veri çerçevesindeki yalnızca bir sütun veya bir dizi sütun için kopyaları tanımlamak isterseniz, bunu işlevin bağımsız değişken alanının “alt küme” kısmına eklemeniz gerekir. duplicated() Daha ileri giderek, kopyaların hangisinin kopya yerine “orijinal” olarak saklanacağını belirtmek isterseniz, bunu bağımsız değişken alanının keep bölümünde belirtebilirsiniz.
+
+Aşağıda, değerlerin yalnızca bir sütunundaki (alt kümesindeki) kopyaları tanımlamaya ve son kopyaları “yanlış” olarak etiketlemeye ve “saklanmaları” için bir örnek verilmiştir:
+
+```python
+print(df)
+```
+
+| color  | rating | type    |
+|--------|--------|---------|
+| olive  | 9.0    | rinds   |
+| olive  | 9.0    | rinds   |
+| gray   | 4.5    | pellets |
+| salmon | 11.0   | pellets |
+| salmon | 7.0    | pellets |
+
+```python
+print(df.duplicated(subset=['type'], keep='last'))
+```
+
+| Index | Value |
+|-------|-------|
+| 0     | True  |
+| 1     | False |
+| 2     | True  |
+| 3     | True  |
+| 4     | False |
+
+### Karar zamanı: Düşmek mi düşmemek mi?
+
+Öğrendiğiniz gibi, her veri kümesi benzersizdir ve her veri kümesini aynı şekilde ele alamazsınız. Yinelenen değerleri ortadan kaldırıp ortadan kaldırmamaya karar verirken, **veri kümesinin kendisi** ve ulaşmak **istediğiniz hedef hakkında derinlemesine düşünün**. Yinelenen kopyaları bırakmanın veri kümeniz ve hedefiniz üzerinde ne gibi bir etkisi olacak?
+
+**1. Düşmeye karar** vermek
+
+**Yinelenen değerler açıkça hataysa veya veri kümesinde kalan benzersiz değerleri yanlış temsil edecekse yinelenen değerleri bırakmalı veya ortadan kaldırmalısınız.** 
+
+![image](./images/3017.png)
+
+Örneğin, bir veri uzmanının (çoğu durumda) ev adreslerini ve ev fiyatlarını içeren bir veri kümesinin yinelenen değerlerini ortadan kaldıracağından makul ölçüde emin olabilirsiniz. Aynı evi iki kez saymak (çoğu durumda) ortalama ev fiyatı, toplam ev fiyatı ve hatta toplam ev sayısı gibi veri kümesinden çıkarılan sonuçları bir bütün olarak yanlış temsil edecektir. Böyle bir durumda, bir veri uzmanı, analiz ve görselleştirme sırasında kalan verileri adil bir şekilde temsil etmek için yinelenen verileri neredeyse kesinlikle ortadan kaldıracaktır.
+
+**2. Düşmemeye karar vermek**
+
+Yinelenen değerler açıkça hata **değilse** ve veri kümesini bir bütün olarak temsil ederken dikkate alınmalıysanız, yinelenen verileri veri kümenizde **tut** malısınız.
+
+![image](./images/3018.png)
+
+Örneğin, antrenmandaki bir Olimpiyat atış sporcunun atış sayısını ve mesafelerini gösteren bir veri kümesi muhtemelen birkaç çift mesafe içerecektir; sadece deneme sayısı ve bir kişinin ağırlıklı bir topa sahip olabileceği sınırlar gereği, yinelenen değerler olacaktır - özellikle mesafe ölçümleri yalnızca 1 veya 2 ondalık basamakla etiketlenmişse. Böyle bir durumda, bir veri uzmanı, analiz ve görselleştirme sırasında bir bütün olarak adil bir şekilde temsil etmek için neredeyse kesinlikle tüm verileri saklar.
+
+### Kandırılmayın - Tekilleştirme nasıl yapılır
+
+Python'a geri dönmeden ve kopyaları nasıl ortadan kaldıracağımızı öğrenmeden önce, önce “tekilleştirme” terimini tanımlayalım:
+
+- **Tekilleştirme:** Bir veri kümesindeki eşleşen veri değerlerinin ortadan kaldırılması veya kaldırılması.
+    
+
+Python'da eşleşen veri değerlerini kaldırmak için kullanabileceğiniz bir dizi farklı kütüphane, işlev ve yöntem vardır.
+
+Kullanılacak en yaygın işlevlerden biri Pandas'dadır: drop_duplicates()
+
+drop_duplicates()başka bir DataFrame yöntemdir. Tüm yinelenen satırların kaldırıldığı yeni bir veri çerçevesi oluşturmak için kullanılır.
+
+Örneğin, bu okumanın önceki bölümlerinden bir veri çerçevesi kullanın:
+
+```python
+df
+```
+
+| brand   | style   | rating |
+|---------|---------|--------|
+| Wowyow  | cistern | 4.0    |
+| Wowyow  | cistern | 4.0    |
+| Splaysh | jug     | 5.5    |
+| Splaysh | stock   | 3.3    |
+| Pipplee | stock   | 3.0    |
+
+
+Şimdi kopyaları bırak işlevini uygulayın:
+
+```python
+df.drop_duplicates()
+```
+
+| brand   | style   | rating |
+|---------|---------|--------|
+| Wowyow  | cistern | 4.0    |
+| Splaysh | jug     | 5.5    |
+| Splaysh | stock   | 3.3    |
+| Pipplee | stock   | 3.0    |
+
+Ortaya çıkan çıktıda, yinelenen veri satırının kaldırıldığını ve kalan benzersiz değerlerin bozulmadan kaldığını fark edeceksiniz.
+
+**Not:** Yukarıda yazıldığı gibi drop_duplicates() işlevin yalnızca **tüm veri satırlarının tam eşleşmelerinin kopyalarını bırakacağını unutmayın**. Yinelenenleri tek bir sütun içine bırakmak isterseniz, subset anahtar kelime bağımsız değişkenini kullanarak hangi sütunların kopyaları kontrol edeceğinizi belirtmeniz gerekir.
+
+Bu örnek, style sütunda yinelenen değerlere sahip tüm satırları bırakır (ilk oluşum hariç):
+
+```python
+df
+```
+
+| brand   | style   | rating |
+|---------|---------|--------|
+| Wowyow  | cistern | 4.0    |
+| Wowyow  | cistern | 4.0    |
+| Splaysh | jug     | 5.5    |
+| Splaysh | stock   | 3.3    |
+| Pipplee | stock   | 3.0    |
+
+```python
+df=df.drop_duplicates(subset='style')
+df
+```
+
+| brand   | style   | rating |
+|---------|---------|--------|
+| Wowyow  | cistern | 4.0    |
+| Splaysh | jug     | 5.5    |
+| Splaysh | stock   | 3.3    |
+
+Ve bu örnek, _hem_ de rating sütunlarda yinelenen _değerlere sahip tüm satırları_ (ilk oluşum hariç) style bırakır:
+
+```python
+df
+```
+
+| brand   | style   | rating |
+|---------|---------|--------|
+| Wowyow  | cistern | 4.0    |
+| Wowyow  | cistern | 4.0    |
+| Splaysh | jug     | 5.5    |
+| Splaysh | stock   | 3.3    |
+| Pipplee | stock   | 3.0    |
+
+
+df = df.drop_duplicates(subset=['style', 'rating'])
+df
+
+| brand   | style   | rating |
+|---------|---------|--------|
+| Wowyow  | cistern | 4.0    |
+| Splaysh | jug     | 5.5    |
+| Splaysh | stock   | 3.3    |
+| Pipplee | stock   | 3.0    |
+
+### Önemli Çıkarımlar
+
+Bir veri kümesindeki yinelenen veri değerlerini belirlemek, özellikle temizleme ve doğrulama olmak üzere EDA (veya “Keşif Veri Analizi”) uygulamalarının önemli bir parçasıdır. Yinelenenleri belirledikten sonra, yinelenmeleri ortadan kaldırmayı veya kopyaları ortadan kaldırmamayı seçerken veri kümesi üzerindeki etkiyi ve analiz hedefinizi düşünün.
+
+### Ek Kaynaklar
+
+Çoğaltmalar ve tekilleştirme hakkında daha fazla bilgi edinmek ister misiniz? Aşağıdaki ek bağlantılara göz atın.
+
+- [Argüman alanının parametreleri hakkında daha fazla bilgi edinmek için Pandas belgelerine bakın](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html)
+    
+- [W3 Okulları: Pandalar - kopyaları kaldırma](https://www.w3schools.com/python/pandas/pandas_cleaning_duplicates.asp "W3 Okulları - Pandalar: Kopyaları kaldırma")
+
+```python
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import datetime
+from matplotlib import pyplot as plt
+
+df = pd.read_csv('../Datasets/1.csv')
+df.head()
+```
+
+| date       | center_point_geom     | longitude | latitude | number_of_strikes |
+|------------|----------------------|-----------|----------|-------------------|
+| 2018-08-01 | POINT(-81.6 22.6)    | -81.6     | 22.6     | 48                |
+| 2018-08-01 | POINT(-81.1 22.6)    | -81.1     | 22.6     | 32                |
+| 2018-08-01 | POINT(-80.9 22.6)    | -80.9     | 22.6     | 118               |
+| 2018-08-01 | POINT(-80.8 22.6)    | -80.8     | 22.6     | 69                |
+| 2018-08-01 | POINT(-98.4 22.8)    | -98.4     | 22.8     | 44                |
+
+
+```python 
+df.shape
+# (717530,5)
+```
+
+```python
+df_zip = pd.read_csv()
+df_zip.head()
+```
+
+| date       | zip_code | city                       | state       | state_code | center_point_geom   | number_of_strikes |
+|------------|----------|----------------------------|-------------|------------|---------------------|-------------------|
+| 2018-08-08 | 3281     | Weare                      | New Hampshire | NH         | POINT(-71.7 43.1)   | 1                 |
+| 2018-08-14 | 6488     | Heritage Village CDP       | Connecticut  | CT         | POINT(-73.2 41.5)   | 3                 |
+| 2018-08-16 | 97759    | Sisters city, Black Butte Ranch CDP | Oregon   | OR         | POINT(-121.4 44.3)  | 3                 |
+| 2018-08-18 | 6776     | New Milford CDP            | Connecticut  | CT         | POINT(-73.4 41.6)   | 48                |
+| 2018-08-08 | 1077     | Southwick                  | Massachusetts| MA         | POINT(-72.8 42)     | 2                 |
+
+```python 
+df_zip.shape
+# (323700, 7)
+```
+
+```python 
+df_joined = df.merge(df_zip, how='left', on=['date', 'center_point_geom'])
+df_joined.head()
+```
+| date       | center_point_geom     | longitude | latitude | number_of_strikes_x | zip_code | city | state | state_code | number_of_strikes_y |
+|------------|-----------------------|-----------|----------|---------------------|----------|------|-------|------------|---------------------|
+| 2018-08-01 | POINT(-81.6 22.6)     | -81.6     | 22.6     | 48                  | NaN      | NaN  | NaN   | NaN        | NaN                 |
+| 2018-08-01 | POINT(-81.1 22.6)     | -81.1     | 22.6     | 32                  | NaN      | NaN  | NaN   | NaN        | NaN                 |
+| 2018-08-01 | POINT(-80.9 22.6)     | -80.9     | 22.6     | 118                 | NaN      | NaN  | NaN   | NaN        | NaN                 |
+| 2018-08-01 | POINT(-80.8 22.6)     | -80.8     | 22.6     | 69                  | NaN      | NaN  | NaN   | NaN        | NaN                 |
+| 2018-08-01 | POINT(-98.4 22.8)     | -98.4     | 22.8     | 44                  | NaN      | NaN  | NaN   | NaN        | NaN                 |
+
+```python 
+df_joined.describe()
+```
+
+|               | longitude      | latitude      | number_of_strikes_x | zip_code      | number_of_strikes_y |
+|---------------|----------------|----------------|---------------------|---------------|---------------------|
+| count        | 717530.000000  | 717530.000000  | 717530.000000       | 323700.000000 | 323700.000000       |
+| mean         | -90.875445     | 33.328572      | 21.637081           | 57931.958996  | 25.410587           |
+| std          | 13.648429      | 7.938831       | 48.029525           | 22277.327411  | 57.421824           |
+| min          | -133.900000    | 16.600000      | 1.000000            | 1002.000000   | 1.000000            |
+| 25%          | -102.800000    | 26.900000      | 3.000000            | 38260.750000  | 3.000000            |
+| 50%          | -90.300000     | 33.200000      | 6.000000            | 59212.500000  | 8.000000            |
+| 75%          | -80.900000     | 39.400000      | 21.000000           | 78642.000000  | 24.000000           |
+| max          | -43.800000     | 51.700000      | 2211.000000         | 99402.000000  | 2211.000000         |
+
+```python 
+df_null_geo = df_joined[pd.isnull(df_joined.state_code)]
+df_null_geo.shape
+(393830,10)
+
+df_joined.info()
+```
+
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 717530 entries, 0 to 717529
+Data columns (total 10 columns):
+| #  | Column               | Non-Null Count | Dtype   |
+|----|----------------------|----------------|---------|
+| 0  | date                 | 717530         | object  |
+| 1  | center_point_geom    | 717530         | object  |
+| 2  | longitude            | 717530         | float64 |
+| 3  | latitude             | 717530         | float64 |
+| 4  | number_of_strikes_x  | 717530         | int64   |
+| 5  | zip_code             | 323700         | float64 |
+| 6  | city                 | 323700         | object  |
+| 7  | state                | 323700         | object  |
+| 8  | state_code           | 323700         | object  |
+| 9  | number_of_strikes_y  | 323700         | float64 |
+
+dtypes: float64(4), int64(1), object(5)
+memory usage: 60.2+ MB
+
+```python 
+df_null_geo.head()
+```
+
+| date       | center_point_geom     | longitude | latitude | number_of_strikes_x | zip_code | city | state | state_code | number_of_strikes_y |
+|------------|-----------------------|-----------|----------|---------------------|----------|------|-------|------------|---------------------|
+| 2018-08-01 | POINT(-81.6 22.6)     | -81.6     | 22.6     | 48                  | NaN      | NaN  | NaN   | NaN        | NaN                 |
+| 2018-08-01 | POINT(-81.1 22.6)     | -81.1     | 22.6     | 32                  | NaN      | NaN  | NaN   | NaN        | NaN                 |
+| 2018-08-01 | POINT(-80.9 22.6)     | -80.9     | 22.6     | 118                 | NaN      | NaN  | NaN   | NaN        | NaN                 |
+| 2018-08-01 | POINT(-80.8 22.6)     | -80.8     | 22.6     | 69                  | NaN      | NaN  | NaN   | NaN        | NaN                 |
+| 2018-08-01 | POINT(-98.4 22.8)     | -98.4     | 22.8     | 44                  | NaN      | NaN  | NaN   | NaN        | NaN                 |
+
+```python 
+top_missing = if_null_geo[['latitude', 'longitude', 'number_of_strikes_x']
+].groupby(['latitude', 'longitude'] ).sum().sort_values('number_of_strikes_x', ascending=False).reset_index()
+
+top_missing.head(10)
+```
+
+| latitude | longitude | number_of_strikes_x |
+|----------|-----------|---------------------|
+| 22.4     | -84.2     | 3841                |
+| 22.9     | -82.9     | 3184                |
+| 22.4     | -84.3     | 2999                |
+| 22.9     | -83.0     | 2754                |
+| 22.5     | -84.1     | 2746                |
+| 22.5     | -84.2     | 2738                |
+| 22.3     | -81.0     | 2680                |
+| 22.9     | -82.4     | 2652                |
+| 22.9     | -82.3     | 2618                |
+| 22.3     | -84.3     | 2551                |
+
+```python 
+import plotly.express as px
+
+fig = px.scatter_geo(top_missing[top_missing.number_of_strikes_x>=300],
+                     lat "latitude",
+                     lon="longitude",
+                     size="number_of_strikes_x")
+
+fig.update_layout(title_text= 'Missing data', )
+fig.show()
+```
+
+![image](./images/3019.png)
+
+```python 
+import plotly.express as px
+
+fig px.scatter_geo(top_missing[top_missing.number_of_strikes_x>=300],
+                   lat="latitude",
+                   lon="longitude",
+                   size="number_of_strikes_x")
+
+fig.update_layout(
+    title_text = 'Missing data',
+    geo_scope='usa',
+)
+
+fig.show()
+```
+
+![image](./images/3020.png)
 
 
