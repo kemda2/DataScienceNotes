@@ -132,3 +132,264 @@ dataframe.head(5)
 | 3           | 1        | 3      | Heikkinen, Miss. Laina                        | female | 26.0 | 0      | 0      | STON/O2. 3101282    | 7.9250  | NaN    | S        | 15.8500    |
 | 4           | 1        | 1      | Futrelle, Mrs. Jacques Heath (Lily May Peel)  | female | 35.0 | 1      | 0      | 113803              | 53.1000 | C123   | S        | 106.2000   |
 | 5           | 0        | 3      | Allen, Mr. William Henry                      | male   | 35.0 | 0      | 0      | 373450              | 8.0500  | NaN    | S        | 16.1000    |
+
+```python
+dataframe.iloc[1][3]
+# 'Cumings, Mrs. John Bradley (Florence Briggs Thayer)'
+```
+
+```python
+fare = dataframe.groupby(['Sex', 'Pclass']).agg({'Fare': ['count', 'sum']}) 
+fare['fare avg'] = fare['Fare']['sum']/fare['Fare']['count'] 
+fare
+```
+
+| Sex    | Pclass | Fare Count | Fare Sum   | Fare Avg   |
+|--------|--------|------------|------------|------------|
+| female | 1      | 94         | 9975.8250  | 106.125798 |
+|        | 2      | 76         | 1669.7292  | 21.970121  |
+|        | 3      | 144        | 2321.1086  | 16.118810  |
+| male   | 1      | 122        | 8201.5875  | 67.226127  |
+|        | 2      | 108        | 2132.1125  | 19.741782  |
+|        | 3      | 347        | 4393.5865  | 12.661633  |
+
+```python
+import pandas as pd
+
+data = {'col1': [1, 2], 'col2': [3, 4]}
+df = pd.DataFrame(data=data)
+df
+```
+|    | col1 | col2 |
+|----|------|------|
+| 0  | 1    | 3    |
+| 1  | 2    | 4    |
+
+```python
+import numpy as np
+
+df2 = pd.DataFrame(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]), columns=['a', 'b', 'c'], index=['x', 'y', 'z'])
+
+df2
+```
+
+|   | a | b | c |
+|---|---|---|---|
+| x | 1 | 2 | 3 |
+| y | 4 | 5 | 6 |
+| z | 7 | 8 | 9 |
+
+```python
+# Print class of first row 
+print(type(dataframe.iloc[0]))
+
+# Print class of "Same" column 
+print(type(dataframe['Name']))
+
+# <class 'pandas.core.series.Series'>
+# <class 'pandas.core.series.Series'>
+```
+
+```python
+dataframe[['Name','Age']]
+```
+
+| Index | Name                                              | Age  |
+|-------|---------------------------------------------------|------|
+| 0     | Braund, Mr. Owen Harris                           | 22.0 |
+| 1     | Cumings, Mrs. John Bradley (Florence Briggs Th...)| 38.0 |
+| 2     | Heikkinen, Miss. Laina                            | 26.0 |
+| 3     | Futrelle, Mrs. Jacques Heath (Lily May Peel)      | 35.0 |
+| 4     | Allen, Mr. William Henry                          | 35.0 |
+| ...   | ...                                               | ...  |
+| 886   | Montvila, Rev. Juozas                             | 27.0 |
+| 887   | Graham, Miss. Margaret Edith                      | 19.0 |
+| 888   | Johnston, Miss. Catherine Helen "Carrie"          | NaN  |
+| 889   | Behr, Mr. Karl Howell                             | 26.0 |
+| 890   | Dooley, Mr. Patrick                               | 32.0 |
+
+```python
+dataframe.iloc[0]
+```
+
+PassengerId                          1
+Survived                             0
+Pclass                               3
+Name           Braund, Mr. Owen Harris
+Sex                               male
+Age                               22.0
+SibSp                                1
+Parch                                0
+Ticket                       A/5 21171
+Fare                              7.25
+Cabin                              NaN
+Embarked                             S
+2023 Fare                         14.5
+Name: 0, dtype: object
+
+```python
+dataframe.iloc[[0]]
+```
+
+| PassengerId | Survived | Pclass | Name                   | Sex  | Age  | SibSp | Parch | Ticket    | Fare | Cabin | Embarked | 2023 Fare |
+|-------------|----------|--------|------------------------|------|------|--------|--------|-----------|------|-------|----------|------------|
+| 1           | 0        | 3      | Braund, Mr. Owen Harris| male | 22.0 | 1      | 0      | A/5 21171 | 7.25 | NaN   | S        | 14.5       |
+
+```python
+dataframe.iloc[0:3]
+```
+
+| PassengerId | Survived | Pclass | Name                                              | Sex    | Age  | SibSp | Parch | Ticket           | Fare    | Cabin | Embarked | 2023 Fare |
+|-------------|----------|--------|---------------------------------------------------|--------|------|--------|--------|-------------------|---------|--------|----------|------------|
+| 1           | 0        | 3      | Braund, Mr. Owen Harris                           | male   | 22.0 | 1      | 0      | A/5 21171         | 7.2500  | NaN    | S        | 14.5000    |
+| 2           | 1        | 1      | Cumings, Mrs. John Bradley (Florence Briggs Th...)| female | 38.0 | 1      | 0      | PC 17599          | 71.2833 | C85    | C        | 142.5666   |
+| 3           | 1        | 3      | Heikkinen, Miss. Laina                            | female | 26.0 | 0      | 0      | STON/O2. 3101282  | 7.9250  | NaN    | S        | 15.8500    |
+
+```python
+dataframe.iloc[0:3,[3,4]]
+```
+
+| Index | Name                                               | Sex    |
+|-------|----------------------------------------------------|--------|
+| 0     | Braund, Mr. Owen Harris                            | male   |
+| 1     | Cumings, Mrs. John Bradley (Florence Briggs Th...)| female |
+| 2     | Heikkinen, Miss. Laina                             | female |
+
+```python
+dataframe.iloc[:,[3]]
+```
+
+| Index | Name                                              |
+|-------|---------------------------------------------------|
+| 0     | Braund, Mr. Owen Harris                           |
+| 1     | Cumings, Mrs. John Bradley (Florence Briggs Th...)|
+| 2     | Heikkinen, Miss. Laina                            |
+| 3     | Futrelle, Mrs. Jacques Heath (Lily May Peel)      |
+| 4     | Allen, Mr. William Henry                          |
+| ...   | ...                                               |
+| 886   | Montvila, Rev. Juozas                             |
+| 887   | Graham, Miss. Margaret Edith                      |
+| 888   | Johnston, Miss. Catherine Helen "Carrie"          |
+| 889   | Behr, Mr. Karl Howell                             |
+| 890   | Dooley, Mr. Patrick                               |
+
+```python
+dataframe.iloc[0,3]
+```
+
+'Braund, Mr. Owen Harris'
+
+```python
+dataframe.loc[0:3,['Name']]
+```
+
+| Index | Name                                              |
+|-------|---------------------------------------------------|
+| 0     | Braund, Mr. Owen Harris                           |
+| 1     | Cumings, Mrs. John Bradley (Florence Briggs Th...)|
+| 2     | Heikkinen, Miss. Laina                            |
+| 3     | Futrelle, Mrs. Jacques Heath (Lily May Peel)      |
+
+
+| **Attribute**                                                                                                  | **Description**                                                     |
+| -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| [columns](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.columns.html#pandas.DataFrame.columns) | Returns the column labels of the dataframe                          |
+| [dtypes](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dtypes.html#pandas.DataFrame.dtypes)    | Returns the data types in the dataframe                             |
+| [iloc](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html#pandas.DataFrame.iloc)          | Accesses a group of rows and columns using integer-based indexing   |
+| [loc](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html#pandas.DataFrame.loc)             | Accesses a group of rows and columns by label(s) or a Boolean array |
+| [shape](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.shape.html#pandas.DataFrame.shape)       | Returns a tuple representing the dimensionality of the dataframe    |
+| [values](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.values.html#pandas.DataFrame.values)    | Returns a NumPy representation of the dataframe                     |
+
+
+
+| **Method**                                                                                                                      | **Description**                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [apply(_)_](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html#pandas.DataFrame.apply)                    | Applies a function over an axis of the dataframe                                                                                                                       |
+| [copy()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.copy.html#pandas.DataFrame.copy)                         | Makes a copy of the dataframe’s indices and data                                                                                                                       |
+| [describe()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.describe.html#pandas.DataFrame.describe)             | Returns descriptive statistics of the dataframe, including the minimum, maximum, mean, and percentile values of its numeric columns; the row count; and the data types |
+| [drop()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html#pandas.DataFrame.drop)                         | Drops specified labels from rows or columns                                                                                                                            |
+| [groupby()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html#pandas.DataFrame.groupby)                | Splits the dataframe, applies a function, and combines the results                                                                                                     |
+| [head(_n=5_)](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head)                    | Returns the first _n_ rows of the dataframe (default=5)                                                                                                                |
+| [info()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.info.html#pandas.DataFrame.info)                         | Returns a concise summary of the dataframe                                                                                                                             |
+| [isna()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.isna.html#pandas.DataFrame.isna)                         | Returns a same-sized Boolean dataframe indicating whether each value is null (can also use isnull() as an alias)                                                       |
+| [sort_values()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sort_values.html#pandas.DataFrame.sort_values)    | Sorts by the values across a given axis                                                                                                                                |
+| [value_counts()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.value_counts.html#pandas.DataFrame.value_counts) | Returns a series containing counts of unique rows in the dataframe                                                                                                     |
+| [where()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.where.html#pandas.DataFrame.where)                      | Replaces values in the dataframe where a given condition is false                                                                                                      |
+
+```python
+data = {'planet': ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'],
+        'radius_km': [2440, 6052, 6371, 3390, 69911, 58232, 25362, 246221],
+        'moons': [0, 0, 1, 2, 80, 83, 27, 14]}
+
+planets = pd.DataFrame(data)
+
+planets
+```
+
+| Index | Planet  | Radius_km | Moons |
+|-------|---------|-----------|-------|
+| 0     | Mercury | 2440      | 0     |
+| 1     | Venus   | 6052      | 0     |
+| 2     | Earth   | 6371      | 1     |
+| 3     | Mars    | 3390      | 2     |
+| 4     | Jupiter | 69911     | 80    |
+| 5     | Saturn  | 58232     | 83    |
+| 6     | Uranus  | 25362     | 27    |
+| 7     | Neptune | 246221    | 14    |
+
+```python
+mask = planets['moons'] < 20
+mask
+```
+
+|||
+|---|---|
+|0|     True|
+|1|     True|
+|2|     True|
+|3|     True|
+|4|    False|
+|5|    False|
+|6|    False|
+|7|     True|
+Name: moons, dtype: bool
+
+```python
+planets[mask]
+```
+
+| Index | Planet  | Radius_km | Moons |
+|-------|---------|-----------|-------|
+| 0     | Mercury | 2440      | 0     |
+| 1     | Venus   | 6052      | 0     |
+| 2     | Earth   | 6371      | 1     |
+| 3     | Mars    | 3390      | 2     |
+| 7     | Neptune | 246221    | 14    |
+
+```python
+planets[planets['moons']<20]
+```
+
+| Index | Planet  | Radius_km | Moons |
+|-------|---------|-----------|-------|
+| 0     | Mercury | 2440      | 0     |
+| 1     | Venus   | 6052      | 0     |
+| 2     | Earth   | 6371      | 1     |
+| 3     | Mars    | 3390      | 2     |
+| 7     | Neptune | 246221    | 14    |
+
+
+
+
+
+
+
+
+
+
+
+
+```python
+
+```
+
