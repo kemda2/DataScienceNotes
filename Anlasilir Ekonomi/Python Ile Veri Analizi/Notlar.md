@@ -3330,9 +3330,25 @@ $\hat{P}$ örneklem oranıdır.
 
 > Erkeklerin haber izleme oranlarının kadınlardan daha fazla olduğu belirtiliyor. 50 kadın 50 erkek örneklem alınıyor. Erkeklerde 45 kadınlarda 40 kişinin haber izlediği görülüyor.
 
-$H_0: P_E = P_K \\[3mm] H_1: P_E\ > P_K \\[6mm] n_E = 50 \\[3mm] n_K = 50 \\[6mm] \hat{P_E} = \frac{45}{50} = 0,90 \\[3mm] \hat{P_K} = \frac{40}{50} = 0,80$
+$H_0: P_E = P_K $
 
+$ H_1: P_E\ > P_K $
 
+$ n_E = 50 $
+
+$ n_K = 50 $
+
+$ \hat{P_E} = \frac{45}{50} = 0,90 $
+
+$ \hat{P_K} = \frac{40}{50} = 0,80 $
+
+$ P = \frac{50\cdot0,9 + 50\cdot0,8}{50+50} $
+
+$ P = \frac{45 + 40}{100} $
+
+$ P = 0,85$
+
+$z_{hesap} = \frac{0,9-0,8}{\sqrt{0,85\cdot(1-0,85)\cdot(\frac{1}{50}+\frac{1}{50})}}$
 
 
 
