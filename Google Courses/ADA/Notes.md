@@ -1019,6 +1019,73 @@ plt.show()
 
 ![image](./images/3006.png)
 
+```python
+# Import statements
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import datetime
+from matplotlib import pyplot as plt
 
+# Read in the 2018 lightning strike dataset
+df = pd.read_csv('eda_using_basic_data_functions_in_python_dataset1.csv')
 
+# Convert the `date` column to datetime
+df['date'] = pd.to_datetime(df['date'])
+df.head()
+```
 
+| date       | number_of_strikes | center_point_geom   |
+|------------|-------------------|---------------------|
+| 2018-01-03 | 194               | POINT(-75 27)       |
+| 2018-01-03 | 41                | POINT(-78.4 29)     |
+| 2018-01-03 | 33                | POINT(-73.9 27)     |
+| 2018-01-03 | 38                | POINT(-73.8 27)     |
+| 2018-01-03 | 92                | POINT(-79 28)       |
+
+```python
+df.shape
+(3401012, 3)
+```
+
+```python
+df.drop_duplicates().shape
+(3401012, 3)
+```
+
+```python
+# Sort by number of strikes in descending order
+df.sort_values(by='number_of_strikes', ascending=False).head(10)
+```
+
+| Index  | date       | number_of_strikes | center_point_geom    |
+|--------|------------|-------------------|----------------------|
+| 302758 | 2018-08-20 | 2211              | POINT(-92.5 35.5)    |
+| 278383 | 2018-08-16 | 2142              | POINT(-96.1 36.1)    |
+| 280830 | 2018-08-17 | 2061              | POINT(-90.2 36.1)    |
+| 280453 | 2018-08-17 | 2031              | POINT(-89.9 35.9)    |
+| 278382 | 2018-08-16 | 1902              | POINT(-96.2 36.1)    |
+| 11517  | 2018-02-10 | 1899              | POINT(-95.5 28.1)    |
+| 277506 | 2018-08-16 | 1878              | POINT(-89.7 31.5)    |
+| 24906  | 2018-02-25 | 1833              | POINT(-98.7 28.9)    |
+| 284320 | 2018-08-17 | 1767              | POINT(-90.1 36)      |
+| 24825  | 2018-02-25 | 1741              | POINT(-98 29)        |
+
+```python
+# Identify locations that appear most in the dataset
+df.center_point_geom.value_counts()
+```
+
+| Location             | Count |
+|----------------------|-------|
+| POINT(-81.5 22.5)    | 108   |
+| POINT(-84.1 22.4)    | 108   |
+| POINT(-82.5 22.9)    | 107   |
+| POINT(-82.7 22.9)    | 107   |
+| POINT(-82.5 22.8)    | 106   |
+| ...                  | ...   |
+| POINT(-119.3 35.1)   | 1     |
+| POINT(-119.3 35)     | 1     |
+| POINT(-119.6 35.6)   | 1     |
+| POINT(-119.4 35.6)   | 1     |
+| POINT(-58.5 45.3)    | 1     |
