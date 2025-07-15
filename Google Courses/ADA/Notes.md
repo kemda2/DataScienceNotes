@@ -2841,19 +2841,19 @@ Bu okumada, birden fazla olay hakkında daha fazla bilgi edineceksiniz. Üç tem
 
 #### **Karşılıklı dışlayan etkinlikler**
 
-İki olay aynı **anda gerçekleş** emezlerse birbirini dışlar.
+İki olay **aynı anda gerçekleşemezlerse**  birbirini dışlar.
 
 Örneğin, Dünya'da ve ayda aynı anda olamazsınız veya aynı anda oturup ayakta duramazsınız.
 
-Veya olasılık teorisinin iki klasik örneğini alın. Madeni para atarsanız, aynı anda kafa ve kuyruk alamazsınız. Bir kalıp yuvarlarsanız, aynı anda 2 ve 4 alamazsınız.
+Veya olasılık teorisinin iki klasik örneğini alın. Madeni para atarsanız, aynı anda kafa ve kuyruk atamazsınız. Bir zar atarsanız, aynı anda 2 ve 4 atamazsınız.
 
 #### **Bağımsız etkinlikler**
 
-Bir olayın **meydana** gelmesi diğer olayın olasılığını değiştirmezse iki olay bağımsızdır. Bu, bir olayın diğer olayın sonucunu etkilemediği anlamına gelir.
+**Bir olayın meydana gelmesi** diğer olayın olasılığını değiştirmezse iki olay bağımsızdır. Bu, bir olayın diğer olayın sonucunu etkilemediği anlamına gelir.
 
 Örneğin, sabahları bir film izlemek öğleden sonra havayı etkilemez. Radyoda müzik dinlemek yeni buzdolabınızın teslimatını etkilemez. Bu olaylar ayrı ve bağımsızdır.
 
-Veya, ardışık iki jeton fırlatması veya iki ardışık kalıp rulosu yapın. İlk atışta kafa almak ikinci atışın sonucunu etkilemez. Herhangi bir madeni para atışı için, herhangi bir sonucun olasılığı her zaman 2 üzerinden 1 veya% 50'dir. İlk ruloda 2 almak ikinci rulonun sonucunu etkilemez. Herhangi bir kalıp atışı için, herhangi bir sonucun olasılığı her zaman 6'dan 1'i veya% 16.7'dir.
+Veya ardışık iki jeton fırlatması veya iki ardışık zar atma yapın. İlk atışta tura atmak ikinci atışın sonucunu etkilemez. Herhangi bir madeni para atışı için, herhangi bir sonucun olasılığı her zaman 2 üzerinden 1 veya % 50'dir. İlk zarda 2 almak ikinci zarın sonucunu etkilemez. Herhangi bir zar atışı için, herhangi bir sonucun olasılığı her zaman 6'dan 1'i veya % 16.7'dir.
 
 ### Üç temel kural
 
@@ -2872,25 +2872,25 @@ Tamamlayıcı kuralı, birbirini dışlayan olaylarla ilgilenir. İstatistikte, 
 
 Bir olayın meydana gelme olasılığı ve gerçekleşmemesi olasılığı 1'e kadar olmalıdır. 1 olasılığının% 100 ile aynı olduğunu hatırlayın.
 
-Bunu düşünmenin başka bir yolu, bir olayın veya diğer olayın meydana gelme olasılığın% 100 olmasıdır. Yarın %40 kar yağma ihtimali olabilir. Ancak yarın kar yağma ya da kar yağmama ihtimali %100.
+Bunu düşünmenin başka bir yolu, bir olayın veya diğer olayın meydana gelme olasılığın % 100 olmasıdır. Yarın %40 kar yağma ihtimali olabilir. Ancak yarın kar yağma ya da kar yağmama ihtimali %100.
 
-Tam **amlayıcı kur** alı, A olayının gerçekleşmemesi olasılığının 1 eksi A olasılığı olduğunu belirtir: Olasılık gösteriminde bunu şu şekilde yazabilirsiniz:
+**Tamamlayıcı kuralı**, A olayının gerçekleşmemesi olasılığının 1 eksi A olasılığı olduğunu belirtir: Olasılık gösteriminde bunu şu şekilde yazabilirsiniz:
 
 **Tamamlayıcı kuralı**
 
-P (A) = 1 - P (A)
+P (A') = 1 - P (A)
 
-**Not: Olas** ılık gösteriminde, kesme işareti (') olumsuzlamayı sembolize eder. Başka bir deyişle, A olayının meydana gelmemesi olasılığını belirtmek istiyorsanız, A: P (A') harfinden sonra bir kesme işareti ekleyin. Bunu “A olmaması olasılığı” olarak söyleyebilirsiniz.
+**Not:** Olasılık gösteriminde, kesme işareti (') olumsuzlamayı sembolize eder. Başka bir deyişle, A olayının meydana gelmemesi olasılığını belirtmek istiyorsanız, A harfinden sonra bir kesme işareti ekleyin: P (A') Bunu "A olmaması olasılığı" olarak söyleyebilirsiniz.
 
-Bu nedenle, yarın% 40 kar olasılığının veya 0.4 olasılığının olduğunu biliyorsanız, yarın kar yağmama olasılığını hesaplamak için tamamlayıcı kuralını kullanabilirsiniz. Kar olmaması olasılığı bir eksi kar olasılığına eşittir.
+Bu nedenle, yarın % 40 kar olasılığının veya 0.4 olasılığının olduğunu biliyorsanız, yarın kar yağmama olasılığını hesaplamak için tamamlayıcı kuralını kullanabilirsiniz. Kar olmaması olasılığı bir eksi kar olasılığına eşittir.
 
 P (kar yok) = 1 - P (kar) = 1 - 0.4 = 0.6.
 
-Yani, yarın kar yağma olasılığı 0.6 veya% 60'dır.
+Yani, yarın kar yağma olasılığı 0.6 veya % 60'dır.
 
 #### **Toplama kuralı (birbirini dışlayan olaylar için)**
 
-Topl **ama kuralı**, eğer A ve B olayları birbirini dışlarsa, A veya B'nin meydana gelme olasılığının A ve B'nin olasılıklarının toplamı olduğunu belirtir: Olasılık gösteriminde, bunu şu şekilde yazabilirsiniz:
+**Toplama kuralı**, eğer A ve B olayları birbirini dışlarsa, A veya B'nin meydana gelme olasılığının A ve B'nin olasılıklarının toplamı olduğunu belirtir: Olasılık gösteriminde, bunu şu şekilde yazabilirsiniz:
 
 P (A veya B) = P (A) +P (B)
 
@@ -2902,31 +2902,31 @@ Bir kalıp yuvarlama örneğimizi inceleyelim.
 
 Tek bir ruloda 2 veya 4 yuvarlanma olasılığını bulmak istediğinizi varsayalım. Bu iki olay birbirini dışlar. 2 veya 4 yuvarlayabilirsiniz, ancak her ikisini de aynı anda yapamazsınız.
 
-Toplama kuralı, her iki olayın meydana gelme olasılığını bulmak için olasılıklarını topladığınızı söyler. Bir kalıpta tek bir sayı atma olasılığı 6'dan 1'i veya% 16.7'dir.
+Toplama kuralı, her iki olayın meydana gelme olasılığını bulmak için olasılıklarını topladığınızı söyler. Bir zarda tek bir sayı atma olasılığı 6'dan 1'i veya % 16.7'dir.
 
-P (haddeleme 2 veya haddeleme 4) = P (haddeleme 2) + P (haddeleme 4) = + = ⅓
+P (2 atma veya 4 atma ) = P (2 atma ) + P (4 atma ) = 1/6 + 1/6 = 1/3
 
-Yani, 2 veya 4 yuvarlanma olasılığı üçten biri veya% 33'tür.
+Yani, 2 veya 4 yuvarlanma olasılığı üçten biri veya % 33'tür.
 
 #### **Çarpma kuralı (bağımsız olaylar için)**
 
-Ç **arpma kuralı**, eğer A ve B olayları bağımsızsa, o zaman hem A hem de B'nin meydana gelme olasılığının, A olasılığının B olasılığı ile çarpılmasıdır. Olasılık gösteriminde, bunu şu şekilde yazabilirsiniz:
+**Çarpma kuralı**, eğer A ve B olayları bağımsızsa, o zaman hem A hem de B'nin meydana gelme olasılığının, A olasılığının B olasılığı ile çarpılmasıdır. Olasılık gösteriminde, bunu şu şekilde yazabilirsiniz:
 
 P (A ve B) = P (A) × P (B)
 
 Bağımlı olaylar için de bir çarpma kuralı olduğunu unutmayın. Bu derste, bağımsız etkinlikler için kurala odaklanıyoruz.
 
-Bir kalıp yuvarlama örneğimizle devam edelim.
+Bir zar atma örneğimizle devam edelim.
 
-##### **Kalıp rulosu (1 yuvarlama ve ardından 6 yuvarlama)**
+##### **zar atma (1 yuvarlama ve ardından 6 yuvarlama)**
 
-Şimdi arka arkaya iki kalıp rulosu hayal edin. Diyelim ki bir 1'i yuvarlama ve ardından bir 6'yı yuvarlama olasılığını bilmek istiyorsunuz. Bunlar bağımsız olaylardır, çünkü ilk rulo ikinci rulonun sonucunu etkilemez.
+Şimdi arka arkaya iki zar atma hayal edin. Diyelim ki bir 1'i yuvarlama ve ardından bir 6'yı yuvarlama olasılığını bilmek istiyorsunuz. Bunlar bağımsız olaylardır, çünkü ilk rulo ikinci rulonun sonucunu etkilemez.
 
 Bir 1'i ve ardından bir 6'yı yuvarlama olasılığı, bir 1'i yuvarlama olasılığının 6 yuvarlanma olasılığıyla çarpılmasıdır. Her olayın olasılığı veya% 16.7'dir. Bunu şu şekilde yazabilirsiniz:
 
-P (ilk ruloda 1 yuvarlama ve ikinci ruloda 6 yuvarlama) = P (ilk ruloda 1 yuvarlama) × P (ikinci ruloda 6 yuvarlama) = × = 1/36
+P (ilk ruloda 1 yuvarlama ve ikinci ruloda 6 yuvarlama) = P (ilk ruloda 1 yuvarlama) × P (ikinci ruloda 6 yuvarlama) = 1/6 × 1/6 = 1/36
 
-Yani, bir 1 ve sonra bir 6'yı yuvarlama olasılığı otuz altıdan biri veya yaklaşık% 2.8'dir.
+Yani, bir 1 ve sonra bir 6'yı yuvarlama olasılığı otuz altıdan biri veya yaklaşık % 2.8'dir.
 
 ### Önemli çıkarımlar
 
@@ -2935,3 +2935,10 @@ Temel olasılık kuralları, birbirini dışlayan veya bağımsız olan olaylar�
 ### Daha fazla bilgi için kaynaklar
 
 Olasılık hakkında daha fazla bilgi edinmek için, aşağıdaki etkileşimli kılavuza bakın: [Görme Teorisi](https://seeing-theory.brown.edu/index.html#secondPage).
+
+## Koşullu olasılık
+
+
+
+
+
