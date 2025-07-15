@@ -2713,6 +2713,122 @@ range_overall_li
 # 61.54000000006
 ```
 
+## Olasılığın Temel Kavramları
 
+Son zamanlarda, olasılığın belir **siz** liği ölçmek veya bir şeyin olma olasılığını tanımlamak için matematiği kullandığını öğrendiniz. Örneğin, yarın yağmur yağma ihtimali %80 veya belirli bir adayın seçimi kazanma ihtimali %20 olabilir.
+
+Bu okumada, olasılığın temel kavramları hakkında daha fazla bilgi edineceksiniz. Rastgele bir deney kavramını, bir olayın olasılığının nasıl temsil edileceğini ve hesaplanacağını ve temel olasılık gösterimini tartışacağız.
+
+### Olasılık temelleri
+
+##### **Temel kavramlar: Rastgele deney, sonuç, olay**
+
+Olasılık teorisinin temelindeki üç kavramla başlayalım:
+
+- Rastgele deney
+    
+- Sonuç
+    
+- Etkinlik
+    
+
+Olasılık, istatistikçilerin istatistiksel deneyler olarak da bilinen rastgele deneyler dediği şeyle ilgilenir. **Rastgele bir deney**, sonucu kesin olarak tahmin edilemeyen bir süreçtir.
+
+Örneğin, bir madeni para veya bir zarı atmadan önce, sonucunu bilemezsiniz. Madeni para atmanın sonucu yazı veya tura olabilir. Zarın sonucu 3 veya 6 olabilir.
+
+Tüm rastgele deneylerin üç ortak noktası vardır:
+
+- Deney birden fazla olası sonuca sahip olabilir.
+    
+- Olası her sonucu önceden temsil edebilirsiniz.
+    
+- Deneyin sonucu şansa bağlıdır.
+    
+
+İstatistikte, rastgele bir deneyin sonucuna sonuç denir. Örneğin, bir zar atarsanız, altı olası sonuç vardır: 1, 2, 3, 4, 5, 6.
+
+Bir olay, bir veya daha fazla sonuçtan oluşan bir kümedir. Bir zarı atma örneğini kullanarak, bir olay sonucu çift sayı olabilir. Çift bir sayının çıkması olayı 2, 4, 6 sonuçlarından oluşur. Veya, tek bir sayının çıkması olayı 1, 3, 5 sonuçlarından oluşur.
+
+Rastgele bir deneyde, bir olaya bir olasılık atanır. Rastgele bir olayın olasılığını nasıl temsil edeceğimizi ve hesaplayacağımızı keşfedelim.
+
+#### **Bir olayın olasılığı**
+
+Bir olayın meydana gelme olasılığı, 0 ile 1 arasında bir sayı olarak ifade edilir. Olasılık yüzde olarak da ifade edilebilir.
+
+- Bir olayın olasılığı 0'a eşitse, olayın gerçekleşme ihtimali %0 vardır.
+    
+- Bir olayın olasılığı 1'e eşitse, olayın gerçekleşme ihtimali %100 vardır.
+
+0 ile 1 arasında farklı olasılık dereceleri vardır. Bir olayın olasılığı sıfıra yakınsa, diyelim ki 0.05 veya % 5 ise, olayın gerçekleşme şansı küçüktür. Bir olayın olasılığı 1'e, örneğin 0.95 veya % 95'e yakınsa, olayın gerçekleşme şansı yüksektir. Bir olayın olasılığı 0,5'e eşitse, olayın gerçekleşmesi veya gerçekleşmemesi ihtimali %50'dir.
+
+Bir olayın olasılığını bilmek, belirsizlik durumlarında bilinçli kararlar vermenize yardımcı olabilir. Örneğin, yarın yağmur olasılığı 0.1 veya % 10 ise, açık hava pikniği planlarınızdan emin olabilirsiniz. Ancak, yağmur olasılığı 0.9 veya % 90 ise, pikniğinizi başka bir güne yeniden planlamayı düşünebilirsiniz.
+
+#### **Bir olayın olasılığını hesaplayın**
+
+Tüm olası sonuçların eşit derecede muhtemel olduğu bir olayın olasılığını hesaplamak için, istenen sonuçların sayısını toplam olası sonuç sayısına bölersiniz. Bunun aynı zamanda klasik olasılığın formülü olduğunu hatırlayabilirsiniz:
+
+$\frac{\text{İstenilen sonuçların sayısı}}{\text{toplam olası sonuç sayısı}}$
+
+Tek bir rastgele olayın olasılığını nasıl hesaplayacağınıza dair daha iyi bir fikir edinmek için jeton atma ve die roll örneklerini inceleyelim.
+
+##### **Örnek: Madeni para fırlatma**
+
+Adil bir madeni para fırlatmak, rastgele bir deneyin klasik bir örneğidir:
+
+- Birden fazla olası sonuç var.
+    
+- Olası her sonucu önceden temsil edebilirsiniz: kafalar veya kuyruklar.
+    
+- Sonuç şansa bağlıdır. Fırlatma kafaları veya kuyrukları ortaya çıkarabilir.
+
+Tek bir atışta kafa alma olasılığını hesaplamak istediğinizi varsayalım. Herhangi bir madeni para atışı için, kafa alma olasılığı ikiden bir şanstır. Bu 1 ÷ 2 = 0.5 veya % 50'dir.
+
+Şimdi, her iki tarafında kafaları olan özel olarak tasarlanmış bir madeni para fırlatacağınızı hayal edin. Bu madeni parayı her attığınızda kafaları yükselecek. Bu durumda kafa alma olasılığı% 100'dür. Kuyruk alma olasılığı% 0'dır.
+
+Başlık kazanma olasılığının% 50 olduğunu söylediğinizde, herhangi bir gerçek jeton atma dizisinin tam olarak %50 kafa ile sonuçlanacağını iddia etmediğinizi unutmayın. Örneğin, adil bir madeni para on kez atarsanız, 4 kafa ve 6 kuyruk veya 7 kafa ve 3 kuyruk alabilirsiniz. Bununla birlikte, madeni parayı atmaya devam ederseniz, uzun vadeli kafa frekansının% 50'ye yaklaşmasını bekleyebilirsiniz.
+
+##### **Örnek: Zar atma**
+
+Altı taraflı bir zarı atmak, rastgele bir deneyin başka bir klasik örneğidir:
+
+- Birden fazla olası sonuç var.
+    
+- Tüm olası sonuçları önceden temsil edebilirsiniz: 1, 2, 3, 4, 5 ve 6.
+    
+- Sonuç şansa bağlıdır. Rulo, herhangi bir sayı 1-6 olarak ortaya çıkabilir.
+    
+
+Diyelim ki 3 atma olasılığını hesaplamak istiyorsunuz. Herhangi bir zar atma için, 3 atma olasılığı altı üzerinden bir şanstır. Bu 1 ÷ 6 = 0.1666 veya yaklaşık % 16.7'dir.
+
+#### **Olasılık gösterimi**
+
+Genellikle eğitim ve teknik bağlamlardaki kavramları sembolize etmek için kullanıldığı için olasılık gösterimine aşina olmaya yardımcı olur.
+
+Notasyonda, P harfi bir olayın olasılığını gösterir. A ve B harfleri bireysel olayları temsil eder.
+
+Örneğin, iki olayla uğraşıyorsanız, bir olayı A ve diğer olayı B olarak etiketleyebilirsiniz.
+
+- A olayı olasılığı P (A) olarak yazılır.
+    
+- B olayı olasılığı P (B) olarak yazılır.
+    
+- Herhangi bir olay için A, 0 ≤ P (A) ≤ 1. Başka bir deyişle, herhangi bir A olayının olasılığı her zaman 0 ile 1 arasındadır.
+    
+- P (A) > P (B) ise, A olayının meydana gelme şansı B olayından daha yüksektir.
+    
+- P (A) = P (B) ise, o zaman A olayı ve B olayı eşit derecede meydana gelir.
+    
+
+### Önemli çıkarımlar
+
+Veri uzmanları, paydaşların belirsiz olaylar hakkında bilinçli kararlar almalarına yardımcı olmak için olasılığı kullanır. Temel olasılık kavramları hakkındaki bilginiz, daha karmaşık olasılık hesaplamaları için bir yapı taşı olarak faydalı olacaktır.
+
+### Daha fazla bilgi için kaynaklar
+
+Temel olasılık kavramları hakkında daha fazla bilgi edinmek için aşağıdaki kaynaklara bakın:
+
+- [Richland Community College"dan alınan bu ders notları](https://people.richland.edu/james/lecture/m116/sequences/probability.html), temel kavramların ve temel olasılık kurallarının yararlı bir özetini sağlar..
+
+## Çoklu olayların olasılığı
 
 
