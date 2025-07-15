@@ -1171,8 +1171,89 @@ union_df[['year', 'number_of_strikes']].groupby(['year']).sum()
 | 2017 | 35,095,195        |
 | 2018 | 44,600,989        |
 
+```python
+# Her yılın her ayı için toplam yıldırım sayısını hesapla
+lightning_by_month = union_df.groupby(['month_txt', 'year']).agg(
+    number_of_strikes = pd.NamedAgg(column='number_of_strikes', aggfunc=sum)
+).reset_index()
 
+# İlk 5 satırı göster
+lightning_by_month.head()
+```
 
+| month_txt | year | number_of_strikes |
+|-----------|------|-------------------|
+| April     | 2016 | 2,636,427         |
+| April     | 2017 | 3,819,075         |
+| April     | 2018 | 1,524,339         |
+| August    | 2016 | 7,250,442         |
+| August    | 2017 | 6,021,702         |
+
+```python
+# Yıllara göre toplam yıldırım sayısını hesapla
+lightning_by_year = union_df.groupby(['year']).agg(
+    year_strikes = pd.NamedAgg(column='number_of_strikes', aggfunc=sum)
+).reset_index()
+
+# İlk 5 satırı göster
+lightning_by_year.head()
+```
+
+| year | year_strikes |
+|------|--------------|
+| 2016 | 41,582,229   |
+| 2017 | 35,095,195   |
+| 2018 | 44,600,989   |
+
+```python
+# Aylık yıldırım verisini yıllık toplamla birleştir
+percentage_lightning = lightning_by_month.merge(lightning_by_year, on='year')
+
+# İlk 5 satırı göster
+percentage_lightning.head()
+```
+
+| month_txt | year | number_of_strikes | year_strikes |
+|-----------|------|-------------------|--------------|
+| April     | 2016 | 2,636,427         | 41,582,229   |
+| August    | 2016 | 7,250,442         | 41,582,229   |
+| December  | 2016 | 316,450           | 41,582,229   |
+| February  | 2016 | 312,676           | 41,582,229   |
+| January   | 2016 | 313,595           | 41,582,229   |
+
+```python
+# Her ay için "yıldırım yüzdesi" sütunu oluştur
+percentage_lightning['percentage_lightning_per_month'] = (
+    (percentage_lightning.number_of_strikes / percentage_lightning.year_strikes) * 100.0
+)
+
+# İlk 5 satırı göster
+percentage_lightning.head()
+```
+ 
+| month_txt | year | number_of_strikes | year_strikes | percentage_lightning_per_month |
+|-----------|------|-------------------|--------------|-------------------------------|
+| April     | 2016 | 2,636,427         | 41,582,229   | 6.340273                      |
+| August    | 2016 | 7,250,442         | 41,582,229   | 17.436396                     |
+| December  | 2016 | 316,450           | 41,582,229   | 0.761022                      |
+| February  | 2016 | 312,676           | 41,582,229   | 0.751946                      |
+| January   | 2016 | 313,595           | 41,582,229   | 0.754156                      |
+
+```python
+plt.figure(figsize=(10,6))  # Grafik boyutunu ayarla (genişlik=10, yükseklik=6)
+
+sns.barplot(
+    data = percentage_lightning,          # Veri kaynağı
+    x = 'month_txt',                      # X ekseni: ay isimleri
+    y = 'percentage_lightning_per_month',# Y ekseni: aylık yıldırım yüzdesi
+    hue = 'year',                        # Renklerle yılı ayır
+    order = month_order                   # Ayların sıralanma düzeni
+)
+
+plt.xlabel("Month")                      # X eksen etiketi
+plt.ylabel("% of lightning strikes")    # Y eksen etiketi
+plt.title("% of lightning strikes each Month (2016–2018)")  # Grafik başlığı
+```
 
 
 
