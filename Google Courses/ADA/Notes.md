@@ -46,7 +46,7 @@ Analiz aşamasında ilk kez verilerle etkileşime gireceksiniz. Burada proje iç
 
 - Verileri kullanılabilir formatlara dönüştürün
 
-#### **İnşaat**
+#### **İnşa**
 
 Adından da anlaşılacağı gibi, inşaat aşaması tamamen bina ile ilgilidir. AKPM'nin bu aşamasında modeller inşa edecek, yorumlayacak ve revize edeceksiniz. Bazı projeler, verilerinizdeki korelasyonları ortaya çıkarmak için makine öğrenimi algoritmaları gerektirecektir. Aksi takdirde kullanılmayacak olan verilerden bilgileri ortaya çıkarmak için bu korelasyonları kullanacaksınız. Bu ilişkiler, kuruluşunuzun gelecek hakkında bilinçli kararlar almasına yardımcı olabilir.
 
@@ -60,7 +60,7 @@ Adından da anlaşılacağı gibi, inşaat aşaması tamamen bina ile ilgilidir.
 
 - Makine öğrenimi algoritmaları oluşturun
 
-#### **Yürüt**
+#### **Yürütme**
 
 Yürütme aşamasında, analizinizi ve inşanızı eyleme geçireceksiniz. Burada bulgularınızı iç (kuruluşunuzun içinde) ve dış (kuruluşunuzun dışında) paydaşlara ileteceksiniz. Oldukça sık, bu, birlikte çalıştığınız şirketlerin iş tarafındaki paydaşları içerecektir. Bulgularınızı sunmak, yürütme aşamasının sadece bir parçasıdır. Paydaşlar geri bildirim sağlayacak, sorular soracak ve toplayıp dahil edeceğiniz önerilerde bulunacaktır.
 
@@ -73,7 +73,6 @@ Yürütme aşamasında, analizinizi ve inşanızı eyleme geçireceksiniz. Burad
 - Bulguları diğer paydaşlara sunun
 
 - Geri bildirimi ele al
-    
 
 ### İletişim ve PACE
 
@@ -87,6 +86,41 @@ Bir projenin başlangıcında, PACE modeli size rehberlik edecek iyi bir yapı s
 
 PACE modeli ilk olarak belirli bir sırayla aşamalar olarak sunulsa da, açık iletişim akışının ihtiyacınız olan aşamalara kolayca geçmenizi sağladığını keşfedeceksiniz. Yeni bilgi ve geri bildirimler sürecin herhangi bir bölümüne dahil edilebilir. Verilerin bazı yönlerini netleştirmek için analiz aşamasına geri dönmeniz ve ardından yeni modeller oluşturmaya gerek kalmadan bu yönü paydaşlarınıza sunmak için yürütme aşamasına geçmeniz gerekebilir. PACE çerçevesi herhangi bir projeye uyacak şekilde uyarlanabilir. Uyarlanabilirliği sizi yüksek derecede profesyonel esneklik ve iletişim gerektiren dinamik bir mesleğe hazırlayacaktır.
 
-### Key takeaways 
+### Sonuç
 
 Veri profesyonelleri, veri projelerindeki çok sayıda görevi yönetmelerine yardımcı olmak için yapılandırılmış iş akışlarına ihtiyaç duyar. PACE profesyonel iş akışı, profesyonel yapılarınızı ve uygulamalarınızı geliştirmenize yardımcı olmak için bu program için özel olarak tasarlanmıştır. PACE, her aşama arasında akan iletişim ile tamamlanmış bir devre gibi işlev görür. PACE'nin tasarımı, gerektiğinde aşamalar arasında serbest dolaşıma izin vererek esnekliği teşvik eder.
+
+# Kurs 2: Python'u kullanmaya başlayın
+
+```python
+import pandas as pd
+
+dataframe = pd.read_csv("https://storage.googleapis.com/kagglesdsdata/competitions/3136/26502/train.csv?GoogleAccessId=web-data@kaggle-161607.iam.gserviceaccount.com&Expires=1721564819&Signature=fPHv7fKX3DCqcfShmJ8XlQV0CAQHdID0JZRyHwzUaPPKqVVPDQ3aCDLx%2BF4KpaQP2SzD83KlPWZIxUSfte80K5adU%2FYDf9yjRMTQOBOvReTfO3aAnGgULCPGG1JFHAUoTTVe8XEFeQfnwf80%2BeNBNvmkXdiKDx5AWztbt04npcVfnpXZJhNBOdUIe%2Fz90jChG1%2Fo43JAWsGBg4YwzPqNb03d2RC5LcPvm1ANtGieIOo82DExb4meMCRycfh6nayDyG0Jj6Kj6gp9M3ny50u0sRFohu5A2vyXArKr0mtPIODVdAxVUlRnUIl2RLmQ7%2Fq9ZxiMEbVlcL0fREHgMF%2BbPA%3D%3D&response-content-disposition=attachment%3B+filename%3Dtrain.csv")
+
+dataframe.head(5)
+```
+
+| PassengerId | Survived | Pclass | Name | Sex | Age | SibSp | Parch | Ticket | Fare | Cabin | Embarked |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 1 | 0 | 3 | Braund, Mr. Owen Harris | male | 22.0 | 1 | 0 | A/5 21171 | 7.2500 | NaN | S |
+| 2 | 1 | 1 | Cumings, Mrs. John Bradley (Florence Briggs) | female | 38.0 | 1 | 0 | PC 17599 | 71.2833 | C85 | C |
+| 3 | 1 | 3 | Heikkinen, Miss. Laina | female | 26.0 | 0 | 0 | STON/O2. 3101282 | 7.9250 | NaN | S |
+| 4 | 1 | 1 | Futrelle, Mrs. Jacques Heath (Lily May Peel) | female | 35.0 | 1 | 0 | 113803 | 53.1000 | C123 | S |
+| 5 | 0 | 3 | Allen, Mr. William Henry | male | 35.0 | 0 | 0 | 373450 | 8.0500 | NaN | S |
+
+```python
+dataframe[(dataframe['Age'] > 60) & (dataframe['Pclass'] == 3)]
+```
+
+| PassengerId | Survived | Pclass | Name                        | Sex    | Age  | SibSp | Parch | Ticket  | Fare   | Cabin | Embarked |
+|-------------|----------|--------|-----------------------------|--------|------|--------|--------|---------|--------|--------|----------|
+| 117         | 0        | 3      | Connors, Mr. Patrick        | male   | 70.5 | 0      | 0      | 370369  | 7.7500 | NaN    | Q        |
+| 281         | 0        | 3      | Duane, Mr. Frank            | male   | 65.0 | 0      | 0      | 336439  | 7.7500 | NaN    | Q        |
+| 327         | 0        | 3      | Nysveen, Mr. Johan Hansen   | male   | 61.0 | 0      | 0      | 345364  | 6.2375 | NaN    | S        |
+| 484         | 1        | 3      | Turkula, Mrs. (Hedwig)      | female | 63.0 | 0      | 0      | 4134    | 9.5875 | NaN    | S        |
+| 852         | 0        | 3      | Svensson, Mr. Johan         | male   | 74.0 | 0      | 0      | 347060  | 7.7750 | NaN    | S        |
+
+```python
+dataframe["2023 Fare"] = dataframe["Fare"] * 2
+dataframe.head(5)
+```
