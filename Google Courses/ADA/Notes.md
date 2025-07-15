@@ -342,8 +342,8 @@ mask = planets['moons'] < 20
 mask
 ```
 
-|||
-|---|---|
+|Index|Moons|
+|---|-------|
 |0|     True|
 |1|     True|
 |2|     True|
@@ -352,7 +352,6 @@ mask
 |5|    False|
 |6|    False|
 |7|     True|
-Name: moons, dtype: bool
 
 ```python
 planets[mask]
@@ -378,6 +377,35 @@ planets[planets['moons']<20]
 | 3     | Mars    | 3390      | 2     |
 | 7     | Neptune | 246221    | 14    |
 
+```python
+mask = (planets['moons'] < 10) | (planets['moons'] > 50)
+
+mask
+```
+
+| Index | moons |
+|-------|-------|
+| 0     | True  |
+| 1     | True  |
+| 2     | True  |
+| 3     | True  |
+| 4     | True  |
+| 5     | True  |
+| 6     | False |
+| 7     | False |
+
+```python
+planets[mask]
+```
+
+| Index | Planet  | Radius_km | Moons |
+|-------|---------|-----------|-------|
+| 0     | Mercury | 2440      | 0     |
+| 1     | Venus   | 6052      | 0     |
+| 2     | Earth   | 6371      | 1     |
+| 3     | Mars    | 3390      | 2     |
+| 4     | Jupiter | 69911     | 80    |
+| 5     | Saturn  | 58232     | 83    |
 
 
 
