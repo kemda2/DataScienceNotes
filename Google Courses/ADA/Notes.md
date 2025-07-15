@@ -1097,12 +1097,52 @@ df.center_point_geom.value_counts()[:20].rename_axis('unique_values').reset_inde
 
 ![image](./images/3007.png)
 
+```python
+# Create two new columns
+df['week'] = df.date.dt.isocalendar().week
+df['weekday'] = df.date.dt.day_name()
+df.head()
+```
 
+| date       | number_of_strikes | center_point_geom | week | weekday   |
+|------------|-------------------|-------------------|------|-----------|
+| 2018-01-03 | 194               | POINT(-75 27)     | 1    | Wednesday |
+| 2018-01-03 | 41                | POINT(-78.4 29)   | 1    | Wednesday |
+| 2018-01-03 | 33                | POINT(-73.9 27)   | 1    | Wednesday |
+| 2018-01-03 | 38                | POINT(-73.8 27)   | 1    | Wednesday |
+| 2018-01-03 | 92                | POINT(-79 28)     | 1    | Wednesday |
 
+```python
+# Calculate mean count of lightning strikes for each weekday
+df[['weekday', 'number_of_strikes']].groupby(['weekday']).mean()
+```
 
+| weekday   | number_of_strikes |
+| --------- | ------------------- |
+| Friday    | 13.349972           |
+| Monday    | 13.152804           |
+| Saturday  | 12.732694           |
+| Sunday    | 12.324717           |
+| Thursday  | 13.240594           |
+| Tuesday   | 13.813599           |
+| Wednesday | 13.224568           |
 
+```python
+# Define order of days for the plot
+weekday_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
+# Create boxplots of strike counts for each day of week
+g = sns.boxplot(
+    data=df,
+    x='weekday',
+    y='number_of_strikes',
+    order=weekday_order,
+    showfliers=False
+)
+g.set_title('Lightning distribution per weekday (2018)')
+```
 
+![image](./images/3008.png)
 
 
 
