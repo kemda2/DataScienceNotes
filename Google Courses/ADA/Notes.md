@@ -2325,4 +2325,5 @@ Sorun gidermenize yardımcı olmak veya daha fazla bilgi edinmek için aşağıd
     
 - İlk Veri Görselleştirmenizi Yayınlamaya Hazırlanmak: [Verileri analiz etmek ve Tableau Genel profilinizde bir vizyon yayınlamak için adım adım kılavuz](https://www.tableau.com/blog/getting-ready-publish-your-first-data-visualization)
 
+# Kurs 4:
 
