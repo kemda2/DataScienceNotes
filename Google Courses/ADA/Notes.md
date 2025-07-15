@@ -1255,7 +1255,7 @@ plt.ylabel("% of lightning strikes")    # Y eksen etiketi
 plt.title("% of lightning strikes each Month (2016–2018)")  # Grafik başlığı
 ```
 
-
+![image](./images/3009.png)
 
 
 
