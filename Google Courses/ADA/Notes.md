@@ -1257,9 +1257,116 @@ plt.title("% of lightning strikes each Month (2016–2018)")  # Grafik başlığ
 
 ![image](./images/3009.png)
 
+## Histogramlar
 
+Öğrendiğiniz gibi, keşif veri analizinin (EDA) amacı tam da adının söylediği şeydir: verileri araştırın ve analiz edin. Bir veri uzmanı olarak, neredeyse her zaman yol gösterici bir soru veya hedefle başlayacaksınız, örneğin, “En yüksek karbondioksit yayıcıları nerede bulunur?” veya “X ürününü satın alma olasılığı en yüksek kişilerin özelliklerini belirleyin.” Süreciniz boyunca bunu sık sık düşünmek, sizi yolda tutan bir itici güç yaratır.
 
+Verileri keşfederken emrinizdeki en önemli araçlardan biri **histogramdır**. Histogram, bir veri kümesindeki veya değişkendeki her değerin ne sıklıkta meydana geldiğini gösteren bir frekans dağılımının grafiksel bir gösterimidir. Veri profesyonellerinin verilerinin dağılımlarını anlamaları çok önemlidir, çünkü bu bilgi deney tasarımı, modelleme ve daha ileri analizler etrafında birçok aşağı yönlü kararı yönlendirir. Bu okumada, histogramlar, ne olduklarını, nasıl yapılacağını ve nasıl yorumlanacağını öğreneceksiniz.
 
+### **Histogramlara giriş**
+
+Histogramlar, herhangi bir aykırı değerlerin varlığı, dağılımın merkezi ve verilerin yayılması dahil olmak üzere bir dağılımın şeklini göstermek için yaygın olarak kullanılır. Histogramlar tipik olarak, her çubuğun bir değer aralığını temsil ettiği bir dizi çubukla temsil edilir. Çubuk yüksekliği, bu aralıktaki veri noktalarının sıklığını veya sayısını temsil eder.
+
+Aşağıdaki örnek, Wyoming, ABD'deki Yellowstone Ulusal Parkı'ndaki Old Faithful şofben patlamaları arasındaki saniye sayısının histogramıdır.
+
+![image](./images/3010.png)
+
+X ekseni, patlamalar arasındaki saniye sayısını temsil eder. Y ekseni patlama sayısını temsil eder. Bu nedenle, grafikteki ikinci çubuk tarafından belirtildiği gibi, 45-49 saniyelik bir bekleme süresinden sonra meydana gelen 20 patlama vardır.
+
+### **Histogramların önemi**
+
+Histogramlar, bir veri kümesinin özelliklerini anlamak için önemli bir araçtır. Verilerin dağılımının görsel bir temsilini sağlar ve veri profesyonellerinin verilerdeki kalıpları, eğilimleri veya aykırı değerleri tanımlamasını sağlar. Histogramlar ayrıca veri profesyonellerinin veriler için uygun istatistiksel testleri ve modelleri seçmelerine ve verilerin analiz için gerekli varsayımları karşılayıp karşılamadığını belirlemelerine yardımcı olabilir. Histogramlar, finans, sağlık, mühendislik ve sosyal bilimler dahil olmak üzere her türlü veri analizi gerektiren herhangi bir alanda ve her durumda yaygın olarak kullanılmaktadır.
+
+### **Histogramlar nasıl yorumlanır**
+
+Histogramları yorumlamak, dağılımın şeklini, merkezini ve yayılmasını anlamayı içerir. Aşağıdakiler de dahil olmak üzere birkaç yaygın histogram şekli vardır:
+
+1. Simetrik: Simetrik bir histogram, ortasında bir tepe bulunan çan şeklinde bir eğriye sahiptir ve bu, verilerin ortalama etrafında eşit olarak dağıldığını gösterir. Bu aynı zamanda normal veya Gauss dağılımı olarak da bilinir.
+
+![image](./images/3011.png)
+
+2. Eğri: Eğik bir histogramın bir tarafında diğerinden daha uzun bir kuyruğu vardır. Sağa eğik bir histogramın sağ tarafında daha uzun bir kuyruğu vardır, bu da histogramın sol tarafında daha fazla veri noktası olduğunu gösterir.
+
+![image](./images/3012.png)
+
+Sol eğri bir dağılım, sol tarafta daha uzun bir kuyruğa sahiptir ve sağ tarafta daha fazla veri noktası gösterir.
+
+![image](./images/3013.png)
+
+3. Bimodal: İki modlu bir histogramın iki farklı tepe noktası vardır, bu da verilerin iki modu olduğunu gösterir.
+
+![image](./images/3014.png)
+
+4. Tek tip: Tek tip bir histogramın düz bir dağılımı vardır, bu da tüm veri noktalarının eşit olarak dağıldığını gösterir.
+
+![image](./images/3015.png)
+
+Sağlanan örnekler karşılaşacağınız tek dağıtım değildir, ancak en yaygın olanlardan bazılarıdır. Yakında dağıtımlar hakkında daha fazla bilgi edineceksiniz.
+
+Şimdi, bu okumanın başlangıcındaki Old Faithful gayzer histogramına dönün. Kendinize sorun: Bu grafik tarafından ne tür bir dağılım temsil edilir? Şekle ek olarak, merkezi anlamak ve yayılmak önemlidir. Dağılımın merkezi tipik olarak ortalama veya medyan ile temsil edilirken, dağılım standart sapma veya verilerin aralığı ile temsil edilir. Merkez ve yayılma, veri konsantrasyonu ve değişkenliği hakkında içgörüler sağlayabilir.
+
+### **Histogramlar nasıl oluşturulur**
+
+Python'un seaborn ve matplotlib kütüphaneleri, histogramlar oluşturmak için basit ve güçlü seçenekler sunar.
+
+#### [plt.hist (x, bins=10,...)](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html#matplotlib-pyplot-hist)
+
+Matplotlib'de bir histogram oluşturmak için pyplot modülündeki hist() işlevi kullanın. İşlev birçok farklı argüman alabilir, ancak birincil olanlar şunlardır:
+
+- x: Çizmek istediğiniz verileri temsil eden bir değer dizisi. Bir liste, tüple, NumPy dizisi, panda serisi vb. Olabilir.
+    
+- kutular: Verilerinizi sıralamak istediğiniz kutu sayısı. Varsayılan değer 10'dur, ancak bu parametre bir int, dizi veya dize olabilir. Bir dizi kullanırsanız, ilk kutunun sol kenarı ve son kutunun sağ kenarı da dahil olmak üzere çöp kutusu kenarlarını tanımlar. Başka bir deyişle, eğer kutular = [1, 3, 5, 7], o zaman ilk kutu [1—3) (1 dahil, ancak 3 hariç) ve ikincisi [3—5). Son kutu, ancak, 7 içeren [5—7] 'dir. Bir dize, numpy tarafından desteklenen önceden tanımlanmış bir binning stratejisini ifade eder. Daha fazla bilgi için belgelere bakın.
+    
+
+Aşağıdaki örnek, işlevi kullanarak bu okumanın başlangıcından itibaren Old Faithful gayzer histogramının nasıl oluşturulacağını göstermektedir.. 
+
+```python
+# Plot histogram with matplotlib pyplot
+plt.hist(df['seconds'], bins=range(40, 101, 5))
+plt.xticks(range(35, 101, 5))
+plt.yticks(range(0, 61, 10))
+plt.xlabel('seconds')
+plt.ylabel('count')
+plt.title('Old Faithful geyser - time between eruptions')
+plt.show();
+```
+![image](./images/3016.png)
+
+Bu durumda, çizilen veriler veri çerçevesinin saniye sütunudur. Kutular 40 saniyede başlar ve toplam 12 kutu için beşli adımlarla 100 saniyeye gider.
+
+#### [sns.histplot (x, kutular, binrange, binwidth...)](https://seaborn.pydata.org/generated/seaborn.histplot.html)
+
+Seaborn'da bir histogram oluşturmanın bir yolu işlevi kullanmaktır. sns.histplot() Matplotlib işlevi gibi, birçok argü sns.histplot() man alabilir. İşte bazı önemli olanlar:
+
+- x: Veri dizisi. Aynı plt.hist()
+    
+- kutular: Aynı plt.hist()
+    
+- binrange: Kutu kenarları için en düşük ve en yüksek değer; bins veya ile kullanılabilirbinwidth; varsayılan olarak veri uç noktalarıdır
+    
+- binwidth: Her bölmenin genişliği, geçersiz kılar bins ancak birlikte kullanılabilir binrange
+    
+
+Aşağıdaki örnek, seaborn işlevini kullanarak Old Faithful gayzer histogramını oluşturmak için kullanılan koddur.. histplot() Daha önce bahsedilen parametrelerin tümünü kullanır. Bir histogram oluşturmak için bu kod bloğunu çalıştırın.
+
+Bu durumda 40 ila 100 binrange arasında tanımlanmış ve 5 olarak ayar binwidth lanmış olduğuna dikkat edin. Bu ayar ile aynı sonuçları verirbins=range(40, 101, 5). Bu örnek ayrıca, altıgen kod gösterimini kullanarak belirli bir rengi belirterek ve parametre tarafından belirtildiği gibi renk doygunluğu seviyesini% 100'e ayarlayarak birkaç stil alpha parametresini kullanır.
+
+**Not:** Aşağıdaki kod bloğu etkileşimli değildir.
+
+```python
+# Plot histogram with seaborn
+ax = sns.histplot(df['seconds'], binrange=(40, 100), binwidth=5, color='#4285F4', alpha=1)
+ax.set_xticks(range(35, 101, 5))
+ax.set_yticks(range(0, 61, 10))
+plt.title('Old Faithful geyser - time between eruptions')
+plt.show();
+```
+
+![](attachment:4a6ad72c-ddc4-40f0-b8dd-1df91b5e5185.png)
+
+### **Önemli çıkarımlar**
+
+Histogramlar, veri uzmanlarının veri kümelerinin ve değişkenlerinin frekans dağılımlarını anlamalarına yardımcı olur. Veri dağılımının şekli ve türü hakkında bilgi, istatistiksel testler ve model mimarisi seçimi gibi önemli alt kararları etkileyecektir. Ek olarak, verilerinizin şeklini bilmek, verilerinizin dağıtım eğilimlerini anlamanıza yardımcı olarak verilerinizin size anlattığı hikayeye ilişkin değerli bilgiler sağlar.
 
 
 
