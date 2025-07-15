@@ -2033,6 +2033,207 @@ plt.show()
 
 ## Veri Dönüşümünde Diğer Yaklaşımlar
 
+Bildiğiniz gibi, veriler bize birçok farklı biçimde geliyor. Kategorik veya nitel veri türleri için, veri uzmanlarının analizlerini tamamlamak, veri görselleştirmelerini tasarlamak veya makine öğrenimi algoritmalarını oluşturmak için genellikle bu tür verileri sayısal rakamlara dönüştürmeleri (veya kodlamaları) gerekir. Bu okumada, iki ana kategorik veri kodlama türünü ve her türün ne zaman kullanılacağını öğreneceksiniz.
+
+### Etiket kodlama
+
+Her veri değerine nitel bir değer yerine farklı bir sayı atandığı bir tür veri dönüştürme tekniği olan **etiket kod** lamayı zaten öğrendiniz.
+
+[Videodan hatırlıyorsanız, verilen örnek mantar türlerini kodlayan etiket idi:](https://www.coursera.org/learn/go-beyond-the-numbers-translate-data-into-insight/lecture/BrCPD/sort-numbers-versus-names)
+
+|**Mantar Türü**|**Kod**|
+|---|---|
+|Siyah trüf|0|
+|Düğme|1|
+|Cremini|2|
+|Kirpi|3|
+|Kral Trompet|4|
+|Morel|5|
+|Portobello|6|
+|Shiitake|7|
+|Kurbağa tabureti|8|
+
+Anlayabileceğiniz gibi, mantarlarla ilgili bu varsayımsal veri seti için, her mantar türüne sıfırdan başlayarak kendi numarası atandı.
+
+### Etiket kodlama ile ilgili bazı olası sorunlar
+
+Müzik türleri kategorileri içeren bir veri kümesini analiz ettiğinizi hayal edin. “Blues”, “Elektronik Dans Müziği (EDM)”, “Hip Hop”, “Jazz”, “K-Pop”, “Metal” ve “Rock” kodlarını aşağıdaki sayısal değerlerle etiketlersiniz: “1, 2, 3, 4, 5, 6 ve 7.”
+
+Bu etiket kodlamasıyla, ortaya çıkan makine öğrenimi modeli sadece bir sıralama değil, aynı zamanda Blues (1) ve EDM (2) arasında sayısal olarak ne kadar yakın oldukları için Blues (1) ve Jazz (4) arasında daha yakın oldukları için daha yakın bir bağlantı da türete **bilir**. Bu varsayılan ilişkilere ek olarak (analizinizde isteyebilirsiniz veya istemeyebilirsiniz), her kodun sayısal sırayla diğerinden eşit uzaklıkta olduğunu da fark etmelisiniz, çünkü 1'den 2'ye 5 ila 6, vb. ile aynı mesafedir, vb. Soru şu ki, bu eşit mesafeli ilişki veri kümenizdeki müzik türleri arasındaki ilişkileri doğru bir şekilde temsil ediyor mu? Başka bir soru sormak için, kodlamadan sonra, oluşturduğunuz görselleştirme veya model kodlanmış etiketleri bir sıralama olarak ele alacak mı?
+
+Aynı şey yukarıdaki mantar örneği için de söylenebilir. Mantar türlerini kodladıktan sonra, mantarların artık düğme mantarları birinci sırada ve mantarların sekizinci sırada olduğu varsayılan bir sıralamada olmasından memnun musunuz?
+
+Özetle, etiket kod **laması**, veri kümenizdeki kategorik veriler arasında istenmeyen ilişkiler oluşturabilir. Etiket kodlaması hakkında karar verirken, verilere uygulayacağınız algoritmayı ve bunun etiket kodlu kategorik verileri nasıl etkileyebileceğini veya etmeyebileceğini göz önünde bulundurun.
+
+Neyse ki, kategorik kodlama için bu potansiyel sorunlara yardımcı olabilecek başka bir yöntem var.
+
+### Tek kullanımda kodlama
+
+Önceki bir [video](https://www.coursera.org/learn/go-beyond-the-numbers-translate-data-into-insight/lecture/BrCPD/sort-numbers-versus-names) da öğrendiğiniz gibi, Python'da sahte değişkenler oluşturabilirsiniz. Hatırlarsanız, sahte bir değişken, bir şeyin varlığını veya yokluğunu gösteren 0 veya 1 değerlerine sahip bir değişkendir. Buradaki fikir, her kategori türü için yeni bir sütun oluşturmaktır, ardından her değer için 0 veya 1 - 0 anlamı, hayır ve 1 anlamı evet belirtin.
+
+Bu mankenlerin yaratılmasına **one-hot** kodlama denir. Bir hatırlatma olarak, tek sıcak kodlamaya sahip bir tablo şu şekilde biter:
+
+|**Yok**|**Hafif**|**Dağınık**|**Ağır**|**Şiddetli**|
+|---|---|---|---|---|
+|**0**|1|0|0|0|
+|**1**|1|0|0|0|
+|**2**|0|1|0|0|
+|**3**|0|0|1|0|
+|**4**|0|0|0|1|
+|**5**|0|0|0|1|
+|**6**|0|0|0|1|
+|**7**|0|0|0|1|
+|**8**|0|0|1|0|
+|**9**|0|1|0|0|
+|**10**|1|0|0|0|
+|**11**|1|0|0|0|
+|**12**|0|1|0|0|
+
+[Video](https://www.coursera.org/learn/go-beyond-the-numbers-translate-data-into-insight/lecture/BrCPD/sort-numbers-versus-names)da kapsanan yıldırım çarpması veri kümesindeki değerlerin “hafif” olarak etiketlendiğini ve “1” olduğunu göreceksiniz. “Hafif”, veri kümesindeki yıldırım sayılarının en düşük çeyreğini ifade eder. “Hafif” sütundaki hafif DEĞER DEĞİLDİR diğer değerler için o hücrede bir sıfır vardır. Bu yöntemle etiket kodlamasının sunduğu istenmeyen ve sorunlu ilişkiler sorununu çözüyoruz.
+
+Ancak tek sıcak kodlama, özellikle lojistik ve doğrusal regresyon söz konusu olduğunda, kendi problemlerini sunar. Gelecekteki bir kursta bunun hakkında daha fazla bilgi edineceksiniz.
+
+### **Etiket kodlaması veya tek sıcak kodlama: Nasıl karar verilir?**
+
+Etiket kodlaması mı yoksa tek sıcak kodlama mı kullanmanız gerektiğine dair basit bir cevap yoktur. Kararın duruma göre veya veri kümesi bazında verilmesi gerekir. Ancak size yardımcı olacak bazı kurallar var.
+
+Aşağıdaki durumlarda etiket kodlamasını kullanın:
+
+- Çok sayıda farklı kategorik değişken vardır - çünkü etiket kodlaması, tek bir sıcak kodlamadan çok daha az veri kullanır
+    
+- Kategorik değerlerin kendilerine göre belirli bir sırası vardır (örneğin, yaş grupları en gençten en büyüğe veya en büyükten en küçüğe kadar gruplandırılabilir)
+    
+- Bir karar ağacı veya rastgele orman makine öğrenme modeli kullanmayı planlıyorsunuz
+    
+
+Aşağıdaki durumlarda tek sıcak kodlama kullanın:
+
+- Nispeten az miktarda kategorik değişken vardır - çünkü tek sıcak kodlama, etiket kodlamasından çok daha fazla veri kullanır.
+    
+- Kategorik değişkenlerin belirli bir sırası yoktur
+    
+- Boyutsallık azaltma ile birlikte bir makine öğrenimi modeli kullanırsınız (Temel Bileşen Analizi (PCA) gibi)
+    
+
+### Önemli çıkarımlar
+
+Etiket kodlaması ve tek sıcak kodlama, kategorik verileri sayısal verilere dönüştürmek için kullanılan tekniklerdir. Etiket kodlaması, çok sayıda farklı kategorik değişken ve kendilerine özgü bir düzene sahip kategoriler için en iyisidir. Tek kullanımlı kodlama, daha küçük miktarlarda kategorik değişken ve sırası olmayan kategoriler için en iyisidir.
+
+## Tarih Farkı ve Görselleştirme
+
+```python
+# Load libraries.
+import datetime
+import matplotlib.pyplot as plt
+import pandas as pd
+import plotly.express as px
+import seaborn as sns
+
+df.head()
+```
+| date       | number_of_strikes | center_point_geom | longitude | latitude |
+|------------|-------------------|-------------------|-----------|----------|
+| 2018-01-03 | 194               | POINT(-75 27)     | -75.0     | 27.0     |
+| 2018-01-03 | 41                | POINT(-78.4 29)   | -78.4     | 29.0     |
+| 2018-01-03 | 33                | POINT(-73.9 27)   | -73.9     | 27.0     |
+| 2018-01-03 | 38                | POINT(-73.8 27)   | -73.8     | 27.0     |
+| 2018-01-03 | 92                | POINT(-79 28)     | -79.0     | 28.0     |
+
+```python
+# Display the data type of the columns.
+print(df.dtypes)
+
+# Date is currently a string. Let's parse it into a datetime column. 
+df['date'] = pd.to_datetime(df['date'])
+```
+
+| Column              | Dtype   |
+|---------------------|---------|
+| date                | object  |
+| number_of_strikes   | int64   |
+| center_point_geom   | object  |
+| longitude           | float64 |
+| latitude            | float64 |
+
+```python
+#Count the number of missing values in each column. 
+df.isnull().sum()
+```
+
+| Column             | Null Count |
+|--------------------|------------|
+| date               | 0          |
+| number_of_strikes  | 0          |
+| center_point_geom  | 0          |
+| longitude          | 0          |
+| latitude           | 0          |
+
+
+```python
+# Check ranges for all variables.
+df.describe(include = 'all')
+```
+| Column             | date         | number_of_strikes | center_point_geom | longitude         | latitude          |
+|--------------------|--------------|-------------------|-------------------|-------------------|-------------------|
+| count              | 3401012      | 3401012           | 3401012           | 3401012           | 3401012           |
+| unique             | 357          | NaN               | NaN               | 170855            | NaN               |
+| top                | 2018-09-01 00:00:00 | NaN       | POINT(-81.5 22.5) | NaN               | NaN               |
+| freq               | 31773        | NaN               | 108               | NaN               | NaN               |
+| first              | 2018-01-01 00:00:00 | NaN       | NaN               | NaN               | NaN               |
+| last               | 2018-12-31 00:00:00 | NaN       | NaN               | NaN               | NaN               |
+| mean               | NaN          | 13.11403          | NaN               | -9.081778         | 33.746888         |
+| std                | NaN          | 31.212099         | NaN               | 12.969539         | 7.8835555         |
+| min                | NaN          | 1.0               | NaN               | -141.8000         | 1.660000          |
+| 25%                | NaN          | 2.0               | NaN               | -102.8000         | 26.9000           |
+| 50%                | NaN          | 4.0               | NaN               | -90.3000          | 33.2000           |
+| 75%                | NaN          | 12.0              | NaN               | -80.9000          | 39.4000           |
+| max                | NaN          | 2211.0            | NaN               | -43.8000          | 51.7000           |
+
+
+```python
+# Find missing dates by comparing all dates in 2018 to dates in our date column.
+full_date_range = pd.date_range(start = '2018-01-01', end = '2018-12-31')
+full_date_range.difference(df['date'])
+
+# DatetimeIndex(['2018-06-19', '2018-06-20', '2018-06-21', '2018-06-22', '2018-09-18', '2018-09-19', '2018-12-01', '2018-12-02'],
+#               dtype='datetime64[ns]', freq=None)
+```
+
+```python
+# Make a boxplot to see the range better.
+sns.boxplot(y = df['number_of_strikes'])
+```
+
+![image](./images/3026.png)
+
+```python
+# Plot again without the outliers to see where the majority of data is. 
+sns.boxplot(y = df['number_of_strikes'], showfliers = False)
+```
+
+![image](./images/3027.png)
+
+```python
+# Plot points on the map to verify data is all from US.
+df_points df[['latitude', 'longitude']].drop_duplicates() # Get unique points.
+df_points.head()
+```
+
+| latitude | longitude |
+|----------|-----------|
+| 27.0     | -75.0     |
+| 29.0     | -78.4     |
+| 27.0     | -73.9     |
+| 27.0     | -73.8     |
+| 28.0     | -79.0     |
+
+```python
+# Plot points on the map to verify data is all from US.
+df_points = df[['latitude', 'longitude']].drop_duplicates() # Get unique points. 
+p = px.scatter_geo(df_points, lat = 'latitude', lon = 'longitude') 
+p.show()
+```
+
 
 
 
