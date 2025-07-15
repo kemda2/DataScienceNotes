@@ -2325,5 +2325,104 @@ Sorun gidermenize yardımcı olmak veya daha fazla bilgi edinmek için aşağıd
     
 - İlk Veri Görselleştirmenizi Yayınlamaya Hazırlanmak: [Verileri analiz etmek ve Tableau Genel profilinizde bir vizyon yayınlamak için adım adım kılavuz](https://www.tableau.com/blog/getting-ready-publish-your-first-data-visualization)
 
-# Kurs 4:
+# Kurs 4: İstatistiğin Gücü
+
+## Merkezi eğilim ölçüleri: Ortalama, medyan ve mod
+
+Son zamanlarda, **merkezi eğilim ölçümlerinin** bir veri kümesinin merkezini temsil eden değerler olduğunu öğrendiniz. Yeni bir veri kümesiyle çalışırken, verilerinizin merkezi konumunu belirlemek, temel yapısını hızlı bir şekilde anlamanıza yardımcı olur.
+
+Bu okumada, merkezi eğilimin üç ölçüsü hakkında daha fazla bilgi edineceksiniz: ortalama, medyan ve mod. Her bir ölçümün nasıl hesaplanacağını gözden geçireceğiz ve belirli verilerinize dayanarak hangi ölçümün en iyi kullanılacağını tartışacağız.
+
+### Merkezi eğilim ölçüleri
+
+Ortalama, medyan ve modun tümü, bir veri kümesinin merkezini farklı şekillerde tanımlar:
+
+- **Ortalama**, bir veri kümesindeki ortalama değerdir.
+    
+- Med **yan**, bir veri kümesindeki orta değerdir.
+    
+- **Mod, bir veri kümesinde en sık meydana gelen değerdir.**
+    
+
+Merkezi eğilimin her ölçüsünün nasıl hesaplanacağını keşfedelim.
+
+#### Ortalamayı, medyanı ve modu hesaplayın
+
+##### Ortalama
+
+**Ortalama**, bir veri kümesindeki ortalama değerdir. Ortalamayı hesaplamak için, veri kümenizdeki tüm değerleri toplar ve toplam değer sayısına bölersiniz.
+
+Örneğin, aşağıdaki değer kümesine sahip olduğunuzu varsayalım: 10, 5, 3, 50, 12. Ortalamayı bulmak için toplam 80 için tüm değerleri eklersiniz. Ardından, toplam değer sayısı olan 5'e bölersiniz.
+
+(10+5+3+50+12)÷5=80÷5=16
+
+Ortalama veya ortalama değer 16'dır.
+
+##### Medyan
+
+Med **yan**, bir veri kümesindeki orta değerdir. Bu, veri kümesindeki değerlerin yarısının medyandan daha büyük olduğu ve değerlerin yarısının medyandan daha küçük olduğu anlamına gelir.
+
+Bir veri kümesindeki tüm değerleri en küçükten en büyüğe düzenleyerek medyanı bulabilirsiniz. Beş değerinizi bu şekilde düzenlerseniz şunları elde edersiniz: 3, 5, 10, 12, 50. Medyan veya orta değer 10'dur.
+
+Veri kümenizde çift sayıda değer varsa, medyan iki orta değerin ortalamasıdır. Diyelim ki setinize başka bir değer, 8, eklediniz: 3, 5, 8, 10, 12, 50. Şimdi, iki orta değer 8 ve 10'dur. Medyanı elde etmek için ortalamalarını alın.
+
+(8+10)÷2=18÷2=9(8+10)÷2=18÷2=9
+
+Medyan 9'dur.
+
+##### Modu
+
+**Mod, bir veri kümesinde en sık meydana gelen değerdir.** Bir veri kümesinin modu, bir modu veya birden fazla modu olamaz.
+
+Örneğin, 1, 12, 33, 54, 75 sayı kümesinin modu yoktur çünkü hiçbir değer tekrarlanmaz. 2, 7, 7, 11, 20 setinde mod 7'dir, çünkü 7 bir kereden fazla meydana gelen tek değerdir. 3, 12, 12, 40, 40 setinin iki modu vardır: 12 ve 40.
+
+#### Ortalama, medyan ve mod ne zaman kullanılır
+
+Veri kümenizin merkezini tanımlamak için ortalama, medyan veya modu kullanıp kullanmadığınız, üzerinde çalıştığınız belirli verilere ve verilerinizden hangi içgörüleri elde etmek istediğinize bağlıdır. Her merkezi eğilim ölçüsünü kullanmak için bazı genel yönergeleri tartışalım.
+
+##### Ortalama ve medyan
+
+Hem ortalama hem de medyan, bir veri kümesinin merkezi konumunu tanımlar. Bununla birlikte, merkezi eğilimin ölçümleri olarak, ortalama ve medyan, farklı veri türleri için daha iyi çalışır.
+
+Ortalamanın bir ana dezavantajı vardır: veri kümenizdeki aykırı değerlere karşı çok hassastır. Bir aykırı değerin, verilerin geri kalanından büyük ölçüde farklı bir değer olduğunu hatırlayın.
+
+Veri kümenizde aykırı değerler varsa, medyan genellikle merkezin daha iyi bir ölçüsüdür. Hiçbir aykırı değer yoksa, ortalama genellikle iyi çalışır.
+
+Örneğin, küçük bir başlangıç şirketindeki bir çalışanın yıllık ortalama maaşını hesaplamak istediğinizi düşünün. Aşağıdaki maaş verilerine sahipsiniz:
+
+|**Çalışan**|#1|#2|#3|#4|#5|#6|#7|
+|---|---|---|---|---|---|---|---|
+|**Maaş**|40.000 $|45.000 $|45.000 $|45.000 $|45.000 $|50,000 $|500.000 $|
+
+Veri kümenizdeki tüm değerleri toplayarak ve toplam değer sayısına bölerek ortalama yıllık maaşı hesaplayabilirsiniz. Toplamda yedi maaş var ve toplamı 770.000 dolar.
+
+\$770,000÷7=\$110,000
+
+Bu yedi çalışanın ortalama maaşı 110.000 dolar. Bununla birlikte, veriler bu ortalama değerin bu şirketteki bir çalışanın tipik maaşını doğru bir şekilde yansıtmadığını göstermektedir. Çoğu çalışanın maaşı 40.000 ila 50.000 dolar arasındadır. Aslında, yalnızca bir çalışanın maaşı 50.000 dolardan fazladır. 500.000 dolarlık maaş, ortalamayı artıran veya ortalamayı çarpıtan bir aykırıdır.
+
+Bu durumda, bu aykırı değerin varlığı nedeniyle, medyan, ortalamadan daha iyi bir merkezi eğilim ölçüsüdür. Bu veri kümesindeki medyan veya orta değer 45.000 ABD dolarıdır. Medyan, bu şirketteki bir çalışanın tipik maaşı hakkında size daha iyi bir fikir verir.
+
+##### Modu
+
+Mod, kategorik verilerle çalışırken kullanışlıdır, çünkü hangi kategorinin en sık meydana geldiğini açıkça gösterir. Bir şirketin çalışan memnuniyeti anketi yürüttüğünü varsayalım. Anketteki ana madde, “Şirket içinde büyümek için sahip olduğum fırsattan memnunum” diyor. Çalışanlar cevapları için dört kategori arasından seçim yaparlar: kesinlikle katılıyorum, katılıyorum, katılmıyorum, kesinlikle katılmıyorum. Bir çubuk grafik sonuçları özetler.
+
+![image](./images/4001.png)
+
+Mod, “kesinlikle katılıyorum” derecesine atıfta bulunan çubuk grafikteki en yüksek çubuğu temsil eder. Bu, veri kümesinde en sık meydana gelen derecelendirmedir. Mod, şirkete çalışan memnuniyeti konusunda net geri bildirim verir; bu durumda olumlu geribildirim.
+
+#### Önemli çıkarımlar
+
+Ortalama, medyan ve mod gibi merkezi eğilim ölçümleri, veri kümenizin merkezini tek bir değer kullanarak tanımlamanıza izin verir. Bir veri uzmanı olarak, veri kümenizin merkezini bilmek, temel yapısını hızlı bir şekilde anlamanıza ve analizinizdeki sonraki adımları belirlemenize yardımcı olur.
+
+#### Daha fazla bilgi için kaynaklar
+
+Ortalama, medyan ve mod gibi merkezi eğilim ölçümleri hakkında daha fazla bilgi edinmek için aşağıdaki kaynağı keşfedin:
+
+- [Avustralya İstatistik Bürosu'nun bu makalesi](https://www.abs.gov.au/websitedbs/D3310114.nsf/Home/Statistical+Language+-+measures+of+central+tendency#:~:text=There%20are%20three%20main%20measures,central%20value%20in%20the%20distribution.), ortalama, medyan ve moda yararlı bir genel bakış sunar ve aykırı değerlerin merkezi eğilim ölçümlerini nasıl etkilediğini tartışır.
+
+
+
+
+
+
 
