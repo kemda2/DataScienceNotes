@@ -1735,4 +1735,201 @@ fig.show()
 
 ![image](./images/3020.png)
 
+```python
+# Import statements
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import datetime
+from matplotlib import pyplot as plt
+
+#Print first 10 rows
+df.head(10)
+```
+
+| year | number_of_strikes |
+|------|-------------------|
+| 2020 | 15620068          |
+| 2019 | 209166            |
+| 2018 | 44600989          |
+| 2017 | 35095195          |
+| 2016 | 41582229          |
+| 2015 | 37894191          |
+| 2014 | 34919173          |
+| 2013 | 27600898          |
+| 2012 | 28807552          |
+| 2011 | 31392058          |
+
+```python 
+def readable_numbers(x):
+    
+    """takes a large number and formats it into K,M to make it more readable""" 
+    if x >= le6:
+        s='{:1.lf}M'.format(x*le-6)
+    else: 
+        s='{:1.0f)K'.format(x*1e-3)
+    return s
+
+#Use the readable_numbers() function to create a new column
+df ['number_of_strikes_readable']=df ['number_of_strikes'].apply(readable_numbers)
+
+df.head(10)
+```
+
+| year | number_of_strikes | number_of_strikes_readable |
+|------|-------------------|----------------------------|
+| 2020 | 15620068          | 15.6M                      |
+| 2019 | 209166            | 209K                       |
+| 2018 | 44600989          | 44.6M                      |
+| 2017 | 35095195          | 35.1M                      |
+| 2016 | 41582229          | 41.6M                      |
+| 2015 | 37894191          | 37.9M                      |
+| 2014 | 34919173          | 34.9M                      |
+| 2013 | 27600898          | 27.6M                      |
+| 2012 | 28807552          | 28.8M                      |
+| 2011 | 31392058          | 31.4M                      |
+
+```python
+print("Mean:" + readable_numbers(np.mean(df['number_of_strikes'])))
+print("Median:" + readable_numbers(np.median(df ['number_of_strikes'])))
+
+# Mean:26.8M
+# Median:28.3M
+```
+
+![image](./images/3021.png)
+
+```python 
+# Create boxplot
+box sns.boxplot(x=df ['number_of_strikes')) gplt.gca()
+
+box.set_xticklabels (np.array([readable_numbers(x) for x in g.get_xticks()])) plt.xlabel('Number of strikes') plt.title('Yearly number of lightning strikes');
+```
+
+![image](./images/3022.png)
+![image](./images/3023.png)
+
+```python 
+# Calculate 25th percentile of annual strikes
+percentile25 = df['number_of_strikes'].quantile (0.25)
+
+#Calculate 75th percentile of annual strikes
+percentile75 = df['number_of_strikes'].quantile(0.75)
+
+#Calculate interquartile range
+iqr = percentile75 - percentile25
+
+#Calculate upper and lower thresholds for outliers
+upper_limit = percentile75 + 1.5 * iqr
+lower_limit percentile25 + 1.5 * iqr
+
+print('Lower limit is: ' + readable_numbers(lower_limit))
+Lower limit is: 8.6M
+
+#Isolate outliers on low end
+df[df['number_of_strikes'] < lower_limit]
+```
+
+| year | number_of_strikes | number_of_strikes_readable |
+|------|-------------------|----------------------------|
+| 2019 | 209166            | 209K                       |
+| 1987 | 7378836           | 7.4M                       |
+
+```python 
+def addlabels(x,y):
+    for i in range(len(x)):
+        plt.text(x[i]-0.5, y[i]+0.05,
+                 s=readable_numbers(y[i]))
+
+
+colors np.where(df['number of_strikes'] < lower_limit, 'r', 'b')
+
+fig, ax = plt.subplots(figsize=(16,8))
+ax.scatter(df['year'], df['number_of_strikes'),c=colors) ax.set_xlabel('Year')
+ax.set_ylabel('Number of strikes')
+ax.set_title('Number of lightning strikes by year')
+addlabels(df['year'], df['number_of_strikes'])
+
+for tick in ax.get_xticklabels():
+    tick.set_rotation (45)
+
+plt.show()
+```
+
+![image](./images/3024.png)
+
+```python 
+df_2019 = pd.read_csv('eda_outliers_dataset2.csv')
+df_2019.head()
+
+# Convert `date` column to datetime
+df_2019['date']= pd.to_datetime(df_2019['date'])
+
+# Create 2 new columns
+
+df_2019['month'] = df_2019['date'].dt.month
+
+df_2019['month_txt'] = df_2019['date'].dt.month_name().str.slice(stop=3)
+
+# Group by month and month txt, sum it, and sort. Assign result new df 
+df_2019_by_month = df_2019.groupby(['month', 'month_txt')).sum().sort_values('month', ascending=True).head()
+df_2019_by_month
+```
+
+| month | month_txt | number_of_strikes |
+|-------|-----------|-------------------|
+| 12    | Dec       | 209166            |
+
+```python 
+#Read in 1987 data
+df_1987=pd.read_csv('eda_outliers_dataset3.csv')
+
+#Convert date column to datetime
+df_1987['date'] = pd.todatetime(df_1987['date'])
+
+#Create 2 new columns
+df_1987['month'] = df_1987['date'].dt.month
+df_1987['month_txt'] = df_1987['date'].dt.month_name().str.slice(stop=3)
+
+#Group by month and `month_txt ', sum it, and sort. Assign result to new df
+df_1987_by_month = df_1987.groupby(['month', 'month_txt']).sum().sort_values('month', ascending=True).head() 
+df_1987_by_month
+```
+
+| month | month_txt | number_of_strikes |
+|-------|-----------|-------------------|
+| 1     | Jan       | 23044             |
+| 2     | Feb       | 61020             |
+| 3     | Mar       | 117877            |
+| 4     | Apr       | 157890            |
+| 5     | May       | 700910            |
+| 6     | Jun       | 1064166           |
+| 7     | Jul       | 2077619           |
+| 8     | Aug       | 2001899           |
+| 9     | Sep       | 869833            |
+| 10    | Oct       | 105627            |
+| 11    | Nov       | 155290            |
+| 12    | Dec       | 43651             |
+
+```python 
+#Create new df that removes outliers
+df_without_outliers=df[df['number_of_strikes']>=lower_limit]
+
+#Recalculate mean and median values on data without outliers
+print("Mean:"+readable_numbers(np.mean(df_without_outliers['number_of_strikes']))) 
+print("Median:"+readable_numbers(np.median(df_without_outliers['number_of_strikes'])))
+
+# Mean:28.2M
+# Median:28.8M
+```
+
+## getdummies() ve cat.codes()
+
+
+
+
+
+
+
+
 
