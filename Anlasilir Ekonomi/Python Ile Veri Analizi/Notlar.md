@@ -3350,6 +3350,26 @@ $ P = 0,85$
 
 $z_{hesap} = \frac{0,9-0,8}{\sqrt{0,85\cdot(1-0,85)\cdot(\frac{1}{50}+\frac{1}{50})}}$
 
+$z_{hesap} = \frac{0,1}{\sqrt{0,85\cdot0,15\cdot(\frac{2}{50})}}$
+
+$z_{hesap} = \frac{0,1}{0,071}$
+
+$z_{hesap} = 1,4$
+
+$z_{tablo} = 1,65$
+
+$z_{hesap} < z_{tablo}$
+
+H0 hipotezi reddedilemez. Erkekler ile kadınlar arasında oransal bir fark yoktur.
+
+
+
+
+
+
+
+
+
 
 
 ### Örnekler
