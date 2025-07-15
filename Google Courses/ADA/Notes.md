@@ -407,17 +407,136 @@ planets[mask]
 | 4     | Jupiter | 69911     | 80    |
 | 5     | Saturn  | 58232     | 83    |
 
+```python
+mask = (planets['moons'] > 20) & ~ (planets['moons'] == 80) & ~ (planets['radius_km'] < 50000)
+planets[mask]
+```
 
-
-
-
-
-
-
-
-
+| Index | Planet | Radius_km | Moons |
+|-------|--------|-----------|-------|
+| 5     | Saturn | 58232     | 83    |
 
 ```python
+data = {'planet': ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'],
+        'radius_km': [2440, 6652, 6371, 3390, 69911, 58232, 25362, 24622], 
+        'moons': [0, 0, 1, 2, 80, 83, 27, 14],
+        'type': ['terrestrial', 'terrestrial', 'terrestrial', 'terrestrial', 'gas giant', 'gas giant', 'ice giant', 'ice giant'], 
+        'rings': ['no', 'по', 'no', 'no', 'yes', 'yes', 'yes', 'yes'], 
+        'mean_temp_c': [167, 464, 15, 65, 110, 140, 195, -200], 
+        'magnetic_field': ['yes', 'no', 'yes', 'no', 'yes', 'yes', 'yes', 'yes']}
 
+planets = pd.DataFrame(data)
+
+planets
 ```
+
+| Index | Planet  | Radius_km | Moons | Type       | Rings | Mean_Temp_C | Magnetic_Field |
+|-------|---------|-----------|-------|------------|-------|-------------|----------------|
+| 0     | Mercury | 2440      | 0     | terrestrial| no    | 167         | yes            |
+| 1     | Venus   | 6652      | 0     | terrestrial| no    | 464         | no             |
+| 2     | Earth   | 6371      | 1     | terrestrial| no    | 15          | yes            |
+| 3     | Mars    | 3390      | 2     | terrestrial| no    | 65          | no             |
+| 4     | Jupiter | 69911     | 80    | gas giant  | yes   | 110         | yes            |
+| 5     | Saturn  | 58232     | 83    | gas giant  | yes   | 140         | yes            |
+| 6     | Uranus  | 25362     | 27    | ice giant  | yes   | 195         | yes            |
+| 7     | Neptune | 24622     | 14    | ice giant  | yes   | -200        | yes            |
+
+```python
+planets.groupby(['type']).sum()
+```
+
+| Type        | Planet                    | Radius_km | Moons | Rings     | Mean_Temp_C | Magnetic_Field |
+|-------------|---------------------------|-----------|--------|-----------|--------------|----------------|
+| gas giant   | JupiterSaturn             | 128143    | 163    | yesyes    | 250          | yesyes         |
+| ice giant   | UranusNeptune             | 49984     | 41     | yesyes    | -5           | yesyes         |
+| terrestrial | MercuryVenusEarthMars     | 18853     | 3      | nononono  | 711          | yesnoyesno     |
+
+```python
+planets.groupby(['type']).sum()[['moons']]
+```
+
+| Type        | Moons |
+|-------------|-------|
+| gas giant   | 163   |
+| ice giant   | 41    |
+| terrestrial | 3     |
+
+```python
+planets.groupby(['type','magnetic_field'])[['radius_km','moons','mean_temp_c']].mean()
+```
+
+| type        | magnetic_field | radius_km | moons | mean_temp_c |
+|-------------|----------------|-----------|--------|--------------|
+| gas giant   | yes            | 64071.5   | 81.5   | 125.0        |
+| ice giant   | yes            | 24992.0   | 20.5   | -2.5         |
+| terrestrial | no             | 5021.0    | 1.0    | 264.5        |
+| terrestrial | yes            | 4405.5    | 0.5    | 91.0         |
+
+```python
+planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', 'median'])
+```
+
+| type        | radius_km (mean) | radius_km (median) | moons (mean) | moons (median) | mean_temp_c (mean) | mean_temp_c (median) |
+|-------------|------------------|--------------------|--------------|----------------|---------------------|-----------------------|
+| gas giant   | 64071.50         | 64071.5            | 81.50        | 81.5           | 125.00              | 125.0                 |
+| ice giant   | 24992.00         | 24992.0            | 20.50        | 20.5           | -2.50               | -2.5                  |
+| terrestrial | 4713.25          | 4880.5             | 0.75         | 0.5            | 177.75              | 116.0                 |
+
+```python
+planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', 'min', 'max'])
+```
+
+| type        | radius_km (mean) | radius_km (min) | radius_km (max) | moons (mean) | moons (min) | moons (max) | mean_temp_c (mean) | mean_temp_c (min) | mean_temp_c (max) |
+|-------------|------------------|------------------|------------------|---------------|--------------|--------------|---------------------|---------------------|---------------------|
+| gas giant   | 64071.50         | 58232            | 69911            | 81.50         | 80           | 83           | 125.00              | 110                 | 140                 |
+| ice giant   | 24992.00         | 24622            | 25362            | 20.50         | 14           | 27           | -2.50               | -200                | 195                 |
+| terrestrial | 4713.25          | 2440             | 6652             | 0.75          | 0            | 2            | 177.75              | 15                  | 464                 |
+
+```python
+planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg({'radius_km': ['mean'], 'moons' : ['min', 'max']})
+```
+
+| type        | radius_km mean | moons min | moons max |
+|-------------|----------------|-----------|-----------|
+| gas giant   | 64071.50       | 80        | 83        |
+| ice giant   | 24992.00       | 14        | 27        |
+| terrestrial | 4713.25        | 0         | 2         |
+
+```python
+def percentile_90(x):
+    return x.quantile(0.9)
+
+planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', percentile_90])
+```
+
+| type        | radius_km mean | radius_km 90th percentile | moons mean | moons 90th percentile | mean_temp_c mean | mean_temp_c 90th percentile |
+|-------------|----------------|---------------------------|------------|-----------------------|------------------|-----------------------------|
+| gas giant   | 64071.50       | 68743.1                   | 81.50      | 82.7                  | 125.00           | 137.0                       |
+| ice giant   | 24992.00       | 25288.0                   | 20.50      | 25.7                  | -2.50            | 155.5                       |
+| terrestrial | 4713.25        | 6567.7                    | 0.75       | 1.7                   | 177.75           | 374.9                       |
+
+### agg()
+
+[agg()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.agg.html) işlevi, bir veri çerçevesine aynı anda birden fazla işlev uygulamak istediğinizde kullanışlıdır. agg(), DataFrame sınıfına ait bir yöntemdir. "Toplam" anlamına gelir. En önemli parametreleri şunlardır:
+
+Func: Uygulanacak işlev
+
+Eksen: Fonksiyonun uygulanacağı eksen (varsayılan= 0).
+
+### Yerleşik toplama işlevleri
+
+Önceki örnekler, groupby nesnelerine uygulanan mean(), min() ve size() toplama işlevlerini göstermiştir. Birçok mevcut yerleşik toplama işlevi vardır. Daha yaygın kullanılanlardan bazıları şunlardır:
+
+| Fonksiyon | Açıklama                                   |
+|-----------|--------------------------------------------|
+| Count()   | Her gruptaki boş olmayan değerlerin sayısı |
+| Sum()     | Her gruptaki değerlerin toplamı            |
+| Mean()    | Her gruptaki değerlerin ortalaması         |
+| Median()  | Her gruptaki değerlerin medyanı            |
+| Min()     | Her gruptaki minimum değer                 |
+| Max()     | Her gruptaki maksimum değer                |
+| Std()     | Her gruptaki değerlerin standart sapması   |
+| Var()     | Her gruptaki değerlerin varyansı           |
+
+
 
