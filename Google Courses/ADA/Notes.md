@@ -2420,8 +2420,298 @@ Ortalama, medyan ve mod gibi merkezi eğilim ölçümleri hakkında daha fazla b
 
 - [Avustralya İstatistik Bürosu'nun bu makalesi](https://www.abs.gov.au/websitedbs/D3310114.nsf/Home/Statistical+Language+-+measures+of+central+tendency#:~:text=There%20are%20three%20main%20measures,central%20value%20in%20the%20distribution.), ortalama, medyan ve moda yararlı bir genel bakış sunar ve aykırı değerlerin merkezi eğilim ölçümlerini nasıl etkilediğini tartışır.
 
+## 8, 10, 12 olan 3 bileşenli bir seri için standart sapma;
 
+![image](./images/4002.png)
 
+## Dağılım ölçüleri: Menzil, varyans ve standart sapma
+
+Son zamanlarda, **dağılım ölçümlerinin veri kümen** izin yayılımını veya veri değerlerinizdeki varyasyon miktarını tanımlamanıza izin verdiğini öğrendiniz. Standart sapma gibi dağılım ölçümleri, verilerinizin dağılımı hakkında ilk bilgi verebilir ve verilerinize hangi istatistiksel yöntemlerin uygulanacağını belirlemenize yardımcı olabilir.
+
+Bu okumada, üç dağılım ölçüsü hakkında daha fazla bilgi edineceksiniz: aralık, varyans ve standart sapma. Bu okuma, temel standart sapma kavramına odaklanmaktadır. Bir veri uzmanı olarak, verilerinizin standart sapmasını sık sık hesaplayacak ve standart sapmayı daha karmaşık veri analizinin bir parçası olarak kullanacaksınız.
+
+### Dağılım ölçüleri
+
+Her dağılım ölçüsünün tanımını inceleyelim: aralık, varyans ve standart sapma.
+
+#### **Menzil**
+
+Aralık, bir veri kümesindeki en büyük ve en küçük değer arasındaki farktır.
+
+Örneğin, bir biyoloji öğretmeni olduğunuzu ve final sınavı için puanlarla ilgili verileriniz olduğunu hayal edin. En yüksek puan 99/100 veya% 99'dur. En düşük puan 62/100 veya% 62'dir. Aralığı hesaplamak için en düşük puanı en yüksek puandan çıkarın.
+
+99 - 62 = 37
+
+Aralığı yüzde 37 puandır.
+
+Menzil yararlı bir metriktir çünkü hesaplanması kolaydır ve veri kümenizin genel yayılımını çok hızlı bir şekilde anlamanızı sağlar.
+
+#### **Varyans**
+
+Başka bir yayılma ölçüsüne, **her** veri noktasının ortalamadan kare farkının ortalamadan ortalaması olan varyans denir. Temel olarak, standart sapmanın karesidir. Daha sonraki bir kursta varyans ve nasıl kullanılacağı hakkında daha fazla bilgi edineceksiniz.
+
+#### **Standart sapma**
+
+Standart sapma kavramını daha iyi anlamak için tanımını, görselleştirmesini ve istatistiksel formülünü inceleyelim.
+
+#### **Tanımı**
+
+**Standart sapma**, değerlerinizin veri kümenizin ortalamasından ne kadar yayıldığını ölçer. Bir veri noktasının ortalamadan tipik mesafesini hesaplar. Standart sapma ne kadar büyükse, değerleriniz ortalamadan o kadar yayılır. Standart sapma ne kadar küçükse, değerleriniz ortalamadan o kadar az yayılır.
+
+#### **Görselleştirme**
+
+Yayılma hakkında daha iyi bir fikir edinmek için üç normal olasılık dağılımının grafiklerini inceleyelim. Daha sonra, bir veri kümesindeki tüm değerleri eşleyen dağıtımlar hakkında bilgi edineceksiniz. Şimdilik, ortalamanın her eğrideki, tam merkezdeki en yüksek nokta olduğunu bilin.
+
+![image](./images/4003.png)
+
+Her eğri aynı ortalamaya ve farklı bir standart sapmaya sahiptir. Mavi noktalı eğrinin standart sapması 1, yeşil katı eğri 2 ve kırmızı kesikli eğri 3'tür. Veri değerlerinin çoğu ortalamaya yakın olduğu için mavi noktalı eğri en az yayılmaya sahiptir. Bu nedenle, mavi noktalı eğri en küçük standart sapmaya sahiptir. Veri değerlerinin çoğu ortalamadan daha uzağa düştüğü için kırmızı kesikli eğri en fazla yayılmaya sahiptir. Bu nedenle, kırmızı kesikli eğri en büyük standart sapmaya sahiptir.
+
+#### **Formül**
+
+Şimdi bir formül kullanarak standart sapmayı nasıl hesapladığınızı tartışalım.
+
+Bir popülasyon ve bir örnek için standart sapmayı hesaplamak için farklı formüller vardır. Hatırlatma olarak, veri uzmanları tipik olarak örnek verilerle çalışır ve örneğe dayalı olarak popülasyonlar hakkında çıkarımlar yaparlar. Öyleyse, örnek standart sapma formülünü gözden geçirelim:
+
+$s=\sqrt{\frac{\sum{(x-\bar{x})^2}}{n-1}} $
+
+Formülde n, örneğinizdeki toplam veri değeri sayısıdır, x her bir veri değeridir ve x( “x-bar” olarak telaffuz edilir) veri değerlerinizin ortalamasıdır. Yunan harfi Sigma, toplam anlamına gelen bir semboldür.
+
+**Not:** Bir veri uzmanı olarak, hesaplamalar için genellikle bir bilgisayar kullanırsınız. Hesaplamaları yapabilmek gelecekteki kariyeriniz için önemlidir, ancak hesaplamaların arkasındaki kavramlara aşina olmak, işyeri sorunlarına istatistiksel yöntemler uygulamanıza yardımcı olacaktır.
+
+Formülün farklı bölümlerini daha iyi anlamak için, küçük bir veri kümesinin örnek standart sapmasını hesaplayalım: 2, 3, 10.
+
+Bunu beş adımda yapabilirsiniz:
+
+**1. Veri değerlerinizin ortalamasını veya ortalamasını hesaplayın.**
+
+(2 + 3 +10) ÷ 3 = 15 ÷ 3 = 5
+
+**2. Her değerden ortalamayı çıkarın**.
+
+2 - 5 = -3
+
+3 - 5 = -2
+
+10 - 5 = 5
+
+**3. Her sonucu kare haline getirin.**
+
+-3*-3 = 9
+
+-2*-2 = 4
+
+5* 5 = 25
+
+**4. Kareli sonuçları toplayın ve bu toplamı veri değerlerinin sayısından bir taneye bölün. Bu varyans.**
+
+(9 + 4 + 25) ÷ (3 -1) = 38 ÷ 2 = 19
+
+**5. Son olarak, varyansın karekökünü bulun.**
+
+√19 = 4.36
+
+Örnek standart sapması 4.36'dır.
+
+Artık standart sapma kavramı hakkında daha fazla bilgi sahibi olduğunuza göre, pratik uygulamasının bir örneğini inceleyelim.
+
+#### **Örnek: Gayrimenkul fiyatları**
+
+Bir emlak şirketi için çalışan bir veri uzmanı olduğunuzu hayal edin. Ekibinizdeki emlakçılar, müşterilerini farklı yerleşim alanlarındaki kira fiyatlarındaki değişimler hakkında bilgilendirmeyi sever. İşinizin bir kısmı, belirli mahallelerdeki daireler için aylık kira fiyatlarının standart sapmasını hesaplamak ve bu bilgileri ekibinizle paylaşmaktır. Diyelim ki iki farklı mahallede tek yatak odalı daireler için aylık kira fiyatları hakkında örnek verileriniz var: Emerald Woods ve Rock Park. Her veri kümesi için ortalama ve standart sapmayı hesapladığınızı varsayalım.
+
+**Zümrüt Ormanları**
+
+|**Daire**|#1|#2|#3|#4|#5|
+|---|---|---|---|---|---|
+|**Aylık Kira**|\$900|\$950|\$1,000|\$1,050|\$1,100|
+
+Ortalama: $1,000
+
+Standart sapma: $79.05
+
+**Kaya Parkı**
+
+|**Daire**|#1|#2|#3|#4|#5|
+|---|---|---|---|---|---|
+|**Aylık Kira**|\$500|\$650|\$1,000|\$1,350|\$1,500|
+
+Ortalama: $1,000
+
+Standart sapma: \$431.56
+
+Her iki mahalle de aylık 1.000 dolarlık aynı ortalama kira fiyatına sahiptir. Ancak, Rock Park'da kiralama fiyatlarındaki standart sapma (\$431.56), Emerald Woods'daki kiralama fiyatlarındaki standart sapmadan çok daha yüksektir (\$79.05). Bu, Rock Park'ta kiralama fiyatlarında çok daha fazla değişiklik olduğu anlamına gelir. Bu, temsilcileriniz için yararlı bir bilgidir. Örneğin, müşterilere Rock Park'ta ortalama 1.000 doların çok altında olan daha uygun fiyatlı bir daire bulmalarının daha kolay olabileceğini söyleyebilirler. Standart sapma, herhangi bir mahalledeki fiyatlardaki değişimi hızlı bir şekilde anlamanıza yardımcı olur.
+
+### Önemli çıkarımlar
+
+Veri uzmanları, reklam gelirleri, hisse senedi fiyatları, çalışan maaşları ve daha fazlası gibi birçok veri türündeki değişimi ölçmek için standart sapmayı kullanır. Standart sapma, varyans ve aralık gibi dağılım ölçümleri, veri değerlerinizdeki değişimi hızlı bir şekilde tanımlamanıza ve verilerinizin temel yapısını daha iyi anlamanıza olanak tanır.
+
+### Daha fazla bilgi için kaynaklar
+
+Menzil, varyans ve standart sapma gibi dağılım ölçümleri hakkında daha fazla bilgi edinmek için aşağıdaki kaynakları keşfedin:
+
+- [Statistics Canada"nın bu makal](https://www150.statcan.gc.ca/n1/edu/power-pouvoir/ch12/5214891-eng.htm)esi, varyans ve standart sapmanın yararlı bir özetini sağlar, ve standart sapmanın bir dağılım ölçüsü olarak kullanışlılığını tartışır.
+
+## Konum ölçüleri: Yüzdelikler ve çeyrekler
+
+Son zamanlarda, **konum ölçümlerinin** bir veri kümesindeki diğer değerlere göre bir değerin konumunu belirlemenize izin verdiğini öğrendiniz. Merkez ve yayılma ile birlikte, değerlerinizin göreceli konumunu bilmek faydalıdır. Örneğin, bir değerin diğerinden daha yüksek veya daha düşük olup olmadığı veya bir değerin veri kümenizin alt, orta veya üst kısmına düşüp düşmediği.
+
+Bu okumada, en yaygın konum ölçüleri hakkında daha fazla bilgi edineceksiniz: yüzdelikler ve çeyrekler. Ayrıca çeyrekler arası aralığı nasıl hesaplayacağınızı öğrenecek ve verilerinizi özetlemek için beş sayı özetini kullanacaksınız.
+
+### Pozisyon ölçüleri
+
+#### **Yüzdelik**
+
+Yüz **delik**, bir veri yüzdesinin altına düştüğü değerdir. Yüzdelikler verilerinizi 100 eşit parçaya böler. Yüzdelikler, bir veri kümesindeki belirli bir değerin göreceli konumunu veya sırasını verir.
+
+Örneğin, yüzdelikler genellikle okul sınavlarında test puanlarını sıralamak için kullanılır. Diyelim ki bir test puanı 99. yüzdelik dilime düşüyor. Bu, puanın tüm test puanlarının% 99'undan daha yüksek olduğu anlamına gelir. Bir puan 75. yüzdelik seviyeye düşerse, puan tüm test puanlarının% 75'inden daha yüksektir. Bir puan 50. yüzdelik seviyeye düşerse, puan tüm test puanlarının yarısından veya %50'sinden daha yüksektir.
+
+![image](./images/4004.png)
+
+_**Not: Yüz**_ _delikler ve yüzdeler farklı kavramlardır. Örneğin, bir testte 90/100 veya% 90 puan aldığınızı varsayalım. Bu mutlaka %90'lık puanınızın 90. yüzdelik dilimde olduğu anlamına gelmez. Yüzdelik, tüm sınava girenlerin göreceli performansına bağlıdır. Tüm sınava girenlerin yarısı %90'ın üzerinde puan alırsa,% 90'lık bir puan 50. persentilde olacaktır._
+
+Yüzdelikler, değerleri karşılaştırmak ve verileri bağlama koymak için kullanışlıdır. Örneğin, yeni bir araba almak istediğinizi hayal edin. Harika yakıt ekonomisine sahip orta boy bir sedan istersiniz. Amerika Birleşik Devletleri'nde yakıt ekonomisi, galon yakıt veya mpg başına mil cinsinden ölçülür. Düşündüğünüz sedan 23 mpg alıyor. Bu iyi mi kötü mü? Karşılaştırma için bir temel olmadan, bilmek zor. Bununla birlikte, 23 mpg'nin tüm orta boy sedanların 25. yüzdesinde olduğunu biliyorsanız, göreceli performansı hakkında çok daha net bir fikriniz var. Bu durumda, tüm orta boy sedanların %75'i satın almayı düşündüğünüz arabadan daha yüksek mpg'ye sahiptir.
+
+#### **Çeyrek**
+
+Değerlerin göreli konumu hakkında genel bir anlayış elde etmek için çeyrekleri kullanabilirsiniz. Bir **çeyrek**, bir veri kümesindeki değerleri dört eşit parçaya böler.
+
+Üç çeyrek verileri dört çeyreğe böler. Çeyreklikler, verilerin dördüncü çeyreğine göre değerleri karşılaştırmanıza olanak tanır. Her çeyrek, veri kümenizdeki değerlerin% 25'ini içerir.
+
+- İlk çeyrek, Q1, veri kümesinin ilk yarısındaki orta değerdir. Q1, 25. yüzdelik anlamına gelir. Tüm veri kümesindeki değerlerin% 25'i Q1'in altında ve% 75'i bunun üzerindedir.
+    
+- İkinci çeyrek, Q2, veri kümesinin medyanıdır. Q2, 50. yüzdelik değeri ifade eder. Tüm veri kümesindeki değerlerin% 50'si Q2'nin altında ve% 50'si bunun üzerindedir.
+    
+- Üçüncü çeyrek, Q3, veri kümesinin ikinci yarısındaki orta değerdir. Q3, 75. yüzdelik değeri ifade eder. Tüm veri kümesindeki değerlerin% 75'i Q3'ün altında ve% 25'i bunun üzerindedir.
+    
+![image](./images/4005.png)
+
+#### Örnek: Araba satışları
+
+Örneğin, bir otomobil bayisinde çalışan bir veri uzmanı olduğunuzu hayal edin. Satış ekibinin yöneticisi, ekipteki her satış temsilcisinin performansını karşılaştırmak ister. Yönetici, her satış temsilcisinin geçen ay içinde kaç araba sattığını sağlayan verileri analiz etmenizi ister.
+
+|**Satış Temsilcisi**|#1|#2|#3|#4|#5|#6|#7|#8|
+|---|---|---|---|---|---|---|---|---|
+|**Satılan Otomobiller**|18|13|6|10|15|7|10|9|
+
+Verileriniz için çeyrekleri dört adımda hesaplayabilirsiniz:
+
+1. Veri kümenizdeki değerleri en küçükten en büyüğe doğru düzenleyin.
+
+[6, 7, 9, 10, 10, 13, 15, 18]
+
+2. Tüm veri kümenizin medyanını veya orta değerini bulun. Bu Q2. Veri kümesinde çift sayıda değer vardır, bu nedenle medyan, iki orta değerin, 10 ve 10'un ortalamasıdır.
+
+**Q2** = (10 + 10) ÷ 2 = 20 ÷ 2 = 10
+
+3. Veri kümenizin alt yarısının medyanını bulun [6, 7, 9, 10]. Bu Q1. Medyan, iki orta değerin, 7 ve 9'un ortalamasıdır.
+
+**Q1** = (7 + 9) ÷ 2 = 16 ÷ 2 = 8
+
+4. Son olarak, veri kümenizin üst yarısının medyanını bulun [10, 13, 15, 18]. Bu Q3. Medyan, 13 ve 15'in iki orta değerin ortalamasıdır.
+
+**Q3** = (13 + 15) ÷ 2 = 28 ÷ 2 = 14
+
+Verileri çeyreğe bölmek size satış temsilcisi performansı hakkında net bir fikir verir. Artık temsilcilerin alt çeyreğinin (Q1) 8 veya daha az araba sattığını ve üst çeyreğin (Q3) 14 veya daha fazla araba sattığını biliyorsunuz. Başka bir deyişle, temsilcilerin% 25'i 8 veya daha az araba sattı ve üstteki %25'i 14 veya daha fazla araba sattı. Temsilcilerin ortada% 50'si 8 ila 14 araba sattı.
+
+**Not:** Çeyrek değerleri hesaplamanın tek yolu bu değildir. Birçok gözlemi olan veri kümeleri için, çeyrek hesaplama metodolojisi, hesaplanan nihai değerler üzerinde ihmal edilebilir bir etkiye sahiptir. Bununla birlikte, az gözlem içeren veri kümeleri için hesaplanan çeyrekler önemsiz olmayabilir. Örneğin, [Numpy'nin persentil() işlevi](https://numpy.org/doc/stable/reference/generated/numpy.percentile.html), belirli bir yüzdelik değeri hesaplamak için dokuz farklı yola sahiptir.
+
+#### **Çeyrekler arası aralık (IQR)**
+
+**Verilerinizin orta %50'sine çeyrek arası aralık veya IQR denir.** Çeyrekler arası aralık, birinci çeyrek (Q1) ile üçüncü çeyrek (Q3) arasındaki mesafedir. Bu, 25. ve 75. yüzdelik arasındaki mesafe ile aynıdır. IQR, veri değerlerinizin göreceli konumunu belirlemek için kullanışlıdır. Örneğin, Q1 - (1.5 * IQR) ve Q3 + (1.5 * IQR) aralığının dışındaki veri değerleri genellikle aykırı değerler olarak kabul edilir.
+
+_**Not:**_ _Teknik olarak, IQR bir dağılım ölçüsüdür çünkü verilerinizin orta yarısının veya orta %50'sinin yayılımını ölçer (Q1 ve Q3 arasında). IQR, veri kümenizdeki daha aşırı değerleri içermediğinden, aykırı değerlere aralıktan daha az duyarlıdır_.
+
+IQR = Q3 - Q1. Bu durumda, Q3 = 14 ve Q1 = 8.
+
+**IQR** = 14 - 8 = 6
+
+#### **Beş sayı özeti**
+
+Son olarak, veri kümenizdeki ana bölümleri beş sayı özetle özetleyebilirsiniz. Beş sayı şunları içerir:
+
+- Minimum
+    
+- İlk çeyrek (Q1)
+    
+- Medyan veya ikinci çeyrek (Q2)
+    
+- Üçüncü çeyrek (Q3)
+    
+- Maksimum
+
+Beş sayı özeti kullanışlıdır çünkü verilerinizin aşırı değerlerden merkeze dağılımı hakkında genel bir fikir verir. Bir kutu çizimi ile görselleştirebilirsiniz.
+
+Kutu grafiğinin kutu kısmı Q1'den Q3'e gider. Kutunun ortasındaki dikey çizgi medyandır (Q2). Bıyık olarak bilinen kutunun her iki tarafındaki yatay çizgiler Q1'den minimuma ve Q3'ten maksimuma gider.
+
+Aşağıdaki kutu çizimi, araba satışlarıyla ilgili verileri göstermektedir. Değerleri kutu grafiğinde bulabilir ve çeyrekler arası aralığı (IQR) belirleyebilirsiniz. IQR, kutunun uzunluğu veya Q1 ile Q3 arasındaki mesafedir.
+
+![image](./images/4006.png)
+
+### Önemli çıkarımlar
+
+Veri uzmanları, ürün satışlarından hane gelirine kadar her tür veriyi daha iyi anlamak için yüzdelik ve çeyrek gibi konum ölçümlerini kullanır. Konum ölçümleri, veri değerlerinizin göreceli konumunu hızlı bir şekilde belirlemenize yardımcı olur ve verilerinizin dağılımı hakkında daha kesin bir fikir verir.
+
+### Daha fazla bilgi için kaynaklar
+
+Yüzdelik ve çeyrek gibi konum ölçümleri hakkında daha fazla bilgi edinmek için aşağıdaki kaynağa göz atın:
+
+- [Freie Universität Berlin'in bu istatistik sözlüğü](https://www.geo.fu-berlin.de/en/v/soga-py/Basics-of-statistics/index.html), yüzdelikler, çeyrekler, beş sayı özeti ve daha fazlası gibi konum ölçümlerinin net tanımlarını ve yararlı örneklerini sağlar.
+
+## Ortalama Okuma Oranını Bulma
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+education_districtwise = pd.read_csv("education_districtwise.csv")
+education_districtwise.head(10)
+```
+
+| DISTNAME     | STATNAME | BLOCKS | VILLAGES | CLUSTERS | TOTPOPULAT | OVERALL_LI |
+|--------------|----------|--------|----------|----------|------------|------------|
+| DISTRICT32   | STATE1   | 13     | 391      | 104      | 875564.0   | 66.92      |
+| DISTRICT649  | STATE1   | 18     | 678      | 144      | 1015503.0  | 66.93      |
+| DISTRICT229  | STATE1   | 8      | 94       | 65       | 1269751.0  | 71.21      |
+| DISTRICT259  | STATE1   | 13     | 523      | 104      | 735753.0   | 57.98      |
+| DISTRICT486  | STATE1   | 8      | 359      | 64       | 570060.0   | 65.00      |
+| DISTRICT323  | STATE1   | 12     | 523      | 96       | 1070144.0  | 64.32      |
+| DISTRICT114  | STATE1   | 6      | 110      | 49       | 147104.0   | 80.48      |
+| DISTRICT438  | STATE1   | 7      | 134      | 54       | 143388.0   | 74.49      |
+| DISTRICT610  | STATE1   | 10     | 388      | 80       | 409576.0   | 65.97      |
+| DISTRICT476  | STATE1   | 11     | 361      | 86       | 555357.0   | 69.90      |
+
+```python
+education_districtwise['OVERALL_LI'].describe()
+```
+
+|       Stat       |    Value     |
+|------------------|--------------|
+| count            | 634.000000   |
+| mean             | 73.395189    |
+| std (std. dev.)  | 10.098460    |
+| min              | 37.220000    |
+| 25% (1st quartile)| 66.437500   |
+| 50% (median)     | 73.490000    |
+| 75% (3rd quartile)| 80.815000   |
+| max              | 98.760000    |
+
+```python
+education_districtwise['STATNAME'].describe()
+```
+
+| Stat   | Value   |
+|--------|---------|
+| count  | 680     |
+| unique | 36      |
+| top    | STATE21 |
+| freq   | 75      |
+
+```python
+range_overall_li = education_districtwise['OVERALL_LI'].max() - education_districtwise['OVERALL_LI'].min() 
+
+range_overall_li
+# 61.54000000006
+```
 
 
 
