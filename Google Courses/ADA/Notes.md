@@ -992,9 +992,32 @@ plt.show()
 
 ![image](./images/3005.png)
 
+```python
+# Create two new columns
+df_by_quarter['quarter_number'] = df_by_quarter['quarter'].str[-2:]
+df_by_quarter['year'] = df_by_quarter['quarter'].str[:4]
 
+df_by_quarter.head()
 
+plt.figure(figsize=(15,5))
+p = sns.barplot(data=df_by_quarter, x='quarter_number', y='number_of_strikes', hue='year')
 
+for b in p.patches:
+    p.annotate(
+        str(round(b.get_height() / 1000000, 1)) + 'M',
+        (b.get_x() + b.get_width() / 2., b.get_height() + 1.2e6),
+        ha='center', va='bottom',
+        xytext=(0, -12),
+        textcoords='offset points'
+    )
+
+plt.xlabel("Quarter")
+plt.ylabel("Number of lightning strikes")
+plt.title("Number of lightning strikes per quarter (2016-2018)")
+plt.show()
+```
+
+![image](./images/3006.png)
 
 
 
