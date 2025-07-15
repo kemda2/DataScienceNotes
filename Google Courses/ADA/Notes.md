@@ -1925,10 +1925,113 @@ print("Median:"+readable_numbers(np.median(df_without_outliers['number_of_strike
 
 ## getdummies() ve cat.codes()
 
+```python
+# Load libraries.
+import datetime
+import matplotlib.pyplot as plt 
+import pandas as pd 
+import seaborn as sns
 
+# Create a new data frame with the number of strikes per month.
+df['date'] = pd.to_datetime(df['date'])
+df['month'] = df['date'].dt.month_name().str.slice(stop = 3)
 
+# Make the month names categorical so they are in calendar instead of alphabetic
+# order when we plot them.
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+df['month'] = pd.Categorical(df['month'], categories = months, ordered
+df['year'] = df['date'].dt.strftime('%Y')
+df_by_month = df.groupby(['year', 'month']).sum().reset_index)
+df_by_month.head()
+```
 
+| year | month | number_of_strikes |
+|------|-------|-------------------|
+| 2016 | Jan   | 313595            |
+| 2016 | Feb   | 312676            |
+| 2016 | Mar   | 2057527           |
+| 2016 | Apr   | 2636427           |
+| 2016 | May   | 5800500           |
+
+```python
+# Create a categorical variable by bucketing the number of lightning strikes
+# per month into severeness levels based on quantiles.
+df_by_month['strike_level'] = pd.qcut(
+df_by_month ['number_of_strikes'],
+4,
+labels = ['Mild', 'Scattered', 'Heavy', 'Severe'])
+df_by_month.head()
+```
+
+| year | month | number_of_strikes | strike_level |
+|------|-------|-------------------|--------------|
+| 2016 | Jan   | 313595            | Mild         |
+| 2016 | Feb   | 312676            | Mild         |
+| 2016 | Mar   | 2057527           | Scattered    |
+| 2016 | Apr   | 2636427           | Heavy        |
+| 2016 | May   | 5800500           | Severe       |
+
+```python
+# Assign numerical values to the strike levels.
+
+df_by_month['strike_level_code'] = df_by_month['strike_level'].cat.codes[df_by_month.head()]
+```
+
+| year | month | number_of_strikes | strike_level | strike_level_code |
+|------|-------|-------------------|--------------|-------------------|
+| 2016 | Jan   | 313595            | Mild         | 0                 |
+| 2016 | Feb   | 312676            | Mild         | 0                 |
+| 2016 | Mar   | 2057527           | Scattered    | 1                 |
+| 2016 | Apr   | 2636427           | Heavy        | 2                 |
+| 2016 | May   | 5800500           | Severe       | 3                 |
+
+```python
+# Create dummy variables from strike levels.
+pd.get_dummies(df_by_month['strike_level'])
+```
+
+| Mild | Scattered | Heavy | Severe |
+|------|-----------|-------|--------|
+| 1    | 0         | 0     | 0      |
+| 1    | 0         | 0     | 0      |
+| 0    | 1         | 0     | 0      |
+| 0    | 0         | 1     | 0      |
+| 0    | 0         | 0     | 1      |
+| 0    | 0         | 0     | 1      |
+| 0    | 0         | 0     | 1      |
+| 0    | 0         | 0     | 1      |
+| 0    | 0         | 1     | 0      |
+| 0    | 1         | 0     | 0      |
+| 1    | 0         | 0     | 0      |
+| 1    | 0         | 0     | 0      |
+| 0    | 1         | 0     | 0      |
+| 1    | 0         | 0     | 0      |
+
+```python
+# Format dataframe indices to prepare for plotting.
+df_by_month_plot = df_by_month.pivot('year', 'month', 'strike_level_code') 
+df_by_month_plot.head()
+```
+
+| year | Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec |
+|------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| 2016 | 0   | 0   | 1   | 2   | 3   | 3   | 3   | 3   | 3   | 2   | 1   | 0   |
+| 2017 | 1   | 0   | 1   | 2   | 2   | 3   | 3   | 3   | 2   | 1   | 0   | 0   |
+| 2018 | 1   | 2   | 1   | 1   | 2   | 3   | 3   | 3   | 2   | 1   | 0   | 0   |
+
+```python
+# Make a heatmap showing which months over the years had most severe lightning.
+ax = sns.heatmap(df_by_month_plot, cmap= 'Blues')
+colorbar = ax.collections[0].colorbar
+colorbar.set_ticks([0, 1, 2, 3])
+colorbar.set_ticklabels (['Mild', 'Scattered', 'Heavy', 'Severe'])
+plt.show()
+```
+
+![image](./images/3025.png)
+
+## Veri Dönüşümünde Diğer Yaklaşımlar
 
 
 
