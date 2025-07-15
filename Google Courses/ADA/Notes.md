@@ -1367,6 +1367,7 @@ plt.show();
 
 Histogramlar, veri uzmanlarının veri kümelerinin ve değişkenlerinin frekans dağılımlarını anlamalarına yardımcı olur. Veri dağılımının şekli ve türü hakkında bilgi, istatistiksel testler ve model mimarisi seçimi gibi önemli alt kararları etkileyecektir. Ek olarak, verilerinizin şeklini bilmek, verilerinizin dağıtım eğilimlerini anlamanıza yardımcı olarak verilerinizin size anlattığı hikayeye ilişkin değerli bilgiler sağlar.
 
+## Veri Temizleme
 
 
 
