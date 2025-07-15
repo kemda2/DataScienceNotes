@@ -1144,6 +1144,33 @@ g.set_title('Lightning distribution per weekday (2018)')
 
 ![image](./images/3008.png)
 
+```python
+# 2016-2017 verilerini 2018 verileriyle birleştirerek yeni bir veri çerçevesi oluştur
+union_df = pd.concat([df.drop(['weekday', 'week'], axis=1), df_2], ignore_index=True)
+
+# Birleştirilmiş veri çerçevesinin ilk 5 satırını göster
+union_df.head()
+```
+
+| date       | number_of_strikes | center_point_geom  |
+|------------|-------------------|---------------------|
+| 2018-01-03 | 194               | POINT(-75 27)       |
+| 2018-01-03 | 41                | POINT(-78.4 29)     |
+| 2018-01-03 | 33                | POINT(-73.9 27)     |
+| 2018-01-03 | 38                | POINT(-73.8 27)     |
+| 2018-01-03 | 92                | POINT(-79 28)       |
+
+```python
+# 2017 yılında daha az yıldırım vardı
+union_df[['year', 'number_of_strikes']].groupby(['year']).sum()
+```
+
+| year | number_of_strikes |
+|------|-------------------|
+| 2016 | 41,582,229        |
+| 2017 | 35,095,195        |
+| 2018 | 44,600,989        |
+
 
 
 
