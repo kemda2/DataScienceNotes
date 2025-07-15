@@ -3362,6 +3362,103 @@ $z_{hesap} < z_{tablo}$
 
 H0 hipotezi reddedilemez. Erkekler ile kadınlar arasında oransal bir fark yoktur.
 
+```python
+from statsmodels.stats.proportion import proportions_ztest
+import numpy as np
+
+basari=np.array([45,40])
+gozlem=np.array([50,50])
+
+test=proportions_ztest(basari,gozlem,alternative="larger")
+test
+
+# (np.float64(1.4002800840280094), np.float64(0.08071473118354161))
+```
+
+$z_{hesap}$ 1,40 ve p değeri 0,08 olduğu ve 0,05 alfa değerinden büyük olduğu için H0 reddedilemez. Erkekler ile kadınlar arasında oransal bir fark yoktur. 
+
+## 5.11 A/B Testi Örneği 
+
+Web tasarımında yeniliğe gidileceği zaman satışları artıyor mu diye önce bir gruba deneme amacıyla yeni tasarım gösteriliyor ve diğer gruplarda eski tasarım gösterilmeye devam ediliyor.
+
+```python
+import pandas as pd
+
+data = {
+    "Grup": [
+        "Kontrol", "Kontrol", "Deneysel", "Deneysel", "Kontrol", "Kontrol", "Deneysel", "Kontrol",
+        "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", 
+        "Deneysel", "Deneysel", "Kontrol", "Kontrol", "Deneysel", "Deneysel", "Kontrol", 
+        "Kontrol", "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", 
+        "Deneysel", "Deneysel", "Deneysel", "Kontrol", "Deneysel"
+    ],
+    "Sayfa": [
+        "Eski Tasarım", "Eski Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Eski Tasarım", "Eski Tasarım",
+        "Yeni Tasarım", "Eski Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım",
+        "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Eski Tasarım",
+        "Eski Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Eski Tasarım", "Eski Tasarım", "Yeni Tasarım",
+        "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım",
+        "Yeni Tasarım", "Yeni Tasarım", "Eski Tasarım", "Yeni Tasarım"
+    ],
+    "Satış": [
+        0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0
+    ]
+}
+
+veri = pd.DataFrame(data)
+
+tablo=pd.crosstab(veri["Grup"],veri["Sayfa"])
+
+print(tablo)
+
+Kontrol=veri[veri["Grup"]=="Kontrol"].sample(n=5,random_state=42)
+Deneysel=veri[veri["Grup"]=="Deneysel"].sample(n=5,random_state=42)
+
+veriyeni=pd.concat([Kontrol,Deneysel],axis=0)
+veriyeni.reset_index(drop=True,inplace=True)
+
+gruplama=veriyeni.groupby("Grup")["Satış"]
+print(gruplama.mean())
+
+```
+
+| Grup     | Satış Ortalaması |
+|----------|------------------|
+| Deneysel | 0.1198           |
+| Kontrol  | 0.1318           |
+
+Kontrol ortalaması Deneysel ortalamasından büyük olduğu için daha iyi bir satış oranına sahip olduğunu söyleyebiliriz ama istatistiksel olarak inceleyeceğiz.
+
+
+```python
+import pandas as pd
+from statsmodels.stats.proportion import proportions_ztest
+
+veri=pd.read_excel("C:/Users/90566/Desktop/ornek.xlsx")
+
+Kontrol=veri[veri["Grup"]=="Kontrol"].sample(n=5000,random_state=42)
+Deneysel=veri[veri["Grup"]=="Deneysel"].sample(n=5000,random_state=42)
+
+veriyeni=pd.concat([Kontrol,Deneysel],axis=0)
+veriyeni.reset_index(drop=True,inplace=True)
+
+Kontrol2=veriyeni[veriyeni["Grup"]=="Kontrol"]["Satıs"]
+Deneysel2=veriyeni[veriyeni["Grup"]=="Deneyse1"]["Satıs"]
+
+Basarı=[Kontrol2.sum(),Deneysel2.sum()]
+Gözlem=[Kontrol2.count(),Deneysel2.count()]
+
+t,p=proportions_ztest(Basarı,Gözlem,alternative="two-sided")
+
+print("Test Sonucu: %.4f P—Değeri: %.4f" %(t,p))
+
+Test Sonucu: 1.8092 P-Değeri: 0.0704
+```
+
+P değeri 0.05'ten büyük olduğu için H0 hiptezini reddedemeyiz. Yeni tasarım eskisinden daha iyi değildir.
+
+
+
 
 
 
@@ -3373,7 +3470,7 @@ H0 hipotezi reddedilemez. Erkekler ile kadınlar arasında oransal bir fark yokt
 
 
 ### Örnekler
-## 5.11 
+## 5.12 
 # 6
 
 https://www.youtube.com/watch?v=Izcl557nsT4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=70
