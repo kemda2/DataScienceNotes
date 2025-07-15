@@ -515,7 +515,7 @@ planets.groupby(['type'])[['radius_km','moons','mean_temp_c']].agg(['mean', perc
 | ice giant   | 24992.00       | 25288.0                   | 20.50      | 25.7                  | -2.50            | 155.5                       |
 | terrestrial | 4713.25        | 6567.7                    | 0.75       | 1.7                   | 177.75           | 374.9                       |
 
-### agg()
+## agg()
 
 [agg()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.agg.html) işlevi, bir veri çerçevesine aynı anda birden fazla işlev uygulamak istediğinizde kullanışlıdır. agg(), DataFrame sınıfına ait bir yöntemdir. "Toplam" anlamına gelir. En önemli parametreleri şunlardır:
 
@@ -523,7 +523,7 @@ Func: Uygulanacak işlev
 
 Eksen: Fonksiyonun uygulanacağı eksen (varsayılan= 0).
 
-### Yerleşik toplama işlevleri
+## Yerleşik toplama işlevleri
 
 Önceki örnekler, groupby nesnelerine uygulanan mean(), min() ve size() toplama işlevlerini göstermiştir. Birçok mevcut yerleşik toplama işlevi vardır. Daha yaygın kullanılanlardan bazıları şunlardır:
 
@@ -537,6 +537,107 @@ Eksen: Fonksiyonun uygulanacağı eksen (varsayılan= 0).
 | Max()     | Her gruptaki maksimum değer                |
 | Std()     | Her gruptaki değerlerin standart sapması   |
 | Var()     | Her gruptaki değerlerin varyansı           |
+
+```python
+import numpy as np 
+import pandas as pd
+
+data = {'planet': ['Mercury', 'Venus', 'Earth', 'Mars'], 'radius km': [2440, 6052, 6371, 3390], 'moons': [0, 0, 1, 2],}
+
+df1 = pd.DataFrame(data) 
+
+df1
+```
+
+| planet  | radius\_km | moons |
+| ------- | ---------- | ----- |
+| Mercury | 2440       | 0     |
+| Venus   | 6052       | 0     |
+| Earth   | 6371       | 1     |
+| Mars    | 3390       | 2     |
+
+```python
+data = {'planet': ['Jupiter', 'Saturn', 'Uranus', 'Neptune'], 'radius km': [69911, 58232, 25362, 24622], 'moons': [80, 83, 27, 14],} 
+
+df2 = pd.DataFrame(data)
+
+df2
+```
+
+| planet  | radius\_km | moons |
+| ------- | ---------- | ----- |
+| Jupiter | 69911      | 80    |
+| Saturn  | 58232      | 83    |
+| Uranus  | 25362      | 27    |
+| Neptune | 24622      | 14    |
+
+```python
+df3 = pd.concat([df1,df2], axis= 0)
+df3
+```
+
+| planet  | radius\_km | moons |
+| ------- | ---------- | ----- |
+| Mercury | 2440       | 0     |
+| Venus   | 6052       | 0     |
+| Earth   | 6371       | 1     |
+| Mars    | 3390       | 2     |
+| Jupiter | 69911      | 80    |
+| Saturn  | 58232      | 83    |
+| Uranus  | 25362      | 27    |
+| Neptune | 24622      | 14    |
+
+```python
+df3 = df3.reset_index(drop=True)
+df3
+```
+
+| planet  | radius\_km | moons |
+| ------- | ---------- | ----- |
+| Mercury | 2440       | 0     |
+| Venus   | 6052       | 0     |
+| Earth   | 6371       | 1     |
+| Mars    | 3390       | 2     |
+| Jupiter | 69911      | 80    |
+| Saturn  | 58232      | 83    |
+| Uranus  | 25362      | 27    |
+| Neptune | 24622      | 14    |
+
+```python
+import pandas as pd
+import numpy as np
+
+data= {
+    'planet': ['Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Janssen', 'Tadmor'],
+    'type': ['terrestrial', 'terrestrial', 'gas giant', 'gas giant', 'ice giant', 'ice giant', 'super earth', 'gas giant'],
+    'rings': ['no', 'no', 'yes', 'yes', 'yes', 'yes', 'no', None],
+    'mean_temp_c': [15.0, -65.0, -110.0, -140.0, -195.0, -200.0, np.nan, np.nan],
+    'magnetic_field': ['yes', 'no', 'yes', 'yes', 'no', 'yes', None, None],
+    'life': [1, 0, 0, 0, 0, 0, 1, 1]
+}
+
+df4 = pd.DataFrame(data)
+df4
+```
+
+| planet  | type        | rings | mean\_temp\_c | magnetic\_field | life |
+| ------- | ----------- | ----- | ------------- | --------------- | ---- |
+| Earth   | terrestrial | no    | 15.0          | yes             | 1    |
+| Mars    | terrestrial | no    | -65.0         | no              | 0    |
+| Jupiter | gas giant   | yes   | -110.0        | yes             | 0    |
+| Saturn  | gas giant   | yes   | -140.0        | yes             | 0    |
+| Uranus  | ice giant   | yes   | -195.0        | no              | 0    |
+| Neptune | ice giant   | yes   | -200.0        | yes             | 0    |
+| Janssen | super earth | no    | NaN           | None            | 1    |
+| Tadmor  | gas giant   | None  | NaN           | None            | 1    |
+
+## Merge()
+
+![image](./images/2001.png)
+![image](./images/2002.png)
+![image](./images/2003.png)
+![image](./images/2004.png)
+![image](./images/2005.png)
 
 
 
