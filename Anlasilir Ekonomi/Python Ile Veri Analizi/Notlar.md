@@ -3473,5 +3473,5 @@ P değeri 0.05'ten büyük olduğu için H0 hiptezini reddedemeyiz. Yeni tasarı
 ## 5.12 
 # 6
 
-https://www.youtube.com/watch?v=Izcl557nsT4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=70
-11:33
+https://www.youtube.com/watch?v=TAoJon6rDhk&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=70
+00:00
