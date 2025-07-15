@@ -1,5 +1,88 @@
 # Kurs 1: Veri Biliminin Temelleri
 
+## Yıllar boyunca veri söylemi
+
+Bu program boyunca “veri bilimi” ve “veri analizi” terimleriyle karşılaşacaksınız. Bu disiplinler kapsamlarında oldukça farklı olsa da, endüstri profesyonelleri genellikle bunları birbirinin yerine kullanırlar. Veri kariyeri alanını ve becerilerinizin nereye uyduğunu daha iyi anlamak için veri bilimi ve veri analitiği arasındaki benzerlikleri ve farklılıkları incelemek önemlidir. Bu okumada, veri bilimi, veri analizi ve veri mesleğinin zaman içinde nasıl geliştiği hakkında daha fazla bilgi edineceksiniz.
+
+### Veri bilimi ve veri analitiği nedir
+
+Veri bilimi, verileri daha kullanışlı hale getirmeye adanmış bir alandır. Veri bilimcisi, verileri modellemek ve bilinmeyenleri anlamak için yeni yollar geliştirmek için ham verileri kullanan bir profesyoneldir. Genellikle, iş sorumlulukları bilgisayar bilimi, tahmine dayalı analitik, istatistik ve makine öğrenmesinin çeşitli bileşenlerini içerir. Veri bilimcilerinin çalıştığı bilgi koleksiyonları oldukça büyük olabilir ve organize etmek ve gezinmek için uzmanlık gerektirir.
+
+Veri analitiği, daha büyük veri bilimi disiplininin bir alt alanıdır. Veri analitiğinin amacı, mevcut sorunlar için eyleme geçirilebilir içgörüleri ortaya çıkarmak için verileri yakalamak, işlemek ve organize etmek için yöntemler oluşturmaktır. Analistler, mevcut veri kümelerinde depolanan bilgileri işlemeye ve bu verileri sunmanın en iyi yolunu oluşturmaya odaklanır. Veri analistleri, sorunları çözmek ve anında iyileştirmelere yol açabilecek öneriler sunmak için istatistiklere ve veri modellemeye güvenir.
+
+Aşağıdaki tablo yan yana bir karşılaştırma sunar:
+
+| **Veri bilimi**                                                                 | **Veri analizi**                                                                 |
+|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| • Veriler hakkında hangi soruların sorulması gerektiğine odaklanan geniş içgörüler üretir | • Sorulan soruların cevaplarını keşfetmeyi vurgular                              |
+| • Gelecek hakkında tahminlerde bulunmak için gelişmiş teknikler kullanarak bilinmeyenlerle yüzleşir | • Mevcut sorgulara dayalı olarak hemen uygulanabilecek eyleme geçirilebilir içgörüleri belirler |
+| • “Ne olacak?” gibi soruları cevaplamaya çalışır ve “X’i nasıl gerçekleştirebiliriz?” | • “Ne oldu?” gibi soruları cevaplamaya çalışır ve “Neden oldu?”                 |
+
+
+### Veri bilimi ve veri analitiği arasındaki bağlantılar
+
+Veri bilimi ve veri analitiği temel bir hedefi paylaşır: Bir kuruluşun gelişmesine ve büyümesine öncülük etmek için kullanılabilecek içgörüleri keşfedin. Ölçülebilir dünyadaki etkileşimler yoluyla toplanan bilgilerle yakından bağlantılıdırlar. Veri projeleri daha karmaşık hale geldikçe, kuruluşlar veri ekiplerini bir araya getirmenin, veri analistlerini ve veri bilimcilerini bir araya getirmenin avantajlarını keşfediyor. Bu son derece işbirlikçi çalışma ortamlarında, veri bilimcileri ve veri analistleri benzer yazılım paketlerini, araçlarını ve programlama dillerini kullanarak ortak görevler üzerinde çalışırlar. Ek olarak, veri bilimcilerinin ve veri analistlerinin sorumlulukları bir şirketin kaynakları, bütçe kısıtlamaları ve organizasyona ve sektöre bağlı olarak değişen diğer faktörlerden etkilenir. İşyerindeki veri bilimi ve veri analitiği arasındaki ortak noktalar, uygulayıcıların ve endüstri profesyonellerinin neden iki başlığı birbirinin yerine kullandıklarını açıklar.. Bu aynı zamanda iş ilanlarına da genişledi.
+
+### Veri kariyer alanındaki veri uzmanı
+
+Bu program, veri bilimi ve veri analitiği profesyonellerine hitap ederken birkaç terim kullanır. Veri uzmanı ter **imi, veri** bilimcileri ve analistlere toplu olarak atıfta bulunurken kullanılır. **Veri analitiği uzman** ı, görevlerin çoğunun veri analitik süreçlerine odaklandığı pozisyonları vurgulamak için kullanılır. **Veri kariyer alanı**, veri bilimi ve ilgili alanlardaki iş ve kariyer yelpazesine atıfta bulunan kapsayıcı bir terim olarak işlev görür. Bu tanımlayıcıların amacı, veri bilimi ve veri analitiği ile ilgili iş ve unvanların mümkün olan en geniş gruplandırılmasını sağlayan kapsayıcı etiketler olarak hizmet etmektir..
+
+Veri uzmanları için kariyer fırsatları çok çeşitli endüstrileri kapsar. Her birinin kendine özgü ihtiyaçları, talepleri ve sorumlulukları vardır. İki farklı kuruluşta aynı iş unvanına sahip iki çalışanın farklı rol ve görevlere sahip olması mümkündür. Veri bilimi ve veri analitiği genelindeki kariyerlerin bu programda nasıl tanımlandığını netleştirmeye yardımcı olmak için, veri kariyer alanı, veri bilimi becerilerine sahip olanlar için mevcut olan çeşitli kariyer ve iş fırsatlarına toplu olarak atıfta bulunmak için kullanılır.
+
+### Zaman içindeki veri kariyer alanı
+
+Şimdiye kadar, veri bilimi ve veri analitiğinin veri kariyeri alanında nasıl birlikte çalıştığını düşünüyorsunuz. Teknoloji, veri depolama, veri analizi ve iletişim değiştikçe bu alan da zamanla gelişmekte ve değişmektedir. Alandaki ilerleme, veri profesyonellerinin bu alanda kariyer oluşturmak ve tanımlamak için uyum sağlamayı ve gelişmeyi öğrenmeleri gerektiği anlamına gelir ve veri kariyer alanının şimdiye kadar nasıl geliştiğini anlamak tam da bunu yapmanıza yardımcı olabilir.
+
+#### 1965
+
+_1965 yılında dünya nüfusu 3,3 milyar idi. Mariner 4 uzay aracı, Mars'ın ilk yakın çekim fotoğraflarını çekti. İlk ticari iletişim uydusu, Avrupa ve Kuzey Amerika arasında neredeyse anında temasa izin verdi._
+
+| **Tarla**        | **Özet** |
+|------------------|---------|
+| **TEKNOLOJİ**    | Hesaplamalar hala elle yapılıyordu; şirketler analistlere yardımcı olmak için yeni bilgi işlem teknolojilerine yatırım yapmaya yeni başlıyorlardı. İlk masaüstü programlanabilir hesap makineleri oda büyüklüğündeki bilgisayarların yerini aldı. Kullanıcılar karmaşık matematiksel işlemleri manyetik kartlara yedekleyebilir ve sonuçları yazdırabilir. |
+| **Veri depolama**| Basit delikli kartlar programlama bilgilerini sakladı. Bu kartlar komut vermek için belirli bir sırayla yüklenecekti. İşletmeler, normal bilgisayar kullanımının oluşturacağı binlerce veri delici kartını depolamak için fiziksel alan ayırdı. Daha büyük kuruluşlar, 50.000 delikli kart veya yaklaşık 3 megabayt tutabilen manyetik bant makaralarına yükseltildi. Ancak bu makaralar hala bir ofis içinde çok fazla depolama alanı gerektiriyordu. |
+| **Veri analizi** | Bilgisayar teknolojisinin boyutu ve maliyeti azaldıkça, daha fazla şirket elle hesaplama işini yapmaktan uzaklaşmaya başladı. |
+| **İletişim**     | Dokümantasyon ve yazışmalar elektrikli daktilo tarafından dönüştürüldü. Belgeler ve mesajlar ofisler içinde elle teslim edildi. Yeni telefon sistemleri birden fazla gelen ve giden hatlara, telefon numaralarını kaydetmek için programlanabilir düğmelere ve 30'a kadar uzatma için interkom yeteneklerine izin verdi. |
+
+#### 1985
+
+_1985 yılında dünya nüfusu 4,8 milyar idi. İnternetin alan adı sistemi oluşturuldu. Antarktika üzerindeki ozon tabakasında bir delik keşfedildi. DNA ilk olarak bir ceza davasında kullanılır._
+
+| **Tarla**        | **Özet** |
+|------------------|---------|
+| **TEKNOLOJİ**    | Telefon hatları iletişimin süper otoyolları haline gelir. 1980'lerde, taramalı faks makinesi işletmeler için bir zorunluluk haline geldi ve belgeleri hızlı bir şekilde gönderip almalarına izin verdi. Masaüstü bilgisayarlar artık kullanıcıların kişisel bir bilgisayara sahip olmaları için yeterince küçüktü. Windows 1.0 yayınlandı. |
+| **Veri depolama**| Disket formatı, veri delici kartların yerini alarak 360 kilobayt veri depolamaya izin verdi. Ortalama dahili sabit sürücü kapasitesi 10 megabayttı. |
+| **Veri analizi** | Veri organizasyonu, elektronik elektronik tabloların geliştirilmesiyle devrim yarattı. Bu programlar önce geleneksel finansal defterleri taklit etti. |
+| **İletişim**     | Dahili elektronik mesajlar veya e-postalar devlet kurumları, üniversiteler ve savunma/askeri endüstriler tarafından iletişim kurmak için kullanılıyordu. |
+
+#### 2005
+
+_2005 yılında dünya nüfusu 6.5 milyar idi. İlk video YouTube'a yüklendi. NASA'nın Deep Impact uzay sondası hareket halindeki bir kuyruklu yıldızı etkiledi._
+
+| **Tarla**         | **Özet** |
+|-------------------|---------|
+| **TEKNOLOJİ**     | Çevirmeli bağlantı bağlantıları yüksek hızlı bağlantı ile değiştirilir. Akıllı cihazlar, özellikle kentsel alanlarda artan sayıda insana internete erişim sağlar. İşletmeler, topladıkları kullanıcı verilerinin yararlılığının farkına varırlar. |
+| **Veri depolama** | Büyük ölçekli şirketler, verileri bulut hizmetlerinde dijitalleştirmeye ve depolamaya başladı. Belgelerle dolu dosya dolapları yavaş yavaş veri arşivlerine dönüştürülüyordu. Flash sürücüler pazara ulaştı ve bir cebe kolayca sığabilecek bir gigabayt taşınabilir depolama alanı sunuyor. |
+| **Veri analizi**  | Şirketler, birincil iş unsurları olarak veri analizi ve tahmine dayalı modelleme kullandılar. Müşteri etkileşimi, yapılandırılmamış verilerin büyük depoları oluşturarak veri kümeleri ve veri analizi fırsatları sağlar. Sosyal medya, yapılandırılmamış verilerden faydalı bilgiler toplamak için araçlara, teknolojilere ve analitik tekniklerine olan ihtiyacı önemli ölçüde artırdı. |
+| **İletişim**      | Departmanlar arası işbirliği, dünya çapında e-posta, ve anlık mesajlaşma akıllı cihazlarda kullanılabilir hale geldi. |
+
+
+#### Bugün
+
+_Bugün dünya nüfusu 8 milyar civarındadır. James Webb Uzay Teleskobu, evrenin ilk anları hakkındaki bilgimizi genişletiyor_.
+
+| **Tarla**         | **Özet** |
+|-------------------|----------|
+| **TEKNOLOJİ**     | Artırılmış ve sanal gerçeklik, bilgisayar tarafından oluşturulan bilgilerle zenginleştirilmiş etkileşimli deneyimler sunar. Nesnelerin İnterneti (IoT), giderek artan sayıda cihaz ve sistemi birbirine bağlar. Edge computing yaygın bir uygulama haline geliyor; Hız ve esneklik için iyi olan ve tek bir hesaplama gücü kaynağına bağlı olmayan hesaplama görevlerini yakındaki birçok işlemciye (yani bilgisayarlar) dağıtmanın bir yoludur. |
+| **Veri depolama** | Kuantum mekaniğinin kolektif özelliklerini kullanan bir bilgi işlem türü olan kuantum hesaplama, işleme ve depolamayı artırmak ve klasik bilgisayarlar için çok karmaşık olan sorunları çözmek için geliştirilmektedir. Uluslararası çabalar, gerekli soğutma sistemleri, kullanıcı arayüzleri, ağlar ve depolama yetenekleriyle kuantum bilgi işlem sistemleri inşa etmeye devam edecektir. |
+| **Veri analizi**  | Yapay zeka, insan yeteneklerini artırarak yenilik oranını hızlandırmaya yardımcı oluyor. Bu teknoloji, sosyal ve teknolojik konular arasındaki kesişme noktasında yer almaktadır. Teknolojik gelişmeler, insanların bilgiyi nasıl işlediği ve öğrendiği hakkındaki biyolojik ve psikolojik bilgilerden ilham almaya devam ediyor. |
+| **İletişim**      | Sanal toplantılar ve çevrimiçi mesajlaşma yaygınlaştı. Görev yönetimi yazılımı, kuruluşların projelerin tamamlanmasını kolaylaştırmasına yardımcı olarak dünyanın dört bir yanındaki çalışanların eşzamanlı çalışmasına olanak tanır. |
+
+
+### Önemli çıkarımlar
+
+Veri bilimi ve veri analitiği, gelişen veri kariyeri alanında zaman içinde gelişen farklı ancak bağlantılı alanlardır. Kuruluşlar genellikle işe alırken bu terimleri birbirinin yerine kullanır, bu nedenle iki meslek arasındaki benzerlikleri ve farklılıkları tanıyabilmek, belirli beceri setinizle uyumlu fırsatları belirlemenize yardımcı olacaktır. Bu nedenle, bu kurs boyunca, bir bütün olarak veri kariyer alanı ve veri analitiği profesyonellerinin bu alanda nasıl çalıştıkları hakkında daha fazla bilgi edineceksiniz.
+
 ## PACE Aşamaları
 
 Şimdiye kadar, PACE çerçevesi ile tanıştınız ve veri analizi projeleri için nasıl net bir temel ve yapı sağladığını öğrendiniz. Ayrıca PACE'nin bir kısaltma olduğunu öğrendiniz; harflerin her biri bir projede eyleme geçirilebilir bir aşamayı temsil eder: planlayın, analiz edin, inşa edin ve uygulayın. Bu okumada, PACE iş akışı hakkında daha fazla bilgi edinecek ve sürecin her aşamasının veri analizine nasıl yardımcı olabileceğini keşfedeceksiniz.
@@ -735,10 +818,161 @@ right
 
 # Kurs 3: Rakamların Ötesine Geçin
 
-## EDA Prosesi (Görsel örnek)
+## EDA Prosesi
 
 Norveç'teki iğne yapraklı bir ormandaki ağaçlar hakkında yalnızca 200 satır ve beş sütun veriye sahip bir veri kümesi atandığını hayal edin. Tam analizinizi tamamlamak için 1.000'den fazla satıra ve en az iki sütuna daha ihtiyacınız olacağını biliyorsunuz. Bundan çok daha fazla ayrıntı olmasa bile, tüm EDA süreciniz şöyle görünebilir:
 
 ![image](./images/3001.png)
+
+1. **Keşfetme**: Veri kümesinin genel şeklini, boyutunu ve içeriğini kontrol edersiniz. Veri konusunda kısa olduğunu görüyorsunuz.
+
+2. **Katılma**: Daha fazla veri eklersiniz.
+
+3. **Doğrulama**: Yeni verilerde hatalar veya yazım hataları olmadığını hızlı bir şekilde kontrol edersiniz.
+
+4. **Yapılandırma**: Trendleri anlamak için verileri farklı zaman dilimlerinde ve segmentlerde yapılandırırsınız.
+
+5. **Doğrulama:** Yapılandırmada yaptığınız yeni sütunların doğru tasarlandığından emin olmak için başka bir hızlı kontrol yaparsınız.
+
+6. **Temizlik**: Aykırıları, eksik verileri ve dönüşüm veya dönüşüm ihtiyaçlarını kontrol edersiniz.
+
+7. **Doğrulama**: Temizledikten sonra, yaptığınız değişikliklerin doğru ve doğru olup olmadığını iki kez kontrol edersiniz.
+
+8. **Sunum**: Veri kümenizi bir eşle paylaşırsınız.
+
+Verilerde yaptığınız değişikliklerin farkında olmadan hata vermediğinden emin olmak için "geçerli" uygulamasını yinelemeli olarak veya birden çok kez gerçekleştirdiğinize dikkat edin. Ayrıca, önceden daha fazla veriye olan ihtiyacı fark ettiğiniz için, "keşfetme" uygulamasının hemen ardından "katılma" uygulaması gerçekleştirildi.
+
+Temizlenmiş veri kümenizi bir eşinize sunduktan sonra, daha fazla keşif ve/veya temizlik için notlar veya fikirler alma şansınız yüksektir. Bu nedenle, daha da fazla yineleme göreceksiniz.
+
+**Profesyonel ipucu**: Veri bilimcileri, "temiz" ve modelleme veya makine öğrenimi algoritmaları için hazır olduğunu ilan etmekte kendilerini rahat hissetmeden önce bir veri kümesinde EDA uygulamalarını birden çok kez gerçekleştirmeyi bekliyorlar.
+
+## Etik makine öğreniminde EDA'nın önemi
+
+Algoritmalar ve makine öğrenimi ağları bireyler, şirketler ve hatta hükümetler adına giderek daha fazla karar vermeye başladıkça, etik ve düzenleme tartışması giderek daha önemli hale geliyor. [Etik Yapay Zeka ve Makine Öğrenimi Enstitüsü](https://ethical.institute/principles.html)'ye göre, makine öğrenimi sistemlerini sorumlu bir şekilde geliştirmek için sekiz ilke vardır.
+
+**EDA sürecinin temel ilkeleri**
+
+Aşağıdaki iki ilke doğası gereği EDA sürecinin bir parçasıdır:
+
+**İnsan büyütme**: Bu ilke, insanların gözetim için AI veya makine öğrenimi algoritma sistemlerine eklenmesini sağlar. Veri bilimcileri tarafından gerçekleştirilen kapsamlı EDA, bir algoritmaya beslenen önyargıyı, dengesizliği ve yanlışlıkları sınırlamanın belki de en iyi yollarından biridir.
+
+**Önyargı değerlendirmesi**: İnsan müdahalesi olmadan, önyargı makine öğrenimi modellerinde çok kolay enjekte edilir ve yeniden üretilir. Metodik EDA süreçlerinin gerçekleştirilmesi, veri bilimcilerinin verilerdeki önyargıların ve dengesizliklerin farkında olmalarını ve bunlara göre hareket etmelerini sağlayacaktır.
+
+**Profesyonal ipucu**: Veri kariyer alanında etik standartlara bağlılığı sağlamanın önemi abartılamaz. Veri profesyonellerinin, EDA çalışmalarına sürekli olarak etik bir zihniyet uygulayarak önyargı ve ayrımcılığı tanımak için kapasitelerini sürekli olarak büyütmeleri gerekir.
+
+Makine öğreniminin ötesinde, EDA neredeyse her önemli veritabanı kararına uygulanabilir. İleride, EDA'nın birçok uygulaması ve yinelemeli ve sıralı olmayan bir yaklaşımın gerekliliği hakkında bilgi edineceksiniz.
+
+## Şematik Gösterim
+
+```python 
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import datetime as dt
+
+# Read in the 2018 lightning strike dataset
+df = pd.read_csv('eda_using_basic_data_functions_in_python_dataset1.csv')
+``` 
+
+```python
+# Eğer tarih sütunu varsa
+df['date'] = pd.to_datetime(df['date'])
+```
+
+```python 
+# Inspect the first 10 rows 
+df.head(10)
+```
+
+| index | date       | number_of_strikes | center_point_geom  |
+|-------|------------|-------------------|--------------------|
+| 0     | 2018-01-03 | 194               | POINT(-75 27)      |
+| 1     | 2018-01-03 | 41                | POINT(-78.4 29)    |
+| 2     | 2018-01-03 | 33                | POINT(-73.9 27)    |
+| 3     | 2018-01-03 | 38                | POINT(-73.8 27)    |
+| 4     | 2018-01-03 | 92                | POINT(-79 28)      |
+| 5     | 2018-01-03 | 119               | POINT(-78 28)      |
+| 6     | 2018-01-03 | 35                | POINT(-79.3 28)    |
+| 7     | 2018-01-03 | 60                | POINT(-79.1 28)    |
+| 8     | 2018-01-03 | 41                | POINT(-78.7 28)    |
+| 9     | 2018-01-03 | 119               | POINT(-78.6 28)    |
+
+```python 
+#Get more information about the data, including data types of each column 
+df.info()
+
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 3401012 entries, 0 to 3401011
+# Data columns (total 3 columns):
+#  #   Column             Dtype         
+# ---  ------             -----         
+#  0   date               datetime64[ns]
+#  1   number_of_strikes  int64         
+#  2   center_point_geom  object        
+# dtypes: datetime64 , int64(1), object(1)
+# memory usage: 77.8+ MB
+```
+
+```python
+df['month'] = df['date'].dt.month
+df.head()
+```
+
+|   | date       | number_of_strikes | center_point_geom | month |
+|---|------------|-------------------|--------------------|-------|
+| 0 | 2018-01-03 | 194               | POINT(-75 27)      | 1     |
+| 1 | 2018-01-03 | 41                | POINT(-78.4 29)    | 1     |
+| 2 | 2018-01-03 | 33                | POINT(-73.9 27)    | 1     |
+| 3 | 2018-01-03 | 38                | POINT(-73.8 27)    | 1     |
+| 4 | 2018-01-03 | 92                | POINT(-79 28)      | 1     |
+
+```python
+# Create a new 'month txt' column
+df['month_txt'] = df['date'].dt.month_name().str.slice(stop=3)
+
+# Create new helper dataframe for plotting
+df_by_month = (
+    df.groupby(['month', 'month_txt'])
+      .sum()
+      .sort_values('month', ascending=True)
+      .head(12)
+      .reset_index()
+)
+
+df_by_month
+```
+
+| month | month_txt | number_of_strikes |
+|-------|-----------|-------------------|
+| 1     | Jan       | 860045            |
+| 2     | Feb       | 2071315           |
+| 3     | Mar       | 854168            |
+| 4     | Apr       | 1524339           |
+| 5     | May       | 4166726           |
+| 6     | Jun       | 6445083           |
+| 7     | Jul       | 8320400           |
+| 8     | Aug       | 15525255          |
+| 9     | Sep       | 3018336           |
+| 10    | Oct       | 1093962           |
+| 11    | Nov       | 409263            |
+| 12    | Dec       | 312097            |
+
+```python
+plt.bar(
+    x=df_by_month['month_txt'],                     # X ekseninde ay isimleri (kısa hali: Jan, Feb, vs.)
+    height=df_by_month['number_of_strikes'],        # Y ekseninde yıldırım sayıları
+    label="Number of strikes"                       # Legende (açıklamada) kullanılacak etiket
+)
+
+plt.xlabel("months (2018)")                         # X ekseni başlığı
+plt.ylabel("Number of lightning strikes")           # Y ekseni başlığı
+plt.title("Number of lightning strikes in 2018 by months")  # Grafik başlığı
+
+plt.legend()                                        # Açıklama kutusunu göster
+plt.show()                                          # Grafiği ekrana çiz
+```
+
+![image](./images/3002.png)
+
 
 
