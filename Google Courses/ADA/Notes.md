@@ -1089,3 +1089,33 @@ df.center_point_geom.value_counts()
 | POINT(-119.6 35.6)   | 1     |
 | POINT(-119.4 35.6)   | 1     |
 | POINT(-58.5 45.3)    | 1     |
+
+```python
+# Identify top 20 locations with most days of lightning
+df.center_point_geom.value_counts()[:20].rename_axis('unique_values').reset_index(name='counts').style.background_gradient()
+```
+
+![image](./images/3007.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
