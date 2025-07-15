@@ -2938,7 +2938,90 @@ Olasılık hakkında daha fazla bilgi edinmek için, aşağıdaki etkileşimli k
 
 ## Koşullu olasılık
 
+Önceden, tek bir olay için ve iki veya daha fazla bağımsız olay için, örneğin iki ardışık jeton çevirme olasılığı hesapladınız. Koşullu olasılık, iki veya daha fazla bağımlı olay için geçerlidir.
 
+### **Bağımlı olaylar**
 
+Daha önce, ilk olay ikinci olayın sonucunu etkilemiyorsa veya olasılığını değiştirmezse iki olayın **bağımsız** olduğunu öğrendiniz. Örneğin, ardışık iki madeni para atışı bağımsız olaylardır. İlk atışta kafa almak ikinci atışın sonucunu etkilemez.
 
+Buna karşılık, bir olayın **meydana gelmesi diğer olayın olasılığını değiştirirse iki olay bağımlıdır.** Bu, ilk olayın ikinci olayın sonucunu etkilediği anlamına gelir.
+
+Örneğin, bir sınavda iyi bir not almak istiyorsanız, önce ders materyalini incelemeniz gerekir. İyi bir not almak çalışmaya bağlıdır. Bir masa beklemeden popüler bir restoranda yemek yemek istiyorsanız, erken gelmelisiniz. Beklemekten kaçınmak erken gelmeye bağlıdır. Her durumda, ikinci olayın ilk olaya bağlı veya buna bağlı olduğunu söyleyebilirsiniz.
+
+Artık bağımlı olayları daha iyi anladığınıza göre, koşullu olasılığa dönelim ve formülü gözden geçirelim.
+
+### **Koşullu olasılık formülü**
+
+Formül, iki bağımlı olay A ve B için, A olayının ve B olayının meydana gelme olasılığının, A olayının meydana geldiği göz önüne alındığında, B olayı meydana gelme olasılığı ile çarpıldığında, A olayının meydana gelme olasılığına eşit olduğunu söylüyor.
+
+**Koşullu olasılık**
+
+P (A ve B) = P (A) * P (B | A)
+
+Olasılık gösteriminde, B ve A harfleri arasındaki dikey çubuk bağımlılığı gösterir veya B olayının meydana gelmesinin A olayının meydana gelmesine bağlı olduğunu gösterir. Bunu “A verilen B olasılığı” olarak söyleyebilirsiniz.
+
+Formül ayrıca, A olayı verilen B olayının olasılığının, hem A hem de B'nin meydana gelme olasılığına eşit olarak ifade edilebilir. A olasılığına bölünmesi.
+
+**Koşullu olasılık**
+
+P (B | A) = P (A ve B) / P (A)
+
+Bunlar aynı denklemi temsil etmenin sadece iki yoludur. Duruma veya önceden hangi bilgilerin verildiğine bağlı olarak, birini veya diğerini kullanmak daha kolay olabilir.
+
+**Not: Ko** şullu olasılık formülü bağımsız olaylar için de geçerlidir. A ve B bağımsız olaylar olduğunda, P (B|A) = P (B). Böylece formül P (A ve B) = P (A) * P (B) olur. Bu formül aynı zamanda kursta daha önce öğrendiğiniz çarpma kuralıdır.
+
+### **Örnek: oyun kartları**
+
+52 oyun kartından oluşan standart bir desteyle ilgilenen koşullu olasılık örneğini inceleyelim.
+
+İki olay hayal edin:
+
+- İlk olay, kart destesinden bir kalp çekmektir.
+    
+- İkinci olay, aynı desteden başka bir kalp çekmektir.
+    
+
+Arka arkaya iki kalp çekme olasılığını öğrenmek istediğinizi varsayalım. Bu iki olay bağımlıdır çünkü ilk çekilişte kalp almak ikinci çekilişte kalp alma olasılığını değiştirir..
+
+Standart bir deste dört farklı takım içerir: kalp, karo, sinek ve maça. Her takımın 13 kartı vardır. İlk çekiliş için kalp alma şansı 52 üzerinden 13 veya % 25'tir. İkinci çekiliş için, ilk çekilişte zaten bir kalp seçtiğiniz için kalp alma olasılığı değişir. Şimdi, 51 kartlık bir destede 12 kalp var. İkinci çekiliş için kalp alma şansı 51 üzerinden 12'si veya yaklaşık % 23,5'tir. Kalbe sahip olmak artık daha az olasıdır - olasılık %25'ten %23,5'e düştü.
+
+Şimdi, koşullu olasılık formülünü uygulayalım:
+
+**P (A ve B) = P (A) * P (B | A)**
+
+Hem A olayının hem de B olayının meydana gelme olasılığını hesaplamak istiyorsunuz. A Olayına _1. kalp_ diyelim, ilk çekilişte kalp almayı ifade eder. B Olayına _2. kalp_ diyelim, ikinci çekilişte kalp almayı ifade eder, ilk seferde bir kalp çizildiği göz önüne alındığında. A olayı olasılığı 13/52 veya % 25'tir. B olayı olasılığı 12/51 veya % 23.5'tir.
+
+Bu sayıları formüle girelim:
+
+**P (1. kalp ve 2. kalp) = P (1. kalp) * P (2. kalp | 1. kalp)** = 13/52 * 12/51 = 1/17 = 0.0588 veya yaklaşık % 5.9
+
+Dolayısıyla, standart bir oyun kartı destesinden arka arkaya iki kalp çekme şansı % 5,9'dur.
+
+### **Örnek: çevrimiçi satın alımlar**
+
+Başka bir örneği inceleyelim. Bir çevrimiçi perakende mağazasında çalışan bir veri uzmanı olduğunuzu hayal edin. Mağazanın web sitesini ziyaret eden müşterilerin % 20'sinin 100$ veya daha fazla satın alma yaptığını söyleyen verileriniz var. Bir müşteri 100$ harcıyorsa, ücretsiz hediye kartı almaya hak kazanır. Mağaza, en az 100$ harcayan müşterilerin % 10'una rastgele hediye kartları verir.
+
+Bir müşterinin 100$ harcama ve hediye kartı alma olasılığını hesaplamak istiyorsunuz. Hediye kartı almak, ilk 100$ harcamanıza bağlıdır. Yani, bu koşullu bir olasılıktır çünkü iki bağımlı olayla ilgilenir.
+
+Koşullu olasılık formülünü uygulayalım:
+
+**P (A ve B) = P (A) * P (B | A)**
+
+Hem A olayının hem de B olayının meydana gelme olasılığını hesaplamak istiyorsunuz. A etkinliğine _100$_ ve B olayı _hediye kartı_ diyelim. A olayı olasılığı 0.2 veya % 20'dir. B olayı olasılığı 0.1 veya % 10'dur.
+
+**P (\$100 ve hediye kartı) = P (\$100) * P (hediye kartı | \$ 100 verilen)** = 0,2 * 0,1 = 0,02 veya % 2
+
+Dolayısıyla, bir müşterinin 100$ veya daha fazla harcama ve ücretsiz hediye kartı alma olasılığı 0,2 * 0,1 = 0,02 veya % 2'dir.
+
+### Önemli çıkarımlar
+
+Koşullu olasılık, bağımlı olaylar arasındaki ilişkiyi tanımlamanıza yardımcı olur. Veri uzmanları genellikle bir iş bağlamında koşullu olasılığı kullanır. Örneğin, yeni bir reklam kampanyası gibi bir etkinliğin satış gelirini nasıl etkileyeceğini tahmin etmek için koşullu olasılığı kullanabilirler. Bu, paydaşların şirketlerinin kaynaklarına yatırım yapmanın en iyi yolu hakkında akıllı kararlar almalarına yardımcı olur.
+
+### Daha fazla bilgi için kaynaklar
+
+Koşullu olasılık hakkında daha fazla bilgi edinmek için aşağıdaki kaynağa bakın:
+
+- [Investopedia"nın bu makalesi, bir iş bağlamında koşullu olasılığı tartışıyor.](https://www.investopedia.com/terms/c/conditional_probability.asp#:~:text=Conditional%20probability%20is%20defined%20as,succeeding%2C%20or%20conditional%2C%20event.) 
+
+## Genişletilmiş Bayes Teoremi
 
