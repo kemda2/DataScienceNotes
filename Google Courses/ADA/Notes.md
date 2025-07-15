@@ -891,5 +891,111 @@ plt.show()                                          # Grafiği ekrana çiz
 
 ![image](./images/3002.png)
 
+```python
+# Import statements
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+# Read in the 2018 lightning strike dataset
+df = pd.read_csv('eda_using_basic_data_functions_in_python_dataset1.csv')
+
+# Convert 'date' column to datetime
+df['date'] = pd.to_datetime(df['date'])
+
+# Create new columns
+df['week'] = df['date'].dt.strftime('%Y-W%V')       # örn: 2018-W27
+df['month'] = df['date'].dt.strftime('%Y-%m')       # örn: 2018-07
+df['quarter'] = df['date'].dt.to_period('Q').dt.strftime('%Y-Q%q')
+df['year'] = df['date'].dt.strftime('%Y')
+
+df.Head()
+```
+
+| date | number_of_strikes | center_point_geom | week | month | quarter | year |
+|---|---|---|---|---|---|---|
+| 2016-08-05 | 16                | POINT(-101.5 24.7)   | 2016-W31 | 2016-08 | 2016-Q3 | 2016 |
+| 2016-08-05 | 16                | POINT(-85 34.3)      | 2016-W31 | 2016-08 | 2016-Q3 | 2016 |
+| 2016-08-05 | 16                | POINT(-89 41.4)      | 2016-W31 | 2016-08 | 2016-Q3 | 2016 |
+| 2016-08-05 | 16                | POINT(-89.8 30.7)    | 2016-W31 | 2016-08 | 2016-Q3 | 2016 |
+| 2016-08-05 | 16                | POINT(-86.2 37.9)    | 2016-W31 | 2016-08 | 2016-Q3 | 2016 |
+| 2016-08-05 | 16                | POINT(-97.8 38.9)    | 2016-W31 | 2016-08 | 2016-Q3 | 2016 |
+| 2016-08-05 | 16                | POINT(-81.9 36)      | 2016-W31 | 2016-08 | 2016-Q3 | 2016 |
+
+```python
+# Create new dataframe view of just 2018 data, summed by week
+df_by_week_2018 = df[df['year'] == '2018'].groupby(['week']).sum().reset_index()
+
+# Plot a bar chart of weekly strike totals in 2018
+plt.bar(x=df_by_week_2018['week'], height=df_by_week_2018['number_of_strikes'])
+plt.xlabel("Week number")
+plt.ylabel("Number of lightning strikes")
+plt.title("Number of lightning strikes per week (2018)")
+plt.show()
+```
+![image](./images/3003.png)
+
+plt.figure(figsize=(20, 5))  # Increase output size
+plt.bar(x=df_by_week_2018['week'], height=df_by_week_2018['number_of_strikes'])
+plt.plot()
+plt.xlabel("Week number")
+plt.ylabel("Number of lightning strikes")
+plt.title("Number of lightning strikes per week (2018)")
+plt.xticks(rotation=45, fontsize=8)  # Rotate x-axis labels and decrease font size
+plt.show()
+
+![image](./images/3004.png)
+
+```python
+df_by_quarter['number_of_strikes'].div(1000000)
+```
+
+|    | Value     |
+|----|-----------|
+| 0  | 2.683798  |
+| 1  | 15.084857 |
+| 2  | 21.843820 |
+| 3  | 1.969754  |
+| 4  | 2.444279  |
+| 5  | 13.548585 |
+| 6  | 17.277461 |
+| 7  | 1.824870  |
+| 8  | 3.785528  |
+| 9  | 12.136148 |
+| 10 | 26.863991 |
+| 11 | 1.815322  |
+
+```python
+# Group 2016-2018 data by quarter and sum
+df_by_quarter = df.groupby(['quarter']).sum().reset_index()
+
+# Format as text, in millions
+df_by _quarter('number_of_strikes_formated'] = df_by_quarter['number_of_strikes'].div(1000000).round(1).astype(int)
+
+plt.figure(figsize = (15,5))
+plt.bar(x = df_by_quarter['quarter'], height=df_by_quarter['number_of_strikes'])
+
+def addlabels (x, y, labels):
+    'Iterates over data and plots text labels above each bar of bar graph.'
+    for i in range(len(x)):
+        plt.text(i, y[i], labels[i], ha 'center', va = 'bottom')
+
+plt.figure(figsize(15,5))
+plt.bar(x=df_by_quarter['quarter'], height=df_by_quarter['number_of_strikes'])
+addlabels(df_by_quarter['quarter'], df_by_quarter['number_of_strikes'], df_by_quarter['number_of_strikes_formated'])
+plt.plot()
+plt.xlabel('Quarter')
+plt.ylabel('Number of lightning strikes')
+plt.title('Number of lightning strikes per quarter (2016-2018)')
+plt.show()
+```
+
+![image](./images/3005.png)
+
+
+
+
+
+
 
 
