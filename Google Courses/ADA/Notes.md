@@ -3025,3 +3025,367 @@ Koşullu olasılık hakkında daha fazla bilgi edinmek için aşağıdaki kayna�
 
 ## Genişletilmiş Bayes Teoremi
 
+Son zamanlarda, **Bayes teore** minin koşullu olasılığı belirlemek için bir matematik formülü olduğunu öğrendiniz. Teorem, adını Londra, İngiltere'den 18. yüzyıl matematikçisi Thomas Bayes'in adını almıştır. Koşul **lu olas** ılığın, başka bir olayın daha önce meydana geldiği göz önüne alındığında meydana gelme olasılığını ifade ettiğini hatırlayın. Örneğin, bir oyun kartı destesinden bir as çektiğinizde, bu aynı desteden ikinci bir as çekme olasılığını değiştirir.
+
+Bu okumada, Bayes teoreminin farklı bölümleri ve şartlı olasılığı hesaplamak için teoremi nasıl kullanabileceğiniz hakkında daha fazla bilgi edineceksiniz.
+
+### Bayes teoremi
+
+Bayes teoremi, olayla ilgili yeni bilgilere dayanarak bir olayın olasılığını güncellemenin bir yolunu sağlar.
+
+#### **Sonraki ve önceki olasılık**
+
+Bayes istatistiklerinde, **önceki olasılık**, yeni veriler toplanmadan önce bir olayın olasılığını ifade eder. **Sonraki olasılık**, yeni verilere dayalı bir olayın güncellenmiş olasılığıdır.
+
+Bayes teoremi, verilerinize göre önceki olasılığı güncelleyerek sonraki olasılığı hesaplamanıza olanak tanır.
+
+Örneğin, tıbbi bir durumun yaşla ilgili olduğunu varsayalım. Bir kişinin yaşa göre duruma sahip olma olasılığını daha doğru bir şekilde belirlemek için Bayes teoremini kullanabilirsiniz. Önceki olasılık, bir kişinin duruma sahip olma olasılığı olacaktır. Sonraki veya güncellenmiş olasılık, belirli bir yaş grubundaysa, bir kişinin duruma sahip olma olasılığı olacaktır.
+
+#### **Teorem**
+
+Teoremin kendisini inceleyelim.
+
+**Bayes teoremi**, herhangi iki A ve B olayı için, verilen B olasılığının, A olasılığının, A verilen B olasılığının B olasılığının B olasılığına bölünmesiyle eşit olduğunu belirtir.
+
+**Bayes teoremi**
+
+Teoremde, önceki olasılık olayın olasılığıdır A. Sonraki olasılık veya hesaplamaya çalıştığınız şey, A olayının olasılığıdır B olayının olasılığıdır.
+
+- **P (A)**: Önceki olasılık
+    
+- **P (A|B)**: Sonraki olasılık
+    
+
+Bazen istatistikçiler ve veri uzmanları, A olayına verilen B olayının olasılığını ifade etmek için “olasılık” terimini ve B olayının olasılığını ifade etmek için “kanıt” terimini kullanırlar.
+
+- **P (B|A)**: Olasılık
+    
+- **P (B)**: Kanıt
+    
+
+Bu terimleri kullanarak Bayes teoremini şu şekilde yeniden ifade edebilirsiniz:
+
+- Sonraki = Olasılık * Önceki/ Kanıt
+    
+![image](./images/4007.png)
+
+Hesaplamayı bu farklı perspektiflerden düşünmek ve probleminizi denklemle eşlemeye yardımcı olabilir.
+
+Bayes teoremi hakkında düşünmenin bir yolu, önceki bir inancı, P (A), yeni verileri kullanarak arka bir olasılık olan P (A | B) 'ye dönüştürmenize izin vermesidir. Yeni veriler olasılık, P (B | A) ve kanıtlar, P (B).
+
+_**Not:**_ _Bu okuma, Bayes teoremi ile ilişkili temel kavram ve terimlere bir giriş sağlar. Bayes istatistiklerinin detaylı bir incelemesi bu dersin kapsamı dışındadır. Kariyerinizde bir veri uzmanı olarak ilerledikçe, Bayes teoremini ve çeşitli uygulamalarını daha fazla keşfetme fırsatına sahip olacaksınız_.
+
+Şimdilik hatırlanması gereken önemli bir nokta, Bayes teoreminin hem A verilen B'nin koşullu olasılığını hem de A verilen B'nin koşullu olasılığını içerdiğidir. Bu olasılıklardan birini biliyorsanız, Bayes teoremi diğerini belirlemenize yardımcı olabilir.
+
+Teoremin nasıl çalıştığını daha iyi anlamak için bir örneği inceleyelim.
+
+#### **Örnek: spam filtresi**
+
+Bayes teoreminin dijital dünyada iyi bilinen bir uygulaması spam filtreleme veya bir e-postanın spam olup olmadığını tahmin etmektir. Uygulamada, sofistike bir spam filtresi, e-postanın içeriği, başlığı, eki olup olmadığı, gönderen adresinin etki alanı türü (.edu veya.org) ve daha fazlası dahil olmak üzere birçok farklı değişkenle ilgilenir. Ancak, örneğimiz için Bayes spam filtresinin basitleştirilmiş bir sürümünü kullanabiliriz.
+
+Diyelim ki e-postada belirli bir kelime göründüğü için bir e-postanın spam olma olasılığını belirlemek istediğinizi varsayalım. Bu örnekte, “para” kelimesini kullanalım.
+
+Aşağıdaki bilgileri keşfedersiniz:
+
+- Bir e-postanın spam olma olasılığı% 20'dir.
+    
+- Bir e-postada “para” kelimesinin görünme olasılığı% 15'tir.
+    
+- Bir spam e-postada “para” kelimesinin görünme olasılığı% 40'tır.
+    
+
+Bu örnekte, önceki olasılığınız, bir e-postanın spam olma olasılığıdır. Sonradan olasılığınız veya nihayetinde öğrenmek istediğiniz şey, bir e-postanın “para” kelimesini içerdiği göz önüne alındığında spam olma olasılığıdır. Önceki olasılığınızı güncellemek için kullanacağınız yeni veriler, “para” kelimesinin bir e-postada görünme olasılığı ve “para” kelimesinin spam e-postada görünme olasılığıdır.
+
+Bayes teoremiyle çalışırken, önce A olayının ne olduğunu ve B olayının ne olduğunu bulmak yararlıdır - bu, olaylar arasındaki ilişkiyi anlamayı ve formülü kullanmayı kolaylaştırır.
+
+A etkinliğine spam e-posta ve B olayına bir e-postada “para” kelimesinin görünüşü diyelim. Şimdi, Bayes teoremini A olayı için “spam” kelimesini ve B olayı için “para” kelimesini kullanarak yeniden yazabilirsiniz.
+
+P (A | B) = P (B | A) * P (A)/P (B)
+
+P (İstenmeyen İleti | Para) = P (Para | İstenmeyen İleti) * P (İstenmeyen İleti)/P (Para)
+
+Aşağıdakileri öğrenmek istiyorsunuz:
+
+- **P (Spam| Para) veya arka olasılık**: e-postada “para” kelimesinin görünmesi göz önüne alındığında bir e-postanın spam olma olasılığı
+    
+
+Şimdi, verilerinizi formüle girin:
+
+- **P (SpAM) veya önceki olas** ılık: bir e-postanın spam olma olasılığı = 0.2 veya% 20
+    
+- **P (Para) veya kanıt:** “para” kelimesinin bir e-postada görünme olasılığı = 0.15 veya% 15
+    
+- **P (Para | SpAM) veya olasılık: e-postanın spam** olduğu göz önüne alındığında “para” kelimesinin bir e-postada görünme olasılığı = 0.4 veya% 40
+    
+
+P (SpAM | Para) = P (Para | SpAM) * P (SpAM)/P (Para) = 0.4 * 0.2/0.15 = 0.53333 veya yaklaşık% 53.3%.
+
+Dolayısıyla, e-postanın “para” kelimesini içerdiği göz önüne alındığında, bir e-postanın spam olma olasılığı% 53.3'tür.
+
+### Önemli çıkarımlar
+
+Bayes teoremi, modern veri analitiğinde verileri analiz etmek ve yorumlamak için güçlü bir yöntem olan Bayes çıkarımı olarak da bilinen Bayes istatistik alanının temelidir. Veri uzmanları, Bayes teoremini yapay zekadan tıbbi testlere kadar çok çeşitli alanlarda kullanır.
+
+Bayes teoremi hakkında temel bir anlayışa sahip olmak, kariyerinizde bir veri uzmanı olarak ilerledikçe Bayes istatistikleri hakkında daha fazla bilgi edinmenizi sağlayacaktır.
+
+### Daha fazla bilgi için kaynaklar
+
+Bayes Teoremi hakkında daha fazla bilgi edinmek için aşağıdaki kaynağa bakın:
+
+- [Pennsylvania Eyalet Üniversitesi tarafından açıklanan Bayes teoremi](https://online.stat.psu.edu/stat500/lesson/2/2.7)
+    
+
+“Savcının yanılgısı” hakkında ilginç bir tartışma için bu sayfaya göz atın:
+
+- [Amerikan Epidemiyoloji Dergisi tarafından savcının yanılgısının açıklaması](https://academic.oup.com/aje/article/179/9/1125/103523)
+
+## Ayrık olasılık dağılımları
+
+Son zamanlarda, veri profesyonellerinin farklı veri kümelerini modellemek ve verilerindeki önemli kalıpları belirlemek için olasılık dağılımlarını kullandığını öğrendiniz. Bir olasılık **dağılımının** rastgele bir olayın olası sonuçlarının olasılığını tanımladığını hatırlayın. Ayrık olasılık dağılımları, ayrık rastgele değişkenleri veya ayrık olayları temsil eder. Genellikle, ayrık olayların sonuçları sayılabilen tam sayılar olarak ifade edilir. Örneğin, bir kalıbın yuvarlanması 2 veya 3 ile sonuçlanabilir, ancak 2.575 veya 3.184 gibi ondalık bir değerle sonuçlanamaz.
+
+Bu okumada, dört ortak ayrık olasılık dağılımının ana özelliklerine genel bir bakış elde edeceksiniz:
+
+- Uniform
+    
+- Binom
+    
+- Bernoulli
+    
+- Poison
+    
+
+### Ayrık olasılık dağılımları
+
+#### **Uniform dağılım**
+
+Tek tip dağılım, sonuçları eşit derecede olası veya eşit olasılığa sahip olayları tanımlar.
+
+Örneğin, bir kalıbı yuvarlamak altı sonuçla sonuçlanabilir: 1, 2, 3, 4, 5 veya 6. Her sonucun olasılığı aynıdır: 6'dan 1'i veya yaklaşık% 16.7.
+
+Bir dağılımı histogram gibi bir grafikle görselleştirebilirsiniz. Ayrık bir dağılım için, rastgele değişken x ekseni boyunca çizilir ve karşılık gelen olasılık y ekseni boyunca çizilir. Bu durumda, x ekseni, tek bir kalıp rulosunun olası her sonucunu temsil eder ve y ekseni her sonucun olasılığını temsil eder.
+
+![image](./images/4008.png)
+
+_**Not: Veri**_ _uzmanları genellikle tek tip dağılımı Monte Carlo simülasyonları gibi daha karmaşık istatistiksel yöntemlerin bir parçası olarak kullanır. Bu yöntemlerin ayrıntılı bir tartışması bu dersin kapsamı dışındadır._
+
+_**Not:**_ _Düzgün dağılım hem ayrık hem de sürekli rastgele değişkenler için geçerlidir._
+
+#### **Binom dağılımı**
+
+**Binom dağılımı,** olayların olasılığını yalnızca iki olası sonuçla modeller: başarı veya başarısızlık. Bu sonuçlar birbirini dışlar ve aynı anda gerçekleşemez.
+
+Bu tanım aşağıdakileri varsayar:
+
+- Her olay bağımsızdır veya diğerlerinin olasılığını etkilemez.
+    
+- Her olay aynı başarı olasılığına sahiptir.
+    
+
+Başarı ve başarısızlığın kolaylık sağlamak için kullanılan etiketler olduğunu unutmayın. Örneğin, bir madeni para atarsanız, yalnızca iki olası sonuç vardır: kafalar veya kuyruklar. Analizinizin ihtiyaçlarına göre kafaları veya kuyrukları başarılı bir sonuç olarak etiketlemeyi seçebilirsiniz.
+
+Binom dağılımı, binom deneyi adı verilen bir rastgele olayı temsil eder. Bir binom deneyi aşağıdaki özelliklere sahiptir:
+
+- Deney, bir dizi tekrarlanan denemeden oluşur.
+    
+- Her denemenin sadece iki olası sonucu vardır.
+    
+- Başarı olasılığı her deneme için aynıdır.
+    
+- Ve, her duruşma bağımsızdır.
+    
+
+Bir binom deneyi örneği, arka arkaya 10 kez bir madeni para fırlatmaktır. Bu, aşağıdaki özelliklere sahip olduğu için binom bir deneydir:
+
+- Deney, tekrarlanan 10 denemeden veya madeni para fırlatmasından oluşur.
+    
+- Her denemenin sadece iki olası sonucu vardır: kafalar veya kuyruklar.
+    
+- Her deneme aynı başarı olasılığına sahiptir. Başarıyı kafa olarak tanımlarsanız, her atış için başarı olasılığı aynıdır: %50.
+    
+- Her deneme bağımsızdır. Bir madeni para atmanın sonucu, diğer madeni para atışlarının sonucunu etkilemez.
+    
+
+Histogramda, x ekseni kafa sayısını gösterir ve y ekseni her sonucu alma olasılığını gösterir.
+
+![image](./images/4009.png)
+
+Veri uzmanları, aşağıdakileri modellemek için binom dağılımını kullanabilir:
+
+- Yeni bir ilaç yan etkiler yaratır
+    
+- Kredi kartı işlemi dolandırıcılıktır
+    
+- Bir hisse senedi fiyatının değeri yükselir
+    
+
+Makine öğreniminde, binom dağılımı genellikle verileri sınıflandırmak için kullanılır. Örneğin, bir veri uzmanı, dijital bir görüntünün kedi veya köpek gibi belirli bir hayvan türü olup olmadığını anlamak için bir algoritma eğitebilir.
+
+#### **Bernoulli dağılımı**
+
+Bernoulli dağılımı, yalnızca iki olası sonucu olan olayları (başarı veya başarısızlık) modellediği için binom dağılımına benzer. Tek fark, Bernoulli dağılımının bir deneyin yalnızca tek bir denemesini ifade ederken, binomun tekrarlanan denemeleri ifade etmesidir. Bernoulli davasının klasik bir örneği, tek bir madeni para fırlatmasıdır.
+
+Histogramda, x ekseni bir madeni para fırlatmanın olası sonuçlarını temsil eder ve y ekseni her sonucun olasılığını temsil eder.
+
+![image](./images/4010.png)
+
+#### **Poisson dağılımı**
+
+**Poisson dağılımı**, belirli bir zaman diliminde belirli sayıda olayın meydana gelme olasılığını modeller.
+
+_**Not:**_ _Poisson dağılımı, mesafe, alan veya hacim gibi belirli bir alanda meydana gelen olayların sayısını temsil etmek için de kullanılabilir. Bu derste zamana odaklanıyoruz._
+
+Poisson dağılımı, Poisson deneyi adı verilen bir tür rastgele deneyi temsil eder. Bir Poisson deneyi aşağıdaki özelliklere sahiptir:
+
+- Deneydeki olayların sayısı sayılabilir.
+    
+- Belirli bir zaman diliminde meydana gelen ortalama olay sayısı bilinmektedir.
+    
+- Her olay bağımsızdır.
+    
+
+Örneğin, içerik yayınladığınız çevrimiçi bir web siteniz olduğunu hayal edin. Web siteniz saatte ortalama iki görüntüleme. Web sitenizin belirli bir saatte belirli sayıda görüntülenme alma olasılığını belirlemek istiyorsunuz.
+
+Bu bir Poisson deneyidir çünkü:
+
+- Deneydeki olayların sayısı sayılabilir. Görüntülenme sayısını sayabilirsiniz.
+    
+- Belirli bir zaman diliminde meydana gelen ortalama olay sayısı bilinmektedir. Saatte ortalama iki görüntüleme var.
+    
+- Her sonuç bağımsızdır. Bir kişinin web sitenizi görüntüleme olasılığı, başka bir kişinin web sitenizi görüntüleme olasılığını etkilemez.
+    
+
+Histogramda, x ekseni saatte görüntüleme sayısını gösterir ve y ekseni oluşma olasılığını gösterir.
+
+![image](./images/4011.png)
+
+Veri uzmanları, aşağıdakilerin sayısı gibi verileri modellemek için Poisson dağılımını kullanır:
+
+- Müşteri hizmetleri çağrı merkezi için saatlik çağrı
+    
+- Bir mağazada günlük müşteriler
+    
+- Bir şehirde aylık gök gürültülü fırtınalar
+    
+- Bir bankada saniyede finansal işlemler
+    
+
+### Önemli çıkarımlar
+
+Verilerinizin dağılımını belirlemek, herhangi bir analizde önemli bir adımdır ve gelecekteki sonuçlar hakkında bilinçli tahminler yapmanıza yardımcı olur. Gelecekteki bir veri uzmanı olarak kariyerinizde, verilerinizi daha iyi anlamak için binom ve Poisson gibi ayrık dağılımları kullanacaksınız. Verilerinizin olasılık dağılımını bilmek, analiziniz için en uygun istatistiksel yöntemi veya makine öğrenimi modelini seçmenize de yardımcı olacaktır.
+
+### Daha fazla bilgi için kaynaklar
+
+Ayrık olasılık dağılımları hakkında daha fazla bilgi edinmek için aşağıdaki kaynaklara bakın:
+
+- [Statistics How To'nun bu makal](https://www.statisticshowto.com/discrete-probability-distribution/) esi, ayrık olasılık dağılımı kavramına genel bir bakış sağlar ve binom ve Poisson gibi belirli dağılım türleri hakkında daha fazla bilgi edinmek için bağlantılar sunar..
+
+## Normal dağılımlı model verileri
+
+Son zamanlarda, sürekli olasılık dağılımları ve veri profesyonellerinin verilerini modellemesine nasıl yardımcı olduklarını öğreniyorsunuz. Sürekli olasılık dağılımlarının, bir dizi sayı içindeki tüm olası değerleri alabilen sürekli rastgele değişkenleri temsil ettiğini hatırlayın. Tipik olarak, bunlar boy, ağırlık, zaman veya sıcaklık gibi ölçülebilen ondalık değerlerdir. Örneğin, ölçüm süresini daha doğru bir şekilde sürdürebilirsiniz: 1.1 saniye, 1.12 saniye, 1.1257 saniye vb.
+
+Bu derste tek bir sürekli olasılık dağılımına odaklanıyoruz: normal dağılım. Bu okumada, normal dağılımın temel özellikleri ve dağıtımın verilerinizi modellemenize nasıl yardımcı olabileceği hakkında daha fazla bilgi edineceksiniz.
+
+### Sürekli olasılık dağılımları
+
+Normal dağılımın belirli niteliklerine geçmeden önce, tüm sürekli olasılık dağılımlarının bazı genel özelliklerini tartışalım.
+
+#### **Olasılık Yoğunluğu ve Olasılık**
+
+Olasılık fonksiyonu, rastgele bir değişkenin olası sonuçları için olasılıklar sağlayan matematiksel bir fonksiyondur.
+
+İki tür olasılık fonksiyonu vardır:
+
+- Olasılık Kütle Fonksiyonları (PMF'ler) ayrık rastgele değişkenleri temsil eder
+    
+- Olasılık Yoğunluk Fonksiyonları (PDF'ler) sürekli rastgele değişkenleri temsil eder
+    
+
+Bir olasılık fonksiyonu bir denklem veya grafik olarak gösterilebilir. Olasılık fonksiyonlarında yer alan matematik bu dersin kapsamı dışındadır. Şimdilik, bir PDF'nin grafiğinin bir eğri olarak göründüğünü bilmek önemlidir. Normal dağılım grafiğine atıfta bulunan çan eğrisini öğrendiniz.
+
+Örnek olarak, rastgele bir kiraz ağacı örneği hakkında verileriniz olduğunu hayal edin. Kiraz ağaçlarının yüksekliklerinin ortalama 15 fit ve 2 fit standart sapma ile yaklaşık olarak normal olarak dağıldığını varsayalım.
+
+![image](./images/4012.png)
+
+Sürekli bir dağılımda, x ekseni ölçtüğünüz değişkenin değerini ifade eder - bu durumda kiraz ağacı yüksekliği. Y ekseni olasılık yoğunluğunu ifade eder. Olasılık yoğunluğunun olasılık ile aynı şey olmadığını unutmayın.
+
+Sürekli bir rastgele değişken için olasılık dağılımı size yalnızca değişkenin bir değer aralığı veya aralığı alma olasılığını söyleyebilir. Bunun nedeni, sürekli bir rastgele değişkenin sonsuz sayıda olası değere sahip olabilmesidir. Örneğin, rastgele seçilen bir kiraz ağacının yüksekliği 15 fit veya 15,1 fit veya 15.175 fit veya 15.175245 fit vb. Ölçülebilir.
+
+Rastgele seçilen bir kiraz ağacının yüksekliğinin tam olarak 15,1 fit olma olasılığını bilmek istediğinizi varsayalım. Ağacın yüksekliği belirli bir aralıkta herhangi bir ondalık değer olabileceğinden, ağacın tam olarak herhangi bir tek değer olma olasılığı esasen sıfırdır.
+
+Bu nedenle, sürekli dağılımlar için, yalnızca 14,5 fit ile 15,5 fit arasındaki aralık gibi aralıkların olasılığı hakkında konuşmak mantıklıdır.
+
+Bir aralığın olasılığını bulmak için, aralığa karşılık gelen eğrinin altındaki alanı hesaplarsınız. Örneğin, bir kiraz ağacının 14,5 fit ile 15,5 fit arasında bir yüksekliğe sahip olma olasılığı, x eksenindeki 14.5 ve 15.5 değerleri arasındaki eğrinin altındaki alana eşittir. Bu alan grafiğin ortasındaki gölgeli dikdörtgen olarak görünür.
+
+![](attachment:322d6296-8cfd-4765-a686-501ba34e771e.png)
+
+Bu durumda, dikdörtgenin alanı 0.20 civarındadır. Dolayısıyla, rastgele seçilen bir kiraz ağacının yüksekliğinin 14,5 fit ile 15, 5 fit arasında olma ihtimali %20 vardır.
+
+**Not:** veri uzmanları genellikle sürekli bir dağılımdaki olasılıkları hesaplamak için istatistiksel yazılım kullanır.
+
+#### **Normal dağılım**
+
+Normal dağılım, ortalama ve çan şeklinde simetrik olan sürekli bir olasılık dağılımıdır. Formülünü ilk tanımlayan Alman matematikçi Carl Gauss'tan sonra Gauss dağılımı olarak da bilinir. Normal dağılım genellikle çan eğrisi olarak adlandırılır çünkü grafiği merkezde bir tepe ve iki aşağı eğimli kenarı olan bir çan şeklindedir.
+
+Normal dağılım, istatistikteki en yaygın olasılık dağılımıdır çünkü pek çok farklı veri kümesi çan şeklinde bir eğri gösterir. Örneğin, 100 kişiyi rastgele örneklerseniz, boy, kilo, kan basıncı, ayakkabı boyutu, test puanları ve daha fazlası gibi sürekli değişkenler için normal bir dağılım eğrisi keşfedeceksiniz.
+
+Tüm normal dağılımlar aşağıdaki özelliklere sahiptir:
+
+- Şekil bir çan eğrisidir
+    
+- Ortalama eğrinin merkezinde bulunur
+    
+- Eğri, ortalamanın her iki tarafında simetriktir
+    
+- Eğrinin altındaki toplam alan 1'e eşittir
+    
+
+Normal dağılımın özelliklerini netleştirmek için kiraz ağacı örneğimizi kullanalım. Ortalama yüksekliğin 2 fit standart sapma ile 15 fit olduğunu hatırlayın.
+
+![](attachment:cb648116-cf02-4026-8f25-57665f4d9ff5.png)
+
+Normal eğrinin aşağıdaki özelliklerini fark edebilirsiniz:
+
+- Ortalama eğrinin merkezinde bulunur ve aynı zamanda eğrinin zirvesidir. Ortalama 15 fit yükseklik, veri kümesindeki en olası sonucu temsil eder
+    
+- Eğri ortalama hakkında simetriktir. Verilerin% 50'si ortalamanın üzerindedir ve verilerin% 50'si ortalamanın altındadır.
+    
+- Bir nokta ortalamadan ne kadar uzaksa, bu sonuçların olasılığı o kadar düşük olur. Ortalamadan en uzak noktalar, veri kümesindeki en az olası sonuçları temsil eder. Bunlar kısa veya uzun, daha aşırı yüksekliklere sahip ağaçlardır
+    
+- Eğrinin altındaki alan 1'e eşittir. Bu, eğrinin altındaki alanın dağılımdaki olası sonuçların% 100'ünü oluşturduğu anlamına gelir.
+    
+
+#### **Ampirik kural**
+
+Normal bir eğrideki değerlerin ortalamaya olan mesafelerine bağlı olarak düzenli bir düzende dağıldığını da fark edebilirsiniz. Bu **ampirik kural olarak bilinir.** Kural, normal dağılıma sahip belirli bir veri kümesi için şunu belirtir:
+
+- Değerlerin% 68'i ortalamanın 1 standart sapması dahilinde
+    
+- Değerlerin% 95'i ortalamanın 2 standart sapması dahilinde
+    
+- Değerlerin% 99,7'si ortalamanın 3 standart sapması içine düşer
+
+![](attachment:d51642cc-0b50-4737-bcb5-06b972a96185.png)
+
+Ampirik kuralı kiraz ağacı örneğimize uygularsanız, aşağıdakileri öğrenirsiniz:
+
+- Çoğu ağaç veya% 68, ortalama 15 fit yüksekliğin 1 standart sapmasına düşecektir. Bu, ağaçların% 68'inin 13 fit ile 17 fit arasında veya ortalamanın 2 fit altında ve ortalamanın 2 fit üzerinde olacağı anlamına gelir.
+    
+- Ağaçların %95'i 11 fit ile 19 fit arasında veya ortalamadan 2 standart sapma içinde ölçülecektir.
+    
+- Hemen hemen tüm ağaçlar veya% 99.7, 9 fit ile 21 fit arasında veya ortalamanın 3 standart sapması içinde ölçülecektir.
+    
+
+Ampirik kural, büyük bir veri kümesindeki değerlerin nasıl dağıtıldığına dair hızlı bir tahmin verebilir. Bu zaman kazandırır ve verilerinizi daha iyi anlamanıza yardımcı olur.
+
+Değerlerinizin normal dağılımdaki konumunu bilmek, aykırı değerleri tespit etmek için de yararlıdır. Bir aykırı değerin, verilerin geri kalanından önemli ölçüde farklı bir değer olduğunu hatırlayın. Tipik olarak, veri uzmanları, ortalamanın altında veya üzerinde 3'ten fazla standart sapma bulunan değerleri aykırı değerler olarak kabul eder. Bazı aşırı değerler veri toplama veya veri işlemedeki hatalardan kaynaklanabileceğinden ve bu yanlış değerler sonuçlarınızı çarpıtabileceğinden, aykırı değerleri belirlemek önemlidir.
+
+#### Önemli çıkarımlar
+
+Bir veri uzmanı olarak, çok çeşitli veri kümelerinde önemli kalıpları belirlemek için muhtemelen normal dağılımı kullanacaksınız. Normal dağılımı anlamak, daha sonra öğreneceğiniz hipotez testi ve regresyon analizi gibi daha gelişmiş istatistiksel yöntemler için de önemlidir.
+
+#### Daha fazla bilgi için kaynaklar
+
+Sürekli olasılık dağılımları ve normal dağılım hakkında daha fazla bilgi edinmek için aşağıdaki kaynaklara göz atın:
+
+- [Duke Üniversitesi'nden bu makale, normal dağılımın temel özelliklerinin yararlı bir özetini sunmaktadır](https://sites.nicholas.duke.edu/statsreview/continuous-probability-distributions/)
+
