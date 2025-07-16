@@ -3459,7 +3459,7 @@ Bu okumada, örneklem ve popülasyon arasındaki ilişkiyi daha ayrıntılı ola
 
 #### **Nüfus ve örnek**
 
-İstatistiklerde, bir pop **ülas** yon, ölçmek istediğiniz her olası öğeyi veya hakkında sonuç çıkarmak istediğiniz tüm veri kümesini içerir. İstatistiksel bir popülasyon, aşağıdakiler de dahil olmak üzere her tür veriye atıfta bulunabilir:
+İstatistiklerde, bir **popülasyon**, ölçmek istediğiniz her olası öğeyi veya hakkında sonuç çıkarmak istediğiniz tüm veri kümesini içerir. İstatistiksel bir popülasyon, aşağıdakiler de dahil olmak üzere her tür veriye atıfta bulunabilir:
 
 - İnsanlar
     
@@ -3494,7 +3494,7 @@ Yukarıdaki popülasyonlardan alınan örnekler şunlar olabilir:
 
 Veri uzmanları, popülasyonlar hakkında çıkarımlar yapmak için örnekler kullanır. Başka bir deyişle, nüfusun küçük bir bölümünden topladıkları verileri bir bütün olarak nüfus hakkında sonuçlar çıkarmak için kullanırlar.
 
-![](attachment:b12573e5-8c4a-46ca-af57-de919c3a8b01.png)
+![image](./images/4018.png)
 
 #### **Örnekleme**
 
@@ -3519,7 +3519,7 @@ Hindistan, Endonezya, Amerika Birleşik Devletleri veya Brezilya gibi büyük n�
 
 Bununla birlikte, tüm seçmenlerin daha büyük nüfusundan alınan 100 veya 1000 seçmenden oluşan bir örneği araştırmak gerçekçidir. Büyük bir popülasyonla uğraşırken, örnekleme, bir bütün olarak popülasyon hakkında geçerli çıkarımlar yapmanıza yardımcı olabilir.
 
-![](attachment:74c22a71-c4ec-4cd5-9446-17d528c7129b.png)
+![image](./images/4019.png)
 
 #### **Temsili örnek**
 
@@ -3537,6 +3537,294 @@ Veri uzmanları, karmaşık veri kümelerini modelleyebilen ve değerli içgör�
 
 Sonuç olarak, numunenizin kalitesi, paydaşlarla paylaştığınız içgörülerin kalitesini belirlemeye yardımcı olur. Bir popülasyon hakkında güvenilir çıkarımlar yapmak için, örneklemenizin popülasyonu temsil ettiğinden emin olun.
 
+## Örnekleme sürecinin aşamaları 
+
+Son zamanlarda, örneklemeyi öğreniyorsunuz. Bir veri uzmanı olarak, her zaman örnek verilerle çalışacaksınız. Genellikle, bu daha önce diğer araştırmacılar tarafından toplanan örnek veriler olacaktır; bazen, ekibiniz kendi verilerini toplayabilir. Her iki durumda da, örnekleme sürecinin nasıl çalıştığını bilmek önemlidir, çünkü örneğinizin popülasyonu temsil edip etmediğini ve örneğinizin tarafsız olup olmadığını belirlemeye yardımcı olur.
+
+Bu okumada, örnekleme sürecinin ana aşamalarını daha ayrıntılı olarak gözden geçireceğiz. Bu, örnekleme sürecinin nasıl çalıştığını ve sürecin her adımının örnek verilerinizi nasıl etkileyebileceğini daha iyi anlamanızı sağlayacaktır..
+
+### Örnekleme süreci
+
+İlk olarak, örnekleme sürecinin ana adımlarını gözden geçirelim:
+
+1. Hedef popülasyonu belirleyin
+    
+2. Örnekleme çerçevesini seçin
+    
+3. Örnekleme yöntemini seçin
+    
+4. Örnek boyutunu belirleyin
+    
+5. Örnek verileri toplayın
+    
+
+Her adımı bir örnekle daha ayrıntılı olarak inceleyelim. Ev aletleri üreten bir şirket için çalışan bir veri uzmanı olduğunuzu hayal edin. Şirket, müşterilerin en yeni buzdolabı modellerindeki yenilikçi dijital özellikler hakkında ne düşündüklerini öğrenmek istiyor. Buzdolabı iki yıldır piyasada ve 10.000 kişi satın aldı. Yöneticiniz sizden bir müşteri memnuniyeti anketi yapmanızı ve sonuçları paydaşlarla paylaşmanızı ister.
+
+#### **Adım 1: Hedef popülasyonu belirleyin**
+
+Örnekleme sürecindeki ilk adım, hedef popülasyonunuzu tanımlamaktır. He **def popülas** yon, hakkında daha fazla bilgi edinmek istediğiniz tüm öğeler kümesidir. Araştırmanızın bağlamına bağlı olarak, popülasyonunuz bireyleri, kuruluşları, nesneleri, olayları veya araştırmak istediğiniz diğer verileri içerebilir.
+
+İyi tanımlanmış bir popülasyon, araştırmanızın tam kapsamına uymayan katılımcıları dahil etme olasılığını azaltır. Örneğin, şirketin tüm müşterilerini veya şirketin diğer buzdolabı modellerini satın alan müşterileri dahil etmek istemezsiniz.
+
+Bu durumda hedef kitleniz şirketin en yeni buzdolabı modelini satın alan 10.000 müşteri olacaktır. Bunlar, en yeni modelle ilgili deneyimleri hakkında bilgi edinmek için anket yapmak istediğiniz müşterilerdir.
+
+![image](./images/4020.png)
+
+#### **Adım 2: Örnekleme çerçevesini seçin**
+
+Örnekleme işlemindeki bir sonraki adım, bir örnekleme çerçevesi oluşturmaktır. Örne **kleme çerçevesi**, hedef popülasyonunuzdaki tüm bireylerin veya öğelerin bir listesidir.
+
+Hedef popülasyon ile örnekleme çerçevesi arasındaki fark, popülasyonun genel ve çerçevenin spesifik olmasıdır. Yani, hedef popülasyonunuz buzdolabını satın alan tüm müşteriler ise, örnekleme çerçeveniz tüm bu müşterilerin adlarının alfabetik bir listesi olabilir. Örneğinizdeki müşteriler bu listeden seçilecektir.
+
+İdeal olarak, örnekleme çerçeveniz tüm hedef popülasyonu içermelidir. Bununla birlikte, pratik nedenlerden dolayı, örnekleme çerçeveniz hedef popülasyonunuzla tam olarak eşleşmeyebilir, çünkü popülasyonun her üyesine erişiminiz olmayabilir. Örneğin, şirketin müşteri veritabanı eksik olabilir veya veri işleme hataları içerebilir. Veya, bazı müşteriler satın aldıklarından bu yana iletişim bilgilerini değiştirmiş olabilir ve onları bulamayabilir veya onlarla iletişim kuramayabilirsiniz. Ayrıca, bazen örnekleme çerçevesi, hedef popülasyonun dışındaki unsurları sadece tesadüfen veya hedef popülasyonu kesin olarak bilmek imkansız olduğu için içerebilir.
+
+![image](./images/4021.png)
+
+Bu nedenle, genellikle örnekleme çerçeveniz hedef _popülasyonunuzun erişilebilir_ kısmıdır, ancak bazen bu kümenin dışında öğeler içerecektir.
+
+#### **Adım 3: Örnekleme yöntemini seçin**
+
+Örnekleme sürecindeki üçüncü adım, bir örnekleme yöntemi seçmektir.
+
+İki ana örnekleme yöntemi türü vardır: olasılık örneklemesi ve **olas** ılık **dışı örnekleme**. Daha sonra, belirli yöntemleri daha ayrıntılı olarak inceleyeceğiz. Şimdilik, olasılık örneklemesinin [bir örnek oluşturmak için rastgele seçim kullandığını bilin](https://www.statisticshowto.com/sample/). Olasılıksız örnekleme, rastgele seçimden ziyade genellikle rahatlığa veya araştırmacının kişisel tercihlerine dayanır. Genellikle, olasılık örnekleme yöntemleri, olasılık dışı örnekleme yöntemlerinden daha fazla zaman ve kaynak gerektirir.
+
+İdeal olarak, örneğiniz popülasyonu temsil edecektir. Numunenizin temsili olmasını sağlamanın bir yolu, doğru örnekleme yöntemini seçmektir. Olasılık örnekleme yöntemleri rastgele seçime dayandığından, popülasyondaki her öğenin örneğe dahil edilme şansı eşittir. Bu size temsili bir örnek almak için en iyi şansı verir, çünkü sonuçlarınızın genel popülasyonu doğru bir şekilde yansıtması daha olasıdır.
+
+Bu nedenle, bütçeniz, kaynaklarınız ve zamanınız olduğunu varsayarsak, anketiniz için bir olasılık örnekleme yöntemi kullanmalısınız.
+
+#### **Adım 4: Örnek boyutunu belirleyin**
+
+Örnekleme sürecinin dördüncü adımı, örneklemeniz için en iyi boyutu belirlemektir, çünkü örnekleme çerçevenizdeki herkesi araştıracak kaynaklara sahip değilsiniz. İstatistikte, örneklem büyüklüğü, bir çalışma veya deney için seçilen bireylerin veya öğelerin sayısını ifade eder.
+
+Örneklem büyüklüğü, popülasyon hakkında yaptığınız tahminlerin kesinliğini belirlemeye yardımcı olur. Genel olarak, örneklem boyutu ne kadar büyükse, tahminleriniz o kadar kesin olur. Bununla birlikte, daha büyük örneklerin kullanılması tipik olarak daha fazla kaynak gerektirir.
+
+Seçtiğiniz örneklem büyüklüğü, örnekleme yöntemi, hedef popülasyonun büyüklüğü ve karmaşıklığı, kaynaklarınızın sınırları, zaman çizelgeniz ve araştırmanızın amacı dahil olmak üzere çeşitli faktörlere bağlıdır.
+
+Bu faktörlere dayanarak, numunenize kaç müşterinin dahil edileceğine karar verebilirsiniz.
+
+#### **Adım 5: Örnek verileri toplayın**
+
+Şimdi, örnekleme sürecinin son adımı olan örnek verilerinizi toplamaya hazırsınız.
+
+Numuneniz için seçilen müşterilere müşteri memnuniyeti anketi verirsiniz. Anket yanıtları, müşterilerin buzdolabının dijital özellikleri hakkında ne düşündükleri hakkında faydalı veriler sağlar. Ardından, bu buzdolabının gelecekteki sürümleri için bu özelliklere yatırım yapmaya devam edip etmeyecekleri konusunda daha bilinçli kararlar almalarına yardımcı olmak için sonuçlarınızı paydaşlarla paylaşırsınız ve diğer modeller için benzer özellikler geliştirirsiniz.
+
+### Önemli çıkarımlar
+
+Etkili örnekleme, örnek verilerinizin popülasyonunuzu temsil etmesini sağlar. Ardından, popülasyon hakkında çıkarımlar yapmak için örnek verileri kullandığınızda, çıkarımlarınızın güvenilir olduğundan makul ölçüde emin olabilirsiniz.
+
+Örnekleme işleminin her adımında verdiğiniz kararlar, örnek verilerinizin kalitesini etkileyebilir. İster diğer araştırmacılar tarafından toplanan verileri analiz ediyor olun, ister kendi başınıza bir anket yapıyor olun, örnekleme sürecini anlamak sizi daha iyi bir veri uzmanı haline getirecektir.
+
+## Olasılık örnekleme yöntemleri
+
+Daha önce, iki ana örnekleme yöntemi türü olduğunu öğrendiniz: olasılık örneklemesi ve olasılık dışı örnekleme. **Olasılık örne** klemesi, bir [örnek](https://www.statisticshowto.com/sample/) oluşturmak için rastgele seçimi kullanır. **Olasılıksız örnekleme**, rastgele seçimden ziyade genellikle rahatlığa veya araştırmacının kişisel tercihlerine dayanır. Kullandığınız örnekleme yöntemi, örneğinizin popülasyonunuzu temsil edip etmediğini ve örneğinizin önyargılı olup olmadığını belirlemeye yardımcı olur. Olasılık örneklemesi, popülasyonu temsil eden bir örnek oluşturmak için size en iyi şansı verir.
+
+Bu okumada, farklı olasılık örneklemesi yöntemleri ve her yöntemin yararları ve dezavantajları hakkında daha fazla bilgi edineceksiniz.
+
+### Olasılık Örnekleme Yöntemleri
+
+Dört farklı olasılık örnekleme yöntemi vardır:
+
+- Basit rastgele örnekleme
+    
+- Tabakalı rastgele örnekleme
+    
+- Küme rastgele örnekleme
+    
+- Sistematik rastgele örnekleme
+    
+
+Her yöntemi daha ayrıntılı olarak inceleyelim.
+
+#### **Basit rastgele örnekleme**
+
+**Basit bir rastgele örneklem** de, bir popülasyonun her üyesi rastgele seçilir ve seçilme şansı eşittir. Üyeleri rastgele bir sayı üreteci kullanarak veya başka bir rastgele seçim yöntemiyle seçebilirsiniz.
+
+![image](./images/4022.png)
+
+Örneğin, bir şirketin çalışanlarını iş deneyimleri hakkında anket yapmak istediğinizi hayal edin. Şirket 10.000 kişiyi istihdamaktadır. Şirket veritabanındaki her çalışana 1 ila 10.000 arasında bir sayı atayabilir ve ardından örneğiniz için 100 kişi seçmek için rastgele bir sayı üreteci kullanabilirsiniz. Bu senaryoda, çalışanların her birinin örnek için seçilme şansı eşittir.
+
+Basit rastgele örneklerin temel yararı, popülasyonun her üyesinin seçilme şansı eşit olduğundan, genellikle oldukça temsili olmalarıdır. Rastgele örnekler önyargıdan kaçınma eğilimindedir ve bunun gibi anketler size daha güvenilir sonuçlar verir.
+
+Bununla birlikte, pratikte, büyük basit rastgele örnekleri toplamak genellikle pahalı ve zaman alıcıdır. Örneklem büyüklüğünüz yeterince büyük değilse, popülasyondaki belirli bir grup insan örnekleminizde yeterince temsil edilmeyebilir. Daha büyük bir örneklem boyutu kullanırsanız, örneklemeniz popülasyonu daha doğru yansıtacaktır.
+
+#### **Tabakalı rastgele örnekleme**
+
+Tab **akalanmış rastgele bir örneklem** de, bir popülasyonu gruplara bölersiniz ve örneklemde yer alacak her gruptan rastgele bazı üyeleri seçersiniz. Bu gruplara katmanlar denir. Katmanlar yaş, cinsiyet, gelir veya okumak istediğiniz kategoriye göre düzenlenebilir.
+
+![image](./images/4023.png)
+
+Örneğin, yeni bir ürün için pazar araştırması yaptığınızı ve farklı yaş gruplarındaki tüketicilerin tercihlerini analiz etmek istediğinizi hayal edin. Hedef popülasyonunuzu yaşa göre katmanlara ayırabilirsiniz: 20-29, 30-39, 40-49, 50-59 vb. Daha sonra, her yaş grubundan eşit sayıda kişiye anket yapabilir ve her yaş grubunun tüketici tercihleri hakkında sonuçlar çıkarabilirsiniz. Sonuçlarınız, pazarlamacıların yeni ürün için satışları optimize etmek için hangi yaş gruplarına odaklanacaklarına karar vermelerine yardımcı olacaktır.
+
+Tabakalı rastgele örnekler, popülasyondaki her gruptan üyelerin ankete dahil edilmesini sağlamaya yardımcı olur. Bu yöntem, yeterince temsil edilmeyen gruplar için eşit temsil sağlamaya yardımcı olur ve katmanların her biri hakkında daha kesin sonuçlar çıkarmanıza olanak tanır. 21 yaşındaki ve 51 yaşındaki birinin satın alma alışkanlıklarında önemli farklılıklar olabilir. Tabakalı örnekleme, her iki perspektifin de örnekte yakalanmasını sağlamaya yardımcı olur.
+
+Tabakalı örneklemenin ana dezavantajlarından biri, bir popülasyon hakkında bilgi sahibi değilseniz, bir çalışma için uygun katmanları belirlemenin zor olabilmesidir. Örneğin, bir nüfus arasında medyan geliri incelemek istiyorsanız, örneğinizi iş türüne, sektöre, konuma veya eğitim düzeyine göre sınıflandırmak isteyebilirsiniz. Bu kategorilerin medyan gelirle ne kadar alakalı olduğunu bilmiyorsanız, çalışmanız için en iyisini seçmek zor olacaktır.
+
+#### **Küme rastgele örnekleme**
+
+Bir **küme rastgele örneği yürütürken**, bir popülasyonu kümelere böler, belirli kümeleri rastgele seçer ve seçilen kümelerden tüm üyeleri örneğe dahil edersiniz.
+
+Küme örneklemesi tabakalı rastgele örneklemeye benzer, ancak tabakalı örneklemede, örneklemde olmak için her gruptan rastgele _bazı_ üyeleri seçersiniz. Küme örneklemesinde, örnekte yer alacak gruptaki _tüm_ üyeleri seçersiniz. Kümeler yaş, cinsiyet, konum veya çalışmak istediğiniz herhangi bir şey gibi tanımlayıcı ayrıntılar kullanılarak bölünür.
+
+![image](./images/4024.png)
+
+Örneğin, küme örneklemesini kullanarak küresel bir restoran franchise'da çalışan memnuniyeti anketi yapmak istediğinizi düşünün. Franchise dünya çapında 40 restorana sahiptir. Her restoran, benzer iş rollerinde yaklaşık aynı sayıda çalışana sahiptir. Kümeler olarak rastgele 4 restoran seçersiniz. Numunenize 4 restorandaki tüm çalışanları dahil edersiniz.
+
+Bu yöntemin bir avantajı, bir küme örneğinin belirli bir kümeden her üyeyi almasıdır; bu, her küme popülasyonu bir bütün olarak yansıttığında yararlıdır. Bu yöntem, açıkça tanımlanmış alt gruplara sahip büyük ve çeşitli popülasyonlarla uğraşırken faydalıdır. Araştırmacılar Auckland, Yeni Zelanda'nın banliyölerinde ev sahipliği hakkında daha fazla bilgi edinmek istiyorlarsa, şehirdeki tüm banliyölerin temsili bir örneği olarak iyi seçilmiş birkaç banliyöyü kullanabilirler.
+
+Küme örneklemesinin ana dezavantajı, genel popülasyonu doğru bir şekilde yansıtan kümeler oluşturmanın zor olabileceğidir. Örneğin, pratik nedenlerle, İngiltere'deki restoranlara yalnızca franchise'ın dünyanın her yerinde konumları olduğunda erişebilirsiniz. İngiltere'deki çalışanlar diğer ülkelerdeki çalışanlardan farklı özelliklere ve değerlere sahip olabilir.
+
+#### **Sistematik rastgele örnekleme**
+
+Sistem **atik bir rastgele örneklem** de, bir popülasyonun her üyesini sıralı bir diziye koyarsınız. Ardından, dizide rastgele bir başlangıç noktası seçersiniz ve düzenli aralıklarla numuneniz için üyeler seçersiniz.
+
+![image](./images/4025.png)
+
+Bir lisedeki öğrencilere çalışma alışkanlıkları hakkında araştırma yapmak istediğinizi hayal edin. Sistematik bir rastgele örnek için, öğrencilerin adlarını alfabetik sıraya koyar ve rastgele bir başlangıç noktası seçersiniz: diyelim ki, sayı 4. 4 numaradan başlayarak, 100 öğrenciden oluşan bir örneğe sahip olana kadar listedeki her 10. ismi (4, 14, 24, 34,...) seçersiniz.
+
+Sistematik rastgele örneklerin bir avantajı, her üyenin örneğe dahil edilme şansı eşit olduğundan, genellikle popülasyonu temsil etmeleridir. Öğrencinin soyadının L veya Q ile başlayıp başlaması özelliklerini etkilemeyecektir. Nüfusunuzun üyelerinin tam bir listesine sahip olduğunuzda sistematik örnekleme de hızlı ve kullanışlıdır.
+
+Sistematik örneklemenin bir dezavantajı, başlamadan önce incelemek istediğiniz popülasyonun büyüklüğünü bilmeniz gerektiğidir. Bu bilgilere sahip değilseniz, tutarlı aralıklar seçmek zordur. Ayrıca, dizide gizli bir desen varsa, temsili bir örnek alamayabilirsiniz. Örneğin, listenizdeki her 10. isim bir onur öğrencisiyse, _tüm_ öğrencilerin değil, yalnızca onur öğrencilerinin çalışma alışkanlıkları hakkında geri bildirim alabilirsiniz.
+
+### Önemli çıkarımlar
+
+Ele aldığımız dört olasılık örneklemesi yönteminin (basit, tabakalı, küme ve sistematik) tümü, çoğu veri uzmanı için tercih edilen örnekleme yöntemi olan rastgele seçime dayanmaktadır. Olasılık örnekleme yöntemleri, bir bütün olarak popülasyonu temsil eden bir örnek oluşturmak için size en iyi şansı verir. Temsili bir örnekle çalışmak, araştırdığınız popülasyon hakkında güvenilir çıkarımlar ve doğru tahminler yapmanıza olanak tanır.
+
+## Olasılıksız örnekleme yöntemleri
+
+Son zamanlarda, olasılık örnekleme yöntemlerinin rastgele seçim kullandığını ve bu da örnekleme yanlılığını önlemeye yardımcı olduğunu öğrendiniz. Rastgele seçilen bir örnek, popülasyonun tüm üyelerinin dahil edilme şansının eşit olduğu anlamına gelir. Buna karşılık, olasılık dışı örnekleme yöntemleri rastgele seçim kullanmazlar, bu nedenle tipik olarak temsili örnekler oluşturmazlar. Aslında, olasılık dışı yöntemler genellikle önyargılı örneklerle sonuçlanır. **Örnekleme yanl** ılığı, popülasyonun bazı üyelerinin seçilme olasılığı diğer üyelere göre daha yüksek olduğunda ortaya çıkar.
+
+Bu okumada, olasılıksız örneklemenin dört yöntemi hakkında daha fazla bilgi edinecek ve örnekleme yanlılığının her yöntemi nasıl etkileyebileceğini öğreneceksiniz. Olasılıksız örneklemenin belirli durumlarda neden yararlı olabileceğini de tartışacağız.
+
+### Olasılıksız örnekleme yöntemleri
+
+Olasılık dışı örnekler rastgele olmayan seçim yöntemlerini kullanır, bu nedenle bir popülasyonun tüm üyelerinin seçilme şansı eşit değildir. Bu nedenle olasılık dışı yöntemlerin örnekleme yanlılığı riski yüksektir. Bununla birlikte, olasılık dışı yöntemler genellikle daha ucuzdur ve araştırmacıların yürütmesi için daha uygundur. Bazen sınırlı zaman, para veya diğer kaynaklar nedeniyle olasılık örneklemesini kullanmak mümkün değildir. Ayrıca, olasılık dışı yöntemler, bir bütün olarak popülasyon hakkında çıkarımlar yapmak yerine, bir popülasyonun ilk anlayışını geliştirmeye çalışan keşif çalışmaları için yararlı olabilir.
+
+Olasılıksız örneklemenin dört yöntemini gözden geçireceğiz:
+
+- Kolay örnekleme
+    
+- Gönüllü yanıt örneklemesi
+    
+- Kartopu örneklemesi
+    
+- Amaçlı örnekleme
+    
+
+Her yöntemi daha ayrıntılı olarak inceleyelim.
+
+#### **Kolay örnekleme**
+
+Kolay örnekleme için, iletişim kurması veya ulaşılması kolay bir popülasyonun üyelerini seçersiniz. Adından da anlaşılacağı gibi, uygun bir örnek yapmak, işyeriniz, yerel bir okul veya halka açık bir park gibi size uygun bir yerden örnek toplamayı içerir.
+
+Örneğin, bir kamuoyu anketi yapmak için, bir araştırmacı gün boyunca bir alışveriş merkezinin girişinde durabilir ve yanından geçen kişileri anket yapabilir.
+
+![image](./images/4026.png)
+
+Bu örnekler, popülasyonun daha geniş bir örneklemine değil, araştırmacının rahatlığına dayandığından, uygun örnekler genellikle yetersiz kapsama yanlılığından muzdariptir. Yetersiz kapsama yanlılığı, bir popülasyonun bazı üyeleri örneklemde yetersiz temsil edildiğinde ortaya çıkar. Örneğin, yukarıdaki örnek, alışveriş merkezlerinde alışveriş yapmayı sevmeyen veya farklı bir alışveriş merkezinde alışveriş yapmayı tercih eden veya ulaşım eksikliği olduğu için alışveriş merkezini ziyaret etmeyen kişileri yeterince temsil edecektir.
+
+Kolay örnekleme genellikle hızlı ve ucuzdur, ancak temsili bir örnek almanın güvenilir bir yolu değildir.
+
+#### **Gönüllü yanıt örneklemesi**
+
+Gönüllü bir yanıt örneği, bir çalışmaya katılmak için gönüllü olan bir popülasyonun üyelerinden oluşur. Uygun bir örnek gibi, gönüllü bir yanıt örneği genellikle bir popülasyona uygun erişime dayanır. Ancak, araştırmacının katılımcıları seçmesi yerine, katılımcılar kendi başlarına gönüllü olurlar.
+
+Örneğin, üniversite yöneticilerinin öğrencilerin kampüste servis edilen yemekler hakkında ne düşündüklerini bilmek istediklerini varsayalım. Öğrencilere yemeğin kalitesiyle ilgili çevrimiçi bir anketin bağlantısını e-posta ile gönderirler ve öğrencilerden zamanları varsa anketi doldurmalarını isterler.
+
+![image](./images/4027.png)
+
+Gönüllü yanıt örnekleri, belirli insan gruplarının yanıt verme olasılığının daha düşük olduğunda ortaya çıkan yanıt dışı önyargıdan muzdarip olma eğilimindedir. Gönüllü olarak yanıt veren insanlar muhtemelen nüfusun geri kalanından olumlu veya olumsuz daha güçlü görüşlere sahip olacaklardır. Bu durumda, yalnızca yiyecekleri gerçekten seven veya gerçekten sevmeyen öğrenciler anketi doldurmak için motive olabilir. Anket, yiyecek hakkında daha hafif görüşlere sahip olan veya tarafsız olan birçok öğrenciyi ihmal edebilir. Bu, gönüllü öğrencileri genel öğrenci popülasyonunu temsil etmez hale getirir.
+
+#### **Kartopu örneklemesi**
+
+Bir kartopu örneğinde, araştırmacılar ilk katılımcıları bir çalışmaya dahil etmek için işe alır ve daha sonra çalışmaya katılmaları için diğer insanları işe almalarını ister. Bir kartopu gibi, daha fazla katılımcı katıldıkça örneklem büyüklüğü gittikçe büyür. Araştırmacılar, incelemek istedikleri popülasyona erişmek zor olduğunda genellikle kartopu örneklemesini kullanırlar.
+
+Örneğin, bir araştırmacının nadir görülen bir tıbbi durumu olan insanları incelediğini hayal edin. Gizlilik nedeniyle, araştırmacının bu nüfusun üyeleri için hastanelerden veya diğer resmi kaynaklardan iletişim bilgilerini alması zor olabilir. Bununla birlikte, araştırmacı katılmaya istekli birkaç kişi bulabilirse, bu iki kişi aynı duruma sahip başkalarını tanıyabilir. İlk katılımcılar daha sonra çalışmanın potansiyel faydalarını paylaşarak başkalarını işe alabilirler.
+
+![image](./images/4028.png)
+
+The first illustration shows two researchers sharing information with two people. The second illustration shows those same researchers standing near four people sharing information.
+
+Kartopu örneklemesi çok zaman alabilir ve araştırmacılar, işe alım sürecine başarılı bir şekilde devam etmek ve “kartopu” oluşturmak için katılımcılara güvenmelidir. Bu tür işe alım, örnekleme yanlılığına da yol açabilir. İlk katılımcılar kendi başlarına ek katılımcıları işe aldıklarından, çoğunun benzer özellikleri paylaşması muhtemeldir ve bu özellikler incelenen toplam popülasyonu temsil etmeyebilir.
+
+#### **Amaçlı örnekleme**
+
+Amaçlı örneklemede, araştırmacılar katılımcıları çalışmalarının amacına göre seçerler. Katılımcılar çalışmanın ihtiyaçlarına göre örnek için seçildiğinden profile uymayan başvuru sahipleri reddedilir.
+
+Örneğin, bir oyun geliştirme şirketinin yeni bir video oyunu hakkında halka açık piyasaya sürülmeden önce pazar araştırması yapmak istediğini hayal edin. Araştırma ekibi sadece oyun uzmanlarını örneklerine dahil etmek istiyor. Bu nedenle, potansiyel iyileştirmeler hakkında geri bildirim sağlamak için bir grup profesyonel oyuncuyu araştırıyorlar.
+
+![image](./images/4029.png)
+
+Amaçlı örneklemede, araştırmacılar genellikle çalışmalarıyla en alakalı olduğunu düşündükleri belirli bir gruba odaklanmak için belirli grupları örneklemden kasıtlı olarak dışlar. Bu durumda, araştırmacı amatör oyuncuları hariç tutar. Amatör oyuncular yeni oyunu profesyonel oyunculardan farklı nedenlerle satın alabilir ve profesyonellere hitap etmeyen oyun özelliklerinin keyfini çıkarabilir. Bu, önyargılı sonuçlara yol açabilir, çünkü örneklemdeki profesyonellerin genel oyuncu popülasyonunu temsil etmesi muhtemel değildir.
+
+Amaçlı örnekleme genellikle bir araştırmacının bir popülasyonun belirli bir kısmı hakkında ayrıntılı bilgi edinmek istediğinde veya popülasyonun çok küçük olduğu ve üyelerinin hepsinin benzer özelliklere sahip olduğu durumlarda kullanılır. Amaçlı örnekleme, büyük ve çeşitli bir popülasyon hakkında çıkarımlar yapmak için etkili değildir.
+
+### Önemli çıkarımlar
+
+Olasılıksız örnekleme, sınırlı zamanınız, bütçeniz ve diğer kaynakların olduğu durumlarda veri toplamak için kullanışlıdır. Olasılıksız örnekleme, bir bütün olarak popülasyon hakkında çıkarımlar yapmak yerine, bir popülasyon hakkında ilk anlayışı elde etmek istediğinizde, keşif araştırmaları için de yararlıdır. Bununla birlikte, olasılık dışı örnekleme yöntemlerinin yüksek örnekleme yanlılığı riskine sahip olduğunu hatırlamak önemlidir.
+
+Bir veri uzmanı olarak, örnek verileri toplamaya başladığınız andan sonuçlarınızı sunduğunuz ana kadar önyargı ve adalet hakkında düşünmelisiniz. Bazı yaygın önyargı biçimlerinin farkına vardığınızda, herhangi bir biçimde önyargı konusunda tetikte kalabilirsiniz.
+
+## Merkezi limit teoremi ile popülasyon parametrelerini çıkarma 
+
+Son zamanlarda, merkezi limit teoremini ve bunun çok çeşitli veri kümeleriyle çalışmanıza nasıl yardımcı olabileceğini öğrendiniz. Veri uzmanları, ekonomi, bilim, işletme ve diğer birçok alandaki veriler için popülasyon parametrelerini tahmin etmek için merkezi sınır teoremini kullanır.
+
+Bu okumada, merkezi limit teoremi ve bunun farklı veri türleri için popülasyon ortalamasını tahmin etmenize nasıl yardımcı olabileceği hakkında daha fazla bilgi edineceksiniz. Teoremin tanımını, teoremi uygulamak için yerine getirilmesi gereken koşulları gözden geçireceğiz ve teoremin eylemdeki bir örneğini inceleyeceğiz.
+
+### Merkezi limit teoremi
+
+#### **Tanımı**
+
+**Merkezi limit teoremi,**  örneklem büyüklüğü arttıkça ortalamanın örnekleme dağılımının normal dağılıma yaklaştığını belirtir. Başka bir deyişle, örnek boyutunuz arttıkça, örnekleme dağılımınız bir çan eğrisi şeklini alır. Ve bir popülasyondan daha fazla gözlem örnekledikçe, örneklem ortalaması popülasyon ortalamasına yaklaşır. Nüfusun yeterince büyük bir örneğini alırsanız, örneklem ortalaması kabaca popülasyon ortalamasına eşit olacaktır.
+
+Örneğin, hafif kamyonetler gibi belirli bir araç sınıfının ortalama ağırlığını tahmin etmek istediğinizi hayal edin. Milyonlarca kamyonet tartmak yerine, temsili bir kamyonet örneği hakkında veri alabilirsiniz. Örneklem büyüklüğünüz yeterince büyükse, örneğinizin ortalama ağırlığı kabaca popülasyonun ortalama ağırlığına eşit olacaktır (büyük sayılar yasasına bağlı kalarak).
+
+![image](./images/4030.png)
+
+**Not:** Merkezi limit teoremi herhangi bir popülasyon için geçerlidir. Teoremi uygulamak için nüfus dağılımınızın şeklini önceden bilmeniz gerekmez - dağılım çan şeklinde olabilir, eğri veya başka bir şekle sahip olabilir. Yeterli büyüklükte numune toplarsanız, araçlarının dağılımının şekli normal bir dağılımı takip edecektir.
+
+#### **Koşullar**
+
+Merkezi limit teoremini uygulamak için aşağıdaki koşulların yerine getirilmesi gerekir:
+
+- **Rastgele seçme**: _Örnek verileriniz rastgele seçimin sonucu olmalıdır. Rastgele seçim, popülasyondaki her üyenin örneklem için seçilme şansının eşit olduğu anlamına gelir._
+    
+- **Bağımsızlık**: _Örnek değerleriniz birbirinden bağımsız olmalıdır. Bağımsızlık, bir gözlemin değerinin başka bir gözlemin değerini etkilemediği anlamına gelir. Tipik olarak, veri kümenizdeki bireylerin veya öğelerin rastgele seçildiğini biliyorsanız, bağımsızlık da varsayabilirsiniz._
+    
+    - **%10**: _Bağımsızlık koşulunun karşılanmasını sağlamaya yardımcı olmak için, örnek _değiştirilmeden çekildiğinde_ örneklem büyüklüğünüz toplam popülasyonun% 10'undan büyük olmamalıdır (genellikle böyle olur)._
+        
+        - **Not**: Genel olarak, değiştirilmiş veya değiştirmeden örnekleme yapabilirsiniz. Bir popülasyon öğesi yalnızca bir kez seçilebildiğinde, değiştirilmeden örnekleme yaparsınız. Bir popülasyon öğesi birden fazla kez seçilebildiğinde, değiştirme ile örnekleme yapıyorsunuz. Kursun ilerleyen bölümlerinde bu konu hakkında daha fazla bilgi edineceksiniz.
+            
+- **Örnek büyüklüğü**: Örnek büyüklüğünün yeterince büyük olması gerekir.
+    
+
+Örneklem büyüklüğü durumunu daha ayrıntılı olarak tartışalım. Merkezi limit teoreminin uygulanabilmesi için bir örneklem büyüklüğünün ne kadar büyük olması gerektiğine dair kesin bir kural yoktur. Cevap aşağıdaki faktörlere bağlıdır:
+
+- **Hassasiyet gereksinimleri**: Örneklem büyüklüğü ne kadar büyükse, örnekleme dağılımınız normal dağılıma o kadar çok benzeyecek ve popülasyon ortalaması tahmininiz o kadar kesin olacaktır.
+    
+- **Nüfusun şekli**: _Popülasyon dağılımınız kabaca çan şeklindeyse ve zaten normal bir dağılıma benziyorsa, örnek ortalamasının örnekleme dağılımı, küçük bir örneklem büyüklüğünde bile normal dağılıma yakın olacaktır._
+    
+
+Genel olarak, birçok istatistikçi ve veri uzmanı, nüfus dağılımı kabaca çan şeklinde veya yaklaşık olarak normal olduğunda 30'luk bir örneklem büyüklüğünün yeterli olduğunu düşünmektedir. Bununla birlikte, orijinal popülasyon normal değilse - örneğin, aşırı derecede çarpıksa veya çok sayıda aykırı değer varsa - veri uzmanları genellikle örneklem boyutunun biraz daha büyük olmasını tercih eder. Keşif veri analizi, belirli bir veri kümesi için ne kadar büyük bir numunenin gerekli olduğunu belirlemenize yardımcı olabilir.
+
+#### **Örnek: Yıllık maaş**
+
+Merkezi limit teoreminin nasıl çalıştığı hakkında daha iyi bir fikir edinmek için bir örneği inceleyelim.
+
+Buenos Aires, Kahire, Delhi veya Seul gibi büyük bir şehirde çalışan profesyoneller için yıllık maaş verilerini incelediğinizi hayal edin. Diyelim ki ilgilendiğiniz profesyonel nüfus 10 milyon insanı içeriyor. Şehirde yaşayan bir profesyonel için yıllık ortalama maaşı bilmek istiyorsunuz. Ancak, her maaş hakkında eksiksiz veri almak için milyonlarca profesyoneli araştırmak için zamanınız veya paranız yok.
+
+Tüm popülasyonu araştırmak yerine, 100 profesyonelin tekrarlanan rastgele örneklerinden anket verilerini toplarsınız. Bu verileri kullanarak, ilk örneğiniz için ortalama yıllık maaşı dolar cinsinden hesaplarsınız: \$40.300. İkinci örneğiniz için ortalama maaş: \$41.100. Üçüncü bir örneği araştırıyorsunuz. Ortalama maaş \$39.700. Ve böyle devam ediyor. Örnekleme değişkenliği nedeniyle, her numunenin ortalaması biraz farklı olacaktır.
+
+![image](./images/4031.png)
+
+Teorik olarak, çok büyük bir örnek alabilir ve 10 milyon kişinin tamamına maaşları hakkında anket yapana kadar örneklem boyutunu artırabilirsiniz. Merkezi limit teoremi, örneklem büyüklüğünüz arttıkça, örnekleme dağılımınızın şeklinin giderek bir çan eğrisine benzeyeceğini söylüyor.
+
+Popülasyondan yeterince büyük bir örnek alırsanız, örnekleme dağılımınızın ortalaması kabaca popülasyon ortalamasına eşit olacaktır. Nüfusun bu örnekleminden, tüm profesyonel nüfus için ortalama yıllık maaşı kesin olarak tahmin edebilirsiniz.
+
+**Not:** Uygulamada, veri uzmanları genellikle tek bir örnek alır. Seçtikleri belirli örneklem büyüklüğü, bütçe, zaman, kaynaklar ve tahminleri için istenen güven düzeyi gibi faktörlere bağlıdır.
+
+### Önemli çıkarımlar
+
+Merkezi limit teoremi, popülasyonun yalnızca bir kısmı hakkında mevcut verileriniz olsa bile ortalama gibi popülasyon parametrelerini çıkarmanıza yardımcı olabilir. Örneklem büyüklüğünüz ne kadar büyükse, popülasyon ortalaması tahmininizin o kadar kesin olması muhtemeldir. İster araç ağırlığını ister yıllık maaşı ölçüyor olun, merkezi limit teoremi verilerinizi daha iyi anlamak için yararlı bir yöntemdir.
 
 
 
