@@ -4854,6 +4854,6 @@ Ipsos'un A/B testine ilişkin bu vaka çalışması, veri odaklı araştırmanı
 
 Bu vaka çalışmasına ilham veren araştırma projesi hakkında daha fazla bilgi edinmek için aşağıdaki kaynakları keşfedin:
 
-- Th [ink With Google'ın bu web sitesi](https://www.thinkwithgoogle.com/feature/youtube-ad-sequencing-and-ad-recall/ad-sequencing?lang=en_US), araştırma projesinde yer alan beş sıralama yapısını sergiliyor.
+- [Think With Google'ın bu web sitesi](https://www.thinkwithgoogle.com/feature/youtube-ad-sequencing-and-ad-recall/ad-sequencing?lang=en_US), araştırma projesinde yer alan beş sıralama yapısını sergiliyor.
 
 ## State21 ve State28 için filtreleme ve okuma yazma oranlarının ttest ve p değerini inceleme
