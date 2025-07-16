@@ -3826,7 +3826,113 @@ Popülasyondan yeterince büyük bir örnek alırsanız, örnekleme dağılımı
 
 Merkezi limit teoremi, popülasyonun yalnızca bir kısmı hakkında mevcut verileriniz olsa bile ortalama gibi popülasyon parametrelerini çıkarmanıza yardımcı olabilir. Örneklem büyüklüğünüz ne kadar büyükse, popülasyon ortalaması tahmininizin o kadar kesin olması muhtemeldir. İster araç ağırlığını ister yıllık maaşı ölçüyor olun, merkezi limit teoremi verilerinizi daha iyi anlamak için yararlı bir yöntemdir.
 
+## Ortalamanın örnekleme dağılımı
+
+Son zamanlarda, veri profesyonellerinin nüfus parametrelerini tahmin etmek için örnek istatistikleri nasıl kullandığını öğrendiniz. Örneğin, bir veri uzmanı, müşterilerin bir perakende web sitesinde geçirdikleri ortalama süreyi veya eğlence endüstrisinde çalışan tüm kişilerin ortalama maaşını tahmin edebilir.
+
+Bu okumada, örnekleme dağılımı kavramı ve bunun rastgele bir örneklemin olası sonuçlarını temsil etmenize nasıl yardımcı olabileceği hakkında daha fazla bilgi edineceksiniz. Ayrıca, örnek ortalamasının örnekleme dağılımının popülasyon ortalamasını tahmin etmenize nasıl yardımcı olabileceğini tartışacağız.
+
+### Örnek ortalamasının örnekleme dağılımı
+
+**Örnekleme dağılımı**, bir örnek istatistiğin olasılık dağılımıdır. Bir olasılık **dağılımının**, madeni para fırlatma veya zar atma gibi rastgele bir değişkenin olası sonuçlarını temsil ettiğini hatırlayın. Aynı şekilde, bir örnekleme dağılımı, bir örnek istatistiği için olası sonuçları temsil eder. Örnek istatistikler rastgele örneklenmiş verilere dayanır ve sonuçları kesin olarak tahmin edilemez. Ortalama, medyan, standart sapma, aralık ve daha fazlası gibi istatistikleri temsil etmek için bir örnekleme dağılımı kullanabilirsiniz.
+
+Tipik olarak, veri uzmanları, karşılık gelen popülasyon parametrelerini tahmin etmek için ortalama gibi örnek istatistikleri hesaplar.
+
+Bir grup insanın, hayvanın veya bitkinin ortalama yüksekliği gibi bir popülasyonun ortalamasını tahmin etmek istediğinizi varsayalım. Örnekleme dağılımı kavramı hakkında düşünmenin iyi bir yolu, popülasyondan her biri aynı örneklem büyüklüğüne sahip tekrarlanan örnekler aldığınızı hayal etmek ve bu örneklerin her biri için ortalamayı hesapladığınızı hayal etmektir. Örnekleme değişkenliği nedeniyle, örnek ortalaması numuneden numuneye kesin olarak tahmin edilemeyecek şekilde değişecektir. Tüm numune araçlarınızın dağılımı esasen örnekleme dağılımıdır. Örnek ortalamaların dağılımını bir histogramda görüntüleyebilirsiniz. İstatistikçiler buna ortalamanın örnekleme dağılımı diyorlar.
+
+**Not: Uygulamada**, sınırlı zaman ve kaynaklar nedeniyle, veri uzmanları tipik olarak tek bir örnek toplar ve popülasyon ortalamasını tahmin etmek için bu örneğin ortalamasını hesaplar.
+
+Ortalamanın örnekleme dağılımı hakkında daha somut bir fikir edinmek için bir örneği inceleyelim.
+
+#### **Örnek: Göl alabalığının ortalama uzunluğu**
+
+Çevre bilimcilerinden oluşan bir ekiple çalışan bir veri uzmanısınız. Ekibiniz su kirliliğinin balık türleri üzerindeki etkilerini inceler. Şu anda ekibiniz, Kuzey Amerika'daki Büyük Göllerden biri olan Superior Gölü'ndeki alabalık popülasyonu üzerindeki kirliliğin etkilerini araştırıyor. Bu araştırmanın bir parçası olarak, sizden bir alabalığın ortalama uzunluğunu tahmin etmenizi istiyorlar. Diyelim ki gölde 10 milyon alabalık var. Milyonlarca alabalık toplamak ve ölçmek yerine, popülasyondan örnek veriler alırsınız.
+
+Diyelim ki popülasyondan her biri 100 alabalıktan oluşan tekrarlanan basit rastgele örnekler aldığınızı varsayalım. Başka bir deyişle, gölden rastgele 100 alabalık seçersiniz, ölçersiniz ve ardından bu işlemi farklı bir 100 alabalık seti ile tekrarlarsınız. İlk 100 alabalık örneğiniz için ortalama uzunluğun 20,2 inç olduğunu görürsünüz. İkinci numuneniz için ortalama uzunluk 20,5 inçtir. Üçüncü numuneniz için ortalama uzunluk 19.7 inçtir. Ve böyle devam ediyor. Örnekleme değişkenliği nedeniyle, ortalama uzunluk numuneden numuneye rastgele değişecektir.
+
+Bu örneğin amacı için, bu popülasyondaki bir alabalığın gerçek ortalama uzunluğunun 20 inç olduğunu varsayalım. Bununla birlikte, pratikte, göldeki her alabalığı ölçmediğiniz sürece bunu bilemezsiniz.
+
+Her 100 alabalık örneği aldığınızda, örneğinizdeki alabalığın ortalama uzunluğunun 20 inçlik popülasyon ortalamasına yakın olması muhtemeldir, ancak tam olarak 20 inç değil. Arada bir, ortalama uzunluğu 16 inç veya daha az olan, ortalamadan daha kısa alabalıklarla dolu bir örnek alabilirsiniz. Veya ortalama uzunluğu 24 inç veya daha fazla olan, ortalamadan daha uzun alabalıklarla dolu bir örnek alabilirsiniz.
+
+Tüm farklı örnek araçlarınızın sıklığını temsil etmek için bir örnekleme dağılımı kullanabilirsiniz. Örneğin, popülasyondan her biri 10 alabalıktan oluşan 10 basit rastgele örnek alırsanız, ortalamanın örnekleme dağılımını bir histogram olarak gösterebilirsiniz. Örnek verilerinizde en sık meydana gelen değer yaklaşık 20 inç olacaktır. En az sık meydana gelen değerler, 16 inç veya 24 inç gibi daha aşırı uzunluklar olacaktır.
+
+![image](./images/4032.png)
+
+Bir örneklemin boyutunu artırdıkça, örnek verilerinizin ortalama uzunluğu popülasyonun ortalama uzunluğuna yaklaşacaktır. Tüm popülasyonu örneklediyseniz - başka bir deyişle, göldeki her bir alabalığı gerçekten ölçseydiniz - örnek ortalamanız popülasyon ortalamasıyla aynı olacaktır.
+
+Ancak, popülasyon ortalamasının doğru bir tahminini elde etmek için milyonlarca balığı ölçmenize gerek yoktur. Popülasyondan yeterince büyük bir örneklem büyüklüğü alırsanız - diyelim ki, 1000 alabalık - örneklem ortalamanız popülasyon ortalamasının (20 inç) kesin bir tahmini olacaktır.
+
+![image](./images/4033.png)
+
+#### **Standart hata**
+
+Örnek verilerinizi, herhangi bir örneğin ortalama uzunluğunun popülasyon ortalamasını ne kadar tam olarak temsil ettiğini tahmin etmek için de kullanabilirsiniz.
+
+Bunu bilmek yararlıdır çünkü örnek ortalaması örneklemden örneğe değişir ve verilen herhangi bir örnek ortalamasının gerçek popülasyon ortalamasından farklı olması muhtemeldir. Örneğin, alabalık popülasyonunun ortalama uzunluğu 20 inç olabilir. Herhangi bir alabalık örneği için ortalama uzunluk 20,2 inç, 20,5 inç, 19,7 inç vb. Olabilir.
+
+Veri uzmanları, bu değişkenliği ölçmek için örnek araçların standart sapmasını kullanır. İstatistikte, bir örnek istatistiğin standart sapmasına **standart hata denir**. Standart hata, örnekleme değişkenliğinin sayısal bir ölçüsünü sağlar. Ortalamanın standart hatası, tüm örnek ortalamalarınız arasındaki değişkenliği ölçer. Daha büyük bir standart hata, örnek ortalamalarının daha dağılmış olduğunu veya daha fazla değişkenlik olduğunu gösterir. Daha küçük bir standart hata, örnek ortalamalarının birbirine daha yakın olduğunu veya daha az değişkenlik olduğunu gösterir.
+
+Uygulamada, tek bir gözlem örneği kullanarak, örnek ortalamasının tahmini standart hatasını hesaplamak için aşağıdaki formülü uygulayabilirsiniz: s/√n Formülde, s örnek standart sapmasını ifade eder ve n örnek boyutunu ifade eder.
+
+Örneğin, alabalık uzunlukları çalışmanızda, 100 alabalık bir numunenin ortalama uzunluğu 20 inç ve standart sapmayı 2 inç olduğunu hayal edin. Örnek standart sapmayı, 2'yi örnek boyutunun kareköküne, 100'e bölerek tahmini standart hatayı hesaplayabilirsiniz:
+
+2 ÷ √100 = 2 ÷ 10 = 0,2
+
+Bu, bir numuneden diğerine ortalama uzunluğun yaklaşık 0,2 inçlik bir standart sapma ile değişeceğini beklemeniz gerektiği anlamına gelir.
+
+Standart hata, tahmininizin kesinliğini anlamanıza yardımcı olur. Genel olarak, örneklem boyutu büyüdükçe ve standart hata küçüldükçe tahminlerinize daha fazla güvenebilirsiniz. Bunun nedeni, örneklem büyüklüğünüz büyüdükçe, örneklem ortalamasının popülasyon ortalamasına yaklaşmasıdır.
+
+### Önemli çıkarımlar
+
+Örnekleme yoluyla popülasyon parametrelerini tahmin etmek, güçlü bir istatistiksel çıkarım şeklidir. Örnekleme dağılımları, bir örnek istatistikle ilişkili belirsizliği tanımlar ve uygun istatistiksel çıkarımlar yapmanıza yardımcı olur. Bu önemlidir, çünkü paydaş kararları genellikle sağladığınız tahminlere dayanır.
+
+## Veri Numunesi Alma ve Tahminler Oluşturma
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt 
+from scipy import stats
+import statsmodels.api as sm
+
+sampled_data = education_districtwise.sample(n = 50 replace=True, random_state=31208)
+
+sampled_data
+```
+
+| DISTNAME     | STATNAME | BLOCKS | VILLAGES | CLUSTERS | TOTPOPULAT | OVERALL_LI |
+|--------------|----------|--------|----------|----------|------------|------------|
+| DISTRICT528  | STATE6   | 9      | 112      | 89       | 1863174.0  | 92.14      |
+| DISTRICT291  | STATE28  | 14     | 1188     | 165      | 3273127.0  | 52.49      |
+| DISTRICT66   | STATE23  | 12     | 1169     | 116      | 1042304.0  | 62.14      |
+| DISTRICT458  | STATE3   | 3      | 157      | 19       | 82839.0    | 76.33      |
+| DISTRICT636  | STATE35  | 3      | 187      | 44       | 514683.0   | 86.70      |
+
+```python
+estimate1 = sampled_data['OVERALL_LI'].mean() 
+
+estimate1
+
+74.22359999999999
+
+estimate2 = education_districtwise['OVERALL_LI'].sample(n = 50, replace=True, random_state=56810).mean() 
+
+estimate2
+
+74.24780000000001
 
 
+estimate_list = [] 
 
+for i in range(10000):
+    estimate_list.append(education_districtwise['OVERALL_LI'].sample(n=50, replace=True).mean()) 
 
+estimate_df = pd.DataFrame(data={'estimate': estimate_list})
+
+mean_sample_means = estimate_df['estimate'].mean() 
+
+mean_sample_means
+73.41124126000025
+```
+
+## Güven aralıkları: Doğru ve yanlış yorumlar 
