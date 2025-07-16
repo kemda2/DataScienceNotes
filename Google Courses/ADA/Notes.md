@@ -4935,12 +4935,11 @@ Bu okumanın amaçları doğrultusunda, 6 gözlemden oluşan bir veri kümesine 
 
 ![image](./images/5001.png)
 
-`Satır 1: y^=−0.5+3x`
+Satır 1: $\hat{y} =−0.5+3x$
 
-Ardından, bazı değerleri varsayalım β^​0​ β^​1​ ve kareli artıkların toplamını hesaplayalım. İlk deneme için, varsayalım β^0​=−0.5 ve β^​1​=3. O zaman doğrusal denklem olacaktır 
-y^=−0.5+3x. Artık denklemin olduğu için y, her bir değeri koyarak tahmin edilen değerleri hesaplayabilirsiniz.
+Ardından, bazı değerleri varsayalım $β_0​$, $β_1$ ve kareli artıkların toplamını hesaplayalım. İlk deneme için, varsayalım $β_0​$=−0.5 ve $β_1$=3. O zaman doğrusal denklem olacaktır  $\hat{y} =−0.5+3x$. Artık denklemin olduğu için y, her bir değeri koyarak tahmin edilen değerleri hesaplayabilirsiniz.
 
-Örneğin, eğer x=0, o zaman y^=−0.5+3∗0=−0.5. Eğer x=1, o zaman y^=−0.5+3∗1=2.5. Böylece, tahmin edilen tüm değerleri hesapladıktan sonra, her veri noktası için kalıntıyı hesaplayabilirsiniz.
+Örneğin, eğer $x=0$, o zaman $\hat{y} =−0.5+3x=−0.5$. Eğer x=1, o zaman $\hat{y} =−0.5+3 \cdot 1 =2.5$. Böylece, tahmin edilen tüm değerleri hesapladıktan sonra, her veri noktası için kalıntıyı hesaplayabilirsiniz.
 
 |X (gözlemlendi)|Y (güncel)|Y (tahmin edilen) = -0.5 + 3x|Kalıntı|
 |---|---|---|---|
@@ -4964,9 +4963,9 @@ Ardından, artıkların her birini kendileriyle çarparak ve ardından artıklar
 
 Kalıntıların karesi toplamı = 0.25+0.25+2.25+0.25+0.25+6.25=9.5
 
-`Satır 2: y^=−0.5+2.5x`
+Satır 2: $\hat{y} =−0.5 + 2.5 \cdot x$
 
-Ardından, önceki örnekteki eğimi ayarlayalım. Yani β^0=−0.5 ama β^1=2.5. O zaman doğrusal denklem y^=−0.5+2.5x olacaktır. Tahmin edilen değerleri hesaplamak x ve artıkları karesini almak için son seferki gibi değerleri ekleyebilirsiniz.
+Ardından, önceki örnekteki eğimi ayarlayalım. Yani $β_0​$=−0.5 ama $β_1​$=2.5. O zaman doğrusal denklem $\hat{y} = −0.5 + 2.5 \cdot x$ olacaktır. Tahmin edilen değerleri hesaplamak x ve artıkları karesini almak için son seferki gibi değerleri ekleyebilirsiniz.
 
 |X (gözlemlendi)|Y (güncel)|Y (tahmin edilen) = -0.5 + 2.5x|Kalıntı|Kare Kalıntılar|
 |---|---|---|---|---|
@@ -4987,7 +4986,8 @@ Eğimi ve kesişmeyi ayarlamaya devam edebilir ve ardından tahmin edilen değer
 
 Beta katsayılarını bulmak için formülleri yazmanın birden fazla yolu vardır. Basit doğrusal regresyon için, formülleri yazmanın bir yolu aşağıdaki gibidir:
 
-![](attachment:01154b9d-5ff8-4b69-95d5-26e30fb52a70.png)
+- $\hat{\beta}_1 = \frac{\sum_{i=1}^{n} (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^{n} (X_i - \bar{X})^2}$
+- $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$
 
 Bir bilgisayardan yardım almadan beta katsayılarını hesaplamanız istenmeyecek, ancak isterseniz keşfetmek ilginç olabilir. İlgilenmeniz durumunda ek kaynaklar sağladık.
 
