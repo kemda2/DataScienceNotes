@@ -4886,3 +4886,11 @@ stats.ttest_ind(a=sampled_state21['OVERALL_LI'], b=sampled_state28['OVERALL_LI']
 
 # Ttest_indResult(statistic=2.8980444277268735, pvalue=0.006421719142765231)
 ```
+
+# Kurs 5: Regresyon Analizi
+
+
+
+
+
+
