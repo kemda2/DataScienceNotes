@@ -4986,9 +4986,9 @@ Eğimi ve kesişmeyi ayarlamaya devam edebilir ve ardından tahmin edilen değer
 
 Beta katsayılarını bulmak için formülleri yazmanın birden fazla yolu vardır. Basit doğrusal regresyon için, formülleri yazmanın bir yolu aşağıdaki gibidir:
 
-$\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(X_i-\bar{X})(Y_i-\bar{Y})}{\sum_{i=1}^{n}(X_i-\bar{X})^2}$
+- $\hat{\beta_1} = \frac{\sum_{i=1}^{n} (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^{n} (X_i - \bar{X})^2}$
+- $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$
 
-$\hat{\beta}_0 = \bar{Y}-\hat{\beta}_1\cdot\bar{X}$
 
 Bir bilgisayardan yardım almadan beta katsayılarını hesaplamanız istenmeyecek, ancak isterseniz keşfetmek ilginç olabilir. İlgilenmeniz durumunda ek kaynaklar sağladık.
 
