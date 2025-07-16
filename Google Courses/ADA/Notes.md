@@ -3391,6 +3391,154 @@ Sürekli olasılık dağılımları ve normal dağılım hakkında daha fazla bi
 
 ## Standart Sapma ve Alt-Üst Limit Hesabı 
 
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy import stats
+import statsmodels.api as sm
+
+education_districtwise['OVERALL_LI'].hist()
+```
+
+![image](./images/4016.png)
+
+```python
+mean_overall_li = education_districtwise['OVERALL_LI'].mean() 
+
+mean_overall_li
+73.39518927444797
+
+std_overall_li = education_districtwise['OVERALL_LI'].std()
+
+std_overall_li
+10.098460413782469
+
+upper_limit = mean_overall_li + 1 * std_overall_li 
+lower_limit = mean_overall_li + 1 * std_overall_li 
+
+(education_districtwise['OVERALL_LI'] >= lower_limit) & (education_districtwise['OVERALL_LI'] <= upper_limit)).mean()
+0.6640378548895899
+
+upper_limit = mean_overall_li + 2 * std_overall_li 
+lower_limit = mean_overall_li + 2 * std_overall_li 
+
+((education_districtwise['OVERALL_LI'] >= lower_limit) & (education_districtwise['OVERALL_LI'] <= upper_limit)).mean()
+0.9542586750788643
+
+upper_limit = mean_overall_li + 3 * std_overall_li 
+lower_limit = mean_overall_li + 3 * std_overall_li 
+
+((education_districtwise['OVERALL_LI'] >= lower_limit) & (education_districtwise['OVERALL_LI'] <= upper_limit)).mean()
+0.996845425867507
+```
+
+Ampirik kural ile uyumlu olduğu için verilerin normal dağılım yaptığı söylenebilir. 
+
+![image](./images/4017.png)
+
+```python
+education_districtwise['Z_SCORE'] = stats.zscore(education_districtwise ['OVERALL_LI']) 
+education_districtwise
+
+education_districtwise[(education_districtwise['Z_SCORE'] > 3) | (education_districtwise ['Z_SCORE'] < -3)]
+```
+
+| DISTNAME     | STATNAME | BLOCKS | VILLAGES | CLUSTERS | TOTPOPULAT | OVERALL_LI | Z_SCORE   |
+|--------------|----------|--------|----------|----------|------------|------------|-----------|
+| DISTRICT461  | STATE31  | 4      | 360      | 53       | 532791.0   | 42.67      | -3.044964 |
+| DISTRICT429  | STATE22  | 6      | 612      | 62       | 728677.0   | 37.22      | -3.585076 |
+
+## Örneklem ve popülasyon arasındaki ilişki
+
+Daha önce, çıkarımsal **istatistiklerin sonuç çıkarmak** veya daha büyük bir popülasyon hakkında tahminlerde bulunmak için örnek verileri kullandığını öğrendiniz. Veri uzmanları, verileri hakkında değerli bilgiler edinmek için çıkarımsal istatistikleri kullanır.
+
+Bu okumada, örneklem ve popülasyon arasındaki ilişkiyi daha ayrıntılı olarak öğreneceksiniz. Ayrıca veri profesyonellerinin veri çalışmasında örneklemeyi nasıl kullandığını ve popülasyonu temsil eden bir örnekle çalışmanın önemini tartışacağız.
+
+### Nüfus ve Örnek
+
+#### **Nüfus ve örnek**
+
+İstatistiklerde, bir pop **ülas** yon, ölçmek istediğiniz her olası öğeyi veya hakkında sonuç çıkarmak istediğiniz tüm veri kümesini içerir. İstatistiksel bir popülasyon, aşağıdakiler de dahil olmak üzere her tür veriye atıfta bulunabilir:
+
+- İnsanlar
+    
+- Kuruluşlar
+    
+- Nesneler
+    
+- Olaylar
+    
+- Ve daha fazlası
+    
+
+Örneğin, bir popülasyon aşağıdakiler kümesi olabilir:
+
+- Bir üniversitedeki tüm öğrenciler
+    
+- Şimdiye kadar bir şirket tarafından üretilen tüm cep telefonları
+    
+- Yeryüzündeki tüm ormanlar
+    
+
+**Örnek, bir popülasyonun bir alt kümesidir.**
+
+Yukarıdaki popülasyonlardan alınan örnekler şunlar olabilir:
+
+- Üniversitedeki matematik bölümleri
+    
+- Şirket tarafından geçen hafta üretilen cep telefonları
+    
+- Kanada'daki ormanlar
+    
+
+Veri uzmanları, popülasyonlar hakkında çıkarımlar yapmak için örnekler kullanır. Başka bir deyişle, nüfusun küçük bir bölümünden topladıkları verileri bir bütün olarak nüfus hakkında sonuçlar çıkarmak için kullanırlar.
+
+![](attachment:b12573e5-8c4a-46ca-af57-de919c3a8b01.png)
+
+#### **Örnekleme**
+
+**Örnekleme**, bir popülasyondan bir veri alt kümesi seçme işlemidir.
+
+Uygulamada, tüm popülasyonun her üyesi veya unsuru hakkında veri toplamak genellikle zordur. Bir nüfus çok büyük olabilir, coğrafi olarak dağılmış veya başka bir şekilde erişilmesi zor olabilir. Bunun yerine, bir bütün olarak popülasyon hakkında sonuç çıkarmak, tahminler yapmak veya hipotezleri test etmek için örnek verileri kullanabilirsiniz.
+
+Veri uzmanları örneklemeyi kullanır çünkü:
+
+- Boyut, karmaşıklık veya erişilebilirlik eksikliği nedeniyle tüm nüfus hakkında veri toplamak genellikle imkansız veya pratik değildir.
+    
+- Bir örnekten veri toplamak daha kolay, daha hızlı ve daha verimli
+    
+- Örnek kullanmak para ve kaynak tasarrufu sağlar
+    
+- Daha küçük veri kümelerini depolamak, düzenlemek ve analiz etmek genellikle son derece büyük veri kümeleriyle uğraşmaktan daha kolay, daha hızlı ve daha güvenilirdir
+    
+
+##### Örnek: seçim anketi
+
+Hindistan, Endonezya, Amerika Birleşik Devletleri veya Brezilya gibi büyük nüfusa sahip bir ülkede çalışan bir veri uzmanı olduğunuzu hayal edin. Yaklaşan bir ulusal cumhurbaşkanı seçimi var. Hangi aday seçmenlerin tercih ettiğini görmek için bir seçim anketi yapmak istiyorsunuz. Diyelim ki uygun seçmenlerin nüfusu 100 milyon kişidir. 100 milyon insanı oy kullanma tercihleri konusunda anket yapmak, tüm seçmenleri bulmanın ve iletişim kurmanın mümkün olacağını ve tüm seçmenlerin katılmaya istekli olacağını varsayarsak bile, çok fazla zaman, para ve kaynak gerektirecektir.
+
+Bununla birlikte, tüm seçmenlerin daha büyük nüfusundan alınan 100 veya 1000 seçmenden oluşan bir örneği araştırmak gerçekçidir. Büyük bir popülasyonla uğraşırken, örnekleme, bir bütün olarak popülasyon hakkında geçerli çıkarımlar yapmanıza yardımcı olabilir.
+
+![](attachment:74c22a71-c4ec-4cd5-9446-17d528c7129b.png)
+
+#### **Temsili örnek**
+
+Bir popülasyon hakkında geçerli çıkarımlar veya doğru tahminler yapmak için, örneklemeniz popülasyonu bir bütün olarak temsil etmelidir. Temsili bir **örneklemin bir pop** ülasyonun özelliklerini doğru bir şekilde yansıttığını hatırlayın. Nüfusunuz hakkında yaptığınız çıkarımlar ve tahminler, örnek verilerinize dayanmaktadır. Örneklemeniz popülasyonunuzu doğru bir şekilde yansıtmıyorsa, çıkarımlarınız güvenilir olmayacak ve tahminleriniz doğru olmayacaktır. Bu da paydaşlar ve kuruluşlar için olumsuz sonuçlara yol açabilir.
+
+Olasılık örneklemesi gibi istatistiksel yöntemler, bir popülasyon içindeki çeşitli gruplardan rastgele örnekler toplayarak örneklemenizin temsili olmasını sağlamaya yardımcı olur. Bu yöntemler örnekleme yanlılığını azaltmaya ve sonuçlarınızın geçerliliğini artırmaya yardımcı olur. Daha sonra örnekleme yöntemleri hakkında daha fazla bilgi edineceksiniz.
+
+##### Örnek: seçim anketi
+
+İdeal olarak, seçim anketinizin örneği, genel seçmen nüfusunun özelliklerini doğru bir şekilde yansıtacaktır. Büyük bir ülkedeki seçmen nüfusu siyasi bakış açıları, coğrafi konum, yaş, cinsiyet, ırk, eğitim düzeyi, sosyoekonomik durum vb. bakımından farklılık gösterecektir. Yalnızca belirli gruplara ait kişilerden veri toplarsanız, diğerlerinden değil, yalnızca belirli gruplara ait kişilerden veri toplarsanız örneklemeniz temsili olmayacaktır. Örneğin, bir siyasi partiden veya ileri dereceye sahip veya 70 yaşından büyük kişilerle anket yaparsanız. Temsili olmayan bir örneğe dayalı bir seçim anketinin sonuçları doğru olmayacaktır. Genel olarak, herhangi bir popülasyon hakkında yaptığınız herhangi bir iddia veya çıkarım, temsili bir örneğe dayanıyorsa daha fazla geçerliliğe sahip olacaktır.
+
+### Önemli çıkarımlar
+
+Veri uzmanları, karmaşık veri kümelerini modelleyebilen ve değerli içgörüler oluşturmaya yardımcı olabilecek güçlü istatistiksel araçlarla çalışır. Ancak, üzerinde çalıştığınız örnek veriler popülasyonunuzu doğru bir şekilde yansıtmıyorsa - yani, örneğiniz temsili değilse - modelinizin ne kadar iyi olduğu önemli değildir. Tahmin modeliniz kötü bir örneğe dayanıyorsa, tahminleriniz doğru olmayacaktır.
+
+Sonuç olarak, numunenizin kalitesi, paydaşlarla paylaştığınız içgörülerin kalitesini belirlemeye yardımcı olur. Bir popülasyon hakkında güvenilir çıkarımlar yapmak için, örneklemenizin popülasyonu temsil ettiğinden emin olun.
+
+
+
 
 
 
