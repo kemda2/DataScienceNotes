@@ -1259,7 +1259,7 @@ plt.title("% of lightning strikes each Month (2016–2018)")  # Grafik başlığ
 
 ## Histogramlar
 
-Öğrendiğiniz gibi, keşif veri analizinin (EDA) amacı tam da adının söylediği şeydir: verileri araştırın ve analiz edin. Bir veri uzmanı olarak, neredeyse her zaman yol gösterici bir soru veya hedefle başlayacaksınız, örneğin, “En yüksek karbondioksit yayıcıları nerede bulunur?” veya “X ürününü satın alma olasılığı en yüksek kişilerin özelliklerini belirleyin.” Süreciniz boyunca bunu sık sık düşünmek, sizi yolda tutan bir itici güç yaratır.
+Öğrendiğiniz gibi, keşif veri analizinin (EDA) amacı tam da adının söylediği şeydir: verileri araştırın ve analiz edin. Bir veri uzmanı olarak, neredeyse her zaman yol gösterici bir soru veya hedefle başlayacaksınız, örneğin, "En yüksek karbondioksit yayıcıları nerede bulunur?" veya "X ürününü satın alma olasılığı en yüksek kişilerin özelliklerini belirleyin." Süreciniz boyunca bunu sık sık düşünmek, sizi yolda tutan bir itici güç yaratır.
 
 Verileri keşfederken emrinizdeki en önemli araçlardan biri **histogramdır**. Histogram, bir veri kümesindeki veya değişkendeki her değerin ne sıklıkta meydana geldiğini gösteren bir frekans dağılımının grafiksel bir gösterimidir. Veri profesyonellerinin verilerinin dağılımlarını anlamaları çok önemlidir, çünkü bu bilgi deney tasarımı, modelleme ve daha ileri analizler etrafında birçok aşağı yönlü kararı yönlendirir. Bu okumada, histogramlar, ne olduklarını, nasıl yapılacağını ve nasıl yorumlanacağını öğreneceksiniz.
 
@@ -1377,7 +1377,7 @@ Yinelenen değerlerin kaldırılıp kaldırılmayacağına dair herhangi bir kar
 
 Kopyaları tanımlamanın basit bir yolu, Pandas duplicated() işlevini kullanmaktır. duplicated()DataFramesınıfın bir yöntemidir.
 
-Bu işlev, veri değerinin bir kopya olduğunu belirten “true” ve “false” benzersiz bir değer olduğunu belirten bir dizi “doğru/yanlış” çıktı döndürür.
+Bu işlev, veri değerinin bir kopya olduğunu belirten "true" ve "false" benzersiz bir değer olduğunu belirten bir dizi "doğru/yanlış" çıktı döndürür.
 
 İşte beş satırlı bir veri çerçevesi örneği:
 
@@ -1394,7 +1394,7 @@ df
 | Pipplee | stock   | 3.0    |
 
 
-duplicated() fonksiyonu kullanarak sonuç, birinin “Doğru” olarak işaretlenmiş olması ve bunun bir kopya olduğunu gösterir.
+duplicated() fonksiyonu kullanarak sonuç, birinin "Doğru" olarak işaretlenmiş olması ve bunun bir kopya olduğunu gösterir.
 
 ```python
 print(df)
@@ -1419,9 +1419,9 @@ print(df.duplicated())
 | 3     | False |
 | 4     | False |
 
-Tüm veri çerçevesi için kopyaları tanımlamak, tek bir sütundan veya dizinden farklı olacaktır. Fonksi duplicated() yonu tüm veri çerçevesi için kullandığınızda emin olun. İş duplicated() lev, yalnızca bir sütunda _bulunan tek tek eşleşen değerleri değil, yalnızca tam olarak eşleşen değerlere sahip tüm sat_ ırları döndürür. Bir veri çerçevesindeki yalnızca bir sütun veya bir dizi sütun için kopyaları tanımlamak isterseniz, bunu işlevin bağımsız değişken alanının “alt küme” kısmına eklemeniz gerekir. duplicated() Daha ileri giderek, kopyaların hangisinin kopya yerine “orijinal” olarak saklanacağını belirtmek isterseniz, bunu bağımsız değişken alanının keep bölümünde belirtebilirsiniz.
+Tüm veri çerçevesi için kopyaları tanımlamak, tek bir sütundan veya dizinden farklı olacaktır. Fonksi duplicated() yonu tüm veri çerçevesi için kullandığınızda emin olun. İş duplicated() lev, yalnızca bir sütunda _bulunan tek tek eşleşen değerleri değil, yalnızca tam olarak eşleşen değerlere sahip tüm sat_ ırları döndürür. Bir veri çerçevesindeki yalnızca bir sütun veya bir dizi sütun için kopyaları tanımlamak isterseniz, bunu işlevin bağımsız değişken alanının "alt küme" kısmına eklemeniz gerekir. duplicated() Daha ileri giderek, kopyaların hangisinin kopya yerine "orijinal" olarak saklanacağını belirtmek isterseniz, bunu bağımsız değişken alanının keep bölümünde belirtebilirsiniz.
 
-Aşağıda, değerlerin yalnızca bir sütunundaki (alt kümesindeki) kopyaları tanımlamaya ve son kopyaları “yanlış” olarak etiketlemeye ve “saklanmaları” için bir örnek verilmiştir:
+Aşağıda, değerlerin yalnızca bir sütunundaki (alt kümesindeki) kopyaları tanımlamaya ve son kopyaları "yanlış" olarak etiketlemeye ve "saklanmaları" için bir örnek verilmiştir:
 
 ```python
 print(df)
@@ -1469,7 +1469,7 @@ Yinelenen değerler açıkça hata **değilse** ve veri kümesini bir bütün ol
 
 ### Kandırılmayın - Tekilleştirme nasıl yapılır
 
-Python'a geri dönmeden ve kopyaları nasıl ortadan kaldıracağımızı öğrenmeden önce, önce “tekilleştirme” terimini tanımlayalım:
+Python'a geri dönmeden ve kopyaları nasıl ortadan kaldıracağımızı öğrenmeden önce, önce "tekilleştirme" terimini tanımlayalım:
 
 - **Tekilleştirme:** Bir veri kümesindeki eşleşen veri değerlerinin ortadan kaldırılması veya kaldırılması.
     
@@ -1564,7 +1564,7 @@ df
 
 ### Önemli Çıkarımlar
 
-Bir veri kümesindeki yinelenen veri değerlerini belirlemek, özellikle temizleme ve doğrulama olmak üzere EDA (veya “Keşif Veri Analizi”) uygulamalarının önemli bir parçasıdır. Yinelenenleri belirledikten sonra, yinelenmeleri ortadan kaldırmayı veya kopyaları ortadan kaldırmamayı seçerken veri kümesi üzerindeki etkiyi ve analiz hedefinizi düşünün.
+Bir veri kümesindeki yinelenen veri değerlerini belirlemek, özellikle temizleme ve doğrulama olmak üzere EDA (veya "Keşif Veri Analizi") uygulamalarının önemli bir parçasıdır. Yinelenenleri belirledikten sonra, yinelenmeleri ortadan kaldırmayı veya kopyaları ortadan kaldırmamayı seçerken veri kümesi üzerindeki etkiyi ve analiz hedefinizi düşünün.
 
 ### Ek Kaynaklar
 
@@ -2057,7 +2057,7 @@ Anlayabileceğiniz gibi, mantarlarla ilgili bu varsayımsal veri seti için, her
 
 ### Etiket kodlama ile ilgili bazı olası sorunlar
 
-Müzik türleri kategorileri içeren bir veri kümesini analiz ettiğinizi hayal edin. “Blues”, “Elektronik Dans Müziği (EDM)”, “Hip Hop”, “Jazz”, “K-Pop”, “Metal” ve “Rock” kodlarını aşağıdaki sayısal değerlerle etiketlersiniz: “1, 2, 3, 4, 5, 6 ve 7.”
+Müzik türleri kategorileri içeren bir veri kümesini analiz ettiğinizi hayal edin. "Blues", "Elektronik Dans Müziği (EDM)", "Hip Hop", "Jazz", "K-Pop", "Metal" ve "Rock" kodlarını aşağıdaki sayısal değerlerle etiketlersiniz: "1, 2, 3, 4, 5, 6 ve 7."
 
 Bu etiket kodlamasıyla, ortaya çıkan makine öğrenimi modeli sadece bir sıralama değil, aynı zamanda Blues (1) ve EDM (2) arasında sayısal olarak ne kadar yakın oldukları için Blues (1) ve Jazz (4) arasında daha yakın oldukları için daha yakın bir bağlantı da türete **bilir**. Bu varsayılan ilişkilere ek olarak (analizinizde isteyebilirsiniz veya istemeyebilirsiniz), her kodun sayısal sırayla diğerinden eşit uzaklıkta olduğunu da fark etmelisiniz, çünkü 1'den 2'ye 5 ila 6, vb. ile aynı mesafedir, vb. Soru şu ki, bu eşit mesafeli ilişki veri kümenizdeki müzik türleri arasındaki ilişkileri doğru bir şekilde temsil ediyor mu? Başka bir soru sormak için, kodlamadan sonra, oluşturduğunuz görselleştirme veya model kodlanmış etiketleri bir sıralama olarak ele alacak mı?
 
@@ -2089,7 +2089,7 @@ Bu mankenlerin yaratılmasına **one-hot** kodlama denir. Bir hatırlatma olarak
 |**11**|1|0|0|0|
 |**12**|0|1|0|0|
 
-[Video](https://www.coursera.org/learn/go-beyond-the-numbers-translate-data-into-insight/lecture/BrCPD/sort-numbers-versus-names)da kapsanan yıldırım çarpması veri kümesindeki değerlerin “hafif” olarak etiketlendiğini ve “1” olduğunu göreceksiniz. “Hafif”, veri kümesindeki yıldırım sayılarının en düşük çeyreğini ifade eder. “Hafif” sütundaki hafif DEĞER DEĞİLDİR diğer değerler için o hücrede bir sıfır vardır. Bu yöntemle etiket kodlamasının sunduğu istenmeyen ve sorunlu ilişkiler sorununu çözüyoruz.
+[Video](https://www.coursera.org/learn/go-beyond-the-numbers-translate-data-into-insight/lecture/BrCPD/sort-numbers-versus-names)da kapsanan yıldırım çarpması veri kümesindeki değerlerin "hafif" olarak etiketlendiğini ve "1" olduğunu göreceksiniz. "Hafif", veri kümesindeki yıldırım sayılarının en düşük çeyreğini ifade eder. "Hafif" sütundaki hafif DEĞER DEĞİLDİR diğer değerler için o hücrede bir sıfır vardır. Bu yöntemle etiket kodlamasının sunduğu istenmeyen ve sorunlu ilişkiler sorununu çözüyoruz.
 
 Ancak tek sıcak kodlama, özellikle lojistik ve doğrusal regresyon söz konusu olduğunda, kendi problemlerini sunar. Gelecekteki bir kursta bunun hakkında daha fazla bilgi edineceksiniz.
 
@@ -2270,9 +2270,9 @@ Aşağıdaki açıklamalar yukarıdaki resme karşılık gelir.
     
 2. Veri bağlantıları penceresinin hemen sağında, Tableau Public"in belirli bir dosyada algıladığı tüm alanların bir listesi bulunur.. Yüklenen birden fazla dosyanız varsa, her dosyanın alanlarına erişmek için dosyayı açılır menüden seçebilirsiniz. Yaklaşan bir videoda öğreneceğiniz gibi, Tableau'nun alanları dosyanızdaki veri sütunlarından alınır. Tableau bu alanları otomatik olarak boyutlar veya hesaplamalar ve ayrık veya sürekli değişkenler olarak sıralar.
     
-3. Sayfadaki en büyük bölme, sağ ortada, dosyanızın tüm sütunlarına birkaç veri satırı dahil Tableau alanları olarak erişmenizi sağlar. Soldaki bölmenin aksine, bu bölme yeni hesaplama alanları, gruplar, kümeler veya parametreler gibi halihazırda mevcut olanlara dayalı olarak yeni alanlar oluşturmanıza olanak tanır (gelecek videolarda bu özellikler hakkında daha fazla bilgi edineceksiniz). Bu bölmeyi verilerinizle doldurmak için “şimdi güncelle” veya “otomatik olarak güncelle” seçeneğini seçmeniz istenebilir. Durum buysa, güncel verilerle tutarlı bir şekilde çalıştığınızdan emin olmak için otomatik olarak güncelleme yapmak iyi bir uygulamadır. (Referans için - #5 'dan sonra aşağıdaki resmi inceleyin.)
+3. Sayfadaki en büyük bölme, sağ ortada, dosyanızın tüm sütunlarına birkaç veri satırı dahil Tableau alanları olarak erişmenizi sağlar. Soldaki bölmenin aksine, bu bölme yeni hesaplama alanları, gruplar, kümeler veya parametreler gibi halihazırda mevcut olanlara dayalı olarak yeni alanlar oluşturmanıza olanak tanır (gelecek videolarda bu özellikler hakkında daha fazla bilgi edineceksiniz). Bu bölmeyi verilerinizle doldurmak için "şimdi güncelle" veya "otomatik olarak güncelle" seçeneğini seçmeniz istenebilir. Durum buysa, güncel verilerle tutarlı bir şekilde çalıştığınızdan emin olmak için otomatik olarak güncelleme yapmak iyi bir uygulamadır. (Referans için - #5 'dan sonra aşağıdaki resmi inceleyin.)
     
-4. Ekranın sağ üst köşesindeki mavi “Yayınla” düğmesi “kaydet” düğmeniz olarak işlev görür. Tableau Public tarayıcı tabanlı bir platform olduğundan, oluşturduğunuz ve kaydetmek istediğiniz her şey herkese açık hesabınızda yayınlanacaktır. İstenirse veri kaynaklarını ve veri görselleştirmelerini parolayla kilitlemenin veya gizlemenin yolları vardır, ancak Tableau Public yalnızca çalışmanızı kaydetmek için Yayınla alanını sunar. 'Yayınla' düğmesine tıkladığınızda, tasarım ilerlemenize bağlı olarak boş olabilecek veri tasarım sayfanıza otomatik olarak yönlendirilebilirsiniz. Endişelenmeyin. En son veri kümesi yüklemeleriniz veya veri tasarımlarınız hala kaydedildi; en son bulunduğunuz yere geri dönün ve görselleştirmenizi düzenlemeye devam edin.
+4. Ekranın sağ üst köşesindeki mavi "Yayınla" düğmesi "kaydet" düğmeniz olarak işlev görür. Tableau Public tarayıcı tabanlı bir platform olduğundan, oluşturduğunuz ve kaydetmek istediğiniz her şey herkese açık hesabınızda yayınlanacaktır. İstenirse veri kaynaklarını ve veri görselleştirmelerini parolayla kilitlemenin veya gizlemenin yolları vardır, ancak Tableau Public yalnızca çalışmanızı kaydetmek için Yayınla alanını sunar. 'Yayınla' düğmesine tıkladığınızda, tasarım ilerlemenize bağlı olarak boş olabilecek veri tasarım sayfanıza otomatik olarak yönlendirilebilirsiniz. Endişelenmeyin. En son veri kümesi yüklemeleriniz veya veri tasarımlarınız hala kaydedildi; en son bulunduğunuz yere geri dönün ve görselleştirmenizi düzenlemeye devam edin.
     
 5. Son olarak, veri tasarım sayfanıza gitmek için sayfanın sol alt köşesindeki düğmeler koleksiyonunu kullanacaksınız. Yeni bir çalışma sayfası, yeni bir gösterge tablosu ve yeni bir hikaye oluşturmak için düğme seçeneklerini bulacaksınız. Bu unsurlar bir sonraki bölümde tanıtılacaktır.
 
@@ -2288,13 +2288,13 @@ Aşağıdaki numaralandırılmış öğeler, yukarıdaki Tableau çalışma kita
 
 1. En soldaki bu bölmede, ayrık ve sürekli boyutlar ve hesaplamalar listenizi bulacaksınız. Görselleştirmeler oluşturmak için bu değişkenleri bu sayfadaki farklı bölmelere taşıyacaksınız. Bu değişkenler hakkında daha sonra daha fazla bilgi edineceksiniz.
     
-2. Hemen sağdaki bir sonraki bölmede “Sayfalar”, “Filtreler” ve “İşaretler” i bulacaksınız. Veri görselleştirmesini değiştirmek için herhangi bir boyutu veya hesaplamayı bu farklı alanlara taşıyabilirsiniz. Bu özellikleri gelecek videolarda nasıl kullanacağınızı öğreneceksiniz.
+2. Hemen sağdaki bir sonraki bölmede "Sayfalar", "Filtreler" ve "İşaretler" i bulacaksınız. Veri görselleştirmesini değiştirmek için herhangi bir boyutu veya hesaplamayı bu farklı alanlara taşıyabilirsiniz. Bu özellikleri gelecek videolarda nasıl kullanacağınızı öğreneceksiniz.
     
-3. Sayfanın üst kısmında, menü çubuğunun hemen altında, değişken alanlarınızı taşımak için ana iki rafınız görevi gören iki boş satır vardır. “Sütunlar” ve “Satırlar” rafları, veri görselleştirmenizi istediğiniz gibi konumlandırmanıza yardımcı olur. Ayrıca bu satırların üzerinde, veri görselleştirmenizi değiştirmek için diğer seçeneklerle dolu bir araç çubuğu ve menü göreceksiniz.
+3. Sayfanın üst kısmında, menü çubuğunun hemen altında, değişken alanlarınızı taşımak için ana iki rafınız görevi gören iki boş satır vardır. "Sütunlar" ve "Satırlar" rafları, veri görselleştirmenizi istediğiniz gibi konumlandırmanıza yardımcı olur. Ayrıca bu satırların üzerinde, veri görselleştirmenizi değiştirmek için diğer seçeneklerle dolu bir araç çubuğu ve menü göreceksiniz.
     
-4. Ekranın ortasında görselleştirmeniz için ana görüntüleme paneli bulunur. Öğeler ekleyip boyutlarınızı ve hesaplamalarınızı farklı alanlara sürükledikçe, bu panelde veri görselleştirmeniz üzerindeki etkisini fark edeceksiniz. Sağ üst köşede, kaydetme düğmesi görevi gören “Yayınla” düğmenizi ve “Beni Göster” açılır menüsünü bulacaksınız. “Bana Göster” açılır menüsünün altında, her birini oluşturmak için çeşitli veri görselleştirme türleri ve kılavuzları bulacaksınız.
+4. Ekranın ortasında görselleştirmeniz için ana görüntüleme paneli bulunur. Öğeler ekleyip boyutlarınızı ve hesaplamalarınızı farklı alanlara sürükledikçe, bu panelde veri görselleştirmeniz üzerindeki etkisini fark edeceksiniz. Sağ üst köşede, kaydetme düğmesi görevi gören "Yayınla" düğmenizi ve "Beni Göster" açılır menüsünü bulacaksınız. "Bana Göster" açılır menüsünün altında, her birini oluşturmak için çeşitli veri görselleştirme türleri ve kılavuzları bulacaksınız.
     
-5. Çalışmanızı [kaydetmeye ve paylaşmaya hazır olduğunuzda](https://help.tableau.com/current/pro/desktop/en-us/publish_workbooks_tableaupublic.htm), Tableau Genel profilinizde yayınlayın. Üst gezinme çubuğundaki “Yayınla” düğmesinin yanındaki aşağı oka tıklayarak çalışmanızı yayınlama seçeneklerini görüntüleyin.
+5. Çalışmanızı [kaydetmeye ve paylaşmaya hazır olduğunuzda](https://help.tableau.com/current/pro/desktop/en-us/publish_workbooks_tableaupublic.htm), Tableau Genel profilinizde yayınlayın. Üst gezinme çubuğundaki "Yayınla" düğmesinin yanındaki aşağı oka tıklayarak çalışmanızı yayınlama seçeneklerini görüntüleyin.
     
 
 ### Tableau araçlarını incelemenin diğer yolları
@@ -2319,7 +2319,7 @@ Sorun gidermenize yardımcı olmak veya daha fazla bilgi edinmek için aşağıd
     
 - Tableau Araçları ve Web Yazma Yardımı: [Grafikler tasarlayın ve verileri analiz edin](https://help.tableau.com/current/pro/desktop/en-us/design_and_analyze.htm)
     
-- “Günün Vizi"ni ve platformda tasarlanan diğer güzel görüntüleri içeren Tableau Public “Keşfet” sayfası: [Tableau Public'e Hoş Geldiniz](https://public.tableau.com/app/discover)
+- "Günün Vizi"ni ve platformda tasarlanan diğer güzel görüntüleri içeren Tableau Public "Keşfet" sayfası: [Tableau Public'e Hoş Geldiniz](https://public.tableau.com/app/discover)
     
 - Tableau Public kullanmaya yeni başlayanlar için kılavuz: [Kendi verilerinize, yani yolculuğunuza başlamanıza yardımcı olacak adım adım kılavuz](https://www.google.com/url?q=https://www.tableau.com/blog/beginners-guide-tableau-public?_gl%3D1*uv0ojo*_ga*MjU5NjUyMzcuMTY1NDMwMDM4MQ..*_ga_8YLN0SNXVS*MTY5MTE4NzA1Mi4xMC4xLjE2OTExODcwNzcuMC4wLjA&sa=D&source=docs&ust=1691485449789685&usg=AOvVaw267xvonfqL2uCc_x_yXcip)
     
@@ -2404,11 +2404,11 @@ Bu durumda, bu aykırı değerin varlığı nedeniyle, medyan, ortalamadan daha 
 
 ##### Modu
 
-Mod, kategorik verilerle çalışırken kullanışlıdır, çünkü hangi kategorinin en sık meydana geldiğini açıkça gösterir. Bir şirketin çalışan memnuniyeti anketi yürüttüğünü varsayalım. Anketteki ana madde, “Şirket içinde büyümek için sahip olduğum fırsattan memnunum” diyor. Çalışanlar cevapları için dört kategori arasından seçim yaparlar: kesinlikle katılıyorum, katılıyorum, katılmıyorum, kesinlikle katılmıyorum. Bir çubuk grafik sonuçları özetler.
+Mod, kategorik verilerle çalışırken kullanışlıdır, çünkü hangi kategorinin en sık meydana geldiğini açıkça gösterir. Bir şirketin çalışan memnuniyeti anketi yürüttüğünü varsayalım. Anketteki ana madde, "Şirket içinde büyümek için sahip olduğum fırsattan memnunum" diyor. Çalışanlar cevapları için dört kategori arasından seçim yaparlar: kesinlikle katılıyorum, katılıyorum, katılmıyorum, kesinlikle katılmıyorum. Bir çubuk grafik sonuçları özetler.
 
 ![image](./images/4001.png)
 
-Mod, “kesinlikle katılıyorum” derecesine atıfta bulunan çubuk grafikteki en yüksek çubuğu temsil eder. Bu, veri kümesinde en sık meydana gelen derecelendirmedir. Mod, şirkete çalışan memnuniyeti konusunda net geri bildirim verir; bu durumda olumlu geribildirim.
+Mod, "kesinlikle katılıyorum" derecesine atıfta bulunan çubuk grafikteki en yüksek çubuğu temsil eder. Bu, veri kümesinde en sık meydana gelen derecelendirmedir. Mod, şirkete çalışan memnuniyeti konusunda net geri bildirim verir; bu durumda olumlu geribildirim.
 
 #### Önemli çıkarımlar
 
@@ -2474,7 +2474,7 @@ Bir popülasyon ve bir örnek için standart sapmayı hesaplamak için farklı f
 
 $s=\sqrt{\frac{\sum{(x-\bar{x})^2}}{n-1}} $
 
-Formülde n, örneğinizdeki toplam veri değeri sayısıdır, x her bir veri değeridir ve x( “x-bar” olarak telaffuz edilir) veri değerlerinizin ortalamasıdır. Yunan harfi Sigma, toplam anlamına gelen bir semboldür.
+Formülde n, örneğinizdeki toplam veri değeri sayısıdır, x her bir veri değeridir ve x( "x-bar" olarak telaffuz edilir) veri değerlerinizin ortalamasıdır. Yunan harfi Sigma, toplam anlamına gelen bir semboldür.
 
 **Not:** Bir veri uzmanı olarak, hesaplamalar için genellikle bir bilgisayar kullanırsınız. Hesaplamaları yapabilmek gelecekteki kariyeriniz için önemlidir, ancak hesaplamaların arkasındaki kavramlara aşina olmak, işyeri sorunlarına istatistiksel yöntemler uygulamanıza yardımcı olacaktır.
 
@@ -2958,7 +2958,7 @@ Formül, iki bağımlı olay A ve B için, A olayının ve B olayının meydana 
 
 P (A ve B) = P (A) * P (B | A)
 
-Olasılık gösteriminde, B ve A harfleri arasındaki dikey çubuk bağımlılığı gösterir veya B olayının meydana gelmesinin A olayının meydana gelmesine bağlı olduğunu gösterir. Bunu “A verilen B olasılığı” olarak söyleyebilirsiniz.
+Olasılık gösteriminde, B ve A harfleri arasındaki dikey çubuk bağımlılığı gösterir veya B olayının meydana gelmesinin A olayının meydana gelmesine bağlı olduğunu gösterir. Bunu "A verilen B olasılığı" olarak söyleyebilirsiniz.
 
 Formül ayrıca, A olayı verilen B olayının olasılığının, hem A hem de B'nin meydana gelme olasılığına eşit olarak ifade edilebilir. A olasılığına bölünmesi.
 
@@ -3056,7 +3056,7 @@ Teoremde, önceki olasılık olayın olasılığıdır A. Sonraki olasılık vey
 - **P (A|B)**: Sonraki olasılık
     
 
-Bazen istatistikçiler ve veri uzmanları, A olayına verilen B olayının olasılığını ifade etmek için “olasılık” terimini ve B olayının olasılığını ifade etmek için “kanıt” terimini kullanırlar.
+Bazen istatistikçiler ve veri uzmanları, A olayına verilen B olayının olasılığını ifade etmek için "olasılık" terimini ve B olayının olasılığını ifade etmek için "kanıt" terimini kullanırlar.
 
 - **P (B|A)**: Olasılık
     
@@ -3083,22 +3083,22 @@ Teoremin nasıl çalıştığını daha iyi anlamak için bir örneği inceleyel
 
 Bayes teoreminin dijital dünyada iyi bilinen bir uygulaması spam filtreleme veya bir e-postanın spam olup olmadığını tahmin etmektir. Uygulamada, sofistike bir spam filtresi, e-postanın içeriği, başlığı, eki olup olmadığı, gönderen adresinin etki alanı türü (.edu veya.org) ve daha fazlası dahil olmak üzere birçok farklı değişkenle ilgilenir. Ancak, örneğimiz için Bayes spam filtresinin basitleştirilmiş bir sürümünü kullanabiliriz.
 
-Diyelim ki e-postada belirli bir kelime göründüğü için bir e-postanın spam olma olasılığını belirlemek istediğinizi varsayalım. Bu örnekte, “para” kelimesini kullanalım.
+Diyelim ki e-postada belirli bir kelime göründüğü için bir e-postanın spam olma olasılığını belirlemek istediğinizi varsayalım. Bu örnekte, "para" kelimesini kullanalım.
 
 Aşağıdaki bilgileri keşfedersiniz:
 
 - Bir e-postanın spam olma olasılığı% 20'dir.
     
-- Bir e-postada “para” kelimesinin görünme olasılığı% 15'tir.
+- Bir e-postada "para" kelimesinin görünme olasılığı% 15'tir.
     
-- Bir spam e-postada “para” kelimesinin görünme olasılığı% 40'tır.
+- Bir spam e-postada "para" kelimesinin görünme olasılığı% 40'tır.
     
 
-Bu örnekte, önceki olasılığınız, bir e-postanın spam olma olasılığıdır. Sonradan olasılığınız veya nihayetinde öğrenmek istediğiniz şey, bir e-postanın “para” kelimesini içerdiği göz önüne alındığında spam olma olasılığıdır. Önceki olasılığınızı güncellemek için kullanacağınız yeni veriler, “para” kelimesinin bir e-postada görünme olasılığı ve “para” kelimesinin spam e-postada görünme olasılığıdır.
+Bu örnekte, önceki olasılığınız, bir e-postanın spam olma olasılığıdır. Sonradan olasılığınız veya nihayetinde öğrenmek istediğiniz şey, bir e-postanın "para" kelimesini içerdiği göz önüne alındığında spam olma olasılığıdır. Önceki olasılığınızı güncellemek için kullanacağınız yeni veriler, "para" kelimesinin bir e-postada görünme olasılığı ve "para" kelimesinin spam e-postada görünme olasılığıdır.
 
 Bayes teoremiyle çalışırken, önce A olayının ne olduğunu ve B olayının ne olduğunu bulmak yararlıdır - bu, olaylar arasındaki ilişkiyi anlamayı ve formülü kullanmayı kolaylaştırır.
 
-A etkinliğine spam e-posta ve B olayına bir e-postada “para” kelimesinin görünüşü diyelim. Şimdi, Bayes teoremini A olayı için “spam” kelimesini ve B olayı için “para” kelimesini kullanarak yeniden yazabilirsiniz.
+A etkinliğine spam e-posta ve B olayına bir e-postada "para" kelimesinin görünüşü diyelim. Şimdi, Bayes teoremini A olayı için "spam" kelimesini ve B olayı için "para" kelimesini kullanarak yeniden yazabilirsiniz.
 
 P (A | B) = P (B | A) * P (A)/P (B)
 
@@ -3106,21 +3106,21 @@ P (İstenmeyen İleti | Para) = P (Para | İstenmeyen İleti) * P (İstenmeyen �
 
 Aşağıdakileri öğrenmek istiyorsunuz:
 
-- **P (Spam| Para) veya arka olasılık**: e-postada “para” kelimesinin görünmesi göz önüne alındığında bir e-postanın spam olma olasılığı
+- **P (Spam| Para) veya arka olasılık**: e-postada "para" kelimesinin görünmesi göz önüne alındığında bir e-postanın spam olma olasılığı
     
 
 Şimdi, verilerinizi formüle girin:
 
 - **P (SpAM) veya önceki olas** ılık: bir e-postanın spam olma olasılığı = 0.2 veya% 20
     
-- **P (Para) veya kanıt:** “para” kelimesinin bir e-postada görünme olasılığı = 0.15 veya% 15
+- **P (Para) veya kanıt:** "para" kelimesinin bir e-postada görünme olasılığı = 0.15 veya% 15
     
-- **P (Para | SpAM) veya olasılık: e-postanın spam** olduğu göz önüne alındığında “para” kelimesinin bir e-postada görünme olasılığı = 0.4 veya% 40
+- **P (Para | SpAM) veya olasılık: e-postanın spam** olduğu göz önüne alındığında "para" kelimesinin bir e-postada görünme olasılığı = 0.4 veya% 40
     
 
 P (SpAM | Para) = P (Para | SpAM) * P (SpAM)/P (Para) = 0.4 * 0.2/0.15 = 0.53333 veya yaklaşık% 53.3%.
 
-Dolayısıyla, e-postanın “para” kelimesini içerdiği göz önüne alındığında, bir e-postanın spam olma olasılığı% 53.3'tür.
+Dolayısıyla, e-postanın "para" kelimesini içerdiği göz önüne alındığında, bir e-postanın spam olma olasılığı% 53.3'tür.
 
 ### Önemli çıkarımlar
 
@@ -3135,7 +3135,7 @@ Bayes Teoremi hakkında daha fazla bilgi edinmek için aşağıdaki kaynağa bak
 - [Pennsylvania Eyalet Üniversitesi tarafından açıklanan Bayes teoremi](https://online.stat.psu.edu/stat500/lesson/2/2.7)
     
 
-“Savcının yanılgısı” hakkında ilginç bir tartışma için bu sayfaya göz atın:
+"Savcının yanılgısı" hakkında ilginç bir tartışma için bu sayfaya göz atın:
 
 - [Amerikan Epidemiyoloji Dergisi tarafından savcının yanılgısının açıklaması](https://academic.oup.com/aje/article/179/9/1125/103523)
 
@@ -3744,7 +3744,7 @@ Bir kartopu örneğinde, araştırmacılar ilk katılımcıları bir çalışmay
 
 The first illustration shows two researchers sharing information with two people. The second illustration shows those same researchers standing near four people sharing information.
 
-Kartopu örneklemesi çok zaman alabilir ve araştırmacılar, işe alım sürecine başarılı bir şekilde devam etmek ve “kartopu” oluşturmak için katılımcılara güvenmelidir. Bu tür işe alım, örnekleme yanlılığına da yol açabilir. İlk katılımcılar kendi başlarına ek katılımcıları işe aldıklarından, çoğunun benzer özellikleri paylaşması muhtemeldir ve bu özellikler incelenen toplam popülasyonu temsil etmeyebilir.
+Kartopu örneklemesi çok zaman alabilir ve araştırmacılar, işe alım sürecine başarılı bir şekilde devam etmek ve "kartopu" oluşturmak için katılımcılara güvenmelidir. Bu tür işe alım, örnekleme yanlılığına da yol açabilir. İlk katılımcılar kendi başlarına ek katılımcıları işe aldıklarından, çoğunun benzer özellikleri paylaşması muhtemeldir ve bu özellikler incelenen toplam popülasyonu temsil etmeyebilir.
 
 #### **Amaçlı örnekleme**
 
@@ -4222,7 +4222,7 @@ Alternatif hipotez aşağıdaki özelliklere sahiptir:
     
 - Matematiksel terimlerle yazıldığında, alternatif hipotez her zaman bir eşitsizlik sembolü içerir (genellikle ≠, ancak bazen < or >).
     
-- Alternatif hipotezler genellikle “bir etki”, “bir fark”, “bir ilişki” veya “bir değişiklik” gibi ifadeleri içerir.
+- Alternatif hipotezler genellikle "bir etki", "bir fark", "bir ilişki" veya "bir değişiklik" gibi ifadeleri içerir.
     
 
 #### **Örnek senaryolar**
@@ -4452,7 +4452,7 @@ Bir hipotez testi hakkında bir sonuç çıkarmak için iki ana kural vardır:
     
 - P değeriniz önem seviyenizden büyükse, sıfır hipotezini reddedemezsiniz.
 
-**Not:** Veri uzmanları ve istatistikçiler her zaman “kabul etmek” yerine “reddetme” derler. Bunun nedeni, hipotez testlerinin kesinliğe değil olasılığa dayanmasıdır - kabul, kesinlik anlamına gelir. Genel olarak, veri uzmanları istatistiksel yöntemlere dayalı sonuçlar hakkında kesinlik talep etmekten kaçınırlar.
+**Not:** Veri uzmanları ve istatistikçiler her zaman "kabul etmek" yerine "reddetme" derler. Bunun nedeni, hipotez testlerinin kesinliğe değil olasılığa dayanmasıdır - kabul, kesinlik anlamına gelir. Genel olarak, veri uzmanları istatistiksel yöntemlere dayalı sonuçlar hakkında kesinlik talep etmekten kaçınırlar.
 
 Bu örnekte, %0,57'lik p değeriniz% 5'lik anlamlılık seviyenizden daha azdır. Testiniz, yeniden tasarlanan tüm dizüstü bilgisayarların ortalama pil ömrünün 8,5 saatten arttığı sonucuna varmak için yeterli kanıt sağlar. Sıfır hipotezini reddediyorsunuz. Sonuçlarınızın istatistiksel olarak anlamlı olduğunu belirlersiniz.
 
@@ -4515,11 +4515,11 @@ Bir hipotez testi yürütme adımlarını gözden geçirelim:
 - **H** a: P < 0.80 (memnun müşterilerin oranı% 80'den az)
     
 
-**Not:** Alternatif hipotez daha az işaretini içerdiğinden bu tek kuyruklu bir testtir (“< “).
+**Not:** Alternatif hipotez daha az işaretini içerdiğinden bu tek kuyruklu bir testtir ("< ").
 
 Ardından, 0.05 veya% 5'lik bir anlamlılık seviyesi seçersiniz.
 
-Ardından, test istatistiğinize göre p değerinizi hesaplarsınız. **P-değerinin, sıfır hipotez doğru olduğunda gözlemlenenlerden daha aşırı veya daha aşırı sonuçları gözlemleme olasılığı olduğunu hatırlayın.** Hipotez testi bağlamında, “aşırı”, alternatif hipotezin yönünde aşırı anlamına gelir.
+Ardından, test istatistiğinize göre p değerinizi hesaplarsınız. **P-değerinin, sıfır hipotez doğru olduğunda gözlemlenenlerden daha aşırı veya daha aşırı sonuçları gözlemleme olasılığı olduğunu hatırlayın.** Hipotez testi bağlamında, "aşırı", alternatif hipotezin yönünde aşırı anlamına gelir.
 
 Test istatistiğiniz 1,75 z puanıdır ve p değeriniz 0,04'tür.
 
@@ -4544,7 +4544,7 @@ Son olarak, bir sonuç çıkarırsınız. 0.04 p değeriniz 0,05 anlamlılık se
 - **Ha:** P ≠ 0.80 (memnun müşterilerin oranı% 80'e eşit değil)
     
 
-**Not:** Alternatif hipotez eşit olmayan işaretini (“≠”) içerdiğinden, bu iki kuyruklu bir testtir.
+**Not:** Alternatif hipotez eşit olmayan işaretini ("≠") içerdiğinden, bu iki kuyruklu bir testtir.
 
 Ardından, 0.05 veya% 5'lik bir anlamlılık seviyesi seçersiniz.
 
@@ -4568,7 +4568,292 @@ Tek kuyruklu ve iki kuyruklu bir test arasındaki farkları anlamak, bir hipotez
 
 ## A/B testi 
 
+Daha önce, A/B testinin hangi sürümün daha iyi performans gösterdiğini bulmak için bir şeyin iki versiyonunu karşılaştırmanın bir yolu olduğunu öğrendiniz. Örneğin, bir veri uzmanı, bir web sayfasının iki sürümünü veya bir çevrimiçi reklamın iki sürümünü karşılaştırmak için A/B testini kullanabilir. Ayrıca A/B testinin örnekleme ve hipotez testi gibi istatistiksel yöntemleri kullandığını öğrendiniz.
 
+Bu okumada, bir A/B testinin genel amacı ve tasarımı ve A/B testinin verileri analiz etmek için istatistiksel yöntemleri nasıl kullandığı hakkında daha fazla bilgi edineceksiniz.
 
+### İş bağlamı
 
+Veri uzmanları, paydaşların pazarlamayı optimize etmek, geliri artırmak veya müşteri deneyimini geliştirmek için bir web sitesi veya uygulama için en iyi tasarımı seçmelerine yardımcı olmak için genellikle A/B testini kullanır. Uygulamada, A/B testi rastgele bir kullanıcı örneğini seçmeyi ve bunları iki gruba (A ve B) ayırmayı içerir. İki grup, bir şirketin web sitesinin farklı versiyonlarını ziyaret eder. Tek bir tasarım özelliği dışında iki versiyon aynıdır. Örneğin, Grup A'nın sürümündeki "Satın Al" düğmesi, Grup B'nin sürümündeki "Satın Al" düğmesinden farklı bir boyut, şekil veya renge sahip olabilir. Bir A/B testi, özellikteki değişikliğin (örneğin, daha büyük bir düğme) belirli bir metrik için kullanıcı davranışını etkileyip etkilemediğini belirlemek için istatistiksel analiz kullanır. Bir veri uzmanı, aşağıdaki metriklerden birini analiz etmek için A/B testi kullanabilir:
 
+- _Kullanıcı başına ortalama gelir:_ Bir kullanıcı bir web sitesi için ne kadar gelir elde eder?
+    
+- _Ortalama oturum süresi:_ Bir kullanıcı bir web sitesinde ne kadar süre kalır?
+    
+- _Tıklama oranı:_ Bir kullanıcıya reklam gösterilirse, kullanıcı reklamı tıklar mı?
+    
+- _Dönüşüm oranı:_ Bir kullanıcıya reklam gösterilirse, bu kullanıcı müşteriye dönüşecek mi?
+    
+
+A/B testinin nasıl çalıştığını daha iyi anlamak için bir örneği inceleyelim.
+
+### Örnek: Kullanıcı başına ortalama gelir
+
+Çevrimiçi bir ayakkabı perakendecisi için çalışan bir veri uzmanı olduğunuzu hayal edin. Şirket işini büyütmeye çalışıyor ve web sitesinde kullanıcı başına ortalama geliri araştırıyor. Ekip lideriniz sizden "Satın Al" düğmesinin boyutunu artırmanın ortalama gelir üzerinde herhangi bir etkisi olup olmadığını belirlemek için bir A/B testi yapmanızı ister. Rastgele bir kullanıcı örneği seçersiniz ve onları iki gruba ayırırsınız, A ve B. Grup A, şirket web sitesinin standart sürümünü ziyaret eder. B Grubu, daha büyük "Satın Al" düğmesi dışında, web sitesinin standart sürümüyle aynı olan bir sürümünü ziyaret eder. Testi çevrimiçi olarak çalıştırır ve örnek verilerinizi toplarsınız. Sonuçlar, B Grubu için kullanıcı başına ortalama gelirin daha yüksek olduğunu göstermektedir. Son olarak, ortalama gelirde gözlemlenen farkın istatistiksel olarak anlamlı olup olmadığını veya şansa bağlı olup olmadığını belirlemek için iki örnekli bir hipotez testi yaparsınız.
+
+![image](./images/4042.png)
+
+Tipik bir A/B testi en az üç ana özelliğe sahiptir:
+
+1. Test tasarımı
+    
+2. Örnekleme
+    
+3. Hipotez testi
+    
+
+Örneğimizi kullanarak her özelliği daha ayrıntılı olarak inceleyelim.
+
+### **Test tasarımı**
+
+İlk olarak, bir A/B testinin temel tasarımını tartışalım.
+
+#### Rastgele kontrollü deney
+
+A/B testi, randomize kontrollü deney olarak bilinen şeyin temel bir versiyonudur. **Randomize kontrollü bir deneyde, test denekleri** rastgele bir kontrol grubuna ve bir tedavi grubuna atanır. **Tedavi**, deneyde test edilen yeni değişikliktir. **Kontrol grubu** tedaviye maruz kalmaz. **Tedavi grubu** tedaviye maruz kalır. İki grup arasındaki metrik değerlerdeki fark, tedavinin test denekleri üzerindeki etkisini ölçer.
+
+**Not**: İdeal olarak, tedaviye maruz kalma iki grup arasındaki tek önemli farktır. Bu test tasarımı, araştırmacıların test sonuçlarını etkileyebilecek diğer faktörleri kontrol etmesine ve tedavinin etkisi hakkında nedensel sonuçlar çıkarmasına olanak tanır.
+
+Örneğimizde, grup A kontrol grubudur, grup B tedavi grubudur ve tedavi daha büyük bir "Satın Al" düğmesi gösteriyor. Kontrol grubundaki kullanıcılar (A) şirketin web sitesinin standart sürümünü ziyaret eder. Tedavi grubundaki kullanıcılar (B) daha büyük bir "Satın Al" düğmesiyle alternatif bir sürümü ziyaret eder (yani tedaviye maruz kalırlar). "Satın Al" düğmesinin boyutu dışında A ve B için web sitesi sürümlerini aynı hale getirerek, ortalama gelirde gözlemlenen herhangi bir farkın sayfa düzeni veya arka plan gibi diğer özelliklerden kaynaklanma olasılığını en aza indirirsiniz. Bu, A grubu ve B grubu için kullanıcı başına ortalama gelirdeki farkı karşılaştırarak daha büyük düğmenin etkisini ölçmenize olanak tanır.
+
+Randomizasyon veya test deneklerinin kontrol grubuna veya tedavi grubuna rastgele atanması, diğer faktörlerin deneyin sonucu üzerindeki potansiyel etkisini kontrol etmeye de yardımcı olur. Uygulamada, bir kullanıcının "Satın Al" düğmesini tıklayıp tıklamadığını birçok farklı faktör etkileyebilir. Örneğin, belki de süper zengin kullanıcıların düğme boyutundan bağımsız olarak genel olarak alışveriş yapma olasılığı çok daha yüksektir. Tedavi grubunuz _yalnızca_ süper zengin kullanıcılardan oluşuyorsa, geçerli test sonuçları alamazsınız. Ortalama gelirde gözlemlenen herhangi bir artış, "Satın Al" düğmesinin (test etmek istediğiniz faktör) daha büyük boyutundan değil, zenginlikten kaynaklanıyor olabilir. Rastgeleştirme, servet gibi diğer faktörlerin sonuçlarınızı ortalama olarak önemli ölçüde etkileme olasılığını en aza indirmeye yardımcı olur.
+
+### Örnekleme
+
+Rastgele seçim, genel kullanıcı popülasyonunun özelliklerini yansıtan temsili bir örnek oluşturmanıza yardımcı olur. Örneğimizde, bu, çalıştığınız şirketin çevrimiçi müşterilerinin popülasyonudur. A/B testiniz için temsili bir örnek kullanmak size genellenebilir veya genel popülasyon için geçerli olan geçerli sonuçlar verecektir.
+
+Ayrıca A/B testinize uygun bir örnek boyutu seçmeniz gerekecektir. Örneklem büyüklüğü ne kadar büyükse, sonuçlar o kadar kesin olur ve A grubu ile B grubu arasında bir fark olduğunda istatistiksel olarak anlamlı sonuçlar elde etme olasılığınız o kadar yüksek. Bununla birlikte, büyük örneklerle çalışmak pahalı ve zaman alıcı olabilir. Veri uzmanları, hem analizin amacına hem de mevcut bütçelerine göre örneklem büyüklüğünü belirler.
+
+### Hipotez testi
+
+Örneğimizin amacı doğrultusunda, çevrimiçi testi çalıştırdığınızı, verilerinizi topladığınızı ve B grubunun kullanıcı başına A grubundan daha yüksek bir ortalama gelire sahip olduğunu keşfettiğinizi varsayalım. B grubunun tedavi grubu olduğunu hatırlayın (daha büyük "Satın Al" düğmesi) ve A grubunun kontrol grubu olduğunu hatırlayın. Bir sonraki adım, verilerinizdeki gözlemlenen farkın istatistiksel olarak anlamlı mı yoksa tesadüfen mi olduğunu belirlemektir. A/B testleri, istatistiksel anlamlılık hakkında sonuçlar çıkarmak için iki örnekli hipotez testleri kullanır. Kullanıcı başına ortalama gelirde gözlemlenen farkın istatistiksel olarak anlamlı olup olmadığını belirlemek için iki örnekli bir t-testi yaparsınız. Hipotezlerinizi şu şekilde formüle edersiniz:
+
+- **H0:** A ve B arasında kullanıcı başına ortalama gelirde fark yoktur
+    
+- **Ha:** Kullanıcı başına ortalama gelirde A ve B arasında bir fark vardır
+    
+
+### Sonuçlar
+
+T-testinizin sonuçlarına dayanarak, sıfır hipotezini reddediyorsunuz ve kullanıcı başına ortalama gelirde gözlemlenen artışın istatistiksel olarak anlamlı olduğu sonucuna varıyorsunuz.
+
+A/B testinizin sonuçları, şirketinizin web sitesi için bir tasarım değişikliği önerilip önermeyeceğinize karar vermenize yardımcı olur. Bu durumda, sonuçlarınızı şirket paydaşlarına sunduğunuzda, ileriye dönük olarak kullanıcı başına ortalama geliri artırmak için daha büyük "Satın Al" düğmesini uygulamanızı öneriyorsunuz.
+
+### Önemli çıkarımlar
+
+A/B testi, iş amaçlı istatistiklerin en popüler uygulamalarından biridir. Veri uzmanları, iş liderlerinin ürün performansını optimize etmelerine, müşteri deneyimini iyileştirmelerine ve çevrimiçi işlerini büyütmelerine yardımcı olmak için A/B testini kullanır. Bir A/B testinin genel amacını ve tasarımını anlamak, bir veri uzmanı olarak gelecekteki kariyerinizde faydalı olacaktır.
+
+## Deneysel Tasarım
+
+Bu kurs boyunca, veri profesyonellerinin bir deneyin sonuçlarının istatistiksel olarak anlamlı olup olmadığını belirlemek için hipotez testini nasıl kullandıklarını tartıştık. Önceki senaryolarda, klinik denemeler ve A/B testleri gibi deneylerin sonuçlarını analiz ettik. Örneğin, yeni bir ilacın etkinliğini test eden bir klinik çalışma ve bir web sayfasının tasarımının değiştirilmesinin müşterilerin sayfada geçirdiği ortalama süreyi nasıl etkilediğini inceleyen bir A/B testi hayal ettik.
+
+Veri uzmanları genellikle daha önce diğer araştırmacılar tarafından toplanan deneysel verilerle çalışır. Ancak, belirli bir proje için doğru veriler her zaman mevcut olmayabilir veya erişilebilir olmayabilir. Bu durumda, veri uzmanları kendi deneylerini tasarlayabilir ve kendi verilerini toplayabilir.
+
+Bu okumada, veri profesyonellerinin veri toplamak, hipotezleri test etmek ve değişkenler arasındaki ilişkileri keşfetmek için deneyleri nasıl tasarladığını tartışacağız. Deneysel tasarımın temel kavramları ve prosedürleri hakkında daha fazla bilgi edineceksiniz.
+
+### Bağlam: Deneysel tasarım
+
+**Deneysel tasarım**, araştırma sorunuzu yanıtlamak için veri toplamak için bir deney planlamayı ifade eder.
+
+Araştırmacılar birçok alanda deneyler yaparlar: tıp, fizik, psikoloji, üretim, pazarlama ve daha fazlası. Bir deneyin tipik amacı, değişkenler arasında bir neden-sonuç ilişkisini keşfetmektir. Örneğin, bir veri uzmanı aşağıdakileri keşfetmek için bir deney tasarlayabilir:
+
+- Yeni bir ilaç daha hızlı iyileşme süresine yol açar
+    
+- Yeni bir web sitesi tasarımı ürün satışlarını artırır
+    
+- Yeni bir gübre mahsul büyümesini artırır
+    
+- Yeni bir antrenman programı atletik performansı artırır
+
+Deneysel tasarımı anlamak önemlidir, çünkü verilerinizin kalitesini ve sonuçlarınıza dayanarak çıkardığınız sonuçların geçerliliğini etkiler. Kötü bir tasarım, şirketler ve tüketiciler için maliyetli olabilecek geçersiz sonuçlara yol açabilir. Kusurlu bir deneyin sonuçlarına dayanarak, bir şirket etkisiz olan bir ilaç geliştirmek için yıllarını harcayabilir veya verimsiz bir üretim sürecine büyük yatırım yapabilir. İyi tasarlanmış bir deney, araştırma sorunuzu cevaplamanıza yardımcı olacak güvenilir veriler sağlayacaktır.
+
+Deneysel tasarımı daha iyi anlamak için bir örneği keşfedebilirsiniz.
+
+### Örnek: Klinik deneme
+
+Bir ilaç şirketi için çalışan bir veri uzmanı olduğunuzu hayal edin. Şirket, soğuk algınlığı tedavisi için yeni bir ilaç icat ediyor. Ekip lideriniz sizden ilacın etkinliğini test etmek için bir deney tasarlamanızı ister. İlacın alınmasının daha hızlı iyileşme süresine yol açıp açmadığını öğrenmek istiyorsunuz.
+
+![image](./images/4043.png)
+
+Bir deney tasarlamanın en az üç temel adımı vardır:
+
+1. Değişkenlerinizi tanımlayın
+    
+2. Hipotezinizi formüle edin
+    
+3. Test deneklerini tedavi ve kontrol gruplarına atayın
+    
+
+**Not**: Bunlar kontrollü deneyler için geçerli olan temel adımlardır (daha fazlası aşağıda). Deneysel tasarım karmaşık bir konudur ve daha ayrıntılı bir tartışma bu dersin kapsamı dışındadır.
+
+Ardından, örneğimizi kullanarak her adımı daha ayrıntılı olarak inceleyin.
+
+#### **Adım 1: Değişkenlerinizi tanımlayın**
+
+Veri uzmanları genellikle deneylerinde bağımsız ve bağımlı değişkenleri tanımlayarak başlarlar. Bu, değişkenler arasındaki ilişkiyi netleştirmeye yardımcı olur.
+
+- **Bağımsız değişken**, araştırmakla ilgilendiğiniz nedeni ifade eder. Bir araştırmacı, bağımlı değişkeni nasıl etkilediğini belirlemek için bağımsız değişkeni değiştirir veya kontrol eder. "Bağımsız", deneydeki diğer değişkenlerden etkilenmediği anlamına gelir.
+    
+- **Bağımlı değişken**, ölçmek istediğiniz etkiyi ifade eder. "Bağımlı", değerinin bağımsız değişkenden etkilendiği anlamına gelir.
+    
+
+Klinik deneyinizde, ilacın iyileşme süresini nasıl etkilediğini öğrenmek istiyorsunuz. Bu nedenle:
+
+- Bağımsız değişkeniniz ilaçtır - araştırmak istediğiniz nedendir.
+    
+- Bağımlı değişkeniniz kurtarma süresidir - ölçmek istediğiniz etkidir.
+
+Daha karmaşık bir deneyde, farklı ilaçların iyileşme süresi üzerindeki etkisini veya aynı ilacın farklı dozlarını test edebilirsiniz. Her durumda, bağımlı değişkeniniz (iyileşme süresi) üzerindeki etkisini ölçmek için bağımsız değişkeninizi (ilaç) manipüle edersiniz.
+
+**Not**: Bu sertifika programının ilerleyen kısımlarında, regresyon analizini tartıştığımızda, bağımsız ve bağımlı değişkenler hakkında daha ayrıntılı bilgi edinme şansınız olacak.
+
+#### **Adım 2: Hipotezinizi formüle edin**
+
+Bir sonraki adım bir hipotez formüle etmektir. Hipoteziniz, bağımsız ve bağımlı değişkenleriniz arasındaki ilişkiyi belirtir ve deneyinizin sonucunu tahmin eder. Daha önce, veri profesyonellerinin istatistiksel testleri içeren araştırmalar yürütürken hem sıfır hem de alternatif hipotezler formüle ettiklerini öğrendiniz. Sıfır hipotezinin tipik olarak popülasyon üzerinde hiçbir etkisi olmadığını varsaydığını ve alternatif hipotezin tam tersini varsaydığını hatırlayın. Klinik denemeniz için:
+
+- Sıfır hipoteziniz (H 0) ilacın hiçbir etkisinin olmadığıdır.
+    
+- Alternatif hipoteziniz (H a) ilacın etkili olduğudur.
+
+#### **Adım 3: Test deneklerini tedavi ve kontrol gruplarına atayın**
+
+##### **Tedavi ve kontrol grupları**
+
+Klinik deneyler ve A/B testleri gibi deneyler kontrollü deneylerdir. Kontro **llü bir deneyde, den** ekler bir tedavi grubuna ve bir kontrol grubuna atanır. **Tedavi**, deneyde test edilen yeni değişikliktir. **Tedavi grubu** tedaviye maruz kalır. **Kontrol grubu** tedaviye maruz kalmaz. İki grup arasındaki metrik değerlerdeki fark, tedavinin test denekleri üzerindeki etkisini ölçer.
+
+Klinik denemenizde tedavi, tedavi grubundaki deneklere verilen ilaçtır. Kontrol grubundaki deneklere ilaç verilmez. Sonuçlarınızın tedavi grubunda (6.2 gün) ortalama iyileşme süresinin kontrol grubuna (7.5 gün) göre daha düşük olduğunu gösterdiğini hayal edin. İki grup arasındaki fark, 7.5 - 6.2 = 1.3 gün, tedavinin etkisini ölçer. Başka bir deyişle, ilaç ortalama iyileşme süresini 1.3 gün azaltır.
+
+**Not**: Bir veri uzmanı deneylerini tasarladıktan ve çalıştırdıktan sonra, sonuçları analiz etmek için istatistiksel testleri kullanır. Bir sonraki adım olarak, iyileşme süresinde gözlemlenen farkın istatistiksel olarak anlamlı mı yoksa tesadüfen mi olduğunu belirlemek için iki örnekli bir t testi yapabilirsiniz.
+
+İdeal olarak, tedaviye maruz kalma iki grup arasındaki tek önemli farktır. Bu tasarım, araştırmacıların test sonuçlarını etkileyebilecek diğer faktörleri kontrol etmesine ve tedavinin etkisi hakkında nedensel sonuçlar çıkarmasına olanak tanır.
+
+Örneğin, tedavi grubunuzdaki deneklerin kontrol grubunuzdaki deneklerden çok daha sağlıklı bir diyete sahip olduğunu hayal edin. Tedavi grubu için iyileşme süresinde gözlenen herhangi bir azalma, ilaca değil, daha sağlıklı diyetlerinden kaynaklanıyor olabilir. Bu durumda, ilacın tek başına daha hızlı iyileşme süresinin _nedeni_ olduğunu güvenle söyleyemezsiniz.
+
+##### **Rastgele**
+
+Tipik olarak, veri uzmanları rastgele test deneklerini tedavi ve kontrol gruplarına atar. Randomizasyon, diğer faktörlerin bir deneyin sonucu üzerindeki etkisini kontrol etmeye yardımcı olur. Denekleri tedavi ve kontrol gruplarına atamak için iki yaygın yöntem, tamamen randomize tasarım ve randomize blok tasarımıdır.
+
+**Tamamen randomize bir tasarımda**, test denekleri rastgele bir süreç kullanılarak tedavi ve kontrol gruplarına atanır. Örneğin, bir klinik denemede, her deneği bir sayı ile etiketlemek için bir bilgisayar programı kullanabilir ve ardından her grup için rastgele sayılar seçebilirsiniz.
+
+Ancak bazen tamamen rastgele bir tasarım en etkili yaklaşım olmayabilir. Bir deney tasarlarken, veri uzmanları rahatsız edici faktörleri **hesaba katmalıdır.** Bunlar, bir deneyin sonucunu etkileyebilecek, ancak araştırmacının birincil ilgisini çekmeyen faktörlerdir.
+
+Araştırmacılar, bilinen rahatsız edici **faktörlerin etkisini en aza indirmek için rastgele bir blok tasarımı** kullanabilirler. **Engelleme**, test deneklerinin birbirine benzer gruplar veya bloklar halinde düzenlenmesidir. Bir blok tasarımında, önce denekleri bloklara bölersiniz ve ardından her bloktaki denekleri rastgele tedavi ve kontrol gruplarına atarsınız.
+
+Örneğin, yaşın soğuk algınlığından iyileşme süresinde önemli bir faktör olduğunu bildiğinizi varsayalım. Özellikle, 35 yaşın altındaki kişilerin yaşlılardan daha hızlı iyileşme eğiliminde olduğunu biliyorsunuz. Bu senaryoda, yaş rahatsız edici bir faktördür çünkü deneyinizin sonuçlarını etkileyebilir. Örneğin, tamamen randomize bir tasarıma ve daha küçük bir örneklem büyüklüğüne sahip bir klinik çalışmada, tedavi grubundaki gençlerin büyük bir bölümünü rastgele alabilirsiniz. Bu, iyileşme süresinde gözlenen herhangi bir azalmanın tedaviden (ilaç) mı yoksa rahatsız edici faktörden (yaş) mı kaynaklandığını belirlemeyi daha zor hale getirecektir.
+
+Bu durumda, yaş faktörü için engelleme, deneyinizi tasarlamanın daha etkili bir yoludur. İlk olarak, test deneklerini 21-35, 36-50 ve 51-65 gibi yaşa göre bloklara ayırırsınız. Daha sonra, her bloktaki denekleri rastgele tedavi ve kontrol gruplarına atarsınız. Bu şekilde, belirli bir blok içinde iyileşme süresinde önemli bir fark varsa, bu sonucun rahatsız edici faktörden (yaş) değil tedaviden (ilaç) kaynaklandığından daha emin olabilirsiniz.
+
+### Önemli çıkarımlar
+
+Veri uzmanları, deneyleri planlamak ve araştırma sorularını cevaplamaya yardımcı olan verileri toplamak için deneysel tasarımı kullanır. Bir deneyin tasarımı, verilerinizin kalitesini ve sonuçlarınızın geçerliliğini etkiler. İster kendi deneyinizi tasarlıyor olun, ister başkaları tarafından toplanan verileri kullanıyor olun, deneysel tasarımın temel ilkelerini anlamak önemlidir. Bu bilgi, klinik denemeler, A/B testleri ve daha fazlası gibi deneylerden elde edilen verileri analiz etmenize yardımcı olacaktır.
+
+## Örnek olay incelemesi: Ipsos: Bir pazar araştırması şirketi, reklamverenlerin daha etkili reklamlar oluşturmasına yardımcı olmak için A/B testini nasıl kullandı? 
+
+Daha önce, A/B testinin hangi sürümün daha iyi performans gösterdiğini bulmak için bir şeyin iki versiyonunu karşılaştırmanın bir yolu olduğunu öğrendiniz. Örneğin, bir veri uzmanı, bir web sayfasının iki sürümünü veya bir çevrimiçi reklamın iki sürümünü karşılaştırmak için A/B testini kullanabilir. Ayrıca A/B testinin örnekleme ve hipotez testi gibi istatistiksel yöntemleri kullandığını öğrendiniz. Bu vaka çalışması, Ipsos'un iki farklı çevrimiçi reklam biçimini karşılaştırmak için A/B testini nasıl kullandığını açıklamaktadır: sıralı bir anlatıda sunulan reklamlar ve birden çok kez sunulan geleneksel 30 saniyelik bir reklam. Veri odaklı pazar araştırmasının, farklı reklam biçimlerinin bir dijital reklam kampanyasının etkinliği üzerindeki etkisine ilişkin önemli bilgileri nasıl ortaya çıkardığını öğreneceksiniz.
+
+![image](./images/4044.png)
+
+### Şirket geçmişi
+
+Ipsos tam hizmet sunan bir pazar araştırma şirketidir. 1975 yılında Fransa'da kurulan Ipsos, şu anda 90 ülkede faaliyet gösteren 18.000 personeli ile küresel bir şirkettir. Ipsos, çok sayıda özel ve kamu sektörü alanında araştırma hizmetleri sunmaktadır. Bu hizmetler arasında marka oluşturma; reklam etkinliği; ürün geliştirme; itibar; müşteri ve kullanıcı deneyimi; ve kamuoyu, seçim ve kriz yönetimi yer alır. Ipsos, araştırmaları için birincil veri toplamadan sosyal dinleme, mobilite ve uydu görüntülerine kadar veri kaynaklarının bir kombinasyonunu kullanır.
+
+![image](./images/4045.png)
+
+### Proje arka planı
+
+Ipsos'un bu proje için müşterisi, kullanıcıların kendi video içeriklerini yayınlamalarına izin veren bir çevrimiçi medya şirketiydi. Medya şirketi kendi müşterilerine - platformlarındaki reklamverenlere - en etkili reklamları oluşturmalarına yardımcı olmak istedi. Özellikle, sıralı reklamlara yatırım yapmanın izleyicilerin bir reklamı hatırlama ve bir ürün satın alma olasılığını artırıp artırmayacağını öğrenmek istediler. Video reklam sıralaması, reklamverenlerin reklamları en ilgi çekici ve akılda kalıcı hikaye yapılarına göre bir sırayla göstermelerini sağlar. Medya şirketi, beş farklı dizi yapısının marka kaldırma üzerindeki etkisini ölçmek için araştırma yapması için Ipsos'u görevlendirdi.
+
+**Not**: Bu vaka çalışmasının amacı doğrultusunda, yalnızca bir dizi yapısına odaklanacağız: Tease, Amplify, Echo. Bu dizi, izleyicilerin merakını uyandırmak için kısa bir reklamla başlar (Tease); daha sonra izleyici etkileşimini sağlamak için daha fazla bilgi içeren daha uzun bir reklama geçer (Amplify); son olarak, hikayeyi özetleyen ve izleyicileri harekete geçmeye teşvik eden daha kısa bir reklamla sona erer (Echo).
+
+![image](./images/4046.png)
+
+Graph with three overlapping curves represents the structure of the Tease, Amplify, Echo ad sequence: first, short video; second, long video; third, short video.
+
+### Proje çerçevesi
+
+Ipsos, projelerine rehberlik etmek için şu araştırma sorusunu geliştirdi: Tease, Amplify, Echo yapısına sahip bir reklam dizisi, geleneksel 30 saniyelik bir reklamın tekrarlanan görüntülemelerine kıyasla reklam hatırlama ve satın alma niyetini artırıyor mu?
+
+Ipsos'un ilk hipotezi, sıralı bir anlatıda sunulan reklamların geleneksel bir reklamın tekrarlanan görüntülemelerinden daha etkili olacağıydı. Bu iki reklam yaklaşımı için bu hipotezi test etmek için Ipsos bir A/B testi yaptı. A/B testi iki kullanıcı grubu için bir deney oluşturdu: bir gruba Tease, Amplify, Echo reklamları gösterildi ve diğer gruba birçok kez geleneksel bir reklam gösterildi. Her durumda, farklı reklam biçimleri aynı marka içeriğine dayanıyordu. Aşağıda test sürecinin ayrıntıları hakkında daha fazla bilgi edineceksiniz.
+
+### Zorluklar
+
+Projenin başlangıcında, Ipsos iki ana zorluğu belirledi. İlk zorluk A/B testinin uygun şekilde tasarlanmasını içeriyordu. İkinci zorluk, test reklamlarını uygun test ortamında oluşturmayı içeriyordu.
+
+#### **Test tasarımı**
+
+Ipsos'un birincil kaygısı, A/B testinin sonuçlarının genellenebilir olması veya medya şirketinin kullanıcılarının genel nüfusu için geçerli olmasıydı. Başka bir deyişle, Ipsos, daha küçük test katılımcıları örneklemine dayalı olarak daha büyük kullanıcı popülasyonu hakkında geçerli çıkarımlar yapmak istedi. Geçerli test sonuçları elde etmek için Ipsos'un aşağıdakileri yapması gerekiyordu;
+
+1. Medya şirketinin kullanıcılarının genel popülasyonunu yansıtan temsili bir test katılımcısı örneği oluşturun.
+    
+2. Medya şirketinin çevrimiçi ortamını yansıtan bir çevrimiçi test ortamı oluşturun. Bu aynı zamanda medya şirketinin platformunda yer alan reklamların çeşitliliğini yeniden üretmek için birden fazla markadan test reklamları oluşturmayı da ima etti.
+    
+
+### Yaklaşım
+
+Bu zorluklara rağmen, Ipsos A/B testini gerçekleştirdi ve araştırma hedeflerine ulaştı. Ipsos'un projelerine yönelik başarılı yaklaşımı aşağıdaki unsurları içeriyordu:
+
+- Takım
+    
+- Örnekleme
+    
+- Test süreci
+    
+- Hipotez testi
+    
+
+#### **Takım**
+
+Etkili bir ekip oluşturmak için Ipsos, gerçekçi bir çevrimiçi test ortamı oluşturmak için Tease, Amplify, Echo yapısına ve teknolojiye dayalı test reklamları oluşturmak için video prodüksiyonu da dahil olmak üzere işlevler arası bir operasyon oluşturdu.
+
+Proje katılımcıları arasında işbirliğini kolaylaştırmak için Ipsos, net bir dizi düzenleme kuralı belirledi ve videolara bağlantılar barındırmak ve notları düzenlemek için paylaşılan bir site düzenledi. Bu, geliştirme süreci boyunca hızlı geri bildirim ve ayarlamaya izin verdi. Son olarak, Ipsos, proje tasarımının ve iş akışının başından sonuna kadar yönetilen üst düzey müşteri hizmetleri proje yöneticilerine sahipti ve bunları izledi.
+
+#### **Örnekleme**
+
+Ipsos, genel kullanıcı popülasyonunun özelliklerini doğru bir şekilde yansıtan temsili bir örnek oluşturmak için tüketici panellerinden rastgele seçim yaptı. Ipsos ayrıca, her test grubunun yaş ve cinsiyet gibi kilit kategoriler için aynı katılımcı oranını içerdiğinden emin oldu. Ayrıca, Ipsos, daha kesin sonuçlar elde etmek için nispeten büyük bir 7.500 katılımcıdan oluşan bir örneklem büyüklüğü kullandı.
+
+#### **Test süreci**
+
+Geçerli test sonuçları elde etmek için Ipsos, katılımcıların medya şirketinin platformunu günlük yaşamlarında olduğu gibi kullandıkları çevrimiçi bir ortamda A/B testi gerçekleştirdi. Platformdaki reklam çeşitliliğini yansıtmak için Ipsos, uçak biletlerinden fast food'a ve çamaşır deterjanına kadar 30 marka kategorisinde test reklamları geliştirdi.
+
+Test süreci aşağıdaki şekilde organize edildi:
+
+Anketler, katılımcıların akıllı telefonları aracılığıyla Kasım ve Aralık 2018'de çevrimiçi olarak yönetildi. İlk taramadan sonra, katılımcılar normalde yaptıkları gibi videoları aramakta ve izlemekte özgür oldukları platformun tarayıcı tabanlı bir sürümüne götürüldü. Ipsos, canlı test ortamında yanıtlayanlar tarafından seçilen videoların başına dinamik olarak test reklamları ekledi. Göz atma oturumundan sonra yanıtlayanlar, reklam geri çağırma ve ürün amacı açısından marka artışını ölçmek üzere bir anket tamamladı.
+
+#### **Hipotez testi**
+
+Anket verileri, Tease, Amplify, Echo reklam dizisinin, yanıtlayanlar arasında geleneksel bir reklamın tekrarlanan görüntülemelerine göre daha yüksek düzeyde reklam hatırlama ve satın alma niyetine yol açtığını gösterdi. Gözlemlenen sonuçların istatistiksel olarak anlamlı olup olmadığını belirlemek için Ipsos, her kategori için iki örnekli bir t testi gerçekleştirdi: biri reklam geri çağırma ve diğeri satın alma amacı için. Hipotezlerini şu şekilde formüle ettiler:
+
+- **H0:** Sıralı reklamlar ile tekrarlanan geleneksel reklam arasında reklam hatırlamada fark yoktur.
+    
+- **Ha:** Sıralı reklamlar ile tekrarlanan geleneksel reklam arasında reklam geri çağırma amacında bir fark vardır.
+    
+- **H0:** Sıralı reklamlar ile tekrarlanan geleneksel reklam arasında satın alma niyetinde bir fark yoktur.
+    
+- **Ha:** Sıralı reklamlar ile tekrarlanan geleneksel reklam arasında satın alma niyetinde bir fark vardır.
+    
+
+Her iki test için de Ipsos sıfır hipotezini reddetti. Sıralı reklamlar ile tekrarlanan geleneksel bir reklam arasında reklam geri çağırma ve satın alma niyetinde istatistiksel olarak anlamlı ve önemli ölçüde anlamlı farklılıklar olduğu sonucuna vardılar..
+
+### Sonuçlar
+
+A/B testinin sonuçları, reklam sıralamanın işe yaradığını gösterdi!
+
+Tease, Amplify, Echo reklam dizisi, reklam geri çağırma ve satın alma niyeti üzerinde geleneksel bir reklamın tekrarlanan görüntülemelerine göre önemli ölçüde daha büyük bir etkiye sahipti. Örneğin, tüm ürün kategorilerinde, izleyicilerin %54'ü "Tease, Amplify, Echo" dizisine maruz kaldıktan sonra reklamı hatırladı ve tekrarlanan geleneksel reklamlarda %42'ye kıyasla. Ayrıca, izleyicilerin %30'u "Tease, Amplify, Echo" reklam dizisine maruz kaldıktan sonra satın alma niyetini ifade ederken, tekrarlanan geleneksel reklamlarda %25'e kıyasla.
+
+![image](./images/4047.png)
+
+Tekrarlanan 30 saniyelik bir reklamla karşılaştırıldığında Tease, Amplify, Echo reklam dizisi için reklam hatırlama ve satın alma amacındaki artışı gösteren çubuk grafik.
+
+Genel olarak, sonuçlar, reklamverenlerin marka artışını artırmak için dijital kampanyaları için reklam sıralamasına yatırım yapmaları gerektiğini göstermektedir.
+
+### Sonuç
+
+Ipsos'un A/B testine ilişkin bu vaka çalışması, veri odaklı araştırmanın temel iş içgörüleri üretme gücünü göstermektedir. A/B testinin sonuçları, reklam sıralamasının geleneksel bir reklamın tekrarlanan görüntülemelerine kıyasla reklam geri çağırma ve satın alma amacını nasıl artırdığını açıkça göstermektedir. Ipsos'un reklam sıralamasının faydaları üzerine yaptığı araştırma, medya şirketinin reklamverenlerin platformlarındaki deneyimini ve performansını iyileştirmesine ve medya şirketinin markasına değer katmasına yardımcı oldu.
+
+### Kaynaklar
+
+Bu vaka çalışmasına ilham veren araştırma projesi hakkında daha fazla bilgi edinmek için aşağıdaki kaynakları keşfedin:
+
+- Th [ink With Google'ın bu web sitesi](https://www.thinkwithgoogle.com/feature/youtube-ad-sequencing-and-ad-recall/ad-sequencing?lang=en_US), araştırma projesinde yer alan beş sıralama yapısını sergiliyor.
+
+## State21 ve State28 için filtreleme ve okuma yazma oranlarının ttest ve p değerini inceleme
