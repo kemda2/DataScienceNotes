@@ -4998,7 +4998,7 @@ Bir veri örneği verildiğinde, verilerinize uyabilecek farklı satırları den
 
 - [Parametre Tahmini - Sıradan En Küçük Kareler Yön](https://www.geo.fu-berlin.de/en/v/soga-py/Basics-of-statistics/Linear-Regression/Simple-Linear-Regression/Parameter-Estimation/index.html) [_temi:_ _Rudolph, A., Krois, J., Hartmann, K. (2023): Python (SOGA-py) kullanarak İstatistik ve Coğrafi Veri Analiz_ _i._](https://www.geo.fu-berlin.de/soga-py) _Yer Bilimleri Bölümü, Freie Universitaet Berlin_.
 
-
+## Korelasyon ve basit doğrusal regresyonun arkasındaki sezgi
 
 
 
