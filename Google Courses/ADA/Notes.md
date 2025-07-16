@@ -4889,6 +4889,115 @@ stats.ttest_ind(a=sampled_state21['OVERALL_LI'], b=sampled_state28['OVERALL_LI']
 
 # Kurs 5: Regresyon Analizi
 
+## Sıradan en küçük kareleri keşfedin
+
+Daha önce de belirtildiği gibi, regresyon modellemesinde en uygun çizgiyi bulmanın bir yolu, en iyisini bulana kadar farklı modelleri denemektir. Ancak basit doğrusal regresyon için, en iyi beta katsayılarının formülleri türetilmiştir. Bu okumada, kareli artıkların toplamının nasıl değişebileceğini ve değişebileceğini daha iyi anlamak için bir örnekten geçeceksiniz. Sıradan en küçük kareler kullanarak β^0 ve β^​1​ katsayıları tahmin etmek için formülleri türetmekle ilgileniyorsanız, daha fazla araştırma için kaynaklar olacaktır. Bu okumada şunları ele alacağız:
+
+- Formül ve notasyon incelemesi
+    
+- Kare artıkların toplamını en aza indirmek (SSR)
+    
+- Beta katsayılarının tahmin edilmesi
+    
+
+### Formül ve notasyon incelemesi
+
+Daha önce, sürekli bir bağımlı değişken ile bir bağımsız değişken arasındaki doğrusal ilişkiyi tahmin etmek için bir yöntem olarak basit doğrusal regresyonu öğrendiniz. Basit doğrusal regresyona dayalı bir tahmin matematiksel olarak şu şekilde temsil edilebilir:
+
+$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 \cdot X$
+
+Şapka sembolünün beta katsayılarının sadece tahmin olduğunu gösterdiğini unutmayın. Sonuç olarak, regresyon modelinden türetilen y değerleri de sadece tahminlerdir.
+
+Doğrusal regresyon modelinin katsayılarını hesaplamak için yaygın bir teknik, sıradan en küçük kareler veya OLS olarak adlandırılır. Sıradan en küçük kareler, artıkların karesi toplamı adı verilen bir hata ölçüsünü en aza indirerek doğrusal bir regresyon modelinde beta katsayılarını tahmin eder.
+
+Bu formülle kareli artıkların toplamını hesaplayabilirsiniz:
+
+$\sum_{i=1}^{N} (Observed - Predicted)^2$
+
+matematiksel gösterim kullanılarak yeniden yazılabilir:
+
+$\sum_{i=1}^{N} (y_i - \hat{y}_i)^2$
+
+Büyük E şeklindeki sembol, büyük Yunan harfi olan sigma'dır ve bir toplamı ifade eder. Dolayısıyla, kareli artıkların toplamı, gözlemlenen değerler ile regresyon modeli tarafından tahmin edilen değerler arasındaki kare farkların toplamıdır.
+
+### Kare artıkların toplamını en aza indirmek (SSR)
+
+Bu okumanın amaçları doğrultusunda, 6 gözlemden oluşan bir veri kümesine sahip olduğunuzu varsayın: (0, -1), (1, 2), (2, 4), (3, 8), (4, 11) ve (5, 12). Bunlar 2 boyutlu X-Y koordinat düzleminde çizilebilir.
+
+|**X (gözlemlendi)**|**Y (gözlemlendi)**|
+|---|---|
+|0|-1|
+|1|2|
+|2|4|
+|3|8|
+|4|11|
+|5|12|
+
+![image](./images/5001.png)
+
+`Satır 1: y^=−0.5+3x`
+
+Ardından, bazı değerleri varsayalım β^​0​ β^​1​ ve kareli artıkların toplamını hesaplayalım. İlk deneme için, varsayalım β^0​=−0.5 ve β^​1​=3. O zaman doğrusal denklem olacaktır 
+y^=−0.5+3x. Artık denklemin olduğu için y, her bir değeri koyarak tahmin edilen değerleri hesaplayabilirsiniz.
+
+Örneğin, eğer x=0, o zaman y^=−0.5+3∗0=−0.5. Eğer x=1, o zaman y^=−0.5+3∗1=2.5. Böylece, tahmin edilen tüm değerleri hesapladıktan sonra, her veri noktası için kalıntıyı hesaplayabilirsiniz.
+
+|X (gözlemlendi)|Y (güncel)|Y (tahmin edilen) = -0.5 + 3x|Kalıntı|
+|---|---|---|---|
+|0|-1|-0.5|-1 - (-0,5) = -1+0,5 = -0,5|
+|1|2|2.5|2 - 2,5 = -0,5|
+|2|4|5.5|4 - 5.5 = -1.5|
+|3|8|8.5|8 - 8.5 = -0.5|
+|4|11|11.5|11 - 11.5 = -0.5|
+|5|12|14.5|12 - 14.5 = -2.5|
+
+Ardından, artıkların her birini kendileriyle çarparak ve ardından artıkların karesinin toplamını hesaplamak için hepsini bir araya getirebilirsiniz.
+
+|Kalıntı|Kare Kalıntı|
+|---|---|
+|-1 - (-0,5) = -1+0,5 = -0,5|0.5|
+|2 - 2,5 = -0,5|0.5|
+|4 - 5.5 = -1.5|2.25|
+|8 - 8.5 = -0.5|0.5|
+|11 - 11.5 = -0.5|0.5|
+|12 - 14.5 = -2.5|6.25|
+
+Kalıntıların karesi toplamı = 0.25+0.25+2.25+0.25+0.25+6.25=9.5
+
+`Satır 2: y^=−0.5+2.5x`
+
+Ardından, önceki örnekteki eğimi ayarlayalım. Yani β^0=−0.5 ama β^1=2.5. O zaman doğrusal denklem y^=−0.5+2.5x olacaktır. Tahmin edilen değerleri hesaplamak x ve artıkları karesini almak için son seferki gibi değerleri ekleyebilirsiniz.
+
+|X (gözlemlendi)|Y (güncel)|Y (tahmin edilen) = -0.5 + 2.5x|Kalıntı|Kare Kalıntılar|
+|---|---|---|---|---|
+|0|-1|-0.5|-0.5|0.25|
+|1|2|2|0|0|
+|2|4|4.5|-0.5|0.25|
+|3|8|7|1|1|
+|4|11|9.5|1.5|2.25|
+|5|12|12|0|0|
+
+Kalıntıların karesi toplamı=0.25+0+0.25+1+2.25+0=3.75=0.25+0+0.25+1+2.25+0=3.75.
+
+Harika! Bu tahmin çok daha iyi!
+
+### Beta katsayılarının tahmin edilmesi
+
+Eğimi ve kesişmeyi ayarlamaya devam edebilir ve ardından tahmin edilen değerleri, artıkları ve kareli artıkları hesaplamaya devam edebilirsiniz. Ancak en uygun çizgiyi bulduğunuzdan emin olmanın hiçbir yolu yok. Gelişmiş matematik yoluyla, hatayı en aza indiren beta katsayılarını bulmak için bazı formüller türetilmiştir.
+
+Beta katsayılarını bulmak için formülleri yazmanın birden fazla yolu vardır. Basit doğrusal regresyon için, formülleri yazmanın bir yolu aşağıdaki gibidir:
+
+![](attachment:01154b9d-5ff8-4b69-95d5-26e30fb52a70.png)
+
+Bir bilgisayardan yardım almadan beta katsayılarını hesaplamanız istenmeyecek, ancak isterseniz keşfetmek ilginç olabilir. İlgilenmeniz durumunda ek kaynaklar sağladık.
+
+### Önemli çıkarımlar
+
+Bir veri örneği verildiğinde, verilerinize uyabilecek farklı satırları deneyebilirsiniz. Hangisinin verilerinize en uygun olduğunu belirlemek için her satır için kareli artıkların toplamını hesaplayabilirsiniz. Bir veri uzmanı olarak, kareli artıkların toplamının neyi temsil ettiğini ve bunu kendi başınıza nasıl hesaplayacağınızı anlamak önemlidir. Neyse ki, artıkların karesini hesaplayabilen ve bizim için OLS gerçekleştirebilen bilgisayarlarımız ve programlama dillerimiz var. İsterseniz OLS ve SSR'nin arkasındaki daha derin matematiği kendi başınıza keşfedebilirsiniz!
+
+### Kaynaklar
+
+- [Parametre Tahmini - Sıradan En Küçük Kareler Yön](https://www.geo.fu-berlin.de/en/v/soga-py/Basics-of-statistics/Linear-Regression/Simple-Linear-Regression/Parameter-Estimation/index.html) [_temi:_ _Rudolph, A., Krois, J., Hartmann, K. (2023): Python (SOGA-py) kullanarak İstatistik ve Coğrafi Veri Analiz_ _i._](https://www.geo.fu-berlin.de/soga-py) _Yer Bilimleri Bölümü, Freie Universitaet Berlin_.
 
 
 
