@@ -4857,3 +4857,32 @@ Bu vaka çalışmasına ilham veren araştırma projesi hakkında daha fazla bil
 - [Think With Google'ın bu web sitesi](https://www.thinkwithgoogle.com/feature/youtube-ad-sequencing-and-ad-recall/ad-sequencing?lang=en_US), araştırma projesinde yer alan beş sıralama yapısını sergiliyor.
 
 ## State21 ve State28 için filtreleme ve okuma yazma oranlarının ttest ve p değerini inceleme
+
+```python
+import pandas as pd 
+from scipy import stats
+
+education_districtwise = pd.read_csv("../Datasets/education_districtwise.csv") 
+education_districtwise = education_districtwise.dropna()
+
+state21 = education_districtwise[education_districtwise['STATNAME'] == "STATE21"]
+
+state28 = education_districtwise[education_districtwise['STATNAME'] == "STATE28"]
+
+sampled_state21 = state21.sample(n=20, random_state=13490, replace = True) 
+
+sampled_state28 = state28.sample(n=20, random_state=39103, replace True)
+
+sampled_state21['OVERALL_LI'].mean()
+70.82900000000001
+
+sampled_state28['OVERALL_LI'].mean()
+64.60100000000001
+
+sampled_state21['OVERALL_LI'].mean() - sampled_state28['OVERALL_LI'].mean()
+6.2
+
+stats.ttest_ind(a=sampled_state21['OVERALL_LI'], b=sampled_state28['OVERALL_LI'].mean(), equal_var=False)
+
+# Ttest_indResult(statistic=2.8980444277268735, pvalue=0.006421719142765231)
+```
