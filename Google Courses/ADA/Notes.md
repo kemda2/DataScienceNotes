@@ -3316,7 +3316,7 @@ Bu nedenle, sürekli dağılımlar için, yalnızca 14,5 fit ile 15,5 fit arası
 
 Bir aralığın olasılığını bulmak için, aralığa karşılık gelen eğrinin altındaki alanı hesaplarsınız. Örneğin, bir kiraz ağacının 14,5 fit ile 15,5 fit arasında bir yüksekliğe sahip olma olasılığı, x eksenindeki 14.5 ve 15.5 değerleri arasındaki eğrinin altındaki alana eşittir. Bu alan grafiğin ortasındaki gölgeli dikdörtgen olarak görünür.
 
-![](attachment:322d6296-8cfd-4765-a686-501ba34e771e.png)
+![image](./images/4013.png)
 
 Bu durumda, dikdörtgenin alanı 0.20 civarındadır. Dolayısıyla, rastgele seçilen bir kiraz ağacının yüksekliğinin 14,5 fit ile 15, 5 fit arasında olma ihtimali %20 vardır.
 
@@ -3341,7 +3341,7 @@ Tüm normal dağılımlar aşağıdaki özelliklere sahiptir:
 
 Normal dağılımın özelliklerini netleştirmek için kiraz ağacı örneğimizi kullanalım. Ortalama yüksekliğin 2 fit standart sapma ile 15 fit olduğunu hatırlayın.
 
-![](attachment:cb648116-cf02-4026-8f25-57665f4d9ff5.png)
+![image](./images/4014.png)
 
 Normal eğrinin aşağıdaki özelliklerini fark edebilirsiniz:
 
@@ -3364,7 +3364,7 @@ Normal bir eğrideki değerlerin ortalamaya olan mesafelerine bağlı olarak dü
     
 - Değerlerin% 99,7'si ortalamanın 3 standart sapması içine düşer
 
-![](attachment:d51642cc-0b50-4737-bcb5-06b972a96185.png)
+![image](./images/4015.png)
 
 Ampirik kuralı kiraz ağacı örneğimize uygularsanız, aşağıdakileri öğrenirsiniz:
 
@@ -3388,4 +3388,9 @@ Bir veri uzmanı olarak, çok çeşitli veri kümelerinde önemli kalıpları be
 Sürekli olasılık dağılımları ve normal dağılım hakkında daha fazla bilgi edinmek için aşağıdaki kaynaklara göz atın:
 
 - [Duke Üniversitesi'nden bu makale, normal dağılımın temel özelliklerinin yararlı bir özetini sunmaktadır](https://sites.nicholas.duke.edu/statsreview/continuous-probability-distributions/)
+
+## Standart Sapma ve Alt-Üst Limit Hesabı 
+
+
+
 
