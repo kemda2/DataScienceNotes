@@ -3936,3 +3936,78 @@ mean_sample_means
 ```
 
 ## Güven aralıkları: Doğru ve yanlış yorumlar 
+
+Son zamanlarda, veri profesyonellerinin bir tahmini çevreleyen belirsizliği tanımlamaya yardımcı olmak için güven aralıklarını kullandığını öğrendiniz. Verilerinizi daha iyi anlamak ve sonuçlarınızı paydaşlara etkili bir şekilde iletmek için, bir güven aralığını nasıl doğru yorumlayacağınızı bilmek önemlidir.
+
+Bu okumada, bir güven aralığını yorumlamanın doğru yolunu gözden geçireceğiz. Ayrıca bazı yaygın yanlış yorumlama biçimlerini ve bunlardan nasıl kaçınılacağını tartışacağız.
+
+### Doğru yorumlama
+
+#### **Örnek: ortalama ağırlık**
+
+Bir güven aralığının nasıl yorumlanacağını daha iyi anlamak için bir örneği inceleyelim. 10.000 penguen popülasyonunun ortalama ağırlığını tahmin etmek istediğinizi hayal edin. Her bir pengueni tartmak yerine, 100 penguenden oluşan bir örnek seçersiniz. Numunenizin ortalama ağırlığı 30 pound. Örnek verilerinize dayanarak, 28 pound ile 32 pound arasında% 95 güven aralığı oluşturursunuz.
+
+95 Cl [28, 32]
+
+#### **Güven aralığını yorumlayın**
+
+Daha önce, güven seviyesinin tahmin sürecinin belirsizliğini ifade ettiğini öğrendiniz. %95 güvenin ne anlama geldiğini daha teknik bir bakış açısıyla tartışalım.
+
+Teknik olarak,% 95 güven, bir popülasyondan tekrarlanan rastgele örnekler alırsanız ve aynı yöntemi kullanarak her örnek için bir güven aralığı oluşturursanız, bu aralıkların % 95'inin popülasyon ortalamasını yakalamasını bekleyebileceğiniz anlamına gelir. Ayrıca toplamın % 5'inin nüfus ortalamasını _yakalamayacağını_ da bekleyebilirsiniz.
+
+Güven seviyesi, **yöntemin**  uzun vadeli başarı oranını veya rastgele örneklemeye dayalı tahmin sürecini ifade eder.
+
+Örneğimizin amacı için, 10.000 penguenin ortalama ağırlığının 31 pound olduğunu hayal edelim, ancak her pengueni gerçekten tartmadığınız sürece bunu bilemezsiniz. Yani, nüfusun bir örneğini alıyorsunuz.
+
+Penguen popülasyonundan her biri 100 penguenden oluşan 20 rastgele örnek aldığınızı ve her örnek için% 95'lik bir güven aralığı hesapladığınızı hayal edin. 20 aralığın yaklaşık 19'unun veya toplamın% 95'inin gerçek popülasyon ortalama ağırlığını 31 pound içermesini bekleyebilirsiniz. Böyle bir aralık, 28 pound ile 32 pound arasındaki değerler aralığı olacaktır.
+
+![image](./images/4034.png)
+
+Uygulamada, veri uzmanları genellikle bir rastgele örnek seçer ve gerçek popülasyon ortalamasını içerebilecek veya içermeyebilecek bir güven aralığı oluşturur. Bunun nedeni, tekrarlanan rastgele örneklemenin genellikle zor, pahalı ve zaman alıcı olmasıdır. Güven aralıkları, veri uzmanlarına rastgele örneklemeden kaynaklanan belirsizliği ölçmenin bir yolunu verir.
+
+### Yanlış yorumlar
+
+Artık bir güven aralığını nasıl doğru yorumlayacağınızı daha iyi anladığınıza göre, bazı yaygın yanlış yorumları ve bunlardan nasıl kaçınılacağını gözden geçirelim.
+
+#### **Yanlış yorumlama 1: %95, popülasyon ortalamasının oluşturulmuş aralık içinde olma olasılığını ifade eder**
+
+Genellikle %95 güven düzeyinde bir güven aralığı hakkında yapılan yanlış bir ifade, popülasyon ortalamasının yapılandırılmış aralık içinde düşme olasılığının% 95'lik bir olasılığın olmasıdır.
+
+Örneğimizde bu, penguen popülasyonunun ortalama ağırlığının 28 pound ile 32 pound arasında düşme olasılığının %95 olduğu anlamına gelir.
+
+Bu yanlış. Nüfus ortalaması sabittir.
+
+Herhangi bir popülasyon parametresi gibi, popülasyon ortalaması rastgele bir değişken değil sabittir. Örnek ortalamasının değeri örneklemden örneğe değişirken, popülasyon ortalamasının değeri değişmez. Bir sabitin herhangi bir değer aralığına girme olasılığı her zaman% 0 veya% 100'dür. Ya değerler aralığına girer, ya da değildir.
+
+Örneğin, 100 penguenden oluşan herhangi bir rastgele örnek farklı bir ortalama ağırlığa sahip olabilir: 32,8 pound, 27,3 pound, 29,6 pound vb. Örnek ortalamalarınızın her birine belirli bir olasılık atamak için bir örnekleme dağılımı kullanabilirsiniz çünkü bunlar rastgele değişkenlerdir. Bununla birlikte, popülasyon ortalama ağırlığı sabit olarak kabul edilir. Örneğimizde, 10.000 penguenin tümünü tartırsanız, nüfus ortalamasının 31 pound olduğunu göreceksiniz. Bu değer sabittir ve numuneden numuneye değişmez.
+
+|**Örnek Ortalama (100 penguen)**|**Nüfus Ortalaması (10.000 penguen)**|
+|---|---|
+|32,8 lbs|31 lbs|
+|27,3 lbs|31 lbs|
+|29,6 lbs|31 lbs|
+
+Bu nedenle, güven aralığınızın popülasyon ortalamasını yakalama olasılığın% 95 olduğunu söylemek kesinlikle doğru değildir çünkü bu, popülasyon ortalamasının değişken olduğu anlamına gelir. Aralıklar örnekten örneğe değişir, ancak popülasyonun değeri yakalamaya çalıştığınız anlamına gelmez.
+
+Söyleyebileceğiniz şey, popülasyondan tekrarlanan rastgele örnekler alırsanız ve aynı yöntemi kullanarak her örnek için bir güven aralığı oluşturursanız, aralıklarınızın% 95'inin popülasyon ortalamasını yakalamasını bekleyebilirsiniz.
+
+**Profesyonel ipucu:** %95 güven seviyesinin tahmin sürecinin başarı oranını ifade ettiğini unutmayın.
+
+#### **Yanlış yorumlama 2: %95, aralığa giren veri değerlerinin yüzdesini ifade eder**
+
+Diğer bir yaygın hata, %95'lik bir güven aralığını, popülasyondaki tüm veri değerlerinin% 95'inin aralık içinde olduğunu söyleyerek yorumlamaktır. Bu mutlaka doğru değildir. %95 güven aralığı, muhtemelen gerçek popülasyon ortalamasını içeren bir değer aralığı gösterir. Bu, _pop_ ülasyondaki veri değerlerinin% 95'ini içeren bir aralıkla aynı değildir.
+
+Örneğin, ortalama penguen ağırlığı için% 95 güven aralığınız 28 pound ile 32 pound arasındadır. Tüm ağırlık değerlerinin% 95'inin bu aralığa düştüğünü söylemek doğru olmayabilir. Popülasyondaki penguen ağırlıklarının% 5'inden fazlasının bu aralığın dışında olması mümkündür - ya 28 pounddan az veya 32 pounddan fazla.
+
+![image](./images/4035.png)
+![](attachment:89ef5148-7a44-49ae-9376-c897ead78c61.png)
+
+#### **Yanlış yorumlama 3: %95, aralığa giren numune araçlarının yüzdesini ifade eder**
+
+Üçüncü bir yaygın yanlış yorum, %95'lik bir güven aralığının, tüm olası numune ortalamasının% 95' _inin_ aralık aralığına girdiğini ima etmesidir. Bu mutlaka doğru değildir. Örneğin, ortalama penguen ağırlığı için% 95 güven aralığınız 28 pound ile 32 pound arasındadır. Tekrarlanan 100 penguenin örneklerini aldığınızı ve her numune için ortalama ağırlığı hesapladığınızı hayal edin. Numunenizin _%_5'inden fazlasının 28 pounddan az veya 32 pounddan büyük olması mümkündür.
+
+![](attachment:70f99cc2-1df2-407b-8709-5affb3373cfe.png)
+
+### Önemli çıkarımlar
+
+Güven aralıklarını nasıl doğru yorumlayacağınızı bilmek, tahmininizi daha iyi anlamanıza ve faydalı ve doğru bilgileri paydaşlarla paylaşmanıza yardımcı olacaktır. Yaygın yanlış yorumları ve neden yanlış olduklarını da açıklamanız gerekebilir. Paydaşlarınızın kararlarını yanlış yorumlamaya dayandırmasını istemezsiniz. Sonuçlarınızı paydaşlara nasıl etkili bir şekilde ileteceğinizi anlamak, bir veri uzmanı olarak işinizin önemli bir parçasıdır.
