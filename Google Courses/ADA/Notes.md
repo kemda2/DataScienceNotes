@@ -4566,7 +4566,7 @@ Test edilmemiş yönde bir etkinin kaçırılmasının olumsuz sonuçları minim
 
 Tek kuyruklu ve iki kuyruklu bir test arasındaki farkları anlamak, bir hipotez testi yürütmenin önemli bir parçasıdır. Analizinizin bağlamına bağlı olarak, etkileri tek bir yönde incelemek için tek kuyruklu bir test veya etkileri her iki yöndeki incelemek için iki kuyruklu bir test kullanmak isteyebilirsiniz.
 
-
+## A/B testi 
 
 
 
