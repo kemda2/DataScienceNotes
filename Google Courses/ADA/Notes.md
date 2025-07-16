@@ -4277,3 +4277,298 @@ Sıfır hipotez ve alternatif hipotez hakkında daha fazla bilgi edinmek için a
 - [Statistics How To'nun bu makalesi](https://www.statisticshowto.com/probability-and-statistics/null-hypothesis/), sıfır hipotezinin ayrıntılı bir tartışmasını içermektedir.
 
 ## Tip I ve tip II hataları
+
+Daha önce, sonuçlarınızın istatistiksel olarak anlamlı olup olmadığını veya tesadüfen meydana gelip gelmediğini belirlemeye yardımcı olmak için bir hipotez testi kullanabileceğinizi öğrendiniz. Bununla birlikte, hipotez testi olasılığa dayandığından, sıfır hipotez hakkında yanlış sonuç çıkarma şansı her zaman vardır. Hipotez testinde, sonuç çıkarırken yapabileceğiniz iki tür hata vardır: Tip I hata ve Tip II hatası.
+
+Bu okumada, Tip I ve Tip II hataları arasındaki farkı ve her bir hatayı yapmanın içerdiği riskleri tartışacağız.
+
+### İstatistiksel karar vermede hatalar
+
+Bir hipotez testi yürütme adımlarını gözden geçirelim:
+
+1. Sıfır hipotezi ve alternatif hipotezi belirtin.
+    
+2. Bir önem seviyesi seçin.
+    
+3. P değerini bulun.
+    
+4. Sıfır hipotezini reddedin veya reddetmeyi başaramayın.
+    
+
+Sıfır hipotezini reddetmeye veya reddetmeyi reddetmeye karar verdiğinizde, dört olası sonuç vardır - ikisi doğru seçenekleri, ikisi hataları temsil eder. Şunları yapabilirsiniz:
+
+- Sıfır hipotezi gerçekte doğru olduğunda reddedin (**Tip I hatası)**
+    
+- Sıfır hipotezini gerçekten yanlış olduğunda reddedin (Doğru)
+    
+- Sıfır hipotezini gerçekten doğru olduğunda reddedememe (Doğru)
+    
+- Aslında yanlış olduğunda sıfır hipotezi reddedilemez (**Tip II hatası**)
+    
+![image](./images/4038.png)
+
+#### **Örnek: Klinik deneme**
+
+Tip I ve Tip II hatalarını daha iyi anlamak için bir örneği inceleyelim. Hipotez testleri genellikle yeni bir ilacın hastalarda daha iyi sonuçlara yol açıp sağlamadığını belirlemek için klinik çalışmalarda kullanılır. Bir ilaç şirketinde çalışan bir veri uzmanı olduğunuzu hayal edin. Şirket, soğuk algınlığı tedavisi için yeni bir ilaç icat ediyor. Şirket, soğuk algınlığı semptomları olan 200 kişiden oluşan rastgele bir örneği test ediyor. İlaç olmadan, tipik kişi 7.5 gün boyunca soğuk algınlığı semptomları yaşar. İlacı alan kişiler için ortalama iyileşme süresi 6.2 gündür.
+
+İlacın iyileşme süresi üzerindeki etkisinin istatistiksel olarak anlamlı olup olmadığını veya şans nedeniyle olup olmadığını belirlemek için bir hipotez testi yaparsınız.
+
+Bu durumda:
+
+- **Sıfır hipoteziniz (H0)**, ilacın hiçbir etkisinin olmadığıdır.
+    
+- **Alternatif hipoteziniz (Ha)**  ilacın etkili olduğudur.
+    
+
+#### **Tip I hatası**
+
+Yanlış pozitif olarak da bilinen **Tip 1 hatası**, gerçekte doğru olan bir sıfır hipotezi reddettiğinizde ortaya çıkar. Başka bir deyişle, sonucunuzun aslında tesadüfen meydana geldiği halde istatistiksel olarak anlamlı olduğu sonucuna varırsınız.
+
+Örneğin, klinik deneyinizde, sıfır hipotez doğruysa, bu ilacın hiçbir etkisi olmadığı anlamına gelir. Tip I hata yaparsanız ve sıfır hipotezi reddederseniz, ilacın aslında etkisiz olduğunda soğuk algınlığı semptomlarını hafiflettiği sonucuna yanlış bir şekilde varırsınız.
+
+Tip I hata yapma olasılığına alfa (α) denir. Anlamlılık seviyeniz veya alfa (α), Tip I hatası yapma olasılığını temsil eder. Tipik olarak, anlamlılık seviyesi 0.05 veya% 5 olarak ayarlanır. %5'lik bir anlamlılık seviyesi, sıfır hipotezini reddettiğinizde yanıldığınız olasılığın% 5'lik bir kabul etmeye istekli olduğunuz anlamına gelir.
+
+##### **Riskinizi azaltın**
+
+Tip I hatası yapma şansınızı azaltmak için, daha düşük bir önem seviyesi seçin.
+
+Örneğin, Tip I hata riskini en aza indirmek istiyorsanız, standart %5 yerine %1'lik bir anlamlılık seviyesi seçebilirsiniz. Bu değişiklik Tip I hata yapma şansını% 5'ten% 1'e düşürür.
+
+|**Önemlilik seviyesi (α)**|**Tip I hata yapma şansı**|
+|---|---|
+|0.05|%5|
+|0.01|%1|
+
+#### **Tip II hatası**
+
+Bununla birlikte, Tip I hata yapma riskinizi azaltmak, Tip II hatası veya yanlış negatif yapma olasılığınızın daha yüksek olduğu anlamına gelir. Aslında yanlış olan bir sıfır hipotezi reddedemediğinizde **Tip II hatası** oluşur. Başka bir deyişle, sonucunuzun tesadüfen gerçekleştiği sonucuna varırsınız, ancak aslında olmadı.
+
+Örneğin, klinik çalışmanızda, sıfır hipotez yanlışsa, bu ilacın etkili olduğu anlamına gelir. Tip II hata yaparsanız ve sıfır hipotezi reddetmezseniz, ilacın soğuk algınlığı semptomlarını hafiflettiğinde etkisiz olduğu sonucuna yanlış bir şekilde varırsınız.
+
+Tip II hata yapma olasılığına beta (β) denir ve beta bir hipotez testinin gücüyle ilişkilidir (güç = 1- β). Güç, bir testin olduğunda gerçek bir etkiyi doğru bir şekilde tespit edebilme olasılığını ifade eder.
+
+##### **Riskinizi azaltın**
+
+Testinizin yeterli güce sahip olduğundan emin olarak Tip II hata yapma riskinizi azaltabilirsiniz. Veri çalışmasında, güç genellikle% 0.80 veya% 80 olarak ayarlanır. İstatistiksel güç ne kadar yüksek olursa, Tip II hata yapma olasılığı o kadar düşük olur. Gücü artırmak için örneklem boyutunuzu veya önem seviyenizi artırabilirsiniz.
+
+**Not**: İstatistiksel güç kavramının ayrıntılı bir tartışması bu dersin kapsamı dışındadır. Güç, kariyerinizde bir veri uzmanı olarak ilerledikçe ve istatistik bilginizi geliştirdikçe daha fazla öğreneceğiniz bir şeydir.
+
+#### **Tip I ve Tip II hataların potansiyel riskleri**
+
+Bir veri uzmanı olarak, iki tür veya hatanın yapılmasıyla ilgili potansiyel risklerin farkında olmak önemlidir.
+
+Tip I hatası, aslında doğru olan bir sıfır hipotezini reddetmek anlamına gelir. Genel olarak, Tip I hatası yapmak genellikle gereksiz ve etkisiz olan ve değerli zaman ve kaynakları boşa harcayan değişikliklerin uygulanmasına yol açar.
+
+Örneğin, klinik deneyinizde Tip I hata yaparsanız, yeni ilaç aslında etkisiz olmasına rağmen etkili kabul edilecektir. Bu yanlış sonuca dayanarak, çok sayıda insana etkisiz bir ilaç verilebilir. Ayrıca, diğer tedavi seçenekleri yeni ilaç lehine reddedilebilir.
+
+Tip II hatası, aslında yanlış olan bir sıfır hipotezini reddetmemek anlamına gelir. Genel olarak, Tip II hata yapmak, olumlu değişim ve yenilik için kaçırılan fırsatlara neden olabilir. İnovasyon eksikliği insanlar ve kuruluşlar için maliyetli olabilir.
+
+Örneğin, klinik deneyinizde Tip II hatası yaparsanız, yeni ilaç gerçekten etkili olmasına rağmen etkisiz olarak kabul edilecektir. Bu, yararlı bir ilacın bundan yararlanabilecek çok sayıda insana ulaşamayabileceği anlamına gelir.
+
+### Önemli çıkarımlar
+
+Bir veri uzmanı olarak, hipotez testinde yer alan olası hataların ve sonuçlarınızı nasıl etkileyebileceğinin farkında olmanıza yardımcı olur. Özel duruma bağlı olarak, Tip I veya Tip II hata riskini en aza indirmeyi seçebilirsiniz. Sonuçta, analizinizin hedeflerine göre hangi tür hataların daha riskli olduğunu belirlemek bir veri uzmanı olarak sizin sorumluluğunuzdadır.
+
+### Daha fazla bilgi için kaynaklar
+
+Tip I ve Tip II hataları hakkında daha fazla bilgi edinmek için aşağıdaki kaynaklara bakın:
+
+- Sim [ply Psychology'nin bu makal](https://www.simplypsychology.org/type_I_and_type_II_errors.html) esi, Tip I ve Tip II hataları arasındaki farkların yararlı bir özetini içermektedir.
+
+## Verilerin istatistiksel önemi olup olmadığını belirleyin
+
+Son zamanlarda, **istatistiksel anlamlılığın**, bir testin veya deneyin sonuçlarının yalnızca tesadüfen açıklanamayacağı iddiası olduğunu öğrendiniz. Bir hipotez testi, gözlemlenen verilerinizin istatistiksel olarak anlamlı mı yoksa muhtemelen tesadüfen mi olduğunu belirlemenize yardımcı olabilir. Örneğin, yeni bir ilacın klinik denemesinde, bir hipotez testi, ilacın bir örnek grubu üzerindeki olumlu etkisinin istatistiksel olarak anlamlı olup olmadığını veya tesadüfen kaynaklanıp kaynaklanmadığını belirlemeye yardımcı olabilir.
+
+Bu okumada, istatistiksel anlamlılık kavramı ve hipotez testindeki rolü hakkında daha fazla bilgi edineceksiniz.
+
+### Hipotez testinde istatistiksel anlamlılık
+
+Veri uzmanları, değişkenler arasındaki bir ilişkinin veya gruplar arasındaki farkın istatistiksel olarak anlamlı olup olmadığını belirlemek için hipotez testini kullanır.
+
+Hipotez testinde istatistiksel anlamlılığın rolünü daha iyi anlamak için bir örneği inceleyelim.
+
+#### **Örnek: Ortalama pil ömrü**
+
+Bir hipotez testi yürütme adımlarını gözden geçirelim:
+
+1. Sıfır hipotezi ve alternatif hipotezi belirtin.
+    
+2. Bir önem seviyesi seçin.
+    
+3. P değerini bulun.
+    
+4. Sıfır hipotezini reddedin veya reddetmeyi başaramayın.
+
+Bir bilgisayar şirketi için çalışan bir veri uzmanı olduğunuzu hayal edin. Şirket, en çok satan dizüstü bilgisayarlarının ortalama pil ömrünün 0.5 saat standart sapma ile 8.5 saat olduğunu iddia ediyor. Son zamanlarda, mühendislik ekibi pil ömrünü uzatmak için dizüstü bilgisayarı yeniden tasarladı. Ekip, yeniden tasarlanmış 40 dizüstü bilgisayardan rastgele bir örnek alıyor. Örnek ortalaması 8.7 saattir.
+
+Ekip, ortalama pil ömründeki artışın istatistiksel olarak anlamlı olup olmadığını veya rastgele bir şansa bağlı olup olmadığını belirlemenizi ister. Öğrenmek için bir z testi yapmaya karar verdiniz.
+
+#### **Adım 1: Sıfır hipotezi ve alternatif hipotezi belirtin**
+
+Sıfır hipotezi tipik olarak gözlemlenen verilerinizin tesadüfen meydana geldiğini varsayar ve istatistiksel olarak anlamlı değildir. Bu durumda, sıfır hipoteziniz, dizüstü bilgisayar popülasyonunda ortalama pil ömrü üzerinde gerçek bir etkisi olmadığını söylüyor.
+
+Alternatif hipotez tipik olarak gözlemlenen verilerinizin tesadüfen _oluşmadığını_ ve istatistiksel olarak anlamlı olduğunu varsayar. Bu durumda, alternatif hipoteziniz dizüstü bilgisayar popülasyonunda ortalama pil ömrü üzerinde bir etkisi olduğunu söylüyor.
+
+Bu örnekte, aşağıdaki hipotezleri formüle edersiniz:
+
+- **H0:** μ = 8.5 (yeniden tasarlanan tüm dizüstü bilgisayarların ortalama pil ömrü 8,5 saate eşittir)
+    
+- **Ha:** μ > 8.5 (yeniden tasarlanan tüm dizüstü bilgisayarların ortalama pil ömrü 8,5 saatten fazladır)
+    
+
+#### **Adım 2: Bir önem seviyesi seçin**
+
+**Anlamlılık seviyesi** veya alfa (α), bir sonucu istatistiksel olarak anlamlı olarak değerlendireceğiniz eşiktir. Anlamlılık seviyesi aynı zamanda doğru olduğunda sıfır hipotezi reddetme olasılığıdır.
+
+Tipik olarak, veri uzmanları anlamlılık seviyesini 0.05 veya% 5 olarak ayarlar. Bu, en azından sizinki kadar aşırı sonuçların, sıfır hipotez doğru olduğunda meydana gelme şansının yalnızca %5'inin (veya daha az) olduğu anlamına gelir.
+
+**Not**: %5 geleneksel bir seçimdir ve sihirli bir sayı değildir. İstatistiksel araştırma ve eğitimdeki geleneğe dayanmaktadır. Diğer yaygın seçenekler% 1 ve% 10'dur. Anlamlılık düzeyini analizinizin özel gereksinimlerini karşılayacak şekilde ayarlayabilirsiniz. Daha düşük bir anlamlılık seviyesi, bir etkinin istatistiksel olarak anlamlı kabul edilebilmesi için daha büyük olması gerektiği anlamına gelir.
+
+**Profesyonel ipucu:** En iyi uygulama olarak, sınava başlamadan önce bir önem seviyesi belirlemelisiniz. Aksi takdirde, sonuçları rahatınıza uyacak şekilde manipüle ettiğiniz bir duruma girebilirsiniz.
+
+Bu örnekte, şirketin araştırma standardı olan %5'lik bir anlamlılık seviyesi seçersiniz.
+
+#### **Adım 3: p değerini bulun**
+
+**P-değeri**, sıfır hipotez doğru olduğunda gözlemlenenlerden daha aşırı veya daha aşırı sonuçları gözlemleme olasılığını ifade eder.
+
+P değeriniz, bir sonucun istatistiksel olarak anlamlı olup olmadığını belirlemenize yardımcı olur. Düşük bir p değeri yüksek istatistiksel anlamlılığı gösterirken, yüksek bir p değeri düşük veya hiç istatistiksel anlamlılık olmadığını gösterir.
+
+Her hipotez testinin özellikleri:
+
+- Verilerinizin sıfır hipotezle ne kadar yakından eşleştiğini gösteren bir test istatistiği. Z testi için, test istatistiğiniz bir z puanıdır; bir t-testi için, bu bir t puanıdır.
+    
+- Sıfır hipotezi doğruysa, gözlenen sonuç kadar en az aşırı bir sonuç elde etme olasılığını söyleyen karşılık gelen bir p değeri.
+
+Bir veri uzmanı olarak, Python veya diğer istatistiksel yazılımlar gibi bir programlama dili kullanarak neredeyse her zaman bilgisayarınızda p değerini hesaplayacaksınız. Bu örnekte, bir z testi yapıyorsunuz, yani test istatistiğiniz 2.53'lük bir z-puanıdır. Bu test istatistiğine dayanarak, 0,0057 veya% 0,57'lik bir p değeri hesaplarsınız.
+
+#### **Adım 4: Sıfır hipotezini reddedin veya reddetmeyi başaramayın**
+
+Bir hipotez testinde, sonuçlarınızın istatistiksel olarak anlamlı olup olmadığına karar vermek için p değerinizi anlamlılık seviyenizle karşılaştırırsınız.
+
+Bir hipotez testi hakkında bir sonuç çıkarmak için iki ana kural vardır:
+
+- P değeriniz önem seviyenizden düşükse, sıfır hipotezini reddedersiniz.
+    
+- P değeriniz önem seviyenizden büyükse, sıfır hipotezini reddedemezsiniz.
+
+**Not:** Veri uzmanları ve istatistikçiler her zaman “kabul etmek” yerine “reddetme” derler. Bunun nedeni, hipotez testlerinin kesinliğe değil olasılığa dayanmasıdır - kabul, kesinlik anlamına gelir. Genel olarak, veri uzmanları istatistiksel yöntemlere dayalı sonuçlar hakkında kesinlik talep etmekten kaçınırlar.
+
+Bu örnekte, %0,57'lik p değeriniz% 5'lik anlamlılık seviyenizden daha azdır. Testiniz, yeniden tasarlanan tüm dizüstü bilgisayarların ortalama pil ömrünün 8,5 saatten arttığı sonucuna varmak için yeterli kanıt sağlar. Sıfır hipotezini reddediyorsunuz. Sonuçlarınızın istatistiksel olarak anlamlı olduğunu belirlersiniz.
+
+### Önemli çıkarımlar
+
+Bir veri uzmanı olarak, bir hipotez testi etkili bir şekilde yürütmek ve sonuçları yorumlamak için istatistiksel anlamlılık kavramını anlamak önemlidir. İstatistiksel olarak anlamlı sonuçlara dayanan içgörüler, paydaşların daha bilinçli iş kararları vermelerine yardımcı olabilir.
+
+### Daha fazla bilgi için kaynaklar
+
+İstatistiksel anlamlılık hakkında daha fazla bilgi edinmek için aşağıdaki kaynaklara bakın:
+
+- [Scribbr"ün bu makalesi](https://www.scribbr.com/statistics/statistical-significance/), istatistiksel anlamlılığa yararlı bir genel bakış sağlar ve çağdaş araştırmalarda kavramın bazı eleştirilerini tartışır..
+
+## Tek kuyruklu ve iki kuyruklu testler
+
+Daha önce, bir hipotez testinin tek kuyruklu veya iki kuyruklu olabileceğini öğrendiniz. Hipotez testinde bir kuyruk, bir dağılım eğrisinin her iki ucundaki kuyruğu ifade eder.
+
+Bu okumada, tek kuyruklu ve iki kuyruklu testler arasındaki temel farkları gözden geçireceğiz ve her testi yürütme prosedürünü tartışacağız.
+
+### Tek kuyruklu ve iki kuyruklu testler
+
+İlk olarak, tek kuyruklu ve iki kuyruklu testler arasındaki farkları tartışalım.
+
+Alternatif hipotez, bir **popülasyon parametresinin gerçek değerinin sıfır hipotezdeki değerden daha küçük veya daha büyük olduğunu belirttiğinde tek kuyruklu bir test** ortaya çıkar.
+
+Tek kuyruklu bir test sol kuyruklu veya sağ kuyruklu olabilir. Alternatif hipotez, parametrenin gerçek değerinin sıfır hipotezdeki değerden daha az olduğunu belirttiğinde sol kuyruklu bir test ortaya çıkar. Alternatif hipotez, parametrenin gerçek değerinin sıfır hipotezdeki değerden daha büyük olduğunu belirttiğinde sağ kuyruklu bir test ortaya çıkar.
+
+Alternatif hipotez, parametrenin gerçek değerinin sıfır hipotezdeki değere eşit olmadığını belirttiğinde **iki kuyruklu bir test** ortaya çıkar.
+
+Örneğin, sıfır hipotezinin bir penguen popülasyonunun ortalama ağırlığının 30 lbs'ye eşit olduğunu belirttiği bir test hayal edin.
+
+- Sol kuyruklu bir testte, alternatif hipotez, penguen popülasyonunun ortalama ağırlığının ("< ") 30 lbs'den az olduğunu belirtebilir.
+    
+- Sağ kuyruklu bir testte, alternatif hipotez, penguen popülasyonunun ortalama ağırlığının (">") 30 lbs'den büyük olduğunu belirtebilir.
+    
+- İki kuyruklu bir testte, alternatif hipotez, penguen popülasyonunun ortalama ağırlığının ("≠") 30 lbs'ye eşit olmadığını belirtebilir.
+    
+
+Tek kuyruklu ve iki kuyruklu testler arasındaki farkı daha iyi anlamak için daha ayrıntılı bir örneği inceleyelim.
+
+#### **Örnek: Tek kuyruklu testler**
+
+Bir çevrimiçi perakende şirketi için çalışan bir veri uzmanı olduğunuzu hayal edin. Şirket, müşterilerinin _en az_ %80'inin alışveriş deneyimlerinden memnun olduğunu iddia ediyor. 100 müşteriden oluşan rastgele bir örneği araştırıyorsunuz. Ankete göre, müşterilerin% 73'ü memnun olduklarını söylüyor. Anket verilerine dayanarak, müşterilerin en az% 80'inin memnun olduğu iddiasını değerlendirmek _için_ bir z testi yaparsınız.
+
+Bir hipotez testi yürütme adımlarını gözden geçirelim:
+
+1. Sıfır hipotezi ve alternatif hipotezi belirtin.
+    
+2. Bir önem seviyesi seçin.
+    
+3. P değerini bulun.
+    
+4. Sıfır hipotezini reddedin veya reddetmeyi başarmayın.
+    
+
+İlk olarak, sıfır ve alternatif hipotezleri belirtirsiniz:
+
+- **H** 0: P >= 0.80 (memnun müşterilerin oranı% 80'den büyük veya buna eşittir)
+    
+- **H** a: P < 0.80 (memnun müşterilerin oranı% 80'den az)
+    
+
+**Not:** Alternatif hipotez daha az işaretini içerdiğinden bu tek kuyruklu bir testtir (“< “).
+
+Ardından, 0.05 veya% 5'lik bir anlamlılık seviyesi seçersiniz.
+
+Ardından, test istatistiğinize göre p değerinizi hesaplarsınız. **P-değerinin, sıfır hipotez doğru olduğunda gözlemlenenlerden daha aşırı veya daha aşırı sonuçları gözlemleme olasılığı olduğunu hatırlayın.** Hipotez testi bağlamında, “aşırı”, alternatif hipotezin yönünde aşırı anlamına gelir.
+
+Test istatistiğiniz 1,75 z puanıdır ve p değeriniz 0,04'tür.
+
+Bu sol kuyruklu bir test olduğundan, p değeri z puanının soldaki ortalamadan 1,75 standart birimden az olma olasılığıdır. Başka bir deyişle, z puanının -1.75'ten az olma olasılığıdır. -1.75 z-puanınızdan daha düşük bir değer alma olasılığı, z-puanının solundaki dağılım eğrisinin altındaki alan alınarak hesaplanır. Buna sol kuyruklu test denir, çünkü p değeriniz dağılımın sol kuyruğunda bulunur. Eğrinin bu bölümünün altındaki alan p değerinizle aynıdır: 0.04.
+
+![image](./images/4039.png)
+
+Son olarak, bir sonuç çıkarırsınız. 0.04 p değeriniz 0,05 anlamlılık seviyenizden az olduğundan, sıfır hipotezini _reddediyorsunuz_.
+
+**Not:** Farklı bir test senaryosunda, test istatistiğiniz pozitif 1.75 olabilir ve z-puanı 1.75'ten büyük veya daha büyük değerlerle ilgilenebilirsiniz. Bu durumda, p değeriniz dağılımın sağ kuyruğunda yer alacak ve sağ kuyruklu bir test yapıyor olacaksınız.
+
+![image](./images/4040.png)
+
+#### **Örnek: İki kuyruklu testler**
+
+Şimdi, önceki örneğimizin biraz farklı bir kuruluma sahip olduğunu hayal edin. Şirketin müşterilerinin% 80'inin alışveriş deneyimlerinden memnun olduğunu iddia ettiğini varsayalım. Bu iddiayı test etmek için 100 müşteriden oluşan rastgele bir örnekle anket yaparsınız. Ankete göre, müşterilerin% 73'ü memnun olduklarını söylüyor. Anket verilerine dayanarak, müşterilerin %80'inin memnun olduğu iddiasını değerlendirmek için bir z testi yaparsınız.
+
+İlk olarak, sıfır ve alternatif hipotezleri belirtirsiniz:
+
+- **H0:** P = 0.80 (memnun müşterilerin oranı% 80'e eşittir)
+    
+- **Ha:** P ≠ 0.80 (memnun müşterilerin oranı% 80'e eşit değil)
+    
+
+**Not:** Alternatif hipotez eşit olmayan işaretini (“≠”) içerdiğinden, bu iki kuyruklu bir testtir.
+
+Ardından, 0.05 veya% 5'lik bir anlamlılık seviyesi seçersiniz.
+
+Ardından, test istatistiğinize göre p değerinizi hesaplarsınız. Test istatistiğiniz 1,75 z puanıdır. _Bu iki kuyruklu bir test olduğundan, p değeri z puanının -1.75'ten az veya 1.75'ten büyük olma olasılığıdır._ İki kuyruklu bir test için _p_ değerinin her zaman tek kuyruklu bir test için _p_ -değerinin iki katı olduğuna dikkat edin. Yani, bu durumda, p değeriniz = 0.04 + 0.04 = 0.08. İki kuyruklu bir testte, p değeriniz dağılımın hem sol kuyruğundaki _hem de sağ kuyruğ_ undaki eğrinin altındaki alana karşılık gelir.
+
+![image](./images/4041.png)
+
+Son olarak, bir sonuç çıkarırsınız. 0.08 p değeriniz 0.05 anlamlılık seviyenizden büyük olduğundan, sıfır hipotez **ini reddedemez** siniz.
+
+### Tek kuyruklu ve iki kuyruklu
+
+Farklı etkileri incelemek için tek kuyruklu ve iki kuyruklu testleri kullanabilirsiniz.
+
+Genel olarak, tek kuyruklu bir test, tek bir yönde bir etkiyi tespit etmek için daha fazla güç sağlayabilir. Bununla birlikte, tek kuyruklu bir test yapmadan önce, diğer yönde bir etkiyi kaçırmanın sonuçlarını göz önünde bulundurmalısınız. Örneğin, bir ilaç şirketinin mevcut bir ilaçtan daha etkili olduğuna inandıkları yeni bir ilaç geliştirdiğini hayal edin. Klinik çalışmanın sonuçlarını analiz eden bir veri uzmanı olarak, iyileşmeyi tespit etme yeteneğinizi en üst düzeye çıkarmak için tek kuyruklu bir test seçmek isteyebilirsiniz. Bunu yaparken, yeni ilacın mevcut ilaçtan daha az etkili olma olasılığını test edemezsiniz. Ve elbette, şirket halka daha az etkili bir ilaç yayınlamak istemiyor.
+
+Test edilmemiş yönde bir etkinin kaçırılmasının olumsuz sonuçları minimum ise, tek kuyruklu bir test uygun olabilir. Örneğin, şirketin en az mevcut ilaç kadar etkili olduğuna inandıkları yeni, daha ucuz bir ilaç geliştirdiğini hayal edin. Düşük fiyat, yeni ilaca piyasada bir avantaj sağlar. Bu nedenle, yeni ilacın mevcut ilaçtan _daha az_ etkili olmadığından emin olmak istiyorlar. _Daha_ etkili olup olmadığını test etmek bir öncelik değildir. Bu durumda, tek kuyruklu bir test uygun olabilir.
+
+### Önemli çıkarımlar
+
+Tek kuyruklu ve iki kuyruklu bir test arasındaki farkları anlamak, bir hipotez testi yürütmenin önemli bir parçasıdır. Analizinizin bağlamına bağlı olarak, etkileri tek bir yönde incelemek için tek kuyruklu bir test veya etkileri her iki yöndeki incelemek için iki kuyruklu bir test kullanmak isteyebilirsiniz.
+
+
+
+
+
+
+
