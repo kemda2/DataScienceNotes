@@ -4000,14 +4000,280 @@ Diğer bir yaygın hata, %95'lik bir güven aralığını, popülasyondaki tüm 
 Örneğin, ortalama penguen ağırlığı için% 95 güven aralığınız 28 pound ile 32 pound arasındadır. Tüm ağırlık değerlerinin% 95'inin bu aralığa düştüğünü söylemek doğru olmayabilir. Popülasyondaki penguen ağırlıklarının% 5'inden fazlasının bu aralığın dışında olması mümkündür - ya 28 pounddan az veya 32 pounddan fazla.
 
 ![image](./images/4035.png)
-![](attachment:89ef5148-7a44-49ae-9376-c897ead78c61.png)
 
 #### **Yanlış yorumlama 3: %95, aralığa giren numune araçlarının yüzdesini ifade eder**
 
 Üçüncü bir yaygın yanlış yorum, %95'lik bir güven aralığının, tüm olası numune ortalamasının% 95' _inin_ aralık aralığına girdiğini ima etmesidir. Bu mutlaka doğru değildir. Örneğin, ortalama penguen ağırlığı için% 95 güven aralığınız 28 pound ile 32 pound arasındadır. Tekrarlanan 100 penguenin örneklerini aldığınızı ve her numune için ortalama ağırlığı hesapladığınızı hayal edin. Numunenizin _%_5'inden fazlasının 28 pounddan az veya 32 pounddan büyük olması mümkündür.
 
-![](attachment:70f99cc2-1df2-407b-8709-5affb3373cfe.png)
+![image](./images/4036.png)
 
 ### Önemli çıkarımlar
 
 Güven aralıklarını nasıl doğru yorumlayacağınızı bilmek, tahmininizi daha iyi anlamanıza ve faydalı ve doğru bilgileri paydaşlarla paylaşmanıza yardımcı olacaktır. Yaygın yanlış yorumları ve neden yanlış olduklarını da açıklamanız gerekebilir. Paydaşlarınızın kararlarını yanlış yorumlamaya dayandırmasını istemezsiniz. Sonuçlarınızı paydaşlara nasıl etkili bir şekilde ileteceğinizi anlamak, bir veri uzmanı olarak işinizin önemli bir parçasıdır.
+
+## Küçük bir örneklem boyutu için bir güven aralığı oluşturun
+
+Şimdiye kadar, genellikle 30 veya daha fazla öğenin örnek boyutları olarak tanımlanan büyük örnek boyutları için güven aralıkları oluşturdunuz. Örneğin, yeni bir cep telefonunun ortalama pil ömrünü tahmin ettiğinizde, 100 telefondan oluşan rastgele bir örnek kullandınız. Öte yandan, küçük örneklem boyutları genellikle 30'dan az maddeye sahip olarak tanımlanır. Tipik olarak, veri uzmanları daha kesin tahminler verdikleri için büyük örneklem boyutlarıyla çalışmaya çalışırlar. Ancak, büyük bir örnekle çalışmak her zaman mümkün değildir. Uygulamada, veri toplamak genellikle pahalı ve zaman alıcıdır. Büyük bir örnek almak için zamanınız, paranız veya kaynağınız yoksa, küçük bir örnekle çalışmaya başlayabilirsiniz.
+
+Bu okumada, küçük bir örneklem boyutu için bir güven aralığının nasıl oluşturulacağını öğreneceksiniz. Yeni bir otomobil motoru için ortalama emisyon seviyelerini içeren bir örneği adım adım inceleyeceğiz.
+
+### Büyük ve küçük örneklem boyutları
+
+İlk olarak, büyük ve küçük örnek boyutları için güven aralıkları oluşturmak için kullandığınız farklı yöntemleri kısaca tartışalım.
+
+#### **Büyük örnek: Z-puanları**
+
+Büyük örneklem boyutları için, cep telefonları için ortalama pil ömrünü tahmin etmek için daha önce yaptığınız gibi, hata payını hesaplamak için **z-score**larını  kullanırsınız. Bunun nedeni merkezi sınır teoremidir: büyük örnek boyutları için, örnek ortalaması yaklaşık olarak normal olarak dağılmıştır. **Z-dağılımı olarak da adlandırılan standart bir normal dağılım için, veriler** iniz hakkında hesaplamalar yapmak için z puanlarını kullanırsınız.
+
+#### **Küçük örnek: T-puanları**
+
+Küçük örnek boyutları için, **t-dağılımı** adı verilen farklı bir dağıtım kullanmanız gerekir. İstatistiksel olarak konuşursak, bunun nedeni, küçük örneklem boyutları için standart hatanın tahmin edilmesinde daha fazla belirsizlik olmasıdır. Bu kursun kapsamı dışındaki teknik detaylar hakkında endişelenmenize gerek yok. Şimdilik, küçük bir örneklem boyutuyla çalışıyorsanız ve verileriniz yaklaşık olarak normal dağılmışsa, standart normal dağılım yerine t dağılımını kullanmanız gerektiğini bilin. Bir t dağılımı için, verileriniz hakkında hesaplamalar yapmak için t-puanlarını kullanırsınız.
+
+T-dağılımının grafiği, standart normal dağılıma benzer bir çan şekline sahiptir. Ancak, t dağılımının standart normal dağılımdan daha büyük kuyrukları vardır. Daha büyük kuyruklar, küçük bir veri kümesiyle gelen aykırı değerlerin daha yüksek sıklığını gösterir. Örneklem büyüklüğü arttıkça, t dağılımı normal dağılıma yaklaşır. Örneklem büyüklüğü 30'a ulaştığında, dağılımlar hemen hemen aynıdır ve hesaplamalarınız için normal dağılımı kullanabilirsiniz.
+
+![image](./images/4037.png)
+
+### Örnek: Ortalama emisyon seviyeleri
+
+Artık t dağılımı ve t puanları hakkında biraz bilgi sahibi olduğunuza göre, küçük bir örneklem boyutu için bir güven aralığı oluşturalım.
+
+#### **Bağlam**
+
+Bir otomobil üreticisi için çalışan bir veri uzmanı olduğunuzu düşünün. Şirket, dünya çapında satılan yüksek performanslı otomobiller üretiyor. Tipik olarak, bu arabalardaki motorlar, küresel ısınmaya katkıda bulunan bir sera gazı olan yüksek karbondioksit veya CO2 emisyon oranlarına sahiptir. Mühendislik ekibi, şirketin en çok satan otomobili için emisyonları azaltmak için yeni bir motor tasarladı.
+
+#### **Hedef**
+
+Amaç, emisyonları mil başına 460 gram CO2'nin altında tutmaktır. Bu, otomobilin satıldığı her ülkede emisyon standartlarını karşılamasını sağlayacaktır. Ayrıca, daha düşük emisyon oranı çevre için iyidir ve bu da yeni müşterilere hitap edecek.
+
+#### **Talep**
+
+Mühendislik ekibi sizden yeni motor için emisyon oranının güvenilir bir tahminini sağlamanızı ister. Üretim sorunları nedeniyle, test için yalnızca sınırlı sayıda motor mevcuttur. Yani, küçük bir örneklem boyutu ile çalışacaksınız.
+
+#### **Örnek**
+
+Mühendislik ekibi, 15 motordan oluşan rastgele bir örneği test eder ve emisyonları hakkında veri toplar. Ortalama emisyon oranı mil başına 430 gram CO 2 'dir ve standart sapma mil başına 35 gram CO 2 'dir.
+
+Tek numuneniz, _her motor için gerçek ortalama emisyon oranını sağlamayabilir._ Emisyonlar için nüfus ortalaması mil başına 430 gram CO2'nin üzerinde veya altında olabilir. Yalnızca küçük bir motor örneğine sahip olsanız bile, büyük bir motor popülasyonu için gerçek emisyon oranını muhtemelen içeren bir güven aralığı oluşturabilirsiniz. Bu, yöneticinize tahmininizdeki belirsizlik hakkında daha iyi bir fikir verecektir. Ayrıca, mühendislik ekibinin emisyon oranını düşürmek için motor üzerinde daha fazla çalışma yapmaları gerekip gerekmediğine karar vermesine yardımcı olacaktır..
+
+### Güven aralığını oluşturun
+
+Bir güven aralığı oluşturma adımlarını gözden geçirelim:
+
+1. Örnek bir istatistik tanımlayın.
+    
+2. Bir güven seviyesi seçin.
+    
+3. Hata payını bulun.
+    
+4. Aralığı hesaplayın.
+    
+
+#### **Adım 1: Örnek bir istatistik belirleyin**
+
+İlk olarak, örnek istatistiğinizi tanımlayın. Numuneniz, 15 motor için ortalama emisyon oranını temsil eder. Örnek bir ortalamayla çalış _ıyorsun_.
+
+#### **Adım 2: Bir güven seviyesi seçin**
+
+Ardından, bir güven seviyesi seçin. Mühendislik ekibi sizden % 95 güven seviyesi seçmenizi ister.
+
+#### **Adım 3: Hata payını bulun**
+
+Üçüncü adımınız hata payını bulmaktır. Küçük bir örneklem boyutu için, t puanını standart hata ile çarparak hata payını hesaplarsınız.
+
+T-dağılımı, serbestlik derecesi adı verilen bir parametre ile tanımlanır. Bağlamımızda, serbestlik derecesi örneklem büyüklüğü - 1 veya 15-1 = 14. Özgürlük dereceniz ve güven seviyeniz göz önüne alındığında, t-puanınızı hesaplamak için Python veya diğer istatistiksel yazılımlar gibi bir programlama dili kullanabilirsiniz.
+
+14 serbestlik derecesine ve % 95'lik bir güven seviyesine bağlı olarak, t-puanınız 2.145'dir.
+
+Artık örnek istatistiğinizin değişkenliğini ölçen standart hatayı hesaplayabilirsiniz.
+
+İşte daha önce kullandığınız ortalamanın standart hatasının formülü:
+
+**Standart Hata (Ortam)**
+
+SE(x)=s/√(n)
+
+Formülde, s harfi örnek standart sapmayı ifade eder ve n harfi örnek boyutunu ifade eder.
+
+Örnek standart sapmanız 35 ve örneklem büyüklüğünüz 15'tir. Hesaplama size yaklaşık 9.04 standart bir hata verir.
+
+Hata marjı, standart hatanızla çarpılan t-puanınızdır. Bu 2.145 * 9.04 = 19.39'dur.
+
+#### **Adım 4: Aralığı hesaplayın**
+
+Son olarak, güven aralığınızı hesaplayın. Aralığınızın üst sınırı, örnek ortalaması artı hata payıdır. Bu, mil başına 430 + 19.39 = 449.39 gram CO2 'dir.
+
+Alt sınır, örnek ortalaması eksi hata payıdır. Bu, mil başına 430 − 19.39 = 410.61 gram CO2 'dir.
+
+Mil başına 410.61 gram CO2'den mil başına 449,39 gram CO2'ye kadar uzanan %95 güven aralığına sahipsiniz.
+
+**95 CI [410.61, 449.39]**
+
+Güven aralığı mühendislik ekibine önemli bilgiler verir. Aralığınızın üst sınırı, mil başına 460 gram CO 2 hedefinin altındadır. Bu sonuç, yeni motorun emisyon oranının emisyon standartlarını karşılayacağına dair sağlam istatistiksel kanıtlar sağlar.
+
+**Not**: Küçük örneklem büyüklükleri için güven aralıkları, popülasyon oranlarıyla değil, yalnızca popülasyon ortalamalarını ilgilendirir. Bu ayrımın istatistiksel nedeni oldukça tekniktir, bu yüzden şimdilik endişelenmenize gerek yok.
+
+### Önemli çıkarımlar
+
+Bir veri uzmanı olarak, hem büyük hem de küçük örnek boyutlarıyla çalışacaksınız. Büyük numuneler küçük numunelerden daha kesin tahminler verse de, küçük bir numuneyi toplamak genellikle büyük bir numune toplamaktan daha ucuz ve zaman alıcıdır. Farklı örnek boyutları için güven aralıklarının nasıl oluşturulacağını bilmek, gelecekteki kariyerinizde karşılaşabileceğiniz herhangi bir veri kümesini yönetmenize yardımcı olacaktır.
+
+### Daha fazla bilgi için kaynaklar
+
+Farklı örnek boyutları için güven aralıkları oluşturma hakkında daha fazla bilgi edinmek için aşağıdaki kaynaklara bakın:
+
+- [Scribbr'in bu makalesi,](https://www.scribbr.com/statistics/t-distribution/) t dağılımına ve bir güven aralığı oluştururken nasıl kullanılacağına dair yararlı bir genel bakış içerir.
+
+## Veri Numunesi Alma ve Tahmini Standart Hatayı Bulma
+
+```python
+import numpy as np 
+import pandas as pd 
+from scipy import stats
+
+education_districtwise = pd.read_csv("../Datasets/education_districtwise.csv")
+
+education_districtwise = education_districtwise.dropna() 
+
+sampled_data = education_districtwise.sample(n = 50, replace=True, random_state=31208)
+
+sampled_data
+```
+
+| Index | DISTNAME     | STATNAME | BLOCKS | VILLAGES | CLUSTERS | TOTPOPULAT | OVERALL_LI |
+|-------|--------------|----------|--------|----------|----------|------------|------------|
+| 661   | DISTRICT528  | STATE6   | 9      | 112      | 89       | 1863174.0  | 92.14      |
+| 216   | DISTRICT291  | STATE28  | 14     | 1188     | 165      | 3273127.0  | 52.49      |
+| 367   | DISTRICT66   | STATE23  | 12     | 1169     | 116      | 1042304.0  | 62.14      |
+| 254   | DISTRICT458  | STATE3   | 3      | 157      | 19       | 82839.0    | 76.33      |
+| 286   | DISTRICT636  | STATE35  | 3      | 187      | 44       | 514683.0   | 86.70      |
+| 369   | DISTRICT512  | STATE23  | 6      | 589      | 30       | 717169.0   | 68.35      |
+| 258   | DISTRICT156  | STATE3   | 6      | 80       | 9        | 35289.0    | 59.94      |
+| 10    | DISTRICT412  | STATE1   | 11     | 187      | 95       | 476820.0   | 68.69      |
+| 512   | DISTRICT277  | STATE9   | 10     | 558      | 179      | 2298934.0  | 84.31      |
+| 144   | DISTRICT133  | STATE21  | 14     | 1672     | 136      | 3673849.0  | 69.61      |
+| 325   | DISTRICT1    | STATE33  | 4      | 534      | 98       | 957853.0   | 69.37      |
+| 227   | DISTRICT159  | STATE28  | 18     | 870      | 134      | 2954367.0  | 66.23      |
+| 86    | DISTRICT667  | STATE25  | 5      | 396      | 75       | 896129.0   | 82.23      |
+
+```python
+sample_mean = sampled_data['OVERALL_LI'].mean() 
+
+sample_mean
+
+74.22359999999999
+
+Estimated_standard_error = sampled_data['OVERALL_LI'].std() / np.sqrt(sampled_data.shape[0])
+
+stats.norm.interval(alpha=0.95, loc=sample_mean, scale=estimated_standard_error)
+
+(71.42241096968617, 77.02478903031381)
+```
+
+## Sıfır ve alternatif hipotezler arasındaki farklar
+
+Son zamanlarda, **hipotez test** inin bir popülasyon parametresi hakkında bir varsayımı değerlendirmek için örnek verileri kullandığını öğrendiniz. Veri uzmanları, örnek verilerinden elde edilen kanıtların sıfır hipotezi mi yoksa alternatif hipotezi mi destekleyip desteklemediğine karar vermek için bir hipotez testi yapar.
+
+Bu okumada, sıfır hipotez ile alternatif hipotez arasındaki temel farkları ve her bir hipotezin farklı senaryolarda nasıl formüle edileceğini gözden geçireceğiz.
+
+### İstatistiksel hipotezler
+
+Bir hipotez testi yürütme adımlarını gözden geçirelim:
+
+1. Sıfır hipotezi ve alternatif hipotezi belirtin.
+    
+2. Bir önem seviyesi seçin.
+    
+3. P değerini bulun.
+    
+4. Sıfır hipotezini reddedin veya reddetmeyi başaramayın.
+    
+
+Herhangi bir hipotez testi için ilk adım, sıfır ve alternatif hipotezleri belirtmektir. Sıfır ve alternatif hipotezler birbirini dışlar, yani ikisi de aynı anda doğru olamazlar.
+
+**Sıfır hipotezi**, aksini gösteren ikna edici kanıtlar olmadıkça doğru olduğu varsayılan bir ifadedir. Sıfır hipotezi tipik olarak popülasyonda hiçbir etki olmadığını ve gözlemlenen verilerinizin tesadüfen meydana geldiğini varsayar.
+
+**Alternatif hipotez**, sıfır hipotezle çelişen bir ifadedir ve ancak bunun için ikna edici kanıtlar varsa doğru olarak kabul edilir. Alternatif hipotez tipik olarak popülasyonda bir etki olduğunu ve gözlemlenen verilerinizin tesadüfen _oluşmadığını_ varsayar.
+
+**Not:** Sıfır ve alternatif hipotezler her zaman popülasyonla ilgili iddialardır. Bunun nedeni, hipotez testinin amacının bir örneğe dayalı bir popülasyon hakkında çıkarımlar yapmak olmasıdır.
+
+Örneğin, bir otomobil bayisinde çalışan bir veri uzmanı olduğunuzu hayal edin. Şirket, çalışanları için yeni bir satış eğitim programı uygulamaktadır. Programın etkinliğini değerlendirmenizi istiyorlar.
+
+- **Sıfır hipoteziniz (H0):** programın satış geliri üzerinde hiçbir etkisi olmadı.
+    
+- **Alternatif hipoteziniz (Ha)**: program satış gelirini artırdı.
+
+Her hipotezi daha ayrıntılı olarak inceleyelim.
+
+#### **Sıfır hipotezi**
+
+Sıfır hipotezi aşağıdaki özelliklere sahiptir:
+
+- İstatistikte, sıfır hipotezi genellikle H sıfırın altında (H0) olarak kısaltılır.
+    
+- Matematiksel terimlerle yazıldığında, sıfır hipotezi her zaman bir eşitlik sembolü içerir (genellikle =, ancak bazen ≤ veya ≥).
+    
+- Sıfır hipotezleri genellikle "etki yok", "fark yok", "ilişki yok" veya "değişiklik yok" gibi ifadeleri içerir.
+    
+
+#### **Alternatif hipotez**
+
+Alternatif hipotez aşağıdaki özelliklere sahiptir:
+
+- İstatistikte, alternatif hipotez genellikle H sub a (Ha) olarak kısaltılır.
+    
+- Matematiksel terimlerle yazıldığında, alternatif hipotez her zaman bir eşitsizlik sembolü içerir (genellikle ≠, ancak bazen < or >).
+    
+- Alternatif hipotezler genellikle “bir etki”, “bir fark”, “bir ilişki” veya “bir değişiklik” gibi ifadeleri içerir.
+    
+
+#### **Örnek senaryolar**
+
+Tipik olarak, sıfır hipotez _statü_ koyu veya olayların mevcut durumunu temsil eder. Sıfır hipotezi, statükonun değişmediğini varsayar. Alternatif hipotez, yeni bir olasılık veya farklı bir açıklama önerir. Farklı senaryolar için boş ve alternatif hipotezlerin nasıl yazılacağı hakkında daha iyi bir fikir edinmek için bazı örneklere göz atalım:
+
+##### **Örnek #1: Ortalama ağırlık**
+
+Organik bir gıda şirketi granola ile ünlüdür. Şirket, ürettikleri her torbanın 300 gram granola içerdiğini iddia ediyor - ne daha fazla ne de daha az. Bu iddiayı test etmek için bir kalite kontrol uzmanı, 40 torbalı rastgele bir numunenin ağırlığını ölçer.
+
+- **H0**: μ = 300 (üretilen tüm granola torbalarının ortalama ağırlığı 300 grama eşittir)
+    
+- **Ha**: μ ≠ 300 (üretilen tüm granola torbalarının ortalama ağırlığı 300 grama eşit değildir)
+    
+
+##### **Örnek #2: Ortalama yükseklik**
+
+Belirli bir ağaç türünün ortalama yüksekliğinin 30 fit uzunluğunda olduğu varsayıldığını varsayalım. Bununla birlikte, bir ekolojist, gerçek ortalama yüksekliğin 30 fitten büyük olduğunu iddia ediyor. Bu iddiayı test etmek için ekolojist, 50 ağaçtan oluşan rastgele bir örneğin yüksekliğini ölçer.
+
+- **H0**: μ ≤ 30 (bu ağaç türünün ortalama yüksekliği 30 fit'e eşit veya daha azdır)
+    
+- **Ha:** μ > 30 (bu ağaç türünün ortalama yüksekliği 30 fitten büyüktür)
+    
+
+##### **Örnek #3: Çalışanların oranı**
+
+Bir şirket, tüm çalışanların en az% 80'inin işlerinden memnun olduğunu iddia eder. Bununla birlikte, bağımsız bir araştırmacı, tüm çalışanların% 80'inden azının işlerinden memnun olduğuna inanmaktadır. Bu iddiayı test etmek için araştırmacı, 100 çalışandan oluşan rastgele bir örneği araştırıyor.
+
+- **H0**: p ≥ 0.80 (işlerinden memnun olan tüm çalışanların oranı% 80'e eşit veya daha fazladır)
+    
+- **Ha:** p < 0.80 (işlerinden memnun olan tüm çalışanların oranı% 80'den azdır)
+    
+
+#### **Özet: Null ve alternatif**
+
+Aşağıdaki tablo, sıfır ve alternatif hipotezler arasındaki bazı önemli farklılıkları özetlemektedir:
+
+||**Sıfır hipotezi (H0)**|**Alternatif hipotez (Ha)**|
+|---|---|---|
+|**İddialar**|Popülasyonda hiçbir etkisi yoktur.|Popülasyonda bir etkisi var.|
+|**Dil**|- Etkisi yok<br>    <br>- Fark yok<br>    <br>- İlişki yok<br>    <br>- Değişiklik yok|- Bir etki<br>    <br>- Bir fark<br>    <br>- Bir ilişki<br>    <br>- Bir değişiklik|
+|**Semboller**|Eşitlik (=, ≤, ≥)|Eşitsizlik (≠, <, >)|
+
+### Önemli çıkarımlar
+
+Sıfır hipotez ve alternatif hipotez, hipotez testinde temel kavramlardır. Etkili bir hipotez testi yapmak için, sıfır ve alternatif hipotezler arasındaki farkları ve her bir hipotezin nasıl doğru bir şekilde ifade edileceğini anlamak önemlidir.
+
+### Daha fazla bilgi için kaynaklar
+
+Sıfır hipotez ve alternatif hipotez hakkında daha fazla bilgi edinmek için aşağıdaki kaynaklara bakın:
+
+- [Statistics How To'nun bu makalesi](https://www.statisticshowto.com/probability-and-statistics/null-hypothesis/), sıfır hipotezinin ayrıntılı bir tartışmasını içermektedir.
+
+## Tip I ve tip II hataları
