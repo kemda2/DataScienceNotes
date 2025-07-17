@@ -5023,7 +5023,7 @@ Aşağıdaki şekil, her değişkenin aynı ortalama ve standart sapmaya sahip o
 
 Bununla birlikte, _r_ size yalnızca değişkenler arasındaki doğrusal korelasyonun gücünü söyler; işareti dışında değişkenler arasındaki ilişkinin eğiminin büyüklüğü hakkında size hiçbir şey söylemez. Örneğin, _r_ = 1 olan değişkenler, X'i bir artırmanın Y'nin 10, 100, 0.1 veya başka bir şey artmasına neden olup olmayacağını söylemez. Sadece artacağından emin olabileceğinizi _söyler_. Bu gerçek, çizgilerin eğimlerinin hepsi farklı olsa da, r'nin yalnızca -1 veya _1_ olduğu aşağıdaki şekilde gösterilmektedir. Çizgi tamamen yatay veya tamamen dikey ise, _r_ tanımsızdır. (Nedenini merak ediyorsanız, aşağıdaki denkleme bakın. Paydadaki terimlerden biri sıfıra eşit olur, bu da paydanın tamamını sıfıra eşit yapar ve bu da tanımlanmamış bir çözümle sonuçlanır.)
 
-![](attachment:908efe6c-0dde-439c-b8c8-a50c803eb296.png)
+![image](./images/5004.png)
 
 #### _r_ hesapla
 
