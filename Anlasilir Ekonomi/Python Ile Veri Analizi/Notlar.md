@@ -3475,12 +3475,39 @@ FWER n tane yaptığımız hipotez testinde bu testlerin bir tanesinde 1. tip bi
 
 ## 5.13 Tek Yönlü ANOVA
 
-F dağılımını kullanır. İkiden fazla gruba sahip bağımsız değişkenin bağımlı değişkenle olan yapısını incelerken kullanılır.
+F dağılımını kullanır. İkiden fazla gruba sahip bağımsız değişkenin bağımlı değişkenle olan yapısını incelerken kullanılır. Anova grupların arasında fark olup olmadığını belirtir ama hangileri arasında fark olup olmadığını söylemez.  Eğer hangilerinin farklı olduğunu öğrenmek istiyorsak post-hoc testi uygulamalıyız.
+
+Hipotez yapısı;
+
+$H_0: \mu_1 = \mu_2 = ... = \mu_n$
+
+$H_1: \mu_1 != \mu_2 != ... != \mu_n$  bu denklemde en az 2 tane $\mu$  değeri eşit olmasa $H_0$ hipotezini reddetmeye yeterlidir.
+
+Varsayımlar; 
+
+1. Bağımlı değişken sürekli olmalıdır.
+1. Bağımsız değişkenin kategorik olması gerekir.
+1. Grup sayısı minimum 3 olmalı 
+1. Her bir grup verilerimiz normal bir dağılım göstermelidir veya örneklem sayısının minimum 20 olması gerekir.
+1. Varyanslar homojen olmalıdır. Eğer varyanslar homojen değilse Welch'in Anova testi kullanılmalıdır.
+1. Gözlemler rassal olarak seçilmelidir. (Önemlidir, eğer düzgün yapılmazsa sorun yaşanır.)
+
+### Örnekler
+
+> Kadıköy ve beşiktaş'taki su kalitesi karşılaştırılacaktır. Hem beşiktaş'tan hem kadıköy'den 100 evden su örneği alınması gerekiyor.
+
+$f = \frac{\text{gruplar arası varyans}}{\text{grup içi varyans}}$
+
+
+
+
+
+
 
 
 ### Örnekler
 ## 5.14 
 # 6
 
-https://www.youtube.com/watch?v=TAoJon6rDhk&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=71
+https://www.youtube.com/watch?v=og0cKCz-ChE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=72
 22:47
