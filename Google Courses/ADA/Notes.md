@@ -5027,19 +5027,25 @@ Bununla birlikte, _r_ size yalnızca değişkenler arasındaki doğrusal korelas
 
 #### _r_ hesapla
 
-_R_ formülü şöyledir:
+_r_ için formül şudur:
 
-r=covariance(X ⁣,Y)(S ⁣D X)(S ⁣D Y)r=(SD X)(SD Y)covariance(X,Y)​
+$$
+r = \frac{\text{covariance}(X, Y)}{(SD_X)(SD_Y)}
+$$
 
-nerede:
+$$
+\text{covariance}_{\text{popülasyon}}(X, Y) = \frac{1}{n} \sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y}) \\
 
-covariance(X ⁣,Y)=∑i=1n(xi−xˉ)(yi−yˉ)ncovariance(X,Y)=ni=1∑n​(xi​−xˉ)(yi​−yˉ​)​
+\text{covariance}_{\text{örneklem}}(X, Y) = \frac{1}{n - 1} \sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})
+$$
+
+
 
 **Not:** Burada verilen _r_ ve kovaryans formülleri, tüm popülasyonlar için kullanılanları temsil eder. Örnekler için, kovaryans formülünün paydası _n -_ 1'dir ve benzer şekilde, _r_ formülündeki standart sapmalar n yerine _n - 1_ kullanılarak hesaplanır.Basitlik için, bu okuma gösterimlerinde popülasyon formüllerini kullanacaktır_._
 
 Bu hesaplama hakkında düşünmenin daha kolay bir yolu şudur: paylayıcı - kovaryans - X ve Y'nin kendi ortalamalarından ne ölçüde farklılık gösterdiğini temsil eder. Bu değer pozitif olduğunda, yüksek X değerlerinin yüksek Y değerleriyle ilişkili olma eğiliminde olduğunu ve pozitif bir korelasyon olduğunu gösterir. Tersine, değer negatifse, yüksek X değerlerinin düşük Y değerleri ile ilişkili olma eğiliminde olduğunu ve bunun tersi de olumsuz bir korelasyon olduğunu gösterir.
 
-Payı - standart sapmaların çarpımı - payı birimlerini standartlaştırır. Bireysel değişkenlerin doğal değişkenliğini ayarlar. Bu, r _'yi_ birimsiz bir istatistik yapar. Boyut içermeyen saf bir sayıdır.
+Payda - standart sapmaların çarpımı - payı birimlerini standartlaştırır. Bireysel değişkenlerin doğal değişkenliğini ayarlar. Bu, r _'yi_ birimsiz bir istatistik yapar. Boyut içermeyen saf bir sayıdır.
 
 _R_ 'yi hesaplamanın eşdeğer bir yolu, her değişkendeki her veri noktasını standart birimlere dönüştürmektir (ortalamayı çıkarın, standart sapmaya bölün), ardından ürünlerin ortalamasını almaktır.
 
