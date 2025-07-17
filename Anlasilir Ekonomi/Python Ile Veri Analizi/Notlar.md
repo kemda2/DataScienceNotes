@@ -3457,21 +3457,27 @@ Test Sonucu: 1.8092 P-Değeri: 0.0704
 
 P değeri 0.05'ten büyük olduğu için H0 hiptezini reddedemeyiz. Yeni tasarım eskisinden daha iyi değildir.
 
+## 5.12 FamilyWise Error Rate-Alpha Inflation
 
+Örneğin bir popülasyonun ortalamasının herhangi bir sabit değerden farkı için biz tek örneklem Z veya T testi yapısı uyguluyoruz. İki popülasyon üzerinden ilerlersek bunların ortalamaları arasındaki fark için ise bağımsız gruplar veya bağımlı gruplar olmak üzere T testinden faydalanıyoruz. Oransal olarak test etmek istediğimizde Z-oran testini yapıyoruz. Örneğin bir sınıftaki not ortalaması 30'dur diye birlikte iddiada bulursak bu aslında bir tek örneklemdir ancak cinsiyet bazlı ilerlersek bu cinsiyet grubunun aldıkları puanlar arasında bir fark var mıdır dediğinde bu sefer iki örneklem yapısına geçmiş oluyoruz.
 
+Kısaca, Z ve T testler yapısı bir veya iki grubun ortalamalarını karşılaştırmak için kullanılır. 
 
+Eğer grup sayımız 2'den yüksekse Eğitim durumu gibi (İlkokul, Ortaokul, Lise, Üniversite gibi 2 den fazla grubun olduğu) T ve z yapısını kullanamıyoruz. ANOVA testini kullanıyoruz. Her grup üyesini kendi içinde ikili testini yaptığımız zaman ise çok zaman alıyor ve  birinci tip hatanın şişmesi dediğimiz bir soruna yol açıyor.
 
+$FWER = 1-(1-\alpha)^n $
 
+n: Test sayısı
 
-
+FWER n tane yaptığımız hipotez testinde bu testlerin bir tanesinde 1. tip bir hata yapma olasılığımızdır.
 
 
 
 
 
 ### Örnekler
-## 5.12 
+## 5.13 
 # 6
 
-https://www.youtube.com/watch?v=TAoJon6rDhk&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=70
-00:00
+https://www.youtube.com/watch?v=TAoJon6rDhk&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=71
+22:47
