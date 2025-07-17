@@ -5000,5 +5000,143 @@ Bir veri örneği verildiğinde, verilerinize uyabilecek farklı satırları den
 
 ## Korelasyon ve basit doğrusal regresyonun arkasındaki sezgi
 
+Şimdiye kadar basit doğrusal regresyonun bir bağımsız değişken olan X ile bir sürekli bağımlı değişken Y arasındaki doğrusal ilişkiyi tahmin eden bir teknik olduğunu öğrendiniz, ayrıca regresyon çizgisinin katsayılarını, veriler aracılığıyla “en iyi uyum” çizgisini belirlemenin yaygın bir yolu olan sıradan en küçük kareler tahminini (OLS) öğrendiniz. Bu okumada, korelasyonun anlamını keşfedeceksiniz; _r_ veya “korelasyon katsayısı” hakkında bilgi edineceksiniz; ve regresyon denkleminin nasıl belirleneceğini keşfedeceksiniz. Bu bilgi, değişkenler arasındaki ilişkileri ve dolayısıyla doğrusal regresyonun nasıl çalıştığını daha iyi anlamanıza yardımcı olacaktır.
+
+### **Korelasyon**
+
+Korelasyon, iki değişkenin birlikte hareket etme şeklinin bir ölçümüdür. Değişkenler arasında güçlü bir korelasyon varsa, birini bilmek diğerini tahmin etmek için çok yardımcı olacaktır. Bununla birlikte, iki değişken arasında zayıf bir korelasyon varsa, birinin değerini bilmek size diğerinin değeri hakkında fazla bir şey söylemeyecektir. Doğrusal regresyon bağlamında korelasyon _doğrusal korelasyonu_ ifade eder: bir değişken değiştikçe, diğeri de sabit bir oranda değişir.
+
+İstatistik kursunda, sürekli bir değişkenin bazı temel sayılar kullanılarak özetlenebileceğini öğrendiniz. Bu özet istatistiklerden ikisi şunlardır:
+
+- **Ortalama:** Merkezi eğilimin bir ölçümü (ortalama, medyan veya mod)
+    
+- **Standart sapma:** Yayılma ölçümü
+    
+
+İki değişken birlikte özetlendiğinde, _**r**_ adı verilen başka bir ilgili istatistik vardır, **Pearson korelasyon katsayısı** (adını geliştirmeye yardımcı olan kişinin adını alır) veya basitçe doğrusal **korelasyon katsayısı**. Korelasyon katsayısı, iki değişken arasındaki doğrusal ilişkinin gücünü ölçer. Her zaman [-1, 1] aralığına düşer. _R_ negatif olduğunda, değişkenler arasında negatif bir korelasyon vardır: biri arttıkça diğeri azalır. _R_ pozitif olduğunda, değişkenler arasında pozitif bir korelasyon vardır: biri arttıkça diğeri de artar. _r_ = 0 olduğunda, değişkenler arasında _doğrusal_ bir korelasyon yoktur. Bir değişkenin bir diğeri tarafından kesin olarak belirlenebileceği durumlar olduğuna dikkat edin - y=x 2 veya y=sin (x) gibi - ancak X ve Y arasındaki _doğrusal korelasyonun değerinin, ilişkileri doğrusal_ olmadığı için yine de düşük veya sıfır olacaktır.
+
+Aşağıdaki şekil, her değişkenin aynı ortalama ve standart sapmaya sahip olduğu ve yalnızca korelasyon katsayısının değiştiği iki değişkenli (bi = “iki”, değişken = “değişkenler”) verilerinin dağılım grafiklerini göstermektedir.
+
+![](attachment:8a8eaaa4-9abd-4675-88b6-9866b9032e87.png)
+
+-1 veya 1 r'ye ne kadar yakınsa, _verilerin_ o kadar doğrusal göründüğüne dikkat edin. _R_ tam olarak 1 veya tam olarak -1 olduğunda, değişkenler mükemmel bir şekilde ilişkilidir ve grafikleri bir çizgidir. _R_ sıfır olduğunda, değişkenler arasında bir korelasyon yoktur ve bu örnekte veriler şekilsiz bir nokta bulutu olarak görünür.
+
+Bununla birlikte, _r_ size yalnızca değişkenler arasındaki doğrusal korelasyonun gücünü söyler; işareti dışında değişkenler arasındaki ilişkinin eğiminin büyüklüğü hakkında size hiçbir şey söylemez. Örneğin, _r_ = 1 olan değişkenler, X'i bir artırmanın Y'nin 10, 100, 0.1 veya başka bir şey artmasına neden olup olmayacağını söylemez. Sadece artacağından emin olabileceğinizi _söyler_. Bu gerçek, çizgilerin eğimlerinin hepsi farklı olsa da, r'nin yalnızca -1 veya _1_ olduğu aşağıdaki şekilde gösterilmektedir. Çizgi tamamen yatay veya tamamen dikey ise, _r_ tanımsızdır. (Nedenini merak ediyorsanız, aşağıdaki denkleme bakın. Paydadaki terimlerden biri sıfıra eşit olur, bu da paydanın tamamını sıfıra eşit yapar ve bu da tanımlanmamış bir çözümle sonuçlanır.)
+
+![](attachment:908efe6c-0dde-439c-b8c8-a50c803eb296.png)
+
+#### _r_ hesapla
+
+_R_ formülü şöyledir:
+
+r=covariance(X ⁣,Y)(S ⁣D X)(S ⁣D Y)r=(SD X)(SD Y)covariance(X,Y)​
+
+nerede:
+
+covariance(X ⁣,Y)=∑i=1n(xi−xˉ)(yi−yˉ)ncovariance(X,Y)=ni=1∑n​(xi​−xˉ)(yi​−yˉ​)​
+
+**Not:** Burada verilen _r_ ve kovaryans formülleri, tüm popülasyonlar için kullanılanları temsil eder. Örnekler için, kovaryans formülünün paydası _n -_ 1'dir ve benzer şekilde, _r_ formülündeki standart sapmalar n yerine _n - 1_ kullanılarak hesaplanır.Basitlik için, bu okuma gösterimlerinde popülasyon formüllerini kullanacaktır_._
+
+Bu hesaplama hakkında düşünmenin daha kolay bir yolu şudur: paylayıcı - kovaryans - X ve Y'nin kendi ortalamalarından ne ölçüde farklılık gösterdiğini temsil eder. Bu değer pozitif olduğunda, yüksek X değerlerinin yüksek Y değerleriyle ilişkili olma eğiliminde olduğunu ve pozitif bir korelasyon olduğunu gösterir. Tersine, değer negatifse, yüksek X değerlerinin düşük Y değerleri ile ilişkili olma eğiliminde olduğunu ve bunun tersi de olumsuz bir korelasyon olduğunu gösterir.
+
+Payı - standart sapmaların çarpımı - payı birimlerini standartlaştırır. Bireysel değişkenlerin doğal değişkenliğini ayarlar. Bu, r _'yi_ birimsiz bir istatistik yapar. Boyut içermeyen saf bir sayıdır.
+
+_R_ 'yi hesaplamanın eşdeğer bir yolu, her değişkendeki her veri noktasını standart birimlere dönüştürmektir (ortalamayı çıkarın, standart sapmaya bölün), ardından ürünlerin ortalamasını almaktır.
+
+İşte bir örnek. Beş öğrencinin bir sınava girdiğini ve kaç saat ders çalıştıklarını ve notlarını kaydettiğinizi varsayalım. Aşağıdaki tablo _r hesaplamasını ortaya koymaktadır._
+
+|**Çalışma saatleri (X)**|**Sınav notu (Y)**|**Standart birimlerde X**|**Standart birimlerde Y**|**Standart birimlerin ürünü**|
+|---|---|---|---|---|
+|2|75|-1.5|-0.5|0.75|
+|4|65|-0.5|-1.5|0.75|
+|5|80|0|0|0|
+|6|95|0.5|1.5|0.75|
+|8|85|1.5|0.5|0.75|
+|**ortalama X = 5**<br><br>**SD X = 2**|**ortalama Y = 80**<br><br>**SD Y = 10**|||**ürünlerin ortalaması (r) = 0.6**|
+
+Korelasyon katsayısı 0.6'dır. İşte bu verilerin bir grafiği:
+
+![](attachment:24d4ed27-212c-4d73-ace6-fd9386254594.png)
+
+Nokta bulutunun yukarı doğru eğimli olduğuna dikkat edin. Bu, r'nin poziti _f_ olmasına karşılık gelir. Korelasyon katsayısı, her değişkenin ortalamasından sapmasının çarpımını kullandığı için bir ilişki göstergesi olarak çalışır. Ürün pozitif olduğunda, hem X _hem_ de Y değerlerinin ilgili ortalamalarının altında (negatif standart birimler) veya ilgili ortalamalarının (pozitif standart birimler) üzerinde olduğu anlamına gelir. Birlikte farklılık gösterirler. Bununla birlikte, bu ürün negatif olduğunda, değerlerden birinin ortalamasının üzerinde, diğerinin altında olduğu anlamına gelir. Kendi araçlarına göre zıt yönlerde farklılık gösterirler.
+
+Aşağıdaki şekil bu fikri göstermektedir. Şekil çeyreklere ayrılmıştır. Dikey çizgi ortalama X değerini ve yatay çizgi ortalama Y değerini temsil eder. Her nokta, standartlaştırılmış puanlarının çarpımı ile etiketlenir (yukarıdaki tabloya bakın). Bu puanların ortalaması r _'dir_. _R_ pozitif olduğunda, daha fazla puan pozitif kadranlarda olma eğiliminde olacaktır ve bunun tersi de geçerlidir.
+
+![](attachment:8fa4f227-8798-42e4-bbe9-ed21bbc81ce2.png)
+
+### **Regresyon**
+
+Başka herhangi bir bilginin yokluğunda, rastgele seçilen bir öğrencinin sınav puanını tahmin etmeniz gerekiyorsa, hatanızı en aza indirmenin en iyi yolu tüm öğrencilerin puanlarının ortalamasını tahmin etmektir. Peki ya o öğrencinin kaç saat çalıştığını da bilseydiniz? Şimdi, en iyi tahmininiz, yalnızca bu kadar saatler boyunca okuyan öğrencilerin ortalama puanı olabilir.
+
+İşte çalışma süreleri en yakın yarım saate yuvarlatılmış 100 öğrenciden oluşan bir örnek. Diyelim ki size bir öğrencinin yedi saat çalıştığı söylendi. Sınav puanlarını tahmin etmek için, hatayı en aza indirmenin bir yolu, yalnızca yedi saat boyunca okuyan öğrencilerin ortalamasını tahmin etmektir.
+
+![](attachment:dd786085-891a-425f-8b28-b0e56b77e32b.png)
+
+Bu dağılım grafiğinde, yedi saat boyunca çalışan tüm öğrenciler iki dikey çizgi arasına düşer. Ortalama sınav puanları bir X ile temsil edilir. Doğrusal regresyon bu kavramı genişletir. Bir regresyon çizgisi, doğrusal bir modelin varsayımları ve sınırlamaları göz önüne alındığında, X'in her değeri için tahmini ortalama Y değerini temsil eder. Başka bir deyişle, X ve Y arasındaki ilişki tamamen doğrusal değilse veya Y'yi etkileyen modele dahil edilmeyen başka faktörler varsa, her X için gerçek ortalama Y değerleri tam olarak regresyon çizgisinde olmayabilir. Regresyon çizgisi, bir bütün olarak verilere en uygun düz çizgi ilişkisini bulmak için bu etkileri dengelemeye çalışır. X göz önüne alındığında, Y'nin merkezi eğiliminin bir tahminidir.
+
+#### Regresyon denklemi
+
+Artık r'yi bildiğinize _ve_ regresyon kavramını daha iyi anladığınıza göre, veriler arasında en uygun çizgiyi bulmak için her şeyi bir araya getirmeye hazırsınız. Bu çizginin formülü regresyon denklemi olarak bilinir. Bu adımın iki anahtarı vardır.
+
+Birincisi:
+
+- _X'in ortalama değeri ve Y'nin ortalama değeri (yani nokta (__x__,)) her zaman regresyon çizgisine düşecektir._
+    
+
+İkincisi, r'nin ne anlama gel _diğini_ anlamaktır:
+
+- X'deki bir standart sapmanın her artışı için, Y'de ortalama olarak X üzerinde beklenen bir _r_ standart sapması artışı vardır.
+    
+
+Aşağıdaki şekil, bu kavramların regresyon çizgisini belirlemek için nasıl birlikte çalıştığını göstermektedir.
+
+![](attachment:f5777644-e7cf-429f-b491-b0bccd4fd68d.png)
+
+Başka bir deyişle, regresyon çizgisinin eğimi:
+
+m=r(S ⁣D y)S ⁣D xm=SD xr(SD y)​
+
+_Bu, bir satırın formülünde m'dir:_ _y_ _=_ _mx_ _+_ _b__._ Bu nedenle _b ile temsil edilen kesiş_ me noktası: _b_ = _y_ - _mx_. _Noktanın (__x__,) her zaman regresyon çizgisinde olduğunu bildiğiniz için, kesişmeyi hesaplamak için bu noktadan_ _x_ _ve_ _y_ _değerlerini ekleyebilirsiniz._ İşte beş öğrencinin orijinal örneğini kullanan bir örnek.
+
+||**Çalışma saatleri (X)**|**Sınav notu (Y)**|
+|---|---|---|
+|**anlamına gelir:**|5|80|
+|**SD:**|2|10|
+|**r:**|**0.6**||
+
+Adımlara ayrılmış:
+
+1. Eğimi hesaplayın: m=r(S ⁣D y)S ⁣D x=0.6(10)2=3.m=SD xr(SD y)​=20.6(10)​=3.
+    
+2. _Kesişmeyi hesaplayın:_ _y_ _=_ _mx_ _+_ _b: 80 = 3 (5) + b →_ _b_ _=_ _65 denklemine_ _x__, ve_ _m_ _değiştirin._
+    
+3. Regresyon denklemini elde etmek için genelleme _yapın: y_ = 3 _x_ + 65.
+    
+
+İşte verilerin üzerine bindirilmiş regresyon çizgisi:
+
+![](attachment:784017ca-3554-4cb7-b4f1-60b8d4294690.png)
+
+Buna “Y'nin X üzerindeki gerilemesi” denir. İşte 100 öğrencinin tamamı için regresyon çizgisi:
+
+![](attachment:febf462c-536b-4281-ac0a-3d8901084425.png)
+
+### **Önemli Çıkarımlar**
+
+Doğrusal regresyon, veri profesyonellerinin verileri analiz etmek için kullandıkları en önemli araçlardan biridir. Basit doğrusal regresyonun temel yapı taşlarını anlamak, daha karmaşık regresyon analizi yöntemleri hakkında bilgi edinmeye devam ederken size yardımcı olacaktır. İşte akılda tutulması gereken bazı önemli noktalar:
+
+- Korelasyon, iki değişkenin birlikte hareket etme şeklinin bir ölçümüdür.
+    
+- _r (diğer adıyla Pear_ son korelasyon katsayısı, diğer adıyla korelasyon katsayısı), iki değişken arasındaki doğrusal ilişkinin gücünü ölçer.
+    
+    - Her zaman [-1, 1] aralığına düşer.
+        
+    - Ortalarından birlikte farklılık gösterme eğiliminde olan değişkenler pozitif olarak ilişkilidir. Tersine, ilgili araçlarına zıt şekillerde değişme eğiliminde olan değişkenler negatif ilişkilidir.
+        
+- Regresyon çizgisi, her _x değeri için ortalama y değerini tahmin_ eder. X verildiğinde _y_ tahmin edilirken hatayı en aza indirir.
+    
+- Regresyon çizgisinin eğimir(S ⁣D y)S ⁣D xSD xr(SD y)​.
+    
+- Nokta (_x,_) _her_ zaman regresyon çizgisindedir.
 
 
