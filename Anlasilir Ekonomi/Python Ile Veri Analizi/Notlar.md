@@ -3473,9 +3473,9 @@ n: Test sayısı
 
 FWER n tane yaptığımız hipotez testinde bu testlerin bir tanesinde 1. tip bir hata yapma olasılığımızdır.
 
-## 5.13 ANOVA
+## 5.13 Tek Yönlü ANOVA
 
-
+F dağılımını kullanır. İkiden fazla gruba sahip bağımsız değişkenin bağımlı değişkenle olan yapısını incelerken kullanılır.
 
 
 ### Örnekler
