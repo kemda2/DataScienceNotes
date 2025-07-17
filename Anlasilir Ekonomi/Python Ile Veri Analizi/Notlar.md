@@ -3465,18 +3465,21 @@ Kısaca, Z ve T testler yapısı bir veya iki grubun ortalamalarını karşıla�
 
 Eğer grup sayımız 2'den yüksekse Eğitim durumu gibi (İlkokul, Ortaokul, Lise, Üniversite gibi 2 den fazla grubun olduğu) T ve z yapısını kullanamıyoruz. ANOVA testini kullanıyoruz. Her grup üyesini kendi içinde ikili testini yaptığımız zaman ise çok zaman alıyor ve  birinci tip hatanın şişmesi dediğimiz bir soruna yol açıyor.
 
+En az 1 kere hata formülü;
+
 $FWER = 1-(1-\alpha)^n $
 
 n: Test sayısı
 
 FWER n tane yaptığımız hipotez testinde bu testlerin bir tanesinde 1. tip bir hata yapma olasılığımızdır.
 
+## 5.13 ANOVA
 
 
 
 
 ### Örnekler
-## 5.13 
+## 5.14 
 # 6
 
 https://www.youtube.com/watch?v=TAoJon6rDhk&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=71
