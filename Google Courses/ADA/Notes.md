@@ -5017,7 +5017,7 @@ Korelasyon, iki değişkenin birlikte hareket etme şeklinin bir ölçümüdür.
 
 Aşağıdaki şekil, her değişkenin aynı ortalama ve standart sapmaya sahip olduğu ve yalnızca korelasyon katsayısının değiştiği iki değişkenli (bi = “iki”, değişken = “değişkenler”) verilerinin dağılım grafiklerini göstermektedir.
 
-![](attachment:8a8eaaa4-9abd-4675-88b6-9866b9032e87.png)
+![image](./images/5003.png)
 
 -1 veya 1 r'ye ne kadar yakınsa, _verilerin_ o kadar doğrusal göründüğüne dikkat edin. _R_ tam olarak 1 veya tam olarak -1 olduğunda, değişkenler mükemmel bir şekilde ilişkilidir ve grafikleri bir çizgidir. _R_ sıfır olduğunda, değişkenler arasında bir korelasyon yoktur ve bu örnekte veriler şekilsiz bir nokta bulutu olarak görünür.
 
