@@ -3330,35 +3330,65 @@ $\hat{P}$ örneklem oranıdır.
 
 > Erkeklerin haber izleme oranlarının kadınlardan daha fazla olduğu belirtiliyor. 50 kadın 50 erkek örneklem alınıyor. Erkeklerde 45 kadınlarda 40 kişinin haber izlediği görülüyor.
 
-$H_0: P_E = P_K $
+$$
+H_0: P_E = P_K 
+$$
 
-$ H_1: P_E\ > P_K $
+$$
+ H_1: P_E\ > P_K 
+$$
 
-$ n_E = 50 $
+$$
+ n_E = 50 
+$$
 
-$ n_K = 50 $
+$$
+ n_K = 50 
+$$
 
-$ \hat{P_E} = \frac{45}{50} = 0,90 $
+$$
+ \hat{P_E} = \frac{45}{50} = 0,90 
+$$
 
-$ \hat{P_K} = \frac{40}{50} = 0,80 $
+$$
+ \hat{P_K} = \frac{40}{50} = 0,80 
+$$
 
-$ P = \frac{50\cdot0,9 + 50\cdot0,8}{50+50} $
+$$
+ P = \frac{50\cdot0,9 + 50\cdot0,8}{50+50} 
+$$
 
-$ P = \frac{45 + 40}{100} $
+$$
+ P = \frac{45 + 40}{100} 
+$$
 
-$ P = 0,85$
+$$
+ P = 0,85
+$$
 
-$z_{hesap} = \frac{0,9-0,8}{\sqrt{0,85\cdot(1-0,85)\cdot(\frac{1}{50}+\frac{1}{50})}}$
+$$
+z_{hesap} = \frac{0,9-0,8}{\sqrt{0,85\cdot(1-0,85)\cdot(\frac{1}{50}+\frac{1}{50})}}
+$$
 
-$z_{hesap} = \frac{0,1}{\sqrt{0,85\cdot0,15\cdot(\frac{2}{50})}}$
+$$
+z_{hesap} = \frac{0,1}{\sqrt{0,85\cdot0,15\cdot(\frac{2}{50})}}
+$$
 
-$z_{hesap} = \frac{0,1}{0,071}$
+$$
+z_{hesap} = \frac{0,1}{0,071}
+$$
 
-$z_{hesap} = 1,4$
+$$
+z_{hesap} = 1,4
+$$
 
-$z_{tablo} = 1,65$
+$$
+z_{tablo} = 1,65
+$$
 
-$z_{hesap} < z_{tablo}$
+$$
+z_{hesap} < z_{tablo}
+$$
 
 H0 hipotezi reddedilemez. Erkekler ile kadınlar arasında oransal bir fark yoktur.
 
@@ -3467,7 +3497,9 @@ Eğer grup sayımız 2'den yüksekse Eğitim durumu gibi (İlkokul, Ortaokul, Li
 
 En az 1 kere hata formülü;
 
-$FWER = 1-(1-\alpha)^n $
+$$
+FWER = 1-(1-\alpha)^n 
+$$
 
 n: Test sayısı
 
@@ -3479,9 +3511,15 @@ F dağılımını kullanır. İkiden fazla gruba sahip bağımsız değişkenin 
 
 Hipotez yapısı;
 
-$H_0: \mu_1 = \mu_2 = ... = \mu_n$
+$$
+H_0: \mu_1 = \mu_2 = ... = \mu_n
+$$
 
-$H_1: \mu_1 != \mu_2 != ... != \mu_n$  bu denklemde en az 2 tane $\mu$  değeri eşit olmasa $H_0$ hipotezini reddetmeye yeterlidir.
+$$
+H_1: \mu_1 != \mu_2 != ... != \mu_n
+$$  
+
+Bu denklemde en az 2 tane $\mu$  değeri eşit olmasa $H_0$ hipotezini reddetmeye yeterlidir.
 
 Varsayımlar; 
 
@@ -3496,11 +3534,40 @@ Varsayımlar;
 
 > Kadıköy ve beşiktaş'taki su kalitesi karşılaştırılacaktır. Hem beşiktaş'tan hem kadıköy'den 100 evden su örneği alınması gerekiyor.
 
-$f = \frac{\text{gruplar arası varyans}}{\text{grup içi varyans}}$
+$$
+f = \frac{\text{gruplar arası varyans}}{\text{grup içi varyans}}
+$$
+
+Varyans;
+
+Popülasyon için;
+
+$$
+\sigma^2 = \frac{ \sum (x_i - \bar{X})^2 }{n} 
+$$
+
+veya
+
+Örneklem için;
+
+$$
+s^2 = \frac{ \sum (x_i - \bar{X})^2 }{n - 1}
+$$
 
 
+Genel Ortalama;
 
+$$
+\bar{\bar{x}} = \frac{ \sum_{i=1}^{n} \sum_{j=1}^{k} x_{ij} }{n \cdot k}
+$$
 
+Genel Kareler Toplamı;
+
+$$
+GKT = \sum_{i=1}^{n} \sum_{j=1}^{k} (x_{ij} - \bar{X})^2
+$$
+
+Grup içi kareler toplamı;
 
 
 
@@ -3510,4 +3577,4 @@ $f = \frac{\text{gruplar arası varyans}}{\text{grup içi varyans}}$
 # 6
 
 https://www.youtube.com/watch?v=og0cKCz-ChE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=72
-22:47
+33:06
