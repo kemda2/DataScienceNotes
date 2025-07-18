@@ -448,4 +448,141 @@ Aşağıda bağlantısı verilen örnek yönetici özeti, ABD Ulusal Park Hizmet
 
 ![image](./images/1003.png)
 
+# Kurs 1 İş Yeri Senaryolarınızı Keşfedin
+
+## **Genel Bakış**
+
+Bu sertifika, her kurs sonu projesini tamamlarken kullanabileceğiniz birkaç farklı iş yeri senaryosu seçeneği sunar:
+
+-   Automatidata: Kurgusal bir veri danışmanlık firması
+    
+-   TikTok: Kısa video platformu TikTok ile ortaklaşa oluşturuldu
+    
+-   Waze: Gerçek zamanlı navigasyon uygulaması Waze ile ortaklaşa oluşturuldu
+    
+
+Her senaryo, becerilerinizi uygulama ve iş başvurularında paylaşabileceğiniz çalışma örnekleri oluşturma fırsatı sunar. Bu nedenle, iş yeri senaryosu fark etmeksizin benzer becerileri pratiğe dökeceksiniz. Daha bütünlüklü bir deneyim için, her kurs sonu projesinde aynı senaryoyu kullanmanız önerilir. Ancak, program ilerledikçe ilginizi çeken diğer senaryoları da inceleyebilirsiniz.
+
+![image](./images/1004.png)
+
+_**Hatırlatma:**_ _Tüm kurs sonu projeleri için tek bir iş yeri senaryosu seçmeniz ve onu takip etmeniz önerilir; böylece projenizi baştan sona tutarlı geliştirebilirsiniz._
+
+İleri Düzey Veri Analitiği Sertifikası alabilmek için her kurs için, tek bir iş yeri senaryosunu kullanarak kurs sonu projesini tamamlamanız gerekmektedir. İsterseniz, bir kursta birden fazla senaryoda proje tamamlayarak ekstra pratik yapabilir ve portföyünüze ekleyebileceğiniz daha fazla örnek oluşturabilirsiniz. Bu, iş ararken size avantaj sağlar.
+
+Bu okuma materyali, mevcut tüm iş yeri senaryolarının genel bir özetini sunar. İlerlemeye başlamadan önce, Kurs 1 kurs sonu projesi için tamamlamak istediğiniz senaryoyu belirleyin.
+
+___
+
+## **Kurs 1 İş Yeri Senaryoları**
+
+### **Automatidata**
+
+![image](./images/1005.png)
+
+**Proje hedefi:**  
+Kurgusal senaryoda, New York City Taksi ve Limuzin Komisyonu (TLC), taksi yolcularının sürüş öncesi tahmini ücret hesaplamasını yapabilecekleri bir uygulama geliştirmek için Automatidata veri danışmanlık firmasına başvuruyor.
+
+**Arka plan:**  
+1971’den beri TLC, New York şehrindeki taksiler, kiralık araçlar, minibüsler ve özel ulaşım araçlarının ruhsatlandırılması ve düzenlenmesinden sorumludur.
+
+**Senaryo:**  
+Siz, Automatidata adlı kurgusal veri danışmanlık firmasına yeni katılan bir veri profesyonelisiniz. Automatidata’nın amacı, müşterilerin kullanılmayan ve depolanmış verilerini faydalı çözümlere dönüştürmelerine yardımcı olmaktır. Bu senaryoda, TLC için yolculara taksi ücretlerini önceden tahmin etmelerini sağlayan bir uygulama geliştireceksiniz. İlk sorumluluğunuz, sürüş ücretleri veri projesi için aşamaları belirleyen bir proje teklifini hazırlamak olacak.
+
+**Kurs 1 görevleri:**
+
+-   Automatidata’nın son yönetici toplantısına ait notlardan bilgi toplamak
+    
+-   İstenen görevler için PACE aşamalarını atamak
+    
+-   Görevleri kilometre taşlarına göre organize etmek
+    
+-   Yönetici ekibin onayı için bir proje teklifi oluşturmak
+    
+
+_**Not:**_ _Bu proje kurgusal olup, tüm isimler, karakterler ve olaylar hayal ürünüdür. Gerçek kişilerle (yaşayan ya da vefat etmiş) herhangi bir bağlantı amaçlanmamış veya ima edilmemiştir. Projede kullanılan veriler eğitim amaçlı oluşturulmuştur._
+
+___
+
+### **TikTok**
+
+![image](./images/1006.png)
+
+**Proje hedefi:**  
+TikTok veri ekibi, platforma gönderilen videolarda yer alan iddiaları sınıflandırmak için bir makine öğrenimi modeli geliştirmektedir.
+
+**Arka plan:**  
+TikTok, kısa mobil videolar için lider bir platformdur. Platformun misyonu, kapsayıcı, neşeli ve özgün içerikler yaratmak ve insanların güvenle keşfetmesini, üretmesini ve bağlanmasını sağlamaktır.
+
+**Senaryo:**  
+TikTok veri ekibinde veri analisti olarak, liderlik ekibinden gelen yeni gereksinimlerle, iddia sınıflandırma projesi için görevleri gerçekçi kilometre taşlarına ayıran bir proje teklifi hazırlayacaksınız.
+
+**Kurs 1 görevleri:**
+
+-   TikTok içindeki paydaş notlarından bilgi toplamak
+    
+-   Sınıflandırma projesindeki görevler için PACE aşamalarını atamak
+    
+-   Görevleri kilometre taşlarına organize etmek
+    
+-   TikTok veri ekibi için proje teklifi oluşturmak
+    
+
+_**Not:**_ _Bu proje kurgusal olup, tüm isimler, karakterler ve olaylar hayal ürünüdür. Gerçek kişilerle (yaşayan ya da vefat etmiş) herhangi bir bağlantı amaçlanmamış veya ima edilmemiştir. Projede kullanılan veriler eğitim amaçlı oluşturulmuştur._
+
+___
+
+### **Waze**
+
+![image](./images/1007.png)
+
+**Proje hedefi:**  
+Waze yönetimi, kullanıcı kaybını (churn) tahmin etmek için makine öğrenimi modeli geliştirilmesini veri ekibinizden talep etti. Kullanıcı kaybı, uygulamayı kaldıran veya kullanmayı bırakan kullanıcı sayısını ifade eder. Bu proje aylık kullanıcı kaybına odaklanmaktadır. Doğru bir model, kullanıcı kaybını önlemeye, kullanıcı sadakatini artırmaya ve Waze’in işini büyütmeye yardımcı olacaktır.
+
+**Arka plan:**  
+Waze, sürücülerin hedeflerine kolayca ulaşmalarını sağlayan ücretsiz bir navigasyon uygulamasıdır. Waze’in harita editörleri, beta testçileri, çevirmenleri, ortakları ve kullanıcıları, her sürüşü daha iyi ve güvenli hale getirmek için katkı sağlar.
+
+**Senaryo:**  
+Siz, Waze veri ekibinin en yeni üyesisiniz. Ekip, kullanıcı kaybı projesine başlamak üzere. İlk adım, projenin genel hedefini net şekilde tanımlayan ve temel görevler, kilometre taşları ile paydaşları belirten bir proje teklifi hazırlamaktır.
+
+**Kurs 1 görevleri:**
+
+-   Kullanıcı kaybı projesindeki görevler için PACE aşamalarını atamak
+    
+-   Görevleri kilometre taşlarına organize etmek
+    
+-   Waze veri ekibi için proje teklifi oluşturmak
+    
+
+_**Not:**_ _Bu proje kurgusal olup, tüm isimler, karakterler ve olaylar hayal ürünüdür. Gerçek kişilerle (yaşayan ya da vefat etmiş) herhangi bir bağlantı amaçlanmamış veya ima edilmemiştir. Projede kullanılan veriler eğitim amaçlı oluşturulmuştur._
+
+___
+
+## **Önemli Noktalar**
+
+Kurs 1 – Veri Biliminin Temelleri’nde, veri profesyonellerinin dünyasını keşfettiniz ve veri analizinin bir kuruluşun hedeflerine nasıl katkı sağladığını öğrendiniz.
+
+### **Kurs 1 kazanımları:**
+
+-   Etkili iletişim
+    
+-   Fonksiyonlar arası ekip dinamiklerini anlama
+    
+-   Proje yönetimi
+    
+-   Paydaşlarla içgörü ve fikir paylaşımı
+    
+
+### **Kurs 1 son proje teslimatları:**
+
+-   Kurs 1 PACE strateji dokümanını tamamlamak
+    
+-   Proje teklifi oluşturmak
+    
+
+Kurs sonu portföy projeleri, veri analiz becerilerinizi iş yeri senaryolarında uygulamanız için tasarlanmıştır. Hangi senaryoda çalışırsanız çalışın, iş arkadaşlarınız, ekip üyeleriniz ve müşterilerle veri analizi konularını tartışma becerinizi geliştireceksiniz.
+
+Hatırlatma olarak, her kurs için en az bir proje tamamlamanız gerekmektedir. Ek pratik yapmak veya portföyünüze daha fazla örnek eklemek isterseniz, istediğiniz kadar senaryo projesi tamamlayabilirsiniz.
+
+
+
 
