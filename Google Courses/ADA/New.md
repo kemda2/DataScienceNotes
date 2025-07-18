@@ -102,11 +102,11 @@ PACE modeli belirli bir sırada aşamalar olarak sunulsa da, açık iletişim ak
 
 # Veri Profesyonelleri için En İyi İletişim Uygulamaları
 
-# Etkili İletişim PACE’ı Yönlendirir
+## Etkili İletişim PACE’ı Yönlendirir
 
 PACE’ın (Planla, Analiz Et, Karar Ver, Uygula) her aşamasında paydaşlar geri bildirim verebilir, sorular sorabilir veya açıklama isteyebilir. İletişim kurabilmek çok önemlidir; bir projenin yaşam döngüsünün her noktasında, karşılaşılan engelleri ve sonuçları paylaşmanız, karar vermeyi yönlendirecek gerekli bilgileri sağlamanız gerekir. İletişim, veri toplama, modeller oluşturma ve sonuçları paylaşma dahil olmak üzere PACE’ın her aşamasını yönlendirir. Bir veri profesyoneli olarak, başarılı olabilmek için hem güçlü iletişim becerilerine hem de teknik becerilere ihtiyacınız vardır. Bu metinde, PACE aşamalarında uygulayabileceğiniz etkili iletişim ipuçlarını ve bulgularınızı sunumlarla paylaşırken kullanabileceğiniz en iyi uygulamaları öğreneceksiniz.
 
-# Etkili İletişim için Yedi İpucu
+## Etkili İletişim için Yedi İpucu
 
 Tipik bir iş günü boyunca, paydaşlarla çeşitli şekillerde iletişim kurarsınız. Bazıları e-posta ve mesajlaşma yoluyla, bazıları toplantılar ve birebir görüşmeler yoluyla, bazıları ise resmi sunumlar şeklinde olabilir. Her etkileşim, dinleyicinizin anlattıklarınızı anlayabilmesini sağlamak için bireyselleştirilmiş bir yaklaşım gerektirir. Aşağıdaki yedi ipucu, iletişiminiz hangi biçimde olursa olsun ve projenizin PACE aşamasında nerede olursa olsun size rehberlik edecektir:
 
@@ -257,3 +257,163 @@ Paydaşlarla yapacağınız en önemli iletişimlerden biri, genellikle sunumlar
 ### Sunumlar
 
 Bilgiyi açık ve etkili şekilde sunmak, bir veri bilimcisinin iş akışının anahtarıdır. Sunumla ilgili iletişim becerileri arasında sunum yapısı, slayt tasarımı, ses tonu ve beden dili gibi unsurlar bulunur. Ayrıca, hazırladığınız materyallerde erişilebilirliği dikkate almak önemlidir. Kuruluşunuzun erişilebilirlik yönergelerini kontrol edin. Ayrıca [W3C’nin Web Erişilebilirlik İnisiyatifi](https://www.w3.org/WAI/) gibi çevrimiçi kaynaklara başvurabilirsiniz.
+
+# Başarılı İletişimin Unsurları
+
+Öğrendiğiniz gibi, iletişim PACE’in itici gücüdür çünkü veri profesyonellerinin proje aşamalarında paydaşlarla etkili iletişim kurabilmesi gerekir. Etkili iletişim için bazı önemli ipuçlarını zaten öğrendiniz. Ancak, başarılı iletişim için göz önünde bulundurmanız gereken birkaç unsur daha var. Bu metin, iş yerinizde uygulayabileceğiniz başarılı iletişim için en iyi uygulamaları sunmaktadır.
+
+## Nedenini Anlamak
+
+İletişim kurarken ilk düşünmeniz gereken şey, iletişim kurma amacınızın net olmasıdır. “Nedeniniz”, çalıştığınız iş veya organizasyonun belirlediği bağlama ve projenin hedeflerine bağlıdır. Her türlü iletişimi oluştururken, ana fikirlerinizi belirlemek için nedeninizi kullanın ki hedef kitleniz amaçlı bir şekilde nasıl hareket edeceğini veya yanıt vereceğini anlayabilsin.
+
+İletişime hazırlanırken, aşağıdaki önemli hedef ve beklentileri belirlemek için kısa bir zaman ayırın:
+
+-   İletişim kurduğunuz projenin hedefleri
+    
+-   Bu iletişimden ne elde etmeyi umduğunuz
+    
+-   Hedef kitlenizden ne yapmasını istediğiniz
+    
+-   Hedef kitlenizin anlaması gerekenler
+    
+
+İletişimin “nedenini” anlamak, düşüncelerinizi organize etmenize ve daha net, doğrudan iletişim kurmanıza yardımcı olur.
+
+## Ortamı Belirlemek
+
+Etkili iletişim geliştirirken sadece “neden” değil, iletişimin nerede gerçekleşeceğini de düşünmeniz gerekir. İletişimin gerçekleştiği ortam, mesajınızın iletilme biçimini ve şekillendirilmesini doğrudan etkiler. İletişime hazırlanırken, bulunacağınız ortama en uygun iletişim biçimini göz önünde bulundurun.
+
+İş yerinde farklı ortamlarda iletişim kurabilirsiniz. Ne paylaşacağınız, nasıl paylaşacağınız ve nasıl takip edeceğiniz o iletişimin bağlamına bağlıdır. Örneğin:
+
+-   Bir öğle yemeğinde bir iş arkadaşınızdan yakın zamanda karşılaştığınız bir engelle ilgili tavsiye istemek
+    
+-   Önemli bir projeyle ilgili tüm paydaşlara e-posta ile güncelleme göndermek
+    
+-   Haftalık toplantıda ekibinize ilerleme raporu sunmak
+    
+-   Analiz sonuçlarını yönetim kurulu üyelerine sunmak
+    
+
+Her ortamda, nasıl iletişim kurduğunuzu, kitlenizin ihtiyaçlarını ve onlardan ne beklediğinizi dikkate almanız gerekir. İletişim becerilerinizi geliştirirken, ortamın gerçek iletişim kadar önemli olduğunu unutmayın.
+
+### Birebir ve Küçük Gruplarda Çalışmak
+
+Veri profesyoneli olarak en sık karşılaşacağınız ortamlardan biri birebir veya küçük grup toplantılarıdır. Bu ortamlarda iletişime hazırlanırken şunlara dikkat edin:
+
+-   Toplantıyı önceden planlayarak meslektaşlarınızın zamanına saygı göstermek
+    
+-   Aktif dinleme pratiği yaparak ilgi göstermek
+    
+-   Sorular sorarak uyumu kontrol etmek
+    
+
+## Zaman Yönetimi
+
+Profesyonel dünyada zaman çok değerlidir. Verimli olmak çok önemlidir; bu, iletişiminizin anlaşılır olmasını sağlayarak paydaşların mesajınızı hızlıca kavrayabilmesi demektir. Mesajınızın net ve öz olması için her zaman şunları uygulayın:
+
+-   Doğrudan bir dil kullanın
+    
+-   Gereksiz kelimeleri azaltın
+    
+-   Gereksiz detaylardan kaçının
+    
+-   Her zaman açıklık için çaba gösterin
+    
+-   Doğru dilbilgisi ve noktalama kullanın
+    
+-   Basit kelimeler tercih edin, teknik dil kullanmaktan kaçının
+    
+-   Karmaşık fikirleri daha kısa cümlelere bölerek anlaşılmasını ve akılda kalmasını kolaylaştırın
+    
+
+Bu öneriler sadece iletişiminizin daha anlaşılır ve etkili olmasını sağlamakla kalmaz, aynı zamanda önemli kavramları tekrar açıklama ihtiyacınızı azaltarak size zaman kazandırır. Ayrıca, meslektaşlarınızın zamanına saygı gösterdiğiniz için minnettar olacaklardır.
+
+## Aktif Dinleme
+
+Veri profesyoneli kariyerinize başlarken, toplantılar ve konuşmalar çok fazla yer tutar. Birçok paydaş, hem organizasyonunuz içinden hem de dışından farklı departmanlardan olabilir. Bu etkileşimlerde paylaşılan bilgiler çok değerlidir. Genellikle, işleyiş, hedefler, önemli kilometre taşları ve proje parametreleri hakkında fikir edinirsiniz.
+
+Aktif dinlediğinizde:
+
+-   Başkalarının anlayışına davet etmiş olursunuz
+    
+-   Başkalarına ve sorumluluklarına karşı empati geliştirirsiniz
+    
+-   Meslektaşlarınızla bağ kurarsınız
+    
+-   Güveni teşvik edersiniz
+    
+
+Aktif dinleme yaparken, konuşanın bakış açısını anlamaya çalışırsınız. Bu, diğer insanların ne anlatmak istediğini anlamanıza ve daha iyi, daha derinlemesine sorular sormanıza olanak sağlar.
+
+## Soru Sormak
+
+Veri profesyonelleri otomatik olarak çözümler geliştirmezler. Veri analizinin etkili olabilmesi için doğru soruları sormak gerekir. Aslında, tüm veri analiz süreci buna bağlıdır.
+
+Soru sormak güçlü bir iletişim aracıdır. Doğru sorular, kurumsal öğrenmeye ve verimli fikir alışverişine yol açabilir. Çoğu zaman sorular, yeniliği teşvik eder ve projelerin ve genel iş akışının iyileştirilmesine yardımcı olur.
+
+Soru sormak ekip üyeleri arasında bağ ve güven oluşturur. Doğru sorular, beklenmedik riskleri ve sorunları ortaya çıkararak iş risklerini azaltabilir. İşte soru sorma konusunda bazı öneriler:
+
+-   Daha önce cevaplanmamış soruları sorun
+    
+-   Daha büyük resmi ortaya çıkaran sorular sorun
+    
+-   Bilgi toplayan veya ekip bilgisini geliştiren sorular sorun
+    
+-   Yanlış anlamaları netleştiren sorular sorun
+    
+
+Etkili sorular, en iyi işinizi yapmanız için gereken yanıtları alma şansınızı artırır ki bu tüm ekip için iyidir.
+
+## Ana Noktalar
+
+Bu metinde, iletişimin veri profesyonellerinin tüm çalışmalarında var olduğunu öğrendiniz. Daha başarılı tartışmalar için iletişimin amacına, ortamına ve zamanlamasına odaklanın. Ayrıca, ilgili sorular soran aktif bir dinleyici olmak, iletişimi daha verimli kılar ve diğer paydaşların bakış açısını davet eder. Tüm bu faktörler, veri profesyoneli olarak ne kadar etkili iletişim kurduğunuzda büyük fark yaratır.
+
+# Proje Teklifi ile Hedefleri İletmek
+
+Bu okumada, veri çalışma alanındaki iletişimi incelemeye devam edeceksiniz. Öğrendiğiniz gibi, iletişim veri profesyonelinin tüm iş alanlarında önemli bir parçadır. Bir veri ekibinde, proje görevleri ve sorumlulukları farklı veri profesyonelleri arasında paylaşılır. Tüm ekip üyeleri ve paydaşlar arasında etkili iletişim ve iş birliği, herhangi bir veri projesinin başarısı için kritiktir.
+
+**Proje teklifi**, görevlerin takibini sağlamak için gereken yapı ve iletişimi sunabilir. Ayrıca, proje teklifleri, yüksek derecede esneklik gerektiren zorluklarla karşılaşan ekipler için faydalıdır. Projeler ilerledikçe beklentiler, kaynaklar veya hatta ekip üyeleri değişebilir. Bu, projenin genel iş akışını ve teslim tarihini etkileyebilecek ayarlamalar gerektirir.
+
+## Proje Teklifleri
+
+Bir proje teklifinin temel işlevi, hedefleri ve gereksinimleri özetlemektir. Proje teklifleri, genellikle **kilometre taşları** (milestones) olarak adlandırılan, daha ayrıntılı ve uygulanabilir bölümlerde fikirleri sunar. Teklifler genellikle ekip üyeleri ve diğer paydaşların girdileri ile oluşturulur. Ayrıca, proje teklifleri onay almak ve projenin tamamlanma yolunu bildirmek için müşteriler veya yöneticilerle de paylaşılabilir. Proje teklifleri birçok endüstri ve organizasyonda kullanılır. Tasarım ve düzeni değişebilse de, ortak bazı temel unsurlar her projede bulunur.
+
+### Proje Teklifinin Unsurları
+
+Her proje teklifi, işe başlamadan önce ekibin dikkate alması gereken önemli bilgiler içerir. Aşağıda, proje tekliflerinde sıkça bulunan bazı ortak bölümlerin kısa açıklamaları verilmiştir. Proje tekliflerinin formatı değişebileceğinden, burada açıklanan her bölüm her projede yer almayabilir.
+
+**Proje başlığı:** Projenin başlığı genellikle belgenin üst kısmına yakın, belirgin bir şekilde yer alır. Etkili başlıklar kısa ve amaç odaklıdır. Projeyi çevreleyen bağlam ve koşullara bağlı olarak başlık zamanla değişebilir.
+
+**Proje hedefi:** Hedef ifadesi, projenin neyi başarmaya çalıştığını bir ila üç cümle ile açıklar.
+
+**Kilometre taşları:** Kilometre taşları, proje içindeki görevlerin gruplandırılmasıdır; gereken işi daha küçük ve yönetilebilir hedeflere böler. Kilometre taşları, projelerde tamamlanması gereken işlerin dağıtımına ve zamanlamasına yardımcı olur.
+
+-   Verilen örnekteki kilometre taşları, gelecekteki dönem sonu projelerini temsil eder.
+    
+
+**Görevler:** Görevler, bir kilometre taşı içinde tamamlanması gereken işleri detaylandırır.
+
+-   Verilen örnekteki görevler, yaklaşan dönem sonu projelerindeki bazı çalışmalara paraleldir.
+    
+
+**Sonuçlar:** Sonuçlar, bir projenin devam etmesini sağlayan tamamlanmış eylemler veya çıktılardır.
+
+**Teslimatlar:** Teslimatlar, ekip üyeleri veya paydaşlarla paylaşılabilen öğelerdir. Bunlar, proje kapsamında gerçekleştirilen işlerin nihai ürünleridir.
+
+**Paydaşlar:** Projeye doğrudan dahil olan ve başarısına çıkarı olan bireyler veya gruplardır. Paydaşlardan gelen geri bildirimler, proje boyunca karar alma sürecine temel oluşturabilir.
+
+**Tahmini zaman:** Projenin başında, kilometre taşlarını tamamlamak için gereken zaman tahmin edilir. Proje geliştikçe, bu tahminler genellikle zaman çizelgesindeki ayarlamalar veya ekip değişiklikleri nedeniyle güncellenir.
+
+### Örnek Proje Teklifi
+
+Aşağıda bağlantısı verilen örnek proje teklifi, ABD Ulusal Park Hizmeti (NPS) tarafından yürütülen kurgusal bir ziyaretçi tahmin projesi hakkındadır. Aşağıdaki bölümleri incelerken bu belgeyi referans olarak kullanabilirsiniz.
+
+Bu proje teklifinin hedef kitlesi NPS veri ekibidir. Amaç, proje görevlerinin kapsamlı bir listesini toplamak ve bunları daha küçük, uygulanabilir gruplar veya kilometre taşlarına bölmektir. Proje teklifleri, proje yöneticilerinin görev takibi, zamanlama yapması ve kaynak tahsisi yapmasına yardımcı olur. Ayrıca ekip için referans görevi görür ve projeye yeni üyeler katıldığında değerli bir araç olarak kullanılır.
+
+Örnek proje teklifi aşağıda sunulmuştur;
+
+![image](./images/1002.png)
+
+
+
+
