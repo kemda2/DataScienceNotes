@@ -144,132 +144,295 @@ lu sayıda grup veya kategori içeren değişkenler.
 
 ## D
 
-Veri anonimleştirme (Data anonymization): Kişisel veya hassas bilgileri ortadan kaldırarak kişilerin gizliliğini koruma süreci.
+**Veri anonimleştirme (Data anonymization)**: Kişisel veya hassas bilgileri ortadan kaldırarak kişilerin gizliliğini koruma süreci.
 
-Veri temizleme (Data cleaning): Verileri biçimlendirme ve istenmeyen materyalleri kaldırma süreci.
+**Veri temizleme (Data cleaning)**: Verileri biçimlendirme ve istenmeyen materyalleri kaldırma süreci.
 
-Veri mühendisi (Data engineer): Verileri erişilebilir hale getiren, veri altyapısını yöneten ve veri ekosistemlerinin güvenilirliğini sağlayan veri uzmanı.
+**Veri mühendisi (Data engineer)**: Verileri erişilebilir hale getiren, veri altyapısını yöneten ve veri ekosistemlerinin güvenilirliğini sağlayan veri uzmanı.
 
-Veri etiği (Data ethics): Verilerin toplanması, paylaşılması ve kullanılmasına dair doğru ve yanlışları belirleyen etik standartlar.
+**Veri etiği (Data ethics)**: Verilerin toplanması, paylaşılması ve kullanılmasına dair doğru ve yanlışları belirleyen etik standartlar.
 
-Veri yönetişimi (Data governance): Bir şirketin veri varlıklarının resmi olarak yönetilmesini sağlayan süreç.
+**Veri yönetişimi (Data governance)**: Bir şirketin veri varlıklarının resmi olarak yönetilmesini sağlayan süreç.
 
-Veri profesyoneli (Data professional): Veriyle çalışan ya da veri becerilerine sahip birey.
+**Veri profesyoneli (Data professional)**: Veriyle çalışan ya da veri becerilerine sahip birey.
 
-Veri bilimi (Data science): Veriyi faydalı hale getirme disiplini.
+**Veri bilimi (Data science)**: Veriyi faydalı hale getirme disiplini.
 
-Veri bilimci (Data scientist): Mevcut iş süreçlerini iyileştirmeye yardımcı olacak anlamlı içgörüler sağlamak için analizle yakın çalışan veri uzmanı.
+**Veri bilimci (Data scientist)**: Mevcut iş süreçlerini iyileştirmeye yardımcı olacak anlamlı içgörüler sağlamak için analizle yakın çalışan veri uzmanı.
 
-Veri kaynağı (Data source): Verinin ortaya çıktığı konum.
+**Veri kaynağı (Data source)**: Verinin ortaya çıktığı konum.
 
-Veri sorumluluğu (Data stewardship): Verilerin erişilebilir, kullanılabilir ve güvenli olmasını sağlayan organizasyonel uygulamalar.
+**Veri sorumluluğu (Data stewardship)**: Verilerin erişilebilir, kullanılabilir ve güvenli olmasını sağlayan organizasyonel uygulamalar.
 
-Veri yapısı (Data structure): Farklı veri türleri içeren veri değerleri veya nesneler koleksiyonu.
+**Veri yapısı (Data structure)**: Farklı veri türleri içeren veri değerleri veya nesneler koleksiyonu.
 
-Veri türü (Data type): Bir verinin değerlerine, programlama diline veya gerçekleştirebildiği işlemlere göre tanımlanan özelliği.
+**Veri türü (Data type)**: Bir verinin değerlerine, programlama diline veya gerçekleştirebildiği işlemlere göre tanımlanan özelliği.
 
-DataFrame: Satır ve sütunlardan oluşan iki boyutlu, etiketlenmiş veri yapısı.
+**DataFrame**: Satır ve sütunlardan oluşan iki boyutlu, etiketlenmiş veri yapısı.
 
-Veri görselleştirme (Data visualization): Bilgiyi temsil eden grafik, tablo, diyagram ya da gösterge paneli.
+**Veri görselleştirme (Data visualization)**: Bilgiyi temsil eden grafik, tablo, diyagram ya da gösterge paneli.
 
-Veritabanı (Database - DB) dosyası: Verilerin genellikle tablolar, dizinler veya alanlar şeklinde saklandığı dosya türü.
+**Veritabanı (Database - DB) dosyası**: Verilerin genellikle tablolar, dizinler veya alanlar şeklinde saklandığı dosya türü.
 
-dataframe: Satır ve sütunlara göre organize edilmiş iki boyutlu veri yapısı.
+**dataframe**: Satır ve sütunlara göre organize edilmiş iki boyutlu veri yapısı.
 
-DBSCAN: “Gürültülü Uygulamalar için Yoğunluğa Dayalı Kümeleme” anlamına gelen, yüksek yoğunluklu bölgeleri bulmaya çalışan kümeleme yöntemi.
+**DBSCAN**: “Gürültülü Uygulamalar için Yoğunluğa Dayalı Kümeleme” anlamına gelen, yüksek yoğunluklu bölgeleri bulmaya çalışan kümeleme yöntemi.
 
-Hata ayıklama (Debugging): Bir programda ya da betikte hata arama süreci.
+**Hata ayıklama (Debugging)**: Bir programda ya da betikte hata arama süreci.
 
-Karar düğümü (Decision node): Kararların verildiği ağaç düğümü.
+**Karar düğümü (Decision node)**: Kararların verildiği ağaç düğümü.
 
-Karar ağacı (Decision tree): Olayların sonuçlarını ya da belirli sonuçların olasılıklarını tahmin etmek için dallanma yolları kullanan şematik yapı.
+**Karar ağacı (Decision tree)**: Olayların sonuçlarını ya da belirli sonuçların olasılıklarını tahmin etmek için dallanma yolları kullanan şematik yapı.
 
-Yinelenenleri kaldırma (Deduplication): Bir veri kümesinde yinelenen verileri ortadan kaldırma işlemi.
+**Yinelenenleri kaldırma (Deduplication)**: Bir veri kümesinde yinelenen verileri ortadan kaldırma işlemi.
 
-def: Bir fonksiyon bloğunun başında fonksiyonu tanımlamak için kullanılan anahtar kelime.
+**def**: Bir fonksiyon bloğunun başında fonksiyonu tanımlamak için kullanılan anahtar kelime.
 
-Bağımlı olaylar (Dependent events): Bir olayın gerçekleşmesinin diğerinin olasılığını değiştirdiği durumlar.
+**Bağımlı olaylar (Dependent events)**: Bir olayın gerçekleşmesinin diğerinin olasılığını değiştirdiği durumlar.
 
-Bağımlı değişken (Y): Bir modelin tahmin etmeye çalıştığı değişken.
+**Bağımlı değişken (Y)**: Bir modelin tahmin etmeye çalıştığı değişken.
 
-describe(): Ortalama, standart sapma, minimum ve maksimum gibi istatistiksel özetleri veren bir pandas fonksiyonu.
+**describe()**: Ortalama, standart sapma, minimum ve maksimum gibi istatistiksel özetleri veren bir pandas fonksiyonu.
 
-Tanımlayıcı istatistikler (Descriptive statistics): Bir veri kümesinin temel özelliklerini özetleyen istatistik türü.
+**Tanımlayıcı istatistikler (Descriptive statistics)**: Bir veri kümesinin temel özelliklerini özetleyen istatistik türü.
 
-dict(): Bir sözlük (dictionary) oluşturmak için kullanılan fonksiyon.
+**dict()**: Bir sözlük (dictionary) oluşturmak için kullanılan fonksiyon.
 
-Sözlük (Dictionary): Anahtar-değer çiftlerinden oluşan veri yapısı.
+**Sözlük (Dictionary)**: Anahtar-değer çiftlerinden oluşan veri yapısı.
 
-difference(): Bir kümede olan ama diğerinde olmayan öğeleri bulan fonksiyon.
+**difference()**: Bir kümede olan ama diğerinde olmayan öğeleri bulan fonksiyon.
 
-Boyutlar (Dimensions): Veriyi kategorize etmek ve gruplamak için kullanılan nitel veri değerleri.
+**Boyutlar (Dimensions)**: Veriyi kategorize etmek ve gruplamak için kullanılan nitel veri değerleri.
 
-Keşif (Discovering): Veri uzmanlarının, veriyi nasıl kullanacaklarını kavrayabilmek için veriyi tanıma süreci (EDA'nın altı uygulamasından biridir).
+**Keşif (Discovering)**: Veri uzmanlarının, veriyi nasıl kullanacaklarını kavrayabilmek için veriyi tanıma süreci (EDA'nın altı uygulamasından biridir).
 
-Ayrık özellikler (Discrete features): Herhangi iki değer arasında sayılabilir sayıda değere sahip özellikler.
+**Ayrık özellikler (Discrete features)**: Herhangi iki değer arasında sayılabilir sayıda değere sahip özellikler.
 
-Ayrık rastgele değişken (Discrete random variable): Sayılabilir sayıda olası değere sahip değişken.
+**Ayrık rastgele değişken (Discrete random variable)**: Sayılabilir sayıda olası değere sahip değişken.
 
-Ayrık (Discrete): Sonlu ve sayılabilir sayıda sonuca sahip olan matematiksel kavram.
+**Ayrık (Discrete)**: Sonlu ve sayılabilir sayıda sonuca sahip olan matematiksel kavram.
 
-distance_threshold: Birleştirici kümeleme modellerinde, kümelerin birleştirilmeyeceği mesafeyi belirleyen hiperparametre.
+**distance_threshold**: Birleştirici kümeleme modellerinde, kümelerin birleştirilmeyeceği mesafeyi belirleyen hiperparametre.
 
-Dokümantasyon (Documentation): Bir paketi geliştirenler tarafından yazılmış, çeşitli fonksiyonlar ve özellikler hakkında ayrıntılı bilgiler içeren kılavuz.
+**Dokümantasyon (Documentation)**: Bir paketi geliştirenler tarafından yazılmış, çeşitli fonksiyonlar ve özellikler hakkında ayrıntılı bilgiler içeren kılavuz.
 
-Dokümantasyon dizesi (Docstring): Bir yöntem veya fonksiyonun ne yaptığını açıklayan metin grubu.
+**Dokümantasyon dizesi (Docstring)**: Bir yöntem veya fonksiyonun ne yaptığını açıklayan metin grubu.
 
-Nokta gösterimi (Dot notation): Bir sınıf örneğine ait yöntem ve özniteliklere erişim biçimi.
+**Nokta gösterimi (Dot notation)**: Bir sınıf örneğine ait yöntem ve özniteliklere erişim biçimi.
 
-Alt örnekleme (Downsampling): Ağırlıklı sınıftan bazı gözlemleri kaldırarak bu sınıfın veri kümesindeki oranını azaltma süreci.
+**Alt örnekleme (Downsampling)**: Ağırlıklı sınıftan bazı gözlemleri kaldırarak bu sınıfın veri kümesindeki oranını azaltma süreci.
 
-Sahte değişkenler (Dummy variables): Bir şeyin varlığını ya da yokluğunu göstermek için 0 veya 1 değerine sahip değişkenler.
+**Sahte değişkenler (Dummy variables)**: Bir şeyin varlığını ya da yokluğunu göstermek için 0 veya 1 değerine sahip değişkenler.
 
-dtype: NumPy kütüphanesinde, bir dizideki verilerin veri türünü kontrol etmek için kullanılan özellik.
+**dtype**: NumPy kütüphanesinde, bir dizideki verilerin veri türünü kontrol etmek için kullanılan özellik.
 
-Dinamik tür tanımı (Dynamic typing): Değişkenlerin herhangi bir veri türündeki nesneye işaret edebilmesi.
+**Dinamik tür tanımı (Dynamic typing)**: Değişkenlerin herhangi bir veri türündeki nesneye işaret edebilmesi.
 
-Dinamik değer (Dynamic value): Kullanıcı girdisi, bir işlemin sonucu ya da bir fonksiyonun çıktısı olan değer.
+**Dinamik değer (Dynamic value)**: Kullanıcı girdisi, bir işlemin sonucu ya da bir fonksiyonun çıktısı olan değer.
 
 ## E
 
-Ekonometri (Econometrics): Ekonomik sorunları analiz etmek için istatistik kullanan ekonomi dalı.
+**Ekonometri (Econometrics)**: Ekonomik sorunları analiz etmek için istatistik kullanan ekonomi dalı.
 
-Uç birim bilişim (Edge computing): Hesaplama görevlerini merkezi olmayan, yakın işlemcilere dağıtan; hız ve dayanıklılık açısından avantajlı yöntem.
+**Uç birim bilişim (Edge computing)**: Hesaplama görevlerini merkezi olmayan, yakın işlemcilere dağıtan; hız ve dayanıklılık açısından avantajlı yöntem.
 
-elif: Önceki koşullar sağlanmadığında bir sonraki koşulu kontrol eden anahtar kelime.
+**elif**: Önceki koşullar sağlanmadığında bir sonraki koşulu kontrol eden anahtar kelime.
 
-else: Önceki koşullar yanlış olduğunda çalıştırılan kod bloğu.
+**else**: Önceki koşullar yanlış olduğunda çalıştırılan kod bloğu.
 
-Ampirik olasılık (Empirical probability): Deneysel veya tarihsel verilere dayanan olasılık türü.
+**Ampirik olasılık (Empirical probability)**: Deneysel veya tarihsel verilere dayanan olasılık türü.
 
-Ampirik kural (Empirical rule): Normal eğrinin üzerindeki değerlerin, ortalamaya olan uzaklığa göre düzenli bir şekilde dağıldığını belirten kavram.
+**Ampirik kural (Empirical rule)**: Normal eğrinin üzerindeki değerlerin, ortalamaya olan uzaklığa göre düzenli bir şekilde dağıldığını belirten kavram.
 
-Topluluk öğrenmesi (Ensemble learning): Birden fazla model oluşturulup tahminlerinin birleştirilmesi süreci.
+**Topluluk öğrenmesi (Ensemble learning)**: Birden fazla model oluşturulup tahminlerinin birleştirilmesi süreci.
 
-Toplulaştırma (Ensembling): (Topluluk öğrenmesine bakınız)
+**Toplulaştırma (Ensembling)**: (Topluluk öğrenmesine bakınız)
 
-enumerate(): Bir dizideki öğeleri ve indekslerini takip ederek yineleyen yerleşik fonksiyon.
+**enumerate()**: Bir dizideki öğeleri ve indekslerini takip ederek yineleyen yerleşik fonksiyon.
 
-eps (Epsilon): DBSCAN kümeleme modellerinde, herhangi bir noktadan itibaren arama alanının yarıçapını belirleyen hiperparametre.
+**eps (Epsilon)**: DBSCAN kümeleme modellerinde, herhangi bir noktadan itibaren arama alanının yarıçapını belirleyen hiperparametre.
 
-Hatalar (Errors): Regresyon modellerinde doğal olarak var olan, modelin açıklayamadığı varyans.
+**Hatalar (Errors)**: Regresyon modellerinde doğal olarak var olan, modelin açıklayamadığı varyans.
 
-Kaçış karakteri (Escape character): Ardından gelen karakterlerin normal davranışını değiştiren karakter.
+**Kaçış karakteri (Escape character)**: Ardından gelen karakterlerin normal davranışını değiştiren karakter.
 
-Uygulama aşaması (Execute stage): PACE sürecinde, veri uzmanının bulgularını paydaşlara sunduğu, soruları yanıtladığı ve önerilerde bulunduğu aşama.
+**Uygulama aşaması (Execute stage)**: PACE sürecinde, veri uzmanının bulgularını paydaşlara sunduğu, soruları yanıtladığı ve önerilerde bulunduğu aşama.
 
-Açıklayıcı değişken (Explanatory variable): (Bağımsız değişkene bakınız)
+**Açıklayıcı değişken (Explanatory variable)**: (Bağımsız değişkene bakınız)
 
-Açık tür dönüşümü (Explicit conversion): Bir nesnenin veri türünü istenen başka bir türle değiştirme işlemi.
+**Açık tür dönüşümü (Explicit conversion)**: Bir nesnenin veri türünü istenen başka bir türle değiştirme işlemi.
 
-Keşifsel veri analizi (Exploratory data analysis - EDA): Veri kümelerini araştırma, düzenleme, analiz etme ve özetleme süreci. Altı temel uygulaması: keşfetme, yapılandırma, temizleme, birleştirme, doğrulama ve sunmadır.
+**Keşifsel veri analizi (Exploratory data analysis - EDA)**: Veri kümelerini araştırma, düzenleme, analiz etme ve özetleme süreci. Altı temel uygulaması: keşfetme, yapılandırma, temizleme, birleştirme, doğrulama ve sunmadır.
 
-İfade (Expression): Değerlendirildiğinde sonuç üreten sayılar, semboller veya değişkenlerin kombinasyonu.
+**İfade (Expression)**: Değerlendirildiğinde sonuç üreten sayılar, semboller veya değişkenlerin kombinasyonu.
 
-Ekstra Kareler Toplamı F-testi (Extra Sum of Squares F-test): Azaltılmış bir modelin açıklayamadığı varyans ile tam modelin açıkladığı varyans arasındaki farkı ölçer.
+**Ekstra Kareler Toplamı F-testi (Extra Sum of Squares F-test)**: Azaltılmış bir modelin açıklayamadığı varyans ile tam modelin açıkladığı varyans arasındaki farkı ölçer.
 
-Çekme (Extracting): Verileri, veri kaynaklarından alarak daha ileri işleme için kullanma süreci.
+**Çekme (Extracting)**: Verileri, veri kaynaklarından alarak daha ileri işleme için kullanma süreci.
 
-Ekstrapolasyon (Extrapolation): Bir modelin, eğitim verisindeki değer aralığının dışındaki yeni değerleri tahmin edebilme yeteneği.
+**Ekstrapolasyon (Extrapolation)**: Bir modelin, eğitim verisindeki değer aralığının dışındaki yeni değerleri tahmin edebilme yeteneği.
+
+## F
+
+**Fail-safe**: Arızaya karşı dayanıklı sistem tasarımı.  
+**False positive (yanlış pozitif)**: Gerçek olmadığı halde pozitif sonuç veren durum.  
+**False negative (yanlış negatif)**: Pozitif olduğu halde negatif sonuç veren durum.  
+**Feature engineering**: Model başarısını artırmak için veri üzerinde değişiklik yaparak yeni özellikler üretme süreci.  
+**Feature selection**: Modelin karmaşıklığını azaltmak ve performansı artırmak için gereksiz özellikleri çıkarma süreci.  
+**Feedback loop**: Girdi ve çıktılar arasında sürekli geri besleme ile sistemin iyileştirilme süreci.  
+**Field**: Bir veritabanındaki sütun veya tablo alanı.  
+**File format**: Verinin saklanma biçimi (CSV, JSON, XML vb.).  
+**Filter**: Veriden belirli kriterlere göre alt küme seçme işlemi.  
+**Fit**: Bir modelin veriye göre ayarlandığı süreç.  
+**Fixed effects model**: Sabit etkiler modelindeki değişkenlerin zamanla değişmeyen etkileri gibi sabit kalıcı etkiler içeren model.  
+**Forecast**: Geleceğe yönelik tahmin yapma işlemi.  
+**Frame**: Jupyter gibi ortamda kullanılan çerçeve (genellikle DataFrame).  
+**Frequency**: Veri içinde belirli bir değerin tekrar edilme sayısı.
+
+## G
+
+**Gain chart**: Tahmin modelinin başarısını grafikle gösteren tür.  
+**Gantt chart**: Proje planlamada kullanılan zaman çizelgesi tablosu.  
+**Gaussian distribution**: Normal dağılımı ifade eden istatistik dağılım şekli.  
+**Geometric mean**: Ardışık sayıların çarpımının n’inci köküyle hesaplanan ortalama.  
+**Gini impurity**: Karar ağaçlarında bölünme kalitesini ölçen değer; safiyeti ölçer.  
+**Git**: Versiyon kontrolü için kullanılan dağıtık sistem.  
+**Grid search**: Model için en iyi hiperparametreleri bulmak için parametreleri sistematik tarama yöntemi.  
+**GroupBy**: Pandas kütüphanesinde veriyi gruplayıp üzerine fonksiyon uygulama yöntemi.
+
+## H
+
+**Hadoop**: Büyük veri işlemleri için kullanılan dağıtık depolama ve işleme platformu.  
+**Histogram**: Veri dağılımını görselleştiren çubuk grafik.  
+**Holistic analysis**: Veriyi genel bakış açısıyla bütünsel ele alma yöntemi.  
+**Homogeneous sample**: Benzer özelliklere sahip veri noktasından oluşan örneklem.  
+**Hybrid model**: Farklı model türlerini birleştirerek oluşan melez model.  
+**Hyperparameter**: Model eğitimi öncesinde ayarlanan, eğitim süreci dışındaki parametreler.  
+**Hypothesis testing**: İstatistiksel hipotezleri test etme süreci.  
+**Hessian matrix**: Çok değişkenli fonksiyonlarda ikinci mertebeden türevleri içeren matris.
+
+## I
+
+**Imputation:** Eksik verileri tahmin ederek doldurma işlemi.  
+**Independent variable (bağımsız değişken):** Sonucu etkileyen veya açıklayıcı değişken.  
+**Index:** Veri yapılarında elemanların konumunu belirten sayı veya anahtar.  
+**Inference:** Veriden çıkarım yapma, sonuç çıkarma süreci.  
+**Input layer:** Yapay sinir ağlarında ilk katman, verilerin alındığı katman.  
+**Instance:** Bir sınıfın (class) örneği, nesne.  
+**Interaction effect:** İki veya daha fazla değişkenin birlikte etkisinin sonucu değiştirmesi durumu.  
+**Interpolation:** Bilinen veri noktaları arasındaki değerleri tahmin etme işlemi.  
+**Iteration:** Döngü, işlemin tekrar edilmesi.
+
+## J
+
+**Jaccard similarity:** İki kümenin ortak elemanlarının oranını ölçen metrik.  
+**Join:** İki veya daha fazla veri tablosunu ortak anahtarlara göre birleştirme işlemi.  
+**JSON (JavaScript Object Notation):** Veri değişiminde kullanılan hafif ve okunabilir format.  
+**Jupyter Notebook:** Kod, grafik ve metni bir arada çalıştırmaya olanak veren interaktif ortam.
+
+## K
+
+**K-means clustering:** Veri noktalarını K adet küme merkezine atayarak kümelendirme yöntemi.  
+**Kernel:** Makine öğrenmesinde veri dönüşümlerinde kullanılan fonksiyon.  
+**K-fold cross-validation:** Veriyi K parçaya bölüp, her parçayı test seti olarak kullanarak model doğrulama yöntemi.  
+**Key-value pair:** Sözlük (dictionary) veri yapısında anahtar ve ona karşılık gelen değer çifti.  
+**K-Nearest Neighbors (KNN):** En yakın K komşuya bakarak sınıflandırma yapan algoritma.
+
+## L
+
+**Label encoding:** Kategorik verileri sayısal değerlere dönüştürme yöntemi.  
+**Lag:** Zaman serisi analizinde, verinin gecikmeli kopyası.  
+**Learning rate:** Makine öğrenmesinde modelin ağırlıklarını güncelleme hızı.  
+**Levenshtein distance:** İki metin arasındaki düzenleme mesafesi, yani birini diğerine dönüştürmek için gereken ekleme, silme veya değiştirme sayısı.  
+**Linear regression:** Bağımlı ve bağımsız değişkenler arasındaki doğrusal ilişkiyi modelleyen yöntem.  
+**Logistic regression:** İkili sınıflandırma için kullanılan, çıktı olasılıklarını tahmin eden regresyon modeli.  
+**Loss function:** Modelin tahmin hatasını ölçen fonksiyon.
+
+## M
+
+**Machine learning:** Veriden öğrenip tahmin yapan algoritmaların alanı.  
+**Mean:** Ortalama değer.  
+**Median:** Ortanca değer, sıralı veride tam ortadaki değer.  
+**Mode:** En çok tekrar eden değer.  
+**Model:** Veriye dayalı tahmin veya sınıflandırma yapan yapı.  
+**Multicollinearity:** Bağımsız değişkenler arasında yüksek korelasyon olması durumu.  
+**Multivariate:** Birden çok değişken içeren analiz.
+
+## N
+
+**Naive Bayes:** Basit varsayımlara dayanan olasılıksal sınıflandırma algoritması.  
+**Normalization:** Verileri belli bir aralığa dönüştürme işlemi.  
+**Null hypothesis (H0):** İstatistikte, değişiklik olmadığını veya varsayımın geçersiz olduğunu ifade eden hipotez.
+
+## O
+
+**Overfitting:** Modelin eğitim verisine aşırı uyum sağlayıp genel veride kötü performans göstermesi.  
+**Outlier:** Veri setindeki diğer verilere göre çok farklı olan veri noktası.  
+**Optimization:** Bir fonksiyonun en iyi (maksimum veya minimum) değerini bulma süreci.
+
+## R
+
+**Recall:** Doğru pozitiflerin, gerçek pozitiflere oranı.  
+**Random Forest:** Birden fazla karar ağacından oluşan topluluk öğrenme yöntemi.  
+**Regression:** Sürekli değişkenleri tahmin etmeye yönelik modelleme.  
+**Regularization:** Modelin aşırı öğrenmesini önlemek için kullanılan teknik.  
+**Reinforcement learning:** Ödül ve ceza mekanizmasıyla öğrenen algoritma türü.  
+**Residual:** Gerçek değer ile modelin tahmin değeri arasındaki fark.  
+**R² (R-squared):** Modelin açıklama gücünü ölçen istatistiksel metrik.
+
+## S
+
+**Sample:** Veri setinden seçilen alt küme.  
+**Sampling:** Veri örneklemesi yapma işlemi.  
+**Scaler:** Veriyi belli bir aralığa dönüştürme işlemi (normalizasyon gibi).  
+**Score:** Model performans ölçütü.  
+**Supervised learning:** Etiketli veriyle yapılan öğrenme türü.  
+**Support Vector Machine (SVM):** Sınıflandırma için kullanılan güçlü algoritma.
+
+## T
+
+**Tablo:** Veri organizasyonu için satır ve sütunlardan oluşan yapı.  
+**Target variable:** Modelin tahmin etmeye çalıştığı bağımlı değişken.  
+**TensorFlow:** Google tarafından geliştirilen açık kaynaklı makine öğrenimi kütüphanesi.  
+**Test set:** Model performansını değerlendirmek için kullanılan veri alt kümesi.  
+**Time series:** Zaman içinde ölçülen verilerin dizisi.  
+**Training set:** Modeli eğitmek için kullanılan veri alt kümesi.  
+**Transfer learning:** Önceden eğitilmiş modeli yeni bir görev için uyarlama yöntemi.
+
+## U
+
+**Unsupervised learning:** Etiketsiz veri üzerinde öğrenme yöntemi.  
+**Underfitting:** Modelin veriyi iyi öğrenememesi durumu.  
+**Univariate:** Tek değişkenli analiz veya veri.  
+**Utility function:** Karar verme sürecinde kullanılan fayda fonksiyonu.
+
+## V
+
+**Validation set:** Modelin ayarlarının test edildiği veri kümesi.  
+**Variance:** Veri ya da model tahminlerinin dağılım ölçüsü.  
+**Vector:** Çok boyutlu veri gösterimi.  
+**Visualization:** Veriyi görsel olarak sunma.  
+**Voting:** Ensemble modellerde farklı modellerin oy birliği yöntemiyle karar vermesi.
+
+## W
+
+**Weights:** Modelde değişkenlerin etkisini gösteren katsayılar.  
+**Windowing:** Zaman serisi verisini belirli pencere aralıklarına bölme.  
+**Workflow:** Veri analizinde adım adım süreçler dizisi.
+
+## X
+
+**XGBoost:** Yüksek performanslı, optimize edilmiş gradient boosting algoritması.  
+**X variable:** Modelde bağımsız değişken.
+
+## Y
+
+**Y variable:** Modelde bağımlı değişken.  
+**Yield:** Modelin veya yatırımın getiri oranı.
+
+## Z
+
+**Zero-padding:** Veri dizisinin boyutunu arttırmak için sıfır ekleme yöntemi.  
+**Z-score:** Verinin standart normal dağılım içerisindeki pozisyonu.
 
 
