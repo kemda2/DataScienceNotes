@@ -728,4 +728,156 @@ ___
 
 Google İleri Düzey Veri Analizi Sertifikası’na ait bu kurs sonu projesi, kurs boyunca öğrendiğiniz becerileri uygulamanız ve pekiştirmeniz için tasarlanmıştır. Her kursun sonunda bir proje tamamlayarak portföyünüzü zenginleştirebilir ve işverenlere yeteneklerinizi somut örneklerle gösterebilirsiniz.
 
+# **Kurs 1 Sonu Portföy Projesi Genel Bakışı: TikTok**
+
+## **Kurs 1 TikTok iş yeri senaryosunu keşfedin!**
+
+Bu kurs sonu projesi, sizin için özel olarak tasarlanmıştır. Veri analitiği becerilerinizi uygulama ve pekiştirme fırsatı sunar. Burada sağlanan materyaller, iş arkadaşlarınız, ekip üyeleri ve dış paydaşlarla yapacağınız görüşmelerde size rehberlik edecektir.
+
+![image](./images/1009.png)
+
+Bu okuma parçasında projeyi, rolünüzü ve sizden beklenenleri öğrenin.
+
+___
+
+## **TikTok Senaryosunun Arka Planı**
+
+TikTok’taki yeni rolünüze hoş geldiniz! Veri ekibimizin bir parçası olmanızdan büyük memnuniyet duyuyoruz.
+
+TikTok’un misyonu, yaratıcılığı teşvik etmek ve insanlara neşe getirmektir. Çalışanlarımız merakla liderlik eder ve kültürün hızında hareket eder. Düz organizasyon yapımız sayesinde, hızla büyüyen bir şirkette somut etki yaratma ve kariyerinizi geliştirme fırsatları elde edersiniz.
+
+TikTok kullanıcıları, videolarda ve yorumlarda kullanıcıya ait iddialar içeren içerikleri bildirebilir. Bu bildirimler, moderatörler tarafından incelenmesi gereken içerikleri tanımlar. Ancak bu süreç çok sayıda kullanıcı bildirimi oluşturur ve bunlara hızla yanıt vermek zor olabilir.
+
+TikTok, bir videonun bir iddia mı yoksa sadece bir görüş mü içerdiğini tahmin edebilecek bir model geliştirmeyi hedeflemektedir. Bu tahmin modeli başarılı olursa, kullanıcı bildirimleri daha etkin şekilde önceliklendirilerek iş yükü azaltılabilir.
+
+___
+
+### **Proje Arka Planı**
+
+TikTok’un veri ekibi, iddia sınıflandırma projesinin en erken aşamalarındadır. Veri analiz sürecine başlamadan önce aşağıdaki görevlerin tamamlanması gerekmektedir:
+
+-   Proje teklifi hazırlanması, içeriği:
+    
+    -   Proje görevlerini kilometre taşlarına göre organize etmek
+        
+    -   Görevleri PACE iş akışına göre sınıflandırmak
+        
+    -   İlgili paydaşları belirlemek
+        
+
+___
+
+### **Göreviniz**
+
+İlk göreviniz, yorum sınıflandırma projesindeki görevler için kilometre taşları oluşturacak bir **proje teklifi** hazırlamaktır. Proje çıktınızı planlarken hedef kitlenizi, ekibinizi, projenin amacını ve her görevin PACE aşamasını dikkate almayı unutmayın.
+
+___
+
+## **TikTok’taki Ekip Üyeleri**
+
+Yeni bir veri analisti olarak, deneyimli veri uzmanlarından oluşan yetenekli bir ekip ile yakın çalışacaksınız. Projeye göre, veri ekibi dışındaki TikTok çalışanlarıyla da iş birliği yapacaksınız.
+
+### **Veri Ekibi Rolleri**
+
+-   **Willow Jaffey** – Veri Bilimi Lideri
+    
+-   **Rosie Mae Bradshaw** – Veri Bilimi Müdürü
+    
+-   **Orion Rainier** – Veri Bilimcisi
+    
+
+### **Çapraz Fonksiyonlu Ekip Üyeleri**
+
+-   **Mary Joanna Rodgers** – Proje Yönetimi Sorumlusu
+    
+-   **Margery Adebowale** – Amerika Finans Lideri
+    
+-   **Maika Abadi** – Operasyon Lideri
+    
+
+> **Not:** _Bu projedeki tüm hikâyeler, isimler, karakterler ve olaylar hayal ürünüdür. Gerçek kişi veya olaylarla bir bağlantı kurulması amaçlanmamıştır. Kullanılan veriler eğitim amaçlı değiştirilmiştir._
+
+TikTok ekibinizde, operasyonlardan sorumlu çeşitli yöneticiler yer almaktadır. Bu nedenle, teknik olmayan bu kişilere yönelik iletişiminizi onların rolüne uygun olarak sade tutmanız önemlidir. Veri ekibindeki üyeler ise veri analizi ve veri bilimi konusunda uzmandır, bu yüzden bu kişilere gönderdiğiniz mesajların kısa ve doğrudan olması gerekir.
+
+___
+
+## **Toplantı Notları**
+
+Artık TikTok ekibine katıldığınıza göre, şirket ağına erişiminiz sağlandı ve şirket e-posta hesabınız oluşturuldu.
+
+Gelen kutunuzun en üstünde yöneticinizden bir e-posta görüyorsunuz:
+
+___
+
+**Kimden:** Rosie Mae Bradshaw  
+**Konu:** İlk görevin: Toplantı notlarını incele
+
+Eğer bu e-postayı okuyabiliyorsan, hesapların aktif demektir! Artık ilk görevinle başlamak için mükemmel bir zaman. Geçen hafta liderlik ekibimizle yeni başlayacağımız bir projeyle ilgili bir iç toplantı yaptım. Önümüzdeki günlerde daha fazla bilgi paylaşacağım ama şimdiden bazı önemli ihtiyaçlardan haberdar olmanı isterim. İşte toplantı sırasında aldığım notlardan bazıları. Yorumları yapan kişilere göre düzenledim:
+
+**Mary Joanna Rodgers – Proje Yönetimi Sorumlusu**
+
+-   Projenin teslimatları ve kilometre taşlarını belirten genel bir dokümana ihtiyacımız olacak.
+    
+-   TikTok yöneticileriyle paylaşmak üzere bazı görseller hazırlamamız gerekecek.
+    
+
+**Orion Rainier – Veri Bilimcisi**
+
+-   Bu projede çalışacağımız verileri iyi anlamamız gerekecek.
+    
+-   Veri setinde eksik veri olup olmadığını kontrol edecek birine ihtiyacımız olacak.
+    
+-   Veri analiz ekibi, TikTok verileri içinde hangi bilgilerin en yararlı olduğunu keşifsel veri analizi (EDA) ile belirlemeli.
+    
+-   Son aşamada istatistiksel testler yapmamız gerekecek.
+    
+
+**Willow Jaffey – Veri Bilimi Lideri**
+
+-   Bu projenin amacı, güvenilir bir makine öğrenimi modeli oluşturmak ve teslim etmektir.
+    
+-   Bu proje için hangi regresyon modelinin kullanılacağına karar verilmesi gerekiyor.
+    
+-   Model tamamlandığında, liderlik ekibine sunumda değinilecek ana noktaları bilmem gerekecek.
+    
+-   Veri seti için en uygun hipotez testi yöntemi belirlenmeli.
+    
+
+**Kendi düşüncelerim:**
+
+-   Bu proje için Python kullanmamız en uygunu olacaktır. Proje teklifi hazır olur olmaz kurulumu başlatacağım.
+    
+-   Geliştirilecek regresyon modellerinin varsayımlarının kontrol edilmesi gerektiğini düşünüyorum.
+    
+-   Projenin iş akışı veri ekibi tarafından belirlenecek ve kurulacak.
+    
+
+Yakında sana daha fazla bilgi gönderilecektir.
+
+**Takıma hoş geldin,**  
+Rosie Mae Bradshaw  
+Veri Bilimi Müdürü – TikTok
+
+_(Not: Cuma günü şirket sponsorluğundaki öğle yemeğini unutma! Yemekler her zaman harika oluyor. Bu, harika ekip arkadaşlarımızla tanışmak için iyi bir fırsat. Ekip olarak öğle saatlerinde lobide buluşuyoruz. Katılmanı bekliyoruz!)_
+
+___
+
+## **Belirli Proje Teslimatları**
+
+Bu kurs sonu projesi kapsamında, aşağıdaki çıktıları tamamlayarak hem yeni becerilerinizi uygulayacak hem de pratik kazanacaksınız:
+
+-   Hedef kitlenizi, ekip arkadaşlarınızı, önemli kilometre taşlarını ve genel proje hedefini dikkate alarak projenizi planlayacağınız **Kurs 1 PACE Strateji Belgesi**
+    
+-   Veri ekibi için bir **proje teklifi** hazırlamak
+    
+
+___
+
+## **Temel Noktalar**
+
+Google İleri Düzey Veri Analitiği Sertifikası’nın kurs sonu projeleri, öğrendiğiniz becerileri kurgusal bir iş yeri senaryosunda uygulamanız için tasarlanmıştır. Her projeyi tamamladığınızda, portföyünüzü zenginleştirecek ve gelecekteki işverenlere becerilerinizi gösterecek örnek çalışmalar elde edersiniz.
+
+
+
+
 
