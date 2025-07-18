@@ -274,165 +274,252 @@ lu sayıda grup veya kategori içeren değişkenler.
 
 ## F
 
-**Fail-safe**: Arızaya karşı dayanıklı sistem tasarımı.  
+**Fail-safe**: Arızaya karşı dayanıklı sistem tasarımı.
+
 **False positive (yanlış pozitif)**: Gerçek olmadığı halde pozitif sonuç veren durum.  
+
 **False negative (yanlış negatif)**: Pozitif olduğu halde negatif sonuç veren durum.  
+
 **Feature engineering**: Model başarısını artırmak için veri üzerinde değişiklik yaparak yeni özellikler üretme süreci.  
+
 **Feature selection**: Modelin karmaşıklığını azaltmak ve performansı artırmak için gereksiz özellikleri çıkarma süreci.  
+
 **Feedback loop**: Girdi ve çıktılar arasında sürekli geri besleme ile sistemin iyileştirilme süreci.  
+
 **Field**: Bir veritabanındaki sütun veya tablo alanı.  
+
 **File format**: Verinin saklanma biçimi (CSV, JSON, XML vb.).  
+
 **Filter**: Veriden belirli kriterlere göre alt küme seçme işlemi.  
+
 **Fit**: Bir modelin veriye göre ayarlandığı süreç.  
+
 **Fixed effects model**: Sabit etkiler modelindeki değişkenlerin zamanla değişmeyen etkileri gibi sabit kalıcı etkiler içeren model.  
+
 **Forecast**: Geleceğe yönelik tahmin yapma işlemi.  
+
 **Frame**: Jupyter gibi ortamda kullanılan çerçeve (genellikle DataFrame).  
+
 **Frequency**: Veri içinde belirli bir değerin tekrar edilme sayısı.
 
 ## G
 
 **Gain chart**: Tahmin modelinin başarısını grafikle gösteren tür.  
+
 **Gantt chart**: Proje planlamada kullanılan zaman çizelgesi tablosu.  
+
 **Gaussian distribution**: Normal dağılımı ifade eden istatistik dağılım şekli.  
+
 **Geometric mean**: Ardışık sayıların çarpımının n’inci köküyle hesaplanan ortalama.  
+
 **Gini impurity**: Karar ağaçlarında bölünme kalitesini ölçen değer; safiyeti ölçer.  
+
 **Git**: Versiyon kontrolü için kullanılan dağıtık sistem.  
+
 **Grid search**: Model için en iyi hiperparametreleri bulmak için parametreleri sistematik tarama yöntemi.  
+
 **GroupBy**: Pandas kütüphanesinde veriyi gruplayıp üzerine fonksiyon uygulama yöntemi.
 
 ## H
 
 **Hadoop**: Büyük veri işlemleri için kullanılan dağıtık depolama ve işleme platformu.  
+
 **Histogram**: Veri dağılımını görselleştiren çubuk grafik.  
+
 **Holistic analysis**: Veriyi genel bakış açısıyla bütünsel ele alma yöntemi.  
+
 **Homogeneous sample**: Benzer özelliklere sahip veri noktasından oluşan örneklem.  
+
 **Hybrid model**: Farklı model türlerini birleştirerek oluşan melez model.  
+
 **Hyperparameter**: Model eğitimi öncesinde ayarlanan, eğitim süreci dışındaki parametreler.  
+
 **Hypothesis testing**: İstatistiksel hipotezleri test etme süreci.  
+
 **Hessian matrix**: Çok değişkenli fonksiyonlarda ikinci mertebeden türevleri içeren matris.
 
 ## I
 
 **Imputation:** Eksik verileri tahmin ederek doldurma işlemi.  
+
 **Independent variable (bağımsız değişken):** Sonucu etkileyen veya açıklayıcı değişken.  
+
 **Index:** Veri yapılarında elemanların konumunu belirten sayı veya anahtar.  
+
 **Inference:** Veriden çıkarım yapma, sonuç çıkarma süreci.  
+
 **Input layer:** Yapay sinir ağlarında ilk katman, verilerin alındığı katman.  
+
 **Instance:** Bir sınıfın (class) örneği, nesne.  
+
 **Interaction effect:** İki veya daha fazla değişkenin birlikte etkisinin sonucu değiştirmesi durumu.  
+
 **Interpolation:** Bilinen veri noktaları arasındaki değerleri tahmin etme işlemi.  
+
 **Iteration:** Döngü, işlemin tekrar edilmesi.
 
 ## J
 
 **Jaccard similarity:** İki kümenin ortak elemanlarının oranını ölçen metrik.  
+
 **Join:** İki veya daha fazla veri tablosunu ortak anahtarlara göre birleştirme işlemi.  
+
 **JSON (JavaScript Object Notation):** Veri değişiminde kullanılan hafif ve okunabilir format.  
+
 **Jupyter Notebook:** Kod, grafik ve metni bir arada çalıştırmaya olanak veren interaktif ortam.
 
 ## K
 
 **K-means clustering:** Veri noktalarını K adet küme merkezine atayarak kümelendirme yöntemi.  
+
 **Kernel:** Makine öğrenmesinde veri dönüşümlerinde kullanılan fonksiyon.  
+
 **K-fold cross-validation:** Veriyi K parçaya bölüp, her parçayı test seti olarak kullanarak model doğrulama yöntemi.  
+
 **Key-value pair:** Sözlük (dictionary) veri yapısında anahtar ve ona karşılık gelen değer çifti.  
+
 **K-Nearest Neighbors (KNN):** En yakın K komşuya bakarak sınıflandırma yapan algoritma.
 
 ## L
 
 **Label encoding:** Kategorik verileri sayısal değerlere dönüştürme yöntemi.  
+
 **Lag:** Zaman serisi analizinde, verinin gecikmeli kopyası.  
+
 **Learning rate:** Makine öğrenmesinde modelin ağırlıklarını güncelleme hızı.  
+
 **Levenshtein distance:** İki metin arasındaki düzenleme mesafesi, yani birini diğerine dönüştürmek için gereken ekleme, silme veya değiştirme sayısı.  
+
 **Linear regression:** Bağımlı ve bağımsız değişkenler arasındaki doğrusal ilişkiyi modelleyen yöntem.  
+
 **Logistic regression:** İkili sınıflandırma için kullanılan, çıktı olasılıklarını tahmin eden regresyon modeli.  
+
 **Loss function:** Modelin tahmin hatasını ölçen fonksiyon.
 
 ## M
 
 **Machine learning:** Veriden öğrenip tahmin yapan algoritmaların alanı.  
+
 **Mean:** Ortalama değer.  
+
 **Median:** Ortanca değer, sıralı veride tam ortadaki değer.  
+
 **Mode:** En çok tekrar eden değer.  
+
 **Model:** Veriye dayalı tahmin veya sınıflandırma yapan yapı.  
+
 **Multicollinearity:** Bağımsız değişkenler arasında yüksek korelasyon olması durumu.  
+
 **Multivariate:** Birden çok değişken içeren analiz.
 
 ## N
 
 **Naive Bayes:** Basit varsayımlara dayanan olasılıksal sınıflandırma algoritması.  
+
 **Normalization:** Verileri belli bir aralığa dönüştürme işlemi.  
+
 **Null hypothesis (H0):** İstatistikte, değişiklik olmadığını veya varsayımın geçersiz olduğunu ifade eden hipotez.
 
 ## O
 
 **Overfitting:** Modelin eğitim verisine aşırı uyum sağlayıp genel veride kötü performans göstermesi.  
+
 **Outlier:** Veri setindeki diğer verilere göre çok farklı olan veri noktası.  
+
 **Optimization:** Bir fonksiyonun en iyi (maksimum veya minimum) değerini bulma süreci.
 
 ## R
 
 **Recall:** Doğru pozitiflerin, gerçek pozitiflere oranı.  
+
 **Random Forest:** Birden fazla karar ağacından oluşan topluluk öğrenme yöntemi.  
+
 **Regression:** Sürekli değişkenleri tahmin etmeye yönelik modelleme.  
+
 **Regularization:** Modelin aşırı öğrenmesini önlemek için kullanılan teknik.  
+
 **Reinforcement learning:** Ödül ve ceza mekanizmasıyla öğrenen algoritma türü.  
+
 **Residual:** Gerçek değer ile modelin tahmin değeri arasındaki fark.  
+
 **R² (R-squared):** Modelin açıklama gücünü ölçen istatistiksel metrik.
 
 ## S
 
 **Sample:** Veri setinden seçilen alt küme.  
+
 **Sampling:** Veri örneklemesi yapma işlemi.  
+
 **Scaler:** Veriyi belli bir aralığa dönüştürme işlemi (normalizasyon gibi).  
+
 **Score:** Model performans ölçütü.  
+
 **Supervised learning:** Etiketli veriyle yapılan öğrenme türü.  
+
 **Support Vector Machine (SVM):** Sınıflandırma için kullanılan güçlü algoritma.
 
 ## T
 
 **Tablo:** Veri organizasyonu için satır ve sütunlardan oluşan yapı.  
+
 **Target variable:** Modelin tahmin etmeye çalıştığı bağımlı değişken.  
+
 **TensorFlow:** Google tarafından geliştirilen açık kaynaklı makine öğrenimi kütüphanesi.  
+
 **Test set:** Model performansını değerlendirmek için kullanılan veri alt kümesi.  
+
 **Time series:** Zaman içinde ölçülen verilerin dizisi.  
+
 **Training set:** Modeli eğitmek için kullanılan veri alt kümesi.  
+
 **Transfer learning:** Önceden eğitilmiş modeli yeni bir görev için uyarlama yöntemi.
 
 ## U
 
 **Unsupervised learning:** Etiketsiz veri üzerinde öğrenme yöntemi.  
+
 **Underfitting:** Modelin veriyi iyi öğrenememesi durumu.  
+
 **Univariate:** Tek değişkenli analiz veya veri.  
+
 **Utility function:** Karar verme sürecinde kullanılan fayda fonksiyonu.
 
 ## V
 
-**Validation set:** Modelin ayarlarının test edildiği veri kümesi.  
+**Validation set:** Modelin ayarlarının test edildiği veri kümesi. 
+
 **Variance:** Veri ya da model tahminlerinin dağılım ölçüsü.  
+
 **Vector:** Çok boyutlu veri gösterimi.  
+
 **Visualization:** Veriyi görsel olarak sunma.  
+
 **Voting:** Ensemble modellerde farklı modellerin oy birliği yöntemiyle karar vermesi.
 
 ## W
 
 **Weights:** Modelde değişkenlerin etkisini gösteren katsayılar.  
-**Windowing:** Zaman serisi verisini belirli pencere aralıklarına bölme.  
+
+**Windowing:** Zaman serisi verisini belirli pencere aralıklarına bölme. 
+
 **Workflow:** Veri analizinde adım adım süreçler dizisi.
 
 ## X
 
 **XGBoost:** Yüksek performanslı, optimize edilmiş gradient boosting algoritması.  
+
 **X variable:** Modelde bağımsız değişken.
 
 ## Y
 
 **Y variable:** Modelde bağımlı değişken.  
+
 **Yield:** Modelin veya yatırımın getiri oranı.
 
 ## Z
 
 **Zero-padding:** Veri dizisinin boyutunu arttırmak için sıfır ekleme yöntemi.  
+
 **Z-score:** Verinin standart normal dağılım içerisindeki pozisyonu.
 
 
