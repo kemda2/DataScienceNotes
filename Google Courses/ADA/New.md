@@ -877,7 +877,167 @@ ___
 
 Google İleri Düzey Veri Analitiği Sertifikası’nın kurs sonu projeleri, öğrendiğiniz becerileri kurgusal bir iş yeri senaryosunda uygulamanız için tasarlanmıştır. Her projeyi tamamladığınızda, portföyünüzü zenginleştirecek ve gelecekteki işverenlere becerilerinizi gösterecek örnek çalışmalar elde edersiniz.
 
+# **Kurs 1 Sonu Portföy Projesi Genel Bakışı: Waze**
 
+## **Kurs 1 Waze işyeri senaryosunu keşfedin!**
+
+Kurs 1’in sonundaki proje, veri projelerini planlama ve bir proje teklifi oluşturma becerinize odaklanır. Bu kurs sonu projeleri, sizin için özel olarak tasarlanmıştır ve veri analitiği becerilerinizi uygulama ve geliştirme fırsatı sunar. Burada sunulan materyaller; iş arkadaşlarınız, iç ekip üyeleri ve dış paydaşlarla yapacağınız görüşmelerde size rehberlik edecektir.
+
+![image](./images/1010.png)
+
+Bu yazıda, projeyi, rolünüzü ve sizden beklenenleri daha ayrıntılı öğrenin.
+
+___
+
+## **Waze Senaryosunun Arka Planı**
+
+Waze’deki yeni rolünüze hoş geldiniz! Veri ekibimizin bir parçası olduğunuz için çok mutluyuz.
+
+Waze’in ücretsiz navigasyon uygulaması, dünya genelinde sürücülerin gitmek istedikleri yere daha kolay ulaşmalarını sağlar. Harita düzenleyiciler, beta test kullanıcıları, çevirmenler, iş ortakları ve kullanıcı topluluğu sayesinde her sürüş daha güvenli ve verimli hale gelir. Waze; şehirler, ulaşım otoriteleri, yayıncılar, işletmeler ve acil durum ekipleri ile iş birliği yaparak insanların daha güvenli ve etkili bir şekilde seyahat etmelerine yardımcı olur.
+
+Verileri analiz etmek, içgörüler üretmek ve liderliğin doğru kararlar almasını sağlamak amacıyla Waze ekibinizle birlikte çalışacaksınız. Ekibiniz, **Waze uygulamasındaki kullanıcı kaybını (churn) önlemeye yönelik yeni bir projeye** başlamak üzere. "Churn", kullanıcıların uygulamayı silmeleri veya kullanmayı bırakmaları anlamına gelir. Bu proje, aylık kullanıcı kaybına odaklanır. Rolünüzde, kullanıcı verilerini analiz edecek ve churn tahmini yapan bir makine öğrenimi modeli geliştireceksiniz.
+
+Bu proje, Waze’in büyüme hedeflerine yönelik daha büyük bir girişimin parçasıdır. Yüksek kullanıcı sadakati (retention), uygulamadan memnun olan kullanıcıların tekrar tekrar kullandığını gösterir. Churn tahmin modeli, kullanıcı kaybını önlemeye, kullanıcı tutumunu artırmaya ve Waze’in işini büyütmeye yardımcı olacaktır. Başarılı bir model ayrıca churn’a neden olan faktörleri belirleyerek şu sorulara yanıt verebilir:
+
+-   Hangi kullanıcılar churn etme olasılığı en yüksek?
+    
+-   Kullanıcılar neden churn ediyor?
+    
+-   Kullanıcılar ne zaman churn ediyor?
+    
+
+Örneğin, Waze yüksek churn riski olan bir kullanıcı segmentini belirleyebilirse, bu kullanıcıları özel teklifler aracılığıyla elde tutmak için proaktif adımlar atabilir. Aksi takdirde, bu kullanıcıları neden kaybettiğini bile anlamadan yitirebilir.
+
+Elde edeceğiniz içgörüler, Waze liderliğinin kullanıcı tutum stratejisini optimize etmesine, kullanıcı deneyimini geliştirmesine ve ürün geliştirmeyle ilgili veri odaklı kararlar almasına yardımcı olacaktır.
+
+___
+
+### **Proje Arka Planı**
+
+Waze’in veri ekibi churn projesinin henüz en erken aşamalarındadır. Veri analiz sürecine başlamadan önce aşağıdaki görevlerin tamamlanması gerekmektedir:
+
+-   Aşağıdakileri tanımlayan bir proje teklifi:
+    
+    -   Proje görevlerini kilometre taşlarına göre organize etmek
+        
+    -   Görevleri PACE iş akışına göre sınıflandırmak
+        
+    -   İlgili paydaşları belirlemek
+        
+
+___
+
+### **Göreviniz**
+
+İlk göreviniz, bu projedeki görevler için kilometre taşları oluşturacak bir **proje teklifi** hazırlamaktır. Hedef kitlenizi, ekibinizi, proje hedefini ve her görevin PACE aşamasını dikkate alarak proje çıktınızı planlamayı unutmayın.
+
+> **Not:** _Bu projede kullanılan veri seti eğitim amaçlı oluşturulmuş olup Waze’in gerçek verilerini temsil etmez._
+
+___
+
+## **Waze’deki Ekip Üyeleri**
+
+Yeni bir veri analisti olarak, deneyimli veri uzmanlarından oluşan yetenekli bir ekip ile yakın çalışacaksınız. Ayrıca, proje gerekliliklerine göre Waze’in veri dışındaki çalışanlarıyla da iş birliği yapacaksınız.
+
+### **Veri Ekibi Rolleri**
+
+-   **Harriet Hadzic** – Veri Analizi Direktörü
+    
+-   **May Santner** – Veri Analizi Müdürü
+    
+-   **Chidi Ga** – Kıdemli Veri Analisti
+    
+-   **Sylvester Esperanza** – Kıdemli Proje Yöneticisi
+    
+
+### **Senaryodaki Diğer Roller**
+
+-   **Emrick Larson** – Finans ve İdari İşler Departman Başkanı
+    
+-   **Ursula Sayo** – Operasyon Müdürü
+    
+
+> **Not:** _Bu projedeki tüm hikâyeler, isimler, karakterler ve olaylar hayal ürünüdür. Gerçek kişi veya olaylarla bir bağlantı kurulması amaçlanmamıştır. Kullanılan veriler eğitim amaçlı değiştirilmiştir._
+
+Veri ekibi üyeleri, veri analizi konusunda teknik uzmanlığa sahiptir ve istatistik ile makine öğrenimi terimlerine aşinadır. Onlarla etkili iletişim kurmak için mesajlarınızın net, öz ve odaklı olması önemlidir.
+
+Veri dışındaki ekip üyeleri, teknik bilgiye sahip olmayabilir. Bu nedenle, onlarla iletişim kurarken dili sadeleştirin ve teknik terimleri gerektiğinde açıklayın.
+
+___
+
+## **Toplantı Notları**
+
+Oryantasyon sürecinden sonra şirket ağına erişiminiz sağlanır ve size bir şirket e-posta hesabı (adınızın ilk harfi ve soyadınız @waze) verilir.
+
+Gelen kutunuzu açtığınızda, yöneticiniz May Santner’dan bir e-posta görürsünüz:
+
+___
+
+**Kimden:** “May Santner” May@waze.com  
+**Konu:** İlk görevin: Toplantı notlarını gözden geçir
+
+Bu mesajı okuyorsan, demek ki şirket hesapların oluşturulmuş! Başlamak için harika bir zaman. Geçen hafta, liderlik ekibimizle yeni bir proje hakkında iç toplantı yaptım. Önümüzdeki günlerde daha fazla bilgi alacaksın ama şimdiden bazı önemli noktaları bilmeni isterim. İşte toplantı notlarından alıntılar. Yorumu yapan kişilere göre sıraladım:
+
+___
+
+**Sylvester Esperanza – Kıdemli Proje Yöneticisi**
+
+-   Projenin hedeflerini ve kilometre taşlarını içeren global düzeyde bir proje dokümanına ihtiyacımız var.
+    
+-   Waze yöneticileriyle paylaşmak için bazı görseller hazırlamamız gerekiyor.
+    
+
+**Chidi Ga – Kıdemli Veri Analisti**
+
+-   Herhangi bir analiz yapılmadan önce veri seti gözden geçirilmeli.
+    
+-   Keşifsel veri analizi (EDA) ile veriye dair daha fazla bilgi edinmeliyiz.
+    
+-   Sonuçta, oluşturduğumuz modelin tutarlı sonuçlar verip vermediğini test etmemiz gerekecek.
+    
+
+**Harriet Hadzic – Veri Analizi Direktörü**
+
+-   Herhangi bir içgörü paylaşmadan önce modelimizin proje gereksinimlerini karşılayıp karşılamadığını değerlendirmemiz gerekecek.
+    
+-   Model tamamlandığında, liderlik ekibine yapılacak sunumda üzerinde durulacak ana başlıkları bilmem gerekecek.
+    
+
+**Kendi düşüncelerim...**
+
+-   Bu proje için Python kullanmak en iyisi olacaktır. Proje teklifi hazırlandığında, kurulum sürecini başlatacağım.
+    
+-   Veri setindeki ana değişkenler arasındaki ilişkiyi belirlemek önemli. Veri ekibinin hipotez testi yöntemlerini düşünmesini öneririm.
+    
+
+___
+
+Yukarıdaki toplantı notlarını ve önerilen görevleri gözden geçirerek projenin bağlamını kavrayın. Sizden proje görevlerini tanımlamanız ve veri ekibini bu projede yönlendirecek bir yapı oluşturmanız istenecek. Google sertifika programındaki deneyimlerinizi konuştuğumuzdan beri, iletişim tarzınızın ve güçlü problem çözme becerilerinizin ekibimize katkı sağlayacağından eminim.
+
+Yakında daha fazla ayrıntı paylaşacağım.
+
+**Takıma hoş geldin,**  
+**May Santner**  
+Veri Analizi Müdürü – Waze
+
+_(Not: “Veri Yıldızları” tartışma grubunu unutma. Bu Cuma saat 15:00’te buluşuyoruz. Her ay, ekip olarak ilham verici bir tarihsel figürü tartışıyoruz. Bu ayın konusu Ada Lovelace – genellikle dünyanın ilk bilgisayar programcısı olarak anılır. Yeni ekip arkadaşlarını tanımak ve istersen Waze kafedeki muhteşem kahveyi denemek için de harika bir fırsat. Katılmanı çok isteriz!)_
+
+___
+
+## **Belirli Proje Teslimatları**
+
+Bu kurs sonu projesiyle aşağıdaki çıktıları tamamlayarak yeni becerilerinizi uygulama ve geliştirme fırsatı bulacaksınız:
+
+-   Hedef kitlenizi, ekip üyelerinizi, önemli kilometre taşlarını ve genel proje hedefini göz önünde bulundurarak projenizi planlayacağınız **Kurs 1 PACE Strateji Belgesi**
+    
+-   Veri ekibi için bir **proje teklifi** oluşturmak
+    
+
+___
+
+## **Temel Noktalar**
+
+Google İleri Düzey Veri Analitiği Sertifikası’nın kurs sonu projeleri, öğrendiğiniz becerileri kurgusal bir işyeri senaryosunda uygulamanız için tasarlanmıştır. Her kursun sonunda bu projeleri tamamladığınızda, portföyünüzü zenginleştirecek ve gelecekteki işverenlere becerilerinizi sergileyecek örnek çalışmalar elde edersiniz.
 
 
 
