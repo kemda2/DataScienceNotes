@@ -1,4 +1,4 @@
-# Kurs 1
+# 1. Veri Biliminin Temelleri
 
 # PACE Aşamaları
 
@@ -1039,5 +1039,6 @@ ___
 
 Google İleri Düzey Veri Analitiği Sertifikası’nın kurs sonu projeleri, öğrendiğiniz becerileri kurgusal bir işyeri senaryosunda uygulamanız için tasarlanmıştır. Her kursun sonunda bu projeleri tamamladığınızda, portföyünüzü zenginleştirecek ve gelecekteki işverenlere becerilerinizi sergileyecek örnek çalışmalar elde edersiniz.
 
+# 2. Python ile Başlayın
 
 
