@@ -583,6 +583,149 @@ Kurs sonu portföy projeleri, veri analiz becerilerinizi iş yeri senaryolarınd
 
 Hatırlatma olarak, her kurs için en az bir proje tamamlamanız gerekmektedir. Ek pratik yapmak veya portföyünüze daha fazla örnek eklemek isterseniz, istediğiniz kadar senaryo projesi tamamlayabilirsiniz.
 
+# **Kurs 1 Sonu Portföy Projesi Genel Bakışı: Automatidata**
 
+## **Kurs 1 Automatidata iş yeri senaryosunu keşfedin!**
+
+Kurs 1’in son projesi, veri projelerini planlama ve bir proje teklifi hazırlama becerinize odaklanır. Bu kurs sonu projeleri, veri analiz becerilerinizi uygulamanız ve geliştirmeniz için tasarlanmıştır. Burada sunulan materyaller, iş arkadaşlarınız, ekip üyeleri ve dış paydaşlarla yapacağınız görüşmelerde size rehberlik edecektir.
+
+![image](./images/1008.png)
+
+Bu okuma parçasında proje, rolünüz ve sizden beklenenler hakkında daha fazla bilgi edineceksiniz.
+
+___
+
+## **Automatidata Senaryosu Hakkında Arka Plan Bilgisi**
+
+Tebrikler! Automatidata adındaki veri danışmanlık firmasında veri analisti olarak yeni bir işe başladınız. Automatidata, müşterilerinin kullanılmayan veya depolanmış verilerini; performans panoları, müşteri odaklı araçlar, stratejik iş içgörüleri gibi faydalı çözümlere dönüştürmelerine yardımcı olur. Firma, müşterilerin iş ihtiyaçlarını belirlemede ve bu ihtiyaçlara uygun veri çözümleri üretmede uzmandır.
+
+Automatidata, New York City Taksi ve Limuzin Komisyonu (TLC) için danışmanlık yapmaktadır. TLC, New York’taki taksiler ve kiralık araçların lisanslanması ve düzenlenmesinden sorumlu bir kamu kuruluşudur. TLC, Automatidata ile iş birliği yaparak, sürüş öncesi taksi ücretlerini tahmin etmeye yardımcı olacak bir regresyon modeli geliştirmek istemektedir.
+
+TLC verileri, günde yaklaşık bir milyon yolculuk gerçekleştiren 200.000'den fazla lisanslı sürücüden toplanmaktadır.
+
+> **Not:** _Bu projede kullanılan veri seti eğitim amaçlı oluşturulmuştur ve gerçek NYC taksi yolcu davranışlarını yansıtmayabilir._
+
+___
+
+### **Proje Arka Planı**
+
+Automatidata, TLC projesinin en erken aşamalarındadır. Veri analiz sürecine başlamadan önce aşağıdaki adımların tamamlanması gerekir:
+
+-   Proje teklifi hazırlanması, içeriği:
+    
+    -   Proje görevlerinin kilometre taşlarına göre organize edilmesi
+        
+    -   Görevlerin PACE iş akışına göre sınıflandırılması
+        
+    -   İlgili paydaşların belirlenmesi
+        
+
+___
+
+### **Göreviniz**
+
+İlk göreviniz, TLC projesindeki görevleri içeren ve bunları kilometre taşlarına ayıran bir proje teklifini hazırlamaktır. Proje çıktınızı planlarken hedef kitlenizi, takımınızı, proje amacını ve her bir görevin PACE aşamalarını dikkate almayı unutmayın.
+
+___
+
+## **Automatidata ve New York City TLC Takım Üyeleri**
+
+### **Automatidata Takımı**
+
+-   **Udo Bankole** – Veri Analizi Direktörü
+    
+-   **Deshawn Washington** – Veri Analizi Müdürü
+    
+-   **Luana Rodriquez** – Kıdemli Veri Analisti
+    
+-   **Uli King** – Kıdemli Proje Yöneticisi
+    
+
+Bu ekip teknik olarak veri analizi ve veri bilimi konusunda deneyimlidir. Ancak, mesajlarınızı ve özetlerinizi net ve doğrudan tutmanız beklenir.
+
+### **New York City TLC Takımı**
+
+-   **Juliana Soto** – Maliye ve İdari İşler Müdürü
+    
+-   **Titus Nelson** – Operasyon Müdürü
+    
+
+> **Not:** _Bu proje kurgusaldır. Tüm isimler, karakterler ve olaylar hayal ürünüdür. Gerçek kişi ya da olaylarla herhangi bir ilişki kurulması amaçlanmamıştır. Projede kullanılan veriler eğitim amaçlı düzenlenmiştir._
+
+TLC takım üyeleri teknik uzmanlığa sahip değildir. Bu nedenle, onlarla iletişim kurarken teknik terimleri sadeleştirmeniz önerilir.
+
+___
+
+## **Toplantı Notları**
+
+Artık Automatidata’daki yeni veri analisti olarak, şirket ağına erişiminiz var ve ilk harf.adınız@automatidata.org şeklinde bir e-posta hesabınız oluşturulmuş durumda.
+
+Gelen kutunuzu açtığınızda, yöneticiniz Deshawn’dan gelen bir e-posta görüyorsunuz:
+
+___
+
+**Kimden:** Deshawn Washington  
+**Konu:** Toplantı notlarını gözden geçir
+
+Eğer bunu okuyabiliyorsan, artık hesapların aktif demektir! Başlamak için harika bir zaman.
+
+Geçen hafta liderlik ekibimizle yeni bir proje hakkında dahili bir toplantı yaptım. Önümüzdeki günlerde sana daha fazla bilgi ileteceğim, ama şimdiden liderlik ekibinin belirlediği bazı ihtiyaçları bilmeni isterim. İşte toplantıdan aldığım notların bir özeti. Noktaları, konuşan kişiye göre sıraladım:
+
+**Uli King (Kıdemli Proje Yöneticisi)**
+
+-   Veri ekibinin, hedefleri ve kilometre taşlarını özetleyen genel bir proje dökümanına ihtiyacı var.
+    
+-   NYC Taksi ve Limuzin Komisyonu’ndan Titus Nelson ile yakın çalışıyorum. TLC yöneticileriyle paylaşılmak üzere bazı görseller talep etti.
+    
+
+**Luana Rodriquez (Kıdemli Veri Analisti)**
+
+-   TLC’den gelen veri seti, analizden önce incelenmeli.
+    
+-   Takım olarak verinin bize ne anlattığını anlamak için keşifsel veri analizine (EDA) ihtiyaç var.
+    
+-   Son aşamada, modelin tutarlı sonuçlar verip vermediğini test etmemiz gerekecek.
+    
+
+**Udo Bankole (Veri Analizi Direktörü)**
+
+-   TLC’ye herhangi bir içgörü sunmadan önce, ürettiğimiz modelin proje gereksinimlerini karşılayıp karşılamadığını belirlemeliyiz.
+    
+-   Model tamamlandığında, TLC sunumunda ele alınacak ana başlıkları bilmem gerekiyor.
+    
+
+**Kendi düşüncelerim:**
+
+-   TLC projesi için Python kullanmanın en iyisi olacağını düşünüyorum. Plan hazır olur olmaz bunu kurmaları için ekibime bilgi vereceğim.
+    
+-   TLC verisindeki değişkenler arası ilişkiyi belirlemek çok önemli. İki önemli değişken arasındaki ilişkiyi analiz etmek ve gelecekteki kararları desteklemek için A/B testini öneriyorum.
+    
+
+Yukarıdaki notları inceleyerek proje bağlamına aşina ol. Senden, proje görevlerini belirlemeni ve veri ekibini yönlendirecek bir yapı oluşturmanı isteyeceğim. Google tarafından sunulan bu sertifika programındaki deneyimini göz önüne alarak, iletişim tarzının ve problem çözme yeteneğinin takımımıza değer katacağından eminim.
+
+Daha fazla detay yakında paylaşılacak.
+
+**Takıma hoş geldin,**  
+Deshawn Washington  
+Veri Analizi Müdürü, Automatidata
+
+_(Not: Her salı sabahı mola odasında muffin olur. Erken git… yoksa sadece kepekli kalır 😄)_
+
+___
+
+## **Belirli Proje Teslimatları**
+
+Bu kurs sonu projesiyle, aşağıdakileri tamamlayarak yeni becerilerinizi uygulama fırsatı bulacaksınız:
+
+-   Projenizi planlamak için **Kurs 1 PACE Strateji Belgesi** (hedef kitle, ekip arkadaşları, ana kilometre taşları ve genel proje hedefi dikkate alınmalı)
+    
+-   Veri ekibi için bir **proje teklifi** hazırlamak
+    
+
+___
+
+## **Temel Noktalar**
+
+Google İleri Düzey Veri Analizi Sertifikası’na ait bu kurs sonu projesi, kurs boyunca öğrendiğiniz becerileri uygulamanız ve pekiştirmeniz için tasarlanmıştır. Her kursun sonunda bir proje tamamlayarak portföyünüzü zenginleştirebilir ve işverenlere yeteneklerinizi somut örneklerle gösterebilirsiniz.
 
 
