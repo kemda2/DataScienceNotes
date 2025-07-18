@@ -28,7 +28,7 @@ Google İleri Düzey Veri Analitiği Sertifikası sekiz dersten oluşur. Her der
     
 1. [**Yapay Zeka ile İş Aramanızı Hızlandırın**](https://www.coursera.org/learn/accelerate-your-job-search-with-ai/home/module/1)
     
-![image](./images/r1.png)
+![image](./images/R1.png)
 
 ## Google Veri Analitiği Sertifikası İçeriği
 
