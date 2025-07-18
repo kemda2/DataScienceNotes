@@ -414,6 +414,38 @@ Bu proje teklifinin hedef kitlesi NPS veri ekibidir. Amaç, proje görevlerinin 
 
 ![image](./images/1002.png)
 
+# PACE’i Yönetici Özeti ile Bağlamak
 
+Bu bölümde, veri profesyonelleri çalışma ortamındaki iletişimi incelemeye devam edeceksiniz. İş akışınız ne olursa olsun, veri profesyonellerinin projeler hakkında planları, güncellemeleri ve özetleri paylaşmak ve iletmek için yöntemlere ihtiyacı vardır. **Yönetici özeti** adlı bir belge, doğrudan projedeki görevlerle ilgilenmeyen karar vericileri güncellemek için kullanılır. Veri profesyoneli olarak, yönetici özetlerinin hazırlanmasında sıkça yer alacaksınız.
+
+## Yönetici Özetleri
+
+Yönetici özetleri, bir projenin en önemli noktalarını özetleyen ve karar vericilere en ilgili bilgilerin kısa bir genel görünümünü sunan belgelerdir. Ayrıca, yeni ekip üyelerinin projeye hızlıca aşina olmasına yardımcı olmak için de kullanılabilirler. Bu format, raporun tamamını okuyup anlayacak zamanı olmayan karar vericilerin ve/veya yöneticilerin sorumluluklarına saygı gösterecek şekilde tasarlanmıştır.
+
+Yönetici özetleri birçok farklı sektörde ve organizasyonda kullanılır. Yönetici özetlerinde bilgiyi sunmanın pek çok yolu vardır; bu amaçla özel olarak geliştirilmiş yazılım seçenekleri bile mevcuttur. Bu programda, genellikle bir sunum slaytı içindeki tek sayfalık bir format dikkate alınacaktır. Yönetici özetlerinin tasarım ve düzeni değişebilir, ancak ortak olan bazı temel öğeler vardır.
+
+### Yönetici Özetinin Öğeleri
+
+Yönetici özetleri çeşitli işletmelerde kullanılır ve genellikle aşağıdaki öğeleri içerir:
+
+**Proje Başlığı:** Projenin teması, hedef kitleyle hemen bağ kurulması için yönetici özetinin başlığına dahil edilir.
+
+**Sorun:** Projenin hedeflediği veya ele aldığı ihtiyaç ya da endişeye odaklanan bir ifade. Sorun, veri analizi yoluyla kanıtlamaya çalıştığınız hipotez olarak da adlandırılabilir.
+
+**Çözüm:** Bu ifade, projenin ana amacını özetler. Bu bölümde, sorun ifadesinde belirtilen endişeleri ele alan eylemler tanımlanır.
+
+**Detaylar/Ana İçgörüler:** Bu bölümün amacı, hedef kitlenin projenin amaçlarını daha iyi anlamasına yardımcı olabilecek ek arka plan bilgileri sağlamaktır. Dahil edilecek detayların belirlenmesi hedef kitleye bağlıdır.
+
+**Sonraki Adımlar/Öneriler:** Ekibin almayı planladığı eylemleri destekleyen bilgiler. Bu aynı zamanda, proje süresince elde edilen içgörülere dayanarak karar vericilere öneriler de içerebilir. Veri profesyonelleri bu bölümde genel proje değerlendirmelerine de yer verebilir. Bu bölüme ekleme yaparken en az bir öneri ve bir sonraki adım önerisi ekleyin.
+
+### Örnek Yönetici Özeti
+
+Aşağıda bağlantısı verilen örnek yönetici özeti, ABD Ulusal Park Hizmeti (NPS) tarafından gerçekleştirilen kurgusal bir ziyaretçi tahmin projesi hakkındadır. Bu özetin hedef kitlesi, NPS liderliğinden bir karar verici grubudur. Bu özetin amacı, rekreasyon parkı ziyaretlerinin veri analiziyle elde edilen içgörüleri paylaşmaktır. Her bölüm süslemelerden arındırılmış kısa ifadeler içerir. Bu sayede karar vericiler, bir projenin en önemli noktalarını hızlıca kavrayabilir. Aşağıdaki bölümleri incelerken bu belgeyi referans olarak kullanabilirsiniz.
+
+Örnek yönetici özetine erişmek için aşağıdaki bağlantıya tıklayın ve “Şablonu Kullan” seçeneğini seçin.
+
+Örnek yönetici özeti:
+
+![image](./images/1003.png)
 
 
