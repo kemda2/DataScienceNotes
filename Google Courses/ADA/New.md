@@ -1395,5 +1395,174 @@ Bu sadece sınıfların, özniteliklerin ve metotların temel çalışma şekill
     
 - Python’da birçok önceden tanımlanmış sınıf, öznitelik ve metot vardır; ayrıca nesne yönelimli programlamada yüksek seviyede özelleştirme mümkündür.
 
+
+# Python Söz Dizimini Keşfet
+
+Python, yazılım geliştirme, makine öğrenimi ve veri analizi gibi birçok alanda kullanılan esnek bir programlama dilidir. Python, veri profesyonelleri arasında en popüler programlama dillerinden biridir; bu yüzden temel söz dizimi (syntax) ve anlam bilimini (semantics) öğrenmek, gelecekteki kariyeriniz açısından faydalı olacaktır. Bu yazıda, Python'un söz dizimi ve anlam bilimini öğrenecek ve öğreniminizi ilerletmek için kaynakların nerede bulunabileceğini keşfedeceksiniz.
+
+## Python’un Dili
+
+İnsanlar birbirleriyle iletişim kurmak ve talimat vermek için dili kullanır. Bilgisayarlar da aynı şeyi yapar; ancak Python, C++ ve Java gibi dilleri kullanırlar. Bu nedenle, bilgisayara talimat vermek isteyen programcıların fikir ve kavramları bilgisayarın anlayacağı bir dile çevirmesi gerekir.
+
+Python söz dizimi; nesneleri ve komutları temsil eden kelimeleri ve bu kelimelere yapı, hiyerarşi ve bağlam kazandıran noktalama işaretlerini içerir. Bu kelimeler ve noktalama işaretleri birlikte fikirleri ve işlemleri iletir; buna da **anlam bilimi (semantics)** denir. Anlam bilimi, söz diziminin ilettiği anlamdır. Söz dizimini ve anlam bilimini öğrenmenin en iyi yolu bolca pratik yapmaktır. Kod yazmaya başlayın ve başkalarının kodlarını okumaya alışın. Ayrıca, programcıların dili kullanırken stil açısından birlik sağlamak için uyguladığı genel kurallar da vardır.
+
+Kodlama dilleri, konuşma dillerine benzer şekilde, kelimeleri işlevlerine göre sınıflandırma yollarına sahiptir. Örneğin, İngilizce cümleler isimler, fiiller, edatlar vb. içerir.
+
+İşte bazı temel kavramlar:
+
+- **Değişkenler (Variables):** String (metin), tuple (demet), dictionary (sözlük), list (liste) ve nesne (object) gibi verileri temsil eder.
+    
+    - Örnek: `student_name`
+        
+- **Anahtar Kelimeler (Keywords):** Belirli amaçlar için ayrılmış özel kelimelerdir; sadece bu amaçlarla kullanılabilirler.
+    
+    - Örnekler:
+        
+        - `in`
+            
+        - `not`
+            
+        - `or`
+            
+        - `for`
+            
+        - `while`
+            
+        - `return`
+            
+- **Operatörler (Operators):** Nesneler ve değerler üzerinde işlemler gerçekleştiren sembollerdir.
+    
+    - Örnekler:
+        
+        - `+` Toplama
+            
+        - `-` Çıkarma
+            
+        - `*` Çarpma
+            
+        - `/` Bölme
+            
+        - `**` Üs alma
+            
+        - `%` Mod alma (bölme işleminin kalanını verir). Örnek: `10 % 3 = 1`
+            
+        - `//` Taban bölme (sonucu en yakın aşağı tam sayıya yuvarlar). Örnek: `5 // 2 = 2`
+            
+        - `>` Büyüktür
+            
+        - `<` Küçüktür
+            
+        - `==` Eşittir
+            
+- **İfadeler (Expressions):** Sayılar, semboller ve değişkenlerin bir araya gelerek bir sonuç üretmesi
+    
+    - Örnek: `[1, 2, 3] + [2, 4, 6]`
+        
+- **Fonksiyonlar (Functions):** Belirli bir görevi yerine getiren ve bir değer döndüren, ilişkili komutlar grubudur.
+    
+    - Örnek:
+        
+        ```python
+        def to_celsius(x):
+            '''Fahrenheit'ı Celsius'a çevir'''
+            return (x - 32) * 5 / 9
+        
+        to_celsius(75)
+        
+        # 23.88888888888889
+        ```
+        
+- **Koşullu İfadeler (Conditional Statements):** Belirli koşullara göre programın yürütülmesini yönlendirir.
+    
+    - Örnek:
+        
+        ```python
+        number = -4
+        
+        if number > 0:
+            print('Sayı pozitiftir.')
+        elif number == 0:
+            print('Sayı sıfırdır.')
+        else:
+            print('Sayı negatiftir.')
+        
+        # Çıktı: Sayı negatiftir.
+        ```
+        
+
+Python, yanlış anahtar kelime veya söz dizimi kullanıldığında sözdizim hatası (syntax error) verir.
+
+Örnek:
+
+```python
+print(This will throw an error because I didn’t make it a string.)
+
+Satır 1’de Hata:
+    print(This will throw an error because I didn’t make it a string.)
+                  ^
+SyntaxError: invalid syntax
+```
+
+## İsimlendirme Kuralları ve Konvansiyonlar
+
+Programcılar, nesnelere isim verirken kodu standartlaştırmak ve herkes için anlaşılır kılmak amacıyla bazı kurallara ve geleneklere uyarlar. Bilmeniz gereken bazı kurallar şunlardır:
+
+- İsimlerde boşluk kullanılamaz.
+    
+- İsimler büyük ve küçük harf karışık olabilir.
+    
+- İsimler sayı ile başlayamaz; ancak ilk karakterden sonra sayı içerebilir.
+    
+- Değişken ve fonksiyon adları, tüm harflerin küçük ve kelimelerin alt çizgi (`_`) ile ayrıldığı **snake_case** biçiminde yazılmalıdır.
+    
+- Anlamlı ve açıklayıcı isimler, kısa ve belirsiz kısaltmalardan daha iyidir. Örneğin, `student_name` kullanmak `sn`yazmaktan daha doğrudur. Başta uzun gibi görünse de, ileride kodunuzu yeniden okurken daha kolay anlayacaksınız.
+    
+
+## Python’un Zen’i (Zen of Python)
+
+Python programcısı Tim Peters, Python'da kodlama için rehber niteliğinde, artık meşhur olmuş şu “şiiri” yazmıştır:
+
+**The Zen of Python**
+
+Güzel, çirkinden iyidir.  
+Açık, örtükten iyidir.  
+Basit, karmaşıktan iyidir.  
+Karmaşık, aşırı karmaşıktan iyidir.  
+Yüzeysel, iç içe olandan iyidir.  
+Seyrek, yoğun olandan iyidir.  
+Okunabilirlik önemlidir.  
+Özel durumlar, kuralları bozmak için yeterince özel değildir.  
+Pratiklik, saflığı yener.  
+Hatalar asla sessizce geçmemelidir.  
+Açıkça bastırılmadıkça.  
+Belirsizlik karşısında, tahmin etme dürtüsüne diren.  
+Bir—tercihen sadece bir—açık yol olmalıdır.  
+Bu yol, ilk başta açık olmasa bile (Hollandalı değilsen).  
+Şimdi, hiç olmamasından iyidir.  
+Ancak, “hiç” bazen _hemen şimdi_den iyidir.  
+Eğer bir uygulamayı açıklamak zorsa, bu kötü bir fikirdir.  
+Eğer açıklamak kolaysa, iyi bir fikir olabilir.  
+İsim alanları harika bir fikirdir—daha fazlasını yapalım!
+
+## [PEP 8 Python Stil Rehberi](https://peps.python.org/pep-0008/)
+
+Kodlama sırasında başvurmak üzere bu stil rehberini yer imlerine eklemek faydalı olacaktır. Bu yazı kapsam olarak sınırlıdır; PEP 8 ise stil ile ilgili daha kapsamlı bir kaynaktır. PEP, "Python Geliştirme Önerileri" anlamına gelir. Python açık kaynaklı bir dil olduğundan, PEP geliştiricilere rehberlik etmek ve fikir birliği oluşturmak için bir çerçeve sunar. Güvenilir ve kullanışlı bir kaynaktır.
+
+## Ana Noktalar
+
+Bir dilin şekil ve anlam kazanmasını sağlayan şey söz dizimi ve anlam bilimidir; Python için de durum aynıdır. Yeni bir dil öğrenmenin büyük kısmı, o dilin söz dizimini ve anlamını tanımaktan geçer. Bu, büyük ölçüde pratik yaparak ve maruz kalarak gerçekleşir. Ancak, bazı yol gösterici ilkeler ve kaynaklar bu süreçte size yardımcı olabilir. Nesnelere isim verirken kuralları öğrenir ve başvurabileceğiniz kaynaklar oluşturursanız, Python öğrenme yolculuğunuzda kesinlikle ilerleme kaydedersiniz. Python'a daha fazla aşina oldukça bilgisayarlarla daha etkili iletişim kurabilir ve veri analiz araçlarını daha verimli kullanabilirsiniz.
+
+## Daha Fazla Bilgi İçin Kaynaklar
+
+Python hakkında daha fazla bilgi edinmenizi sağlayacak bazı yararlı kaynaklar:
+
+- Python [Referans Kütüphanesi](https://docs.python.org/3/library/)
+    
+    - [Yerleşik Veri Tipleri](https://docs.python.org/3/library/stdtypes.html)
+        
+    - [Yerleşik Fonksiyonlar](https://docs.python.org/3/library/functions.html#built-in-functions)
+        
+- [Python Operatörleri](https://python-reference.readthedocs.io/en/latest/docs/operators/index.html)
+
 #
 
