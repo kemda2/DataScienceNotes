@@ -1043,224 +1043,49 @@ Google İleri Düzey Veri Analitiği Sertifikası’nın kurs sonu projeleri, ö
 
 # Python ve Diğer Programlama Dilleri
 
-Python, veri profesyonelleri arasında en popüler programlama dillerinden biridir; bu da onu veri analiz araç kutunuza harika bir katkı haline getirir! Daha önce incelediğimiz gibi, Python’un komutları iletmek ve görevleri gerçekleştirmek için sözdizimini kullanma şekli konuşma diline benzer. Bu da Python’u öğrenmeyi oldukça kolaylaştırır. Python’un yapısı birçok programlama diliyle benzerlik gösterse de, göz önünde bulundurulması gereken bazı önemli farklar vardır.
+Python, veri profesyonelleri arasında en popüler programlama dillerinden biridir ve bu da onu veri analitiği araç kutunuza harika bir katkı haline getirir! Daha önce de incelediğimiz gibi, Python'un komutları iletmek ve görevleri yerine getirmek için kullandığı sözdizimi, konuşma dilini yansıtır. Bu da Python’u öğrenmesi çok daha kolay bir programlama dili yapar. Python’un yapısı birçok diğer programlama diliyle benzerdir, ancak dikkate alınması gereken bazı önemli farklar da vardır.
 
-Bu okumada, Python’un veri profesyonelleri tarafından kullanılan diğer programlama dilleri (R, Java ve C++) ile nasıl karşılaştırıldığını öğreneceksiniz.
+Bu metinde, Python’un veri profesyonelleri tarafından kullanılan diğer programlama dilleri (R, Java ve C++) ile nasıl karşılaştırıldığını öğreneceksiniz.
 
-## Programlama Dilleri İçin Beş Temel Kriter
+---
 
-Veri analizi için sadece Python kullanılmaz, ancak en yaygın ve güçlü dillerden biridir. Birçok veri uzmanı birden fazla programlama dili kullanır. Her dilin avantajları ve dezavantajları vardır. Bu kurs kapsamında, aşağıdaki beş kriteri inceleyeceğiz: **hız, erişilebilirlik, değişken yapısı, veri bilimi odaklılık ve programlama paradigması.**
+## Programlama Dillerinde Beş Temel Kriter
+
+Python, veri analizi için kullanılan tek programlama dili değildir, ancak en yaygın ve en güçlü olanlardan biridir. Birçok veri uzmanı birden fazla programlama dili kullanır. Her dilin avantajları ve dezavantajları vardır. Bu kurs kapsamında, aşağıdaki beş kriteri inceleyeceğiz: **hız, erişilebilirlik, değişkenler, veri bilimi odaklılık ve programlama paradigması.**
 
 ### **Hız**
 
-Bir programın çalışma hızına birçok faktör katkı sağlar: derleme süresi, çalışma süresi, donanım, kurulu bağımlılıklar ve kodun verimliliği. Genel olarak, düşük seviyeli diller daha hızlıdır, ancak öğrenmeleri ve kullanmaları daha zordur.
+Bir programın çalıştırılma hızına katkıda bulunan birçok faktör vardır: derleme süresi, çalışma süresi, donanım, yüklü bağımlılıklar ve kodun verimliliği. Genel olarak, düşük seviyeli programlama dilleri daha hızlıdır, ancak öğrenmesi ve kullanması daha zordur.
 
 ### **Erişilebilirlik**
 
-Erişilebilirlik, bir dilin yeni öğrenenler için ne kadar kolay kullanılabilir olduğunu ifade eder. Yeni bir programlama dili öğrenmek, sözdizimi (syntax) ve genel yapısına bağlı olarak zorlayıcı olabilir. **Sözdizimi**, kod kelimelerinin, sembollerin, yerleşimlerin ve noktalama işaretlerinin yapısını ifade eder. **Anlam bilim (semantik)** ise bu yapılara değişkenler ve nesneler kullanarak anlam kazandırır. Değişkenler, programlara esneklik kazandıran önemli yapılardır.
+Erişilebilirlik, yeni öğrenenlerin bir dili ne kadar kolay kullanmaya başlayabileceğini ifade eder. Programlama dili öğrenmek, sözdizimi (syntax) ve genel yapısına bağlı olarak zor olabilir. **Sözdizimi**, kodda kullanılan kelimelerin, sembollerin, yerleşimlerin ve noktalama işaretlerinin yapısını ifade eder. Anlam ise bu yapılara değişkenler ve nesneler aracılığıyla eklenir. Bu değişkenler, programlara ve verilerin bulunduğu nesnelere esneklik kazandırır.
 
 ### **Değişkenler**
 
-Kod içerisindeki bilgiler **değişkenlerde** saklanır. Değişken, bilgisayarın belleğinde ayrılmış bir konumda değer saklayan adlandırılmış bir kaptır. Her programlama dili değişkenleri farklı şekillerde kullanır. Bazı diller, tüm program boyunca sabit kalan **statik değişkenler** kullanır. Diğerleri, program çalışırken belirlenen **dinamik değişkenler** kullanır. Bazı diller ise değişkenlerin yerleştirileceği yeri programın kendisinin belirlemesini sağlayan **deklaratif değişkenlere** izin verir.
+Kod içindeki bilgiler değişkenlerde saklanır. **Değişken**, bilgisayarın hafızasında belirli bir yerde saklanan değeri içeren isimlendirilmiş bir kaptır. Bir programlama dilinin değişkenleri nasıl kullandığı, sistemin çekirdek işlemleri veya çekirdek (kernel) hızı üzerinde etkili olabilir. Bazı diller, programın tamamı boyunca bir değeri koruyan statik değişkenler kullanır. Diğerleri, program çalıştıkça değeri belirleyen dinamik değişkenleri tercih eder. Bazı diller ise değişkenin yerleştirileceği yeri belirleyen deklaratif değişkenlere izin verir.
 
-### **Veri Bilimi Odağı**
+### **Veri bilimi odaklılık**
 
-Her programlama dili, belirli veri analizi görevlerine daha uygun olan kendine özgü özelliklere sahiptir. Bu yüzden programcılar, farklı veri bilimi görevleri için farklı diller kullanabilir.
+Programlama dillerinin kendine özgü özellikleri vardır ve veri analizi görevlerine göre farklı avantajlar sunarlar. Bu nedenle, veri bilimcileri genellikle belirli görevler için belirli dilleri kullanır.
 
 ### **Programlama Paradigması**
 
-Programlama dilleri **nesne yönelimli**, **fonksiyonel** ya da **emredici (imperative)** olabilir.
+Programlama dilleri nesne yönelimli (object-oriented), fonksiyonel (functional) veya emir tabanlı (imperative) olabilir. Nesne yönelimli diller, veri nesneleri etrafında modellenmiştir. Fonksiyonel diller, fonksiyonlar etrafında; emir tabanlı diller ise programın durumunu değiştirebilen kod ifadeleri etrafında modellenmiştir.
 
--   **Nesne yönelimli** diller, veri nesneleri etrafında modellenmiştir.
-    
--   **Fonksiyonel** diller, işlevler etrafında modellenir.
-    
--   **Emredici** diller, programın durumunu değiştirebilecek komut dizileri etrafında çalışır.
-    
+---
 
-___
+## Programlama Dili Karşılaştırmaları
 
-## Programlama Dillerinin Karşılaştırması
+Python, R, Java ve C++, veri analizinde en yaygın kullanılan dört programlama dilidir. Aşağıdaki tablo, bu dilleri beş kritere göre karşılaştırmaktadır: **hız, erişilebilirlik, değişkenler, veri bilimi odaklılık ve programlama paradigması.**
 
-Python, R, Java ve C++ veri analizi için en yaygın kullanılan dört programlama dilidir. Aşağıdaki tablo, bu dilleri beş kritere göre karşılaştırmaktadır: **hız, erişilebilirlik, değişken yapısı, veri bilimi odağı ve programlama paradigması.**
+|**Özellikler**|**Python**|**R**|**Java**|**C++**|
+|---|---|---|---|---|
+|**Hız**|Yavaş|Yapılandırmaya ve eklentilere bağlı|Hızlı|Çok hızlı|
+|**Erişilebilirlik**|Öğrenmesi kolay|Karmaşık|Öğrenmesi kolay|Karmaşık|
+|**Değişken**|Dinamik|Dinamik|Statik|Deklaratif|
+|**Veri Bilimi Odaklılık**|Makine öğrenimi ve otomatik analiz|Keşifsel veri analizi ve kapsamlı istatistik kütüphaneleri|Açık kaynak projelerde genel kullanım|Yaygın değil ama çok güçlü uygulamalar mümkün|
+|**Programlama Paradigması**|Nesne yönelimli|Fonksiyonel dil|Nesne yönelimli|Çok paradigmalı (emir tabanlı ve nesne yönelimli)|
 
-| **Özellikler** | **Python** | **R** | **Java** | **C++** |
-| --- | --- | --- | --- | --- |
-| **Hız** | Yavaş | Yapılandırma ve eklentilere bağlı | Daha hızlı | Çok hızlı |
-| **Erişilebilirlik** | Öğrenmesi kolay | Karmaşık | Öğrenmesi kolay | Karmaşık |
-| **Değişkenler** | Dinamik | Dinamik | Statik | Deklaratif |
-| **Veri Bilimi Odağı** | Makine öğrenimi ve otomatik analiz | Keşifsel veri analizi ve istatistiksel kütüphaneler | Açık kaynak projelerde yaygın | Çok yaygın değil ama güçlü uygulamaları var |
-| **Programlama Paradigması** | Nesne yönelimli | Fonksiyonel dil | Nesne yönelimli | Çok paradigmalı (emredici & nesne yönelimli) |
-
-# Jupyter Notebook'lar Nasıl Kullanılır?
-
-**Jupyter Notebook**, canlı kod, matematiksel formüller, görselleştirmeler ve metin içeren belgeler oluşturmak ve paylaşmak için kullanılan açık kaynaklı bir web uygulamasıdır. Bu araç, etkileşimli ve paylaşılabilir bir şekilde, standart metin blokları formatında kod geliştirmek ve sunmak için harika bir yöntemdir. Jupyter Notebook'lar içinde kod, matematiksel formüller, veri görselleştirmeleri ve serbest metin oluşturabilirsiniz!
-
-Bu program boyunca, Jupyter Notebook'ları kendi kodunuzu yazmak, çalıştırmak ve sunmak için kullanacaksınız. Bu okuma parçası, kendi not defterinizi nasıl kullanacağınızı size gösterecek. Ancak, bu sertifika programı için herhangi bir yazılım indirmeniz **gerekmediğini** unutmayın. Tüm etkinlikleri Coursera platformunda sunulan araçlarla tamamlayabilirsiniz.
-
-___
-
-## Jupyter Notebook
-
-Jupyter Notebook’a doğrudan tarayıcınızdan erişebilir veya masaüstü uygulamasını indirerek cihazınızda çalışabilirsiniz. R ve Python gibi bildiğiniz programlama dilleri dahil olmak üzere **100’den fazla programlama diliyle** uyumludur.
-
--   [JupyterLab](https://jupyterlab.readthedocs.io/en/latest/): Hesaplamalı not defterlerle çalışmak için tam araç setidir.
-    
--   [Jupyter Notebook](https://jupyter-notebook.readthedocs.io/en/stable/): Daha sade bir araçtır ama yine de güçlü ve etkileşimli hesaplamalar yapmanıza olanak tanır.
-    
-
-Bu sertifika programı için, Coursera tarafından sunulan **Jupyter Notebook arayüzünü** kullanmanız önerilir. Jupyter Notebook kullanılan etkinlikler “laboratuvar” (lab) olarak etiketlenir ve her etkinliğin sayfasında ilgili talimatları bulabilirsiniz.
-
-___
-
-## Neden Jupyter Notebook?
-
-Not defterleri özellikle veriyle çalışırken oldukça faydalıdır. Jupyter Notebook’ların öne çıkan bazı avantajları şunlardır:
-
-1.  **Modüler / etkileşimli hesaplama:** Kodları hücre adı verilen küçük parçalarda yazabilir ve çalıştırabilirsiniz. Tüm not defterini çalıştırmanıza gerek kalmadan yalnızca bir hücreyi çalıştırabilirsiniz. Bu, özellikle veri keşfi ve hata ayıklama sırasında oldukça faydalıdır.
-    
-2.  **Kod ve dokümantasyon entegrasyonu:** Kod, açıklayıcı metin ve görselleştirmeleri (grafikler, tablolar vb.) tek bir belgede birleştirebilirsiniz.
-    
-3.  **Birden fazla dili destekler:** Bu programda Python kullanacaksınız ancak Jupyter, birçok programlama dilini destekler.
-    
-4.  **Veri keşfi ve analizi:** Veri yükleme, temizleme, analiz etme ve inceleme işlemlerini şık ve kolay bir arayüzle gerçekleştirmenizi sağlar.
-    
-5.  **Bulut tabanlı hizmetler:** Birçok bulut platformu Jupyter Notebook’ları destekler. Böylece yerel kurulum yapmadan not defterlerini çalıştırabilir ve paylaşabilirsiniz.
-    
-6.  **Eklentiler ve uzantılar:** Çalıştığınız projeye göre işlevselliği artıran zengin bir eklenti ve uzantı ekosistemi mevcuttur.
-    
-
-___
-
-## Jupyter Notebook Nasıl Kullanılır?
-
-Bir Jupyter Notebook açtıktan sonra artık kullanmaya hazırsınız! İşte başlamak için bazı ipuçları:
-
-### Komut / Düzenleme Modu
-
-Not defterlerinin iki çalışma modu vardır: **Komut modu** ve **Düzenleme modu**.
-
--   **Komut modu:** Not defterine genel olarak etkileşimli şekilde müdahale etmek içindir (hücre eklemek, silmek, taşımak vb.). Aktif hücrenin solunda **mavi çubuk** ile gösterilir.
-
-![image](./images/1011.png)
-    
--   **Düzenleme modu:** Seçilen hücreye kod veya Markdown metni yazmak içindir. Aktif hücrenin solunda **yeşil çubuk** ve ince yeşil kenarlık ile gösterilir.
-
-![image](./images/1012.png)
-
--   Düzenleme moduna geçmek için hücreye tıklayın veya yön tuşları ile hücreyi seçip **Enter** tuşuna basın.
-    
--   Komut moduna geri dönmek için hücre dışına tıklayın ya da **Escape** tuşuna basın.
-    
-
-___
-
-### Markdown Modu
-
-Jupyter Notebook’ta hücreleri kod veya **Markdown** moduna geçirebilirsiniz. Markdown, düz metni biçimlendirmek için kullanılan bir işaretleme dilidir. Açıklamalar, analizler veya kodun çıktısını açıklamak için kullanılır.
-
--   Bir hücreyi Markdown’a dönüştürmek için sayfanın üstündeki menüden “**Code**” yazan yere tıklayın ve açılır menüden **Markdown**’ı seçin.
-    
--   Markdown hakkında daha fazla bilgi için:
-    
-    -   [Markdown Temel Söz Dizimi](https://www.markdownguide.org/basic-syntax/)
-        
-    -   [Markdown Genişletilmiş Söz Dizimi](https://www.markdownguide.org/extended-syntax/)
-        
-
-___
-
-### Yaygın Eylemler
-
-Çoğu işlem hem fare hem de klavye kısayollarıyla yapılabilir. İşte en yaygın işlemler:
-
-#### Yeni hücre ekleme
-
--   Menü çubuğundaki **Insert** seçeneğini kullanın.
-    
--   Klavye kısayolları (komut modundayken):
-    
-    -   **a:** Mevcut hücrenin üstüne hücre ekler
-        
-    -   **b:** Altına hücre ekler
-        
-
-#### Hücre silme
-
--   Komut modunda hücre(leri) seçin.
-    
--   Menüden **Edit > Delete Cells** seçeneğini tıklayın.
-    
--   Klavye kısayolu: **dd** (iki kez `d` tuşuna basın)
-    
-
-#### Hücre taşıma
-
--   Komut modunda hücre(leri) seçin.
-    
--   Menüden yukarı/aşağı okları tıklayarak taşıyın.
-    
-
-#### Hücre çalıştırma
-
--   Hücreyi seçin ve üst menüden **Run** düğmesine tıklayın.
-    
--   Klavye kısayolları:
-    
-    -   **Ctrl + Enter:** Seçili hücreyi çalıştırır
-        
-    -   **Shift + Enter:** Hücreyi çalıştırır ve bir sonrakini seçer
-        
-    -   **Alt + Enter:** Hücreyi çalıştırır ve altına yeni hücre ekler
-        
--   Hem komut hem düzenleme modunda çalıştırabilirsiniz.
-    
--   Tüm klavye kısayollarını görmek için komut modunda **h** tuşuna basın.
-    
-
-Daha fazla bilgi için:  
-🔗 [Jupyter Notebook arayüz bileşenleri](https://jupyter-notebook.readthedocs.io/en/stable/ui_components.html)
-
-___
-
-## Sorun Giderme
-
-Jupyter Notebook’u kullanırken bazen erişim veya çalıştırma sorunları yaşayabilirsiniz. İşte bazı çözüm adımları:
-
-### Tarayıcı Uyumluluğu
-
--   Tarayıcınızın en son sürümünü kullanın: **Google Chrome**, **Firefox** veya **Microsoft Edge** önerilir.
-    
--   Sorun devam ederse: Tarayıcıyı yeniden başlatın, önbelleği ve çerezleri temizleyin veya gizli modda deneyin.
-    
-
-### İnternet Bağlantısı
-
--   Coursera, **kararlı bir internet bağlantısı** gerektirir.
-    
--   Sayfaların yüklenmemesi, donmalar ya da komut girilememesi bağlantı sorununa işaret edebilir.
-    
--   Mümkünse farklı bir cihaz deneyin.
-    
-
-### Özetle Sorun Giderme Adımları
-
-1.  Desteklenen tarayıcının en güncel sürümünü kullanın.
-    
-2.  Tarayıcıyı yeniden başlatın, çerezleri/önbelleği temizleyin.
-    
-3.  İnternet bağlantınızı kontrol edin.
-    
-4.  Laboratuvarı yeniden başlatmayı deneyin.
-    
-
-Tüm bu adımlardan sonra hâlâ sorun varsa, Coursera geçici bakım yapıyor olabilir. Bir süre bekleyip tekrar deneyin.
-
-___
-
-## Önemli Noktalar
-
-**Jupyter Notebook**, kendi kodunuzu geliştirmek ve hata ayıklamak için güçlü bir platformdur. Onu etkili şekilde kullanmayı öğrenmek, Python becerilerinizi geliştirme ve kurs sonunda yapacağınız projeye hazırlık açısından önemlidir.
-
-Python, makine öğrenmesi ve otomatik analiz gibi ileri düzey analiz araçlarının kapısını açacaktır. Jupyter Notebook ise bu becerileri edinmek için mükemmel bir araçtır.
+#
 
