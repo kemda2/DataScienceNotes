@@ -1243,5 +1243,157 @@ Jupyter Notebook, kendi kodunuzu geliştirebileceğiniz ve hata ayıklayabilece�
     
 - [Jupyter Notebooks kurulumu](https://test-jupyter.readthedocs.io/en/latest/install.html)
 
+# Nesne Yönelimli Programlama Hakkında Daha Fazlası
+
+**Not:** Bu metin, nesne yönelimli programlamaya sadece kısa bir giriş yapmaktadır. Nesne yönelimli programlamanın ayrıntılı tartışması bu dersin kapsamı dışındadır.
+
+Daha önce, nesne yönelimli programlamayı hem veriyi hem de bu veriyi işleyen kodu içeren nesneler etrafında kurulu bir programlama paradigması olarak tanımlamıştık. Bir sınıfın, veriyi ve işlevselliği bir arada tutan nesnenin veri türü olduğunu hatırlayabilirsiniz. Ayrıca, sınıfa özgü işlevlerin metotlar ve öznitelikler şeklinde örneklerine rastlamıştınız. Bu metinde nesne yönelimli programlama hakkında daha fazla bilgi edinecek ve nasıl çalıştığını öğreneceksiniz. Bu sertifika programında kendi sınıflarınızı tanımlamanız gerekmese de, bu sürecin temel işleyişini anlamak öğrenme yolculuğunuzda karşınıza çıkacak kavramları anlamanıza yardımcı olacaktır.
+
+## Gözden Geçirme: Öznitelikler ve Metotlar
+
+Python sınıfları, yaygın veri analiz görevlerini basitleştiren yerleşik özellikler sayesinde güçlü ve kullanışlıdır. Bu özellikler öznitelikler ve metotlar olarak adlandırılır.
+
+- **Öznitelik:** Bir nesneye veya sınıfa bağlı, nokta gösterimi kullanılarak ismiyle erişilen bir değerdir.
+    
+- **Metot:** Bir sınıfa ait olan ve genellikle bir eylem veya işlem gerçekleştiren fonksiyondur.
+    
+
+Öznitelik ve metot arasındaki farkı daha basit anlamak için, özniteliklerin nesnenin _özellikleri_, metotların ise _eylemleri_ veya _işlemleri_ olduğunu hatırlayın.
+
+Örneğin, sınıf "Spaceship" (Uzay Gemisi) ise, öznitelikler şunlar olabilir:
+
+- name (isim)
+    
+- kind (tür)
+    
+- speed (hız)
+    
+- tractor_beam (çekim ışını)
+    
+
+Bu özniteliklere şu şekilde erişilir:
+
+```python
+Spaceship.name
+Spaceship.kind
+Spaceship.speed
+Spaceship.tractor_beam
+```
+
+Dikkat edin, bu özelliklere erişmek için sadece nokta kullanılır.
+
+Öte yandan, Spaceship sınıfının metotları şunlar olabilir:
+
+- warp()
+    
+- tractor()
+    
+
+Bu metotlar şu şekilde kullanılır:
+
+```python
+Spaceship.warp()
+Spaceship.tractor()
+```
+
+Metotların ardından parantez gelir ve gerekirse argüman alabilirler. Örneğin, `Spaceship.warp(7)` geminin hızını warp yediye çıkarabilir.
+
+## Özgün Özniteliklere ve Metotlara Sahip Sınıflar Tanımlamak
+
+Python, her biri kendine özgü özniteliklere ve metotlara sahip kendi sınıflarınızı tanımlamanıza izin verir. Bu, farklı programcıların işlerini daha verimli hale getiren tekrar kullanılabilir kodlar oluşturmasını sağlar. Daha önce bahsedilen Spaceship sınıfını bile oluşturabilirsiniz. Aşağıdaki örnek bunu nasıl yapacağınızı gösterir.
+
+**Not:** Aşağıdaki kod bloğu interaktif değildir.
+
+```python
+class Spaceship:
+
+    # Sınıf özniteliği
+    tractor_beam = 'off'
+
+    # Nesne öznitelikleri
+    def __init__(self, name, kind):
+        self.name = name
+        self.kind = kind
+        self.speed = None
+
+    # Nesne metotları
+    def warp(self, warp):
+        self.speed = warp
+        print(f'Warp {warp}, engage!')
+
+    def tractor(self):
+        if self.tractor_beam == 'off':
+            self.tractor_beam = 'on'
+            print('Tractor beam on.')
+        else:
+            self.tractor_beam = 'off'
+            print('Tractor beam off')
+```
+
+Bu derste sınıf oluşturma sözdizimini öğrenmek zorunda değilsiniz. Sadece sınıfın önce tanımlandığını ve ardından altındaki girintili satırlarda özniteliklerin ve metotların bulunduğunu fark edin. Bu, bir öznitelik veya metot “sınıfa ait” olduğunda ne demek istediğimizi açıklar. Öznitelikler ve metotlar, o sınıfın kodunda tanımlanır.
+
+Bir sınıf, aynı özelliklere ve davranışlara sahip tüm şeyler için bir şablondur. Burada sınıf Spaceship (Uzay Gemisi). Farklı türlerde uzay gemileri olabilir; farklı isimlere ve amaçlara sahip olabilirler. Bir sınıfa ait bir nesne oluşturduğunuzda, o sınıfın bir **örneğini** yaratmış olursunuz. Bu işleme **sınıfı örnekleme** denir. Yukarıdaki kodda, her Spaceship örneği oluşturulduğunda çekim ışını (tractor beam) “off” olarak başlar. Çekim ışını sınıf özniteliğidir. Spaceship sınıfının tüm örneklerinde bulunur. Ayrıca, örnek öznitelikleri de vardır; bunlar nesne oluşturulurken atayabileceğiniz özniteliklerdir.
+
+```python
+# Spaceship sınıfından bir örnek oluşturmak (örneklemek)
+ship = Spaceship('Mockingbird', 'rescue frigate')
+
+# Geminin ismini kontrol et
+print(ship.name)
+
+# Geminin türünü kontrol et
+print(ship.kind)
+
+# Çekim ışını durumunu kontrol et
+print(ship.tractor_beam)
+
+# Çıktı:
+# Mockingbird
+# rescue frigate
+# off
+```
+
+Sonraki kod bloğu, warp() metodunu kullanarak warp hızını yedi olarak ayarlar. Sonra speed özniteliğini kullanarak geminin mevcut hızını kontrol eder.
+
+```python
+# Warp hızını ayarla
+ship.warp(7)
+
+# Hızı kontrol et
+ship.speed
+
+# Çıktı:
+# Warp 7, engage!
+# 7
+```
+
+Son kod bloğu, tractor() metodunu kullanarak çekim ışını durumunu değiştirir. Sonra tractor_beam özniteliğini kullanarak çekim ışınının mevcut durumunu kontrol eder.
+
+```python
+# Çekim ışınını aç/kapa
+ship.tractor()
+
+# Çekim ışını durumunu kontrol et
+print(ship.tractor_beam)
+
+# Çıktı:
+# Tractor beam on.
+# on
+```
+
+Bu sadece sınıfların, özniteliklerin ve metotların temel çalışma şekillerini ve birbirleriyle ilişkilerini göstermek için basit bir örnektir. Ancak sınıflar çok karmaşık olabilir ve birçok öznitelik ve metot içerebilir. Veri profesyoneli olarak yaptığınız işe bağlı olarak, nesne yönelimli programlama bilgisi kendi sınıflarınızı, özniteliklerinizi ve metotlarınızı tanımlarken, verinin içindeki desenleri, ilişkileri ve anlamları araştırmada size yardımcı olacaktır.
+
+## Önemli Noktalar
+
+- Sınıflar, Python’un temel nesnelerini oluşturur; bu nedenle Python nesne yönelimli bir dil olarak bilinir.
+    
+- Sınıf nesneleri, o sınıfa özgü araçları içinde barındırdıkları için güçlüdür.
+    
+- Metotlar, bir sınıfa ait fonksiyonlardır; eylemler veya işlemler yaparlar ve parantezle çağrılırlar.
+    
+- Öznitelikler, bir sınıfa veya sınıf örneğine bağlı değerler veya özelliklerdir; parantez kullanılmaz.
+    
+- Python’da birçok önceden tanımlanmış sınıf, öznitelik ve metot vardır; ayrıca nesne yönelimli programlamada yüksek seviyede özelleştirme mümkündür.
+
 #
 
