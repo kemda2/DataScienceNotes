@@ -1041,4 +1041,105 @@ Google İleri Düzey Veri Analitiği Sertifikası’nın kurs sonu projeleri, ö
 
 # 2. Python ile Başlayın
 
+# Python ve Diğer Programlama Dilleri
+
+Python, veri profesyonelleri arasında en popüler programlama dillerinden biridir; bu da onu veri analiz araç kutunuza harika bir katkı haline getirir! Daha önce incelediğimiz gibi, Python’un komutları iletmek ve görevleri gerçekleştirmek için sözdizimini kullanma şekli konuşma diline benzer. Bu da Python’u öğrenmeyi oldukça kolaylaştırır. Python’un yapısı birçok programlama diliyle benzerlik gösterse de, göz önünde bulundurulması gereken bazı önemli farklar vardır.
+
+Bu okumada, Python’un veri profesyonelleri tarafından kullanılan diğer programlama dilleri (R, Java ve C++) ile nasıl karşılaştırıldığını öğreneceksiniz.
+
+## Programlama Dilleri İçin Beş Temel Kriter
+
+Veri analizi için sadece Python kullanılmaz, ancak en yaygın ve güçlü dillerden biridir. Birçok veri uzmanı birden fazla programlama dili kullanır. Her dilin avantajları ve dezavantajları vardır. Bu kurs kapsamında, aşağıdaki beş kriteri inceleyeceğiz: **hız, erişilebilirlik, değişken yapısı, veri bilimi odaklılık ve programlama paradigması.**
+
+### **Hız**
+
+Bir programın çalışma hızına birçok faktör katkı sağlar: derleme süresi, çalışma süresi, donanım, kurulu bağımlılıklar ve kodun verimliliği. Genel olarak, düşük seviyeli diller daha hızlıdır, ancak öğrenmeleri ve kullanmaları daha zordur.
+
+### **Erişilebilirlik**
+
+Erişilebilirlik, bir dilin yeni öğrenenler için ne kadar kolay kullanılabilir olduğunu ifade eder. Yeni bir programlama dili öğrenmek, sözdizimi (syntax) ve genel yapısına bağlı olarak zorlayıcı olabilir. **Sözdizimi**, kod kelimelerinin, sembollerin, yerleşimlerin ve noktalama işaretlerinin yapısını ifade eder. **Anlam bilim (semantik)** ise bu yapılara değişkenler ve nesneler kullanarak anlam kazandırır. Değişkenler, programlara esneklik kazandıran önemli yapılardır.
+
+### **Değişkenler**
+
+Kod içerisindeki bilgiler **değişkenlerde** saklanır. Değişken, bilgisayarın belleğinde ayrılmış bir konumda değer saklayan adlandırılmış bir kaptır. Her programlama dili değişkenleri farklı şekillerde kullanır. Bazı diller, tüm program boyunca sabit kalan **statik değişkenler** kullanır. Diğerleri, program çalışırken belirlenen **dinamik değişkenler** kullanır. Bazı diller ise değişkenlerin yerleştirileceği yeri programın kendisinin belirlemesini sağlayan **deklaratif değişkenlere** izin verir.
+
+### **Veri Bilimi Odağı**
+
+Her programlama dili, belirli veri analizi görevlerine daha uygun olan kendine özgü özelliklere sahiptir. Bu yüzden programcılar, farklı veri bilimi görevleri için farklı diller kullanabilir.
+
+### **Programlama Paradigması**
+
+Programlama dilleri **nesne yönelimli**, **fonksiyonel** ya da **emredici (imperative)** olabilir.
+
+-   **Nesne yönelimli** diller, veri nesneleri etrafında modellenmiştir.
+    
+-   **Fonksiyonel** diller, işlevler etrafında modellenir.
+    
+-   **Emredici** diller, programın durumunu değiştirebilecek komut dizileri etrafında çalışır.
+    
+
+___
+
+## Programlama Dillerinin Karşılaştırması
+
+Python, R, Java ve C++ veri analizi için en yaygın kullanılan dört programlama dilidir. Aşağıdaki tablo, bu dilleri beş kritere göre karşılaştırmaktadır: **hız, erişilebilirlik, değişken yapısı, veri bilimi odağı ve programlama paradigması.**
+
+| **Özellikler** | **Python** | **R** | **Java** | **C++** |
+| --- | --- | --- | --- | --- |
+| **Hız** | Yavaş | Yapılandırma ve eklentilere bağlı | Daha hızlı | Çok hızlı |
+| **Erişilebilirlik** | Öğrenmesi kolay | Karmaşık | Öğrenmesi kolay | Karmaşık |
+| **Değişkenler** | Dinamik | Dinamik | Statik | Deklaratif |
+| **Veri Bilimi Odağı** | Makine öğrenimi ve otomatik analiz | Keşifsel veri analizi ve istatistiksel kütüphaneler | Açık kaynak projelerde yaygın | Çok yaygın değil ama güçlü uygulamaları var |
+| **Programlama Paradigması** | Nesne yönelimli | Fonksiyonel dil | Nesne yönelimli | Çok paradigmalı (emredici & nesne yönelimli) |
+
+# Python ve Diğer Programlama Dilleri
+
+Python, veri profesyonelleri arasında en popüler programlama dillerinden biridir; bu da onu veri analiz araç kutunuza harika bir katkı haline getirir! Daha önce incelediğimiz gibi, Python’un komutları iletmek ve görevleri gerçekleştirmek için sözdizimini kullanma şekli konuşma diline benzer. Bu da Python’u öğrenmeyi oldukça kolaylaştırır. Python’un yapısı birçok programlama diliyle benzerlik gösterse de, göz önünde bulundurulması gereken bazı önemli farklar vardır.
+
+Bu okumada, Python’un veri profesyonelleri tarafından kullanılan diğer programlama dilleri (R, Java ve C++) ile nasıl karşılaştırıldığını öğreneceksiniz.
+
+## Programlama Dilleri İçin Beş Temel Kriter
+
+Veri analizi için sadece Python kullanılmaz, ancak en yaygın ve güçlü dillerden biridir. Birçok veri uzmanı birden fazla programlama dili kullanır. Her dilin avantajları ve dezavantajları vardır. Bu kurs kapsamında, aşağıdaki beş kriteri inceleyeceğiz: **hız, erişilebilirlik, değişken yapısı, veri bilimi odaklılık ve programlama paradigması.**
+
+### **Hız**
+
+Bir programın çalışma hızına birçok faktör katkı sağlar: derleme süresi, çalışma süresi, donanım, kurulu bağımlılıklar ve kodun verimliliği. Genel olarak, düşük seviyeli diller daha hızlıdır, ancak öğrenmeleri ve kullanmaları daha zordur.
+
+### **Erişilebilirlik**
+
+Erişilebilirlik, bir dilin yeni öğrenenler için ne kadar kolay kullanılabilir olduğunu ifade eder. Yeni bir programlama dili öğrenmek, sözdizimi (syntax) ve genel yapısına bağlı olarak zorlayıcı olabilir. **Sözdizimi**, kod kelimelerinin, sembollerin, yerleşimlerin ve noktalama işaretlerinin yapısını ifade eder. **Anlam bilim (semantik)** ise bu yapılara değişkenler ve nesneler kullanarak anlam kazandırır. Değişkenler, programlara esneklik kazandıran önemli yapılardır.
+
+### **Değişkenler**
+
+Kod içerisindeki bilgiler **değişkenlerde** saklanır. Değişken, bilgisayarın belleğinde ayrılmış bir konumda değer saklayan adlandırılmış bir kaptır. Her programlama dili değişkenleri farklı şekillerde kullanır. Bazı diller, tüm program boyunca sabit kalan **statik değişkenler** kullanır. Diğerleri, program çalışırken belirlenen **dinamik değişkenler** kullanır. Bazı diller ise değişkenlerin yerleştirileceği yeri programın kendisinin belirlemesini sağlayan **deklaratif değişkenlere** izin verir.
+
+### **Veri Bilimi Odağı**
+
+Her programlama dili, belirli veri analizi görevlerine daha uygun olan kendine özgü özelliklere sahiptir. Bu yüzden programcılar, farklı veri bilimi görevleri için farklı diller kullanabilir.
+
+### **Programlama Paradigması**
+
+Programlama dilleri **nesne yönelimli**, **fonksiyonel** ya da **emredici (imperative)** olabilir.
+
+-   **Nesne yönelimli** diller, veri nesneleri etrafında modellenmiştir.
+    
+-   **Fonksiyonel** diller, işlevler etrafında modellenir.
+    
+-   **Emredici** diller, programın durumunu değiştirebilecek komut dizileri etrafında çalışır.
+    
+
+___
+
+## Programlama Dillerinin Karşılaştırması
+
+Python, R, Java ve C++ veri analizi için en yaygın kullanılan dört programlama dilidir. Aşağıdaki tablo, bu dilleri beş kritere göre karşılaştırmaktadır: **hız, erişilebilirlik, değişken yapısı, veri bilimi odağı ve programlama paradigması.**
+
+| **Özellikler** | **Python** | **R** | **Java** | **C++** |
+| --- | --- | --- | --- | --- |
+| **Hız** | Yavaş | Yapılandırma ve eklentilere bağlı | Daha hızlı | Çok hızlı |
+| **Erişilebilirlik** | Öğrenmesi kolay | Karmaşık | Öğrenmesi kolay | Karmaşık |
+| **Değişkenler** | Dinamik | Dinamik | Statik | Deklaratif |
+| **Veri Bilimi Odağı** | Makine öğrenimi ve otomatik analiz | Keşifsel veri analizi ve istatistiksel kütüphaneler | Açık kaynak projelerde yaygın | Çok yaygın değil ama güçlü uygulamaları var |
+| **Programlama Paradigması** | Nesne yönelimli | Fonksiyonel dil | Nesne yönelimli | Çok paradigmalı (emredici & nesne yönelimli) |
 
