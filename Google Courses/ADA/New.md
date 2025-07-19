@@ -1092,4 +1092,175 @@ Python, R, Java ve C++ veri analizi için en yaygın kullanılan dört programla
 | **Veri Bilimi Odağı** | Makine öğrenimi ve otomatik analiz | Keşifsel veri analizi ve istatistiksel kütüphaneler | Açık kaynak projelerde yaygın | Çok yaygın değil ama güçlü uygulamaları var |
 | **Programlama Paradigması** | Nesne yönelimli | Fonksiyonel dil | Nesne yönelimli | Çok paradigmalı (emredici & nesne yönelimli) |
 
+# Jupyter Notebook'lar Nasıl Kullanılır?
+
+**Jupyter Notebook**, canlı kod, matematiksel formüller, görselleştirmeler ve metin içeren belgeler oluşturmak ve paylaşmak için kullanılan açık kaynaklı bir web uygulamasıdır. Bu araç, etkileşimli ve paylaşılabilir bir şekilde, standart metin blokları formatında kod geliştirmek ve sunmak için harika bir yöntemdir. Jupyter Notebook'lar içinde kod, matematiksel formüller, veri görselleştirmeleri ve serbest metin oluşturabilirsiniz!
+
+Bu program boyunca, Jupyter Notebook'ları kendi kodunuzu yazmak, çalıştırmak ve sunmak için kullanacaksınız. Bu okuma parçası, kendi not defterinizi nasıl kullanacağınızı size gösterecek. Ancak, bu sertifika programı için herhangi bir yazılım indirmeniz **gerekmediğini** unutmayın. Tüm etkinlikleri Coursera platformunda sunulan araçlarla tamamlayabilirsiniz.
+
+___
+
+## Jupyter Notebook
+
+Jupyter Notebook’a doğrudan tarayıcınızdan erişebilir veya masaüstü uygulamasını indirerek cihazınızda çalışabilirsiniz. R ve Python gibi bildiğiniz programlama dilleri dahil olmak üzere **100’den fazla programlama diliyle** uyumludur.
+
+-   [JupyterLab](https://jupyterlab.readthedocs.io/en/latest/): Hesaplamalı not defterlerle çalışmak için tam araç setidir.
+    
+-   [Jupyter Notebook](https://jupyter-notebook.readthedocs.io/en/stable/): Daha sade bir araçtır ama yine de güçlü ve etkileşimli hesaplamalar yapmanıza olanak tanır.
+    
+
+Bu sertifika programı için, Coursera tarafından sunulan **Jupyter Notebook arayüzünü** kullanmanız önerilir. Jupyter Notebook kullanılan etkinlikler “laboratuvar” (lab) olarak etiketlenir ve her etkinliğin sayfasında ilgili talimatları bulabilirsiniz.
+
+___
+
+## Neden Jupyter Notebook?
+
+Not defterleri özellikle veriyle çalışırken oldukça faydalıdır. Jupyter Notebook’ların öne çıkan bazı avantajları şunlardır:
+
+1.  **Modüler / etkileşimli hesaplama:** Kodları hücre adı verilen küçük parçalarda yazabilir ve çalıştırabilirsiniz. Tüm not defterini çalıştırmanıza gerek kalmadan yalnızca bir hücreyi çalıştırabilirsiniz. Bu, özellikle veri keşfi ve hata ayıklama sırasında oldukça faydalıdır.
+    
+2.  **Kod ve dokümantasyon entegrasyonu:** Kod, açıklayıcı metin ve görselleştirmeleri (grafikler, tablolar vb.) tek bir belgede birleştirebilirsiniz.
+    
+3.  **Birden fazla dili destekler:** Bu programda Python kullanacaksınız ancak Jupyter, birçok programlama dilini destekler.
+    
+4.  **Veri keşfi ve analizi:** Veri yükleme, temizleme, analiz etme ve inceleme işlemlerini şık ve kolay bir arayüzle gerçekleştirmenizi sağlar.
+    
+5.  **Bulut tabanlı hizmetler:** Birçok bulut platformu Jupyter Notebook’ları destekler. Böylece yerel kurulum yapmadan not defterlerini çalıştırabilir ve paylaşabilirsiniz.
+    
+6.  **Eklentiler ve uzantılar:** Çalıştığınız projeye göre işlevselliği artıran zengin bir eklenti ve uzantı ekosistemi mevcuttur.
+    
+
+___
+
+## Jupyter Notebook Nasıl Kullanılır?
+
+Bir Jupyter Notebook açtıktan sonra artık kullanmaya hazırsınız! İşte başlamak için bazı ipuçları:
+
+### Komut / Düzenleme Modu
+
+Not defterlerinin iki çalışma modu vardır: **Komut modu** ve **Düzenleme modu**.
+
+-   **Komut modu:** Not defterine genel olarak etkileşimli şekilde müdahale etmek içindir (hücre eklemek, silmek, taşımak vb.). Aktif hücrenin solunda **mavi çubuk** ile gösterilir.
+
+![image](./images/1011.png)
+    
+-   **Düzenleme modu:** Seçilen hücreye kod veya Markdown metni yazmak içindir. Aktif hücrenin solunda **yeşil çubuk** ve ince yeşil kenarlık ile gösterilir.
+
+![image](./images/1012.png)
+
+-   Düzenleme moduna geçmek için hücreye tıklayın veya yön tuşları ile hücreyi seçip **Enter** tuşuna basın.
+    
+-   Komut moduna geri dönmek için hücre dışına tıklayın ya da **Escape** tuşuna basın.
+    
+
+___
+
+### Markdown Modu
+
+Jupyter Notebook’ta hücreleri kod veya **Markdown** moduna geçirebilirsiniz. Markdown, düz metni biçimlendirmek için kullanılan bir işaretleme dilidir. Açıklamalar, analizler veya kodun çıktısını açıklamak için kullanılır.
+
+-   Bir hücreyi Markdown’a dönüştürmek için sayfanın üstündeki menüden “**Code**” yazan yere tıklayın ve açılır menüden **Markdown**’ı seçin.
+    
+-   Markdown hakkında daha fazla bilgi için:
+    
+    -   [Markdown Temel Söz Dizimi](https://www.markdownguide.org/basic-syntax/)
+        
+    -   [Markdown Genişletilmiş Söz Dizimi](https://www.markdownguide.org/extended-syntax/)
+        
+
+___
+
+### Yaygın Eylemler
+
+Çoğu işlem hem fare hem de klavye kısayollarıyla yapılabilir. İşte en yaygın işlemler:
+
+#### Yeni hücre ekleme
+
+-   Menü çubuğundaki **Insert** seçeneğini kullanın.
+    
+-   Klavye kısayolları (komut modundayken):
+    
+    -   **a:** Mevcut hücrenin üstüne hücre ekler
+        
+    -   **b:** Altına hücre ekler
+        
+
+#### Hücre silme
+
+-   Komut modunda hücre(leri) seçin.
+    
+-   Menüden **Edit > Delete Cells** seçeneğini tıklayın.
+    
+-   Klavye kısayolu: **dd** (iki kez `d` tuşuna basın)
+    
+
+#### Hücre taşıma
+
+-   Komut modunda hücre(leri) seçin.
+    
+-   Menüden yukarı/aşağı okları tıklayarak taşıyın.
+    
+
+#### Hücre çalıştırma
+
+-   Hücreyi seçin ve üst menüden **Run** düğmesine tıklayın.
+    
+-   Klavye kısayolları:
+    
+    -   **Ctrl + Enter:** Seçili hücreyi çalıştırır
+        
+    -   **Shift + Enter:** Hücreyi çalıştırır ve bir sonrakini seçer
+        
+    -   **Alt + Enter:** Hücreyi çalıştırır ve altına yeni hücre ekler
+        
+-   Hem komut hem düzenleme modunda çalıştırabilirsiniz.
+    
+-   Tüm klavye kısayollarını görmek için komut modunda **h** tuşuna basın.
+    
+
+Daha fazla bilgi için:  
+🔗 [Jupyter Notebook arayüz bileşenleri](https://jupyter-notebook.readthedocs.io/en/stable/ui_components.html)
+
+___
+
+## Sorun Giderme
+
+Jupyter Notebook’u kullanırken bazen erişim veya çalıştırma sorunları yaşayabilirsiniz. İşte bazı çözüm adımları:
+
+### Tarayıcı Uyumluluğu
+
+-   Tarayıcınızın en son sürümünü kullanın: **Google Chrome**, **Firefox** veya **Microsoft Edge** önerilir.
+    
+-   Sorun devam ederse: Tarayıcıyı yeniden başlatın, önbelleği ve çerezleri temizleyin veya gizli modda deneyin.
+    
+
+### İnternet Bağlantısı
+
+-   Coursera, **kararlı bir internet bağlantısı** gerektirir.
+    
+-   Sayfaların yüklenmemesi, donmalar ya da komut girilememesi bağlantı sorununa işaret edebilir.
+    
+-   Mümkünse farklı bir cihaz deneyin.
+    
+
+### Özetle Sorun Giderme Adımları
+
+1.  Desteklenen tarayıcının en güncel sürümünü kullanın.
+    
+2.  Tarayıcıyı yeniden başlatın, çerezleri/önbelleği temizleyin.
+    
+3.  İnternet bağlantınızı kontrol edin.
+    
+4.  Laboratuvarı yeniden başlatmayı deneyin.
+    
+
+Tüm bu adımlardan sonra hâlâ sorun varsa, Coursera geçici bakım yapıyor olabilir. Bir süre bekleyip tekrar deneyin.
+
+___
+
+## Önemli Noktalar
+
+**Jupyter Notebook**, kendi kodunuzu geliştirmek ve hata ayıklamak için güçlü bir platformdur. Onu etkili şekilde kullanmayı öğrenmek, Python becerilerinizi geliştirme ve kurs sonunda yapacağınız projeye hazırlık açısından önemlidir.
+
+Python, makine öğrenmesi ve otomatik analiz gibi ileri düzey analiz araçlarının kapısını açacaktır. Jupyter Notebook ise bu becerileri edinmek için mükemmel bir araçtır.
 
