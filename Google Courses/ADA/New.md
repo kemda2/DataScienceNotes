@@ -2373,6 +2373,7 @@ Dizelere ifade yerleştirmenin yanı sıra, dizelerde sayısal değerlerin gör�
     
 4. Son olarak bir harf sunum tipini belirtir
     
+![image](./images/2008.png)
 
 Örnek:
 
