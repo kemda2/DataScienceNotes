@@ -3662,7 +3662,22 @@ $$
 
 f değeri için P değeri bulunur ve alfa ile karşılaştırılır.
 
+> Python ile çözüm;
 
+```Python
+from scipy import stats
+
+grubA = [1, 2, 3, 6]
+grupB = [1, 3, 5, 7]
+grupC = [2, 4, 6, 8]
+
+test = stats.f_oneway(grubA, grupB, grupC)
+
+print(test)
+
+# F_onewayResult(statistic=np.float64(0.6666666666666666), pvalue=np.float64(0.5370433168702269))
+
+```
 
 
 
