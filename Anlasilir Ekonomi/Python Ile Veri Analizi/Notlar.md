@@ -3543,7 +3543,7 @@ Varyans;
 Popülasyon için;
 
 $$
-\sigma^2 = \frac{ \sum (x_i - \bar{X})^2 }{n} 
+\sigma^2 = \frac{ \sum (x_i - \bar{x})^2 }{n} 
 $$
 
 veya
@@ -3551,7 +3551,7 @@ veya
 Örneklem için;
 
 $$
-s^2 = \frac{ \sum (x_i - \bar{X})^2 }{n - 1}
+s^2 = \frac{ \sum (x_i - \bar{x})^2 }{n - 1}
 $$
 
 
@@ -3564,11 +3564,28 @@ $$
 Genel Kareler Toplamı;
 
 $$
-GKT = \sum_{i=1}^{n} \sum_{j=1}^{k} (x_{ij} - \bar{X})^2
+GKT = \sum_{i=1}^{n} \sum_{j=1}^{k} (x_{ij} - \bar{\bar{x}})^2
 $$
 
 Grup içi kareler toplamı;
 
+$$
+GİKT = \sum_{i=1}^{n} \sum_{j=1}^{k} (x_{ij} - \bar{x}_j)^2
+$$
+
+Gruplar arası kareler toplamı;
+
+$$
+GAKT = n \cdot \sum_{j=1}^{k} (\bar{x}_j - \bar{\bar{x}})^2
+$$
+
+GKT = GİKT + GAKT
+
+| **Değişim Kaynağı**  | **Kareler Toplamı** | **Serbestlik Derecesi** | **Kareler Ortalaması** | **F Test İstatistiği** |
+|----------------------|---------------------|-------------------------|------------------------|------------------------|
+| **Gruplar Arası**    | GAKT                | k - 1                   | S1 = GAKT / (k - 1)    | F = S1 / S2            |
+| **Gruplar İç**       | GiKT                | k(n - 1)                | S2 = GiKT / (k(n - 1)) |                        |
+| **Toplam**           | GKT                 | nk - 1                  |                        |                        |
 
 
 
