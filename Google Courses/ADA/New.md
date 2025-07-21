@@ -1701,5 +1701,93 @@ Fonksiyonlar hakkında daha fazla bilgi almak için şu kaynaklara göz atabilir
 
 Ayrıca, [PEP 257](https://peps.python.org/pep-0257/) belgesine bakarak **docstring** yazım kurallarını öğrenebilirsiniz.
 
-# 
+# Referans Kılavuzu: Python Operatörleri
 
+Python'da şimdiye kadar birçok operatörle karşılaştınız. Birçoğu muhtemelen size oldukça tanıdık geliyordur. Sonuçta, Python’da toplama ve çıkarma işlemlerinde yeni bir şey yok. Ancak, temel aritmetik işlemlerin ötesinde birçok başka **operatör** de vardır!
+
+**Operatörler**, belirli aritmetik, mantıksal işlemleri veya süreçleri gerçekleştiren karakterlerdir. Veri uzmanları bu operatörleri işlerinde sürekli kullanır. Operatörler, Python programlamasının temel yapı taşlarından biridir, bu yüzden onları öğrenmek önemlidir. Bu metin, Python’da kullanabileceğiniz çeşitli operatörlere dair bir rehberdir.
+
+---
+
+## Karşılaştırma Operatörleri (Comparators)
+
+Python’da değerleri karşılaştırmak için karşılaştırma operatörlerini kullanabilirsiniz. Bir karşılaştırma yapıldığında, Python **Boolean** (mantıksal) bir sonuç döndürür: `True` (Doğru) veya `False` (Yanlış).
+
+Python şu karşılaştırma operatörlerini kullanır:
+
+|**İşlem**|**Operatör**|
+|---|---|
+|büyüktür|`>`|
+|büyük veya eşittir|`>=`|
+|küçüktür|`<`|
+|küçük veya eşittir|`<=`|
+|eşit değildir|`!=`|
+|eşittir|`==`|
+
+**Notlar:**
+
+- Tek eşittir işareti (`=`) **değer atamak** için kullanılır. Eğer bir karşılaştırma yapmak için tek eşittir kullanırsanız, Python **SyntaxError** (sözdizimi hatası) verir.
+    
+- Uyuşmayan veri türlerini karşılaştırmaya çalışırsanız (örneğin bir string'in bir sayıdan büyük olup olmadığını kontrol etmek), Python **TypeError** (tip hatası) verir.
+    
+
+---
+
+## Mantıksal Operatörler (Logical Operators)
+
+Python ayrıca üç adet **mantıksal operatör** sunar. Bu operatörler karşılaştırma operatörleriyle birleştirilerek daha karmaşık ifadeler oluşturulabilir.
+
+Bu operatörler şunlardır:
+
+- `and`
+    
+    - Sadece **her iki ifade de doğruysa** `True` döner.
+        
+- `or`
+    
+    - **İfadelerden en az biri doğruysa** `True` döner.
+        
+- `not`
+    
+    - Sonucun tersini döner.
+        
+        - Eğer ifade `True` ise, `False` döner.
+            
+        - Eğer ifade `False` ise, `True` döner.
+            
+
+**Örnekler:**
+
+```python
+x = 3 
+my_list = [3, 4, 6, 10]  
+print(x < 3 and x != 0) 
+print(x >= len(my_list) or x == min(my_list)) 
+print(x not in my_list)  
+
+# False 
+# True 
+# False
+```
+
+---
+
+## Aritmetik Operatörler
+
+Python, yerleşik operatörler kullanarak matematiksel işlemler de yapabilir. Bu aritmetik operatörler şunlardır:
+
+|**İşlem**|**Operatör**|**Örnek**|
+|---|---|---|
+|Toplama|`+`|`[IN] 5 + 2`  <br>`[OUT] 7`|
+|Çıkarma|`-`|`[IN] 5 - 2`  <br>`[OUT] 3`|
+|Çarpma|`*`|`[IN] 5 * 2`  <br>`[OUT] 10`|
+|Bölme|`/`|`[IN] 5 / 2`  <br>`[OUT] 2.5`|
+|Modül (bölümden kalan)|`%`|`[IN] 5 % 2`  <br>`[OUT] 1`|
+|Üs alma|`**`|`[IN] 5 ** 2`  <br>`[OUT] 25`|
+|Tamsayı bölme  <br>(tam kaç kere bölünür?)|`//`|`[IN] 5 // 2`  <br>`[OUT] 2`|
+
+---
+
+Python’da bu temel operatörlerin dışında, özel kütüphanelerle yapılabilecek çok daha fazla matematiksel işlem vardır — bunları ilerleyen konularda öğreneceksiniz. Python, karşılaştırmalar yapmak, mantıksal işlemler gerçekleştirmek ve aritmetik hesaplamalar yapmak için temel bir operatör seti kullanır. Bu operatörler ifadeler içinde birleştirilerek sınırsız sayıda işlem ve görev gerçekleştirilebilir.
+
+#
