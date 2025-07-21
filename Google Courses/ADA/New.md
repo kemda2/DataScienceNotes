@@ -2041,4 +2041,146 @@ Programın işleyişi şu şekildedir:
     
 - `continue` ifadesi, mevcut yinelemenin kalan kısmını atlayarak doğrudan bir sonraki yinelemeye geçmenizi sağlar.
 
+# For Döngüleri
+
+Python’da `for` döngülerini öğrendiniz ve bazı örnekler üzerinde çalıştınız. `For` döngüleri, `while` döngülerine benzer; ancak, belirli bir koşul sağlanana kadar devam etmek yerine, `for` döngüleri bir **iterable** (yinelenebilir) dizideki her bir öğe üzerinde döner ve her yinelemede bir işlem veya değerlendirme yapılmasına olanak tanır. Bu süreç yalnızca Python’da değil, çoğu programlama dilinde de önemli bir rol oynar. Veri profesyonelleri verileri işlerken `for` döngülerini sıkça kullanır, bu nedenle becerilerinizi geliştirirken bu yapıya aşina olmanız önemlidir. Bu metin, `for` döngülerinin temel kavramlarının bir gözden geçirmesidir.
+
+___
+
+## For Döngüsü Söz Dizimi
+
+Bir `for` döngüsü, bir **iterable** (yinelenebilir) dizideki eleman sayısı kadar bir kod bloğunu çalıştırmanıza olanak tanıyan bir kontrol yapısıdır. İlerleyen derslerde yinelenebilir diziler hakkında daha fazla bilgi edineceksiniz; ancak bazı örnekler şunlardır:
+
+-   **String’ler**: `'chimichurri'`
+    
+-   **Listeler**: `[1, 2, 3, 4, 5, 6]`
+    
+-   **Tuple’lar**: `(1, 2, 3, 4, 5)`
+    
+-   **Sözlükler**: `{'Ad': 'Anita', 'Yaş': 77}`
+    
+-   **Kümeler (Set)**: `{1, 4, 14, 33}`
+    
+
+**Not**: Aşağıdaki kod bloğu etkileşimli değildir.
+
+Bir `for` döngüsünün temel söz dizimi şu şekildedir:
+
+```python
+for item in iterable_sequence:
+    # iterable_sequence içindeki her bir değer için çalıştırılacak kod bloğu
+```
+
+Burada iterable_sequence herhangi bir yinelemeli veri türü olabilir ve item değişkeninin adı size kalmıştır — istediğiniz ismi verebilirsiniz. Ancak, bu değişkeni adlandırırken bazı yaygın konvansiyonlarla karşılaşırsınız. Örneğin, bir string içindeki karakterleri dönerken genellikle char, bir sayı listesini dönerken n veya num isimleri kullanılır. Döngüde neyin döndürüldüğünü kodu okuyan kişilere anlatmak açısından değişkenin anlamlı bir isme sahip olması faydalıdır. Örneğin, insanların isimlerini içeren names adlı bir liste varsa, şöyle yazabilirsiniz: for name in names:.
+
+Bu değişkenin davranışına dair bir not — her döngü adımında değeri yeniden atanır ve döngü tamamlandıktan sonra da bu son değerle birlikte varlığını sürdürür.
+
+Örnek:
+
+```python
+num = 5
+
+y = [1, 2, 3]
+
+for num in y:
+    print(num)
+
+print(num)
+
+# 1
+# 2
+# 3
+# 3
+```
+
+Dikkat ederseniz, `num` döngü başlamadan önce tanımlanmış. For döngüsünün ilk adımında bu değişkene, dizideki ilk öğenin değeri atanır. Bu atama her yinelemede tekrar edilir. Döngü bittiğinde `num` değişkeni hâlâ mevcuttur ve son yinelemedeki değeri taşır.
+
+___
+
+## `range()` fonksiyonu
+
+For döngüsü, üzerinde döngü yapılacak veri yapısının uzunluğuna göre tam olarak gereken sayıda yineleme yapmanızı sağlar. Yani, yinelemeli diziniz 2, 1000 ya da bir milyon öğe içerse de aynı sözdizimini kullanabilirsiniz ve kaç defa döneceğinizi ayrıca belirtmeniz gerekmez. Ancak bazı durumlarda, belirli bir sayıda işlem yapmak isteyebilirsiniz ama elinizde döngü yapılacak bir veri olmayabilir. Ya da düzenli bir sayı dizisi oluşturmak isteyebilirsiniz. İşte bu noktada `range()` fonksiyonu devreye girer.
+
+`range()` fonksiyonu üç argüman alabilir: **başlangıç (start), bitiş (stop), adım (step)**. Çıktısı, `range` sınıfına ait bir nesnedir. Eğer sadece bir argüman verirseniz, bu bitiş değeri olarak yorumlanır. Başlangıç varsayılan olarak `0`, adım ise `1` olarak alınır. İki argüman verirseniz, bunlar başlangıç ve bitiş olarak yorumlanır (adım yine varsayılan olarak 1 olur). Dikkat: Bitiş değeri `range` içinde yer almaz.
+
+Bazı örnekler:
+
+**A.**
+
+```python
+for i in range(3):
+    print(i)
+
+# 0  
+# 1  
+# 2
+```
+
+**B.**
+
+```python
+for n in range(2, 5):
+    print(n)
+
+# 2  
+# 3  
+# 4
+```
+
+**C.**
+
+```python
+for even_num in range(2, 11, 2):
+    print(even_num)
+
+# 2  
+# 4  
+# 6  
+# 8  
+# 10
+```
+
+`range()` fonksiyonunun oldukça kullanışlı olduğunu göreceksiniz — örneğin, numaralı listeler oluştururken ya da bir nesnenin belirli indekslerinde işlem yaparken. İleride dizinleme (indexing) hakkında daha fazla öğreneceksiniz.
+
+___
+
+## İç içe döngüler (Nested loops)
+
+Bazen iç içe yapılardan —örneğin bir liste içindeki listelerden— bilgi çıkarmanız gerekir. Bunu yapmanın bir yolu da **iç içe döngüler** kullanmaktır. İç içe döngü, bir döngünün içinde başka bir döngü olmasıdır. Teorik olarak sonsuz sayıda iç içe döngü yazabilirsiniz, ama ne kadar çok eklerseniz, kodun okunması ve anlaşılması o kadar zorlaşır.
+
+İşte bir örnek:
+
+```python
+students = [['Igor', 'Sokolov'], ['Riko', 'Miyazaki'], ['Tuva', 'Johansen']]
+
+for student in students:
+    for name in student:
+        print(name)
+    print()
+
+# Igor  
+# Sokolov  
+
+# Riko  
+# Miyazaki  
+
+# Tuva  
+# Johansen
+```
+
+Bu örnekte `students` değişkeni, üç iç liste içeren bir liste. Her iç liste, bir isim ve bir soyisim içeriyor. İlk for döngüsü, iç listeleri döner. İçteki (ikinci) for döngüsü, her iç listedeki isimleri döner ve yazdırır. Her dış döngü adımından sonra, boş bir `print()` ile yeni satır oluşturulur.
+
+___
+
+## Ana noktalar
+
+-   **For döngüsü**, yinelemeli bir dizideki öğe sayısı kadar bir kod bloğunu çalıştırmanızı sağlar.
+    
+-   **`range()` fonksiyonu**, tanımlı bir yinelemeli dizi oluşturmak için oldukça kullanışlıdır.
+    
+-   **İç içe döngüler**, bir döngü içinde başka bir döngü çalıştırarak daha karmaşık yapılar üzerinde işlem yapmanıza olanak tanır.
+    
+
+Bunlar, bir veri profesyoneli olarak karşılaşacağınız birçok sorunu çözmek için kullanabileceğiniz güçlü araçlardır.
+
 #
