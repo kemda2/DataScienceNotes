@@ -1564,5 +1564,142 @@ Python hakkında daha fazla bilgi edinmenizi sağlayacak bazı yararlı kaynakla
         
 - [Python Operatörleri](https://python-reference.readthedocs.io/en/latest/docs/operators/index.html)
 
-#
+# Referans Kılavuzu: Fonksiyonlar
+
+Öğrendiğiniz üzere, **fonksiyonlar** belirli süreçleri veya görevleri gerçekleştirmek için yeniden kullanılabilir kod bloklarıdır. Daha az kodla daha fazla iş yapmanıza yardımcı olurlar. Fonksiyon örnekleri şunları içerebilir:
+
+- Fahrenheit'ı Celsius’a çevirme gibi belirli bir hesaplama veya ölçüm
+    
+- Stoktaki ürünlerin miktarlarını yineleyip toplam maliyetini hesaplayan bir envanter aracı
+    
+- Bir dizi veya sözlük verisinden bir DataFrame oluşturma
+    
+- Yazım denetleyici gibi bir uygulama aracı
+    
+
+Bu metinde, fonksiyonların nasıl tanımlanacağı, oluşturulacağı ve çağrılacağı hakkında bilgi edineceksiniz.
+
+---
+
+## Fonksiyon Söz Dizimi (Syntax)
+
+Fonksiyonları aşağıdaki söz dizimi ve biçimi kullanarak tanımlayın:
+
+**Not:** Aşağıdaki kod bloğu etkileşimli değildir.
+
+```python
+def my_function(parameters):
+
+    '''
+
+    Docstring.
+
+    Fonksiyonun davranışını özetleyin ve argümanlarını ile döndürdüğü değerleri açıklayın.
+
+    '''
+
+    kod bloğu
+
+    return değer
+```
+
+1. `def` anahtar kelimesiyle başlayın, ardından fonksiyonun adını yazın. Parantez içine parametrelerini/argümanlarını yerleştirin ve sonuna iki nokta (:) koyun.
+    
+    - Python'da fonksiyon adlarında küçük harfli kelimeler alt çizgi ile ayrılarak yazılır (snake_case).
+        
+2. Fonksiyon önemliyse ya da ne yaptığı açık değilse, bir **docstring** (belge açıklaması) ekleyin. Bunu üç açılış ve üç kapanış tırnak arasında yazın.
+    
+    - Docstring emir kipiyle yazılmalıdır (örneğin: “İki sayıyı topla”, “İki sayıyı toplar” değil).
+        
+    - Fonksiyonun ne yaptığını, parametrelerini ve döndürdüğü değeri özetlemelidir.
+        
+    - Docstring, tanım satırından dört boşluk girintili yazılmalıdır.
+        
+3. Fonksiyonun gövdesini yazın.
+    
+    - Tüm kodlar, tanım satırından en az dört boşluk girintili olmalıdır. Kodun karmaşıklığına göre daha fazla girinti de olabilir.
+        
+4. Son olarak, bir **return** ifadesiyle bir değer döndürün veya **print** ifadesiyle konsola bir şey yazdırın ve fonksiyonu tamamlayın. Bu satır da dört boşluk girintili olmalıdır.
+    
+
+---
+
+## **return vs. print**
+
+Python öğrenenler için `return` ve `print` ifadeleri arasındaki fark bazen net olmayabilir. Bunların ne yaptığını ve ne zaman kullanılacağını anlamak önemlidir:
+
+- `return` ifadesi, başka bir işlemde kullanılabilecek bir **sonuç döndürür**. Ekrana bir şey yazdırmak zorunda değildir.
+    
+- `print` ifadesi, sadece **ekrana yazdırır**, başka bir işlemde kullanılmaz.
+    
+
+Şöyle düşünün:  
+`return` ifadesi, kardeşinizin pazara gidip size bir **patates torbası** getirmesi gibidir.  
+`print` ifadesi, kardeşinizin pazara gidip eve gelip hangi **patateslerin satıldığını anlatması** gibidir.  
+`return` ile pişirecek patatesiniz olur. `print` ile sadece ne olduğunu bilirsiniz ama elinizde bir şey yoktur.
+
+---
+
+## **Fonksiyonlar ve Metotlar Arasındaki Fark**
+
+Fonksiyonlar ve metotlar birbirine çok benzer, ancak bazı temel farklar vardır. **Metotlar**, belirli bir sınıfa (class) ait olan özel fonksiyonlardır. Yani bir nesne üzerinden **nokta gösterimi (dot notation)** ile çağrılırlar.
+
+**Metot örneği:**
+
+```python
+my_string = 'The eagles filled the sky.'
+my_string.split()
+
+# ['The', 'eagles', 'filled', 'the', 'sky.']
+```
+
+Buradaki `split`, string sınıfına ait bir fonksiyondur ve boşluklardan bölme işlemi yapar.
+
+**Bağımsız fonksiyonlar**, belirli bir sınıfa ait değildir ve genellikle birçok sınıfla birlikte kullanılabilirler.
+
+**Fonksiyon örneği:**
+
+```python
+sum([6, 3])
+
+# 9
+```
+
+Python’un yerleşik fonksiyonlarının listesini [buradan inceleyebilirsiniz](https://docs.python.org/3/library/functions.html) ve bunların nasıl kullanıldığını [Jupyter forumu](https://discourse.jupyter.org/), [StackOverflow](https://stackoverflow.com/) ve diğer topluluklarda araştırabilirsiniz.
+
+---
+
+## Daha Fazla Bilgi İçin Kaynaklar
+
+Fonksiyonlar hakkında daha fazla bilgi almak için şu kaynaklara göz atabilirsiniz:
+
+- Python [Referans Kütüphanesi](https://docs.python.org/3/library/)
+    
+- [Veri tipleri](https://docs.python.org/3/library/stdtypes.html)
+    
+- [Fonksiyonlar](https://docs.python.org/3/library/functions.html#built-in-functions)
+    
+- [Semboller](https://wiki.python.org/moin/PythonGlossary?action=AttachFile&do=view&target=PySymbols.html)
+    
+
+### Yerleşik Fonksiyonlar:
+
+- [enumerate()](https://docs.python.org/3/library/functions.html#enumerate)
+    
+- [isinstance()](https://docs.python.org/3/library/functions.html#isinstance)
+    
+- [dict()](https://docs.python.org/3/library/functions.html#func-dict)
+    
+- [type()](https://docs.python.org/3/library/functions.html#type)
+    
+- [len()](https://docs.python.org/3/library/functions.html#len)
+    
+- [set()](https://docs.python.org/3/library/functions.html#func-set)
+    
+- [zip()](https://docs.python.org/3/library/functions.html#zip)
+    
+
+Ayrıca, [PEP 257](https://peps.python.org/pep-0257/) belgesine bakarak **docstring** yazım kurallarını öğrenebilirsiniz.
+
+# 
 
