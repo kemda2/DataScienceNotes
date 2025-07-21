@@ -1790,4 +1790,105 @@ Python, yerleşik operatörler kullanarak matematiksel işlemler de yapabilir. B
 
 Python’da bu temel operatörlerin dışında, özel kütüphanelerle yapılabilecek çok daha fazla matematiksel işlem vardır — bunları ilerleyen konularda öğreneceksiniz. Python, karşılaştırmalar yapmak, mantıksal işlemler gerçekleştirmek ve aritmetik hesaplamalar yapmak için temel bir operatör seti kullanır. Bu operatörler ifadeler içinde birleştirilerek sınırsız sayıda işlem ve görev gerçekleştirilebilir.
 
+Elbette! İşte verdiğiniz metnin Türkçeye çevrilmiş hâli:
+
+---
+
+# Referans Kılavuzu: Koşullu İfadeler
+
+Koşullu ifadeler, programlamanın temel bir parçasıdır. Belirli koşullara göre bilgi akışını kontrol etmenizi sağlar. Python'da koşullu ifadeleri uygulamak için `if`, `elif` ve `else` ifadeleri kullanılır. Program yürütmesini dallandırmak için koşullu ifadeleri kullanmak, çoğu veri profesyoneli için kodlamanın temel bir yönüdür; bu yüzden nasıl çalıştıklarını anlamak önemlidir. Bu okuma materyali, koşullu ifadelere dair bir referans kılavuzudur.
+
+## Koşullu İfadelerin Söz Dizimi (Syntax)
+
+Önceki videolarda, değerleri karşılaştırmanıza olanak tanıyan bazı yerleşik Python operatörlerini ve değerleri birleştirmek için kullanabileceğiniz bazı mantıksal operatörleri öğrendiniz. Ayrıca bu operatörleri `if-elif-else` bloklarında nasıl kullanacağınızı da öğrendiniz.
+
+**Not**: Aşağıdaki kod bloğu etkileşimli değildir.
+
+Python'da `if-elif-else` ifadelerinin temel söz dizimi aşağıdaki gibidir:
+
+```python
+if koşul1:
+    # koşul True olarak değerlendirilirse çalışacak kod bloğu
+
+elif koşul2:
+    # koşul1 False ve koşul2 True olarak değerlendirilirse çalışacak kod bloğu
+
+else:
+    # koşul1 ve koşul2'nin ikisi de False ise çalışacak kod bloğu
+```
+
+Burada, `koşul1` ve `koşul2` ya `True` ya da `False` olarak değerlendirilen ifadelerdir. `if` ifadesindeki koşul doğruysa, ardından gelen kod bloğu çalıştırılır. Aksi takdirde atlanır.
+
+`elif` ifadesi "else if" anlamına gelir ve ilk koşul yanlışsa kontrol edilecek alternatif bir koşulu belirtmek için kullanılır. Kodunuzda birden fazla `elif` ifadesi olabilir. Önceki koşul yanlış ve `elif` koşulu doğruysa, `elif`'in ardından gelen kod bloğu çalıştırılır.
+
+`else` ifadesi, `if` ve varsa tüm `elif` ifadeleri yanlışsa ne yapılacağını belirtmek için kullanılır.
+
+Aşağıda tüm bu ifadelerin kullanıldığı bir örnek verilmiştir:
+
+```python
+x = 8
+
+if x > 5:
+    print('x beşten büyüktür')
+
+elif x < 5:
+    print('x beşten küçüktür')
+
+else:
+    print('x beşe eşittir')
+
+# Çıktı: x beşten büyüktür
+```
+
+### `else` Kullanımının Atlanması
+
+Çoğu zaman, kodunuzun mantıksal bağlamında `else` ifadesi gereksiz olduğu için kullanılmaz. Aşağıdaki örneği inceleyin:
+
+```python
+def bigger_than_ten(x):
+    if x > 10:
+        return True
+    else:
+        return False
+
+print(bigger_than_ten(15))
+print(bigger_than_ten(2))
+
+# Çıktı: True
+# Çıktı: False
+```
+
+Bu işlev, `x` 10'dan büyükse `True`, değilse `False` döndürecektir. Dikkat ederseniz, `else` kendi satırında yer alır ve ardından girintili bir `return` ifadesi gelir. Bu tamamen geçerli bir koddur ve sıkça bu tür yapılarla karşılaşırsınız.
+
+Ancak, bu son adımı atlayan eşdeğer başka bir form da vardır. Aşağıdaki koda göz atın:
+
+```python
+def bigger_than_ten(x):
+    if x > 10:
+        return True
+    return False
+
+print(bigger_than_ten(15))
+print(bigger_than_ten(2))
+
+# Çıktı: True
+# Çıktı: False
+```
+
+Bu örnekte `else` ifadesi yoktur ama bir fark yaratmaz. Mantık aynıdır. Fonksiyon en üstten başlayarak çalışmaya başlar. Satır 2’deki koşulu değerlendirir, eğer `True` ise satır 3 çalışır ve `return` ifadesiyle fonksiyon sonlanır. Daha fazla kod çalıştırılmaz.
+
+Eğer koşul doğru değilse, 3. satır atlanır çünkü bu satır 2. satıra bağlı bir alt koşuldur. Bunun yerine doğrudan 4. satıra geçilir ve `False` değeri döndürülerek fonksiyon sonlanır. Ayrıca `return False` ifadesinin, `if` ile aynı girintide olduğuna dikkat edin.
+
+Programlama becerileriniz geliştikçe, bu iki yaklaşımdan hangisini tercih ettiğinizi göreceksiniz. Hangisi size daha uygunsa onu kullanabilirsiniz. Ancak her iki yapıyı da tanımak önemlidir.
+
+## Önemli Noktalar
+
+Python'da koşullu ifadelerle ilgili bilmeniz gereken bazı önemli noktalar:
+
+* `elif` ve `else` ifadeleri isteğe bağlıdır. Tek başına bir `if` ifadesi kullanabilirsiniz.
+* Birden fazla `elif` ifadesi kullanabilirsiniz.
+* Sadece bir tane `else` ifadesi olabilir ve bu her zaman mantık bloğunuzun sonunda yer almalıdır.
+* Koşullar, Boolean (True veya False) değerine değerlenecek ifadeler olmalıdır.
+* Girintileme çok önemlidir! Her koşullu ifadeye ait kod bloğu, o ifadenin altına girintili şekilde yazılmalıdır. Veri profesyonelleri için yaygın girintileme standardı dört boşluktur. Girintileme hataları, beklenmeyen kod davranışlarının en yaygın nedenlerinden biridir.
+
 #
