@@ -3670,5 +3670,5 @@ f değeri için P değeri bulunur ve alfa ile karşılaştırılır.
 ## 5.14 
 # 6
 
-https://www.youtube.com/watch?v=og0cKCz-ChE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=72
-50:19
+https://www.youtube.com/watch?v=mtLisESscvo&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=73
+00:00
