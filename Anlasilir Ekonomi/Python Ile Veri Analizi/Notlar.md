@@ -3584,7 +3584,7 @@ GKT = GİKT + GAKT
 | **Değişim Kaynağı**  | **Kareler Toplamı** | **Serbestlik Derecesi** | **Kareler Ortalaması** | **F Test İstatistiği** |
 |----------------------|---------------------|-------------------------|------------------------|------------------------|
 | **Gruplar Arası**    | GAKT                | k - 1                   | S1 = GAKT / (k - 1)    | F = S1 / S2            |
-| **Gruplar İç**       | GiKT                | k(n - 1)                | S2 = GiKT / (k(n - 1)) |                        |
+| **Gruplar İçi**       | GiKT                | k(n - 1)                | S2 = GiKT / (k(n - 1)) |                        |
 | **Toplam**           | GKT                 | nk - 1                  |                        |                        |
 
 ### Örnekler
@@ -3607,6 +3607,8 @@ $$n \cdot k= 12$$
 
 $$ \bar{\bar{x}} = \frac{3 + 4 + 5}{3} = 4 $$
 
+Gruplar Arası;
+
 $$
 GAKT = 4 \left( (3 - \bar{x})^2 + (4 - \bar{x})^2 + (5 - \bar{x})^2 \right)
 $$
@@ -3628,8 +3630,37 @@ GAKT = 8
 $$
 
 $$
-S1 = \frac{GAKT}{k-1} = \frac{8}{2} = 4
+S_1 = \frac{GAKT}{k-1} = \frac{8}{2} = 4
 $$
+
+
+$$
+A → 3 \qquad B → 4 \qquad C → 5
+$$
+
+|         | A            | B            | C            |
+|---------|--------------|--------------|--------------|
+|         | (1-3)²       | (1-4)²       | (2-3)²       |
+|         | (2-3)²       | (3-4)²       | (4-5)²       |
+|         | (3-3)²       | (5-1)²       | (6-5)²       |
+|         | (6-3)²       | (7-1)²       | (8-5)²       |
+| Toplam  | 14           | 20           | 20           |
+
+Gruplar İçi;
+
+$$
+GİKT = 14 + 20 + 20 = 54
+$$
+
+$$
+S_2 = \frac{GİKT}{k \cdot (n-1)} = \frac{54}{3 \cdot 3} = 6
+$$
+
+$$
+f = \frac{S_1}{S_2} = \frac{4}{6} = 0,667
+$$
+
+f değeri için P değeri bulunur ve alfa ile karşılaştırılır.
 
 
 
