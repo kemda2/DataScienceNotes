@@ -1891,4 +1891,160 @@ Python'da koşullu ifadelerle ilgili bilmeniz gereken bazı önemli noktalar:
 * Koşullar, Boolean (True veya False) değerine değerlenecek ifadeler olmalıdır.
 * Girintileme çok önemlidir! Her koşullu ifadeye ait kod bloğu, o ifadenin altına girintili şekilde yazılmalıdır. Veri profesyonelleri için yaygın girintileme standardı dört boşluktur. Girintileme hataları, beklenmeyen kod davranışlarının en yaygın nedenlerinden biridir.
 
+# Döngüler, `break` ve `continue` İfadeleri
+
+Python’da `while` döngülerini öğrendiniz ve bazı örnekleri incelediniz. `While` döngüleri kullanışlıdır çünkü belirli bir koşul sağlandığı sürece bir işlemi veya değerlendirmeyi tekrar tekrar yapmanıza olanak tanır, koşul sağlanmadığında ise döngü sona erer. Bu süreç yalnızca Python’da değil, çoğu programlama dilinde de önemli bir yer tutar. Veri profesyonelleri, veriyi işlerken `while` döngülerini sıklıkla kullanır; bu nedenle becerilerinizi geliştirirken bu yapıya aşina olmanız önemlidir. Bu okuma, `while` döngülerine dair temel kavramların bir özetidir.
+
+---
+
+## `While` Döngüsü Söz Dizimi (Syntax)
+
+`While` döngüsü, belirli bir koşul doğru olduğu sürece bir kod bloğunu tekrar tekrar çalıştırmanıza olanak tanıyan bir kontrol yapısıdır.
+
+**Not**: Aşağıdaki kod bloğu etkileşimli değildir.
+
+Bir `while` döngüsünün temel söz dizimi şöyledir:
+
+```python
+while koşul:
+    # çalıştırılacak kod bloğu
+```
+
+Koşul, her döngü yinelemesinin başında değerlendirilen bir Boolean ifadedir. Koşul doğru (`True`) ise, kod bloğu çalıştırılır. Kod bloğu çalıştıktan sonra koşul tekrar değerlendirilir. Bu işlem koşul `False` olana kadar devam eder. Koşul `False` olduğunda döngü sona erer ve program döngüden sonraki satırla devam eder.
+
+Temel bir `while` döngüsü örneği:
+
+```python
+x = 1
+
+while x < 100:
+    print(x)
+    x = x * 2
+
+# Çıktı:
+# 1 
+# 2 
+# 4 
+# 8 
+# 16 
+# 32 
+# 64
+```
+
+
+Bu örnekte, döngü başlarken `x` değeri 1’dir. `x < 100` olduğu sürece, program `x`’in değerini yazdırır ve sonra `x`’i ikiyle çarpar. Koşul tekrar kontrol edilir ve hâlâ doğru olduğu sürece döngü çalışmaya devam eder. `x` 128 olduğunda, koşul artık sağlanmaz ve döngü sona erer.
+
+---
+
+## Sonsuz Döngüler (Infinite Loops)
+
+`While` döngüleri kullanırken dikkatli olun; çünkü mantık veya yazım hataları yaptığınızda döngü sonsuza kadar çalışabilir. Bu bir **sonsuz döngü** oluşturur.
+
+Önceki örnekte, eğer `x = x * 2` satırı yanlışlıkla döngü bloğunun dışında yazılmış olsaydı, `x` hiçbir zaman değişmeyecekti ve `x < 100` koşulu hep doğru kalacaktı. Bu durumda döngü sonsuza kadar devam ederdi.
+
+Sonsuz bir döngüye girerseniz endişelenmeyin. Döngüyü durdurmak için kernel’i durdurabilirsiniz. Bunu yapmanın birkaç yolu vardır:
+
+1. Notebook’un üst menüsündeki **durdur (stop)** butonunu kullanın.
+
+![image](./images/2006.png)
+
+2. Menü çubuğunda **Kernel** sekmesine tıklayıp açılan menüden **Interrupt** (kes) seçeneğini seçin.
+    
+![image](./images/2007.png)
+
+3. Komut modundayken **iki kere `i` tuşuna** basın.
+    
+
+---
+
+## `break` ve `continue`
+
+Koşul hâlâ doğru olsa bile, bir döngüyü erken sonlandırmak mümkündür. Bunu yapmak için `break` ifadesi kullanılır.
+
+Aşağıda bir örnek yer almaktadır:
+
+```python
+x = 1
+i = 0
+
+while x < 100:
+    if i == 5:
+        break
+    print(i, x)
+    x = x * 2
+    i += 1
+
+# Çıktı:
+# 0 1
+# 1 2
+# 2 4
+# 3 8
+# 4 16
+```
+
+
+
+Bu örnekte, `i` adında bir sayaç değişkeni var. Her yinelemede program:
+
+1. `x < 100` koşulunu kontrol eder.
+    
+2. Eğer koşul sağlanıyorsa, `i == 5` mi diye bakar.
+    
+3. Eğer `i == 5` ise, `break` ifadesi çalışır ve döngü sona erer. Aksi takdirde, `i` ve `x` değerleri yazdırılır, `x` ikiyle çarpılır, `i` bir artırılır.
+    
+4. Bu işlem, `x ≥ 100` ya da `i == 5` olana kadar devam eder. Bu örnekte döngü, `i = 5` olduğunda kırılır.
+    
+
+---
+
+Ayrıca, döngünün içindeki kodun geri kalanını çalıştırmadan bir yinelemeyi atlamak da mümkündür. Bunun için `continue` ifadesi kullanılır.
+
+Örnek:
+
+```python
+i = 0
+
+while i < 10:
+    if i % 3 != 0:
+        print(i)
+        i += 1
+        continue
+    i += 1
+
+# Çıktı:
+# 1 
+# 2 
+# 4 
+# 5 
+# 7 
+# 8
+```
+
+
+
+Bu örnek, 0’dan 9’a kadar olan ve **3’e tam bölünemeyen** sayıları yazdırır.
+
+Programın işleyişi şu şekildedir:
+
+1. `i < 10` koşulu kontrol edilir.
+    
+2. Eğer sağlanıyorsa, `i % 3 != 0` koşuluna bakılır.
+    
+3. Eğer `i`, 3’e tam bölünmüyorsa, `i` yazdırılır, 1 artırılır ve `continue` ile döngünün başına dönülür. Sonraki `i += 1` satırı çalışmaz.
+    
+4. Eğer `i`, 3’e tam bölünüyorsa, `if` bloğu atlanır ve yalnızca `i += 1` satırı çalışır.
+    
+5. Döngü `i = 10` olana kadar devam eder.
+    
+
+---
+
+## Önemli Noktalar
+
+- `While` döngüsü, bir koşul doğru olduğu sürece bir kod bloğunu tekrar tekrar çalıştırmanızı sağlar.
+    
+- `break` ifadesi, koşul hâlâ doğru olsa bile döngüyü erken bitirmenizi sağlar.
+    
+- `continue` ifadesi, mevcut yinelemenin kalan kısmını atlayarak doğrudan bir sonraki yinelemeye geçmenizi sağlar.
+
 #
