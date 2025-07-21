@@ -3761,5 +3761,5 @@ H0 reddedilir. En az iki tanesi istatistiksel olarak farklıdır.
 ## 5.14 
 # 6
 
-https://www.youtube.com/watch?v=mtLisESscvo&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=73
+https://www.youtube.com/watch?v=gAWlOTyL0uU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=74
 00:00
