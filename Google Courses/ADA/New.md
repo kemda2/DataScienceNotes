@@ -2276,4 +2276,231 @@ Bitiş indeksi 100 olmasına rağmen (ki bu dizenin sınırlarının çok dış�
     
 -   Bu araçlar sayesinde dizeleri ve diğer yinelenebilir dizileri işleyerek çok çeşitli işlemler gerçekleştirebilir ve veri işleme konusunda daha yetkin hale gelebilirsiniz.
 
+# Dize Biçimlendirme ve Düzenli İfadeler
+
+Öğrendiğiniz gibi, dizeler metinsel bilgiyi temsil ettikleri için önemli bir veri türüdür. Veri profesyonelleri sürekli dizelerle karşılaşır, bu yüzden dizelerle çalışmanın ve onları manipüle etmenin farklı yollarını öğrenmek önemlidir. Bu bölümde öğrendiğiniz dize biçimlendirme teknikleri gözden geçirilecek ve ayrıca size düzenli ifadeler tanıtılacaktır.
+
+## Dize Biçimlendirme
+
+Dize biçimlendirme, string sınıfına ait olan `format()` metodu kullanılarak yapılır. Bu metot, daha büyük bir dize içinde belirlenmiş yerlere belirli alt dizeleri biçimlendirerek eklemeye yarar. Örneğin, içine değişken değerlerin yerleştirileceği tekrar kullanılabilir şablon metinler için kullanışlıdır. Ayrıca grafik ve çizelgelerdeki etiketlerde kullanılacak dizeleri oluştururken de faydalıdır.
+
+Örnek:
+
+```python
+x = 'değerler' 
+y = 100  
+print('''Dize biçimlendirme, {} dizelere eklemenizi sağlar. Hatta sayılar da olabilir, örneğin {}.'''.format(x, y))
+
+# Dize biçimlendirme, değerler dizelere eklemenizi sağlar. Hatta sayılar da olabilir, örneğin 100.
+```
+
+Yazım şekline dikkat edin. `format()` fonksiyonu, argümanlarını kendisine bağlı olan dizideki süslü parantezler `{}` içine sırasıyla yerleştirir. Bu örnekte ayrıca faydalı bir yöntem de kullanılmıştır: Çok uzun dizelerle karşılaştığınızda, birçok editör dizenin tek satırda çok sağa uzamasına izin verir. Bu, geniş bir monitörünüz yoksa pratik değildir; Python kodunda tek satır uzunluğu için geleneksel maksimum 79 karakterdir. Üçlü tırnak işaretiyle (''') dizenizi birden çok satıra bölebilirsiniz.
+
+`format()` fonksiyonu, anahtar kelime argümanları kullanarak da değerleri süslü parantezlere yerleştirebilir. Bu sayede argümanların fonksiyona verilme sırasını değiştirip, son dizide yerleşim sırasını farklı tutabilirsiniz.
+
+Örnek:
+
+```python
+var_a = 'A' 
+var_b = 'B' 
+print('{a}, {b}'.format(b=var_b, a=var_a))
+
+# A, B
+```
+
+Burada argümanlar isimlendirilmiş olduğu için `var_b` önce girse bile dizide sıralama `{a}, {b}` olarak korunur.
+
+Ayrıca süslü parantezlerin içine argüman indekslerini koyarak hangi argümanın hangi pozisyona yerleşeceğini belirtebilirsiniz:
+
+```python
+var_a = 'A' 
+var_b = 'B' 
+print('{1}, {0}'.format(var_a, var_b)) 
+print('{0}, {1}'.format(var_a, var_b))
+
+# B, A 
+# A, B
+```
+
+İstediğiniz kadar argüman kullanabilirsiniz:
+
+```python
+print('{}, {}, {}, {}, {}, {} ...'.format(1, 2, 3, 4, 5, 6))
+
+# 1, 2, 3, 4, 5, 6 ...
+```
+
+Ayrıca indeksleri tekrarlayabilirsiniz:
+
+```python
+print('{0}{1}{0}'.format('abra', 'cad'))
+# abracadabra
+```
+
+`format()` metodu, farklı değişkenlerdeki değerleri birleştirip dizelere yerleştirmek için çok kullanışlı ve esnek bir yöntemdir.
+
+## **Literal dize interpolasyonu (f-stringler)**
+
+Python 3.6 ve sonrası sürümlerde sıkça kullanılan bir başka biçimlendirme yöntemi literal dize interpolasyonudur, yani f-stringler. F-stringler, ifadeleri dizelerin içine gömmek için gereken yazımı daha da kısaltır. İfadeler hep `f` ya da `F` harfiyle başlar.
+
+Örnek:
+
+```python
+var_a = 1 
+var_b = 2 
+print(f'{var_a} + {var_b}') 
+print(f'{var_a + var_b}') 
+print(f'var_a = {var_a} \nvar_b = {var_b}')
+
+# 1 + 2 
+# 3 
+# var_a = 1  var_b = 2
+```
+
+Bu örneklerde süslü parantezler, değerlerin dizenin neresine ekleneceğini gösterir ama `format()` çağrısına gerek yoktur.
+
+## **Ondalık sayı biçimlendirme seçenekleri**
+
+Dizelere ifade yerleştirmenin yanı sıra, dizelerde sayısal değerlerin görünümünü biçimlendirmek de mümkündür. Burada tüm seçenekler listelenemeyecek kadar çoktur, ama [Python string dokümantasyonu](https://docs.python.org/3/library/string.html) iyi bir başvuru kaynağıdır. En yararlı birkaçını paylaşalım.
+
+### Kullanımı:
+
+1. Biçimlendirilecek değişken
+    
+2. İki nokta (`:`) ile biçimlendirme ayrılır
+    
+3. `.sayı` kısmı ondalık hassasiyeti belirtir
+    
+4. Son olarak bir harf sunum tipini belirtir
+    
+
+Örnek:
+
+```python
+num = 1000.987123 f'{num:.2f}
+# 1000.99
+```
+
+Bu örnekte `f` sunum tipi, `num` değişkenindeki sayının ondalıktan sonra iki basamağa yuvarlanacağını belirtir.
+
+Yaygın sunum tipleri:
+
+|Tip|Anlamı|
+|---|---|
+|'e'|Bilimsel gösterim. p hassasiyeti verildiğinde, katsayı ile üs arasında 'e' bulunan gösterim. Katsayı ondalıktan önce 1 basamak, sonra p basamak içerir. Varsayılan p=6'dır.|
+|'f'|Sabit nokta gösterimi. p hassasiyetinde ondalıktan sonra p basamak gösterir.|
+|'%'|Yüzde gösterimi. Sayıyı 100 ile çarpar ve ardından yüzde işareti koyar.|
+
+Örnek:
+
+```python
+num = 1000.987123 print(f'{num:.3e}')  decimal = 0.2497856 print(f'{decimal:.4%}')
+# 1.001e+03 24.9786%
+```
+
+## **Dize metodları**
+
+Python’daki temel sınıflardan biri olan dizelerin, onlarla çalışmayı kolaylaştıran çok sayıda yerleşik metodu vardır. Burada tümünü detaylı anlatmak mümkün değil ama en faydalılarından bazıları:
+
+- `str.count(sub[, start[, end]])`  
+    Belirtilen alt dize `sub`'un, dizenin `[start, end]` aralığında geçen tekrar sayısını döndürür.
+
+```python
+my_string = 'Mutlu doğum günü'  
+print(my_string.count('y')) 
+print(my_string.count('y', 2, 7))
+# 2 1
+```
+
+
+- `str.find(sub)`  
+    Dizide `sub` alt dizesinin en düşük indeksini döndürür. Bulamazsa -1 döner.
+    
+```python
+my_string = 'Mutlu doğum günü'  my_string.find('doğum')
+# 6
+```
+
+
+- `str.join()`  
+    Bir iterable içindeki dizeleri birleştirir; bu metodun çağrıldığı dize öğeler arasındaki ayırıcı olur.
+    
+```python
+separator_string = ' ' 
+iterable_of_strings = ['Mutlu', 'doğum', 'günü']  separator_string.join(iterable_of_strings)
+
+# Mutlu doğum günü
+```
+
+- `str.partition(sep)`  
+    Diziyi ilk `sep` görülen yerde üçlü parçaya böler: `önce`, `sep` ve `sonra`. `sep` yoksa dize ve iki boş dize döner.
+
+```python
+my_string = 'https://www.google.com/'  my_string.partition('.')
+# ('https://www', '.', 'google.com/')
+```
+
+- `str.replace(old, new[, count])`  
+    `old` alt dizelerini `new` ile değiştirir. `count` verilirse ilk `count` kez değiştirir.
+    
+```python
+`my_string = 'https://www.google.com/'  
+my_string.replace('google', 'youtube')`
+
+# https://www.youtube.com/
+```
+
+- `str.split([sep])`  
+    Diziyi `sep` ile bölüp liste döner. `sep` yoksa boşluk karakterlerine göre bölünür.
+
+```python
+`my_string = 'Muffin adamı tanıyor musun?'  
+my_string.split()`
+
+# ['Muffin', 'adamı', 'tanıyor', 'musun?']
+```
+
+Bazı metodların ek parametreleri vardır. Burada sadece temel olanlara değinildi. Daha fazlası için [string metodları dokümantasyonuna](https://docs.python.org/2/library/stdtypes.html#string-methods) bakabilirsiniz.
+
+## Düzenli İfadeler (Regular Expressions)
+
+Düzenli ifadeler (regex), ileri düzey veri uzmanlarının dize verilerini değiştirmek ve işlemek için kullandıkları tekniklerdir. Bu programda regex kullanmanız zorunlu değil, ancak konsepti bilmeniz önemlidir. Kendi başınıza regex araştırmanız teşvik edilir.
+
+Regex, Python’da metin içinde desen eşleştirmeyi sağlar. Web kazıma, metin temizleme ve veri analizinde yaygın kullanılır.
+
+Regex ile çalışmaya başlamak için `re` modülünü import etmek gerekir:
+
+```python
+import re  
+pattern = 'regex_deseni'  
+match = re.search(pattern, string)
+```
+
+Basit örnek:
+
+```python
+import re  
+my_string = 'Üç üzgün kaplan, buğdayı yuttu.'  
+re.search('wheat', my_string)
+
+None
+```
+
+(Örnek İngilizce’de, `wheat` kelimesi bulunamadığı için `None` döner.)
+
+Başka bir örnek:
+
+```python
+import re  
+my_string = 'Üç üzgün kaplan, buğdayı yuttu.'  
+re.search('[bms]ad', my_string)
+```
+
+Bu örnek `"bad"`, `"mad"`, `"sad"` kelimelerini arar. Regex karmaşık desenlere izin verir; mesela belirli karakterlerden sonra gelen veya gelmeyen ifadeleri arama gibi. Veriyle çalışırken regex keşfetmeniz gerekebilir.
+
+## Özet
+
+Dize biçimlendirme, belirli alt dizeleri daha büyük dizelerin içine yerleştirme işlemidir. Alt dizeler genellikle belli biçimde işlenir ve formatlanır. String biçimlendirme yöntemleri; `format()` metodu, literal dize interpolasyonu (f-stringler) ve düzenli ifadeler (regex) olarak çeşitlenir. Hangi yöntemi kullanacağınız verinizin ihtiyaçlarına ve kişisel tercihlerinize bağlıdır. Ancak veri profesyonellerinin en çok kullandığı tekniklere hakim olmak önemlidir.
+
+
 #
