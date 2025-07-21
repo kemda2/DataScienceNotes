@@ -3713,7 +3713,7 @@ data = {
     "Egitim": ["Ilkokul", "Ilkokul", "Ilkokul", "Ilkokul", "Ilkokul", "Lise", "Lise", "Lise", "Lise", "Lise", 
                "Universite", "Universite", "Universite", "Universite", "Universite", "Yuksek Lisans", "Yuksek Lisans", 
                "Yuksek Lisans", "Yuksek Lisans", "Yuksek Lisans"],
-    "Tvizleme": [75, 87, 65, 74, 64, 56, 54, 60, 73, 57, 73, 82, 79, 58, 80, 37, 56, 54, 57, 55]
+    "Tvizleme": [75, 87, 65, 74, 64, 56, 54, 60, 73, 57, 73, 82, 79, 58, 80, 37, 62, 54, 57, 55]
 }
 
 veri = pd.DataFrame(data)
@@ -3739,7 +3739,7 @@ print("g4 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik
 # g1 normallik sonucu: W = 0.9055, p-value = 0.4410
 # g2 normallik sonucu: W = 0.8034, p-value = 0.0864
 # g3 normallik sonucu: W = 0.8164, p-value = 0.1094
-# g4 normallik sonucu: W = 0.6806, p-value = 0.0059
+# g4 normallik sonucu: W = 0.8399, p-value = 0.1646
 
 
 
