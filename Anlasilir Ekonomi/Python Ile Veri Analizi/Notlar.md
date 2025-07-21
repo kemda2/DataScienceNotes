@@ -3679,6 +3679,72 @@ print(test)
 
 ```
 
+> Eğitim durumunun tv izleme süresi ile ilgili anlamlı bir fark olup olmadığını inceliyoruz.
+
+| Ornekler | Egitim        | Tvizleme |
+|----------|---------------|----------|
+| 1        | Ilkokul       | 75       |
+| 2        | Ilkokul       | 87       |
+| 3        | Ilkokul       | 65       |
+| 4        | Ilkokul       | 74       |
+| 5        | Ilkokul       | 64       |
+| 6        | Lise          | 56       |
+| 7        | Lise          | 54       |
+| 8        | Lise          | 60       |
+| 9        | Lise          | 73       |
+| 10       | Lise          | 57       |
+| 11       | Universite    | 73       |
+| 12       | Universite    | 82       |
+| 13       | Universite    | 79       |
+| 14       | Universite    | 58       |
+| 15       | Universite    | 80       |
+| 16       | Yuksek Lisans | 37       |
+| 17       | Yuksek Lisans | 56       |
+| 18       | Yuksek Lisans | 54       |
+| 19       | Yuksek Lisans | 57       |
+| 20       | Yuksek Lisans | 55       |
+
+```Python
+from scipy import stats
+import pandas as pd
+
+data = {
+    "Ornekler": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    "Egitim": ["Ilkokul", "Ilkokul", "Ilkokul", "Ilkokul", "Ilkokul", "Lise", "Lise", "Lise", "Lise", "Lise", 
+               "Universite", "Universite", "Universite", "Universite", "Universite", "Yuksek Lisans", "Yuksek Lisans", 
+               "Yuksek Lisans", "Yuksek Lisans", "Yuksek Lisans"],
+    "Tvizleme": [75, 87, 65, 74, 64, 56, 54, 60, 73, 57, 73, 82, 79, 58, 80, 37, 56, 54, 57, 55]
+}
+
+veri = pd.DataFrame(data)
+
+g1 = veri[veri["Egitim"] == "Ilkokul"]
+g2 = veri[veri["Egitim"] == "Lise"]
+g3 = veri[veri["Egitim"] == "Universite"]
+g4 = veri[veri["Egitim"] == "Yuksek Lisans"]
+
+# 1 - Normallik varsayımı
+normallik = stats.shapiro(g1["Tvizleme"])
+print("g1 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik[1]))
+
+normallik = stats.shapiro(g2["Tvizleme"])
+print("g2 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik[1]))
+
+normallik = stats.shapiro(g3["Tvizleme"])
+print("g3 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik[1]))
+
+normallik = stats.shapiro(g4["Tvizleme"])
+print("g4 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik[1]))
+
+# g1 normallik sonucu: W = 0.9055, p-value = 0.4410
+# g2 normallik sonucu: W = 0.8034, p-value = 0.0864
+# g3 normallik sonucu: W = 0.8164, p-value = 0.1094
+# g4 normallik sonucu: W = 0.6806, p-value = 0.0059
+
+
+
+```
+
 
 
 ### Örnekler
