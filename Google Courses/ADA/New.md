@@ -2183,4 +2183,97 @@ ___
 
 Bunlar, bir veri profesyoneli olarak karşılaşacağınız birçok sorunu çözmek için kullanabileceğiniz güçlü araçlardır.
 
+# Dize (String) İndeksleme ve Dilimleme
+
+Bildiğiniz gibi, dizeler metni temsil ettikleri için önemli bir veri türüdür. Veri uzmanları sürekli olarak dizelerle karşılaşır, bu nedenle bunları farklı şekillerde işleyip kullanmaya alışmak önemlidir. Bu yazıda, dizeleri işlemenin temel ama güçlü iki yolu olan **dize indeksleme ve dilimleme** konuları ele alınacaktır.
+
+## Dize İndeksleme
+
+İndeksleme, bir dizideki (sequence) tek bir öğeye konumuna göre erişmeyi ifade eder.  
+_Python'da herhangi bir dizinin ilk öğesi_ **sıfır indeksine** sahiptir. Bu, Python'un **sıfır tabanlı indeksleme** kullandığı anlamına gelir. Birçok başka programlama dili de sıfır tabanlı indeksleme kullanır, ancak hepsi değil. Örneğin, R, Julia ve SAS gibi bazı diller **bir tabanlı indeksleme** kullanır.
+
+İndeksleme işlemleri köşeli parantez (`[]`) kullanılarak yapılır. İşte bazı örnekler:
+
+```python
+my_string = 'Mississippi half-step' 
+print(my_string[0])  
+
+my_list = [1, 'unladen', 'swallow'] 
+print(my_list[1])  
+print(my_list[-1])
+
+# M 
+# unladen 
+# swallow
+```
+
+Bu örneklerde, biri dize diğeri liste olmak üzere iki dizisel (sequence) değişken bulunmaktadır. Dizgede sıfırıncı indeksteki karaktere (yani ilk karaktere—M) erişmek için indeksleme kullanılmıştır. Listede birinci indekste yer alan “unladen” öğesine erişilmiştir. Negatif indeksleme kullanılarak listenin son öğesi (“swallow”) alınmıştır.
+
+**Not:** Eğer bir nesnenin sınırları dışında bir indeks seçmeye çalışırsanız, `IndexError` (İndeks Hatası) alırsınız:
+
+```python
+my_list = [1, 'unladen', 'swallow'] 
+my_list[3]
+# IndexError: list index out of range
+```
+
+## Dilimleme
+
+Dilimleme, bir diziden belli bir **aralıktaki öğelere** erişmeyi ifade eder. İki indeksin iki nokta (`:`) ile ayrıldığı köşeli parantezler kullanılır.
+
+İşte bazı örnekler:
+
+```python
+new_string = 'pining for the fjords' 
+print(new_string[0:3]) 
+print(new_string[:3])
+
+# pin 
+# pin
+```
+
+Bu iki örnek biraz farklı yazılsa da aynı sonucu verir. İki önemli noktaya dikkat edin:
+
+1.  Dilim, başlangıç indeksini içerir ama bitiş indeksini **içermez**.
+    
+2.  Başlangıç indeksi belirtilmezse, varsayılan olarak **sıfır** kabul edilir (ikinci `print` satırında görüldüğü gibi).
+    
+
+Bitiş indeksi belirtilmediğinde de aynı mantık geçerlidir:
+
+```python
+new_string = 'pining for the fjords' 
+print(new_string[6:21]) 
+print(new_string[6:]) 
+print(len(new_string))
+
+# for the fjords  
+# for the fjords 
+# 21
+```
+
+Yine, iki farklı yazım şekliyle aynı alt dize elde edilmiştir. Bitiş indeksi belirtilmediğinde, varsayılan değer dizenin uzunluğudur.
+
+Son olarak, eğer bir dizide geçersiz bir indeksle erişmeye çalışırsanız hata alırsınız; **ancak dilimleme** bu durumu tolere eder:
+
+```python
+new_string = 'pining for the fjords' 
+print(new_string[6:100])
+# `for the fjords`
+```
+
+Bitiş indeksi 100 olmasına rağmen (ki bu dizenin sınırlarının çok dışındadır), Python dizenin sonuna kadar olan kısmı döndürmüştür.
+
+## Önemli Noktalar
+
+-   **İndeksleme** ve **dilimleme**, Python’da dizilerdeki belirli öğelere ya da kısımlara erişmenizi sağlayan güçlü araçlardır.
+    
+-   Her ikisi de **köşeli parantezler** kullanır.
+    
+-   Dilimlerde, başlangıç indeksi **dahildir**, bitiş indeksi **hariçtir**.
+    
+-   Negatif indeksler, dizenin sonundan geriye doğru sayar.
+    
+-   Bu araçlar sayesinde dizeleri ve diğer yinelenebilir dizileri işleyerek çok çeşitli işlemler gerçekleştirebilir ve veri işleme konusunda daha yetkin hale gelebilirsiniz.
+
 #
