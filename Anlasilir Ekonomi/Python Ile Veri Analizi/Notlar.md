@@ -3587,6 +3587,32 @@ GKT = GİKT + GAKT
 | **Gruplar İç**       | GiKT                | k(n - 1)                | S2 = GiKT / (k(n - 1)) |                        |
 | **Toplam**           | GKT                 | nk - 1                  |                        |                        |
 
+### Örnekler
+
+> Aşağıda tabloda sonuçları verilen her grubun aldıkları notlar arasında fark var mıdır yok mudur inceleyiniz.
+
+| Öğrenci | A | B | C |
+|---------|---|---|---|
+| 1       | 1 | 1 | 2 |
+| 2       | 2 | 3 | 4 |
+| 3       | 3 | 5 | 6 |
+| 4       | 6 | 7 | 8 |
+| $\bar{x}$ | 3 | 4 | 5 |
+
+$$n = 4$$
+
+$$k = 3$$
+
+$$n \cdot k= 12$$
+
+$$ \bar{\bar{x}} = \frac{3 + 4 + 5}{3} = 4 $$
+
+
+
+
+
+
+
 
 
 ### Örnekler
