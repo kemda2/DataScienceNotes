@@ -3628,7 +3628,7 @@ GAKT = 8
 $$
 
 $$
-GAKTOrt = \frac{GAKT}{k-1} = \frac{8}{2} = 4
+S1 = \frac{GAKT}{k-1} = \frac{8}{2} = 4
 $$
 
 
@@ -3640,4 +3640,4 @@ $$
 # 6
 
 https://www.youtube.com/watch?v=og0cKCz-ChE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=72
-33:06
+50:19
