@@ -3619,8 +3619,17 @@ $$
 GAKT = 4 \left( (-1)^2 + (0)^2 + (1)^2 \right)
 $$
 
+$$
+GAKT = 4 \cdot 2
+$$
 
+$$
+GAKT = 8
+$$
 
+$$
+GAKTOrt = \frac{GAKT}{k-1} = \frac{8}{2} = 4
+$$
 
 
 
