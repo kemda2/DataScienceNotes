@@ -3741,9 +3741,19 @@ print("g4 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik
 # g3 normallik sonucu: W = 0.8164, p-value = 0.1094
 # g4 normallik sonucu: W = 0.8399, p-value = 0.1646
 
+# 2- Varyansların Homojenliği Varsayımı
+homojenlik = stats.bartlett(g1["Tvizleme"], g2["Tvizleme"], g3["Tvizleme"], g4["Tvizleme"])
+print(homojenlik)
 
+# BartlettResult(statistic=np.float64(0.2659866948821638), pvalue=np.float64(0.9662931563230583))
 
+testanova = stats.f_oneway(g1["Tvizleme"], g2["Tvizleme"], g3["Tvizleme"], g4["Tvizleme"])
+# F_onewayResult(statistic=np.float64(6.5150040551500386), pvalue=np.float64(0.004355343225480918))
 ```
+
+H0 reddedilir. En az iki tanesi istatistiksel olarak farklıdır.
+
+
 
 
 
