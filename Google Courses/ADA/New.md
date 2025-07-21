@@ -1982,8 +1982,6 @@ while x < 100:
 # 4 16
 ```
 
-
-
 Bu örnekte, `i` adında bir sayaç değişkeni var. Her yinelemede program:
 
 1. `x < 100` koşulunu kontrol eder.
@@ -1994,7 +1992,6 @@ Bu örnekte, `i` adında bir sayaç değişkeni var. Her yinelemede program:
     
 4. Bu işlem, `x ≥ 100` ya da `i == 5` olana kadar devam eder. Bu örnekte döngü, `i = 5` olduğunda kırılır.
     
-
 ---
 
 Ayrıca, döngünün içindeki kodun geri kalanını çalıştırmadan bir yinelemeyi atlamak da mümkündür. Bunun için `continue` ifadesi kullanılır.
@@ -2020,8 +2017,6 @@ while i < 10:
 # 8
 ```
 
-
-
 Bu örnek, 0’dan 9’a kadar olan ve **3’e tam bölünemeyen** sayıları yazdırır.
 
 Programın işleyişi şu şekildedir:
@@ -2035,7 +2030,6 @@ Programın işleyişi şu şekildedir:
 4. Eğer `i`, 3’e tam bölünüyorsa, `if` bloğu atlanır ve yalnızca `i += 1` satırı çalışır.
     
 5. Döngü `i = 10` olana kadar devam eder.
-    
 
 ---
 
