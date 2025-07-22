@@ -3928,10 +3928,11 @@ print(tamhane)
 
 ## 5.15 Bist100 Haftanın Günü Anomalisi
 
-Getiriler demek önceki ile sonraki arasındaki fark.
+Getiriler demek bir önceki gün ile sonraki gün arasındaki fark.
 
-Sürekli birleşik getiri bir günün değerinin kendinden bir önceki gün değerine bölünüp logaritması alınarak elde edilir.
+Sürekli birleşik getiri bir günün değerinin kendinden bir önceki gün değerine bölünüp logaritması alınarak elde edilir. Uç veriyi en aza indirmek amacıyla kullanılır.
 
+Grupların n sayılarında yaklaşık olarak aynı olacak.
 
 
 ### Örnekler
