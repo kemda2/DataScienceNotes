@@ -3789,7 +3789,7 @@ Anova testinde $H_0$ hipotezini reddettiysek, yani en az iki grup arasında orta
 
 T-testinde varyansların eşit olmadığı durumda Welch'in t-testi dediğimiz bir yöntemle çalışıyoruz. ANOVA'da da durum aynıdır. Eğer varyanslar eşitse normal ANOVA testini, değilse **Welch'in ANOVA testi** ya da **Welch'in F testi** dediğimiz yöntemi kullanacağız.
 
-
+Varyanslarımız eşit ve örneklem eşitse öncelikle Tukey HSD, eğer örneklem eşit değilse öncelikle Scheffé veya Bonferroni testi yapısı kullanmalıyız. Varyans ve örneklem eşit değilse Tamhane's T2 yapısını kullanırız.
 
 
 
