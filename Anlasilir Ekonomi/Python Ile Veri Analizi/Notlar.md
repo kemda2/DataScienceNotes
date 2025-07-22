@@ -3926,14 +3926,15 @@ print(tamhane)
 | Üniversite    | 0.999679     | 0.295004 | 1.000000     | **0.044404**  |
 | Yüksek Lisans | **0.038531** | 0.420232 | **0.044404** | 1.000000      |
 
+## 5.15 Bist100 Haftanın Günü Anomalisi
 
 
 
 
 
 ### Örnekler
-## 5.15 
+## 5.16 
 # 6
 
 https://www.youtube.com/watch?v=gAWlOTyL0uU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=75
-22:00
+2200
