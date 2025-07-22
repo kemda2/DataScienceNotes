@@ -3928,7 +3928,7 @@ print(tamhane)
 
 ## 5.15 Bist100 Haftanın Günü Anomalisi
 
-
+Sürekli birleşik getiri bir günün değerinin kendinden bir önceki gün değerine bölünüp logaritması alınarak elde edilir.
 
 
 
