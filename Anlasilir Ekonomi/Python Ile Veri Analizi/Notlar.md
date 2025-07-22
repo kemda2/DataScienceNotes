@@ -3983,13 +3983,30 @@ print(anova)
 
 0,89 > 0,05 dolayısıyla aralarında fark yok diyebiliriz.
 
+```Python
+grup = veri.groupby("Gün")["Getiri"]
+print(grup.mean() * 100)
+```
+
+| Gün       | Ortalama Getiri (%) |
+| --------- | ------------------- |
+| Cuma      | 0.038221            |
+| Pazartesi | 0.068212            |
+| Perşembe  | 0.024298            |
+| Salı      | 0.079923            |
+| Çarşamba  | 0.001507            |
+
+## 5.16 Two-Way ANOVA
+
+
+
 
 
 
 
 ### Örnekler
-## 5.16 
+## 5.17 
 # 6
 
-https://www.youtube.com/watch?v=gAWlOTyL0uU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=75
-2200
+https://www.youtube.com/watch?v=kVGfQIgeeFI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=76
+0000
