@@ -3892,7 +3892,40 @@ print(f"g4 ortalama: {g4['Tvizleme'].mean():.2f}, g1 ortalama: {g1['Tvizleme'].m
 # g4 ortalama: 53.00, g1 ortalama: 73.00
 ```
 
-> Varyansları homojen olmasaydı Welch'in ANOVA testini kullanmak gerekirdi. Aynı veri setiyle varyansların homojen çıkmadığını varsayarak Welch'in ANOVA testini kullanalım.
+> Varyansları homojen olmadığını varsayarak Welch'in ANOVA testini kullanalım. 
+
+```Python
+# !pip install Pingouin
+import pingouin as pg
+
+test = pg.welch_anova(data=veri, dv="Tvizleme", between="Egitim")
+print(test)
+```
+
+| Source | ddof1 | ddof2   |    F     | p-unc   |  np2   |
+|--------|-------|---------|----------|---------|--------|
+| Eğitim |   3   | 8.809   | 4.571703 | 0.03383 | 0.5240 |
+
+p-unc 0.05 değerinden küçük olduğu için ortalamalar arasında fark olduğunu söyeyebiliriz.
+
+> Varyansları homojen olmadığını varsayarak hangi grupların farklı olduğunu anlamak için Post-Hoc testi uygulayacağız.
+
+```Python
+# !pip install scikit-posthocs
+
+import scikit_posthocs as sp
+
+tamhane = sp.posthoc_tamhane(veri, val_col="Tvizleme", group_col="Egitim")
+print(tamhane)
+```
+
+|               | İlkokul      | Lise     | Üniversite   | Yüksek Lisans |
+|---------------|--------------|----------|--------------|---------------|
+| İlkokul       | 1.000000     | 0.249431 | 0.999679     | **0.038531**  |
+| Lise          | 0.249431     | 1.000000 | 0.295004     | 0.420232      |
+| Üniversite    | 0.999679     | 0.295004 | 1.000000     | **0.044404**  |
+| Yüksek Lisans | **0.038531** | 0.420232 | **0.044404** | 1.000000      |
+
 
 
 
