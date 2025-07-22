@@ -2316,7 +2316,7 @@ print(f"{ks.pvalue:5f}")
 
 0,92 > 0,05 
 
-P değeri, alpha değerinden büyük olduğu için H0 reddedilemez. Normal dağılımdır.
+P değeri, alpha değerinden büyük olduğu için $H_0$ reddedilemez. Normal dağılımdır.
 
 ## 5.3 Shapiro—Wilk sınaması
 
@@ -2342,7 +2342,7 @@ print(f"{sw.pvalue:5f}")
 
 0.50 > 0,05 
 
-P değeri, alpha değerinden büyük olduğu için H0 reddedilemez. Normal dağılımdır.
+P değeri, alpha değerinden büyük olduğu için $H_0$ reddedilemez. Normal dağılımdır.
 
 ## 5.4 Tek Örneklem Z Testi
 
@@ -2751,7 +2751,7 @@ print(p2)
 # ShapiroResult(statistic=np.float64(0.9637624469211384), pvalue=np.float64(0.7302480962555515))
 # ShapiroResult(statistic=np.float64(0.8334973947524276), pvalue=np.float64(0.004702334663604679))
 
-# İki p değeri de 0,05'ten büyük. Yani H0 hipotezinin reddedilemeyeceğini gösteriyor.
+# İki p değeri de 0,05'ten büyük. Yani $H_0$ hipotezinin reddedilemeyeceğini gösteriyor.
 
 h1=stats.levene(erkek["Harcama"],kadın["Harcama"])
 print(h1)
@@ -2772,7 +2772,7 @@ print(h2)
 
 ```
 
-Bütün p değerleri 0,05'ten büyük olduğu için H0 reddedilemez. Varyanslar homojen.
+Bütün p değerleri 0,05'ten büyük olduğu için $H_0$ reddedilemez. Varyanslar homojen.
 
 
 
@@ -2863,9 +2863,9 @@ else:
 
 ```
 
-0,17 0,05 değerinden büyük olduğu için H0  reddedilemez. İçen ile içmeyen arasında ortalama olarak herhangi bir fark yok.
+0,17 0,05 değerinden büyük olduğu için $H_0$  reddedilemez. İçen ile içmeyen arasında ortalama olarak herhangi bir fark yok.
 
-Hiçbir H0 hipotezini reddedemediğimiz için %95 güven aralığında içen ile içmeyen arasında bir fark yoktur. 
+Hiçbir $H_0$ hipotezini reddedemediğimiz için %95 güven aralığında içen ile içmeyen arasında bir fark yoktur. 
 
 > Bir içecek firması müşterilerin eski ve yeni içeceklere dair tutumlarını topluyor.
 
@@ -3390,7 +3390,7 @@ $$
 z_{hesap} < z_{tablo}
 $$
 
-H0 hipotezi reddedilemez. Erkekler ile kadınlar arasında oransal bir fark yoktur.
+$H_0$ hipotezi reddedilemez. Erkekler ile kadınlar arasında oransal bir fark yoktur.
 
 ```python
 from statsmodels.stats.proportion import proportions_ztest
@@ -3405,7 +3405,7 @@ test
 # (np.float64(1.4002800840280094), np.float64(0.08071473118354161))
 ```
 
-$z_{hesap}$ 1,40 ve p değeri 0,08 olduğu ve 0,05 alfa değerinden büyük olduğu için H0 reddedilemez. Erkekler ile kadınlar arasında oransal bir fark yoktur. 
+$z_{hesap}$ 1,40 ve p değeri 0,08 olduğu ve 0,05 alfa değerinden büyük olduğu için $H_0$ reddedilemez. Erkekler ile kadınlar arasında oransal bir fark yoktur. 
 
 ## 5.11 A/B Testi Örneği 
 
@@ -3485,7 +3485,7 @@ print("Test Sonucu: %.4f P—Değeri: %.4f" %(t,p))
 Test Sonucu: 1.8092 P-Değeri: 0.0704
 ```
 
-P değeri 0.05'ten büyük olduğu için H0 hiptezini reddedemeyiz. Yeni tasarım eskisinden daha iyi değildir.
+P değeri 0.05'ten büyük olduğu için $H_0$ hiptezini reddedemeyiz. Yeni tasarım eskisinden daha iyi değildir.
 
 ## 5.12 FamilyWise Error Rate-Alpha Inflation
 
@@ -3751,14 +3751,49 @@ testanova = stats.f_oneway(g1["Tvizleme"], g2["Tvizleme"], g3["Tvizleme"], g4["T
 # F_onewayResult(statistic=np.float64(6.5150040551500386), pvalue=np.float64(0.004355343225480918))
 ```
 
-H0 reddedilir. En az iki tanesi istatistiksel olarak farklıdır.
+$H_0$ reddedilir. En az iki tanesi istatistiksel olarak farklıdır.
+
+## 5.14 Post-Hoc Analizi
+
+Anova testinde $H_0$ hipotezini reddettiysek, yani en az iki grup arasında ortalama olarak fark var dediğimizde bu farkın hangi gruplar arasından kaynaklandığını tespit edebilmek için kullanacağımız testlere Post-Hoc test yapısı veya Post-Hoc test istatistikleri ismi verilir. Bu yapı arka planda daha önce işlediğimiz FamilyWise Error Rate yani aile bazında hata oranı yapısıyla çalışıyor.
+
+**Çizelge 1. Varyansların eşit olması durumunda seçilebilecek post-hoc test istatistikleri**
+
+
+| Test Türü                                | Post-hoc          | Varyans Eşit | Örneklem Eşit  | Örneklem Eşit Değil  |
+| ---------------------------------------- |-------------------|--------------|----------------|----------------------|
+| Çiftli Karşılaştırma Test İstatistikleri | LSD               | X            |                | X                    |
+|                                          | Sidak             | X            |                | X                    |
+|                                          | Bonferroni        | X            |                | X                    |
+|                                          | Tukey HSD         | X            | X              |                      |
+|                                          | Hochberg's GT2    | X            | X              |                      |
+|                                          | Gabriel           | X            |                | X                    |
+|                                          | Scheffé           | X            |                | X                    |
+| Çoklu Anlamlı Test İstatistikleri        | SNK               | X            | X              |                      |
+|                                          | Tukey's B         | X            | X              |                      |
+|                                          | Duncan            | X            |                | X                    |
+|                                          | R-E-G-W-F         | X            | X              |                      |
+|                                          | R-E-G-W-Q         | X            | X              |                      |
+|                                          | Waller Duncan     | X            |                | X                    |
+|                                          | Dunnet            | X            | X              |                      |
+
+**Çizelge 2. Varyansların Eşit Olmaması Durumunda Seçilebilecek POST-HOC Test İstatistikleri**
+
+| Post-hoc         | Varyans Eşit Değil | Örneklem Eşit Değil |
+|------------------|--------------------|---------------------|
+| Games–Howell     | X                  | X                   |
+| Tamhane's T2     | X                  | X                   |
+| Tamhane's T3     | X                  | X                   |
+| Dunnet's C       | X                  | X                   |
+| Dunnet's T3      | X                  | X                   |
+
 
 
 
 
 
 ### Örnekler
-## 5.14 
+## 5.15 
 # 6
 
 https://www.youtube.com/watch?v=gAWlOTyL0uU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=74
