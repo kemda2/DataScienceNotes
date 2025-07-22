@@ -3787,6 +3787,7 @@ Anova testinde $H_0$ hipotezini reddettiysek, yani en az iki grup arasında orta
 | Dunnet's C       | X                  | X                   |
 | Dunnet's T3      | X                  | X                   |
 
+T-testinde varyansların eşit olmadığı durumda Welch'in t-testi dediğimiz bir yöntemle çalışıyoruz. ANOVA'da da durum aynıdır. Eğer varyanslar eşitse normal ANOVA testini, değilse **Welch'in ANOVA testi** ya da **Welch'in F testi** dediğimiz yöntemi kullanacağız.
 
 
 
