@@ -3998,7 +3998,7 @@ print(grup.mean() * 100)
 
 ## 5.16 Two-Way ANOVA
 
-
+İki farklı kategorik bağımsız değişkenin bir bağımsız değişken üzerindeki etkilerini incelediğimiz yapıdır.
 
 
 
