@@ -3464,7 +3464,30 @@ Kontrol ortalaması Deneysel ortalamasından büyük olduğu için daha iyi bir 
 import pandas as pd
 from statsmodels.stats.proportion import proportions_ztest
 
-veri=pd.read_excel("C:/Users/90566/Desktop/ornek.xlsx")
+import pandas as pd
+
+data = {
+    "Grup": [
+        "Kontrol", "Kontrol", "Deneysel", "Deneysel", "Kontrol", "Kontrol", "Deneysel", "Kontrol",
+        "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", 
+        "Deneysel", "Deneysel", "Kontrol", "Kontrol", "Deneysel", "Deneysel", "Kontrol", 
+        "Kontrol", "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", "Deneysel", 
+        "Deneysel", "Deneysel", "Deneysel", "Kontrol", "Deneysel"
+    ],
+    "Sayfa": [
+        "Eski Tasarım", "Eski Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Eski Tasarım", "Eski Tasarım",
+        "Yeni Tasarım", "Eski Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım",
+        "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Eski Tasarım",
+        "Eski Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Eski Tasarım", "Eski Tasarım", "Yeni Tasarım",
+        "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım", "Yeni Tasarım",
+        "Yeni Tasarım", "Yeni Tasarım", "Eski Tasarım", "Yeni Tasarım"
+    ],
+    "Satış": [
+        0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0
+    ]
+}
+
+veri = pd.DataFrame(data)
 
 Kontrol=veri[veri["Grup"]=="Kontrol"].sample(n=5000,random_state=42)
 Deneysel=veri[veri["Grup"]=="Deneysel"].sample(n=5000,random_state=42)
@@ -3747,6 +3770,7 @@ print(homojenlik)
 
 # BartlettResult(statistic=np.float64(0.2659866948821638), pvalue=np.float64(0.9662931563230583))
 
+# 3 - ANOVA testi
 testanova = stats.f_oneway(g1["Tvizleme"], g2["Tvizleme"], g3["Tvizleme"], g4["Tvizleme"])
 # F_onewayResult(statistic=np.float64(6.5150040551500386), pvalue=np.float64(0.004355343225480918))
 ```
@@ -3791,6 +3815,74 @@ T-testinde varyansların eşit olmadığı durumda Welch'in t-testi dediğimiz b
 
 Varyanslarımız eşit ve örneklem eşitse öncelikle Tukey HSD, eğer örneklem eşit değilse öncelikle Scheffé veya Bonferroni testi yapısı kullanmalıyız. Varyans ve örneklem eşit değilse Tamhane's T2 yapısını kullanırız.
 
+### Örnekler
+
+```Python
+from scipy import stats
+import pandas as pd
+
+data = {
+    "Ornekler": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    "Egitim": ["Ilkokul", "Ilkokul", "Ilkokul", "Ilkokul", "Ilkokul", "Lise", "Lise", "Lise", "Lise", "Lise", 
+               "Universite", "Universite", "Universite", "Universite", "Universite", "Yuksek Lisans", "Yuksek Lisans", 
+               "Yuksek Lisans", "Yuksek Lisans", "Yuksek Lisans"],
+    "Tvizleme": [75, 87, 65, 74, 64, 56, 54, 60, 73, 57, 73, 82, 79, 58, 80, 37, 62, 54, 57, 55]
+}
+
+veri = pd.DataFrame(data)
+
+g1 = veri[veri["Egitim"] == "Ilkokul"]
+g2 = veri[veri["Egitim"] == "Lise"]
+g3 = veri[veri["Egitim"] == "Universite"]
+g4 = veri[veri["Egitim"] == "Yuksek Lisans"]
+
+# 1 - Normallik varsayımı
+normallik = stats.shapiro(g1["Tvizleme"])
+print("g1 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik[1]))
+
+normallik = stats.shapiro(g2["Tvizleme"])
+print("g2 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik[1]))
+
+normallik = stats.shapiro(g3["Tvizleme"])
+print("g3 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik[1]))
+
+normallik = stats.shapiro(g4["Tvizleme"])
+print("g4 normallik sonucu: W = %.4f, p-value = %.4f" % (normallik[0], normallik[1]))
+
+# g1 normallik sonucu: W = 0.9055, p-value = 0.4410
+# g2 normallik sonucu: W = 0.8034, p-value = 0.0864
+# g3 normallik sonucu: W = 0.8164, p-value = 0.1094
+# g4 normallik sonucu: W = 0.8399, p-value = 0.1646
+
+# 2- Varyansların Homojenliği Varsayımı
+homojenlik = stats.bartlett(g1["Tvizleme"], g2["Tvizleme"], g3["Tvizleme"], g4["Tvizleme"])
+print(homojenlik)
+
+# BartlettResult(statistic=np.float64(0.2659866948821638), pvalue=np.float64(0.9662931563230583))
+
+# 3 - ANOVA testi
+testanova = stats.f_oneway(g1["Tvizleme"], g2["Tvizleme"], g3["Tvizleme"], g4["Tvizleme"])
+print(testanova)
+# F_onewayResult(statistic=np.float64(6.5150040551500386), pvalue=np.float64(0.004355343225480918))
+
+# Daha önce yukarıda en az iki grubun arasında fark olduğunu bulmuştuk. Şimdi hangi gruplar arasında olduğunu bulacağız.
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+posthoc = pairwise_tukeyhsd(veri["Tvizleme"], veri["Eğitim"], alpha=0.05) 
+print(posthoc)
+#       Multiple Comparison of Means - Tukey HSD, FWER=0.05       
+# ================================================================
+#   group1       group2    meandiff p-adj   lower    upper  reject
+# ----------------------------------------------------------------
+#    Ilkokul          Lise    -13.0 0.1477 -29.4054  3.4054  False
+#    Ilkokul    Universite      1.4 0.9947 -15.0054 17.8054  False
+#    Ilkokul Yuksek Lisans    -20.0 0.0145 -36.4054 -3.5946   True
+#       Lise    Universite     14.4 0.0961  -2.0054 30.8054  False
+#       Lise Yuksek Lisans     -7.0 0.6232 -23.4054  9.4054  False
+# Universite Yuksek Lisans    -21.4 0.0088 -37.8054 -4.9946   True
+```
+
+Dikkat edilmesi gereken nokta P-adj sütununda bulunan değerlerden verdiğimiz alfa değerinden küçük olanları reject
 
 
 ### Örnekler
