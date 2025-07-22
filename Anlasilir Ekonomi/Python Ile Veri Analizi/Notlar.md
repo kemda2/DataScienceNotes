@@ -3928,6 +3928,8 @@ print(tamhane)
 
 ## 5.15 Bist100 Haftanın Günü Anomalisi
 
+Getiriler demek önceki ile sonraki arasındaki fark.
+
 Sürekli birleşik getiri bir günün değerinin kendinden bir önceki gün değerine bölünüp logaritması alınarak elde edilir.
 
 
