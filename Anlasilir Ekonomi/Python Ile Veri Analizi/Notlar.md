@@ -4009,4 +4009,4 @@ print(grup.mean() * 100)
 # 6
 
 https://www.youtube.com/watch?v=kVGfQIgeeFI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=76
-0000
+0537
