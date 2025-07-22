@@ -3884,10 +3884,23 @@ print(posthoc)
 
 > Dikkat edilmesi gereken nokta **P-adj** sütununda bulunan değerlerden verdiğimiz **alfa** değerinden küçük olanları **reject** sütununda True olarak göstermektedir. Tablodan yola çıkarak Ilkokul - Yuksek Lisans ve Universite - Yuksek Lisans mezunları arasında istatistiksel bir fark vardır deriz.
 
+```Python
+print(f"g4 ortalama: {g4['Tvizleme'].mean():.2f}, g3 ortalama: {g3['Tvizleme'].mean():.2f}")
+print(f"g4 ortalama: {g4['Tvizleme'].mean():.2f}, g1 ortalama: {g1['Tvizleme'].mean():.2f}")
+
+# g4 ortalama: 53.00, g3 ortalama: 74.40
+# g4 ortalama: 53.00, g1 ortalama: 73.00
+```
+
+> Varyansları homojen olmasaydı Welch'in ANOVA testini kullanmak gerekirdi. Aynı veri setiyle varyansların homojen çıkmadığını varsayarak Welch'in ANOVA testini kullanalım.
+
+
+
+
 
 ### Örnekler
 ## 5.15 
 # 6
 
-https://www.youtube.com/watch?v=gAWlOTyL0uU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=74
-00:00
+https://www.youtube.com/watch?v=gAWlOTyL0uU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=75
+22:00
