@@ -3882,7 +3882,7 @@ print(posthoc)
 # Universite Yuksek Lisans    -21.4 0.0088 -37.8054 -4.9946   True
 ```
 
-> Dikkat edilmesi gereken nokta **P-adj** sütununda bulunan değerlerden verdiğimiz **alfa** değerinden küçük olanları **reject** sütununda True olarak göstermektedir.
+> Dikkat edilmesi gereken nokta **P-adj** sütununda bulunan değerlerden verdiğimiz **alfa** değerinden küçük olanları **reject** sütununda True olarak göstermektedir. Tablodan yola çıkarak Ilkokul - Yuksek Lisans ve Universite - Yuksek Lisans mezunları arasında istatistiksel bir fark vardır deriz.
 
 
 ### Örnekler
