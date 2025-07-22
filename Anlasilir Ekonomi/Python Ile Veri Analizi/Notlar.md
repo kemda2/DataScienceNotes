@@ -3934,6 +3934,58 @@ Sürekli birleşik getiri bir günün değerinin kendinden bir önceki gün değ
 
 Grupların n sayılarında yaklaşık olarak aynı olacak.
 
+```Python
+import pandas as pd
+from scipy import stats
+
+veri = pd.read_csv("5-15 BIST100 Log.csv", sep=";", decimal=",")
+
+Pazartesi = veri[veri["Gün"] == "Pazartesi"]["Getiri"]
+Salı = veri[veri["Gün"] == "Salı"]["Getiri"]
+Çarşamba = veri[veri["Gün"] == "Çarşamba"]["Getiri"]
+Perşembe = veri[veri["Gün"] == "Perşembe"]["Getiri"]
+Cuma = veri[veri["Gün"] == "Cuma"]["Getiri"]
+
+# 1 - Normallik Varsayımı 
+
+normallik = stats.shapiro(Pazartesi)
+print("İstatistik: %.4f, p-değeri: %.4f" % (normallik.statistic, normallik.pvalue))
+# İstatistik: 0.8944, p-değeri: 0.0000
+# P değeri çok küçük. Normal dağılım değildir.
+
+normallik = stats.shapiro(Cuma)
+print("İstatistik: %.4f, p-değeri: %.4f" % (normallik.statistic, normallik.pvalue))
+# İstatistik: 0.9824, p-değeri: 0.0000
+# P değeri çok küçük. Normal dağılım değildir.
+
+# Ama ANOVA güçlü bir test olduğu için 15 tane örneklem bile olsa normal dağılım olmadığı takdirde doğru sonuç veriyor.
+
+# 2 - Varyans Homojenliği Varsayımı 
+
+homojenlik = stats.levene(Pazartesi, Salı, Çarşamba, Perşembe, Cuma)
+print("İstatistik: %.4f, p-değeri: %.4f" % (homojenlik.statistic, homojenlik.pvalue))
+# İstatistik: 6.0609, p-değeri: 0.0001
+
+homojenlik = stats.bartlett(Pazartesi, Salı, Çarşamba, Perşembe, Cuma)
+print("İstatistik: %.4f, p-değeri: %.4f" % (homojenlik.statistic, homojenlik.pvalue))
+# İstatistik: 75.9943, p-değeri: 0.0000
+
+# İki test için de homojen olmadığı tespit edilmiştir. Tek yönlü ANOVA yerine Welch'in ANOVA testini tercih edeceğiz.
+
+import pingouin as pg
+anova = pg.welch_anova(data=veri, dv="Getiri", between="Gün")
+print(anova)
+```
+
+| Source | ddof1 | ddof2     | F        | p-unc    | np2      |
+| ------ | ----- | --------- | -------- | -------- | -------- |
+| Gün    | 4     | 1289.5453 | 0.267523 | 0.898927 | 0.000403 |
+
+
+
+
+
+
 
 ### Örnekler
 ## 5.16 
