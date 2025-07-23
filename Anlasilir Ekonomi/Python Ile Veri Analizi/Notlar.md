@@ -4221,15 +4221,171 @@ anova = sm.stats.anova_lm(model, type=2) # type=2 olmasının sebebi dengeli bir
 
 Buradan Mevkinin ve mevki:süre nin performans üzerinde etkisi vardır. Sürenin ise tek başına etkisi yoktur.
 
+```Python
+etkimevki = ss.multicomp.pairwise_tukeyhsd(endog=veri["Performans"], groups=veri["Mevki"])
+etkimevki
+
+#   Multiple Comparison of Means - Tukey HSD, FWER=0.05   
+# ========================================================
+#  group1   group2  meandiff p-adj   lower   upper  reject
+# --------------------------------------------------------
+# Ustabaşı Yönetici   1.9375 0.0011  0.7098  3.1652   True
+# Ustabaşı     İşçi    -2.75    0.0 -3.9777 -1.5223   True
+# Yönetici     İşçi  -4.6875    0.0 -5.9152 -3.4598   True
+# --------------------------------------------------------
+
+# reject sütunu hepsinde True olduğu için her mevkinin performans üzerine anlamlı farkı var deriz.  
+
+grup1 = veri.groupby("Mevki")["Performans"].mean()
+print(grup1)
+
+# Mevki
+# Ustabaşı    6.3125
+# Yönetici    8.2500
+# İşçi        3.5625
+
+# Performans olarak Yönetici > Ustabaşı > İşçi diyebiliriz.
+
+etkimevkisure = ss.multicomp.pairwise_tukeyhsd(endog=veri["Performans"], groups=veri["Mevki"] + veri["Süre"])
+print(etkimevkisure)
+
+#                   Multiple Comparison of Means - Tukey HSD, FWER=0.05                  
+# =======================================================================================
+#          group1                  group2         meandiff p-adj   lower    upper  reject
+# ---------------------------------------------------------------------------------------
+#          UstabaşıBeş Ay          UstabaşıBir Ay     0.25    1.0  -1.8675  2.3675  False
+#          UstabaşıBeş Ay         UstabaşıBir Yıl     -0.5 0.9994  -2.6175  1.6175  False
+#          UstabaşıBeş Ay UstabaşıÜç Yıl ve Üzeri     -0.5 0.9994  -2.6175  1.6175  False
+#          UstabaşıBeş Ay          YöneticiBeş Ay      1.5 0.3877  -0.6175  3.6175  False
+#          UstabaşıBeş Ay          YöneticiBir Ay     -0.5 0.9994  -2.6175  1.6175  False
+#          UstabaşıBeş Ay         YöneticiBir Yıl     2.75 0.0031   0.6325  4.8675   True
+#          UstabaşıBeş Ay YöneticiÜç Yıl ve Üzeri     3.25 0.0003   1.1325  5.3675   True
+#          UstabaşıBeş Ay              İşçiBeş Ay     -2.0 0.0788  -4.1175  0.1175  False
+#          UstabaşıBeş Ay              İşçiBir Ay    -1.25 0.6517  -3.3675  0.8675  False
+#          UstabaşıBeş Ay             İşçiBir Yıl    -3.75    0.0  -5.8675 -1.6325   True
+#          UstabaşıBeş Ay     İşçiÜç Yıl ve Üzeri    -4.75    0.0  -6.8675 -2.6325   True
+#          UstabaşıBir Ay         UstabaşıBir Yıl    -0.75 0.9819  -2.8675  1.3675  False
+#          UstabaşıBir Ay UstabaşıÜç Yıl ve Üzeri    -0.75 0.9819  -2.8675  1.3675  False
+#          UstabaşıBir Ay          YöneticiBeş Ay     1.25 0.6517  -0.8675  3.3675  False
+#          UstabaşıBir Ay          YöneticiBir Ay    -0.75 0.9819  -2.8675  1.3675  False
+#          UstabaşıBir Ay         YöneticiBir Yıl      2.5 0.0098   0.3825  4.6175   True
+#          UstabaşıBir Ay YöneticiÜç Yıl ve Üzeri      3.0 0.0009   0.8825  5.1175   True
+#          UstabaşıBir Ay              İşçiBeş Ay    -2.25 0.0291  -4.3675 -0.1325   True
+#          UstabaşıBir Ay              İşçiBir Ay     -1.5 0.3877  -3.6175  0.6175  False
+#          UstabaşıBir Ay             İşçiBir Yıl     -4.0    0.0  -6.1175 -1.8825   True
+#          UstabaşıBir Ay     İşçiÜç Yıl ve Üzeri     -5.0    0.0  -7.1175 -2.8825   True
+#         UstabaşıBir Yıl UstabaşıÜç Yıl ve Üzeri      0.0    1.0  -2.1175  2.1175  False
+#         UstabaşıBir Yıl          YöneticiBeş Ay      2.0 0.0788  -0.1175  4.1175  False
+#         UstabaşıBir Yıl          YöneticiBir Ay      0.0    1.0  -2.1175  2.1175  False
+#         UstabaşıBir Yıl         YöneticiBir Yıl     3.25 0.0003   1.1325  5.3675   True
+#         UstabaşıBir Yıl YöneticiÜç Yıl ve Üzeri     3.75    0.0   1.6325  5.8675   True
+#         UstabaşıBir Yıl              İşçiBeş Ay     -1.5 0.3877  -3.6175  0.6175  False
+#         UstabaşıBir Yıl              İşçiBir Ay    -0.75 0.9819  -2.8675  1.3675  False
+#         UstabaşıBir Yıl             İşçiBir Yıl    -3.25 0.0003  -5.3675 -1.1325   True
+#         UstabaşıBir Yıl     İşçiÜç Yıl ve Üzeri    -4.25    0.0  -6.3675 -2.1325   True
+# UstabaşıÜç Yıl ve Üzeri          YöneticiBeş Ay      2.0 0.0788  -0.1175  4.1175  False
+# UstabaşıÜç Yıl ve Üzeri          YöneticiBir Ay      0.0    1.0  -2.1175  2.1175  False
+# UstabaşıÜç Yıl ve Üzeri         YöneticiBir Yıl     3.25 0.0003   1.1325  5.3675   True
+# UstabaşıÜç Yıl ve Üzeri YöneticiÜç Yıl ve Üzeri     3.75    0.0   1.6325  5.8675   True
+# UstabaşıÜç Yıl ve Üzeri              İşçiBeş Ay     -1.5 0.3877  -3.6175  0.6175  False
+# UstabaşıÜç Yıl ve Üzeri              İşçiBir Ay    -0.75 0.9819  -2.8675  1.3675  False
+# UstabaşıÜç Yıl ve Üzeri             İşçiBir Yıl    -3.25 0.0003  -5.3675 -1.1325   True
+# UstabaşıÜç Yıl ve Üzeri     İşçiÜç Yıl ve Üzeri    -4.25    0.0  -6.3675 -2.1325   True
+#          YöneticiBeş Ay          YöneticiBir Ay     -2.0 0.0788  -4.1175  0.1175  False
+#          YöneticiBeş Ay         YöneticiBir Yıl     1.25 0.6517  -0.8675  3.3675  False
+#          YöneticiBeş Ay YöneticiÜç Yıl ve Üzeri     1.75 0.1893  -0.3675  3.8675  False
+#          YöneticiBeş Ay              İşçiBeş Ay     -3.5 0.0001  -5.6175 -1.3825   True
+#          YöneticiBeş Ay              İşçiBir Ay    -2.75 0.0031  -4.8675 -0.6325   True
+#          YöneticiBeş Ay             İşçiBir Yıl    -5.25    0.0  -7.3675 -3.1325   True
+#          YöneticiBeş Ay     İşçiÜç Yıl ve Üzeri    -6.25    0.0  -8.3675 -4.1325   True
+#          YöneticiBir Ay         YöneticiBir Yıl     3.25 0.0003   1.1325  5.3675   True
+#          YöneticiBir Ay YöneticiÜç Yıl ve Üzeri     3.75    0.0   1.6325  5.8675   True
+#          YöneticiBir Ay              İşçiBeş Ay     -1.5 0.3877  -3.6175  0.6175  False
+#          YöneticiBir Ay              İşçiBir Ay    -0.75 0.9819  -2.8675  1.3675  False
+#          YöneticiBir Ay             İşçiBir Yıl    -3.25 0.0003  -5.3675 -1.1325   True
+#          YöneticiBir Ay     İşçiÜç Yıl ve Üzeri    -4.25    0.0  -6.3675 -2.1325   True
+#         YöneticiBir Yıl YöneticiÜç Yıl ve Üzeri      0.5 0.9994  -1.6175  2.6175  False
+#         YöneticiBir Yıl              İşçiBeş Ay    -4.75    0.0  -6.8675 -2.6325   True
+#         YöneticiBir Yıl              İşçiBir Ay     -4.0    0.0  -6.1175 -1.8825   True
+#         YöneticiBir Yıl             İşçiBir Yıl     -6.5    0.0  -8.6175 -4.3825   True
+#         YöneticiBir Yıl     İşçiÜç Yıl ve Üzeri     -7.5    0.0  -9.6175 -5.3825   True
+# YöneticiÜç Yıl ve Üzeri              İşçiBeş Ay    -5.25    0.0  -7.3675 -3.1325   True
+# YöneticiÜç Yıl ve Üzeri              İşçiBir Ay     -4.5    0.0  -6.6175 -2.3825   True
+# YöneticiÜç Yıl ve Üzeri             İşçiBir Yıl     -7.0    0.0  -9.1175 -4.8825   True
+# YöneticiÜç Yıl ve Üzeri     İşçiÜç Yıl ve Üzeri     -8.0    0.0 -10.1175 -5.8825   True
+#              İşçiBeş Ay              İşçiBir Ay     0.75 0.9819  -1.3675  2.8675  False
+#              İşçiBeş Ay             İşçiBir Yıl    -1.75 0.1893  -3.8675  0.3675  False
+#              İşçiBeş Ay     İşçiÜç Yıl ve Üzeri    -2.75 0.0031  -4.8675 -0.6325   True
+#              İşçiBir Ay             İşçiBir Yıl     -2.5 0.0098  -4.6175 -0.3825   True
+#              İşçiBir Ay     İşçiÜç Yıl ve Üzeri     -3.5 0.0001  -5.6175 -1.3825   True
+#             İşçiBir Yıl     İşçiÜç Yıl ve Üzeri     -1.0  0.879  -3.1175  1.1175  False
+# ---------------------------------------------------------------------------------------
 
 
+# aralarında anlamlı bir fark olanlar;
+#          UstabaşıBeş Ay         YöneticiBir Yıl
+#          UstabaşıBeş Ay YöneticiÜç Yıl ve Üzeri
+#          UstabaşıBeş Ay             İşçiBir Yıl
+#          UstabaşıBeş Ay     İşçiÜç Yıl ve Üzeri
+#          UstabaşıBir Ay         YöneticiBir Yıl
+#          UstabaşıBir Ay YöneticiÜç Yıl ve Üzeri
+#          UstabaşıBir Ay              İşçiBeş Ay
+#          UstabaşıBir Ay             İşçiBir Yıl
+#          UstabaşıBir Ay     İşçiÜç Yıl ve Üzeri
+#         UstabaşıBir Yıl         YöneticiBir Yıl
+#         UstabaşıBir Yıl YöneticiÜç Yıl ve Üzeri
+#         UstabaşıBir Yıl             İşçiBir Yıl
+#         UstabaşıBir Yıl     İşçiÜç Yıl ve Üzeri
+# UstabaşıÜç Yıl ve Üzeri         YöneticiBir Yıl
+# UstabaşıÜç Yıl ve Üzeri YöneticiÜç Yıl ve Üzeri
+# UstabaşıÜç Yıl ve Üzeri             İşçiBir Yıl
+# UstabaşıÜç Yıl ve Üzeri     İşçiÜç Yıl ve Üzeri
+#          YöneticiBeş Ay              İşçiBeş Ay
+#          YöneticiBeş Ay              İşçiBir Ay
+#          YöneticiBeş Ay             İşçiBir Yıl
+#          YöneticiBeş Ay     İşçiÜç Yıl ve Üzeri
+#          YöneticiBir Ay         YöneticiBir Yıl
+#          YöneticiBir Ay YöneticiÜç Yıl ve Üzeri
+#          YöneticiBir Ay             İşçiBir Yıl
+#          YöneticiBir Ay     İşçiÜç Yıl ve Üzeri
+#         YöneticiBir Yıl              İşçiBeş Ay
+#         YöneticiBir Yıl              İşçiBir Ay
+#         YöneticiBir Yıl             İşçiBir Yıl
+#         YöneticiBir Yıl     İşçiÜç Yıl ve Üzeri
+# YöneticiÜç Yıl ve Üzeri              İşçiBeş Ay
+# YöneticiÜç Yıl ve Üzeri              İşçiBir Ay
+# YöneticiÜç Yıl ve Üzeri             İşçiBir Yıl
+# YöneticiÜç Yıl ve Üzeri     İşçiÜç Yıl ve Üzeri
+#              İşçiBeş Ay     İşçiÜç Yıl ve Üzeri
+#              İşçiBir Ay             İşçiBir Yıl
+#              İşçiBir Ay     İşçiÜç Yıl ve Üzeri
+
+grup1 = veri.groupby(["Mevki", "Süre"])["Performans"].mean()
+print(grup1)
+
+# Mevki     Süre           
+# Ustabaşı  Beş Ay             6.50
+#           Bir Ay             6.75
+#           Bir Yıl            6.00
+#           Üç Yıl ve Üzeri    6.00
+# Yönetici  Beş Ay             8.00
+#           Bir Ay             6.00
+#           Bir Yıl            9.25
+#           Üç Yıl ve Üzeri    9.75
+# İşçi      Beş Ay             4.50
+#           Bir Ay             5.25
+#           Bir Yıl            2.75
+#           Üç Yıl ve Üzeri    1.75
+```
+
+## 5.17 Pandas Melt Fonksiyonu
 
 
 
 
 ### Örnekler
-## 5.17 
+## 5.18 
 # 6
 
-https://www.youtube.com/watch?v=kVGfQIgeeFI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=77
-2352
+https://www.youtube.com/watch?v=soAxt9rmuPM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=78
+0000
