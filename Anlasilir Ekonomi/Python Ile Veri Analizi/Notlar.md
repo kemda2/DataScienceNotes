@@ -4000,6 +4000,62 @@ print(grup.mean() * 100)
 
 İki farklı kategorik bağımsız değişkenin bir bağımsız değişken üzerindeki etkilerini incelediğimiz yapıdır.
 
+Varsayımları;
+
+1. Her grup normal dağılmalı.
+1. Varyanslar eşit olmalı
+1. Gözlemler bağımsız olmalı
+
+### Örnekler
+
+>
+
+| Gübre | Tohum | Verim   |
+|-------|-------|---------|
+| a     | x     | 1,30666 |
+| a     | y     | 2,08843 |
+| a     | z     | 2,07446 |
+| b     | x     | 3,24712 |
+| b     | y     | 3,66463 |
+| b     | z     | 3,40174 |
+| b     | x     | 2,26187 |
+| b     | y     | 0,21646 |
+| c     | x     | 3,75111 |
+| c     | y     | 4,93807 |
+| c     | z     | 1,52868 |
+| c     | x     | 2,96162 |
+| c     | y     | 3,29044 |
+| c     | z     | 1,37916 |
+| b     | x     | 2,86905 |
+| b     | y     | 3,66399 |
+| b     | z     | 3,89564 |
+| b     | x     | 4,21133 |
+| b     | y     | 3,52177 |
+| b     | z     | 2,90911 |
+| c     | x     | 4,02537 |
+| c     | w     | 2,40579 |
+| c     | z     | 3,46629 |
+| c     | w     | 3,66432 |
+| c     | y     | 4,79953 |
+| a     | z     | 3,83279 |
+| a     | y     | 3,89394 |
+| a     | x     | 3,82907 |
+| a     | y     | 4,03004 |
+
+
+
+
+
+```Python
+data = {
+    "Gübre": ["a", "a", "a", "b", "b", "b", "b", "b", "c", "c", "c", "c", "c", "c", "b", "b", "b", "b", "b", "b", "c", "c", "c", "c", "c", "a", "a", "a", "a"],
+    "Tohum": ["x", "y", "z", "x", "y", "z", "x", "y", "x", "y", "z", "x", "y", "z", "x", "y", "z", "x", "y", "z", "x", "w", "z", "w", "y", "z", "y", "x", "y"],
+    "Verim": [1.30666, 2.08843, 2.07446, 3.24712, 3.66463, 3.40174, 2.26187, 0.21646, 3.75111, 4.93807, 1.52868, 2.96162, 3.29044, 1.37916, 2.86905, 3.66399, 3.89564, 4.21133, 3.52177, 2.90911, 4.02537, 2.40579, 3.46629, 3.66432, 4.79953, 3.83279, 3.89394, 3.82907, 4.03004]
+}
+
+```
+
+
 
 
 
@@ -4008,5 +4064,5 @@ print(grup.mean() * 100)
 ## 5.17 
 # 6
 
-https://www.youtube.com/watch?v=kVGfQIgeeFI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=76
-0537
+https://www.youtube.com/watch?v=kVGfQIgeeFI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=77
+2352
