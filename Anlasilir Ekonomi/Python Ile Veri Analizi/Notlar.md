@@ -4197,6 +4197,30 @@ plt.show()
 
 Hatalar genellikle çizginin etrafında yoğunlaştığı için genel bir dağılım gerçekleştirdiğini söyleyebiliriz.
 
+```Python
+
+# 2 - Varyans eşitliğine şimdilik girmeyeceğiz. Varyans - kovaryans matrisini görmediğimiz için.
+
+print(model.summary())
+```
+
+![image](./images/modelsum.png)
+
+Burada **Prob(F-statistic)** değeri 0,05'ten küçük olduğu için model anlamlıdır.
+
+```Python
+anova = sm.stats.anova_lm(model, type=2) # type=2 olmasının sebebi dengeli bir dağılım olmasından dolayıdır. 16 işçi, 16 ustabaşı ve 16 yönetici gibi. Sayısal fark varsa type=3 kulanılır.
+```
+
+|                 |   df |   sum_sq   |   mean_sq  |       F       |      PR(>F)       |
+|-----------------|-------|------------|------------|---------------|-------------------|
+| C(Mevki)        |  2.0  | 177.541667 |  88.770833 | 120.594340    | 1.105315e-16      |
+| C(Süre)         |  3.0  |   1.583333 |   0.527778 |   0.716981    | 5.483443e-01      |
+| C(Mevki):C(Süre)|  6.0  |  64.291667 |  10.715278 |  14.556604    | 2.351726e-08      |
+| Residual        | 36.0  |  26.500000 |   0.736111 |       NaN     |        NaN        |
+
+Buradan Mevkinin ve mevki:süre nin performans üzerinde etkisi vardır. Sürenin ise tek başına etkisi yoktur.
+
 
 
 
