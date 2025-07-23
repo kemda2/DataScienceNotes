@@ -4195,6 +4195,12 @@ plt.show()
 
 ![image](./images/qqplot.png)
 
+Hatalar genellikle çizginin etrafında yoğunlaştığı için genel bir dağılım gerçekleştirdiğini söyleyebiliriz.
+
+
+
+
+
 
 
 ### Örnekler
