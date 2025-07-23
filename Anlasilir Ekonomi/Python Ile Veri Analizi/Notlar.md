@@ -4047,11 +4047,90 @@ Varsayımları;
 
 
 ```Python
-data = {
-    "Gübre": ["a", "a", "a", "b", "b", "b", "b", "b", "c", "c", "c", "c", "c", "c", "b", "b", "b", "b", "b", "b", "c", "c", "c", "c", "c", "a", "a", "a", "a"],
-    "Tohum": ["x", "y", "z", "x", "y", "z", "x", "y", "x", "y", "z", "x", "y", "z", "x", "y", "z", "x", "y", "z", "x", "w", "z", "w", "y", "z", "y", "x", "y"],
-    "Verim": [1.30666, 2.08843, 2.07446, 3.24712, 3.66463, 3.40174, 2.26187, 0.21646, 3.75111, 4.93807, 1.52868, 2.96162, 3.29044, 1.37916, 2.86905, 3.66399, 3.89564, 4.21133, 3.52177, 2.90911, 4.02537, 2.40579, 3.46629, 3.66432, 4.79953, 3.83279, 3.89394, 3.82907, 4.03004]
-}
+data = [
+    {"Gübre": "a", "Tohum": "x", "Verim": 1.306366},
+    {"Gübre": "a", "Tohum": "y", "Verim": 2.088343},
+    {"Gübre": "a", "Tohum": "z", "Verim": 2.074462},
+    {"Gübre": "a", "Tohum": "w", "Verim": 3.247412},
+    {"Gübre": "b", "Tohum": "x", "Verim": 3.663463},
+    {"Gübre": "b", "Tohum": "y", "Verim": 3.401724},
+    {"Gübre": "b", "Tohum": "z", "Verim": 3.261872},
+    {"Gübre": "b", "Tohum": "w", "Verim": 0.216146},
+    {"Gübre": "c", "Tohum": "x", "Verim": 3.751611},
+    {"Gübre": "c", "Tohum": "y", "Verim": 4.938079},
+    {"Gübre": "c", "Tohum": "z", "Verim": 1.525868},
+    {"Gübre": "c", "Tohum": "w", "Verim": 2.961626},
+    {"Gübre": "a", "Tohum": "x", "Verim": 2.330424},
+    {"Gübre": "a", "Tohum": "y", "Verim": 1.379126},
+    {"Gübre": "a", "Tohum": "z", "Verim": 2.869005},
+    {"Gübre": "a", "Tohum": "w", "Verim": 1.429398},
+    {"Gübre": "b", "Tohum": "x", "Verim": 3.72459},
+    {"Gübre": "b", "Tohum": "y", "Verim": 3.663938},
+    {"Gübre": "b", "Tohum": "z", "Verim": 3.988546},
+    {"Gübre": "b", "Tohum": "w", "Verim": 4.421133},
+    {"Gübre": "c", "Tohum": "x", "Verim": 3.521777},
+    {"Gübre": "c", "Tohum": "y", "Verim": 2.90911},
+    {"Gübre": "c", "Tohum": "z", "Verim": 4.025637},
+    {"Gübre": "c", "Tohum": "w", "Verim": 2.405079},
+    {"Gübre": "a", "Tohum": "x", "Verim": 4.362696},
+    {"Gübre": "a", "Tohum": "y", "Verim": 3.66432},
+    {"Gübre": "a", "Tohum": "z", "Verim": 4.799353},
+    {"Gübre": "a", "Tohum": "w", "Verim": 3.832974},
+    {"Gübre": "b", "Tohum": "x", "Verim": 2.829076},
+    {"Gübre": "b", "Tohum": "y", "Verim": 4.030048},
+]
+
+
+import pandas as pd
+from scipy import stats
+
+veri = pd.DataFrame(data)
+
+gübrea = veri[veri["Gübre"] == "a"]["Verim"]
+gübreb = veri[veri["Gübre"] == "b"]["Verim"]
+gübrec = veri[veri["Gübre"] == "c"]["Verim"]
+
+tohumx = veri[veri["Tohum"] == "x"]["Verim"]
+tohumy = veri[veri["Tohum"] == "y"]["Verim"]
+tohumz = veri[veri["Tohum"] == "z"]["Verim"]
+tohumw = veri[veri["Tohum"] == "w"]["Verim"]
+
+normallik = stats.shapiro(gübrea)
+print(normallik)
+# ShapiroResult(statistic=np.float64(0.9331734647821069), pvalue=np.float64(0.4149659983337719))
+
+normallik = stats.shapiro(gübreb)
+print(normallik)
+# ShapiroResult(statistic=np.float64(0.7244096065963742), pvalue=np.float64(0.0017424331651333834))
+
+normallik = stats.shapiro(gübrec)
+print(normallik)
+# ShapiroResult(statistic=np.float64(0.9915271905787592), pvalue=np.float64(0.9970901669111705))
+
+normallik = stats.shapiro(tohumx)
+print(normallik)
+# ShapiroResult(statistic=np.float64(0.9021377517980724), pvalue=np.float64(0.3019951037341627))
+
+normallik = stats.shapiro(tohumy)
+print(normallik)
+# ShapiroResult(statistic=np.float64(0.966514549074815), pvalue=np.float64(0.8693426251294119))
+
+normallik = stats.shapiro(tohumz)
+print(normallik)
+# ShapiroResult(statistic=np.float64(0.9672962186543457), pvalue=np.float64(0.8783215754586416))
+
+normallik = stats.shapiro(tohumw)
+print(normallik)
+# ShapiroResult(statistic=np.float64(0.9646131086630286), pvalue=np.float64(0.8571966206962809))
+
+homojenlik = stats.levene(gübrea, gübreb, gübrec)
+print(homojenlik)
+# LeveneResult(statistic=np.float64(0.6394561195729113), pvalue=np.float64(0.5353827382055358))
+
+homojenlik = stats.levene(tohumx, tohumy, tohumz, tohumw)
+print(homojenlik)
+# LeveneResult(statistic=np.float64(0.30423464772926995), pvalue=np.float64(0.8220529521815618))
+
 
 ```
 
