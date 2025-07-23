@@ -4006,45 +4006,11 @@ Varsayımları;
 1. Varyanslar eşit olmalı
 1. Gözlemler bağımsız olmalı
 
+2 yönlü Anova yapısı doğrusal model gibi çalışır.
+
 ### Örnekler
 
->
-
-| Gübre | Tohum | Verim   |
-|-------|-------|---------|
-| a     | x     | 1,30666 |
-| a     | y     | 2,08843 |
-| a     | z     | 2,07446 |
-| b     | x     | 3,24712 |
-| b     | y     | 3,66463 |
-| b     | z     | 3,40174 |
-| b     | x     | 2,26187 |
-| b     | y     | 0,21646 |
-| c     | x     | 3,75111 |
-| c     | y     | 4,93807 |
-| c     | z     | 1,52868 |
-| c     | x     | 2,96162 |
-| c     | y     | 3,29044 |
-| c     | z     | 1,37916 |
-| b     | x     | 2,86905 |
-| b     | y     | 3,66399 |
-| b     | z     | 3,89564 |
-| b     | x     | 4,21133 |
-| b     | y     | 3,52177 |
-| b     | z     | 2,90911 |
-| c     | x     | 4,02537 |
-| c     | w     | 2,40579 |
-| c     | z     | 3,46629 |
-| c     | w     | 3,66432 |
-| c     | y     | 4,79953 |
-| a     | z     | 3,83279 |
-| a     | y     | 3,89394 |
-| a     | x     | 3,82907 |
-| a     | y     | 4,03004 |
-
-
-
-
+> Gübre ve tohum kategorik çeşitlerinin verim üzerinde farkı olup olmadığını inceliyoruz.
 
 ```Python
 data = [
@@ -4152,6 +4118,82 @@ anova = sm.stats.anova_lm(test, type=2)
 
 En sağ sütundaki değerlerin hepsi 0,05 değerinden büyük. Bu yüzden $H_0$ hipotezini reddedemiyoruz. Bunların ortalamaları arasında herhangi bir fark yoktur diyoruz.
 
+> Mevki veya title'ın performans üzerinde fark yaratıyor mu inceleyeceğiz.
+
+```Python
+import pandas as pd
+from scipy import stats
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+import statsmodels.stats as ss
+import matplotlib.pyplot as plt
+
+
+calisanlar = [
+    {"ÇalışanNo": 1, "Mevki": "İşçi", "Süre": "Bir Ay", "Performans": 7},
+    {"ÇalışanNo": 2, "Mevki": "İşçi", "Süre": "Beş Ay", "Performans": 5},
+    {"ÇalışanNo": 3, "Mevki": "İşçi", "Süre": "Bir Yıl", "Performans": 4},
+    {"ÇalışanNo": 4, "Mevki": "İşçi", "Süre": "Üç Yıl ve Üzeri", "Performans": 2},
+    {"ÇalışanNo": 5, "Mevki": "İşçi", "Süre": "Bir Ay", "Performans": 5},
+    {"ÇalışanNo": 6, "Mevki": "İşçi", "Süre": "Beş Ay", "Performans": 5},
+    {"ÇalışanNo": 7, "Mevki": "İşçi", "Süre": "Bir Yıl", "Performans": 3},
+    {"ÇalışanNo": 8, "Mevki": "İşçi", "Süre": "Üç Yıl ve Üzeri", "Performans": 1},
+    {"ÇalışanNo": 9, "Mevki": "İşçi", "Süre": "Bir Ay", "Performans": 5},
+    {"ÇalışanNo": 10, "Mevki": "İşçi", "Süre": "Beş Ay", "Performans": 4},
+    {"ÇalışanNo": 11, "Mevki": "İşçi", "Süre": "Bir Yıl", "Performans": 2},
+    {"ÇalışanNo": 12, "Mevki": "İşçi", "Süre": "Üç Yıl ve Üzeri", "Performans": 2},
+    {"ÇalışanNo": 13, "Mevki": "İşçi", "Süre": "Bir Ay", "Performans": 4},
+    {"ÇalışanNo": 14, "Mevki": "İşçi", "Süre": "Beş Ay", "Performans": 4},
+    {"ÇalışanNo": 15, "Mevki": "İşçi", "Süre": "Bir Yıl", "Performans": 2},
+    {"ÇalışanNo": 16, "Mevki": "İşçi", "Süre": "Üç Yıl ve Üzeri", "Performans": 2},
+    {"ÇalışanNo": 17, "Mevki": "Ustabaşı", "Süre": "Bir Ay", "Performans": 5},
+    {"ÇalışanNo": 18, "Mevki": "Ustabaşı", "Süre": "Beş Ay", "Performans": 6},
+    {"ÇalışanNo": 19, "Mevki": "Ustabaşı", "Süre": "Bir Yıl", "Performans": 5},
+    {"ÇalışanNo": 20, "Mevki": "Ustabaşı", "Süre": "Üç Yıl ve Üzeri", "Performans": 5},
+    {"ÇalışanNo": 21, "Mevki": "Ustabaşı", "Süre": "Bir Ay", "Performans": 7},
+    {"ÇalışanNo": 22, "Mevki": "Ustabaşı", "Süre": "Beş Ay", "Performans": 6},
+    {"ÇalışanNo": 23, "Mevki": "Ustabaşı", "Süre": "Bir Yıl", "Performans": 6},
+    {"ÇalışanNo": 24, "Mevki": "Ustabaşı", "Süre": "Üç Yıl ve Üzeri", "Performans": 7},
+    {"ÇalışanNo": 25, "Mevki": "Ustabaşı", "Süre": "Bir Ay", "Performans": 8},
+    {"ÇalışanNo": 26, "Mevki": "Ustabaşı", "Süre": "Beş Ay", "Performans": 7},
+    {"ÇalışanNo": 27, "Mevki": "Ustabaşı", "Süre": "Bir Yıl", "Performans": 6},
+    {"ÇalışanNo": 28, "Mevki": "Ustabaşı", "Süre": "Üç Yıl ve Üzeri", "Performans": 6},
+    {"ÇalışanNo": 29, "Mevki": "Ustabaşı", "Süre": "Bir Ay", "Performans": 7},
+    {"ÇalışanNo": 30, "Mevki": "Ustabaşı", "Süre": "Beş Ay", "Performans": 7},
+    {"ÇalışanNo": 31, "Mevki": "Ustabaşı", "Süre": "Bir Yıl", "Performans": 7},
+    {"ÇalışanNo": 32, "Mevki": "Ustabaşı", "Süre": "Üç Yıl ve Üzeri", "Performans": 6},
+    {"ÇalışanNo": 33, "Mevki": "Yönetici", "Süre": "Bir Ay", "Performans": 5},
+    {"ÇalışanNo": 34, "Mevki": "Yönetici", "Süre": "Beş Ay", "Performans": 7},
+    {"ÇalışanNo": 35, "Mevki": "Yönetici", "Süre": "Bir Yıl", "Performans": 9},
+    {"ÇalışanNo": 36, "Mevki": "Yönetici", "Süre": "Üç Yıl ve Üzeri", "Performans": 10},
+    {"ÇalışanNo": 37, "Mevki": "Yönetici", "Süre": "Bir Ay", "Performans": 6},
+    {"ÇalışanNo": 38, "Mevki": "Yönetici", "Süre": "Beş Ay", "Performans": 9},
+    {"ÇalışanNo": 39, "Mevki": "Yönetici", "Süre": "Bir Yıl", "Performans": 10},
+    {"ÇalışanNo": 40, "Mevki": "Yönetici", "Süre": "Üç Yıl ve Üzeri", "Performans": 10},
+    {"ÇalışanNo": 41, "Mevki": "Yönetici", "Süre": "Bir Ay", "Performans": 7},
+    {"ÇalışanNo": 42, "Mevki": "Yönetici", "Süre": "Beş Ay", "Performans": 9},
+    {"ÇalışanNo": 43, "Mevki": "Yönetici", "Süre": "Bir Yıl", "Performans": 9},
+    {"ÇalışanNo": 44, "Mevki": "Yönetici", "Süre": "Üç Yıl ve Üzeri", "Performans": 10},
+    {"ÇalışanNo": 45, "Mevki": "Yönetici", "Süre": "Bir Ay", "Performans": 6},
+    {"ÇalışanNo": 46, "Mevki": "Yönetici", "Süre": "Beş Ay", "Performans": 7},
+    {"ÇalışanNo": 47, "Mevki": "Yönetici", "Süre": "Bir Yıl", "Performans": 9},
+    {"ÇalışanNo": 48, "Mevki": "Yönetici", "Süre": "Üç Yıl ve Üzeri", "Performans": 9},
+]
+
+veri = pd.DataFrame(calisanlar)
+
+model = ols("Performans ~ C(Mevki) + C(Süre) + C(Mevki):C(Süre)", data=veri).fit()
+hatalar = model.resid
+
+normallik = stats.shapiro(hatalar)
+print(normallik)
+# ShapiroResult(statistic=np.float64(0.9807986727220802), pvalue=np.float64(0.6122785077808122)) ⚠⚠⚠ 0,61 > 0,05 olduğu için normallik varsayımı geçerli.
+
+fig = sm.qqplot(hatalar, line="s")
+plt.show()
+```
+
+![image](./images/qqplot.png)
 
 
 
