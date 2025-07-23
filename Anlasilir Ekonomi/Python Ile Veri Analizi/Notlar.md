@@ -4095,6 +4095,7 @@ tohumy = veri[veri["Tohum"] == "y"]["Verim"]
 tohumz = veri[veri["Tohum"] == "z"]["Verim"]
 tohumw = veri[veri["Tohum"] == "w"]["Verim"]
 
+# 1 - Normallik
 normallik = stats.shapiro(gübrea)
 print(normallik)
 # ShapiroResult(statistic=np.float64(0.9331734647821069), pvalue=np.float64(0.4149659983337719))
@@ -4123,6 +4124,7 @@ normallik = stats.shapiro(tohumw)
 print(normallik)
 # ShapiroResult(statistic=np.float64(0.9646131086630286), pvalue=np.float64(0.8571966206962809))
 
+# 2 - Varyans homojenliği
 homojenlik = stats.levene(gübrea, gübreb, gübrec)
 print(homojenlik)
 # LeveneResult(statistic=np.float64(0.6394561195729113), pvalue=np.float64(0.5353827382055358))
@@ -4131,10 +4133,24 @@ homojenlik = stats.levene(tohumx, tohumy, tohumz, tohumw)
 print(homojenlik)
 # LeveneResult(statistic=np.float64(0.30423464772926995), pvalue=np.float64(0.8220529521815618))
 
+# 3 - Çift yönlü ANOVA
 
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
+
+model = "Verim ~ C(Gübre) + C(Tohum) + C(Gübre):C(Tohum)"
+test = ols(model, data=veri).fit()
+anova = sm.stats.anova_lm(test, type=2)
 ```
 
+| df | sum_sq   | mean_sq  | F        | PR(>F)   |
+|----|----------|----------|----------|----------|
+| C(Gübre)           | 2.0  | 1.884892 | 0.942446 | 0.568988 | 0.575955 |
+| C(Tohum)           | 3.0  | 1.686942 | 0.562314 | 0.339489 | 0.797025 |
+| C(Gübre):C(Tohum)  | 6.0  | 4.445899 | 0.740983 | 0.447358 | 0.837423 |
+| Residual           | 18.0 | 29.814402| 1.656356 | NaN      | NaN      |
 
+En sağ sütundaki değerlerin hepsi 0,05 değerinden büyük. Bu yüzden $H_0$ hipotezini reddedemiyoruz. Bunların ortalamaları arasında herhangi bir fark yoktur diyoruz.
 
 
 
