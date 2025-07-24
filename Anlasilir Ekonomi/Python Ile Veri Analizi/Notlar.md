@@ -4380,12 +4380,57 @@ print(grup1)
 
 ## 5.17 Pandas Melt Fonksiyonu
 
+```Python
+import pandas as pd
+
+data = {
+    "Mevki": [
+        "İşçi", "Ustabaşı", "Yönetici", "İşçi", "Ustabaşı", "Yönetici", "İşçi", "Ustabaşı", "Yönetici", "İşçi",
+        "Ustabaşı", "Yönetici", "İşçi", "Ustabaşı", "Yönetici", "İşçi", "Ustabaşı", "Yönetici", "İşçi", "Ustabaşı",
+        "Yönetici", "İşçi", "Ustabaşı", "Yönetici", "İşçi", "Ustabaşı", "Yönetici", "İşçi", "Ustabaşı", "Yönetici"
+    ],
+    "1 Ay": [
+        8, 8, 7, 6, 10, 2, 10, 6, 5, 4, 10, 6, 9, 8, 2, 1, 10, 8, 2, 9, 1, 1, 9, 7, 1, 1, 1, 4, 7, 4
+    ],
+    "3 Ay": [
+        3, 10, 6, 3, 7, 2, 2, 4, 5, 6, 7, 6, 2, 2, 3, 9, 2, 2, 6, 1, 7, 9, 2, 6, 7, 9, 1, 0, 6, 0
+    ],
+    "1 Yıl": [
+        6, 9, 6, 10, 4, 9, 4, 6, 6, 5, 4, 5, 6, 3, 6, 2, 3, 4, 2, 2, 4, 9, 1, 9, 9, 6, 8, 1, 0, 0
+    ],
+    "3 Yıl ve Üzeri": [
+        5, 7, 4, 4, 1, 9, 9, 5, 5, 5, 5, 5, 9, 5, 9, 1, 5, 4, 9, 2, 3, 1, 4, 6, 1, 2, 2, 5, 6, 6
+    ]
+}
+
+veri = pd.DataFrame(data)
+
+veri2 = pd.melt(veri, id_vars=["Mevki"], value_vars=["1 Ay", "3 Ay", "1 Yıl", "3 Yıl ve Üzeri"], var_name="Kıdem", value_name="Sayı")
+
+veri2
+```
+
+|   | Mevki    | Kıdem            | Sayı |
+|---|----------|------------------|------|
+| 0 | İşçi     | 1 Ay             | 8    |
+| 1 | Ustabaşı | 1 Ay             | 8    |
+| 2 | Yönetici | 1 Ay             | 7    |
+| 3 | İşçi     | 1 Ay             | 6    |
+| 4 | Ustabaşı | 1 Ay             | 10   |
+|...| ...      | ...              | ...  |
+|115| Ustabaşı | 3 Yıl ve Üzeri   | 2    |
+|116| Yönetici | 3 Yıl ve Üzeri   | 2    |
+|117| İşçi     | 3 Yıl ve Üzeri   | 5    |
+|118| Ustabaşı | 3 Yıl ve Üzeri   | 6    |
+|119| Yönetici | 3 Yıl ve Üzeri   | 6    |
+
+## 5.18 Repeated Measures ANOVA (Tekrarlı Anova Yapısı)
 
 
 
 ### Örnekler
-## 5.18 
+## 5.19 
 # 6
 
-https://www.youtube.com/watch?v=soAxt9rmuPM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=78
+https://www.youtube.com/watch?v=5Zqdg_dFtSU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=79
 0000
