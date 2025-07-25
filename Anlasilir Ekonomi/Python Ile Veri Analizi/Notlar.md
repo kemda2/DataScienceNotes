@@ -4437,12 +4437,88 @@ Varsayımlar;
 
 ### Örnekler
 
+| Örneklem | TÖ | TS1 | TS2 | TS3 |
+| -------- | -- | --- | --- | --- |
+| Ahmet    | 70 | 86  | 80  | 87  |
+| Mehmet   | 78 | 82  | 77  | 80  |
+| Ayşe     | 61 | 70  | 64  | 72  |
+| Candan   | 70 | 74  | 68  | 88  |
+| Mustafa  | 89 | 105 | 89  | 101 |
+| Ali      | 79 | 84  | 88  | 87  |
+
+```Python
+import pandas as pd
+
+data = {
+    "Örneklem": ["Ahmet", "Mehmet", "Ayşe", "Candan", "Mustafa", "Ali"],
+    "TÖ": [70, 78, 61, 70, 89, 79],
+    "TS1": [86, 82, 70, 74, 105, 84],
+    "TS2": [80, 77, 64, 68, 89, 88],
+    "TS3": [87, 80, 72, 88, 101, 87]
+}
+
+veri = pd.DataFrame(data)
+veri
+```
+
+| Örneklem | TÖ | TS1 | TS2 | TS3 |
+| -------- | -- | --- | --- | --- |
+| Ahmet    | 70 | 86  | 80  | 87  |
+| Mehmet   | 78 | 82  | 77  | 80  |
+| Ayşe     | 61 | 70  | 64  | 72  |
+| Candan   | 70 | 74  | 68  | 88  |
+| Mustafa  | 89 | 105 | 89  | 101 |
+| Ali      | 79 | 84  | 88  | 87  |
 
 
+```Python
+veri2 = pd.melt(veri, id_vars=["Örneklem"], value_vars=["TÖ", "TS1", "TS2", "TS3"])
+veri2.columns = ["Örneklem", "Testler", "Puanlar"]
+veri2
+```
 
+| Örneklem | Testler | Puanlar |
+|----------|---------|---------|
+| Ahmet    | TÖ      | 70      |
+| Mehmet   | TÖ      | 78      |
+| Ayşe     | TÖ      | 61      |
+| Candan   | TÖ      | 70      |
+| Mustafa  | TÖ      | 89      |
+| Ali      | TÖ      | 79      |
+| Ahmet    | TS1     | 86      |
+| Mehmet   | TS1     | 82      |
+| Ayşe     | TS1     | 70      |
+| Candan   | TS1     | 74      |
+| Mustafa  | TS1     | 105     |
+| Ali      | TS1     | 84      |
+| Ahmet    | TS2     | 80      |
+| Mehmet   | TS2     | 77      |
+| Ayşe     | TS2     | 64      |
+| Candan   | TS2     | 68      |
+| Mustafa  | TS2     | 89      |
+| Ali      | TS2     | 88      |
+| Ahmet    | TS3     | 87      |
+| Mehmet   | TS3     | 80      |
+| Ayşe     | TS3     | 72      |
+| Candan   | TS3     | 88      |
+| Mustafa  | TS3     | 101     |
+| Ali      | TS3     | 87      |
 
+# 1 - Normallik Varsayımı
 
+```Python
+import pingouin as pg
 
+normallik = pg.normality(data=veri2, dv="Puanlar", group="Testler", method="shapiro")
+normallik
+```
+
+|         | W        | p-val    | Normal     |
+| ------- | -------- | -------- | ---------- |
+| TÖ      | 0.968747 | 0.883916 | True       |
+| TS1     | 0.912647 | 0.454037 | True       |
+| TS2     | 0.924451 | 0.537977 | True       |
+| TS3     | 0.943039 | 0.683771 | True       |
 
 
 
