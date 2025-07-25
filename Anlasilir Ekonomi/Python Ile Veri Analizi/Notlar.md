@@ -4431,10 +4431,23 @@ veri2
 Varsayımlar;
 
 1. Gözlemlerimizin bağımsız olması
-1. 
-1. 
-1. 
-1. 
+1. Bağımlı değişkenin sürekli olması
+1. Normallik Varsayımı (Anova varsayımı normallik varsayımına göre daha dirençli bir testtir. Normallik sağlanmasa da gözlem sayımız çoksa Merkezi limit teoremine atıfta bulunabiliriz.)
+1. Küresellik (Sphericity: bütün grupların ikili kombinasyonlarının varyans homojenliği) Mauchly'nin küresellik testi ile uygulanır.
+
+### Örnekler
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Örnekler
 ## 5.19 
