@@ -4698,13 +4698,152 @@ print(varcov)
 #  [ 7.68 17.36]]
 ```
 
-## 5.20 One-Way MANOVA
+## 5.20 Anova ve Manova rasındaki farklar
+
+### 🎯 1. **Tek Yönlü ANOVA (One-Way ANOVA)**
+
+#### ✔️ Kullanım Durumu:
+
+- **1 bağımsız değişken**,
+    
+- **1 bağımlı değişken** olduğunda kullanılır.
+    
+
+#### 📌 Örnek:
+
+Bir araştırmacı, **3 farklı eğitim yönteminin** (geleneksel, online, hibrit) öğrencilerin **matematik sınav puanı** üzerindeki etkisini incelemek istiyor.
+
+- Bağımsız değişken: Eğitim yöntemi (3 grup)
+    
+- Bağımlı değişken: Matematik puanı
+    
+
+#### ✅ Neden Tek Yönlü ANOVA?
+
+Çünkü **tek bir faktör (eğitim yöntemi)** ve **tek bir sonuç (puan)** var.
+
+---
+
+### 🎯 2. **Çift Yönlü ANOVA (Two-Way ANOVA)**
+
+#### ✔️ Kullanım Durumu:
+
+- **2 bağımsız değişken**,
+    
+- **1 bağımlı değişken** olduğunda kullanılır.
+    
+- Ayrıca **etkileşim (interaction)** etkisi de test edilir.
+    
+
+#### 📌 Örnek:
+
+Bir öğretmen, hem **eğitim yöntemi** (geleneksel, online) hem de **cinsiyetin** öğrencilerin **sınav puanı** üzerindeki etkisini araştırmak istiyor.
+
+- Bağımsız değişkenler:
+    
+    - Eğitim yöntemi (2 seviye)
+        
+    - Cinsiyet (erkek/kadın)
+        
+- Bağımlı değişken: Sınav puanı
+    
+
+#### ✅ Neden Çift Yönlü ANOVA?
+
+Çünkü iki faktörün tek bir ölçüm üzerindeki **hem bireysel hem birlikte (etkileşimli)** etkisi test ediliyor.
+
+---
+
+### 🎯 3. **Tek Yönlü MANOVA (One-Way MANOVA)**
+
+#### ✔️ Kullanım Durumu:
+
+- **1 bağımsız değişken**,
+    
+- **2 veya daha fazla bağımlı değişken** olduğunda kullanılır.
+    
+
+#### 📌 Örnek:
+
+Araştırmacı, **farklı öğretim yöntemlerinin** hem **sınav puanları** hem de **öğrenci memnuniyeti** üzerindeki etkisini merak ediyor.
+
+- Bağımsız değişken: Öğretim yöntemi (3 grup)
+    
+- Bağımlı değişkenler:
+    
+    - Sınav puanı
+        
+    - Memnuniyet skoru
+        
+
+#### ✅ Neden Tek Yönlü MANOVA?
+
+Çünkü **tek bir faktör**, birden fazla sonuca olan etkisiyle test ediliyor.
+
+---
+
+### 🎯 4. **Çift Yönlü MANOVA (Two-Way MANOVA)**
+
+#### ✔️ Kullanım Durumu:
+
+- **2 bağımsız değişken**,
+    
+- **2 veya daha fazla bağımlı değişken** olduğunda kullanılır.
+    
+
+#### 📌 Örnek:
+
+Bir araştırmacı, **öğretim yöntemi** ve **cinsiyetin**, hem **sınav notu** hem de **motivasyon skoru** üzerindeki etkisini araştırıyor.
+
+- Bağımsız değişkenler:
+    
+    - Öğretim yöntemi (geleneksel/online)
+        
+    - Cinsiyet (erkek/kadın)
+        
+- Bağımlı değişkenler:
+    
+    - Sınav puanı
+        
+    - Motivasyon puanı
+        
+
+#### ✅ Neden Çift Yönlü MANOVA?
+
+Çünkü iki faktörün, birden fazla ölçüm üzerindeki etkisi birlikte değerlendiriliyor.
+
+---
+
+### 🔚 Özet Tablo:
+
+|Analiz Türü|Bağımsız Değişken|Bağımlı Değişken|Örnek|
+|---|---|---|---|
+|**Tek Yönlü ANOVA**|1|1|Eğitim türü → sınav puanı|
+|**Çift Yönlü ANOVA**|2|1|Eğitim türü & cinsiyet → sınav puanı|
+|**Tek Yönlü MANOVA**|1|2+|Eğitim türü → sınav + memnuniyet|
+|**Çift Yönlü MANOVA**|2|2+|Eğitim türü & cinsiyet → sınav + motivasyon|
+
+## 5.21 One-Way MANOVA (Çok değişkenli varyans analizi)
+
+Bağımlı değişken 1'den fazla olursa Anova yerine Manova kullanılır.
+
+Varsayımlar;
+
+1. Gözlemlerin Bağımsızlığı
+1. Her bağımlı değişken sürekli olmalıdır
+1. Her Bağımlı Değişkenin, Bağımsız Değişken Grupları İçerisinde Normal Dağılım Gösterme Varsayımı
+1. 
+1. 
+
+
+
+
 
 
 
 
 ### Örnekler
-## 5.21 
+## 5.22 
 # 6
 
 https://www.youtube.com/watch?v=a-KltTG1EMY&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=80
