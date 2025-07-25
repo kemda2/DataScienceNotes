@@ -4577,12 +4577,138 @@ grup
 
 Kovaryans iki değişkenin birlikte ne kadar değiştiklerinin ölçüsüdür.
 
+$$
+\sigma^2 = \frac{\sum (X_i - \mu)^2}{n}
+$$
+
+
+$$
+\sigma^2 = \frac{(X_1 - \mu)^2 + (X_2 - \mu)^2 + \cdots + (X_i - \mu)^2}{n}
+$$
+
+$$
+\sigma^2 = \frac{X_1^2 - 2X_1\mu + \mu^2 + X_2^2 - 2X_2\mu + \mu^2 + \cdots + X_i^2 - 2X_i\mu + \mu^2}{n}
+$$
+
+$$
+\sigma^2 = \frac{\sum X_i^2 - 2\mu \sum X_i + n\mu^2}{n}
+$$
+
+$$
+\sigma^2 = \frac{\sum X_i^2}{n} - \frac{2\mu \sum X_i}{n} + \mu^2
+$$
+
+$$
+\sigma^2 = E(X^2) - 2 \cdot E(X) \cdot E(X) + E(X)^2
+$$
+
+$$
+\sigma^2 = E(x^2) - 2(E(x))^2 + (E(x))^2
+$$
+
+$$
+\sigma^2 = E(x^2) - (E(x))^2
+$$
+
+> Örnek;
+
+* Değerler: 2, 4, 6, 8, 10
+
+* $n = 5$
+
+* $\sum{x} = 30$
+
+* $\mu$ = 6
+
+> Eski formülle hesabı;
+
+$$
+\frac{\sum (x_i - \bar{M})^2}{n}
+$$
+
+
+$$
+(2-6)^2 = 16, \quad (4-6)^2 = 4, \quad (6-6)^2 = 0, \quad (8-6)^2 = 4, \quad (10-6)^2 = 16
+$$
+
+$$
+16 + 4 + 0 + 4 + 16 = 40
+$$
+
+$$
+\frac{40}{5} = 8
+$$
+
+> Yeni formülle hesabı
+
+$$
+\sigma^2 = E(x^2) - (E(x))^2
+$$
+
+
+$$
+E(x^2) = \frac{\sum x^2}{n} = \frac{4 + 16 + 36 + 64 + 100}{5} = \frac{220}{5} = 44
+$$
+
+$$
+E(x) = \frac{\sum x}{n} = \frac{2 + 4 + 6 + 8 + 10}{n} = \frac{30}{5} = 6
+$$
+
+$$
+\sigma^2 = E(x^2) - (E(x))^2 = 44 - 6^2 = 44-36 = 8
+$$
+
+İki şekilde de 8 çıkmaktadır.
+
+$$
+Cov(x,x) = \sigma^2 = E(x^2) - (E(x))^2
+$$
+
+$$
+Cov(x,y) = E(x \cdot y) - E(x) \cdot E(y)
+$$
+
+Varyans Kovaryans matrisi;
+
+|       | **X**          | **Y**          |
+|-------|----------------|----------------|
+| **X** | Var(X)         | Cov(X, Y)      |
+| **Y** | Cov(X, Y)      | Var(Y)         |
+
+> Python'da,
+
+```Python
+import numpy as np
+
+x = [45, 37, 42, 35, 39]
+y = [38, 31, 26, 28, 33]
+
+veri = np.array([x, y])
+
+print(veri)
+
+# [[45 37 42 35 39]
+#  [38 31 26 28 33]]
+
+varcov = np.cov(veri, bias=True)
+
+print(varcov)
+
+# [[12.64  7.68]
+#  [ 7.68 17.36]]
+```
+
+## 5.20 One-Way MANOVA
+
 
 
 
 ### Örnekler
-## 5.20 
+## 5.21 
 # 6
 
 https://www.youtube.com/watch?v=a-KltTG1EMY&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=80
 0000
+
+
+
