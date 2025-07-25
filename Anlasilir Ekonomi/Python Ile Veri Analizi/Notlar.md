@@ -4832,9 +4832,93 @@ Varsayımlar;
 1. Gözlemlerin Bağımsızlığı
 1. Her Bağımlı Değişken Sürekli Olmalıdır
 1. Her Bağımlı Değişkenin, Bağımsız Değişken Grupları İçerisinde Normal Dağılım göstermelidir.
-1. 
-1. 
+1. Varyansların Homojenliği
+1. Varyans-kovaryans matrisi eşitliği
 
+### Örnekler
+
+```Python
+import pandas as pd
+
+data = {
+    "Ürün": ["1. Ürün"] * 20 + 
+            ["2. Ürün"] * 20 + 
+            ["3. Ürün"] * 20,
+    
+    "ErkekTutum": [
+        5, 4, 5, 7, 6, 3, 6, 5, 6, 7, 
+        6, 5, 7, 6, 6, 5, 6, 6, 5, 6, 
+        6, 6, 5, 7, 6, 4, 6, 6, 5, 7, 
+        5, 5, 6, 6, 7, 3, 6, 4, 6, 6,
+        6, 6, 6, 5, 6, 6, 4, 4, 5, 5, 
+        5, 6, 4, 6, 4, 7, 7, 6, 6, 6
+    ],
+
+    "KadınTutum": [
+        8, 7, 7, 8, 8, 6, 8, 6, 9, 8, 
+        9, 7, 9, 6, 7, 8, 6, 7, 8, 9, 
+        10, 8, 6, 8, 7, 6, 7, 8, 7, 6, 
+        7, 8, 6, 7, 6, 7, 8, 8, 7, 6,
+        7, 9, 9, 8, 8, 8, 7, 7, 7, 7, 
+        8, 8, 8, 6, 5, 8, 10, 8, 8, 10
+    ]
+}
+
+veri = pd.DataFrame(data)
+
+# Varsayımlar;
+# Gözlemlerin Bağımsızlığı OK
+# Her Bağımlı Değişken Sürekli Olmalı OK
+# Normal Dağılım göstermeli n>20 OK 
+# Varyansların Homojenliği
+import pingouin as pg
+homojenlik = pg.homoscedasticity(veri, dv="ErkekTutum", group="Ürün", center="mean")
+print(homojenlik)
+
+# Test   W        p-değeri (pval) equal\_var)
+# Levene 0.258799 0.772881        True   
+
+import pingouin as pg
+homojenlik = pg.homoscedasticity(veri, dv="KadınTutum", group="Ürün", center="mean")
+print(homojenlik)
+
+#         W        pval   equal_var
+# levene  1.693663  0.192965   True
+
+# Varyans-kovaryans matrisi eşitliği 
+
+varcov = pg.box_m(veri, dvs=["ErkekTutum", "KadınTutum"], group="Ürün")
+print(varcov)
+
+#        Chi2     df      pval      equal_cov
+# box    7.383242  6    0.286854    True
+
+# P > 0,5 Varyans-kovaryans matrisi eşitliği sağlanıyor.
+
+from statsmodels.multivariate.manova import MANOVA
+
+model = MANOVA.from_formula("ErkekTutum + KadınTutum ~ Ürün",data=veri)
+print(model.mv_test())
+
+# --------------------------------------------------------------
+#        Intercept         Value  Num DF  Den DF F Value  Pr > F
+# --------------------------------------------------------------
+#           Wilks' lambda  0.0459 2.0000 56.0000 581.6706 0.0000
+#          Pillai's trace  0.9541 2.0000 56.0000 581.6706 0.0000
+#  Hotelling-Lawley trace 20.7740 2.0000 56.0000 581.6706 0.0000
+#     Roy's greatest root 20.7740 2.0000 56.0000 581.6706 0.0000
+# --------------------------------------------------------------
+                                                              
+# --------------------------------------------------------------
+#            Ürün          Value  Num DF  Den DF  F Value Pr > F
+# --------------------------------------------------------------
+#            Wilks' lambda 0.9247 4.0000 112.0000  1.1178 0.3517
+#           Pillai's trace 0.0754 4.0000 114.0000  1.1160 0.3525
+#   Hotelling-Lawley trace 0.0814 4.0000  66.1739  1.1328 0.3487
+#      Roy's greatest root 0.0806 2.0000  57.0000  2.2972 0.1098
+# ==============================================================
+
+```
 
 
 
@@ -4847,8 +4931,7 @@ Varsayımlar;
 # 6
 
 https://www.youtube.com/watch?v=LtEOHhvRJ4A&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=81
-
-0640
+2419
 
 
 
