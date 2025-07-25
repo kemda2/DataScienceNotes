@@ -4830,8 +4830,8 @@ Bağımlı değişken 1'den fazla olursa Anova yerine Manova kullanılır.
 Varsayımlar;
 
 1. Gözlemlerin Bağımsızlığı
-1. Her bağımlı değişken sürekli olmalıdır
-1. Her Bağımlı Değişkenin, Bağımsız Değişken Grupları İçerisinde Normal Dağılım Gösterme Varsayımı
+1. Her Bağımlı Değişken Sürekli Olmalıdır
+1. Her Bağımlı Değişkenin, Bağımsız Değişken Grupları İçerisinde Normal Dağılım göstermelidir.
 1. 
 1. 
 
