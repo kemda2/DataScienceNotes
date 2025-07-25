@@ -4846,8 +4846,9 @@ Varsayımlar;
 ## 5.22 
 # 6
 
-https://www.youtube.com/watch?v=a-KltTG1EMY&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=80
-0000
+https://www.youtube.com/watch?v=LtEOHhvRJ4A&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=81
+
+0640
 
 
 
