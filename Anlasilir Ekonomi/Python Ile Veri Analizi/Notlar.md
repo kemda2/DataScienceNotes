@@ -4504,9 +4504,9 @@ veri2
 | Mustafa  | TS3     | 101     |
 | Ali      | TS3     | 87      |
 
-# 1 - Normallik Varsayımı
 
 ```Python
+# 1 - Normallik Varsayımı
 import pingouin as pg
 
 normallik = pg.normality(data=veri2, dv="Puanlar", group="Testler", method="shapiro")
@@ -4522,21 +4522,66 @@ normallik
 
 Hepsi True, Hepsi normal dağılım gösteriyor.
 
-# 2 - Varyansların Homojenliği
 
 ```Python
+# 2 - Varyansların Homojenliği
 homojenlik = pg.sphericity(data=veri2, dv="Puanlar", subject="Örneklem", within="Testler")
 homojenlik
 
 # SpherResults(spher=True, W=0.8329, chi2=0.6806, dof=5, pval=0.9846)
 ```
 
-P > 0,5 Varyanslar homojen. Eğer Varyanslar homojen değilse Greenhouse-Geisser testini uygulamamız gerekir. 
+P > 0,05 Varyanslar homojen. Eğer Varyanslar homojen değilse Greenhouse-Geisser testini uygulamamız gerekir. 
+
+```Python
+# 3 - Anova testi
+anova = pg.rm_anova(data=veri2, dv="Puanlar", subject="Örneklem", within="Testler")
+anova
+```
+
+| Source   | ddof1 | ddof2 |    F     | p-unc   |   np2    |   eps    |
+|----------|-------|-------|----------|---------|----------|----------|
+| Testler  |   3   |  15   | 8.575713 | 0.001485| 0.631695 | 0.896743 |
+
+P < 0,05 olduğu için bu gruplar arasında fark var deriz. Farkın nereden kaynaklandığını anlamak için Post-Hoc yapılır.
+
+```Python
+posthoc = pg.pairwise_ttests(data=veri2, dv="Puanlar", subject="Örneklem", within="Testler", padjust="bonf")
+print(posthoc)
+```
+
+| A    | B    | T       | dof | p-unc   | p-corr  | p-adj | BF10  | Hedges' g |
+|------|------|---------|-----|---------|---------|-------|-------|-----------|
+| TS1  | TS2  | 2.2545  | 5   | 0.0739  | 0.4431  | bonf  | 1.576 |  0.4788   |
+| TS1  | TS3  | -0.0099 | 5   | 0.4047  | 1.0000  | bonf  | 0.515 | -0.1961   |
+| TS1  | TÖ   | 3.8493  | 5   | 0.0120  | 0.0721  | bonf  | 6.012 |  0.7556   |
+| TS2  | TS3  | -2.7383 | 5   | 0.0409  | 0.2452  | bonf  | 2.420 | -0.7599   |
+| TS2  | TÖ   | 1.4937  | 5   | 0.1955  | 1.0000  | bonf  | 0.803 |  0.2943   |
+| TS3  | TÖ   | 4.6880  | 5   | 0.0054  | 0.0324  | bonf  | 11.00 |  1.0858   |
+
+p-corr düzeltilmiş p değeridir. Buraya bakıldığında TS3 ile TÖ değerleri arasında fark olduğu ve TS3 tedavisinin işe yaradığı söylenebilir.
+
+```Python
+grup = veri2.groupby("Testler").mean()
+grup
+```
+
+| Testler | Ortalama Puan |
+|---------|----------------|
+| TÖ      | 74.50          |
+| TS1     | 83.50          |
+| TS2     | 77.67          |
+| TS3     | 85.83          |
+
+## 5.19 Varyans-Kovaryans Matrisi
+
+
+
 
 
 
 ### Örnekler
-## 5.19 
+## 5.20 
 # 6
 
 https://www.youtube.com/watch?v=5Zqdg_dFtSU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=79
