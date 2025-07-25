@@ -4520,8 +4520,18 @@ normallik
 | TS2     | 0.924451 | 0.537977 | True       |
 | TS3     | 0.943039 | 0.683771 | True       |
 
+Hepsi True, Hepsi normal dağılım gösteriyor.
 
+# 2 - Varyansların Homojenliği
 
+```Python
+homojenlik = pg.sphericity(data=veri2, dv="Puanlar", subject="Örneklem", within="Testler")
+homojenlik
+
+# SpherResults(spher=True, W=0.8329, chi2=0.6806, dof=5, pval=0.9846)
+```
+
+P > 0,5 Varyanslar homojen. Eğer Varyanslar homojen değilse Greenhouse-Geisser testini uygulamamız gerekir. 
 
 
 
