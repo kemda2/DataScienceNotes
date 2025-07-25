@@ -2504,4 +2504,285 @@ Bu örnek `"bad"`, `"mad"`, `"sad"` kelimelerini arar. Regex karmaşık desenler
 Dize biçimlendirme, belirli alt dizeleri daha büyük dizelerin içine yerleştirme işlemidir. Alt dizeler genellikle belli biçimde işlenir ve formatlanır. String biçimlendirme yöntemleri; `format()` metodu, literal dize interpolasyonu (f-stringler) ve düzenli ifadeler (regex) olarak çeşitlenir. Hangi yöntemi kullanacağınız verinizin ihtiyaçlarına ve kişisel tercihlerinize bağlıdır. Ancak veri profesyonellerinin en çok kullandığı tekniklere hakim olmak önemlidir.
 
 
+İşte referans kılavuzunun Türkçeye çevrilmiş hali:
+
+---
+
+# Referans Kılavuzu: Listeler
+
+Python’da listelerin önemli veri yapıları olduğunu öğreniyorsunuz. Liste, sıralı bir öğe koleksiyonunu saklamak ve üzerinde işlem yapmak için kullanılan bir veri yapısıdır. Bu öğeler tamsayı, ondalık sayı, metin (string) veya başka listeler gibi herhangi bir veri tipi olabilir. Bu kadar çok yönlü oldukları için veri uzmanları ve tüm Python programcıları listeleri her gün kullanır. Bu yüzden listelerin nasıl çalıştığını bilmek çok önemlidir. Bu yazı, Python öğrenirken size yardımcı olacak bir liste referans kılavuzudur.
+
+---
+
+## Liste Oluşturma
+
+Python’da liste oluşturmanın iki temel yolu vardır:
+
+* Köşeli parantezler: `[]`
+* `list()` fonksiyonu
+
+Köşeli parantezle liste tanımlarken, her öğe arasına virgül koymanız gerekir.
+
+Örneğin, aşağıdaki kod bir string listesi oluşturur:
+
+```python
+list_a = ['olive', 'palm', 'coconut']
+print(list_a)
+
+# ['olive', 'palm', 'coconut']
+```
+
+Bir tamsayı listesi de oluşturabilirsiniz:
+
+```python
+list_b = [8, 6, 7, 5, 3, 0, 8]
+print(list_b)
+
+# [8, 6, 7, 5, 3, 0, 8]
+```
+
+Veya karma veri tiplerinden oluşan bir liste:
+
+```python
+list_c = ['Abidjan', 14.2, [1, 2, None], 'Zagreb']
+print(list_c)
+
+# ['Abidjan', 14.2, [1, 2, None], 'Zagreb']
+```
+
+Boş bir liste oluşturmak için ise boş köşeli parantez veya `list()` fonksiyonunu kullanabilirsiniz:
+
+```python
+empty_list_1 = []
+empty_list_2 = list()
+```
+
+---
+
+## İndeksleme ve Dilimleme
+
+Stringlerde olduğu gibi, listelerde de indeksleme ve dilimleme ile öğelere ulaşabilirsiniz. Listelerde indeksler sıfırdan başlar. Köşeli parantezlerle indeksleme yapılır:
+
+```python
+phrase = ['Astra', 'inclinant', 'sed', 'non', 'obligant']
+print(phrase[1])
+
+# inclinant
+```
+
+Sondan başlamak için negatif indeks kullanılabilir:
+
+```python
+print(phrase[-1])
+
+# obligant
+```
+
+Bir alt liste almak için dilimleme yapılır. Dilimleme, iki indeksin iki nokta üst üste (:) ile ayrılmasıyla yapılır:
+
+```python
+print(phrase[1:4])
+
+# ['inclinant', 'sed', 'non']
+```
+
+Bu kod, 1, 2 ve 3. indekslerdeki öğeleri alır. Bitiş indeksi dahil edilmez.
+
+Başlangıç indeksi yazılmazsa varsayılan olarak `0`, bitiş indeksi yazılmazsa `len(my_list)` kabul edilir:
+
+```python
+print(phrase[:3])  # İlk üç öğe
+print(phrase[3:])  # 3. öğeden sona kadar
+```
+
+---
+
+## Liste Değiştirilebilirliği (Mutability)
+
+Listeler değiştirilebilirdir. Yani, oluşturulduktan sonra içeriği değiştirilebilir. Belirli bir öğeyi değiştirmek için indeksini belirleyip yeni bir değer atamanız yeterlidir:
+
+```python
+my_list = ['Macduff', 'Malcolm', 'Duncan', 'Banquo']
+my_list[2] = 'Macbeth'
+print(my_list)
+
+# ['Macduff', 'Malcolm', 'Macbeth', 'Banquo']
+```
+
+Bir dilimi de değiştirebilirsiniz:
+
+```python
+my_list = ['Macduff', 'Malcolm', 'Macbeth', 'Banquo']
+my_list[1:3] = [1, 2, 3, 4]
+print(my_list)
+
+# ['Macduff', 1, 2, 3, 4, 'Banquo']
+```
+
+---
+
+## Liste İşlemleri
+
+Listeler `+` operatörü ile birleştirilebilir:
+
+```python
+num_list = [1, 2, 3]
+char_list = ['a', 'b', 'c']
+print(num_list + char_list)
+
+# [1, 2, 3, 'a', 'b', 'c']
+```
+
+`*` operatörü ile tekrar edilebilir:
+
+```python
+list_a = ['a', 'b', 'c']
+print(list_a * 2)
+
+# ['a', 'b', 'c', 'a', 'b', 'c']
+```
+
+Ancak listeler `-` veya `/` ile çıkarılamaz veya bölünemez.
+
+Bir öğenin listede olup olmadığını `in` ve `not in` operatörleriyle kontrol edebilirsiniz:
+
+```python
+num_list = [2, 4, 6]
+print(5 in num_list)       # False
+print(5 not in num_list)   # True
+
+# False
+# True
+```
+
+---
+
+## Liste Metodları
+
+Python’daki listeler, veri ve bu verilerle işlem yapan metotları bir araya getiren sınıflardır. Listelerin birçok yerleşik metodu vardır:
+
+### `append()`
+
+Listenin sonuna bir öğe ekler:
+
+```python
+my_list = [0, 1, 1, 2, 3]
+my_list.append(5)
+print(my_list)
+
+# [0, 1, 1, 2, 3, 5]
+```
+
+### `insert()`
+
+Belirli bir pozisyona öğe ekler:
+
+```python
+my_list = ['a', 'b', 'd']
+my_list.insert(2, 'c')
+print(my_list)
+
+# ['a', 'b', 'c', 'd']
+```
+
+### `remove()`
+
+Belirtilen öğenin ilk eşleşmesini kaldırır:
+
+```python
+my_list = ['a', 'b', 'd', 'a']
+my_list.remove('a')
+print(my_list)
+
+# ['b', 'd', 'a']
+```
+
+### `pop()`
+
+Belirtilen pozisyondaki öğeyi kaldırır ve döndürür. Pozisyon belirtilmezse son öğeyi kaldırır:
+
+```python
+my_list = ['a', 'b', 'c']
+print(my_list.pop())
+print(my_list)
+
+# c
+# ['a', 'b']
+```
+
+### `clear()`
+
+Tüm öğeleri kaldırır:
+
+```python
+my_list = ['a', 'b', 'c']
+my_list.clear()
+print(my_list)
+
+# []
+```
+
+### `index()`
+
+İlk eşleşen öğenin indeksini döndürür:
+
+```python
+my_list = ['a', 'b', 'c', 'a']
+print(my_list.index('a'))
+
+# 0
+```
+
+### `count()`
+
+Belirli bir öğenin kaç kez geçtiğini döndürür:
+
+```python
+my_list = ['a', 'b', 'c', 'a']
+print(my_list.count('a'))
+
+# 2
+```
+
+### `sort()`
+
+Listeyi varsayılan olarak artan sırayla sıralar. `reverse=True` ile azalan sırayla da sıralanabilir:
+
+```python
+char_list = ['b', 'c', 'a']
+num_list = [2, 3, 1]
+
+char_list.sort()
+num_list.sort(reverse=True)
+
+print(char_list)
+print(num_list)
+
+# ['a', 'b', 'c']
+# [3, 2, 1]
+```
+
+---
+
+## **Ek Kaynaklar**
+
+* Daha fazla bilgi için: [Python'a Resmi Giriş: Listeler](https://docs.python.org/3/tutorial/introduction.html#lists)
+* Diğer liste metodları için: [Veri Yapıları: Listeler Üzerine Daha Fazlası](https://docs.python.org/3/tutorial/datastructures.html)
+
+#
+
+# 
+
+#
+
+# 
+
+#
+
+# 
+
+#
+
+# 
+
 #
