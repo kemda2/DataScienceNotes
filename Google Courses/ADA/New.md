@@ -2503,11 +2503,6 @@ Bu örnek `"bad"`, `"mad"`, `"sad"` kelimelerini arar. Regex karmaşık desenler
 
 Dize biçimlendirme, belirli alt dizeleri daha büyük dizelerin içine yerleştirme işlemidir. Alt dizeler genellikle belli biçimde işlenir ve formatlanır. String biçimlendirme yöntemleri; `format()` metodu, literal dize interpolasyonu (f-stringler) ve düzenli ifadeler (regex) olarak çeşitlenir. Hangi yöntemi kullanacağınız verinizin ihtiyaçlarına ve kişisel tercihlerinize bağlıdır. Ancak veri profesyonellerinin en çok kullandığı tekniklere hakim olmak önemlidir.
 
-
-İşte referans kılavuzunun Türkçeye çevrilmiş hali:
-
----
-
 # Referans Kılavuzu: Listeler
 
 Python’da listelerin önemli veri yapıları olduğunu öğreniyorsunuz. Liste, sıralı bir öğe koleksiyonunu saklamak ve üzerinde işlem yapmak için kullanılan bir veri yapısıdır. Bu öğeler tamsayı, ondalık sayı, metin (string) veya başka listeler gibi herhangi bir veri tipi olabilir. Bu kadar çok yönlü oldukları için veri uzmanları ve tüm Python programcıları listeleri her gün kullanır. Bu yüzden listelerin nasıl çalıştığını bilmek çok önemlidir. Bu yazı, Python öğrenirken size yardımcı olacak bir liste referans kılavuzudur.
@@ -2769,7 +2764,186 @@ print(num_list)
 * Daha fazla bilgi için: [Python'a Resmi Giriş: Listeler](https://docs.python.org/3/tutorial/introduction.html#lists)
 * Diğer liste metodları için: [Veri Yapıları: Listeler Üzerine Daha Fazlası](https://docs.python.org/3/tutorial/datastructures.html)
 
-#
+
+# Karşılaştırma: Listeler, String'ler ve Tuple'lar
+
+Python’daki temel iterable (yinelenebilir) sıralı veri yapılarından bazılarını artık öğrendiniz: string'ler, listeler ve tuple'lar. Bu yapılar birçok benzer özelliği paylaşsa da, aralarında önemli farklar vardır. Veri uzmanları genellikle belirli bir problemi çözmek için hangi veri yapısının en uygun olduğunu belirlemek zorundadır. Bu sınıflar arasındaki ilişkiyi anlamak, işinizde daha bilinçli kararlar almanıza yardımcı olur. Bu yazı, string'ler, listeler ve tuple'lar arasındaki benzerlikleri ve farkları açıklayan bir rehberdir.
+
+---
+
+## String’ler (Metinler)
+
+### **Sözdizimi / Oluşturma**
+
+**Not:** Aşağıdaki kod blokları etkileşimli değildir.
+
+* Tek, çift veya üçlü tırnaklar kullanılabilir:
+
+```python
+my_string1 = 'minerals'
+my_string2 = "martin"
+my_string3 = """marathon
+golfcart"""
+empty_str = ''
+```
+
+> **Not:** Üçlü tırnaklar çok satırlı string’ler yazmak için kullanılır ve satır sonlarında otomatik olarak `\n` karakteri eklenir.
+
+* `str()` fonksiyonu kullanılarak string oluşturulabilir veya dönüşüm yapılabilir:
+
+```python
+my_string = str(125)
+```
+
+### **İçerik**
+
+* String’ler harfler, rakamlar, noktalama işaretleri ve boşluklar dahil olmak üzere herhangi bir karakteri içerebilir. Tırnaklar arasındaki her şey aynı string’in bir parçasıdır.
+
+### **Değiştirilebilirlik (Mutability)**
+
+* String’ler **değiştirilemezdir (immutable)**. Yani bir kez oluşturulduktan sonra değiştirilemezler. Değiştiriliyormuş gibi görünen işlemler aslında yeni bir string nesnesi oluşturur.
+
+### **Kullanım Alanları**
+
+* Genellikle metin verisini temsil etmek için kullanılırlar.
+
+### **Yöntemler (Methods)**
+
+Python’un string sınıfı, string'ler üzerinde işlem yapmak için birçok faydalı yöntem sunar. Detaylı bilgi için [Common String Operations](https://docs.python.org/3/library/string.html) bağlantısına göz atabilirsiniz.
+
+---
+
+## Listeler
+
+### **Sözdizimi / Oluşturma**
+
+* Köşeli parantezler ve aralarına virgül konularak yazılır:
+
+```python
+empty_list = []
+my_list = [1, 2, 3, 4, 5]
+```
+
+* `list()` fonksiyonu iterable veri türlerinden liste oluşturmak için kullanılabilir:
+
+```python
+print(list('rocks'))
+print(list(('stones', 'water', 'underground')))
+
+# ['r', 'o', 'c', 'k', 's']
+# ['stones', 'water', 'underground']
+```
+
+### **İçerik**
+
+* Listeler herhangi bir veri türünü ve farklı türleri bir arada içerebilir:
+
+```python
+my_list = [1, 2, 1, 2, 'And through', ['and', 'through']]
+```
+
+### **Değiştirilebilirlik**
+
+* Listeler **değiştirilebilirdir (mutable)**. Oluşturulduktan sonra içerikleri değiştirilebilir:
+
+```python
+num_list = [1, 2, 3]
+num_list[0] = 5446
+print(num_list)  # [5446, 2, 3]
+```
+
+### **Kullanım Alanları**
+
+Listeler çok yönlüdür ve birçok durumda kullanılır:
+
+* İlişkili öğeleri bir arada tutmak
+* Üzerinde döngü kurmak istediğiniz verileri sıralı şekilde saklamak
+* Sıralama ve arama işlemleri yapmak
+* Veriyi değiştirmek gereken durumlarda kullanmak
+* Hesaplama veya işlemler sonucunda elde edilen sonuçları saklamak
+
+### **Yöntemler**
+
+Liste metodları hakkında daha fazla bilgi için [More on Lists](https://docs.python.org/3/tutorial/datastructures.html#more-on-lists) bağlantısına bakabilirsiniz.
+
+---
+
+## Tuple’lar
+
+### **Sözdizimi / Oluşturma**
+
+* Parantez içinde, elemanlar arasında virgül konularak yazılır:
+
+```python
+empty_tuple = ()
+my_tuple = (1, 'z')
+```
+
+> **Not:** Tek elemanlı bir tuple oluştururken, sonuna virgül konulmalıdır:
+
+```python
+test1 = (1)
+test2 = (2,)
+print(type(test1))  # <class 'int'>
+print(type(test2))  # <class 'tuple'>
+```
+
+* Parantez olmadan da virgül ile tuple tanımlanabilir:
+
+```python
+tuple1 = 1,
+tuple2 = 2, 3
+```
+
+* `tuple()` fonksiyonu iterable veri türlerini tuple’a dönüştürmek için kullanılabilir:
+
+```python
+my_tuple = tuple([1, 'z'])
+empty_tuple = tuple()
+```
+
+### **İçerik**
+
+* Tuple’lar her türden veriyi içerebilir:
+
+```python
+my_tuple = (1871, 'all', 'mimsy', ('were', 'the'), ['borogroves'])
+```
+
+### **Değiştirilebilirlik**
+
+* Tuple’lar **değiştirilemezdir (immutable)**. Bir kez oluşturulduktan sonra içerikleri değiştirilemez.
+
+### **Kullanım Alanları**
+
+Tuple’lar genellikle şu durumlarda kullanılır:
+
+* Fonksiyonlardan birden fazla değer döndürmek
+* Değerleri paketleme ve açma (packing & unpacking)
+* Sözlük anahtarları olarak kullanmak (çünkü değiştirilemez olduklarından güvenlidirler)
+* Veri bütünlüğü sağlamak (kazara değişikliklere karşı koruma sağlar)
+
+### **Yöntemler**
+
+Tuple’lar yalnızca iki yerleşik metoda sahiptir:
+
+* `count()`: Belirli bir değerin kaç kez geçtiğini döndürür
+* `index()`: Belirli bir değerin ilk geçtiği konumun indeksini verir
+
+---
+
+## Özet
+
+String’ler, listeler ve tuple’lar, Python’un sıralı ve yinelenebilir veri yapılarıdır. Aralarındaki benzerliklerin yanında, işlevsellik açısından farklılıklar da önemlidir. Hangi veri yapısını kullanacağınıza karar verirken; nasıl oluşturulduğunu, hangi tür verileri içerebildiğini, değiştirilebilir olup olmadığını ve kullanım amacını dikkate almalısınız.
+
+---
+
+## Kaynaklar
+
+* [Python String'lerine Giriş](https://docs.python.org/3/tutorial/introduction.html#strings)
+* [Python Listelerine Giriş](https://docs.python.org/3/tutorial/introduction.html#lists)
+* [Python Tuple Veri Tipleri](https://docs.python.org/3/library/stdtypes.html#tuples)
+
 
 # 
 
