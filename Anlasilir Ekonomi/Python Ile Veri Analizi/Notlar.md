@@ -4584,5 +4584,5 @@ grup
 ## 5.20 
 # 6
 
-https://www.youtube.com/watch?v=5Zqdg_dFtSU&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=79
+https://www.youtube.com/watch?v=a-KltTG1EMY&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=80
 0000
