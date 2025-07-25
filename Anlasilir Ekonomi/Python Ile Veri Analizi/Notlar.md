@@ -4575,7 +4575,7 @@ grup
 
 ## 5.19 Varyans-Kovaryans Matrisi
 
-
+Kovaryans iki değişkenin birlikte ne kadar değiştiklerinin ölçüsüdür.
 
 
 
