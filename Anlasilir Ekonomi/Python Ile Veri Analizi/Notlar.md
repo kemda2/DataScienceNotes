@@ -4426,7 +4426,15 @@ veri2
 
 ## 5.18 Repeated Measures ANOVA (Tekrarlı Anova Yapısı)
 
+Örneğin; İnsanların sigarayı bırakması ile ilgili bir tedavi yöntemi geliştirdiğimizi̇ varsayalım. Amacımız bizim bulduğumuz tedavi işe yarıyor mu yaramıyor mu istatistiksel olarak göstermektir. Aynı kişilerin test önce, testten 1 ay sonraki ve testten 5 ay sonraki değerlerinin olduğu bir tablomuz var. (1 yıl sonraki, 5 yıl sonraki gibi sütunlar daha da artabilir.)
 
+Varsayımlar;
+
+1. Gözlemlerimizin bağımsız olması
+1. 
+1. 
+1. 
+1. 
 
 ### Örnekler
 ## 5.19 
