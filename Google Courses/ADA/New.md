@@ -3070,7 +3070,157 @@ Burada `word[0], word[-1]` işlemi bir tuple (demet) oluşturur ve yalnızca uzu
 
 `zip()`, `enumerate()` ve liste anlama (list comprehension), döngülere olan bağımlılığı azaltarak kodunuzu daha verimli hale getirir ve iterable’larla çalışmayı kolaylaştırır. Bu yaygın araçları anlamak, veriyle çalışırken size zaman kazandırır ve işlemlerinizi daha dinamik hale getirir.
 
-#
+# **Referans Rehberi: Sözlükler (Dictionaries)**
+
+Artık sözlüklerle tanıştınız ve Python’da veri yapısı olarak ne kadar güçlü ve kullanışlı olduklarını keşfediyorsunuz. Sözlüklerin, verileri anahtar-değer (key-value) çiftleri kullanarak saklamanızı ve erişmenizi sağladığını öğrendiniz. Veri uzmanları, birçok görev için sözlükleri kullanır, bu nedenle sözlüklerin nasıl çalıştığını iyi bilmek önemlidir. Bu okuma, sözlüklerle ilgili bir **referans rehberidir** ve Python öğrenme yolculuğunuzda size yardımcı olmak üzere tasarlanmıştır.
+
+---
+
+## **Sözlük Oluşturma**
+
+Python’da sözlük oluşturmanın iki temel yolu vardır:
+
+- Süslü parantezler: `{}`
+    
+- `dict()` fonksiyonu
+    
+
+Süslü parantezlerle bir sözlük tanımlarken, her öğeyi `:` ile ayırmanız gerekir. Örneğin:
+
+```python
+continents = {
+    'Africa': 'Seychelles',
+    'Europe': 'Vatican City',
+    'Asia': 'Maldives'
+}
+```
+
+**Boş sözlük** oluşturmak için:
+
+```python
+empty_dict1 = {}
+empty_dict2 = dict()
+```
+
+`dict()` fonksiyonu farklı bir sözdizimi kullanır: Anahtarlar fonksiyonun anahtar kelime argümanları (keyword arguments) olarak girilir ve `=` ile değer atanır:
+
+```python
+data = dict(a=1, b=2, c=3)
+```
+
+> **Not:** Anahtar kelimeler string olarak girilmez; bu yüzden boşluk içeremezler.
+
+### Anahtarlar ve değerlerle ilgili önemli notlar:
+
+- **Anahtarlar:** Değiştirilemez (immutable) veri tipinde olmalıdır (örneğin, string, sayı veya tuple).
+    
+- **Değerler:** Herhangi bir veri tipinde olabilir (değiştirilebilir veya değiştirilemez) — hatta başka sözlükler bile olabilir.
+    
+- Her anahtar yalnızca bir değere karşılık gelebilir. Örneğin, şu kod hata verir:
+    
+
+```python
+invalid_dict = {'numbers': 1, 2, 3}  # ❌ SyntaxError
+```
+
+Ama birden fazla değeri bir yapı (örneğin liste) içinde verirseniz, geçerli bir sözlük olur:
+
+```python
+valid_dict = {'numbers': [1, 2, 3]}  # ✅
+```
+
+---
+
+## **Sözlüklerle Çalışmak**
+
+### Değerlere erişim
+
+Bir sözlükte belirli bir değere erişmek için, anahtarını köşeli parantez içinde belirtin:
+
+```python
+d = {'numbers': [1, 2, 3]}
+print(d['numbers'])  # [1, 2, 3]
+```
+
+Tüm değerlere erişmek için `values()` metodunu kullanın:
+
+```python
+d = {'numbers': [1, 2, 3], 'letters': ['a', 'b', 'c']}
+print(d.values())  # dict_values([[1, 2, 3], ['a', 'b', 'c']])
+```
+
+### Yeni anahtarlar atama
+
+Python’daki sözlükler **değiştirilebilir (mutable)** yapılardır. Yeni anahtarlar ekleyebilir ve mevcutları güncelleyebilirsiniz:
+
+```python
+d['floats'] = [1.0, 2.0, 3.0]
+print(d)  
+# {'numbers': [1, 2, 3], 'letters': ['a', 'b', 'c'], 'floats': [1.0, 2.0, 3.0]}
+```
+
+### Anahtar var mı diye kontrol etme
+
+Bir anahtarın sözlükte olup olmadığını kontrol etmek için `in` ifadesini kullanın:
+
+```python
+'letters' in d  # True
+'colors' in d   # False
+```
+
+### Anahtar-değer çifti silme
+
+Bir anahtar-değer çiftini silmek için `del` anahtar sözcüğünü kullanın:
+
+```python
+del d['letters']
+print(d)  # {'numbers': [1, 2, 3], 'floats': [1.0, 2.0, 3.0]}
+```
+
+---
+
+## **Sözlük Metodları**
+
+Sözlükler Python’un temel sınıflarından biridir. Daha önce öğrendiğiniz gibi, sınıflar verilerle birlikte bu verilere yönelik işlemleri de paketler. Sözlüklerin birçok yerleşik (built-in) metodu vardır. En yaygın olanlardan bazıları:
+
+### `items()`
+
+Anahtar-değer çiftlerini döndürür:
+
+```python
+d.items()
+# dict_items([('numbers', [1, 2, 3]), ('floats', [1.0, 2.0, 3.0])])
+```
+
+### `keys()`
+
+Tüm anahtarları döndürür:
+
+```python
+d.keys()
+# dict_keys(['numbers', 'floats'])
+```
+
+### `values()`
+
+Tüm değerleri döndürür:
+
+```python
+d.values()
+# dict_values([[1, 2, 3], [1.0, 2.0, 3.0]])
+```
+
+> Bu metodların döndürdüğü nesneler birer **view object**’tir. Bu nesneler, sözlükte yapılan değişiklikleri dinamik olarak yansıtır. Ayrıca yineleme (iterasyon) yapılabilir ve üyelik testlerini desteklerler.
+
+---
+
+## **Ek Kaynaklar**
+
+- Daha fazla bilgi için: [Python sözlük dokümantasyonu](https://docs.python.org/3/tutorial/datastructures.html#dictionaries)
+    
+- Diğer metodlar için: [Python mapping types dökümantasyonu](https://docs.python.org/3/library/stdtypes.html#mapping-types-dict)
+    
+- View object’ler hakkında: [Sözlük view object’leri dokümantasyonu](https://docs.python.org/3/library/stdtypes.html#dict-views)
 
 # 
 
