@@ -3372,6 +3372,243 @@ print(a ^ b)  # {'a', 'c', 'd'}
 * [Hashing ve hashlenebilirlik hakkında bilgi](https://runestone.academy/ns/books/published/pythonds/SortSearch/Hashing.html)
 * [Hashing algoritmalarının tarihi (IEEE Spectrum)](https://spectrum.ieee.org/hans-peter-luhn-and-the-birth-of-the-hashing-algorithm)
 
+
+# Python kütüphanelerini, paketlerini ve modüllerini anlama
+
+Son zamanlarda Python kütüphaneleri, paketleri ve modülleri hakkında bilgi edindiniz. Bu araçların içe aktarılmasının (import edilmesinin) veri profesyonelleri için zaman kazandırdığını ve programlamayı geliştirdiğini öğrendiniz. Yaygın olarak kullanılan kütüphanelerin bir diğer avantajı da yetenekli ve bilgili programcılar tarafından sürekli olarak incelenip güncellenmeleridir. Bu nedenle, altyapı kodunun yüksek kalitede olduğundan emin olabilirsiniz.
+
+Bu yazıda, kütüphane, paket ve modüllerin temel özelliklerini; aralarındaki ilişkiyi ve veri profesyoneli olarak kullanabileceğiniz bazı temel modülleri öğreneceksiniz.
+
+---
+
+## **Kütüphaneler, Paketler ve Modüller**
+
+**Kütüphane (library)**, yeniden kullanılabilir kod modüllerinin ve bunlara ait dokümantasyonun bir bütünüdür. Kütüphaneler, kurulabilen **paketler** şeklinde sunulur ve ihtiyaç duyulduğunda kod ortamınıza (working environment) import edilir. “Kütüphane” ve “paket” terimleri genellikle birbirinin yerine kullanılır. Bu eğitim programında her ikisi de genellikle “kütüphane” olarak anılacaktır, ancak her iki terimi de tanımak önemlidir.
+
+**Modüller (modules)**, kütüphanelere benzer şekilde, ilgili sınıflar ve fonksiyonlar grubudur; ancak genellikle kütüphanelerin alt bileşenleridir. Başka bir deyişle, bir kütüphane birden fazla modül içerebilir ve siz ister tüm kütüphaneyi, ister sadece ihtiyacınız olan modülü import edebilirsiniz.
+
+---
+
+## **Import (İçe Aktarma) İfadeleri**
+
+Python’un standart kütüphanesi dışındaki kütüphaneler ve modüller, genellikle ihtiyaç duyuldukça çalışma ortamınıza import edilmelidir. Önce kurulur, ardından gerektiğinde içe aktarılır.
+
+Bir kütüphane ya da modül import etmek için **import** ifadesi kullanılır. Import ifadeleri, **import** anahtar kelimesiyle belirli bir sözdizimine sahiptir. İşte bazı örnekler:
+
+```python 
+import numpy
+```
+
+---
+
+### NumPy örneği
+
+Bu import ifadesi, NumPy kütüphanesini çalışma ortamınıza aktarır. Bu komutu çalıştırdıktan sonra, NumPy’nin tüm sınıf ve fonksiyonlarına erişebilirsiniz. Örneğin, `[2, 4, 6]` listesini bir diziye (array) çevirmek için şunu yazarsınız:
+
+```python
+numpy.array([2, 4, 6])
+```
+
+Burada, `array()` fonksiyonunun NumPy'den geldiğini belirtmek için başına `numpy` yazılması gerektiğine dikkat edin.
+
+---
+
+### Takma İsim Kullanımı (Aliasing)
+
+Python kütüphanelerinde zaman kazandıran bir diğer özellik de takma ad kullanımıdır. Bu yöntem sayesinde, bir kütüphanenin her fonksiyon kullanımında tam adını yazmanıza gerek kalmaz. Bunun yerine, **as** anahtar kelimesiyle bir takma ad belirlenir:
+
+```python
+import numpy as np
+```
+
+Bu örnekte, NumPy kütüphanesi `np` takma adıyla import edilmiştir. Takma ad olarak istediğiniz kısaltmayı kullanabilirsiniz, ancak yaygın kütüphaneler için genel kabul görmüş takma adlar vardır. Bunlardan sapmak, başkalarıyla kod paylaşırken kafa karışıklığına neden olabilir.
+
+Bazı yaygın kütüphaneler ve standart takma adları:
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+* **NumPy**: Vektör ve matris hesaplamalarında kullanılır.
+* **Pandas**: Tablo verilerini analiz etmek ve dönüştürmek için.
+* **Seaborn** ve **matplotlib**: Grafik, çizim ve veri görselleştirme için kullanılır.
+
+Örneğin, NumPy’nin `array()` fonksiyonunu takma adla şöyle kullanırsınız:
+
+```python
+np.array([2, 4, 6])
+```
+
+---
+
+### Ekstra Import Sözdizimi
+
+#### **Modül İçe Aktarma**
+
+Şu örneği hatırlayın:
+
+```python
+import matplotlib.pyplot as plt
+```
+
+Burada `matplotlib` kütüphanesinden `pyplot` modülü import ediliyor ve `plt` takma adı veriliyor. Modüle erişim, nokta (.) kullanılarak yapılır.
+
+---
+
+#### **Fonksiyon İçe Aktarma**
+
+Kütüphane ya da modül içindeki belirli fonksiyonlar da import edilebilir. Örneğin, scikit-learn ile makine öğrenmesi modelleri kurarken sık kullanılan bir import:
+
+```python
+from sklearn.metrics import precision_score, recall_score
+```
+
+Burada `sklearn.metrics` modülünden `precision_score` ve `recall_score` fonksiyonları import edilmiştir.
+
+Benzer şekilde NumPy'deki `array()` fonksiyonu da şöyle import edilebilir:
+
+```python
+from numpy import array
+```
+
+Bu durumda, fonksiyonu kullanırken herhangi bir ön ek yazmanız gerekmez:
+
+```python
+array([2, 4, 6])
+```
+
+---
+
+### Önerilmeyen Sözdizimi
+
+Bazı durumlarda aşağıdaki gibi her şeyi içe aktaran bir yapı görebilirsiniz:
+
+```python
+from numpy import *
+```
+
+Bu sözdizimi sayesinde tüm fonksiyonlar doğrudan kullanılabilir. Ancak **bu yöntem önerilmez** çünkü hangi fonksiyonun nereden geldiğini takip etmek zorlaşır. Yine de, bazı durumlarda işe yarayabileceği için bu yönteme aşina olmanız faydalıdır.
+
+---
+
+## **Yaygın Olarak Kullanılan Dahili (Built-in) Modüller**
+
+Python’un standart kütüphanesi, veri profesyonelleri için faydalı olabilecek birçok dahili modül içerir. Bunların bazıları: `math`, `datetime` ve `random`. Bu modüller, Python yüklü olduğu sürece ek bir kurulum gerekmeden doğrudan import edilebilir.
+
+---
+
+### [datetime](https://docs.python.org/3/library/datetime.html#module-datetime)
+
+* Tarih ve saat hesaplamaları ve dönüşümleri için kullanılır.
+
+Örnek kullanım:
+
+```python
+import datetime  
+date = datetime.date(1977, 5, 8)       # assign a date to a variable
+print(date)                            # 1977-05-08 # print date
+print(date.year)                       # 1977 # print the year that the date is in
+
+delta = datetime.timedelta(days=30)    # assign a timedelta of 30 days to a  variable
+print(date - delta)                    # 1977-04-08 # print date of 30 days prior 
+```
+
+---
+
+### [math](https://docs.python.org/3/library/math.html#module-math)
+
+* Matematiksel işlemler için işlevler sağlar.
+
+Örnek:
+
+```python
+import math
+print(math.sqrt(1))         # 1.0
+print(math.sin(0))          # 0.0
+print(math.factorial(4))    # 24
+print(math.sqrt(100))       # 10 # square root of 100
+```
+
+---
+
+### [random](https://docs.python.org/3/library/random.html#module-random)
+
+* Sahte rastgele sayı üretimi için kullanılır.
+
+Örnek:
+
+```python
+import random
+print(random.random())       # 0 ile 1 arasında bir sayı
+print(random.randint(1, 3))  # 1 ile 3 arasında bir tamsayı
+```
+
+---
+
+## **Temel Çıkarımlar**
+
+Kütüphaneler, paketler ve modüller, Python’un sınırsız yeteneklerine açılan kapılardır. Bunları kendi kod ihtiyaçlarınıza göre nasıl kullanacağınızı öğrenmek, işlerinizi çok daha verimli hale getirecektir. [PyPI](https://pypi.org/) deposuna göz atarak işinize yarayacak kütüphaneleri keşfedebilirsiniz. Kimya, ses düzenleme, doğal dil işleme ve video oyunları gibi çok farklı alanlar için tasarlanmış paketler mevcuttur. Ne yapmak isterseniz isteyin, muhtemelen biri sizin için gerekli araçları çoktan geliştirmiştir!
+
+# Python’un Yeni Sürümleri ve Özellikleri
+
+Python’un en büyük güçlü yönlerinden birinin dinamizmi olduğunu öğrendiniz: Python, geniş bir kullanıcı topluluğu tarafından geliştirilen ve desteklenen bir dildir. Bu da onun sürekli değişen ve gelişen bir dil olmasını sağlar. Başka bir deyişle, dil ve kütüphaneleri sürekli olarak büyür, gelişir ve kullanıcı geri bildirimlerine yanıt verir.
+
+Python’un bu dinamizmi büyük bir avantaj olmakla birlikte bazı karmaşıklıkları da beraberinde getirebilir. Bu durum, bir kodun uzun süreli kullanım için tasarlandığında veya birden fazla kişinin birlikte çalıştığı projelerde bazı zorluklara neden olabilir. Bir Python sürümünde geliştirilmiş bir betik (script) ya da program, genellikle o sürüme özgüdür. Farklı bir sürümde çalıştırıldığında beklenmeyen davranışlar görülebilir. Bunun nedeni Python’un ve kütüphanelerinin zamanla güncellenmesidir. Örneğin, 2013 yılında Python 2.7.4 sürümünü kullanarak geliştirdiğiniz bir projeyi bugün Python 3.12.4 sürümünde çalıştırmaya çalıştığınızda, aynı şekilde çalışmama ihtimali vardır. Benzer şekilde, takım üyelerinin farklı kütüphane sürümleri kullanması da uyumsuzluk sorunlarına yol açabilir.
+
+---
+
+## **Kullanımdan Kaldırma (Deprecation)**
+
+Kod zamanla gelişir, bazı bölümleri kullanımdan kalkar ve eski hale gelir. Bu sürece **kullanımdan kaldırma (deprecation)** denir. Jupyter defteri (notebook) kullanıyorsanız, gelecekteki bir sürümde kaldırılması planlanan bir şeyi kullandığınızda genellikle bir uyarı alırsınız. Kodunuz hala çalışabilir, ancak ileride çalışmayabilir veya davranışı değişebilir. Bu uyarılara dikkat edip kodunuzu bu değişikliklere uygun şekilde güncellemeniz en iyisidir. Çünkü aktif olarak kod yazarken bunu yapmak, kod sonradan bozulduğunda geri dönüp ne yaptığınızı hatırlamaya çalışmaktan çok daha kolaydır.
+
+Küçük güncellemeler (örneğin Python 3.11.8 → 3.11.9) genellikle büyük sorunlara neden olmazken, büyük sürüm geçişlerinde (örneğin Python 2.X → 3.X) kullanımdan kaldırma işlemleri daha yaygın olur.
+
+Şunu da unutmamak gerekir: Python’un ve kütüphanelerinin eski sürümlerini hâlâ kullanabilirsiniz. Her yeni sürüm çıktığında kodunuzu güncellemek zorunda değilsiniz. Hatta eski sürümler genellikle, daha yeni sürümler çıksa da uzun süre desteklenmeye devam eder. Bunun nedeni, bireylerin ve kuruluşların kodlarını zaman içinde güncelleyebilmelerine olanak tanımaktır. Siz bir projeyi kolayca güncelleyebilseniz bile, büyük bir şirketin tüm kod tabanını bozmadan güncellemesi çok daha zordur.
+
+---
+
+## **Ortamlar (Environments)**
+
+Kod geliştirmek için kullandığınız özel araçlar, kütüphaneler, bağımlılıklar ve ayarlar bütününe **ortam (environment)** denir. Yani, yazdığınız ve çalıştırdığınız kodun çalıştığı koşulların tümü ortamınızın bir parçasıdır. Bir projede bir grupla çalışıyorsanız, kodun herkes için aynı şekilde çalışabilmesi adına aynı ortamı paylaşmanız önemlidir.
+
+Bu kursun uygulamalarını Coursera üzerinden yapıyorsanız, ortam önceden yapılandırıldığı için endişelenmenize gerek yoktur. Ancak, uygulamaları Coursera dışındaki kendi bilgisayarınızda yapıyorsanız, ortam farklı olduğu için kodlar farklı sonuçlar verebilir.
+
+Ortam yönetimi karmaşık ve teknik bir süreç olabilir. Bu kursta bu konuya derinlemesine girilmeyecek, çünkü ortamınız öğrenmeye odaklanabilmeniz için önceden yapılandırılmıştır. Ancak kendi geliştirme ortamınızı oluşturmak ve ortam yönetimini öğrenmek isterseniz, [Anaconda Navigator](https://docs.anaconda.com/navigator/) harika bir başlangıç noktasıdır.
+
+**Anaconda Navigator**, ortamları yönetmek için kullanıcı dostu bir grafik arayüz sağlayan, ücretsiz ve açık kaynaklı bir araçtır. Ayrıca Jupyter Notebook, PyCharm, VSCode gibi veri uzmanlarının sık kullandığı araçlarla entegre çalışır.
+
+---
+
+## **Sahip Olduğunuz Sürümleri Kontrol Etme**
+
+Bu kursta kullanılan kodlar, güncel ve kararlı Python sürümleri ile kütüphaneler üzerinden yazılmıştır. Ancak her yeni sürüm çıktığında tüm ders içeriklerini buna göre güncellemek mümkün ya da gerekli değildir. Eğer Jupyter Notebook etkinliklerini kendi bilgisayarınızda yapıyorsanız, Coursera’daki çıktılarla sizinkiler arasında bazı farklılıklar görebilirsiniz. Bu farklar genellikle **sürüm farklılıklarından** kaynaklanır.
+
+Bir Jupyter hücresinde Python sürümünü kontrol etmek için şu kodu çalıştırabilirsiniz:
+
+```python
+import sys
+print(sys.version)
+```
+
+Bir kütüphanenin sürümünü kontrol etmek için ise, önce kütüphaneyi import edin, ardından `__version__` özelliğini kullanın:
+
+```python
+import numpy as np
+import pandas as pd
+
+print(np.__version__)
+print(pd.__version__)
+```
+
+---
+
+## **Temel Çıkarımlar**
+
+Python, kullanıcıları ve kullanım alanlarına göre gelişen bir dildir. Bu nedenle, sürüm güncellemeleri eski sürümlerde yazılmış kodların davranışlarını değiştirebilir. Kodlama ortamınızı değerlendirmek, yönetmek ve sorunlarını gidermek, etkili bir şekilde kod yazmanın önemli bir parçasıdır.
+
 # 
 
 #
@@ -3380,6 +3617,4 @@ print(a ^ b)  # {'a', 'c', 'd'}
 
 #
 
-# 
-
-#
+https://www.coursera.org/learn/get-started-with-python/lecture/fUQVE/the-power-of-packages
