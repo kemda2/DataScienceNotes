@@ -4949,16 +4949,120 @@ print(posthoc2)
 
 Görüldüğü gibi p-tukey değerlerinin hepsi 0,05'ten fazladır.
 
+## 5.22 Two-Way MANOVA
 
+```Python
+import pandas as pd
 
+# Veriyi DataFrame olarak tanımlıyoruz
+data = {
+    "Mevki": ["İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici", "İşçi", "Müdür", "Yönetici"],
+    "Departman": ["Muhasebe", "Finans", "Muhasebe", "Üretim", "Arge", "Üretim", "Üretim", "Finans","Muhasebe", "Arge", "Üretim", "Finans","Üretim", "Muhasebe", "Finans", "Finans","Finans", "Üretim", "Finans", "Üretim","Muhasebe", "Finans", "Üretim" , "Arge","Üretim", "Arge", "Muhasebe", "Finans","Üretim", "Üretim", "Finans", "Finans", "Finans"],
+    "Performans": [6,5,7,6,5,7,8,6,6,8,8,6,7,6,7,6,6,9,6,6,8,5,5,7,5,6,6,6,7,6,6,8,8],
+    "Sahiplenme": [4,5,6,5,3,2,6,5,5,5,5,4,3,6,3,5,4,4,7,4,6,7,4,5,4,6,5,4,3,5,4,5,7]
+}
 
+# DataFrame oluşturuluyor
+veri = pd.DataFrame(data)
 
+from statsmodels.multivariate.manova import MANOVA
 
+manova = MANOVA.from_formula("Performans+Sahiplenme~Mevki+Departman+Mevki:Departman", data=veri)
+print(manova.mv_test())
+
+#                   Multivariate linear model
+# =============================================================
+                                                             
+# -------------------------------------------------------------
+#         Intercept        Value  Num DF  Den DF F Value Pr > F
+# -------------------------------------------------------------
+#            Wilks' lambda 0.2561 2.0000 20.0000 29.0423 0.0000
+#           Pillai's trace 0.7439 2.0000 20.0000 29.0423 0.0000
+#   Hotelling-Lawley trace 2.9042 2.0000 20.0000 29.0423 0.0000
+#      Roy's greatest root 2.9042 2.0000 20.0000 29.0423 0.0000
+# -------------------------------------------------------------
+                                                             
+# -------------------------------------------------------------
+#           Mevki          Value  Num DF  Den DF F Value Pr > F
+# -------------------------------------------------------------
+#            Wilks' lambda 0.8489 4.0000 40.0000  0.8537 0.4999
+#           Pillai's trace 0.1512 4.0000 42.0000  0.8590 0.4964
+#   Hotelling-Lawley trace 0.1779 4.0000 23.0000  0.8767 0.4931
+#      Roy's greatest root 0.1771 2.0000 21.0000  1.8592 0.1806
+# -------------------------------------------------------------
+                                                             
+# -------------------------------------------------------------
+#         Departman        Value  Num DF  Den DF F Value Pr > F
+# -------------------------------------------------------------
+#            Wilks' lambda 0.8485 6.0000 40.0000  0.5708 0.7511
+#           Pillai's trace 0.1556 6.0000 42.0000  0.5904 0.7361
+#   Hotelling-Lawley trace 0.1738 6.0000 24.9655  0.5668 0.7526
+#      Roy's greatest root 0.1397 3.0000 21.0000  0.9776 0.4221
+# -------------------------------------------------------------
+                                                             
+# -------------------------------------------------------------
+#     Mevki:Departman     Value   Num DF  Den DF F Value Pr > F
+# -------------------------------------------------------------
+#           Wilks' lambda 0.7430 12.0000 40.0000  0.5336 0.8796
+#          Pillai's trace 0.2740 12.0000 42.0000  0.5555 0.8644
+#  Hotelling-Lawley trace 0.3229 12.0000 28.1818  0.5214 0.8829
+#     Roy's greatest root 0.2177  6.0000 21.0000  0.7620 0.6077
+# =============================================================
+```
+
+Mevkiyi incelediğimizde P değeri 0.4999 > 0.05 olduğu için herhangi bir etkisi yoktur. 
+Departmanı incelediğimizde P değeri 0.7511 > 0.05 olduğu için herhangi bir etkisi yoktur. 
+Mevki:Departman incelediğimizde P değeri 0.8796 > 0.05 olduğu için ikisinin birlikte herhangi bir etkisi yoktur. 
+
+Manovada hiçbir istatistiksel ilişki olmadığını bulduk. Ama eğer etkisi olsaydı (P değeri 0.05'ten küçük olmalıydı)aşağıdaki gibi post-hoc yapısını çalıştırırdık;  
+
+```Python
+import pingouin as pg
+
+posthoc1 = pg.pairwise_tukey(data=veri, dv="Performans", between="Mevki")
+posthoc2 = pg.pairwise_tukey(data=veri, dv="Performans", between="Departman")
+posthoc3 = pg.pairwise_tukey(data=veri, dv="Sahiplenme", between="Mevki")
+posthoc4 = pg.pairwise_tukey(data=veri, dv="Sahiplenme", between="Departman")
+
+print(posthoc1)
+print(posthoc2)
+print(posthoc3)
+print(posthoc4)
+
+#          A         B     mean(A)   mean(B)    diff         se        T      p-tukey    hedges
+# 0    Müdür  Yönetici   6.181818   7.000000  -0.818182  0.439133 -1.863177  0.166959  -0.764292
+# 1    Müdür     İşçi    6.181818   6.272727  -0.090909  0.439133 -0.207020  0.976669  -0.089421
+# 2  Yönetici    İşçi    7.000000   6.272727   0.727273  0.439133  1.656157  0.238519  -0.679371
+
+#           A         B     mean(A)   mean(B)    diff         se        T       p-tukey    hedges
+# 0      Arge    Finans    6.250000   6.250000   0.250000  0.633652  0.394538  0.978775   0.215362
+# 1      Arge  Muhasebe    6.500000   6.500000   0.000000  0.708445  0.000000  1.000000   0.000000
+# 2      Arge    Üretim    6.500000   6.727273  -0.227273  0.648812 -0.354663  0.984934  -0.194898
+# 3    Finans  Muhasebe    6.250000   6.500000  -0.250000  0.548759 -0.455573  0.968024  -0.216940
+# 4    Finans    Üretim    6.250000   6.727273  -0.477273  0.458130 -1.041785  0.726639  -0.419148
+# 5  Muhasebe    Üretim    6.500000   6.727273  -0.227273  0.557011 -0.408022  0.976627  -0.196549
+
+#         A         B      mean(A)    mean(B)     diff       se        T      p-tukey    hedges
+# 0     Müdür  Yönetici   4.545455   4.727273  -0.181818  0.538373 -0.33774   0.93186   -0.138544
+# 1     Müdür     İşçi    4.545455   4.909091  -0.363636  0.538373 -0.67548   0.779407  -0.277808
+# 2   Yönetici    İşçi    4.727273   4.909091   0.181818  0.538373 -0.33774   0.939186  -0.138544
+
+#         A         B      mean(A)    mean(B)     diff       se        T       p-tukey    hedges
+# 0     Arge    Finans    4.750000   5.000000  -0.250000  0.686424 -0.364207  0.983147  -0.198835
+# 1     Arge   Muhasebe   4.750000   5.333333  -0.583333  0.767445 -0.760989  0.871595  -0.443160
+# 2     Arge    Üretim    4.750000   5.000000  -0.250000  0.659091 -0.394625  0.778610  -0.521751
+# 3    Finans  Muhasebe   5.000000   5.333333  -0.333333  0.594620 -0.560734  0.942839  -0.267610
+# 4    Finans   Üretim    5.000000   5.000000   0.000000  0.496283  1.831799  0.279448   0.736998
+# 5   Muhasebe  Üretim    5.333333   4.090909   1.242424  0.603400  2.059039  0.190493   0.991868
+
+```
+
+İlk testte p-tukey sütununda 0.05'ten küçük bir değer olsaydı bu bizim için anlamlı bir fark olacaktı.
 
 
 
 ### Örnekler
-## 5.22 
+## 5.23 
 # 6
 
 https://www.youtube.com/watch?v=LtEOHhvRJ4A&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=81
