@@ -4900,25 +4900,56 @@ from statsmodels.multivariate.manova import MANOVA
 model = MANOVA.from_formula("ErkekTutum + KadınTutum ~ Ürün",data=veri)
 print(model.mv_test())
 
-# --------------------------------------------------------------
-#        Intercept         Value  Num DF  Den DF F Value  Pr > F
-# --------------------------------------------------------------
-#           Wilks' lambda  0.0459 2.0000 56.0000 581.6706 0.0000
-#          Pillai's trace  0.9541 2.0000 56.0000 581.6706 0.0000
-#  Hotelling-Lawley trace 20.7740 2.0000 56.0000 581.6706 0.0000
-#     Roy's greatest root 20.7740 2.0000 56.0000 581.6706 0.0000
-# --------------------------------------------------------------
-                                                              
-# --------------------------------------------------------------
-#            Ürün          Value  Num DF  Den DF  F Value Pr > F
-# --------------------------------------------------------------
-#            Wilks' lambda 0.9247 4.0000 112.0000  1.1178 0.3517
-#           Pillai's trace 0.0754 4.0000 114.0000  1.1160 0.3525
-#   Hotelling-Lawley trace 0.0814 4.0000  66.1739  1.1328 0.3487
-#      Roy's greatest root 0.0806 2.0000  57.0000  2.2972 0.1098
-# ==============================================================
+# ====================================================================
+# Intercept               Value   Num DF   Den DF   F Value   Pr > F
+# --------------------------------------------------------------------
+# Wilks' lambda           0.0404   2.0000   56.0000  665.8804  0.0000
+# Pillai's trace          0.9596   2.0000   56.0000  665.8804  0.0000
+# Hotelling-Lawley trace  23.7814  2.0000   56.0000  665.8804  0.0000
+# Roy's greatest root     23.7814  2.0000   56.0000  665.8804  0.0000
+# --------------------------------------------------------------------
+# Ürün                    Value   Num DF   Den DF   F Value   Pr > F
+# --------------------------------------------------------------------
+# Wilks' lambda           0.9805  4.0000   112.0000  0.2764   0.8927
+# Pillai's trace          0.0195  4.0000   114.0000  0.2813   0.8895
+# Hotelling-Lawley trace  0.0197  4.0000   66.1739   0.2749   0.8932
+# Roy's greatest root     0.0114  4.0000   57.0000   0.3252   0.7237
+# ====================================================================
 
 ```
+
+Yukarıdaki tabloda genellikle Wilks' lambda testi kullanılır. Varsayımlara karşı çok güçlü olduğu için akademik çalışmalarda da sıklıkla bu testi görürüz. Bazen de Pillai's trace testi kullanılır. Wilks' lambda testi 0,89 > 0,05 olduğu için ortalamaları arasında fark yoktur diyoruz.
+
+Testin devamını görmek için istatistiksel fark çıkmış gibi devam ediyoruz.
+
+```Python
+import pingouin as pg
+
+# ErkekTutum için Tukey HSD testi
+posthoc1 = pg.pairwise_tukey(data=veri, dv="ErkekTutum", between="Ürün")
+
+# KadınTutum için Tukey HSD testi
+posthoc2 = pg.pairwise_tukey(data=veri, dv="KadınTutum", between="Ürün")
+
+# Sonuçları yazdır
+print(posthoc1)
+print(posthoc2)
+
+   A          B       mean(A)  mean(B)   diff       se        T     p-tukey    hedges
+-------------------------------------------------------------------------------------------
+0  1. Ürün    2. Ürün   5.35     5.25    0.10    0.317059   0.315399   0.946694   0.097756
+1  1. Ürün    3. Ürün   5.35     5.50   -0.15    0.317059  -0.473098   0.884199  -0.146634
+2  2. Ürün    3. Ürün   5.25     5.50   -0.25    0.317059  -0.788497   0.711571  -0.244391
+-------------------------------------------------------------------------------------------
+0  1. Ürün    2. Ürün   7.85     7.60    0.25    0.34931    0.715969   0.755252   0.221827
+1  2. Ürün    3. Ürün   7.85     7.70    0.15    0.34931    0.429418   0.903523   0.133096
+2  2. Ürün    3. Ürün   7.60     7.70   -0.10    0.34931   -0.286279   0.955863  -0.088731
+
+```
+
+Görüldüğü gibi p-tukey değerlerinin hepsi 0,05'ten fazladır.
+
+
 
 
 
