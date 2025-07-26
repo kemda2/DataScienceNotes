@@ -2944,8 +2944,131 @@ String’ler, listeler ve tuple’lar, Python’un sıralı ve yinelenebilir ver
 * [Python Listelerine Giriş](https://docs.python.org/3/tutorial/introduction.html#lists)
 * [Python Tuple Veri Tipleri](https://docs.python.org/3/library/stdtypes.html#tuples)
 
+# **zip(), enumerate() ve liste anlama (list comprehension)**
 
-# 
+Daha önce stringler, listeler ve demetler (tuple) gibi yinelenebilir (iterable) nesneler hakkında birçok şey öğrendiniz ve yakında daha fazlasını öğreneceksiniz. Bu nesneler, Python'un temel veri yapılarının çoğunu oluşturur ve bir veri profesyoneli olarak bu yapılarla sürekli çalışacaksınız. Python’da çalışırken, aynı görevleri ve işlemleri birçok kez gerçekleştirmeniz gerekebilir. Bu yazı size zaman kazandıran üç aracı tanıtacak: `zip()`, `enumerate()` ve liste anlama (list comprehension).
+
+---
+
+## **zip()**
+
+[zip() fonksiyonu](https://docs.python.org/3/library/functions.html#zip), isminin çağrıştırdığı şeyi yapan, Python’a yerleşik bir fonksiyondur: Sıraların (sequences) elemanlarını, eleman bazında birleştirir.
+
+![image](./images/2009.png)
+
+Fonksiyon, her bir giriş sırasından alınan elemanları içeren demetler (tuple) üreten bir **iterator (yineleyici)** döndürür. Bir iterator, bir öğe koleksiyonunu tamamını bir araya getirmeye gerek kalmadan, öğeleri tek tek işleme imkânı sunar. Bu iterator’ü `list()` veya `tuple()` gibi fonksiyonlarla ya da döngülerle birlikte kullanabilirsiniz. Örnek:
+
+```python
+cities = ['Paris', 'Lagos', 'Mumbai']
+countries = ['France', 'Nigeria', 'India']
+zipped = zip(cities, countries)
+print(list(zipped))
+# [('Paris', 'France'), ('Lagos', 'Nigeria'), ('Mumbai', 'India')]
+```
+
+Burada `list()` fonksiyonu, iterator nesnesinden oluşan demetleri bir liste haline getirir.
+
+**zip() fonksiyonunu kullanırken şunlara dikkat edin:**
+
+- İki veya daha fazla iterable nesne ile çalışır. Yukarıdaki örnek iki sıralamayı birleştiriyor, ancak `zip()` daha fazla sıralamayı da alabilir ve aynı mantıkla çalışır.
+    
+- Giriş nesneleri farklı uzunlukta ise, döndürülen iterator en kısa giriş nesnesinin uzunluğunda olur.
+    
+- Eğer sadece bir iterable nesne verirseniz, fonksiyon o nesnedeki elemanları tek öğeli demetler halinde döndürür.
+    
+
+---
+
+### **Unzipping (Geri açma)**
+
+Bir `zip` nesnesini tekrar ayırmak (unzip) için `*` operatörünü kullanabilirsiniz. Sözdizimi şu şekildedir:
+
+```python
+names = [('Nikola', 'Tesla'), ('Charles', 'Darwin'), ('Marie', 'Curie')]
+first_names, last_names = zip(*names)
+print(first_names)  # ('Nikola', 'Charles', 'Marie')
+print(last_names)   # ('Tesla', 'Darwin', 'Curie')
+```
+
+Bu işlem, orijinal listedeki demetleri öğe bazında ayırarak iki ayrı demet haline getirir ve veriyi ayrı değişkenlere ayırmanızı sağlar.
+
+---
+
+## **enumerate()**
+
+[enumerate() fonksiyonu](https://docs.python.org/3/library/functions.html#enumerate), bir sırayı yineleyerek her elemanın indeksini takip etmenizi sağlayan bir diğer yerleşik Python fonksiyonudur. `zip()` gibi, indeks ve öğe ikilileri üreten bir iterator döndürür. Örnek:
+
+```python
+letters = ['a', 'b', 'c']
+for index, letter in enumerate(letters):
+    print(index, letter)
+# 0 a
+# 1 b
+# 2 c
+```
+
+Varsayılan başlangıç indeksi sıfırdır, ancak bunu değiştirebilirsiniz:
+
+```python
+for index, letter in enumerate(letters, start=2):
+    print(index, letter)
+# 2 a
+# 3 b
+# 4 c
+```
+
+Bu fonksiyon, bir sıradaki öğelerin konumunun işlemde nasıl kullanılacağını belirlemek gerektiğinde faydalıdır.
+
+---
+
+## **Liste Anlama (List Comprehension)**
+
+Python’daki en kullanışlı araçlardan biri [liste anlama (list comprehension)](https://docs.python.org/3/tutorial/datastructures.html?highlight=list%20comprehension#list-comprehensions) yapısıdır. Bu yapı, mevcut bir iterable nesneye dayalı olarak yeni bir liste oluşturmanın kısa ve etkili bir yoludur.
+
+Genel sözdizimi:
+
+```python
+my_list = [ifade for öğe in iterable if koşul]
+```
+
+Buradaki terimler:
+
+- **ifade**: iterable dizisindeki her öğe için gerçekleştirmek istediğiniz işlem.
+    
+- **öğe (element)**: iterable dizisindeki her öğeyi temsil eden değişken adı.
+    
+- **iterable**: üzerinde işlem yapılacak sıra (liste, string, tuple vb.).
+    
+- **koşul (condition)**: True ya da False döndüren isteğe bağlı bir ifade; listeye eklenecek öğeleri filtrelemek için kullanılır.
+    
+
+**Örnekler:**
+
+Her sayıya 10 ekleyen bir list comprehension:
+
+```python
+numbers = [1, 2, 3, 4, 5]
+new_list = [x + 10 for x in numbers]
+print(new_list)
+# [11, 12, 13, 14, 15]
+```
+
+Beş harften uzun olan kelimelerin ilk ve son harflerini içeren bir demet listesi:
+
+```python
+words = ['Einstein', 'Tesla', 'Curie', 'Newton', 'Sagan']
+result = [(word[0], word[-1]) for word in words if len(word) > 5]
+print(result)
+# [('E', 'n'), ('S', 'a')]
+```
+
+Burada `word[0], word[-1]` işlemi bir tuple (demet) oluşturur ve yalnızca uzunluğu 5’ten fazla olan kelimeler seçilir.
+
+---
+
+## **Önemli Noktalar**
+
+`zip()`, `enumerate()` ve liste anlama (list comprehension), döngülere olan bağımlılığı azaltarak kodunuzu daha verimli hale getirir ve iterable’larla çalışmayı kolaylaştırır. Bu yaygın araçları anlamak, veriyle çalışırken size zaman kazandırır ve işlemlerinizi daha dinamik hale getirir.
 
 #
 
