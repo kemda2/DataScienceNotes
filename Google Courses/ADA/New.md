@@ -3222,6 +3222,156 @@ d.values()
     
 - View object’ler hakkında: [Sözlük view object’leri dokümantasyonu](https://docs.python.org/3/library/stdtypes.html#dict-views)
 
+# **Referans Rehberi: Kümeler (Sets)**
+
+Veri uzmanları, verileri ayırmak ve benzersiz (unique) öğeleri belirlemek için kümelere güvenirler. Kümeler, listelere ve sözlüklere benzer nesnelerdir; ancak anahtar-değer (key-value) çiftleri veya konumsal indeksleme (index\[i]) yetenekleri yoktur. Ayrıca kümeler yalnızca **benzersiz değerler** içerir ve **sırasızdır**, yani öğelerin belirli bir sıralaması veya indeksleri yoktur.
+
+Veri uzmanları, iki kümenin kesişimlerini, farklarını ve kapsamlarını analiz etmek için kümeleri karşılaştırır. Aynı zamanda, veriyi analiz için temizlerken de oldukça kullanışlıdır. Bu okuma, Python öğrenme sürecinizde size yardımcı olacak bir **küme referans rehberidir**.
+
+## **Küme İncelemesi**
+
+**Küme (set)**, yinelemeli (iterable) bir veri yapısıdır ve **tekrarlayan (duplicate) öğelere izin vermez**. Python’da küme, aslında iki farklı sınıfla temsil edilir: `set` ve `frozenset`.
+
+Kümeler sadece Python'a özgü değildir; matematikte de temel kavramlardan biridir. Kümeler, veri içerisindeki **benzersiz** öğeleri belirlemek için oldukça kullanışlıdır.
+
+---
+
+## **Küme Oluşturma**
+
+Küme süslü parantez `{}` kullanılarak oluşturulabilir:
+
+```python
+my_set = {5, 10, 10, 20}  # {5, 10, 20}
+```
+
+> **Not:** Boş bir küme oluşturmak için süslü parantez kullanılamaz (`{}` bir sözlük olarak algılanır). Bunun yerine `set()` kullanılmalıdır.
+
+Python’da küme oluşturmak için iki fonksiyon vardır: `set()` ve `frozenset()`
+Bunlar her türlü iterable (tekrarlanabilir) veri üzerinde kullanılabilir.
+
+---
+
+### [**set()**](https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset)
+
+* **Değiştirilebilir (mutable)** bir veri türüdür.
+* Bu yüzden öğe ekleme/silme gibi birçok metoda sahiptir.
+* Herhangi bir iterable üzerinde kullanılabilir ve **tekrar eden öğeleri kaldırır**.
+* **Sırasızdır** ve indekslenemez.
+* İçindeki tüm öğeler **hashlenebilir (hashable)** olmalıdır, yani çoğu zaman **değiştirilemez (immutable)** olmalıdır.
+
+#### Örnekler:
+
+```python
+example_a = set([1, 2, '2'])  # {1, 2, '2'}
+example_b = set([2, 'apple', (1, 2, 2, 2, 3)])  # {'apple', 2, (1, 2, 2, 2, 3)}
+```
+
+> `(1, 2, 2, 2, 3)` bir tuple’dır ve hashlenebilir olduğu için kümede kullanılabilir.
+
+Aşağıdaki örnek hata verir:
+
+```python
+example_c = set([{'a', 'b', 'c'}])
+# ❌ TypeError: unhashable type: 'set'
+```
+
+> Çünkü içteki set (`{'a', 'b', 'c'}`) değiştirilebilir olduğu için hashlenemez.
+
+#### `add()` metodu örneği:
+
+```python
+example_d = {'mother', 'father'}
+example_d.add('hamster')
+# {'father', 'mother', 'hamster'}
+```
+
+> `example_d` kümesine yeni bir eleman eklendi — bu, `set` sınıfının değiştirilebilirliğini gösterir.
+
+---
+
+### [**frozenset()**](https://docs.python.org/3/library/stdtypes.html#frozenset)
+
+`frozenset`, set ile aynı özelliklere sahiptir fakat **değiştirilemez (immutable)** bir küme türüdür.
+
+* **Değiştirilemez (immutable)** olduğu için içerik değiştirilemez.
+* Iterable veri alabilir ve tekrarlayan öğeleri otomatik olarak kaldırır.
+* `frozenset` nesneleri sözlük anahtarı veya diğer kümelerin elemanı olarak kullanılabilir.
+
+#### Örnek:
+
+```python
+example_e = {1.5, frozenset({'a', 'b', 'c'})}
+# {1.5, frozenset({'a', 'b', 'c'})}
+```
+
+> Bu geçerlidir çünkü `frozenset` değiştirilemez bir nesnedir ve kümenin içinde yer alabilir.
+
+---
+
+## **Küme Metodları**
+
+Kümeler, veri yapılarında **hangi benzersiz değerlerin olduğunu belirlemek** ve **tekrarlayanları temizlemek** için oldukça yararlıdır. Python'da kümelerle çalışmak için birçok güçlü metod vardır:
+
+---
+
+### [**union()**](https://docs.python.org/3/library/stdtypes.html#frozenset.union)
+
+İki kümenin birleşimini döndürür (tüm benzersiz öğeler).
+
+* Operatörü: `|`
+
+```python
+a = {'a', 'b'}
+b = {'b', 'c', 'd'}
+print(a | b)  # {'a', 'b', 'c', 'd'}
+```
+
+---
+
+### [**intersection()**](https://docs.python.org/3/library/stdtypes.html#frozenset.intersection)
+
+Kümelerin kesişimini döndürür (ortak öğeler).
+
+* Operatörü: `&`
+
+```python
+print(a & b)  # {'b'}
+```
+
+---
+
+### [**difference()**](https://docs.python.org/3/library/stdtypes.html#frozenset.difference)
+
+İlk kümede olup diğerinde olmayan öğeleri döndürür.
+
+* Operatörü: `-`
+
+```python
+print(a - b)  # {'a'}
+```
+
+---
+
+### [**symmetric\_difference()**](https://docs.python.org/3/library/stdtypes.html#frozenset.symmetric_difference)
+
+Sadece birinde olan (her iki kümede olmayan ortaklar hariç) öğeleri döndürür.
+
+* Operatörü: `^`
+
+```python
+print(a ^ b)  # {'a', 'c', 'd'}
+```
+
+---
+
+## **Ek Kaynaklar**
+
+* [Python dokümantasyonu: set ve frozenset](https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset)
+* [Set sınıfına özel metodlar](https://docs.python.org/3/library/stdtypes.html#frozenset.update)
+* [Python set eğitim rehberi](https://docs.python.org/3/tutorial/datastructures.html#sets)
+* [Hashing ve hashlenebilirlik hakkında bilgi](https://runestone.academy/ns/books/published/pythonds/SortSearch/Hashing.html)
+* [Hashing algoritmalarının tarihi (IEEE Spectrum)](https://spectrum.ieee.org/hans-peter-luhn-and-the-birth-of-the-hashing-algorithm)
+
 # 
 
 #
