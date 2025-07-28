@@ -5061,12 +5061,26 @@ print(posthoc4)
 
 ## 5.23 Non-Parametrik Testler
 
-Parametrik testlerin varsayımları karşılanmadığında non-parametrik testler kullanılır. Mesela, Veri hem normal dağılım testinden geçemiyor ve merkezi limit teoremine atıfta bulunacak kadar gözlem yoksa non-parametrik testlere yöneliyoruz. Bu testler ortalama yerine medyan karşılaştırması yapıyor. Normal dağılımın olmadığı ve aykırı değerlerin olduğu durumlarda.Bu testler Parametrik testlere göre daha güçsüz sonuçlar doğurur.
+Parametrik testlerin varsayımları karşılanmadığında non-parametrik testler kullanılır. Mesela, Veri **hem normal dağılım testinden geçemiyor ve merkezi limit teoremine atıfta bulunacak kadar gözlem yoksa** non-parametrik testlere yöneliyoruz. Bu testler ortalama yerine medyan karşılaştırması yapıyor. Normal dağılımın olmadığı ve aykırı değerlerin olduğu durumlarda.Bu testler Parametrik testlere göre daha **güçsüz sonuçlar doğurur**.
 
 ## 5.24 Ki Kare Uyum Testi 
 
+Non-parametrik test yapısındaki testlerin Ki Kare Uyum Testi dışında hepsinin bir parametrik test karşılığı vardır.
 
+$$
+H_0: o_i = e_i
+$$
 
+$$
+H_1: o_i = e_i
+$$
+
+Varsayımları;
+
+1. Bağımlı ve bağımsız gözlemler: Her gözlem bağımsızdır; bir gözlemin sonucu diğerini etkilememelidir.
+1. Gözlemler tamamen kategorik olmalı: Veri kategorik veya nominal/ordinal olmalıdır.
+1. Beklenen frekanslar: Her hücredeki beklenen frekans değeri en az 5 olmalıdır. Eğer bazı hücrelerde bu değer sağlanamazsa, alternatif olarak Fisher'in kesin testi kullanılabilir.
+1. Örneklem yeterince büyük olmalı: Genel olarak, toplam örneklem büyüklüğü yeterince büyük olmalı ve her hücrede yeterli sayıda gözlem bulunmalıdır.
 
 
 ### Örnekler
