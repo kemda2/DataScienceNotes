@@ -5061,7 +5061,7 @@ print(posthoc4)
 
 ## 5.23 Non-Parametrik Testler
 
-Parametrik testlerin varsayımları karşılanmadığında non-parametrik testler kullanılır. Mesela, Veri hem normal dağılım testinden geçemiyor ve merkezi limit teoremine atıfta bulunacak kadar gözlem yoksa non-parametrik testlere yöneliyoruz. Bu testler ortalama yerine medyan karşılaştırması yapıyor. Normal dağılımın olmadığı ve aykırı değerlerin olduğu durumlarda.
+Parametrik testlerin varsayımları karşılanmadığında non-parametrik testler kullanılır. Mesela, Veri hem normal dağılım testinden geçemiyor ve merkezi limit teoremine atıfta bulunacak kadar gözlem yoksa non-parametrik testlere yöneliyoruz. Bu testler ortalama yerine medyan karşılaştırması yapıyor. Normal dağılımın olmadığı ve aykırı değerlerin olduğu durumlarda.Bu testler Parametrik testlere göre daha güçsüz sonuçlar doğurur.
 
 
 
