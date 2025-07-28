@@ -5096,112 +5096,24 @@ Yukarıdaki yapı **Frekans tablosu**dur. Süreç boyunca Pazartesi günü gelen
 
 ### Örnekler
 
+```Python
 import pandas as pd
 
-data = [
-"Normal",
-"Aşırı Kilolu",
-"Normal",
-"Normal",
-"Kilolu",
-"Aşırı Kilolu",
-"Aşırı Kilolu",
-"Normal",
-"Normal",
-"Aşırı Kilolu",
-"Normal",
-"Kilolu",
-"Normal",
-"Normal",
-"Aşırı Kilolu",
-"Kilolu",
-"Kilolu",
-"Kilolu",
-"Aşırı Kilolu",
-"Aşırı Kilolu",
-"Normal",
-"Normal",
-"Normal",
-"Kilolu",
-"Kilolu",
-"Normal",
-"Aşırı Kilolu",
-"Kilolu",
-"Kilolu",
-"Kilolu",
-"Normal",
-"Normal",
-"Normal",
-"Kilolu",
-"Normal",
-"Kilolu",
-"Aşırı Kilolu",
-"Normal",
-"Normal",
-"Kilolu",
-"Aşırı Kilolu",
-"Aşırı Kilolu",
-"Kilolu",
-"Normal",
-"Kilolu",
-"Kilolu",
-"Aşırı Kilolu",
-"Kilolu",
-"Kilolu",
-"Kilolu",
-"Normal",
-"Normal",
-"Aşırı Kilolu",
-"Aşırı Kilolu",
-"Kilolu",
-"Normal",
-"Kilalu",
-"Kilolu",
-"Kilolu",
-"Normal",
-"Aşırı Kilolu",
-"Normal",
-"Aşırı Kilolu",
-"Kilalu",
-"Aşırı Kilolu",
-"Kilolu",
-"Normal",
-"Aşırı Kilolu",
-"Normal",
-"Kilolu",
-"Normal",
-"Kilolu",
-"Normal",
-"Aşırı Kilolu",
-"Aşırı Kilolu",
-"Aşırı Kilolu",
-"Aşırı Kilolu",
-"Aşırı Kilolu",
-"Normal",
-"Normal",
-"Aşırı Kilolu",
-"Normal",
-"Normal",
-"Kilolu",
-"Kilolu",
-"Aşırı Kilolu",
-"Normal",
-"Aşırı Kilolu",
-"Normal",
-"Normal",
-"Normal",
-"Aşırı Kilolu",
-"Normal",
-"Aşırı Kilolu",
-"Normal",
-"Normal",
-"Normal",
-"Kilalu",
-"Normal",
-"Normal",
-]
+kilo = ["Normal","Aşırı Kilolu","Normal","Normal","Kilolu","Aşırı Kilolu","Aşırı Kilolu","Normal","Normal","Aşırı Kilolu","Normal","Kilolu","Normal","Normal","Aşırı Kilolu","Kilolu","Kilolu","Kilolu","Aşırı Kilolu","Aşırı Kilolu","Normal","Normal","Normal","Kilolu","Kilolu","Normal","Aşırı Kilolu","Kilolu","Kilolu","Kilolu","Normal","Normal","Normal","Kilolu","Normal","Kilolu","Aşırı Kilolu","Normal","Normal","Kilolu","Aşırı Kilolu","Aşırı Kilolu","Kilolu","Normal","Kilolu","Kilolu","Aşırı Kilolu","Kilolu","Kilolu","Kilolu","Normal","Normal","Aşırı Kilolu","Aşırı Kilolu","Kilolu","Normal","Kilolu","Kilolu","Kilolu","Normal","Aşırı Kilolu","Normal","Aşırı Kilolu","Kilolu","Aşırı Kilolu","Kilolu","Normal","Aşırı Kilolu","Normal","Kilolu","Normal","Kilolu","Normal","Aşırı Kilolu","Aşırı Kilolu","Aşırı Kilolu","Aşırı Kilolu","Aşırı Kilolu","Normal","Normal","Aşırı Kilolu","Normal","Normal","Kilolu","Kilolu","Aşırı Kilolu","Normal","Aşırı Kilolu","Normal","Normal","Normal","Aşırı Kilolu","Normal","Aşırı Kilolu","Normal","Normal","Normal","Kilolu","Normal","Normal"]
 
 veri = pd.DataFrame({"Kilo":kilo})
+
+frekans = pd.value_counts(veri["Kilo"])
+print(frekans)
+
+# Kilo
+# Normal          42
+# Kilolu          30
+# Aşırı Kilolu    28
+
+from scipy import stats
+
+```
 
 
 ### Örnekler
