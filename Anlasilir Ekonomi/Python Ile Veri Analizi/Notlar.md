@@ -5063,13 +5063,14 @@ print(posthoc4)
 
 Parametrik testlerin varsayımları karşılanmadığında non-parametrik testler kullanılır. Mesela, Veri hem normal dağılım testinden geçemiyor ve merkezi limit teoremine atıfta bulunacak kadar gözlem yoksa non-parametrik testlere yöneliyoruz. Bu testler ortalama yerine medyan karşılaştırması yapıyor. Normal dağılımın olmadığı ve aykırı değerlerin olduğu durumlarda.Bu testler Parametrik testlere göre daha güçsüz sonuçlar doğurur.
 
+## 5.24 Ki Kare Uyum Testi 
 
 
 
 
 
 ### Örnekler
-## 5.24 
+## 5.25 
 # 6
 
 https://www.youtube.com/watch?v=PqIdEkBzY3M&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=83
