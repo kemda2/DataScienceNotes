@@ -5205,6 +5205,35 @@ print(tablo)
 # Cinsiyet          
 # Erkek      44    4
 # Kadın      43    9
+
+from scipy import stats
+
+test, p, sd, beklenen = stats.chi2_contingency(tablo)
+print(beklenen )
+
+#[[41.76, 6.24],
+# [45.24, 6.76]]
+
+```
+
+Eğer 6,24 25'ten büyük olsaydı, aşağıdaki kodla Pearson Kikare Testi kullanacaktık;
+
+```python 
+test, p, sd, beklenen = stats.chi2_contingency(tablo, correction=False)
+print(test, p) # 1.7774150400145101 0.18246706526054798 0.18 olan P değeri 0.05'ten büyük olduğu için aralarında fark yoktur diyebiliriz.
+```
+
+En küçük beklenen değer 6,24 (5 ile 25 arasında) olduğu için Yates'in Kikare Testi kullanırız;
+
+```python 
+test, p, sd, beklenen = stats.chi2_contingency(tablo, correction=True)
+print(test, p) # test = 1.0724852071005921 p = 0.300384770390566 0.30 olan P değeri 0.05'ten büyük olduğu için aralarında fark yoktur diyebiliriz.
+```
+
+Eğer 6,24 5'ten küçük olsaydı Fisher Kikare Testi kullanacaktık; 
+```python 
+test = stats.fisher_exact(tablo)
+print(test) # 2.302325581395349 0.23915695682224283 0.23 olan P değeri 0.05'ten büyük olduğu için aralarında fark yoktur diyebiliriz.
 ```
 
 
