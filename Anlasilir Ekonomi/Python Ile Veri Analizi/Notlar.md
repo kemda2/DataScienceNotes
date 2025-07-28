@@ -5077,10 +5077,27 @@ $$
 
 Varsayımları;
 
-1. Bağımlı ve bağımsız gözlemler: Her gözlem bağımsızdır; bir gözlemin sonucu diğerini etkilememelidir.
-1. Gözlemler tamamen kategorik olmalı: Veri kategorik veya nominal/ordinal olmalıdır.
-1. Beklenen frekanslar: Her hücredeki beklenen frekans değeri en az 5 olmalıdır. Eğer bazı hücrelerde bu değer sağlanamazsa, alternatif olarak Fisher'in kesin testi kullanılabilir.
-1. Örneklem yeterince büyük olmalı: Genel olarak, toplam örneklem büyüklüğü yeterince büyük olmalı ve her hücrede yeterli sayıda gözlem bulunmalıdır.
+1.  **Veriler kategorik olmalıdır:**
+    
+    -   Gözlemler, belirli kategorilere ayrılmalıdır (örn. renk, sınıf, marka tercihleri gibi).
+        
+2.  **Gözlemler bağımsız olmalıdır:**
+    
+    -   Bir bireyin/örneğin bir kategoriye dahil olması, diğerine dahil olmasını etkilememelidir.
+        
+3.  **Beklenen frekanslar yeterince büyük olmalıdır:**
+    
+    -   Her bir kategori için beklenen frekans genellikle **en az 5** olmalıdır.
+        
+    -   (Eğer beklenen frekans 5’ten küçükse, testin sonuçları güvenilir olmayabilir.)
+        
+4.  **Örneklem rassal olarak seçilmiş olmalıdır:**
+    
+    -   Testin geçerli olması için örneklem, evrenden rastgele seçilmelidir.
+        
+5.  **Veriler sayım (frekans) biçiminde olmalıdır:**
+    
+    -   Veri tipi, oran ya da ölçüm değil; sayısal kategori frekansları olmalıdır.
 
 Örneğin;
 
@@ -5120,13 +5137,36 @@ p > 0.05 olduğu için kategoriler arasında anlamlı bir fark yoktur.
 
 ## 5.25 Ki Kare Bağımsızlık Testi
 
+2 temel tablo yapısı vardır;
+
+- 2 x 2 ( Her iki değişkende de 2 tane kategori olur)
+
+||Uzun|Kısa|
+|---|---|---|
+|Kadın|f1|f2|
+|Erken|f3|f4|
+
+- R x C (2'den daha fazla kategorik değişken vardır.)
+
+||Uzun|Normal|Kısa|
+|---|---|---|---|
+|Kadın|f1|f2|f3|
+|Erken|f4|f5|f6|
+
+Bu test boy ile cinsiyet arasında bir ilişki olup olmadığını inceler.
+
+$H_0:$ Bu iki değişken arasında ilişki yoktur. 
+
+$H_1:$ Bu iki değişken arasında ilişki vardır. 
+
+
+
 
 ### Örnekler
 ## 5.26 
 # 6
 
 https://www.youtube.com/watch?v=K-3h_F76How&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=85
-0000
-
+0917
 
 
