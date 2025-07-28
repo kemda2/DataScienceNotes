@@ -5161,6 +5161,52 @@ $H_1:$ Bu iki değişken arasında ilişki vardır.
 
 2 x 2 yapısı;
 
+En küçük beklenen frekans 25'ten büyükse; Pearson Kikare Testi
+En küçük beklenen frekans 5 ile 25 arasındaysa; Yates Kikare Testi
+En küçük beklenen frekans 5'ten küçükse Fisher Kikare Testi
+
+### Örnekler
+
+```Python
+import pandas as pd
+
+# Verileri liste olarak tanımla
+data = [
+    ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"),
+    ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"),
+    ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"),
+    ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"),
+    ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"),
+    ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"),
+    ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"),
+    ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"),
+    ("Kadın", "Sağ"), ("Kadın", "Sağ"), ("Kadın", "Sağ"),
+    ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"),
+    ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"),
+    ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"),
+    ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"),
+    ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"),
+    ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"),
+    ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"),
+    ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"),
+    ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"), ("Erkek", "Sağ"),
+    ("Kadın", "Sol"), ("Kadın", "Sol"), ("Kadın", "Sol"), ("Kadın", "Sol"), ("Kadın", "Sol"),
+    ("Kadın", "Sol"), ("Kadın", "Sol"), ("Kadın", "Sol"), ("Kadın", "Sol"),
+    ("Erkek", "Sol"), ("Erkek", "Sol"), ("Erkek", "Sol"), ("Erkek", "Sol"),
+]
+
+# DataFrame oluştur
+veri = pd.DataFrame(data, columns=["Cinsiyet", "El"])
+
+tablo = pd.crosstab(index=veri["Cinsiyet"], columns=veri["El"])
+print(tablo)
+
+# El        Sağ  Sol
+# Cinsiyet          
+# Erkek      44    4
+# Kadın      43    9
+```
+
 
 
 
@@ -5169,6 +5215,6 @@ $H_1:$ Bu iki değişken arasında ilişki vardır.
 # 6
 
 https://www.youtube.com/watch?v=K-3h_F76How&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=85
-0917
+2000
 
 
