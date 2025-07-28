@@ -5082,7 +5082,7 @@ Varsayımları;
 1. Beklenen frekanslar: Her hücredeki beklenen frekans değeri en az 5 olmalıdır. Eğer bazı hücrelerde bu değer sağlanamazsa, alternatif olarak Fisher'in kesin testi kullanılabilir.
 1. Örneklem yeterince büyük olmalı: Genel olarak, toplam örneklem büyüklüğü yeterince büyük olmalı ve her hücrede yeterli sayıda gözlem bulunmalıdır.
 
-### Örnekler
+Örneğin;
 
 |Günler | Müşteri Sayıları|
 |-|-|
@@ -5092,10 +5092,116 @@ Varsayımları;
 |4 | 16|
 |5 | 24|
 
-Yukarıdaki yapı **Frekans tablosu**dur.
+Yukarıdaki yapı **Frekans tablosu**dur. Süreç boyunca Pazartesi günü gelen her müşteriye Pazartesi yazarsak ve altalta tablo oluşturursak ve en son sayılarını gösteren bir tablo oluşturursak frekans tablosu oluşturmuş oluruz.
 
+### Örnekler
 
+import pandas as pd
 
+data = [
+"Normal",
+"Aşırı Kilolu",
+"Normal",
+"Normal",
+"Kilolu",
+"Aşırı Kilolu",
+"Aşırı Kilolu",
+"Normal",
+"Normal",
+"Aşırı Kilolu",
+"Normal",
+"Kilolu",
+"Normal",
+"Normal",
+"Aşırı Kilolu",
+"Kilolu",
+"Kilolu",
+"Kilolu",
+"Aşırı Kilolu",
+"Aşırı Kilolu",
+"Normal",
+"Normal",
+"Normal",
+"Kilolu",
+"Kilolu",
+"Normal",
+"Aşırı Kilolu",
+"Kilolu",
+"Kilolu",
+"Kilolu",
+"Normal",
+"Normal",
+"Normal",
+"Kilolu",
+"Normal",
+"Kilolu",
+"Aşırı Kilolu",
+"Normal",
+"Normal",
+"Kilolu",
+"Aşırı Kilolu",
+"Aşırı Kilolu",
+"Kilolu",
+"Normal",
+"Kilolu",
+"Kilolu",
+"Aşırı Kilolu",
+"Kilolu",
+"Kilolu",
+"Kilolu",
+"Normal",
+"Normal",
+"Aşırı Kilolu",
+"Aşırı Kilolu",
+"Kilolu",
+"Normal",
+"Kilalu",
+"Kilolu",
+"Kilolu",
+"Normal",
+"Aşırı Kilolu",
+"Normal",
+"Aşırı Kilolu",
+"Kilalu",
+"Aşırı Kilolu",
+"Kilolu",
+"Normal",
+"Aşırı Kilolu",
+"Normal",
+"Kilolu",
+"Normal",
+"Kilolu",
+"Normal",
+"Aşırı Kilolu",
+"Aşırı Kilolu",
+"Aşırı Kilolu",
+"Aşırı Kilolu",
+"Aşırı Kilolu",
+"Normal",
+"Normal",
+"Aşırı Kilolu",
+"Normal",
+"Normal",
+"Kilolu",
+"Kilolu",
+"Aşırı Kilolu",
+"Normal",
+"Aşırı Kilolu",
+"Normal",
+"Normal",
+"Normal",
+"Aşırı Kilolu",
+"Normal",
+"Aşırı Kilolu",
+"Normal",
+"Normal",
+"Normal",
+"Kilalu",
+"Normal",
+"Normal",
+]
+
+veri = pd.DataFrame({"Kilo":kilo})
 
 
 ### Örnekler
