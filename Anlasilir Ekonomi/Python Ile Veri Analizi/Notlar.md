@@ -5059,14 +5059,21 @@ print(posthoc4)
 
 İlk testte p-tukey sütununda 0.05'ten küçük bir değer olsaydı bu bizim için anlamlı bir fark olacaktı.
 
+## 5.23 Non-Parametrik Testler
+
+Parametrik testlerin varsayımları karşılanmadığında non-parametrik testler kullanılır. Mesela, Veri hem normal dağılım testinden geçemiyor ve merkezi limit teoremine atıfta bulunacak kadar gözlem yoksa non-parametrik testlere yöneliyoruz. Bu testler ortalama yerine medyan karşılaştırması yapıyor. Normal dağılımın olmadığı ve aykırı değerlerin olduğu durumlarda.
+
+
+
+
 
 
 ### Örnekler
-## 5.23 
+## 5.24 
 # 6
 
-https://www.youtube.com/watch?v=LtEOHhvRJ4A&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=81
-2419
+https://www.youtube.com/watch?v=PqIdEkBzY3M&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=83
+0000
 
 
 
