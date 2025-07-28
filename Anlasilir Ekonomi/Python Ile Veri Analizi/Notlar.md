@@ -5236,6 +5236,10 @@ test = stats.fisher_exact(tablo)
 print(test) # 2.302325581395349 0.23915695682224283 0.23 olan P değeri 0.05'ten büyük olduğu için aralarında fark yoktur diyebiliriz.
 ```
 
+R x C yapısı;
+
+Beklenen frekansı 5 ten küçük olanların sayısı toplam frekans içinde %20 den küçükse Pearson ın kikare testi kullanılır, %20Den büyükse Fisher'ınkikare testini kullanırız.
+
 
 
 
