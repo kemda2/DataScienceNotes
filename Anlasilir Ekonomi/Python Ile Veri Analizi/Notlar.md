@@ -5112,6 +5112,9 @@ print(frekans)
 # Aşırı Kilolu    28
 
 from scipy import stats
+kikare, p = stats.chisquare(frekans)
+print(kikare, p) # 3.44 0.1790661479114932
+
 
 ```
 
