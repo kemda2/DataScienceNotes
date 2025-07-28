@@ -5247,7 +5247,7 @@ Beklenen frekansı 5 ten küçük olanların sayısı toplam frekans içinde %20
 ## 5.26 
 # 6
 
-https://www.youtube.com/watch?v=K-3h_F76How&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=85
-2000
+https://www.youtube.com/watch?v=K-3h_F76How&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=86
+2911
 
 
