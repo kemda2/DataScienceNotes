@@ -5114,16 +5114,18 @@ print(frekans)
 from scipy import stats
 kikare, p = stats.chisquare(frekans)
 print(kikare, p) # 3.44 0.1790661479114932
-
-
 ```
+
+p > 0.05 olduğu için kategoriler arasında anlamlı bir fark yoktur.
+
+## 5.25 Ki Kare Bağımsızlık Testi
 
 
 ### Örnekler
-## 5.25 
+## 5.26 
 # 6
 
-https://www.youtube.com/watch?v=PqIdEkBzY3M&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=83
+https://www.youtube.com/watch?v=K-3h_F76How&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=85
 0000
 
 
