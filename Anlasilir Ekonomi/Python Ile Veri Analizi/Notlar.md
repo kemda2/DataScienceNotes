@@ -5072,7 +5072,7 @@ H_0: o_i = e_i
 $$
 
 $$
-H_1: o_i = e_i
+H_1: o_i != e_i
 $$
 
 Varsayımları;
