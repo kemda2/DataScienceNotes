@@ -5308,7 +5308,7 @@ Fisher yapısı zor olduğu için atladık.
 ## 5.26 
 # 6
 
-https://www.youtube.com/watch?v=K-3h_F76How&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=86
-2911
+https://www.youtube.com/watch?v=YZM2hehvbfE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=86
+0000
 
 
