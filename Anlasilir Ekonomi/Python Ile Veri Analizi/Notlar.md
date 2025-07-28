@@ -5159,6 +5159,8 @@ $H_0:$ Bu iki değişken arasında ilişki yoktur.
 
 $H_1:$ Bu iki değişken arasında ilişki vardır. 
 
+2 x 2 yapısı;
+
 
 
 
