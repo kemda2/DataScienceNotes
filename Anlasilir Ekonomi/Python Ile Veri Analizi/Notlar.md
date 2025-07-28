@@ -5238,7 +5238,68 @@ print(test) # 2.302325581395349 0.23915695682224283 0.23 olan P değeri 0.05'ten
 
 R x C yapısı;
 
-Beklenen frekansı 5 ten küçük olanların sayısı toplam frekans içinde %20 den küçükse Pearson ın kikare testi kullanılır, %20Den büyükse Fisher'ınkikare testini kullanırız.
+Beklenen frekansı 5 ten küçük olanların sayısı toplam frekans içinde %20 den küçükse Pearson ın kikare testi kullanılır, %20Den büyükse Fisher'ın kikare testini kullanırız.
+
+### Örnekler
+
+```python 
+import pandas as pd
+
+df = {
+    "Cinsiyet": [
+        "Kadın", "Kadın", "Kadın", "Kadın", "Erkek", "Kadın", "Kadın", "Kadın", "Erkek",
+        "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın",
+        "Kadın", "Erkek", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın"
+    ],
+    "Marka": [
+        "B markası", "B markası", "C markası", "C markası", "A markası", "B markası", "B markası",
+        "D markası", "D markası", "A markası", "A markası", "C markası", "D markası", "A markası",
+        "D markası", "A markası", "D markası", "C markası", "C markası", "C markası", "C markası",
+        "D markası", "A markası", "D markası", "D markası"
+    ]
+}
+
+# DataFrame oluştur
+veri = pd.DataFrame(df)
+
+tablo = pd.crosstab(index=veri["Cinsiyet"], columns=veri["Marka"])
+print(tablo)
+
+# Marka     A markası  B markası  C markası  D markası
+# Cinsiyet                                            
+# Erkek             1          0          1          1
+# Kadın             5          4          6          7
+
+from scipy import stats
+
+test, p, sd, beklenen = stats.chi2_contingency(tablo)
+print(beklenen)
+
+# [[0.72 0.48 0.84 0.96]
+#  [5.28 3.52 6.16 7.04]]
+
+kucuk = []   # Stores expected values less than 5
+toplam = []  # Stores all expected values
+
+for i in beklenen:          
+    for j in i:             
+        if j < 5:           
+            kucuk.append(j) 
+
+    for j in i:             
+        toplam.append(j)    
+
+print(len(kucuk) / len(toplam)) # 0.625 %20'den büyük Fisher testi kullanacağız.
+
+#Pearson kikare yapısını da örnek olarak gösterelim;
+test, p, sd, beklenen = stats.chi2_contingency(tablo, correction=False)
+print(test,p) # 0.6222222222222222 0.8913267885846314 Marka ve cinsiyet arasında ilişki yoktur.
+```
+
+Fisher yapısı zor olduğu için atladık.
+
+
+
 
 
 
