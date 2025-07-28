@@ -5082,6 +5082,21 @@ Varsayımları;
 1. Beklenen frekanslar: Her hücredeki beklenen frekans değeri en az 5 olmalıdır. Eğer bazı hücrelerde bu değer sağlanamazsa, alternatif olarak Fisher'in kesin testi kullanılabilir.
 1. Örneklem yeterince büyük olmalı: Genel olarak, toplam örneklem büyüklüğü yeterince büyük olmalı ve her hücrede yeterli sayıda gözlem bulunmalıdır.
 
+### Örnekler
+
+|Günler | Müşteri Sayıları|
+|-|-|
+|1 | 24|
+|2 | 21|
+|3 | 15|
+|4 | 16|
+|5 | 24|
+
+Yukarıdaki yapı **Frekans tablosu**dur.
+
+
+
+
 
 ### Örnekler
 ## 5.25 
