@@ -5465,17 +5465,56 @@ print(test)
 | ------- | ----- | -------- | -------- |
 | Kruskal | 2     | 8.733601 | 0.012692 |
 
-p < 0.05 olduğu için medyan değerleri arasında fark vardır deriz. Bu durumda parametrik testte olduğu gibi Post-Hoc kullanırız. bu durumda en çok kullanılan 2 Post-Hoc yapısı var.
+p < 0.05 olduğu için medyan değerleri arasında fark vardır deriz. Bu durumda parametrik testte olduğu gibi Post-Hoc kullanırız. bu durumda en çok kullanılan 2 Post-Hoc yapısı var. En güçlü olanı conover testini kullanacağız.
+
+```Python
+from scikit_posthocs import posthoc_conover
+
+posthoc = posthoc_conover(veri2, val_col="Değer", group_col="Yöntem", p_adjust="bonf")
+
+print(posthoc)
+```
+
+|              | A Yöntem | B Yöntem | C Yöntem |
+| ------------ | -------- | -------- | -------- |
+| **A Yöntem** | 1.000000 | 0.065296 | 0.008453 |
+| **B Yöntem** | 0.065296 | 1.000000 | 1.000000 |
+| **C Yöntem** | 0.008453 | 1.000000 | 1.000000 |
+
+Test değeri 0.008 A ve C yöntemi arasında istatistiksel olarak bir fark vardır.
+
+## 5.30 Friedman Testi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 ### Örnekler
-## 5.30 
+## 5.31 
 # 6
 
-https://www.youtube.com/watch?v=b_VqgOc6eXs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=89
-0943
+https://www.youtube.com/watch?v=LWrEnFtuaJE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=90
+0000
 
 
