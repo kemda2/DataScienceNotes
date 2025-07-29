@@ -5445,11 +5445,27 @@ veri2.columns = ["Yöntem", "Değer"]
 
 import pingouin as pg
 
+normallik = pg.normality(veri2, dv="Değer", group="Yöntem")
+print(normallik)
+```
+| Grup     | W        | pval     | normal |
+| -------- | -------- | -------- | ------ |
+| A Yöntem | 0.839268 | 0.043242 | False  |
+| B Yöntem | 0.839410 | 0.043412 | False  |
+| C Yöntem | 0.822919 | 0.027487 | False  |
+
+Hiçbiri normal dağılımda değil. Gözlem sayısı az. Non-parametrik Kruskal testi yapılır.
+
+```Python
+test = pg.kruskal(veri2, dv="Değer", between="Yöntem")
+print(test)
 ```
 
+| Source  | ddf01 | H        | p-unc    |
+| ------- | ----- | -------- | -------- |
+| Kruskal | 2     | 8.733601 | 0.012692 |
 
-
-
+p < 0.05 olduğu için medyan değerleri arasında fark vardır deriz. Bu durumda parametrik testte olduğu gibi Post-Hoc kullanırız. bu durumda en çok kullanılan 2 Post-Hoc yapısı var.
 
 
 
@@ -5459,7 +5475,7 @@ import pingouin as pg
 ## 5.30 
 # 6
 
-https://www.youtube.com/watch?v=Z0liMtI8oRc&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=87
-0000
+https://www.youtube.com/watch?v=b_VqgOc6eXs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=89
+0943
 
 
