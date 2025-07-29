@@ -5485,11 +5485,71 @@ Test değeri 0.008 A ve C yöntemi arasında istatistiksel olarak bir fark vard�
 
 ## 5.30 Friedman Testi
 
+```Python
+import pandas as pd
 
+# Verileri sözlük formatında tanımlayalım
+data = {
+    'Hastalar': ['Ahmet', 'Mehmet', 'Ayşe', 'Yusuf'],
+    'TÖ': [14, 7, 13, 3],
+    'TS': [78, 87, 24, 17],
+    'TS2': [99, 11, 4, 10],
+    'TS3': [55, 17, 14, 20]
+}
 
+# DataFrame'e dönüştür
+veri = pd.DataFrame(data)
 
+veri2 = pd.melt(veri, 
+                id_vars=["Hastalar"], 
+                value_vars=["TÖ", "TS", "TS2", "TS3"])
 
+veri2.columns = ["Hastalar", "Testler", "Değerler"]
 
+import pingouin as pg
+
+normallik = pg.normality(veri2, dv="Değerler", group="Testler")
+print(normallik)
+```
+
+| Test | W (Shapiro) | p-değeri | Normal Dağılım? |
+| ---- | ----------- | -------- | --------------- |
+| TÖ   | 0.906973    | 0.466514 | ✅ True        |
+| TS   | 0.838805    | 0.177943 | ✅ True        |
+| TS2  | 0.691725    | 0.009263 | ❌ False       |
+| TS3  | 0.746922    | 0.036132 | ❌ False       |
+
+Normal dağılım olmadığı ve gözlem sayısı az olduğu için varsayım parametrik test için uygun değildir. Küreselliğe bakmaya gerek kalmıyor.
+
+```Python
+test = pg.friedman(veri2, dv="Değerler", within="Testler", subject="Hastalar")
+print(test)
+```
+
+| Değişken | W     | ddf1 | Q   | p-unc  |
+| -------- | ----- | ---- | --- | ------ |
+| Friedman | 0.575 | 3    | 6.9 | 0.0751 |
+
+p > 0.05 olduğu için gruplar arasında medyan olarak fark yoktur. Ama olsaydı aşağıdaki testi yapacaktık;
+
+```Python
+from scikit_posthocs import posthoc_conover_friedman
+import numpy as np
+
+df = np.array([veri["TÖ"], veri["TS"], veri["TS2"], veri["TS3"]])
+
+posthoc = posthoc_conover_friedman(df, p_adjust="bonf")
+print(posthoc)
+```
+
+|   | 0       | 1   | 2       | 3       |
+| - | ------- | --- | ------- | ------- |
+| 0 | 1.0     | 1.0 | 0.38759 | 0.38759 |
+| 1 | 1.0     | 1.0 | 1.0     | 1.0     |
+| 2 | 0.38759 | 1.0 | 1.0     | 1.0     |
+| 3 | 0.38759 | 1.0 | 1.0     | 1.0     |
+
+Fark olmadığını daha önce bulmuştuk ama fark olsaydı yukarıdaki tabloda 0,05'ten az değer bulacaktık.
 
 
 
