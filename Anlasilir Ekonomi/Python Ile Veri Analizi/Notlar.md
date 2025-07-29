@@ -5298,6 +5298,56 @@ print(test,p) # 0.6222222222222222 0.8913267885846314 Marka ve cinsiyet arasınd
 
 Fisher yapısı zor olduğu için atladık.
 
+## 5.26 İşaret Testi
+
+Genellikle normal dağılım olmadığında ve yeterince örneklem sayısı olmadığında kullanılır.
+
+> Öğrencilerle ilgili 25 örneklem alınmış. Not ortalama değerlerinin 30 dan farklı olduğu iddia ediliyor.
+
+```Python
+import pandas as pd
+
+# Verileri sözlük formatında tanımlayalım
+data = {
+    "Örnek": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+              11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+              21, 22, 23, 24, 25],
+    "Not": [1, 1, 2, 2, 3, 3, 4, 5, 5, 6,
+            7, 7, 8, 10, 20, 22, 25, 27, 33, 40,
+            42, 50, 55, 75, 80]
+}
+
+# DataFrame oluştur
+veri = pd.DataFrame(data)
+
+# veri normal mi diye bakıyoruz;
+
+from scipy import stats
+
+norm = stats.shapiro(veri["Not"])
+print(norm) # ShapiroResult(statistic=np.float64(0.8117451551524919), pvalue=np.float64(0.00035926296925941514)) p<0.5 olduğu için normal dağılım değildir.
+
+from statsmodels.stats.descriptivestats import sign_test
+
+test = sign_test(veri["Not"], mu0=30)
+print(test) # (np.float64(-5.5), np.float64(0.043285250663757324)) p < 0.5 olduğu için medyan değeri 30'a eşit değildir. 
+
+print(veri["Not"].median()) # 8
+```
+
+## 5.27 Mann-Whitney U Testi 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5305,10 +5355,10 @@ Fisher yapısı zor olduğu için atladık.
 
 
 ### Örnekler
-## 5.26 
+## 5.28 
 # 6
 
-https://www.youtube.com/watch?v=YZM2hehvbfE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=86
+https://www.youtube.com/watch?v=Z0liMtI8oRc&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=87
 0000
 
 
