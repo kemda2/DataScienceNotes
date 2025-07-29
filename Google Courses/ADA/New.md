@@ -3938,4 +3938,4 @@ Ancak bu, dizilerin boyutunun değiştirilememesinin sebebidir: Aynı bellek ala
 
 #
 
-https://www.coursera.org/learn/get-started-with-python/lecture/fUQVE/the-power-of-packages
+https://www.coursera.org/learn/get-started-with-python/lecture/zC7LT/introduction-to-pandas
