@@ -3609,7 +3609,328 @@ print(pd.__version__)
 
 Python, kullanıcıları ve kullanım alanlarına göre gelişen bir dildir. Bu nedenle, sürüm güncellemeleri eski sürümlerde yazılmış kodların davranışlarını değiştirebilir. Kodlama ortamınızı değerlendirmek, yönetmek ve sorunlarını gidermek, etkili bir şekilde kod yazmanın önemli bir parçasıdır.
 
-# 
+# **Referans Kılavuzu: Diziler (Arrays)**
+
+Daha önce öğrendiğiniz gibi, **NumPy** gelişmiş sayısal hesaplamalar yapabilen güçlü bir kütüphanedir. En büyük avantajlarından biri diziler (arrays) ile çalışabilme yeteneğidir. Çünkü bir vektöre uygulanan bir işlem, aynı işlemin bir listeye uygulanmasına göre çok daha hızlı çalışır. Büyük veri hacimleriyle çalışırken bu performans farkı daha belirgin hale gelir. Bu metin, **NumPy dizileriyle çalışma** konusunda bir referans kılavuzudur.
+
+---
+
+## **Dizi Oluşturma**
+
+NumPy’i kullanmak için öncelikle onu içe aktarmanız gerekir. Standart olarak `np` takma adıyla çağrılır:
+
+### [**np.array()**](https://numpy.org/doc/stable/reference/generated/numpy.array.html)
+
+Bu fonksiyon **ndarray** (n boyutlu dizi) oluşturur. NumPy dizilerinin boyut sayısında bir sınır yoktur, ancak çok boyutlu dizilerle çalışmak zor olabilir.
+
+#### 1 Boyutlu Dizi:
+
+```python
+import numpy as np
+array_1d = np.array([1, 2, 3])
+array_1d
+```
+
+Çıktı:
+
+```
+[1 2 3]
+```
+
+> Tek boyutlu dizi, bir listeye benzer.
+
+#### 2 Boyutlu Dizi:
+
+```python
+array_2d = np.array([(1, 2, 3), (4, 5, 6)])
+array_2d
+```
+
+Çıktı:
+
+```
+[[1 2 3]
+ [4 5 6]]
+```
+
+> İki boyutlu dizi, bir tabloya benzer.
+
+#### 3 Boyutlu Dizi:
+
+```python
+array_3d = np.array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+array_3d
+```
+
+Çıktı:
+
+```
+[[[1 2]
+  [3 4]]
+ [[5 6]
+  [7 8]]]
+```
+
+> Üç boyutlu dizi, iki tabloya benzer.
+
+---
+
+### [np.zeros()](https://numpy.org/doc/stable/reference/generated/numpy.zeros.html)
+
+Belirtilen şekle sahip, tüm değerleri **0** olan bir dizi oluşturur:
+
+```python
+np.zeros((3, 2))
+```
+
+Çıktı:
+
+```
+[[0. 0.]
+ [0. 0.]
+ [0. 0.]]
+```
+
+---
+
+### [np.ones()](https://numpy.org/doc/stable/reference/generated/numpy.ones.html)
+
+Belirtilen şekle sahip, tüm değerleri **1** olan bir dizi oluşturur:
+
+```python
+np.ones((2, 2))
+```
+
+Çıktı:
+
+```
+[[1. 1.]
+ [1. 1.]]
+```
+
+---
+
+### [np.full()](https://numpy.org/doc/stable/reference/generated/numpy.full.html)
+
+Belirtilen şekle sahip, tüm değerleri belirli bir **değerle** doldurulmuş bir dizi oluşturur:
+
+```python
+np.full((5, 3), 8)
+```
+
+Çıktı:
+
+```
+[[8. 8. 8.]
+ [8. 8. 8.]
+ [8. 8. 8.]
+ [8. 8. 8.]
+ [8. 8. 8.]]
+```
+
+Bu fonksiyonlar şu durumlarda kullanışlıdır:
+
+- Belirli boyutta bir diziyi başlatıp sonra değerlerle doldurmak
+    
+- Bellek tahsisi yapmak
+    
+- Matris işlemleri gerçekleştirmek
+    
+
+---
+
+## **Dizi Metotları**
+
+NumPy dizileri üzerinde işlem yapmaya yarayan birçok yerleşik metoda sahiptir. Tam liste için [NumPy dizi belgeleri](https://numpy.org/doc/stable/reference/arrays.ndarray.html) sayfasına bakabilirsiniz. İşte en sık kullanılan metotlardan bazıları:
+
+### [ndarray.flatten()](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flatten.html)
+
+Diziyi **tek boyutlu hale getirir**.
+
+```python
+array_2d = np.array([(1, 2, 3), (4, 5, 6)])
+array_2d.flatten()
+```
+
+Çıktı:
+
+```
+[1 2 3 4 5 6]
+```
+
+---
+
+### [ndarray.reshape()](https://numpy.org/doc/stable/reference/generated/numpy.reshape.html#numpy.reshape)
+
+Dizinin şeklini **veriler değişmeden** yeniden tanımlar.
+
+```python
+array_2d = np.array([(1, 2, 3), (4, 5, 6)])
+array_2d.reshape(3, 2)
+```
+
+Çıktı:
+
+```
+[[1 2]
+ [3 4]
+ [5 6]]
+```
+
+`-1` kullanıldığında NumPy, diğer değere göre otomatik boyut belirler:
+
+```python
+array_2d.reshape(3, -1)
+```
+
+---
+
+### [ndarray.tolist()](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.tolist.html)
+
+Bir diziyi **listeye** çevirir (çok boyutlu ise iç içe listeler olur).
+
+```python
+array_2d.tolist()
+```
+
+Çıktı:
+
+```
+[[1, 2, 3], [4, 5, 6]]
+```
+
+---
+
+### **Matematiksel Fonksiyonlar**
+
+NumPy dizileri aşağıdaki gibi birçok matematiksel metoda sahiptir:
+
+- `ndarray.max()`: En büyük değeri döndürür
+    
+- `ndarray.mean()`: Ortalama değeri döndürür
+    
+- `ndarray.min()`: En küçük değeri döndürür
+    
+- `ndarray.std()`: Standart sapmayı döndürür
+    
+
+Örnek:
+
+```python
+a = np.array([(1, 2, 3), (4, 5, 6)])
+
+a.max()   # 6
+a.mean()  # 3.5
+a.min()   # 1
+a.std()   # 1.7078...
+```
+
+---
+
+## **Dizi Öznitelikleri (Attributes)**
+
+NumPy dizilerinin özelliklerine erişmek için çeşitli öznitelikler vardır:
+
+- `ndarray.shape`: Dizinin boyutlarını döndürür (örneğin (2, 3))
+    
+- `ndarray.dtype`: Veri tipini döndürür
+    
+- `ndarray.size`: Eleman sayısını verir
+    
+- `ndarray.T`: Dizinin transpozunu alır (satırlar sütun, sütunlar satır olur)
+    
+
+Örnek:
+
+```python
+array_2d.shape    # (2, 3)
+array_2d.dtype    # int64
+array_2d.size     # 6
+array_2d.T
+```
+
+---
+
+## **İndeksleme ve Dilimleme (Indexing & Slicing)**
+
+Bireysel elemanlara ve alt dizilere erişim sağlar:
+
+```python
+a = np.array([(1, 2, 3), (4, 5, 6)])
+
+a[1]      # [4 5 6]
+a[0, 1]   # 2
+a[1, 2]   # 6
+
+a[:, 1:]  # [[2 3], [5 6]]
+```
+
+---
+
+## **Dizi İşlemleri**
+
+Aynı boyuttaki dizilerle **eleman bazlı işlemler** yapılabilir:
+
+```python
+a = np.array([(1, 2, 3), (4, 5, 6)])
+b = np.array([[1, 2, 3], [1, 2, 3]])
+
+a + b  # toplama
+a * b  # çarpma
+```
+
+Çıktı:
+
+```
+[[2 4 6]
+ [5 7 9]]
+
+[[ 1  4  9]
+ [ 4 10 18]]
+```
+
+NumPy’nin [matematiksel fonksiyonlar](https://numpy.org/doc/stable/reference/routines.math.html#mathematical-functions) sayfasında yüzlerce fonksiyon daha mevcuttur.
+
+---
+
+## **Değiştirilebilirlik (Mutability)**
+
+NumPy dizileri **değiştirilebilir**, fakat bazı sınırlamaları vardır:
+
+```python
+a = np.array([(1, 2), (3, 4)])
+a[1][1] = 100
+```
+
+Çıktı:
+
+```
+[[  1   2]
+ [  3 100]]
+```
+
+Ancak dizinin boyutu **değiştirilemez**:
+
+```python
+a = np.array([1, 2, 3])
+a[3] = 100  # HATA: dizide 3. indeks yok
+```
+
+Hata:
+
+```
+IndexError: index 3 is out of bounds for axis 0 with size 3
+```
+
+---
+
+## **NumPy Dizilerinin Bellekte Veri Saklaması**
+
+NumPy dizileri oluşturulduklarında bellekte **bitişik** bir alan ayrılır. Bu da onları diğer Python veri yapılarından daha hızlı yapar çünkü veriler aynı yerde depolanır. Bu sayede hızlı erişim sağlanır.
+
+![image](./images/2010.png)
+
+Ancak bu, dizilerin boyutunun değiştirilememesinin sebebidir: Aynı bellek alanında başka veriler olabilir. Bu nedenle yeni eleman eklemek mümkün değildir. Diziyi büyütmek için yeni bir bellek konumuna kopya alınmalıdır.
 
 #
 
