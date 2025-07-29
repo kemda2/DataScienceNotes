@@ -5302,7 +5302,7 @@ Fisher yapısı zor olduğu için atladık.
 
 Genellikle normal dağılım olmadığında ve yeterince örneklem sayısı olmadığında kullanılır.
 
-> Öğrencilerle ilgili 25 örneklem alınmış. Not ortalama değerlerinin 30 dan farklı olduğu iddia ediliyor.
+> Öğrencilerle ilgili 25 örneklem alınmış. Not medyanları 30 dan farklı olduğu iddia ediliyor.
 
 ```Python
 import pandas as pd
@@ -5337,14 +5337,115 @@ print(veri["Not"].median()) # 8
 
 ## 5.27 Mann-Whitney U Testi 
 
+Bir bağımlı ve bir bağımsız veri olduğunda ve grup sayısı 2 olduğunda kullanılır. Bağımlı veri yalnızca sayı veya likert ölçeğiyle toplanmış sıralı veriler cronbach alfa yapılarak ile kullanılır.
+
+Likert ölçeği: bize çok iyi ile çok kötü arasında seçeneklerin yer aldığı veya katılıyorum katılmıyorum seçeneklerinin olduğu test yapısı. Bu yapıları da sıralı oldukları için sürekli kabul edebiliyoruz. Ama iç tutarlılık testi **cronbach alfa** uygulanarak yapılır.
+
+> Kadın ve erkeklerin süre değerlerinin medyanları arasında bir fark var mıdır?
+
+```Python
+import pandas as pd
+
+# Veriyi oluştur
+data = {
+    "Cinsiyet": ["Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın",
+                 "Erkek", "Erkek", "Erkek", "Erkek", "Erkek", "Erkek"],
+    "Süre": [55, 25, 66, 22, 35, 55, 33, 75, 29, 63, 27, 29]
+}
+
+# DataFrame'e çevir
+veri = pd.DataFrame(data)
+
+import pingouin as pg
+
+normallik = pg.normality(veri, dv="Süre", group="Cinsiyet")
+print(normallik)
+```
+
+| Grup  | W        | p-değeri | Normal mi?  |
+| ----- | -------- | -------- | ----------- |
+| Kadın | 0.899448 | 0.370679 | ✅ **True**  |
+| Erkek | 0.765136 | 0.027905 | ❌ **False** |
+
+Veri sayısı az ve Erkek normalliğe uymadığı için non parametrik test kullanılır.
+
+```Python
+erkek = veri[veri["Cinsiyet"] == "Erkek"]["Süre"]
+kadın = veri[veri["Cinsiyet"] == "Kadın"]["Süre"]
+
+test = pg.mwu(erkek, kadın, alternative="two-sided")
+print(test)
+```
+
+|       | U-val | alternative |   p-val  |    RBC    |  CLES   |
+|-------|-------|-------------|----------|-----------|---------|
+|  MWU  |  19.0 |  two-sided  | 0.935962 | -0.055556 | 0.52778 |
+
+p > 0.05 Erkek ve kadınların sürelerinin medyanları arasında fark yoktur.
+
+## 5.28 Wilcoxon T Testi
+
+Test öncesi ve sonra olacak şekilde yapılan ölçülerin testi için kullanılır.
 
 
 
+```Python
+import pandas as pd
 
+data = {
+    "Hasta": [1, 2, 3, 4, 5, 6, 7],
+    "TÖ": [54, 53, 61, 51, 48, 60, 58], 
+    "TS": [60, 40, 66, 60, 55, 62, 60]
+}
 
+veri = pd.DataFrame(data)
 
+fark = veri["TÖ"] - veri["TS"]
 
+import pingouin as pg
 
+normallik = pg.normality(fark)
+print(normallik)
+```
+
+|   | W       | pval     | normal |
+| - | ------- | -------- | ------ |
+| 0 | 0.77484 | 0.022864 | False  |
+
+p değeri 0,05'ten küçük olduğu için normal değildir.
+
+```Python
+test = pg.wilcoxon(veri["TÖ"], veri["TS"], alternative="two-sided")
+print(test)
+```
+
+| Test     | W-val | alternative | p-val    | RBC  | CLES     |
+| -------- | ----- | ----------- | -------- | ---- | -------- |
+| Wilcoxon | 7.0   | two-sided   | 0.296875 | -0.5 | 0.295918 |
+
+p > 0,5 olduğu için aralarında bir fark yoktur diyebiliriz. Eğer fark olsaydı medyan değerlerini karşılaştırarak hangisinin daha iyi olduğunu bulabilirdik.
+
+## 5.29 Kruskal Wallis H Testi 
+
+Tek yönlü ANOVA normallik varsayımı sağlanmadığında ve yeterli sayıda gözlem olmadığında kullanılabilinecek bir testtir. Varyansların eşitliği için Welch'in Anova testini kullanıyoruz.
+
+```Python
+import pandas as pd
+
+data = {
+    "A Yöntem": [81, 32, 42, 62, 37, 44, 38, 47, 49, 41],
+    "B Yöntem": [48, 31, 25, 22, 30, 30, 32, 15, 40, 77],
+    "C Yöntem": [18, 49, 33, 19, 24, 17, 48, 22, 31, 17]
+}
+
+veri = pd.DataFrame(data)
+
+veri2 = pd.melt(veri, value_vars=["A Yöntem", "B Yöntem", "C Yöntem"])
+veri2.columns = ["Yöntem", "Değer"]
+
+import pingouin as pg
+
+```
 
 
 
@@ -5355,7 +5456,7 @@ print(veri["Not"].median()) # 8
 
 
 ### Örnekler
-## 5.28 
+## 5.30 
 # 6
 
 https://www.youtube.com/watch?v=Z0liMtI8oRc&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=87
