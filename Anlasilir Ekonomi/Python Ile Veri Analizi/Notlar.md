@@ -5788,7 +5788,10 @@ print(skor)
 
 ```
 
-r değeri spearman da daha güçlü çıktığı için spearman testi daha uygun diyebiliriz.
+r değeri spearman da daha güçlü çıktığı için spearman testi daha uygun diyebiliriz. r testine bakarak arada güçlü bir negatif ilişki var diyebiliriz. p değerine bakarak istatistiksel olarak anlamlı diyebiliriz.
+
+
+
 
 
 ### Örnekler
