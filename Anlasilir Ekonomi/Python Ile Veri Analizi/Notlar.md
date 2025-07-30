@@ -5730,7 +5730,27 @@ plt.show()
 
 Non parametrik test yapısıdır.
 
+```Python
+import pandas as pd
 
+data = {
+    "A": [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],
+    "B": [244.5, 200, 161.8, 145, 134.5, 122.7, 109.2, 110.8, 109.8, 111.2, 105.9]
+}
+
+veri = pd.DataFrame(data)
+
+import pingouin as pg
+
+normalik = pg.normality(veri)
+print(normalik)
+
+#        W       pval   normal
+# A  0.968391  0.869842    True
+# B  0.792429  0.007479    False Normal dağılım değil bu yüzden non-parametrik Spearman Korelasyon Testi kullanacağız.
+
+
+```
 
 
 
