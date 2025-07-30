@@ -5719,7 +5719,10 @@ plt.show()
 
 ![image](./images/pearsonkor.png)
 
-
+```Python
+sns.lmplot(x="Sıcaklık", y="DondurmaSatış", data=veri,ci=None)
+plt.show()
+```
 
 
 
