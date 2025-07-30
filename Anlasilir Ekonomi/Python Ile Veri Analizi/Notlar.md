@@ -5726,9 +5726,16 @@ plt.show()
 
 ![image](./images/pearsonkor2.png)
 
+```Python
+korelasyon = pg.corr(x=veri["Sıcaklık"], y=veri["DondurmaSatış"], method="pearson")
+print(korelasyon)
 
+#            n       r          CI95%       p-val       BF10       power
+#-------------------------------------------------------------------------
+# pearson    12  0.957507   [0.85, 0.99]   0.00001   1.102e+04   0.999953
+```
 
-
+p değerimiz çok küçük olduğu için anlamlı bir ilişki vardır diyoruz. r değerinin 0.95 olması bize çok güçlü bir bağlantı olduğunu gösteriyor.
 
 
 
@@ -5736,7 +5743,7 @@ plt.show()
 ## .1 
 # 10
 
-https://www.youtube.com/watch?v=xnXFTitSSxA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=92
+https://www.youtube.com/watch?v=PfMPTiFIC6g&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=95
 0000
 
 
