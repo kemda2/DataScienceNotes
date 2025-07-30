@@ -5551,10 +5551,11 @@ print(posthoc)
 
 Fark olmadığını daha önce bulmuştuk ama fark olsaydı yukarıdaki tabloda 0,05'ten az değer bulacaktık.
 
+# 6 Korelasyon
 
+Korelasyon iki rassal değişken arasındaki doğrusal ilişkinin yönünü ve gücünü bildirir. İki değişken arasında korelasyon olması birinin diğerinin nedeni olduğunu göstermez sadece birini etkileyen neden diğerini de etkilemektedir.
 
-
-
+r korelasyon katsayısıdır. (-1 <= r <= 1)
 
 
 
@@ -5571,10 +5572,10 @@ Fark olmadığını daha önce bulmuştuk ama fark olsaydı yukarıdaki tabloda 
 
 
 ### Örnekler
-## 5.31 
-# 6
+## 6.1 
+# 7
 
-https://www.youtube.com/watch?v=LWrEnFtuaJE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=90
+https://www.youtube.com/watch?v=PblPuBmEBqI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=91
 0000
 
 
