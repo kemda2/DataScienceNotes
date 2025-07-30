@@ -5638,6 +5638,7 @@ print(np.corrcoef(x, y))
 #  [0.98198051 1.        ]]
 ```
 
+# 8 Doğrusallık
 
 
 
@@ -5649,7 +5650,7 @@ print(np.corrcoef(x, y))
 
 ### Örnekler
 ## .1 
-# 8
+# 9
 
 https://www.youtube.com/watch?v=xnXFTitSSxA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=92
 0000
