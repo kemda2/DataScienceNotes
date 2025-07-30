@@ -5788,6 +5788,7 @@ print(skor)
 
 ```
 
+r değeri spearman da daha güçlü çıktığı için spearman testi daha uygun diyebiliriz.
 
 
 ### Örnekler
