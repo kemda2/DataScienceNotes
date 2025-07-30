@@ -5565,7 +5565,7 @@ r = 0.00 ise ilişki yoktur
 0.71 < r < 0.99  ise yüksek ilişki
 r = 1 ise mükemmel ilişki
 
-# 7 Kovaryans ve Korelasyon İlişkisi
+## 6.1 Kovaryans ve Korelasyon İlişkisi
 
 x ve y arasındaki covaryansı aşağıdaki gibi buluruz. cov(x,x) x'in varyansını verirken diğerleri birbirleriyle ilişkisini verir.
 
