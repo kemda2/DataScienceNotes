@@ -5557,7 +5557,11 @@ Korelasyon iki rassal değişken arasındaki doğrusal ilişkinin yönünü ve g
 
 r korelasyon katsayısıdır. (-1 <= r <= 1)
 
-
+r = 0.00 ise ilişki yoktur
+0.01 < r < 0.29  ise düşük ilişki
+0.30 < r < 0.70  ise orta ilişki
+0.71 < r < 0.99  ise yüksek ilişki
+r = 1 ise mükemmel ilişki
 
 
 
