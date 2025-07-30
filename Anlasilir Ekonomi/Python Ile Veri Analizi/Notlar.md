@@ -5614,7 +5614,7 @@ print(np.cov(x, y))
 # [[300.  933.3333333]]
 ```
 
-Bu artışa karşı oluşan değer artışını standart bir hale getirmek için korelasyonu kullanırız.
+Bu artışa karşı oluşan değer artışını standart bir hale getirmek için korelasyonu kullanırız. Böylece -$\infin$ ve $\infin$ arasındaki kovaryans değerlerini -1 ile 1 arasındaki korelansyon değerine indirgeriz.
 
 
 
