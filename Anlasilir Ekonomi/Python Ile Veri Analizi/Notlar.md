@@ -5765,8 +5765,7 @@ plt.show()
 
 ![image](./images/dogrusallik4.png)
 
-
-
+Grafikte bazı noktalar verilen alanın dışında kaldığı için doğrusallık istenilen güven aralığı için yoktur diyebiliriz. 
 
 
 
