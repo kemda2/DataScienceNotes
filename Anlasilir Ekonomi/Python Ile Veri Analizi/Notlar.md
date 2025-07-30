@@ -5678,6 +5678,47 @@ plt.show()
 
 # 9 Pearson Korelasyon
 
+Parametrik bir testtir. 
+
+Varsayımlar;
+
+- İki değişken de sürekli olacak
+- Normallik 
+- Doğrusallık
+
+H0 hipotezi p=0 ve H1 hipotezi p=!0
+
+### Örnekler
+
+```Python
+import pandas as pd
+
+data = {
+    "Sıcaklık": [14.2, 16.4, 11.9, 15.2, 18.5, 22.1, 19.4, 25.1, 23.4, 22.6, 17.2],
+    "DondurmaSatış": [215, 325, 185, 332, 406, 522, 412, 614, 544, 421, 445, 408]
+}
+
+veri = pd.DataFrame(data)
+
+# Veri seti küçük olduğu için normallik testi yapacağız.
+import pingouin as pg
+
+normallik = pg.normality(veri)
+print(normallik)
+
+#                    W       pval    normal
+# Sıcaklık       0.975931  0.962042   True
+# DondurmaSatış  0.961593  0.806309   True
+
+
+```
+
+
+
+
+
+
+
 
 
 
