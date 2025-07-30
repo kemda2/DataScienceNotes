@@ -5771,7 +5771,22 @@ Doğrusallık olmadığında monotonik mi değil mi ona bakarız. Soldaki gibiys
 
 ![image](./images/dogrusallik5.png)
 
+```Python
+pkor = pg.corr(veri["A"], veri["B"], method="pearson")
+print(pkor)
 
+skor = pg.corr(veri["A"], veri["B"], method="spearman")
+print(skor)
+
+#                n         r           CI95%         p-val      BF10    power
+# -------------------------------------------------------------------------------
+# pearson        11    -0.8743    [-0.97, -0.58]    0.000431   81.667   0.975883
+# 
+#                n         r           CI95%         p-val      BF10    power
+# -------------------------------------------------------------------------------
+# spearman       11    -0.9182    [-0.98, -0.71]    0.000067   81.667   0.995623
+
+```
 
 
 
