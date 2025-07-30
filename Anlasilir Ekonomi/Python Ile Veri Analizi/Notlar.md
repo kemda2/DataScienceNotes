@@ -5921,6 +5921,7 @@ print(kismikor)
 
 Kilo ve öğün arasındaki korelasyon değeri yaş değişkeni olmadan 0.95 ten 0.44 e düşmektedir. Çok güçlü ilişkiden güçlü bir ilişki değerine düştü diyebiliriz. Anlamlılık değerine baktığımızda 0.05'ten küçük olduğu için anlamlıdır diyebiliriz.
 
+## 6.7 Bist Korelasyon Matrisi
 
 
 
@@ -5937,7 +5938,7 @@ Kilo ve öğün arasındaki korelasyon değeri yaş değişkeni olmadan 0.95 ten
 
 
 ### Örnekler
-## 6.7
+## 6.8
 # 7
 
 https://www.youtube.com/watch?v=jtxRQyg2RZM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=96
