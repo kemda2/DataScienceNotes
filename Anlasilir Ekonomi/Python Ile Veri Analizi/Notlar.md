@@ -5825,6 +5825,12 @@ plt.show()
 
 ![image](./images/kormat.png)
 
+```python 
+sns.heatmap(kormat, annot=True)
+plt.show()
+```
+
+![image](./images/kormat2.png)
 
 
 
