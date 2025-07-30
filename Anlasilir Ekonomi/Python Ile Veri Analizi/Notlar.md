@@ -5790,15 +5790,16 @@ print(skor)
 
 r değeri spearman da daha güçlü çıktığı için spearman testi daha uygun diyebiliriz. r testine bakarak arada güçlü bir negatif ilişki var diyebiliriz. p değerine bakarak istatistiksel olarak anlamlı diyebiliriz.
 
+## 6.5 Korelasyon Matrisi
 
 
 
 
 ### Örnekler
-## 6.5 
+## 6.6
 # 7
 
-https://www.youtube.com/watch?v=xnXFTitSSxA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=92
+https://www.youtube.com/watch?v=jtxRQyg2RZM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=96
 0000
 
 
