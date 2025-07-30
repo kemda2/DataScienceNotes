@@ -5593,9 +5593,28 @@ Covaryans sadece pozitif bir ilişki mi var veya negatif bir ilişki mi var onu 
 
 Karşılaştırma yaptığımız veriler arasında aynı birimler olmalı.
 
+```Python
+import numpy as np
+
+x = [1, 2, 3]
+y = [4, 6, 10]
+
+print(np.cov(x, y))
+
+# [[1.  3.]]
+# [[3.  9.3333333]]
 
 
+x = [10, 20, 30]
+y = [40, 60, 100]
 
+print(np.cov(x, y))
+
+# [[100.  300.]]
+# [[300.  933.3333333]]
+```
+
+Bu artışa karşı oluşan değer artışını standart bir hale getirmek için korelasyonu kullanırız.
 
 
 
