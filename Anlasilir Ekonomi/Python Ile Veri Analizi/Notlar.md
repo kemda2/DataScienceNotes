@@ -5839,6 +5839,23 @@ plt.show()
 
 ![image](./images/kormat3.png)
 
+Korelasyon değerlerini bulduk. Anlamlılık açısından kullanabileceğimiz 2 çeşit yapı var. Bunları p1 ve p2 olarak inceleyelim;
+
+```python 
+import pingouin as pg
+
+p1 = pg.pairwise_corr(veri)
+print(p1)
+```
+
+| X | Y | method  | alternative | n  |     r     |      CI95%       |  p-unc   | BF10  |   power   |
+|---|---|---------|-------------|----|-----------|------------------|----------|-------|-----------|
+| A | B | pearson | two-sided   | 29 |  0.119167 | [-0.26, 0.47]    | 0.538090 | 0.276 | 0.094472  |
+| A | C | pearson | two-sided   | 29 |  0.261769 | [-0.12, 0.57]    | 0.170151 | 0.566 | 0.283344  |
+| A | D | pearson | two-sided   | 29 | -0.286916 | [-0.59, 0.09]    | 0.131283 | 0.683 | 0.332692  |
+| B | C | pearson | two-sided   | 29 |  0.012229 | [-0.36, 0.38]    | 0.949798 | 0.231 | 0.049929  |
+| B | D | pearson | two-sided   | 29 |  0.301583 | [-0.07, 0.6 ]    | 0.111856 | 0.770 | 0.363367  |
+| C | D | pearson | two-sided   | 29 | -0.329254 | [-0.62, 0.04]    | 0.081142 | 0.984 | 0.424469  |
 
 
 
