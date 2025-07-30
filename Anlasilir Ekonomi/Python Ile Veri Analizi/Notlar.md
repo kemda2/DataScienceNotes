@@ -5883,11 +5883,43 @@ Köşegenin altında kalan kısım bize korelasyon katsayıkarını veriyor. Üs
 
 ## 6.6 Kısmi Korelasyon
 
+Kısmi korelasyon (partial correlation), iki değişken arasındaki ilişkinin gücünü ölçerken, diğer bir veya daha fazla değişkenin etkisini kontrol altına alarak yapılan korelasyon analizidir.
 
+```python 
+import pandas as pd
 
+veri = pd.DataFrame({
+    "Kilo": [50, 52, 53, 58, 59, 63, 64, 68, 69, 71, 73, 74, 76, 76, 80, 82, 82, 82, 83, 87, 87, 88, 89, 94, 98, 98, 99, 100],
+    "Öğün": [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5],
+    "Yaş":  [43, 43, 41, 41, 41, 41, 39, 39, 39, 35, 33, 32, 31, 31, 31, 30, 28, 27, 26, 25, 25, 25, 24, 23, 21, 21, 21, 19]
+})
 
+import pingouin as pg
 
+kor = pg.pairwise_corr(veri)
+print(kor)
+```
 
+| X     | Y     | method  | alternative | n  |     r      |     CI95%       |     p-unc      |     BF10      | power |
+|-------|-------|---------|-------------|----|------------|------------------|----------------|---------------|--------|
+| Kilo  | Öğün  | pearson | two-sided   | 29 |  0.956975  | [0.91, 0.98]     | 4.916439e-16   | 7.281e+12     | 1.0    |
+| Kilo  | Yaş   | pearson | two-sided   | 29 | -0.980594  | [-0.99, -0.96]   | 1.213447e-20   | 1.328e+17     | 1.0    |
+| Öğün  | Yaş   | pearson | two-sided   | 29 | -0.947297  | [-0.98, -0.89]   | 7.181222e-15   | 6.112e+11     | 1.0    |
+
+Hepsi için güçlü pozitif veya negatif korelasyon var ve p değerleri 0.05 ten küçük olduğu için hepsinin arasında anlamlı bir ilişki vardır.
+
+Yaşın etkisi olmadan öğün ve kilo arasında nasıl bit ilişki var inceleyelim;
+
+```python 
+kismikor = pg.partial_corr(data=veri, x="Öğün", y="Kilo", covar="Yaş")
+print(kismikor)
+```
+
+| n  | r      | CI95%         | p-val  |
+| -- | ------ | ------------- | ------ |
+| 29 | 0.4467 | [0.09, 0.72]  | 0.0171 |
+
+Kilo ve öğün arasındaki korelasyon değeri yaş değişkeni olmadan 0.95 ten 0.44 e düşmektedir. Gerçek korelasyon değerimiz bu olmaktadır.
 
 
 
