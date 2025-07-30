@@ -5747,11 +5747,16 @@ print(normalik)
 
 #        W       pval   normal
 # A  0.968391  0.869842    True
-# B  0.792429  0.007479    False Normal dağılım değil bu yüzden non-parametrik Spearman Korelasyon Testi kullanacağız.
+# B  0.792429  0.007479    False Normal dağılım değil bu yüzden non-parametrik Spearman Korelasyon Testi kullanacağız. Eğer ikisi de normal dağılsaydı doğrusallığı kontrol etmemiz gerekecekti. 
 
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.lmplot(x="A", y="B", data=veri, ci=None)
+plt.show()
 ```
 
+![image](./images/dogrusallik3.png)
 
 
 
