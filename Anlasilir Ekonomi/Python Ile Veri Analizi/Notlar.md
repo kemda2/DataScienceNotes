@@ -5737,7 +5737,7 @@ Non parametrik test yapısıdır.
 
 ### Örnekler
 ## 6.5 
-# 10
+# 7
 
 https://www.youtube.com/watch?v=xnXFTitSSxA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=92
 0000
