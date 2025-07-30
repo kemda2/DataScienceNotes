@@ -5656,6 +5656,7 @@ plt.plot(x, y)
 plt.show()
 ```
 
+![image](./images/dogrusallik.png)
 
 
 
