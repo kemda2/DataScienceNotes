@@ -5758,6 +5758,19 @@ plt.show()
 
 ![image](./images/dogrusallik3.png)
 
+```Python
+sns.lmplot(x="A", y="B", data=veri) # ci=None kaldırıldı ve güven aralığı çıkartacak
+plt.show()
+```
+
+![image](./images/dogrusallik4.png)
+
+
+
+
+
+
+
 
 
 ### Örnekler
