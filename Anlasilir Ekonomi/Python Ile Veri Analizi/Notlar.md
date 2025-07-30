@@ -5658,8 +5658,23 @@ plt.show()
 
 ![image](./images/dogrusallik.png)
 
+```Python
+import matplotlib.pyplot as plt
 
+x = [2, 4, 6, 8, 10]
+y = []
 
+for i in x:
+    sonuc = 3 + 2 * i**3
+    y.append(sonuc)
+
+print(y)
+
+plt.plot(x, y)
+plt.show()
+```
+
+![image](./images/dogrusallik2.png)
 
 
 
