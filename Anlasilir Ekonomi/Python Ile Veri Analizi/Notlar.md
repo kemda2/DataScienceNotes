@@ -5616,7 +5616,18 @@ print(np.cov(x, y))
 
 Bu artışa karşı oluşan değer artışını standart bir hale getirmek için korelasyonu kullanırız. Böylece -$\infin$ ve $\infin$ arasındaki kovaryans değerlerini -1 ile 1 arasındaki korelansyon değerine indirgeriz.
 
+```Python
+import numpy as np
 
+x = [1, 2, 3]
+y = [4, 6, 10]
+
+print(np.corrcoef(x, y))
+
+# [[1.         0.98198051]
+#  [0.98198051 1.        ]]
+
+```
 
 ### Örnekler
 ## .1 
