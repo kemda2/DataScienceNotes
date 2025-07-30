@@ -5557,6 +5557,8 @@ Korelasyon iki rassal değişken arasındaki doğrusal ilişkinin yönünü ve g
 
 r korelasyon katsayısıdır. (-1 <= r <= 1)
 
+0,5 < r < 0,9 olduğunda nedensellik araştırması yapılır. 
+
 r = 0.00 ise ilişki yoktur
 0.01 < r < 0.29  ise düşük ilişki
 0.30 < r < 0.70  ise orta ilişki
@@ -5579,7 +5581,7 @@ r = 1 ise mükemmel ilişki
 ## 6.1 
 # 7
 
-https://www.youtube.com/watch?v=PblPuBmEBqI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=91
+https://www.youtube.com/watch?v=xnXFTitSSxA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=92
 0000
 
 
