@@ -5767,6 +5767,9 @@ plt.show()
 
 Grafikte bazı noktalar verilen alanın dışında kaldığı için doğrusallık istenilen güven aralığı için yoktur diyebiliriz. 
 
+Doğrusallık olmadığında monotonik mi değil mi ona bakarız. Soldaki gibiyse pearson, sağdaki gibiyse spearman testini kullanırız. 
+
+![image](./images/dogrusallik5.png)
 
 
 
