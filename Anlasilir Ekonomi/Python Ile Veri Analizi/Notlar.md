@@ -5589,9 +5589,9 @@ print(np.cov(x, y))
 #  [ 40. 182.5]] cov(x,y) = 40 Varx=10 Vary=182.5 Pozitif yönlü ilişki
 ```
 
-Covaryans sadece pozitif bir ilişki mi var veya negatif bir ilişki mi var onu gösterir. -$\infin$ ve $\infin$ arasında bir değer alır.
+Covaryans sadece pozitif bir ilişki mi var veya negatif bir ilişki mi var onu gösterir. -$\infin$ ve $\infin$ arasında bir değer alır. Korelasyon pozitif bir ilişki mi var veya negatif bir ilişki mi var onu gösterir ve bu ilişkinin gücüne dair de bilgi verir.
 
-
+Karşılaştırma yaptığımız veriler arasında aynı birimler olmalı.
 
 
 
