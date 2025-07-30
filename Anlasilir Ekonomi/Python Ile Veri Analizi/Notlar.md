@@ -5638,7 +5638,7 @@ print(np.corrcoef(x, y))
 #  [0.98198051 1.        ]]
 ```
 
-# 8 Doğrusallık
+## 6.2 Doğrusallık
 
 ```Python
 import matplotlib.pyplot as plt
@@ -5676,7 +5676,7 @@ plt.show()
 
 ![image](./images/dogrusallik2.png)
 
-# 9 Pearson Korelasyon
+## 6.3 Pearson Korelasyon
 
 Parametrik bir testtir. 
 
