@@ -5941,7 +5941,7 @@ Kilo ve öğün arasındaki korelasyon değeri yaş değişkeni olmadan 0.95 ten
 ## 6.8
 # 7
 
-https://www.youtube.com/watch?v=jtxRQyg2RZM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=96
+https://www.youtube.com/watch?v=-Fe-x-RRq68&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=98
 0000
 
 
