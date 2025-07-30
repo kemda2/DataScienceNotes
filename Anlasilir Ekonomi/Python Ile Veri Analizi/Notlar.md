@@ -5676,11 +5676,15 @@ plt.show()
 
 ![image](./images/dogrusallik2.png)
 
+# 9 Pearson Korelasyon
+
+
+
 
 
 ### Örnekler
 ## .1 
-# 9
+# 10
 
 https://www.youtube.com/watch?v=xnXFTitSSxA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=92
 0000
