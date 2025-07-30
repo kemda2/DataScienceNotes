@@ -5565,9 +5565,31 @@ r = 0.00 ise ilişki yoktur
 0.71 < r < 0.99  ise yüksek ilişki
 r = 1 ise mükemmel ilişki
 
+# 7 Kovaryans ve Korelasyon İlişkisi
 
+x ve y arasındaki covaryansı aşağıdaki gibi buluruz. cov(x,x) x'in varyansını verirken diğerleri birbirleriyle ilişkisini verir.
 
+```Python
+import numpy as np
 
+x = [2, 4, 6, 8, 10]
+y = [15, 12, 9, 6, 3]
+
+print(np.cov(x, y))
+
+# [[ 10.  -15. ]
+#  [-15.   22.5]] cov(x,y) = -15 Varx=10 Vary=22.5 Negatif yönlü ilişki
+
+x = [2, 4, 6, 8, 10]
+y = [15, 20, 25, 30, 50]
+
+print(np.cov(x, y))
+
+# [[ 10.  40. ]
+#  [ 40. 182.5]] cov(x,y) = 40 Varx=10 Vary=182.5 Pozitif yönlü ilişki
+```
+
+Covaryans sadece pozitif bir ilişki mi var veya negatif bir ilişki mi var onu gösterir. -$\infin$ ve $\infin$ arasında bir değer alır.
 
 
 
@@ -5578,8 +5600,8 @@ r = 1 ise mükemmel ilişki
 
 
 ### Örnekler
-## 6.1 
-# 7
+## .1 
+# 8
 
 https://www.youtube.com/watch?v=xnXFTitSSxA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=92
 0000
