@@ -5724,6 +5724,7 @@ sns.lmplot(x="Sıcaklık", y="DondurmaSatış", data=veri,ci=None)
 plt.show()
 ```
 
+![image](./images/pearsonkor2.png)
 
 
 
