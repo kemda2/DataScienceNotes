@@ -5919,7 +5919,7 @@ print(kismikor)
 | -- | ------ | ------------- | ------ |
 | 29 | 0.4467 | [0.09, 0.72]  | 0.0171 |
 
-Kilo ve öğün arasındaki korelasyon değeri yaş değişkeni olmadan 0.95 ten 0.44 e düşmektedir. Gerçek korelasyon değerimiz bu olmaktadır.
+Kilo ve öğün arasındaki korelasyon değeri yaş değişkeni olmadan 0.95 ten 0.44 e düşmektedir. Gerçek korelasyon değerimiz bu olmaktadır. Anlamlılık değerine baktığımızda 0.05'ten küçük olduğu için anlamlıdır diyebiliriz.
 
 
 
