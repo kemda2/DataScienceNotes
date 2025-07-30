@@ -5694,7 +5694,7 @@ H0 hipotezi p=0 ve H1 hipotezi p=!0
 import pandas as pd
 
 data = {
-    "Sıcaklık": [14.2, 16.4, 11.9, 15.2, 18.5, 22.1, 19.4, 25.1, 23.4, 22.6, 17.2],
+    "Sıcaklık": [14.2, 16.4, 11.9, 15.2, 18.5, 22.1, 19.4, 25.1, 23.4, 18.1, 22.6, 17.2],
     "DondurmaSatış": [215, 325, 185, 332, 406, 522, 412, 614, 544, 421, 445, 408]
 }
 
@@ -5717,6 +5717,7 @@ sns.scatterplot(x="Sıcaklık", y="DondurmaSatış", data=veri)
 plt.show()
 ```
 
+![image](./images/pearsonkor.png)
 
 
 
