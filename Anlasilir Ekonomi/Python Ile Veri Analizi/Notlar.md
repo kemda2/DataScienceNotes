@@ -5640,7 +5640,21 @@ print(np.corrcoef(x, y))
 
 # 8 Doğrusallık
 
+```Python
+import matplotlib.pyplot as plt
 
+x = [2, 4, 6, 8, 10]
+y = []
+
+for i in x:
+    sonuc = 3 + 8 * i
+    y.append(sonuc)
+
+print(y) # [19, 35, 51, 67, 83]
+
+plt.plot(x, y)
+plt.show()
+```
 
 
 
