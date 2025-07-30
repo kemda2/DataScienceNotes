@@ -5857,11 +5857,55 @@ print(p1)
 | B | D | pearson | two-sided   | 29 |  0.301583 | [-0.07, 0.6 ]    | 0.111856 | 0.770 | 0.363367  |
 | C | D | pearson | two-sided   | 29 | -0.329254 | [-0.62, 0.04]    | 0.081142 | 0.984 | 0.424469  |
 
+p değeri 0.5 ten büyük olduğu için anlamlı bir fark yoktur.
+
+```python 
+p2 = pg.rcorr(veri)
+print(p2)
+
+#         A      B       C  D
+# A       -                  
+# B   0.119      -           
+# C   0.262  0.012       -   
+# D  -0.287  0.302  -0.329  -
+
+p2 = pg.rcorr(veri, stars=False)
+print(p2)
+
+#         A      B       C      D
+# A       -  0.538   0.170  0.131
+# B   0.119      -    0.95  0.112
+# C   0.262  0.012       -  0.081
+# D  -0.287  0.302  -0.329      -
+```
+
+Köşegenin altında kalan kısım bize korelasyon katsayıkarını veriyor. Üstünde kalan kısımlar p değerlerini bize verir.
+
+## 6.6 Kısmi Korelasyon
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 ### Örnekler
-## 6.6
+## 6.7
 # 7
 
 https://www.youtube.com/watch?v=jtxRQyg2RZM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=96
