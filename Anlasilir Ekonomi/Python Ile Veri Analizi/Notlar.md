@@ -5832,6 +5832,15 @@ plt.show()
 
 ![image](./images/kormat2.png)
 
+```python 
+sns.heatmap(kormat, annot=True, cmap=plt.cm.Blues)
+plt.show()
+```
+
+![image](./images/kormat3.png)
+
+
+
 
 
 ### Örnekler
