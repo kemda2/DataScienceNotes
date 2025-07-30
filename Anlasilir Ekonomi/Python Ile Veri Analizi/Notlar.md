@@ -5710,7 +5710,11 @@ print(normallik)
 # Sıcaklık       0.975931  0.962042   True
 # DondurmaSatış  0.961593  0.806309   True
 
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.scatterplot(x="Sıcaklık", y="DondurmaSatış", data=veri)
+plt.show()
 ```
 
 
