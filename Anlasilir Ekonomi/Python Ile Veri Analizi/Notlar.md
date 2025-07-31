@@ -6037,12 +6037,52 @@ plt.show()
 
 ![image](./images/bistkor2.png)
 
+```Python
+import pingouin as pg
+
+anlam = pg.pairwise_corr(getiri)
+print(anlam)
+```
+
+|   X        |    Y         | method  | alternative | n   | r        | CI95%        | p-unc         | BF10          | power |
+|------------|--------------|---------|-------------|-----|----------|--------------|---------------|---------------|-------|
+| AKBNK.IS   | ARCLK.IS     | pearson | two-sided   | 598 | 0.436570 | [0.37, 0.53] | 3.19727e-29   | 9.651e+25     | 1.0   |
+| AKBNK.IS   | ASELS.IS     | pearson | two-sided   | 598 | 0.465337 | [0.40, 0.53] | 1.82422e-33   | 1.538e+30     | 1.0   |
+| AKBNK.IS   | BIMAS.IS     | pearson | two-sided   | 598 | 0.297686 | [0.22, 0.37] | 1.05711e-13   | 4.771e+10     | 1.0   |
+| AKBNK.IS   | EKGYO.IS     | pearson | two-sided   | 598 | 0.550719 | [0.49, 0.62] | 1.00257e-48   | 2.11e+45      | 1.0   |
+| AKBNK.IS   | EREGL.IS     | pearson | two-sided   | 598 | 0.377723 | [0.31, 0.44] | 1.02341e-21   | 3.679e+18     | 1.0   |
+| ...        | ...          | ...     | ...         | ... | ...      | ...          | ...           | ...           | ...   |
+| TTKOM.IS   | VESTL.IS     | pearson | two-sided   | 598 | 0.445949 | [0.38, 0.51] | 1.70034e-30   | 1.762e+27     | 1.0   |
+| TTKOM.IS   | YKBNK.IS     | pearson | two-sided   | 598 | 0.544434 | [0.49, 0.61] | 1.97961e-47   | 1.091e+44     | 1.0   |
+| TUPRS.IS   | YKBNK.IS     | pearson | two-sided   | 598 | 0.422475 | [0.35, 0.49] | 2.75744e-27   | 1.173e+24     | 1.0   |
+| TUPRS.IS   | YKBNK.IS     | pearson | two-sided   | 598 | 0.457203 | [0.39, 0.52] | 3.17869e-32   | 9.066e+28     | 1.0   |
+| VESTL.IS   | YKBNK.IS     | pearson | two-sided   | 598 | 0.367658 | [0.3, 0.44]  | 1.40997e-20   | 2.766e+17     | 1.0   |
+
+
+```Python
+print(anlam[anlam["p-unc"] > 0.05])
+
+Empty DataFrame
+Columns: [X, Y, method, alternative, n, r, CI95%, p-unc, BF10, power]
+Index: []
+```
+
+Boş dataframe göndermiş. Yani tüm korelasyon değerleri istatistiksel olarak anlamlı.
+
+## 6.8 Veri Görselleştirme
+
+
+
+
+
+
+
 
 ### Örnekler
-## 6.8
+## 6.9
 # 7
 
-https://www.youtube.com/watch?v=-Fe-x-RRq68&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=98
+https://www.youtube.com/watch?v=8SHjegmOuiM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=99
 0000
 
 
