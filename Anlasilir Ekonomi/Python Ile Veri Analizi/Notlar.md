@@ -6069,20 +6069,30 @@ Index: []
 
 Boş dataframe göndermiş. Yani tüm korelasyon değerleri istatistiksel olarak anlamlı.
 
-## 6.8 Veri Görselleştirme
+# 7 Veri Görselleştirme
 
+Neden verileri görselleştirme yaparız;
 
+- Ham veri hakkında bilgi sahibi olmak
+- Analiz sonucunda verileri sunmak
 
+İyi bir grafik yapısı nasıl oluşturulur;
+
+- Veriye göre grafik türü seçilir
+- Grafik üzerinde kişilerin dikkatini çeken noktalar iyi hazırlanmalıdır
+- Bir grafiği sunarken bu grafiğin hikayesini anlatmak da önemlidir
+
+## 7.1 Sütun Grafik
 
 
 
 
 
 ### Örnekler
-## 6.9
-# 7
+## 7.2
+# 8
 
-https://www.youtube.com/watch?v=8SHjegmOuiM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=99
+https://www.youtube.com/watch?v=4GtrG20T838&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=100
 0000
 
 
