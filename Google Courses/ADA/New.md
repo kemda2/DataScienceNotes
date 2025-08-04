@@ -4390,6 +4390,291 @@ Pandas dataframes are a convenient way to work with tabular data. Each row and e
     
 - [pandas selection documentation](https://pandas.pydata.org/docs/user_guide/10min.html#selection)
 
+# Pandas'ta Boolean Maskesi (Mantıksal Maskeleme)
+
+Satırlara ve sütunlara referans vererek pandas’ta veri seçmeyi öğrendiğinize göre, bir sonraki adım Boolean maskelerinin nasıl kullanıldığını öğrenmek. Veri profesyonelleri, pandas'ta koşullara bağlı olarak veri seçmek için Boolean maskeleri kullanır. Bu yazıda, Boolean maskeleri ve pandas’ın mantıksal operatörlerini kullanarak çoklu koşullu seçim ifadelerinin nasıl oluşturulacağını keşfedeceksiniz. Pandas’ın temel kavramlarını anlamak, veri profesyoneli olarak işinizi kolaylaştırır ve daha verimli hale getirir.
+
+## Boolean Maskeleri
+
+Boolean’un, olası değerleri doğru (True) veya yanlış (False) olan herhangi bir ikili değişkeni tanımlamak için kullanıldığını biliyorsunuz. Pandas’ta **Boolean maskesi** ya da diğer adıyla **Boolean indeksleme**, bir Boolean ızgarasını dataframe’in indeksine uygulayarak, sadece ızgaradaki True değerleri ile eşleşen dataframe değerlerini seçmek için kullanılır.
+
+Videodaki örneğe dönelim. Diyelim ki gezegenler, yarıçapları ve ay sayıları ile ilgili bir dataframe'iniz var:
+
+| **planet** | **radius\_km** | **moons** |
+| ---------- | -------------- | --------- |
+| Merkür     | 2,440          | 0         |
+| Venüs      | 6,052          | 0         |
+| Dünya      | 6,371          | 1         |
+| Mars       | 3,390          | 2         |
+| Jüpiter    | 69,911         | 80        |
+| Satürn     | 58,232         | 83        |
+| Uranüs     | 25,362         | 27        |
+| Neptün     | 24,622         | 14        |
+
+Şimdi, ay sayısı 20’den az olan gezegenlerin satırlarını tutmak, diğerlerini filtrelemek istediğinizi varsayalım. Boolean maskesi, moons sütunundaki her değer için bu koşulun doğru (True) veya yanlış (False) olduğunu belirten bir pandas Series objesidir:
+
+|   | **Aylar < 20 mi?** |
+| - | ------------------ |
+| 0 | True               |
+| 1 | True               |
+| 2 | True               |
+| 3 | True               |
+| 4 | False              |
+| 5 | False              |
+| 6 | False              |
+| 7 | True               |
+
+Bu serinin veri tipi bool’dur. Boolean maskesi, bu Boolean serisini dataframe’in indeksine uygular. Sonuç olarak, Boolean maskede False olan satırlar dataframe’den filtrelenir, True olanlar dataframe’de kalır:
+
+| **planet** | **radius\_km** | **moons** |
+| ---------- | -------------- | --------- |
+| Merkür     | 2,440          | 0         |
+| Venüs      | 6,052          | 0         |
+| Dünya      | 6,371          | 1         |
+| Mars       | 3,390          | 2         |
+| Neptün     | 24,622         | 14        |
+
+### Pandas’ta Boolean Maskesi Kodlama
+
+Bu işlemi pandas’ta şu şekilde yapabilirsiniz.
+
+Öncelikle bir DataFrame oluşturun.
+
+```python
+data = {'planet': ['Mercury', 'Venus', 'Earth', 'Mars',
+                   'Jupiter', 'Saturn', 'Uranus', 'Neptune'],
+        'radius_km': [2440, 6052, 6371, 3390, 69911, 58232,
+                      25362, 24622],
+        'moons': [0, 0, 1, 2, 80, 83, 27, 14]
+        }
+
+df = pd.DataFrame(data)
+
+df
+```
+
+|   | moons | planet  | radius\_km |
+| - | ----- | ------- | ---------- |
+| 0 | 0     | Mercury | 2440       |
+| 1 | 0     | Venus   | 6052       |
+| 2 | 1     | Earth   | 6371       |
+| 3 | 2     | Mars    | 3390       |
+| 4 | 80    | Jupiter | 69911      |
+| 5 | 83    | Saturn  | 58232      |
+| 6 | 27    | Uranus  | 25362      |
+| 7 | 14    | Neptune | 24622      |
+
+Sonra, mantıksal ifadeyi yazın. Amaç, ay sayısı 20’den az olan gezegenleri tutmak, diğerlerini filtrelemektir.
+
+```python
+print(df['moons'] < 20)
+```
+
+Çıktı:
+
+```
+0     True
+1     True
+2     True
+3     True
+4    False
+5    False
+6    False
+7     True
+Name: moons, dtype: bool
+```
+
+Bu, her satırın koşulu sağlama durumuna göre True veya False değeri içeren bool veri tipinde bir Series objesi döndürür. Bu Boolean maskedir. Bu maskeyi dataframe’e uygulamak için ifadeyi seçici parantez içine alın:
+
+```python
+print(df[df['moons'] < 20])
+```
+
+Çıktı:
+
+```
+   moons   planet  radius_km
+0      0  Mercury       2440
+1      0    Venus       6052
+2      1    Earth       6371
+3      2     Mars       3390
+7     14  Neptune      24622
+```
+
+Boolean maskeyi bir değişkene atayıp sonra dataframe’e uygulayabilirsiniz:
+
+```python
+mask = df['moons'] < 20
+
+df[mask]
+```
+
+Sonuç aynı şekilde olur.
+
+Unutmayın, bu işlem dataframe’i kalıcı olarak değiştirmez; sadece filtrelenmiş bir görünüm sağlar.
+
+```python
+df
+```
+
+Çıktı:
+
+```
+   moons   planet  radius_km
+0      0  Mercury       2440
+1      0    Venus       6052
+2      1    Earth       6371
+3      2     Mars       3390
+4     80  Jupiter      69911
+5     83   Saturn      58232
+6     27   Uranus      25362
+7     14  Neptune      24622
+```
+
+Sonucu başka bir değişkene de atayabilirsiniz:
+
+```python
+mask = df['moons'] < 20
+
+df2 = df[mask]
+
+df2
+```
+
+Çıktı:
+
+```
+   moons   planet  radius_km
+0      0  Mercury       2440
+1      0    Venus       6052
+2      1    Earth       6371
+3      2     Mars       3390
+7     14  Neptune      24622
+```
+
+Sadece planet sütununu Series olarak seçmek isterseniz loc\[] kullanabilirsiniz:
+
+```python
+mask = df['moons'] < 20
+df.loc[mask, 'planet']
+```
+
+Çıktı:
+
+```
+0    Mercury
+1      Venus
+2      Earth
+3       Mars
+7    Neptune
+Name: planet, dtype: object
+```
+
+### Karmaşık Mantıksal İfadeler
+
+Birden fazla koşul içeren ifadelerde, pandas hangi verilerin tutulacağını ve hangi verilerin filtreleneceğini belirtmek için mantıksal operatörler kullanır:
+
+| **Operatör** | **Anlamı**  |
+| ------------ | ----------- |
+| &            | ve (and)    |
+| \|           | veya (or)   |
+| \~           | değil (not) |
+
+**Önemli: Çoklu koşullu ifadelerde her koşul mutlaka parantez içine alınmalıdır.** Aksi halde hata alınabilir veya yanlış sonuç dönebilir.
+
+Örneğin, ay sayısı 10’dan az veya 50’den fazla olan gezegenleri seçen Boolean maskesi:
+
+```python
+mask = (df['moons'] < 10) | (df['moons'] > 50)
+mask
+```
+
+Çıktı:
+
+```
+0     True
+1     True
+2     True
+3     True
+4     True
+5     True
+6    False
+7    False
+Name: moons, dtype: bool
+```
+
+Her koşul parantez içinde ve aralarında | (veya) operatörü var. Maskeyi uygulamak için:
+
+```python
+mask = (df['moons'] < 10) | (df['moons'] > 50)
+
+df[mask]
+```
+
+Çıktı:
+
+```
+   moons   planet  radius_km
+0      0  Mercury       2440
+1      0    Venus       6052
+2      1    Earth       6371
+3      2     Mars       3390
+4     80  Jupiter      69911
+5     83   Saturn      58232
+```
+
+Başka bir örnek: Ay sayısı 20’den fazla olan, ay sayısı 80’e eşit olmayan ve yarıçapı 50,000 km’den küçük olmayan gezegenler:
+
+```python
+mask = (df['moons'] > 20) & ~(df['moons'] == 80) & ~(df['radius_km'] < 50000)
+df[mask]
+```
+
+Çıktı:
+
+```
+   moons  planet  radius_km
+5     83  Saturn      58232
+```
+
+Bu, aşağıdaki ile aynıdır:
+
+```python
+mask = (df['moons'] > 20) & (df['moons'] != 80) & (df['radius_km'] >= 50000)
+
+df[mask]
+```
+
+---
+
+Pandas dataframe’leri üzerinde çalışmak, özelliklerini ve metodlarını kullanmak ve Boolean maskeleriyle veri seçmek, veri profesyonellerinin günlük temel işleri arasındadır. Bu araçları yolculuğunuzda sıkça kullanacaksınız.
+
+## Özet
+
+* Boolean maskesi, dataframe’e filtre uygulama yöntemidir.
+* Maske, dataframe üzerine Boolean bir ızgara uygular ve True olanları seçer.
+* Pandas’ta mantıksal operatörler şunlardır: & (and), | (or), \~ (not).
+* Çoklu koşullu ifadelerde her koşul kendi parantezine alınmalıdır.
+* Pratikle, pandas’ta karmaşık seçim ifadeleri oluşturmak mümkündür ve etkilidir.
+
+## Daha fazla bilgi için kaynaklar
+
+* [pandas Boolean indeksleme dökümantasyonu](https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing)
+
+---
+
+Başka bir konuda da yardımcı olayım mı?
+
+#
+
+# 
+
+#
+
+# 
+
+#
+
 # 
 
 #
