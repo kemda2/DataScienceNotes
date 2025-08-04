@@ -6108,7 +6108,7 @@ x ekseni 2 farklı şekilde kullanılır;
 ## 7.2
 # 8
 
-https://www.youtube.com/watch?v=4GtrG20T838&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=100
-0000
+https://www.youtube.com/watch?v=4GtrG20T838&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=101
+2031
 
 
