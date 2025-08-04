@@ -6084,6 +6084,22 @@ Neden verileri görselleştirme yaparız;
 
 ## 7.1 Sütun Grafik
 
+Dikey duruyorsa sütun yatay duruyorsa çubuk grafiği denir. y ekseni değerleri gösterir. 
+
+x ekseni 2 farklı şekilde kullanılır;
+
+* Birbirinden farklı nicel yapılar (farklı markaların fiyat karşılaştırması) 
+
+* Aynı nicel yapıların süreç içerisindeki değişimi (Farklı markaların 2018, 2019 2020 yıllarındaki değerleri) 
+
+Çubuk yapısı artandan azalana giderse daha anlamlı olur. Yüzdelik olarak da çubuk grafiği kullanılabilir. Kadın ve Erkekler için eğitim durumlarının (ilkokul ortaokul lise üniversite) yüzdesi gibi.
+
+
+
+
+
+
+
 
 
 
