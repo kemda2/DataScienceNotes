@@ -5056,11 +5056,137 @@ df2 = pd.DataFrame(data)
 df2                     
 ```
 
+| index | planet  | radius\_km | moons |
+| ----- | ------- | ---------- | ----- |
+| 0     | Jupiter | 69911      | 80    |
+| 1     | Saturn  | 58232      | 83    |
+| 2     | Uranus  | 25362      | 27    |
+| 3     | Neptune | 24622      | 14    |
+
+```python   
+df3 = pd.concat([df1, df2], axis=0)
+df3
+```
+
+| index | planet  | radius_km | moons |
+|-------|---------|-----------|-------|
+| 0     | Mercury | 2440      | 0     |
+| 1     | Venus   | 6052      | 0     |
+| 2     | Earth   | 6371      | 1     |
+| 3     | Mars    | 3390      | 2     |
+| 0     | Jupiter | 69911     | 80    |
+| 1     | Saturn  | 58232     | 83    |
+| 2     | Uranus  | 25362     | 27    |
+| 3     | Neptune | 24622     | 14    |
+
+```python   
+df3 = df3.reset_index(drop=True)
+df3
+```
+
+| index | planet  | radius_km | moons |
+|-------|---------|-----------|-------|
+| 0     | Mercury | 2440      | 0     |
+| 1     | Venus   | 6052      | 0     |
+| 2     | Earth   | 6371      | 1     |
+| 3     | Mars    | 3390      | 2     |
+| 4     | Jupiter | 69911     | 80    |
+| 5     | Saturn  | 58232     | 83    |
+| 6     | Uranus  | 25362     | 27    |
+| 7     | Neptune | 24622     | 14    |
 
 ## merge()
 
+```python   
+df4
+```
 
-#
+| index | planet   | type        | rings | mean_temp_c | magnetic_field | life |
+|-------|----------|-------------|-------|-------------|----------------|------|
+| 0     | Earth    | terrestrial | no    | 15.0        | yes            | 1    |
+| 1     | Mars     | terrestrial | no    | -65.0       | no             | 0    |
+| 2     | Jupiter  | gas giant   | yes   | -110.0      | yes            | 0    |
+| 3     | Saturn   | gas giant   | yes   | -140.0      | yes            | 0    |
+| 4     | Uranus   | ice giant   | yes   | -195.0      | yes            | 0    |
+| 5     | Neptune  | ice giant   | yes   | -200.0      | yes            | 0    |
+| 6     | Janssen  | super earth | no    | NaN         | None           | 1    |
+| 7     | Tadmor   | gas giant   | None  | NaN         | None           | 1    |
+
+![image](./images/2011.png)
+
+![image](./images/2012.png)
+
+![image](./images/2013.png)
+
+![image](./images/2014.png)
+
+![image](./images/2015.png)
+
+```python   
+inner = pd.merge(df3, df4, on='planet', how='inner')
+inner
+```
+
+| index | planet   | radius_km | moons | type        | rings | mean_temp_c | magnetic_field | life |
+|-------|----------|-----------|-------|-------------|-------|--------------|----------------|------|
+| 0     | Earth    | 6371      | 1     | terrestrial | no    | 15.0         | yes            | 1    |
+| 1     | Mars     | 3390      | 2     | terrestrial | no    | -65.0        | no             | 0    |
+| 2     | Jupiter  | 69911     | 80    | gas giant   | yes   | -110.0       | yes            | 0    |
+| 3     | Saturn   | 58232     | 83    | gas giant   | yes   | -140.0       | yes            | 0    |
+| 4     | Uranus   | 25362     | 27    | ice giant   | yes   | -195.0       | yes            | 0    |
+| 5     | Neptune  | 24622     | 14    | ice giant   | yes   | -200.0       | yes            | 0    |
+
+```python   
+outer = pd.merge(df3, df4, on='planet', how='outer')
+outer
+```
+
+| index | planet   | radius_km | moons | type        | rings | mean_temp_c | magnetic_field | life |
+|-------|----------|-----------|-------|-------------|-------|-------------|----------------|------|
+| 0     | Mercury  | 2440.0    | 0.0   | NaN         | NaN   | NaN         | NaN            | NaN  |
+| 1     | Venus    | 6052.0    | 0.0   | NaN         | NaN   | NaN         | NaN            | NaN  |
+| 2     | Earth    | 6371.0    | 1.0   | terrestrial | no    | 15.0        | yes            | 1.0  |
+| 3     | Mars     | 3390.0    | 2.0   | terrestrial | no    | -65.0       | no             | 0.0  |
+| 4     | Jupiter  | 69911.0   | 80.0  | gas giant   | yes   | -110.0      | yes            | 0.0  |
+| 5     | Saturn   | 58232.0   | 83.0  | gas giant   | yes   | -140.0      | yes            | 0.0  |
+| 6     | Uranus   | 25362.0   | 27.0  | ice giant   | yes   | -195.0      | yes            | 0.0  |
+| 7     | Neptune  | 24622.0   | 14.0  | ice giant   | yes   | -200.0      | yes            | 0.0  |
+| 8     | Janssen  | NaN       | NaN   | super earth | no    | NaN         | None           | 1.0  |
+| 9     | Tadmor   | NaN       | NaN   | gas giant   | None  | NaN         | None           | 1.0  |
+
+```python   
+left = pd.merge(df3, df4, on='planet', how='left')
+left
+```
+
+| index | planet  | radius_km | moons | type        | rings | mean_temp_c | magnetic_field | life |
+|-------|---------|-----------|-------|-------------|-------|-------------|----------------|------|
+| 0     | Mercury | 2440      | 0     | NaN         | NaN   | NaN         | NaN            | NaN  |
+| 1     | Venus   | 6052      | 0     | NaN         | NaN   | NaN         | NaN            | NaN  |
+| 2     | Earth   | 6371      | 1     | terrestrial | no    | 15.0        | yes            | 1    |
+| 3     | Mars    | 3390      | 2     | terrestrial | no    | -65.0       | no             | 0    |
+| 4     | Jupiter | 69911     | 80    | gas giant   | yes   | -110.0      | yes            | 0    |
+| 5     | Saturn  | 58232     | 83    | gas giant   | yes   | -140.0      | yes            | 0    |
+| 6     | Uranus  | 25362     | 27    | ice giant   | yes   | -195.0      | yes            | 0    |
+| 7     | Neptune | 24622     | 14    | ice giant   | yes   | -200.0      | yes            | 0    |
+
+```python   
+right = pd.merge(df3, df4, on='planet', how='right')
+right
+```
+
+| index | planet  | radius_km | moons | type        | rings | mean_temp_c | magnetic_field | life |
+|-------|---------|-----------|-------|-------------|-------|-------------|----------------|------|
+| 0     | Earth   | 6371.0    | 1.0   | terrestrial | no    | 15.0        | yes            | 1    |
+| 1     | Mars    | 3390.0    | 2.0   | terrestrial | no    | -65.0       | no             | 0    |
+| 2     | Jupiter | 69911.0   | 80.0  | gas giant   | yes   | -110.0      | yes            | 0    |
+| 3     | Saturn  | 58232.0   | 83.0  | gas giant   | yes   | -140.0      | yes            | 0    |
+| 4     | Uranus  | 25362.0   | 27.0  | ice giant   | yes   | -195.0      | yes            | 0    |
+| 5     | Neptune | 24622.0   | 14.0  | ice giant   | yes   | -200.0      | yes            | 0    |
+| 6     | Janssen | NaN       | NaN   | super earth | no    | NaN         | None           | 1    |
+| 7     | Tadmor  | NaN       | NaN   | gas giant   | None  | NaN         | None           | 1    |
+
+# 3. Sayılardan Öteye Geçin: Verileri İçgörülere Dönüştürün
 
 # 
 
