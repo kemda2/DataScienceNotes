@@ -5196,4 +5196,4 @@ right
 
 #
 
-https://www.coursera.org/learn/get-started-with-python/lecture/zC7LT/introduction-to-pandas
+https://www.coursera.org/learn/go-beyond-the-numbers-translate-data-into-insight/supplement/b7ThI/case-study-deloitte
