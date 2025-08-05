@@ -4661,11 +4661,243 @@ Pandas dataframe’leri üzerinde çalışmak, özelliklerini ve metodlarını k
 
 * [pandas Boolean indeksleme dökümantasyonu](https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing)
 
----
 
-Başka bir konuda da yardımcı olayım mı?
 
-#
+# Gruplama ve Toplulaştırma Hakkında Daha Fazlası
+
+Pandas’ın, tablo biçimindeki verileri incelemeyi ve düzenlemeyi kolaylaştıran bir Python kütüphanesi olduğunu keşfettiniz. Ayrıca `groupby()` ve `agg()` fonksiyonları, veri profesyonellerinin verileri gruplamak, toplulaştırmak, özetlemek ve daha iyi anlamak için kullandıkları temel DataFrame yöntemlerindendir. Bu okumada, bu fonksiyonların nasıl çalıştığını, ne zaman ve nasıl uygulanacağını inceleyeceksiniz.
+
+## groupby()
+
+[`groupby()` (yeni sekmede açılır)](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html) fonksiyonu, DataFrame sınıfına ait bir metottur. Belirli kriterlere göre veriyi gruplara ayırır, her gruba bağımsız olarak bir fonksiyon uygular ve ardından sonuçları bir veri yapısında birleştirir. Bir DataFrame’e uygulandığında, bu fonksiyon bir groupby nesnesi döndürür. Bu groupby nesnesi, aşağıdakiler dahil olmak üzere çeşitli veri işleme işlemleri için temel oluşturur:
+
+-   **Toplulaştırma (Aggregation):** Her grup için özet istatistiklerin hesaplanması
+    
+-   **Dönüştürme (Transformation):** Her gruba fonksiyonlar uygulanması ve verilerin değiştirilerek geri döndürülmesi
+    
+-   **Filtreleme (Filtration):** Belirli koşullara göre bazı grupların seçilmesi
+    
+-   **Yineleme (Iteration):** Gruplar veya değerler üzerinde yineleme yapılması
+    
+
+İşte, farklı giysi türlerinden oluşan bir DataFrame üzerinde `groupby()` fonksiyonunun kullanımına dair bazı örnekler:
+
+```python   
+clothes = pd.DataFrame({'type': ['pants', 'shirt', 'shirt', 'pants', 'shirt', 'pants'],
+                       'color': ['red', 'blue', 'green', 'blue', 'green', 'red'],
+                       'price_usd': [20, 35, 50, 40, 100, 75],
+                       'mass_g': [125, 440, 680, 200, 395, 485]})
+
+clothes
+```
+
+|   | color | mass_g | price_usd | type  |
+|---|-------|--------|-----------|-------|
+| 0 | red   | 125    | 20        | pants |
+| 1 | blue  | 440    | 35        | shirt |
+| 2 | green | 680    | 50        | shirt |
+| 3 | blue  | 200    | 40        | pants |
+| 4 | green | 395    | 100       | shirt |
+| 5 | red   | 485    | 75        | pants |
+
+Tabloyu `type` sütununa göre gruplamak, bir `DataFrame` `GroupBy` nesnesi ile sonuçlanır:
+
+```python   
+grouped = clothes.groupby('type')
+print(grouped) # <pandas.core.groupby.DataFrameGroupBy object at 0x7f1601f38198>
+print(type(grouped)) # <class 'pandas.core.groupby.DataFrameGroupBy'>
+```
+
+Ancak, groupby nesnesine bir toplama (aggregation) fonksiyonu uygulanabilir:
+
+```python   
+grouped = clothes.groupby('type')
+grouped.mean()
+```
+
+| type  | mass_g | price_usd   |
+|-------|--------|-------------|
+| pants | 270.0  | 45.000000   |
+| shirt | 505.0  | 61.666667   |
+
+Önceki örnekte, `groupby()` tüm öğeleri türlerine göre grupladı ve DataFrame’deki her sayısal sütun için her grubun ortalamasını içeren bir DataFrame nesnesi döndürdü. Not: Pandas’ın gelecekteki sürümlerinde, `mean` gibi bazı toplama (aggregation) fonksiyonları bir `groupby` nesnesine uygulanırken `numeric_only` parametresinin belirtilmesi gerekecektir. `numeric_only`, her sütunun veri tipini ifade eder. Pandas’ın eski sürümlerinde (bu platformdaki sürüm gibi) `numeric_only=True` belirtmek zorunlu değildir, ancak gelecekteki sürümlerde bu yapılmalıdır. Aksi takdirde, hangi sütunların alınacağı açıkça belirtilmelidir.
+
+Ayrıca, gruplar birden fazla sütuna göre de oluşturulabilir:
+
+```python   
+clothes.groupby(['type', 'color']).min()
+```
+
+| type  | color | mass_g | price_usd |
+|-------|-------|--------|-----------|
+| pants | blue  | 200    | 40        |
+|       | red   | 125    | 20        |
+| shirt | blue  | 440    | 35        |
+|       | green | 395    | 50        |
+
+Önceki örnekte, `groupby()` doğrudan clothes DataFrame’ine uygulandı. Veriler önce type’a, sonra color’a göre gruplandı. Bu, type ve color için mevcut olan farklı değer kombinasyonlarının sayısı kadar, yani dört grup oluşmasına neden oldu. Ardından, her grubu en küçük değerine göre filtrelemek için `min()` fonksiyonu uygulandı.
+
+Her gruptaki gözlem sayısını basitçe döndürmek için `size()` metodunu kullanabilirsiniz. Bu, ilgili bilgileri içeren bir Series nesnesi ile sonuçlanır:
+
+```python   
+clothes.groupby(['type', 'color']).size()
+```
+
+| type  | color |   |
+|-------|-------|---|
+| pants | blue  | 1 |
+|       | red   | 2 |
+| shirt | blue  | 1 |
+|       | green | 2 |
+dtype: int64
+
+### Dahili Toplama Fonksiyonları
+
+Önceki örneklerde, `groupby` nesnelerine uygulanan `mean()`, `min()` ve `size()` toplama fonksiyonları gösterildi. Kullanılabilen birçok dahili toplama fonksiyonu vardır. En yaygın kullanılanlardan bazıları şunlardır:
+
+-   **count():** Her gruptaki boş olmayan (null olmayan) değerlerin sayısı
+    
+-   **sum():** Her gruptaki değerlerin toplamı
+    
+-   **mean():** Her gruptaki değerlerin ortalaması
+    
+-   **median():** Her gruptaki değerlerin medyanı
+    
+-   **min():** Her gruptaki en küçük değer
+    
+-   **max():** Her gruptaki en büyük değer
+    
+-   **std():** Her gruptaki değerlerin standart sapması
+    
+-   **var():** Her gruptaki değerlerin varyansı
+    
+
+## agg()
+
+[`agg()` (yeni sekmede açılır)](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.agg.html) fonksiyonu, aynı anda bir DataFrame’e birden fazla fonksiyon uygulamak istediğinizde faydalıdır. `agg()` DataFrame sınıfına ait bir metottur ve “aggregate” (toplama) anlamına gelir. En önemli parametreleri şunlardır:
+
+-   **func:** Uygulanacak fonksiyon
+    
+-   **axis:** Fonksiyonun uygulanacağı eksen (varsayılan = 0)
+    
+
+Aşağıda, `agg()` fonksiyonunun nasıl kullanılabileceğine dair bazı örnekler bulunmaktadır. Bu örneklerde `agg()` fonksiyonunun tek başına (groupby() olmadan) nasıl kullanılabileceği gösterilmektedir. Ayrıca, platform kısıtlamaları nedeniyle bazı kod blokları çalıştırılamamaktadır; bu durumlarda çıktı görsel olarak verilmiştir. Hatırlatma olarak, orijinal clothes DataFrame’i tekrar aşağıda verilmiştir:
+
+```python   
+clothes
+```
+
+|   | color | mass_g | price_usd | type  |
+|---|-------|--------|-----------|-------|
+| 0 | red   | 125    | 20        | pants |
+| 1 | blue  | 440    | 35        | shirt |
+| 2 | green | 680    | 50        | shirt |
+| 3 | blue  | 200    | 40        | pants |
+| 4 | green | 395    | 100       | shirt |
+| 5 | red   | 485    | 75        | pants |
+
+The following example applies the sum() and mean() functions to the price and mass\_g columns of the clothes dataframe.
+
+```python   
+clothes[['price_usd', 'mass_g']].agg(['sum', 'mean'])
+```
+
+|        | price_usd | mass_g |
+|--------|-----------|--------|
+| sum    | 320.000000| 2325.0 |
+| mean   | 53.333333 | 387.5  |
+
+Şu noktalara dikkat edin:
+
+-   `agg()` metodunu uygulamadan önce, ilgili iki sütun DataFrame'den ayrılarak alt küme (subset) alınır. Eğer önce sütunları ayırmazsanız, `agg()` tüm sütunlara `sum()` ve `mean()` fonksiyonlarını uygulamaya çalışır. Bu da işe yaramaz çünkü bazı sütunlar string (metin) içerir. (Teknik olarak `sum()` stringlerde çalışır ama tüm metinleri birleştirerek uzun ve işe yaramaz bir string döndürür.)
+    
+-   `sum()` ve `mean()` fonksiyonları bir liste içinde, parantezsiz olarak ve string şeklinde yazılır. Bu yöntem tüm yerleşik (built-in) toplama fonksiyonları için geçerlidir.
+
+```python   
+clothes.agg({'price_usd': 'sum',
+            'mass_g': ['mean', 'median']
+            })
+```
+
+|         | price_usd | mass_g |
+|---------|-----------|--------|
+| sum     | 320.0     | NaN    |
+| mean    | NaN       | 387.5  |
+| median  | NaN       | 417.5  |
+
+Şu noktalara dikkat edin:
+
+-   `agg()` fonksiyonu uygulanmadan önce sütunlar DataFrame’den alt küme olarak ayrılmamıştır. Bu gereksizdir çünkü hangi sütunlara işlem uygulanacağı zaten `agg()` fonksiyonu içinde belirtilmiştir.
+    
+-   `agg()` fonksiyonuna verilen argüman, anahtarları sütun adları ve değerleri o sütunlara uygulanacak fonksiyonlar olan bir sözlüktür (dictionary). Bir sütuna birden fazla fonksiyon uygulanacaksa, bu fonksiyonlar bir liste içinde yazılır. Yine, her yerleşik (built-in) fonksiyon, parantezsiz şekilde string olarak yazılır.
+    
+-   Sonuçta oluşan DataFrame, belirtilmeyen fonksiyonların yerine **NaN** değerlerini içerir.
+
+```python   
+clothes[['price_usd', 'mass_g']].agg(['sum', 'mean'], axis=1)
+```
+
+|   | sum   | mean  |
+|---|-------|-------|
+| 0 | 145.0 | 72.5  |
+| 1 | 475.0 | 237.5 |
+| 2 | 730.0 | 365.0 |
+| 3 | 240.0 | 120.0 |
+| 4 | 495.0 | 247.5 |
+| 5 | 560.0 | 280.0 |
+
+## groupby() **ile birlikte** agg()
+
+`groupby()` ve `agg()` fonksiyonları genellikle birlikte kullanılır. Bu tür durumlarda, önce `groupby()` fonksiyonu bir DataFrame’e uygulanır, ardından `agg()` fonksiyonu `groupby` sonucuna uygulanır. Referans olması açısından, aşağıda clothes (giysiler) DataFrame’i tekrar verilmiştir.
+
+```python   
+clothes
+```
+
+|   | color | mass_g | price_usd | type  |
+|---|-------|--------|-----------|-------|
+| 0 | red   | 125    | 20        | pants |
+| 1 | blue  | 440    | 35        | shirt |
+| 2 | green | 680    | 50        | shirt |
+| 3 | blue  | 200    | 40        | pants |
+| 4 | green | 395    | 100       | shirt |
+| 5 | red   | 485    | 75        | pants |
+
+Aşağıdaki örnekte, **clothes** tablosundaki öğeler **renklerine (color)** göre gruplandırılmıştır. Ardından, her bir gruba **price\_usd** ve **mass\_g** sütunlarında **mean()** ve **max()** fonksiyonları uygulanmıştır.
+
+```python   
+clothes.groupby('color').agg({'price_usd': ['mean', 'max'],
+                             'mass_g': ['mean', 'max']})
+```
+
+| color | price_usd mean | price_usd max | mass_g mean | mass_g max |
+|-------|----------------|----------------|-------------|-------------|
+| blue  | 37.5           | 40             | 320.0       | 440         |
+| green | 75.0           | 100            | 537.5       | 680         |
+| red   | 47.5           | 75             | 305.0       | 485         |
+
+## **Çok Katmanlı İndeks (MultiIndex)**
+
+Fonksiyonlar bir `groupby` nesnesine uygulandığında, ortaya çıkan DataFrame’in katmanlı (hiyerarşik) indekslere sahip olduğunu fark etmiş olabilirsiniz. İşte bu, **MultiIndex** (Çok Katmanlı İndeks) örneğidir. MultiIndex, DataFrame indekslemesi için kullanılan hiyerarşik bir sistemdir. Bu sistem, verileri daha düşük boyutlu yapılar —örneğin Series ve DataFrame’ler— içinde, herhangi sayıda boyutla saklamanıza ve üzerinde işlem yapmanıza olanak tanır. Bu sayede karmaşık veri manipülasyonları daha kolay hale gelir.
+
+Bu eğitimde hiyerarşik indeksleme hakkında derin bilgiye sahip olmanız gerekmiyor, ancak aşina olmanız faydalı olacaktır. Şu örneği inceleyelim:
+
+```python   
+grouped = clothes.groupby(['color', 'type']).agg(['mean', 'min'])
+grouped
+```
+
+| color | type  | mass_g mean | mass_g min | price_usd mean | price_usd min |
+|-------|-------|-------------|------------|----------------|---------------|
+| blue  | pants | 200.0       | 200        | 40.0           | 40            |
+|       | shirt | 440.0       | 440        | 35.0           | 35            |
+| green | shirt | 537.5       | 395        | 75.0           | 50            |
+| red   | pants | 305.0       | 125        | 47.5           | 20            |
+
+
+
+
+
 
 # 
 
