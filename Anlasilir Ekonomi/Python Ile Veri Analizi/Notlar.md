@@ -6132,7 +6132,14 @@ plt.show()
 
 ![image](./images/sutun4.png)
 
+```Python
+fiyat = [100, 200, 250, 150]
+marka = ["A", "B", "C", "D"]
 
+fig, ax = plt.subplots(2, 2)
+ax[1, 0].plot(marka, fiyat)
+plt.show()
+```
 
 
 
