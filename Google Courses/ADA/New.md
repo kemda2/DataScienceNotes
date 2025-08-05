@@ -4894,6 +4894,10 @@ grouped
 | green | shirt | 537.5       | 395        | 75.0           | 50            |
 | red   | pants | 305.0       | 125        | 47.5           | 20            |
 
+Dikkat edin, çıktıdaki **color** ve **type** sütun adlarının altında yer almaktadır. Bu, **color** ve **type**’ın artık sütun değil, isimlendirilmiş satır indeksleri (row indices) olduğunu gösterir. Benzer şekilde, çıktıdaki sütun adlarında **price\_usd** ve **mass\_g**, **mean** ve **min**’in üzerinde konumlanmıştır; bu da hiyerarşik bir sütun indeksini ifade eder.
+
+Satır indeksini incelediğinizde, satır indeksleri hakkında bilgi içeren bir **MultiIndex** nesnesi elde edersiniz:
+
 
 
 
