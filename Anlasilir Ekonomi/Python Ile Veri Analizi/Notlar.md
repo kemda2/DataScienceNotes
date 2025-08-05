@@ -6094,9 +6094,43 @@ x ekseni 2 farklı şekilde kullanılır;
 
 Çubuk yapısı artandan azalana giderse daha anlamlı olur. Yüzdelik olarak da çubuk grafiği kullanılabilir. Kadın ve Erkekler için eğitim durumlarının (ilkokul ortaokul lise üniversite) yüzdesi gibi.
 
+> Eksen ölçeği önemli. Çoğunlukla 0 dan başlamazsa aradaki fark büyük gözükür. 
 
+> çok değişken varsa çubuk grafiği çok karmaşık olmaya başlar.
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+fiyat = [100, 200, 250, 150]
+marka = ["A", "B", "C", "D"]
+
+sns.barplot(x=marka, y=fiyat)
+plt.show()
+```
+
+![image](./images/sutun1.png)
+
+```Python
+fig = plt.figure()
+plt.show()
+```
+
+![image](./images/sutun2.png)
+
+```Python
+fig, ax = plt.subplots()
+plt.show()
+```
+
+![image](./images/sutun3.png)
+
+```Python
+fig, ax = plt.subplots(2, 2)
+plt.show()
+```
+
+![image](./images/sutun4.png)
 
 
 
@@ -6108,7 +6142,7 @@ x ekseni 2 farklı şekilde kullanılır;
 ## 7.2
 # 8
 
-https://www.youtube.com/watch?v=4GtrG20T838&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=101
-2031
+https://www.youtube.com/watch?v=U_LYhYFCZ0g&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=101
+0000
 
 
