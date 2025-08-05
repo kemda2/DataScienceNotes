@@ -4898,6 +4898,33 @@ Dikkat edin, çıktıdaki **color** ve **type** sütun adlarının altında yer 
 
 Satır indeksini incelediğinizde, satır indeksleri hakkında bilgi içeren bir **MultiIndex** nesnesi elde edersiniz:
 
+```python   
+grouped.index
+
+# MultiIndex(levels=[['blue', 'green', 'red'], ['pants', 'shirt']], labels=[[0, 0, 1, 2], [0, 1, 1, 0]], names=['color', 'type'])
+```
+
+Sütun indeksi, sütun indeksleri hakkında bilgi içeren bir **MultiIndex** nesnesini gösterir:
+
+```python   
+grouped.columns
+
+# MultiIndex(levels=[['mass_g', 'price_usd'], ['mean', 'min']], labels=[[0, 0, 1, 1], [0, 1, 0, 1]])
+```
+
+Bir DataFrame üzerinde, çok katmanlı indeks (MultiIndex) kullanıldığında seçim yapmak için **loc\[\]** seçimini kullanın ve indeksleri parantez içinde belirtin. İşte, iki seviyeli satır indeksi ve iki seviyeli sütun indeksi olan **grouped** adlı DataFrame üzerinde bazı örnekler. Referans olması açısından, aşağıda **grouped** DataFrame verilmiştir:
+
+```python   
+grouped
+```
+
+| color | type  | mass_g mean | mass_g min | price_usd mean | price_usd min |
+|-------|-------|-------------|------------|----------------|---------------|
+| blue  | pants | 200.0       | 200        | 40.0           | 40            |
+|       | shirt | 440.0       | 440        | 35.0           | 35            |
+| green | shirt | 537.5       | 395        | 75.0           | 50            |
+| red   | pants | 305.0       | 125        | 47.5           | 20            |
+
 
 
 
