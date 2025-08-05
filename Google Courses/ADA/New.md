@@ -4951,6 +4951,33 @@ grouped.loc[:, ('price_usd', 'min')]
 | green | shirt | 50  |
 | red   | pants | 20  |
 
+Birinci seviye (en soldaki) satırı seçmek için:
+
+```python   
+grouped.loc['blue', :]
+```
+
+| type  | mass_g mean | mass_g min | price_usd mean | price_usd min |
+|-------|-------------|------------|----------------|---------------|
+| pants | 200.0       | 200        | 40.0           | 40            |
+| shirt | 440.0       | 440        | 35.0           | 35            |
+
+En alt seviye (en sağdaki) satırı seçmek için:
+
+```python   
+grouped.loc[('green', 'shirt'), :]
+```
+
+||            |        |
+|------------|------------|--------|
+|mass_g |     |        |
+|| mean       | 537.5  |
+|| min        | 395.0  |
+|price_usd |   |        |
+|| mean       | 75.0   |
+|| min        | 50.0   |
+
+**Name:** (green, shirt), **dtype:** float64
 
 
 
@@ -4960,6 +4987,12 @@ grouped.loc[:, ('price_usd', 'min')]
 
 
 
+
+
+
+
+```python   
+```
 
 # 
 
