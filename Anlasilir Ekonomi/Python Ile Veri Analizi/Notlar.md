@@ -6141,6 +6141,12 @@ ax[1, 0].plot(marka, fiyat)
 plt.show()
 ```
 
+![image](./images/sutun5.png)
+
+
+
+
+
 
 
 
@@ -6150,6 +6156,6 @@ plt.show()
 # 8
 
 https://www.youtube.com/watch?v=U_LYhYFCZ0g&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=101
-0000
+1031
 
 
