@@ -4989,9 +4989,24 @@ grouped.loc[('blue', 'shirt'), ('mass_g', 'mean')]
 
 Eğer bir groupby sonucundan satırdaki MultiIndex’i kaldırmak istiyorsanız, groupby() ifadenize bir parametre olarak **as\_index=False** ekleyin:
 
+```python   
+clothes.groupby(['color', 'type'], as_index=False).mean()
+```
 
+| color | type   | mass_g | price_usd |
+|-------|--------|--------|-----------|
+| blue  | pants  | 200.0  | 40.0      |
+|       | shirt  | 440.0  | 35.0      |
+| green | shirt  | 537.5  | 75.0      |
+| red   | pants  | 305.0  | 47.5      |
 
+Renk (color) ve türün (type) artık satır indeksleri değil, isimlendirilmiş sütunlar olduğunu fark edin. Satır indeksleri ise sıfırdan başlayan standart sıralamadır.
 
+Yine, bu derste hiyerarşik indeksli verilerle karmaşık işlemler yapmanız beklenmiyor, ancak MultiIndex’in nasıl çalıştığını temel düzeyde anlamak faydalıdır. Özellikle groupby() işlemleri genellikle varsayılan olarak MultiIndex veri çerçevesi (dataframe) ile sonuçlandığı için bu önemlidir.
+
+## Temel çıkarımlar
+
+groupby() fonksiyonu, veri profesyonelleri olarak çalışmalarınızda çok önemli olacak; çünkü verilerin etkin şekilde birleştirilmesi ve analiz edilmesini sağlar. Benzer şekilde, agg() fonksiyonu belirli bir eksen boyunca veri çerçevesine dinamik olarak birden fazla fonksiyon uygulamanıza yardımcı olur. Tek başlarına ya da birlikte kullanıldıklarında, bu araçlar veri profesyonellerine verilere derinlemesine erişim sağlar ve başarılı projelerin ortaya çıkmasına yardımcı olur.
 
 
 
@@ -5005,7 +5020,45 @@ Eğer bir groupby sonucundan satırdaki MultiIndex’i kaldırmak istiyorsanız,
 ```python   
 ```
 
-# 
+# Veri Birleştirme ve Birleştirme İşlemleri
+
+## concat()
+
+```python   
+import numpy as np
+import pandas as pd
+
+data = {
+    'planet': ['Mercury', 'Venus', 'Earth', 'Mars'], 
+    'radius_km': [2440, 6052, 6371, 3390],           
+    'moons': [0, 0, 1, 2]                            
+}
+
+df1 = pd.DataFrame(data) 
+df1                      
+```
+
+| index | planet  | radius\_km | moons |
+| ----- | ------- | ---------- | ----- |
+| 0     | Mercury | 2440       | 0     |
+| 1     | Venus   | 6052       | 0     |
+| 2     | Earth   | 6371       | 1     |
+| 3     | Mars    | 3390       | 2     |
+
+```python   
+data = {
+    'planet': ['Jupiter', 'Saturn', 'Uranus', 'Neptune'],   
+    'radius_km': [69911, 58232, 25362, 24622],             
+    'moons': [80, 83, 27, 14]                              
+}
+
+df2 = pd.DataFrame(data)
+df2                     
+```
+
+
+## merge()
+
 
 #
 
