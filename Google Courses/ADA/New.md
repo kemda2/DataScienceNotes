@@ -4925,6 +4925,37 @@ grouped
 | green | shirt | 537.5       | 395        | 75.0           | 50            |
 | red   | pants | 305.0       | 125        | 47.5           | 20            |
 
+Birinci seviye (en üst) sütunu seçmek için:
+
+```python   
+grouped.loc[:, 'price_usd']
+```
+
+| color | type  | mean | min |
+|-------|-------|------|-----|
+| blue  | pants | 40.0 | 40  |
+|       | shirt | 35.0 | 35  |
+| green | shirt | 75.0 | 50  |
+| red   | pants | 47.5 | 20  |
+
+İkinci seviye (alt) sütunu seçmek için:
+
+```python   
+grouped.loc[:, ('price_usd', 'min')]
+```
+
+| color | type  | min |
+|-------|-------|-----|
+| blue  | pants | 40  |
+|       | shirt | 35  |
+| green | shirt | 50  |
+| red   | pants | 20  |
+
+
+
+
+
+
 
 
 
