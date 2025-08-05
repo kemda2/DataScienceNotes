@@ -4979,6 +4979,17 @@ grouped.loc[('green', 'shirt'), :]
 
 **Name:** (green, shirt), **dtype:** float64
 
+Ve hatta bireysel değerleri bile seçebilirsiniz:
+
+```python   
+grouped.loc[('blue', 'shirt'), ('mass_g', 'mean')]
+
+# 440.0
+```
+
+Eğer bir groupby sonucundan satırdaki MultiIndex’i kaldırmak istiyorsanız, groupby() ifadenize bir parametre olarak **as\_index=False** ekleyin:
+
+
 
 
 
