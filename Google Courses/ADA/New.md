@@ -5188,7 +5188,66 @@ right
 
 # 3. Sayılardan Öteye Geçin: Verileri İçgörülere Dönüştürün
 
-# 
+# Başvuru Kılavuzu: EDA Süreci
+
+## EDA’nın Altı Uygulaması Yinelemeli ve Sıralı Olmayan Bir Yapıdadır
+
+Keşifsel Veri Analizi (EDA), bir pasta tarifi gibi değildir. Yani _**adım adım**_ izlenecek bir süreç **değildir**. Bunun yerine, EDA’nın altı uygulaması yinelemeli (tekrarlayan) ve sıralı olmayan bir yapıdadır.
+
+-   **Yinelemeli (Iterative)**: Bir sürecin tekrar edilmesini içeren veya buna ilişkin olan.
+    
+-   **Sıralı Olmayan (Non-sequential)**: Belirli bir sıra veya düzende olmayan.
+
+Veri setlerinin farklı doğaları nedeniyle, bu verileri keşfetme yaklaşımı da her seferinde farklı olacaktır. Bu da demektir ki, EDA süreci boyunca hangi altı uygulamayı kullanacağınızı, bunları kaç kez tekrarlayacağınızı ve ne zaman uygulayacağınızı belirlemek için mantığınızı ve deneyiminizi kullanmanız gerekir.
+
+* * *
+
+## **Görsel Örnek**
+
+Norveç'teki bir iğne yapraklı ormanda bulunan ağaçlarla ilgili, yalnızca 200 satır ve 5 sütundan oluşan bir veri seti aldığınızı hayal edin. Tam bir analiz yapabilmek için 1000’den fazla satıra ve en az iki sütuna daha ihtiyacınız olduğunu biliyorsunuz. Daha fazla ayrıntı olmadan bile, tüm EDA süreciniz şu şekilde görünebilir:
+
+1.  **Keşfetme (Discovering)**: Veri setinin genel yapısını, boyutunu ve içeriğini incelersiniz. Verinin yetersiz olduğunu fark edersiniz.
+    
+2.  **Birleştirme (Joining)**: Daha fazla veri eklersiniz.
+    
+3.  **Doğrulama (Validating)**: Yeni eklenen veride hata veya yazım hatası olmadığını hızlıca kontrol edersiniz.
+    
+4.  **Yapılandırma (Structuring)**: Eğilimleri anlamak için veriyi zaman dilimlerine ve segmentlere ayırarak yapılandırırsınız.
+    
+5.  **Doğrulama (Validating)**: Yapılandırma sırasında oluşturduğunuz yeni sütunların doğru tasarlandığını kontrol edersiniz.
+    
+6.  **Temizleme (Cleaning)**: Aykırı değerler, eksik veriler ve dönüştürme ihtiyaçlarını kontrol edersiniz.
+    
+7.  **Doğrulama (Validating)**: Temizlik sonrası yaptığınız değişikliklerin doğru ve tutarlı olup olmadığını yeniden kontrol edersiniz.
+    
+8.  **Sunum (Presenting)**: Veri setinizi bir meslektaşınızla paylaşırsınız.
+
+Burada “doğrulama” adımının birden fazla kez tekrarlanarak, yapılan değişikliklerin veri üzerinde hata yaratmadığından emin olunduğunu görebilirsiniz. Ayrıca, veri ihtiyacını erken fark ettiğiniz için “birleştirme” adımı “keşfetme”den hemen sonra gelmiştir.
+
+Temizlenmiş veri setinizi bir meslektaşınıza sunduğunuzda, muhtemelen daha fazla keşif ve/veya temizlik yapılması gerektiğine dair öneriler alırsınız. Bu nedenle, sürecin daha fazla yinelemesi söz konusu olabilir.
+
+🔎 **Uzman İpucu**: Veri bilimciler, bir veri setini “temiz” ve modelleme veya makine öğrenmesi algoritmalarına hazır ilan etmeden önce, genellikle EDA uygulamalarını birçok kez tekrar ederler.
+
+* * *
+
+## Etik Makine Öğreniminde EDA’nın Önemi
+
+Algoritmalar ve makine öğrenmesi sistemleri bireyler, şirketler ve hatta hükümetler adına kararlar almaya başladıkça, etik ve düzenleme konuları da giderek daha fazla önem kazanmaktadır. [Etik Yapay Zeka ve Makine Öğrenmesi Enstitüsü’ne](https://ethical.institute/principles.html) göre, makine öğrenmesi sistemlerinin sorumlu bir şekilde geliştirilmesi için sekiz ilke vardır.
+
+### EDA Sürecinin Temel İlkeleri
+
+Aşağıdaki iki ilke, doğrudan EDA sürecinin bir parçasıdır:
+
+-   **İnsani Destek (Human Augmentation)**: Bu ilke, AI ya da makine öğrenmesi sistemlerinde insan gözetiminin her aşamada yer almasını sağlar. Veri bilimciler tarafından yürütülen kapsamlı EDA, algoritmalara önyargı, dengesizlik ve hataların aktarılmasını önlemenin en iyi yollarından biridir.
+    
+-   **Önyargı Değerlendirmesi (Bias Evaluation)**: İnsan müdahalesi olmadan, makine öğrenimi modellerine önyargı çok kolay bir şekilde girip çoğalabilir. Sistemli bir EDA süreci yürütmek, veri bilimcilerin bu önyargıları fark etmesine ve düzeltici adımlar atmasına yardımcı olur.
+    
+
+🎯 **Uzman İpucu**: Veri bilimi kariyerinde, etik standartlara uyumun sağlanmasının önemi göz ardı edilemez. Veri profesyonellerinin, EDA süreçlerinde etik bir bakış açısıyla çalışarak önyargı ve ayrımcılığı fark etme kapasitelerini sürekli geliştirmeleri gerekir.
+
+* * *
+
+Makine öğreniminin ötesinde, EDA neredeyse tüm önemli veri temelli kararlar için geçerlidir. Bu eğitimle birlikte, EDA’nın çeşitli uygulamalarını ve neden yinelemeli ve sıralı olmayan bir yaklaşıma ihtiyaç duyduğunuzu daha iyi anlayacaksınız.
 
 #
 
