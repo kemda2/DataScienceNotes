@@ -6233,7 +6233,7 @@ plt.title("Örnek Başlık", color="darkblue", fontsize=20, fontweight="bold", f
 plt.show()
 ```
 
-![](sutun15.png)
+![image](./images/sutun15.png)
 
 
 
