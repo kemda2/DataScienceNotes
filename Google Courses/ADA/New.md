@@ -8954,7 +8954,9 @@ Aşağıdaki şekil, bu kavramların regresyon çizgisini belirlemek için nası
 
 Başka bir deyişle, regresyon çizgisinin eğimi:
 
-m=r(S ⁣D y)S ⁣D xm=SD xr(SD y)​
+$$
+m=r(SDy) / 1(S⁣Dx)
+$$
 
 _Bu, bir satırın formülünde m'dir:_ _y_ _=_ _mx_ _+_ _b__._ Bu nedenle _b ile temsil edilen kesiş_ me noktası: _b_ = _y_ - _mx_. _Noktanın (__x__,) her zaman regresyon çizgisinde olduğunu bildiğiniz için, kesişmeyi hesaplamak için bu noktadan_ _x_ _ve_ _y_ _değerlerini ekleyebilirsiniz._ İşte beş öğrencinin orijinal örneğini kullanan bir örnek.
 
