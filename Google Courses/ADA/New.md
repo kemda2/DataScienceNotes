@@ -8981,7 +8981,7 @@ Adımlara ayrılmış:
 
 Buna “Y'nin X üzerindeki gerilemesi” denir. İşte 100 öğrencinin tamamı için regresyon çizgisi:
 
-![](attachment:febf462c-536b-4281-ac0a-3d8901084425.png)
+![image](./images/5010.png)
 
 ### **Önemli Çıkarımlar**
 
