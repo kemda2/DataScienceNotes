@@ -6226,8 +6226,6 @@ plt.show()
 
 ![image](./images/sutun14.png)
 
-![image](sutun14.png)
-
 
 
 
