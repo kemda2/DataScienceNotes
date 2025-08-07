@@ -8915,7 +8915,7 @@ _R_ 'yi hesaplamanın eşdeğer bir yolu, her değişkendeki her veri noktasın�
 
 Korelasyon katsayısı 0.6'dır. İşte bu verilerin bir grafiği:
 
-![](attachment:24d4ed27-212c-4d73-ace6-fd9386254594.png)
+![image](./images/5005.png)
 
 Nokta bulutunun yukarı doğru eğimli olduğuna dikkat edin. Bu, r'nin poziti _f_ olmasına karşılık gelir. Korelasyon katsayısı, her değişkenin ortalamasından sapmasının çarpımını kullandığı için bir ilişki göstergesi olarak çalışır. Ürün pozitif olduğunda, hem X _hem_ de Y değerlerinin ilgili ortalamalarının altında (negatif standart birimler) veya ilgili ortalamalarının (pozitif standart birimler) üzerinde olduğu anlamına gelir. Birlikte farklılık gösterirler. Bununla birlikte, bu ürün negatif olduğunda, değerlerden birinin ortalamasının üzerinde, diğerinin altında olduğu anlamına gelir. Kendi araçlarına göre zıt yönlerde farklılık gösterirler.
 
