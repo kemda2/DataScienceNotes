@@ -8923,6 +8923,7 @@ Aşağıdaki şekil bu fikri göstermektedir. Şekil çeyreklere ayrılmıştır
 
 ![image](./images/5006.png)
 
+
 ### **Regresyon**
 
 Başka herhangi bir bilginin yokluğunda, rastgele seçilen bir öğrencinin sınav puanını tahmin etmeniz gerekiyorsa, hatanızı en aza indirmenin en iyi yolu tüm öğrencilerin puanlarının ortalamasını tahmin etmektir. Peki ya o öğrencinin kaç saat çalıştığını da bilseydiniz? Şimdi, en iyi tahmininiz, yalnızca bu kadar saatler boyunca okuyan öğrencilerin ortalama puanı olabilir.
