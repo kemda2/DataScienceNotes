@@ -9099,7 +9099,7 @@ fig.set_title("Histogram of Residuals")
 plt.show()
 ```
 
-![](attachment:7bbaf486-6f54-49a7-af76-7ffbee388458.png)
+![image](./images/5014.png)
 
 #### **Bağımsız Gözlemler**
 
@@ -9132,7 +9132,7 @@ fig.set_ylabel("Residuals")
 plt.show()
 ```
 
-![](attachment:671e25f0-7b78-436e-b35e-cd78aa5728b3.png)
+![image](./images/5015.png)
 
 ### Bir varsayım ihlal edilirse ne yapmalı
 
@@ -9155,7 +9155,7 @@ Artık dört varsayımı ve ihlallerini nasıl test edeceğinizi incelediğinize
         
     - Bir değişkeni dönüştürürseniz, modeli yeniden yapılandırmanız ve ardından emin olmak için normallik varsayımını yeniden kontrol etmeniz gerekir. Varsayım hala yerine getirilmezse, sorunu gidermeye devam etmeniz gerekir.
         
-![](attachment:fdbfb44c-1772-4fb3-96f1-f5a3525b3d71.png)
+![image](./images/5016.png)
 
 #### **Bağımsız gözlemler**
 
