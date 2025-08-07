@@ -6236,7 +6236,6 @@ plt.show()
 ![image](./images/sutun15.png)
 
 
-
 ### Örnekler
 ## 7.2
 # 8
