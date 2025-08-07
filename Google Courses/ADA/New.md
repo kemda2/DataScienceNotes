@@ -8950,7 +8950,7 @@ Birincisi:
 
 Aşağıdaki şekil, bu kavramların regresyon çizgisini belirlemek için nasıl birlikte çalıştığını göstermektedir.
 
-![](attachment:f5777644-e7cf-429f-b491-b0bccd4fd68d.png)
+![image](./images/5008.png)
 
 Başka bir deyişle, regresyon çizgisinin eğimi:
 
