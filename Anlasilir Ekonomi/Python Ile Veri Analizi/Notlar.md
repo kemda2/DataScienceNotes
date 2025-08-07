@@ -6235,6 +6235,7 @@ plt.show()
 
 ![image](./images/sutun15.png)
 
+![alt text](resim.png)
 
 ### Örnekler
 ## 7.2
