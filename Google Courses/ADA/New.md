@@ -9000,3 +9000,200 @@ Doğrusal regresyon, veri profesyonellerinin verileri analiz etmek için kulland
 - Regresyon çizgisinin eğimir(S ⁣D y)S ⁣D xSD xr(SD y)​.
     
 - Nokta (_x,_) _her_ zaman regresyon çizgisindedir.
+
+## Basit doğrusal regresyonun dört ana varsayımı
+
+Bu okumada, basit doğrusal regresyonun dört ana varsayımını, varsayımların karşılanıp karşılanmadığını nasıl kontrol edeceğinizi ve bir varsayım karşılanmazsa ne yapacağınızı gözden geçireceksiniz. Grafikleri çoğaltmak ve varsayımları kendi başınıza keşfetmek için ek kaynakları kullanabilirsiniz. Bu okumada tanımlanmamış herhangi bir terim varsa, her modülün sonunda kurs boyunca bulunan terimler sözlüğüne bakın. Bu okuma şunları kapsayacaktır:
+
+- Basit doğrusal regresyon varsayımları
+    
+- Varsayımların geçerliliği nasıl kontrol edilir
+    
+- Bir varsayım ihlal edilirse ne yapmalı
+    
+
+### Basit doğrusal regresyon varsayımları
+
+Özetlemek gerekirse, basit doğrusal regresyonun dört varsayımı vardır:
+
+1. **Doğrusallık:** Her öngörücü değişken (Xi), sonuç değişkeni (Y) ile doğrusal olarak ilişkilidir.
+    
+2. **Normallik:** Hatalar normal olarak dağıtılır. *****
+    
+3. **Bağımsız Gözlemler:** Veri kümesindeki her gözlem bağımsızdır.
+    
+4. **Homoscedastisite: Hataların** varyansı model boyunca sabit veya benzerdir. *****
+    
+
+#### *** Hatalar ve artıklar hakkında not***
+
+Bu ders, regresyon ile bağlantılı olarak “hatalar” ve “artıklar” terimlerini birbirinin yerine kullanmıştır. Bunu, bir veri uzmanı olarak geçirdiğiniz süre boyunca diğer çevrimiçi kaynaklarda ve materyallerde görebilirsiniz.. Gerçekte, bir fark var:
+
+- **Kalıntılar**, tahmin edilen ve gözlemlenen değerler arasındaki farktır. Bir regresyon modeli oluşturduktan sonra, tahmin edilen değerleri gözlemlenen değerlerden çıkararak kalıntıları hesaplayabilirsiniz.
+    
+- **Hatalar**, modelde olduğu varsayılan doğal gürültüdür.
+    
+- Kalıntılar, doğrusal regresyonun normallik ve homoskedastiklik varsayımlarını kontrol ederken hataları tahmin etmek için kullanılır.
+    
+
+### Varsayımların geçerliliği nasıl kontrol edilir
+
+Daha önce gözden geçirildiği gibi, basit doğrusal regresyon varsayımlarının çoğu veri görselleştirmeleri yoluyla kontrol edilebilir. Bazı varsayımlar bir model oluşturulmadan önce kontrol edilebilir ve diğerleri yalnızca model oluşturulduktan ve tahmin edilen değerler hesaplandıktan sonra kontrol edilebilir.
+
+#### **Doğrusallık**
+
+Bağımsız ve bağımlı değişkenler arasında doğrusal bir ilişki olup olmadığını değerlendirmek için, veri kümesinin bir dağılım grafiğini oluşturmak en kolay yoldur. Bağımsız değişken x ekseninde ve bağımlı değişken y ekseninde olacaktır. Verileri okumak ve bir dağılım grafiği oluşturmak için kullanabileceğiniz bir dizi farklı Python işlevi vardır. Veri görselleştirmeleri için kullanılan bazı paketler arasında Matplotlib, seaborn ve Plotly bulunur. Doğrusallık varsayımının test edilmesi, model oluşturulmadan önce yapılmalıdır.
+
+```python
+# Create pairwise scatterplots of Chinstrap penguins data
+sns.pairplot(chinstrap_penguins)
+```
+
+![image](./images/5011.png)
+
+#### **Normallik**
+
+Normallik varsayımı, art **ıklarla tahmin edilebilen hatalara veya verilerde gözlemlenen değerler ile regresyon modeli tarafından tahmin edilen değerler arasındaki farka odak** lanır. Bu nedenle normallik varsayımı ancak bir model oluşturulduktan ve tahmin edilen değerler hesaplandıktan **sonra** doğrulanabilir. Model oluşturulduktan sonra, artıkların normal dağıldığını kontrol etmek için bir QQ grafiği oluşturabilir veya artıkların bir histogramını oluşturabilirsiniz. Varsayımın karşılanıp karşılanmadığı bir düzeyde yorumlamaya bağlıdır.
+
+##### **Kuantil-kuantil grafik**
+
+Ku **antil-kuantil grafiği (****Q-Q grafiği**), iki olasılık dağılımını kuantillerini birbirine karşı çizerek karşılaştırmak için kullanılan grafik bir araçtır. Veri uzmanları genellikle bir dağılımın normalliğini ölçmek için Q-Q grafiklerini histogramlara tercih eder, çünkü bir grafiğin düz bir çizgiye yapışıp yapışmadığını ayırt etmek, bir histogramın normal bir eğriyi ne kadar yakından takip ettiğini belirlemekten daha kolaydır. Bir modelin artıklarının normalliğini değerlendirirken Q-Q grafiklerinin nasıl çalıştığı aşağıda açıklanmıştır:
+
+1. **Kalıntıları sıralayın**. _N artıklarınızı en küç_ ükten en büyüğe doğru sıralayın. Her biri için, verilerin yüzde kaçının bu sıralamaya veya altına düştüğünü hesaplayın. Bunlar veriler _inizin n_ miktarıdır.
+    
+2. **Normal dağılımla karşılaştırın.** Standart bir normal dağılımı _n_ +1 eşit alana bölün (yani, _n kez dilim_ leyin). Kalıntılar normal olarak dağılmışsa, her bir kalıntının kuantili (yani, verilerin yüzde kaçı her sıralı kalıntının altına düşer), standart normal dağılımdaki _n_ kesimin her birinin karşılık gelen z puanları ile yakından hizalanacaktır (bunlar normal bir z-puan tablosunda veya daha yaygın olarak istatistiksel yazılım kullanılarak bulunabilir).
+    
+3. **Bir arsa inşa et.** Bir Q-Q grafiği, x ekseni boyunca standart bir normal dağılımın bilinen kuantil değerlerine ve y ekseninde sıra sıralı kalıntı değerlerine sahiptir. Kalıntılar normal olarak dağılmışsa, artıkların kuantil değerleri standartlaştırılmış normal dağılımınkilere karşılık gelecektir ve her ikisi de doğrusal olarak artacaktır. Kalıntılarınızı ilk önce standartlaştırırsanız (ortalamayı çıkarıp standart sapmaya bölerek z puanlarına dönüştürün), iki eksen aynı ölçeklerde olacaktır ve artıklar gerçekten normal dağılmışsa, çizgi 45° açıda olacaktır. Bununla birlikte, artıkları standartlaştırmak, bir Q-Q grafiğinin bir gerekliliği değildir. Her iki durumda da, ortaya çıkan grafik doğrusal değilse, artıklar normal olarak dağıtılmaz.
+
+Aşağıdaki şekilde, ilk Q-Q grafiği, normal bir dağılımdan alınan verileri göstermektedir. Standart bir normal dağılımın miktarlarına karşı çizildiğinde bir çizgi oluşturur. İkinci çizim, üstel bir dağılımdan alınan verileri gösterir. Üçüncü çizim, tek tip bir dağılımdan alınan verileri kullanır. İkinci ve üçüncü çizimlerin bir çizgiye nasıl uymadığına dikkat edin.
+
+![image](./images/5012.png)
+
+##### **Q-Q grafiği nasıl kodlanır**
+
+Neyse ki, daha önce belirtilen adımları manuel olarak gerçekleştirmeniz gerekmez. Bunu halletmek için bilgisayar kütüphaneleri var. Bir Q-Q grafiği oluşturmanın bir yolu, statmodels kütüphanesini kullanmaktır. İçe aktarırsanızstatsmodels.api, [qqplot ()](https://www.statsmodels.org/stable/generated/statsmodels.graphics.gofplots.qqplot.html) işlevini doğrudan kullanabilirsiniz. Aşağıdaki örnek, bir statsmodels ols model nesnesindeki artıkları kullanır. Model, penguenlerin palet uzunluğunu gaga derinliklerine göre geri çeker (X üzerinde Y).
+
+```python
+import statsmodels.api as sm
+
+import matplotlib.pyplot as plt
+
+residuals = model.resid
+
+fig = sm.qqplot(residuals, line = 's')
+
+plt.show()
+```
+
+![](attachment:99fd4765-31cc-4e55-a3a1-47dceaa219aa.png)
+
+Ve işte aynı verilerin bir histogramı:
+
+```python
+fig = sns.histplot(residuals)
+
+fig.set_xlabel("Residual Value")
+
+fig.set_title("Histogram of Residuals")
+
+plt.show()
+```
+
+![](attachment:7bbaf486-6f54-49a7-af76-7ffbee388458.png)
+
+#### **Bağımsız Gözlemler**
+
+Gözlemlerin bağımsız olup olmadığı, verilerinizi anlamanıza bağlıdır. Gibi sorular sormak:
+
+- Veriler nasıl toplandı?
+    
+- Her veri noktası neyi temsil eder?
+    
+- Veri toplama sürecine bağlı olarak, bir veri noktasının değerinin başka bir veri noktasının değerini etkilemesi muhtemel midir?
+    
+
+Sizin fark etmediğiniz şeyleri fark edebilecek başkalarından içgörü almayı içeren bu soruların nesnel bir incelemesi, bağımsız gözlem varsayımının ihlal edilip edilmediğini belirlemenize yardımcı olabilir. Bu da eldeki veri kümesiyle çalışırken sonraki adımlarınızı belirlemenizi sağlayacaktır.
+
+#### **Homoscedastisite**
+
+Normallik varsayımı gibi, homoskedastiklik varsayımı bir modelin artıklarıyla ilgilidir, bu nedenle ancak bir regresyon modeli oluşturulduktan sonra değerlendirilebilir. Takılan değerlerin (yani modelin öngörülen Y değerleri) artıklara karşı bir dağılım grafiği, homoskedastiklik varsayımının ihlal edilip edilmediğini belirlemeye yardımcı olabilir.
+
+```python
+import matplotlib.pyplot as plt
+
+fig = sns.scatterplot(fitted_values, residuals)
+
+fig.axhline(0)
+
+fig.set_xlabel("Fitted Values")
+
+fig.set_ylabel("Residuals")
+
+plt.show()
+```
+
+![](attachment:671e25f0-7b78-436e-b35e-cd78aa5728b3.png)
+
+### Bir varsayım ihlal edilirse ne yapmalı
+
+Artık dört varsayımı ve ihlallerini nasıl test edeceğinizi incelediğinize göre, bir varsayım ihlal edildiğinde atabileceğiniz bazı yaygın sonraki adımları tartışmanın zamanı geldi. Verileri dönüştürürseniz, bunun sonuçları yorumlama şeklinizi değiştirebileceğini unutmayın. Ek olarak, bu potansiyel çözümler verileriniz için işe yaramazsa, farklı bir model denemeyi düşünmelisiniz.
+
+Şimdilik, başlamanız için birkaç temel yaklaşıma odaklanın!
+
+#### **Doğrusallık**
+
+- Logaritmayı almak gibi değişkenlerden birini veya her ikisini de dönüştürün.
+    
+    - Örneğin, eğitim yılları ile gelir arasındaki ilişkiyi ölçüyorsanız, gelir değişkeninin logaritmasını alabilir ve bunun doğrusal ilişkiye yardımcı olup olmadığını kontrol edebilirsiniz.
+        
+
+#### **Normallik**
+
+- Değişkenlerden birini veya her ikisini de dönüştürün. En yaygın olarak, bu sonuç değişkeninin logaritmasını almayı içerir.
+    
+    - Sonuç değişkeni gelir gibi doğru çarpık olduğunda, artıkların normalliği etkilenebilir. Dolayısıyla, sonuç değişkeninin logaritmasını almak bazen bu varsayıma yardımcı olabilir.
+        
+    - Bir değişkeni dönüştürürseniz, modeli yeniden yapılandırmanız ve ardından emin olmak için normallik varsayımını yeniden kontrol etmeniz gerekir. Varsayım hala yerine getirilmezse, sorunu gidermeye devam etmeniz gerekir.
+        
+![](attachment:fdbfb44c-1772-4fb3-96f1-f5a3525b3d71.png)
+
+#### **Bağımsız gözlemler**
+
+- Mevcut verilerin sadece bir alt kümesini alın.
+    
+    - Örneğin, bir anket yürütüyorsanız ve aynı hanedeki kişilerden yanıt alıyorsanız, yanıtları ilişkili olabilir. Her hanede sadece bir kişinin verilerini saklayarak bunu düzeltebilirsiniz.
+        
+    - Başka bir örnek, belirli bir süre boyunca veri toplamanızdır. Diyelim ki bisiklet kiralamayla ilgili verileri araştırıyorsunuz. Verilerinizi her 15 dakikada bir toplarsanız, sabah 8:00'de kiralanan bisiklet sayısı sabah 8:15 'de kiralanan bisiklet sayısıyla ilişkili olabilir. Ancak, veriler her 15 dakikada bir yerine 2 saatte bir alınırsa kiralanan bisiklet sayısı bağımsızdır.
+        
+
+#### **Homoscedastisite**
+
+- Farklı bir sonuç değişkeni tanımlayın.
+    
+    - Bir şehrin nüfusunun bir şehirdeki restoran sayısıyla nasıl ilişkili olduğunu anlamakla ilgileniyorsanız, bazı şehirlerin diğerlerinden çok daha kalabalık olduğunu bilirsiniz. Daha sonra sonuç değişkenini nüfusun restoranlara oranı olarak yeniden tanımlayabilirsiniz.
+        
+- Y değişkenini dönüştürün.
+    
+    - Yukarıdaki varsayımlarda olduğu gibi, bazen logaritmayı almak veya Y değişkenini başka bir şekilde dönüştürmek, homoskedastiklik varsayımıyla tutarsızlıkları potansiyel olarak düzeltebilir.
+        
+
+### Önemli çıkarımlar
+
+- Basit doğrusal regresyon için dört temel varsayım vardır: doğrusallık, normallik, bağımsız gözlemler ve homoskedastiklik.
+    
+- Her varsayımın geçerliliğini kontrol etmenin farklı yolları vardır. Bazı varsayımlar model oluşturulmadan önce kontrol edilebilirken, bazıları model oluşturulduktan sonra kontrol edilebilir.
+    
+- Model varsayımlarının ihlallerini düzeltebilecek verilerle çalışmanın yolları vardır.
+    
+- Değişkenlerin değiştirilmesi yorumlamayı değiştirecektir.
+    
+- Varsayımlar ihlal edilirse, veri dönüşümlerinden sonra bile, verileriniz için diğer modelleri göz önünde bulundurmalısınız.
+    
+
+### Daha fazla bilgi için kaynaklar
+
+- [Denizdeki penguenler veri kümesini buradan indirin](https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv "Seaborn GitHub deposundan penguens veri kümesi")
+    
+- Penguenler veri kümesi hakkında daha fazla bilgi: [Palmer penguenlerine giriş](https://allisonhorst.github.io/palmerpenguins/articles/intro.html)
+    
+- Q-Q grafikleri hakkında daha fazla bilgi: [Normal Nicel-Kuantil Grafikler (jbstatistik'ten video)](https://www.youtube.com/watch?v=X9_ISJ0YpGw)
