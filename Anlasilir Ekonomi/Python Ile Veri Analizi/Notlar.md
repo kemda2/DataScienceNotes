@@ -6143,8 +6143,20 @@ plt.show()
 
 ![image](./images/sutun5.png)
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+fiyat = [100, 200, 250, 150]
+marka = ["A", "B", "C", "D"]
 
+fig, ax = plt.subplots(2, 2)
+ax[1, 0].plot(marka, fiyat)
+ax[1, 1].set_title("Örnek Başlık", color="red")
+plt.show()
+```
+
+![image](./images/sutun6.png)
 
 
 
