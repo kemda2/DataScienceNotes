@@ -6172,6 +6172,48 @@ plt.show()
 
 ![image](./images/sutun8.png)
 
+```Python
+ax = sns.barplot(x=marka, y=fiyat)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık")
+plt.show()
+```
+
+![image](./images/sutun9.png)
+
+```Python
+ax = sns.barplot(x=marka, y=fiyat)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue")
+plt.show()
+```
+
+![image](./images/sutun10.png)
+
+```Python
+ax = sns.barplot(x=marka, y=fiyat)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue", fontsize=15)  
+plt.show()
+```
+
+![image](./images/sutun11.png)
+
+```Python
+ax = sns.barplot(x=marka, y=fiyat)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue", fontsize=20, fontweight="bold")
+plt.show()
+```
+
+![image](./images/sutun12.png)
+
+
+
+
+
+
+
 
 ### Örnekler
 ## 7.2
