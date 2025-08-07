@@ -8977,7 +8977,7 @@ Adımlara ayrılmış:
 
 İşte verilerin üzerine bindirilmiş regresyon çizgisi:
 
-![](attachment:784017ca-3554-4cb7-b4f1-60b8d4294690.png)
+![image](./images/5009.png)
 
 Buna “Y'nin X üzerindeki gerilemesi” denir. İşte 100 öğrencinin tamamı için regresyon çizgisi:
 
