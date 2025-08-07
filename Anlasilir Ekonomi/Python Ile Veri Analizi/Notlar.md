@@ -6158,9 +6158,19 @@ plt.show()
 
 ![image](./images/sutun6.png)
 
+```Python
+sns.barplot(x=marka, y=fiyat)
+plt.show()
+```
 
+![image](./images/sutun7.png)
 
+```Python
+sns.barplot(x=marka, y=fiyat).set_facecolor("blue")
+plt.show()
+```
 
+![image](./images/sutun8.png)
 
 
 ### Örnekler
