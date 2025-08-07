@@ -6226,8 +6226,14 @@ plt.show()
 
 ![image](./images/sutun14.png)
 
+```Python
+ax = sns.barplot(x=marka, y=fiyat)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue", fontsize=20, fontweight="bold", fontname="Times New Roman", loc="left", pad=50)
+plt.show()
+```
 
-
+![](sutun15.png)
 
 
 
