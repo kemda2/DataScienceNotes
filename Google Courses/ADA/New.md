@@ -8930,7 +8930,7 @@ Başka herhangi bir bilginin yokluğunda, rastgele seçilen bir öğrencinin sı
 
 İşte çalışma süreleri en yakın yarım saate yuvarlatılmış 100 öğrenciden oluşan bir örnek. Diyelim ki size bir öğrencinin yedi saat çalıştığı söylendi. Sınav puanlarını tahmin etmek için, hatayı en aza indirmenin bir yolu, yalnızca yedi saat boyunca okuyan öğrencilerin ortalamasını tahmin etmektir.
 
-![](attachment:dd786085-891a-425f-8b28-b0e56b77e32b.png)
+![image](./images/5007.png)
 
 Bu dağılım grafiğinde, yedi saat boyunca çalışan tüm öğrenciler iki dikey çizgi arasına düşer. Ortalama sınav puanları bir X ile temsil edilir. Doğrusal regresyon bu kavramı genişletir. Bir regresyon çizgisi, doğrusal bir modelin varsayımları ve sınırlamaları göz önüne alındığında, X'in her değeri için tahmini ortalama Y değerini temsil eder. Başka bir deyişle, X ve Y arasındaki ilişki tamamen doğrusal değilse veya Y'yi etkileyen modele dahil edilmeyen başka faktörler varsa, her X için gerçek ortalama Y değerleri tam olarak regresyon çizgisinde olmayabilir. Regresyon çizgisi, bir bütün olarak verilere en uygun düz çizgi ilişkisini bulmak için bu etkileri dengelemeye çalışır. X göz önüne alındığında, Y'nin merkezi eğiliminin bir tahminidir.
 
