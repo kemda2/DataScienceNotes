@@ -9085,7 +9085,7 @@ fig = sm.qqplot(residuals, line = 's')
 plt.show()
 ```
 
-![](attachment:99fd4765-31cc-4e55-a3a1-47dceaa219aa.png)
+![image](./images/5013.png)
 
 Ve işte aynı verilerin bir histogramı:
 
