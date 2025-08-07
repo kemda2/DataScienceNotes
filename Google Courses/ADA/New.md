@@ -8921,7 +8921,7 @@ Nokta bulutunun yukarı doğru eğimli olduğuna dikkat edin. Bu, r'nin poziti _
 
 Aşağıdaki şekil bu fikri göstermektedir. Şekil çeyreklere ayrılmıştır. Dikey çizgi ortalama X değerini ve yatay çizgi ortalama Y değerini temsil eder. Her nokta, standartlaştırılmış puanlarının çarpımı ile etiketlenir (yukarıdaki tabloya bakın). Bu puanların ortalaması r _'dir_. _R_ pozitif olduğunda, daha fazla puan pozitif kadranlarda olma eğiliminde olacaktır ve bunun tersi de geçerlidir.
 
-![](attachment:8fa4f227-8798-42e4-bbe9-ed21bbc81ce2.png)
+![image](./images/5006.png)
 
 ### **Regresyon**
 
