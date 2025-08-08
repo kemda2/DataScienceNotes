@@ -6260,7 +6260,103 @@ plt.show()
 
 ![image](./images/sutun17.png)
 
+```Python
+renkler = {
+    "A": "tab:pink",
+    "B": "tab:green",
+    "C": "tab:orange",
+    "D": "tab:red"
+}
 
+ax = sns.barplot(x=marka, y=fiyat, palette=renkler, alpha=0.5)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue", fontsize=20, fontweight="bold", fontname="Times New Roman", loc="left", pad=50)
+plt.show()
+```
+
+![image](./images/sutun18.png)
+
+```Python
+renkler = {
+    "A": "tab:pink",
+    "B": "tab:green",
+    "C": "tab:orange",
+    "D": "tab:red"
+}
+
+ax = sns.barplot(x=marka, y=fiyat, palette=renkler)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue", fontsize=20, fontweight="bold", fontname="Times New Roman", loc="left", pad=50)
+plt.xlabel("Markalar", color="red", fontsize=15)
+plt.ylabel("Fiyatlar", color="red", fontsize=15)
+plt.show()
+```
+
+![image](./images/sutun19.png)
+
+```Python
+renkler = {
+    "A": "tab:pink",
+    "B": "tab:green",
+    "C": "tab:orange",
+    "D": "tab:red"
+}
+
+ax = sns.barplot(x=marka, y=fiyat, palette=renkler)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue", fontsize=20, fontweight="bold", fontname="Times New Roman", loc="left", pad=50)
+plt.xlabel("Markalar", color="red", fontsize=15)
+plt.ylabel("Fiyatlar", color="red", fontsize=15)
+plt.ylim(50, 500, 50)
+plt.show()
+```
+
+![image](./images/sutun20.png)
+
+```Python
+renkler = {
+    "A": "tab:pink",
+    "B": "tab:green",
+    "C": "tab:orange",
+    "D": "tab:red"
+}
+
+ax = sns.barplot(x=marka, y=fiyat, palette=renkler)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue", fontsize=20, fontweight="bold", fontname="Times New Roman", loc="left", pad=50)
+plt.xlabel("Markalar", color="red", fontsize=15)
+plt.ylabel("Fiyatlar", color="red", fontsize=15)
+plt.ylim(0, 300, 10) # 10'arlı artsın dedik ama olmadı.
+plt.show()
+```
+
+![image](./images/sutun21.png)
+
+```Python
+fiyat = [100, 200, 250, 150]
+marka = ["A", "B", "C", "D"]
+
+sns.barplot(x=fiyat, y=marka, orient="h")
+plt.show()
+```
+![image](./images/sutun22.png)
+
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+fiyat=[100,200,250,150]
+marka=["A","B","C","D"]
+
+liste=list(zip(fiyat,marka))
+
+veri=pd.DataFrame(data=liste,columns=["Fiyat","Marka"])
+
+sns.barplot(x="Fiyat",y="Marka",data=veri,orient="h",order=veri.sort_values("Fiyat").Marka)
+plt.show()
+```
+![image](./images/sutun23.png)
 
 
 
@@ -6269,7 +6365,7 @@ plt.show()
 ## 7.2
 # 8
 
-https://www.youtube.com/watch?v=U_LYhYFCZ0g&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=101
-1031
+https://www.youtube.com/watch?v=Vrra4lfqvz8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=102
+0119
 
 
