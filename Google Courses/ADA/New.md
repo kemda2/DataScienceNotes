@@ -9197,3 +9197,117 @@ Artık dört varsayımı ve ihlallerini nasıl test edeceğinizi incelediğinize
 - Penguenler veri kümesi hakkında daha fazla bilgi: [Palmer penguenlerine giriş](https://allisonhorst.github.io/palmerpenguins/articles/intro.html)
     
 - Q-Q grafikleri hakkında daha fazla bilgi: [Normal Nicel-Kuantil Grafikler (jbstatistik'ten video)](https://www.youtube.com/watch?v=X9_ISJ0YpGw)
+
+## Normal Dağılımın Doğrulanması
+
+
+```python
+import pandas as pd
+import seaborn as sns
+
+# Load dataset
+penguins = sns.load_dataset ("penguins")
+
+# Examine first 5 rows of dataset 
+penguins.head()
+```
+| species | island    | bill_length_mm | bill_depth_mm | flipper_length_mm | body_mass_g | sex    |
+|---------|-----------|----------------|----------------|--------------------|-------------|--------|
+| Adelie  | Torgersen | 39.1           | 18.7           | 181.0              | 3750.0      | Male   |
+| Adelie  | Torgersen | 39.5           | 17.4           | 186.0              | 3800.0      | Female |
+| Adelie  | Torgersen | 40.3           | 18.0           | 195.0              | 3250.0      | Female |
+| Adelie  | Torgersen | NaN            | NaN            | NaN                | NaN         | NaN    |
+| Adelie  | Torgersen | 36.7           | 19.3           | 193.0              | 3450.0      | Female |
+
+
+```python
+#Keep Adelie and Gentoo penguins, drop NAS
+penguins_sub = penguins[penguins["species"] != "Chinstrap"]
+penguins_final = penguins_sub.dropna()
+penguins_final.reset_index(inplace=True, drop=True)
+
+sns.pairplot(penguins_final)
+
+#Subset Data
+ols_data = penguins_final[["bill_length_mm", "body_mass_g"]]
+```
+
+![image](./images/5017.png)
+
+```python
+# Write out formula
+ols_formula = "body_mass_g ~ bill_length_mm"
+
+# Import ols function 
+from statsmodels.formula.api import ols
+
+# Build OLS, fit model to data
+OLS = ols(formula = ols_formula, data ols_data) 
+model = OLS.fit()
+
+model.summary()
+```
+
+|                   | coef      | std err | t       | P>\|t\| | [0.025]   | [0.975]   |
+|-------------------|-----------|---------|---------|------|------------|-----------|
+| Intercept         | -1707.2919| 205.640 | -8.302  | 0.000| -2112.202  | -1302.382 |
+| bill_length_mm    | 141.1904  | 4.775   | 29.569  | 0.000| 131.788    | 150.592   |
+
+
+$$
+y = intercept + slope \cdot x
+$$
+
+$$
+Body\ mass\ (g) = -1707.30 + 141.19 \cdot Bill\ length\ (mm)
+$$
+
+```python
+# Subset X variable
+x = ols_data["bill_length_mm"]
+
+# Get predictions from model
+fitted_values = model.predict(X)
+
+# Calculate residuals
+residuals = model.resid
+
+sns.regplot(x = "bill_length_mm", y = "body_mass_g", data = ols_data)
+```
+
+(Doğrusal)
+
+![image](./images/5018.png)
+
+```python
+import matplotlib.pyplot as plt
+fig = sns.scatterplot(fitted_values, residuals)
+fig.axhline(0)
+fig.set_xlabel("Fitted Values") fig.set_ylabel("Residuals")
+plt.show()
+```
+(Homojen Dağılım)
+
+![image](./images/5019.png)
+
+```python
+fig = sns.histplot(residuals)
+fig.set_xlabel ("Residual Value")
+fig.set_title("Histogram of Residuals")
+plt.show()
+```
+(çan şeklinde)
+
+![image](./images/5020.png)
+
+Bu üç adım aynı gerçekleşirse normal dağılım diyebiliriz. Ama doğrulamak için;
+
+```python
+import statsmodels.api as sm
+fig = sm.qqplot(model.resid, line = 's')
+plt.show()
+```
+
+![image](./images/5021.png)
+
+## Kod işlevleri ve dokümantasyon
