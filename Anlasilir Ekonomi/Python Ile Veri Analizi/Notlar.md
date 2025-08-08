@@ -6358,9 +6358,26 @@ plt.show()
 ```
 ![image](./images/sutun23.png)
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+fiyat=[100,200,250,150]
+marka=["A","B","C","D"]
+
+liste=list(zip(fiyat,marka))
+
+veri=pd.DataFrame(data=liste,columns=["Fiyat","Marka"])
+
+sns.barplot(x="Fiyat",y="Marka",data=veri,orient="h",order=veri.sort_values("Fiyat", ascending=False).Marka)
+plt.show()
+```
+![image](./images/sutun24.png)
 
 
 
+![image](./images/sutun2.png)
 ### Örnekler
 ## 7.2
 # 8
