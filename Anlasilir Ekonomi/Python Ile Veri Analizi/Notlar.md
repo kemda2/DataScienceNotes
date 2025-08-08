@@ -6235,6 +6235,36 @@ plt.show()
 
 ![image](./images/sutun15.png)
 
+```Python
+ax = sns.barplot(x=marka, y=fiyat, color="green")
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue", fontsize=20, fontweight="bold", fontname="Times New Roman", loc="left", pad=50)
+plt.show()
+```
+
+![image](./images/sutun16.png)
+
+```Python
+renkler = {
+    "A": "tab:pink",
+    "B": "tab:green",
+    "C": "tab:orange",
+    "D": "tab:red"
+}
+
+ax = sns.barplot(x=marka, y=fiyat, palette=renkler)
+ax.set_facecolor("midnightblue")  
+plt.title("Örnek Başlık", color="darkblue", fontsize=20, fontweight="bold", fontname="Times New Roman", loc="left", pad=50)
+plt.show()
+```
+
+![image](./images/sutun17.png)
+
+
+
+
+
+
 ### Örnekler
 ## 7.2
 # 8
