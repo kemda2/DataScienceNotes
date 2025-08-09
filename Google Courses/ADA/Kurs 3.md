@@ -2,9 +2,7 @@
 
 You’ve learned the definitions for each of the six practices of exploratory data analysis (EDA) — discovering, structuring, cleaning, joining, validating, and presenting. Next, you’ll discover how these practices apply to the data career space. In the following case study, members of Deloitte’s data team utilized the six practices of EDA to meet their client’s metrics and dashboarding needs. After you read more about the experiences of Deloitte’s team, you will have a tangible example of just how useful and empowering the application of these practices can be. 
 
-<img width="1141" height="281" alt="image" src="https://github.com/user-attachments/assets/8ec36eca-6493-4307-ba7c-eda4285259bb" />
-
-![Deloitte logo](https://d3c33hcgiwev3.cloudfront.net/imageAssetProxy.v1/mD90klW7SdWs0Aiaise6tA_1bce5f92447843e49ca03c480ffc8af1_ADA_R-011Deloitte-Logo.png?expiry=1754870400000&hmac=LdLfVVgBMBEJK6-eK-rLzEgMoH10VPVdTEDUV9xjvNQ)
+![image](images/3031.png)
 
 ## Get to know Deloitte
 
