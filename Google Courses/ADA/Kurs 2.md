@@ -515,7 +515,7 @@ Bir dilin şekil ve anlam kazanmasını sağlayan şey söz dizimi ve anlam bili
 
 Python hakkında daha fazla bilgi edinmenizi sağlayacak bazı yararlı kaynaklar:
 
-- Python [Referans Kütüphanesi](https://docs.python.org/3/library/)
+- [Python Referans Kütüphanesi](https://docs.python.org/3/library/)
     
     - [Yerleşik Veri Tipleri](https://docs.python.org/3/library/stdtypes.html)
         
@@ -4133,3 +4133,4 @@ right
 | 5     | Neptune | 24622.0   | 14.0  | ice giant   | yes   | -200.0      | yes            | 0    |
 | 6     | Janssen | NaN       | NaN   | super earth | no    | NaN         | None           | 1    |
 | 7     | Tadmor  | NaN       | NaN   | gas giant   | None  | NaN         | None           | 1    |
+
