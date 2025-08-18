@@ -6421,7 +6421,7 @@ import seaborn as sns
 tarih = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs"]
 fiyat = [100, 200, 150, 180, 250]
 
-sns.lineplot(x=tarih, y=fiyat)
+sns.lineplot(x=tarih, y=fiyat, color="red", ls="--") # ls="-."
 plt.show()
 ```
 
