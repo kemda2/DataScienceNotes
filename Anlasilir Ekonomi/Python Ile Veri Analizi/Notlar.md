@@ -6529,12 +6529,15 @@ plt.show()
 
 ![image](./images/sutun31.png)
 
+## 7.3 Saçılım Grafiği
+
+
 
 
 
 ![image](./images/sutun3.png)
 ### Örnekler
-## 7.3
+## 7.4
 # 8
 
 https://www.youtube.com/watch?v=xGqimYLmUKs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=105
