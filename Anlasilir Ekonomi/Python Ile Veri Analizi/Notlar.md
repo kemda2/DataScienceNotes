@@ -6626,6 +6626,6 @@ plt.show()
 ## 7.4
 # 8
 
-https://www.youtube.com/watch?v=xGqimYLmUKs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=105
+https://www.youtube.com/watch?v=3zh6L0jl2T0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=107
 0000
 
