@@ -6375,6 +6375,20 @@ plt.show()
 ```
 ![image](./images/sutun24.png)
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+fiyat=[100,200,250,150]
+marka=["A","B","C","D"]
+
+sns.barplot(x=fiyat,y=marka)
+plt.show()
+```
+![image](./images/sutun25.png)
+
+
 
 
 ![image](./images/sutun2.png)
