@@ -6458,6 +6458,9 @@ plt.show()
 ![image](./images/sutun28.png)
 
 
+
+
+
 ![image](./images/sutun2.png)
 ### Örnekler
 ## 7.3
