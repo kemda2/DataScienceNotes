@@ -6531,11 +6531,22 @@ plt.show()
 
 ## 7.3 Saçılım Grafiği
 
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+x = [100, 200, 300, 400, 500]
+y = [150, 250, 350, 450, 550]
+
+sns.scatterplot(x=x,y=y)
+plt.show()
+```
+
+![image](./images/sacilim1.png)
 
 
 
-
-![image](./images/sutun3.png)
+![image](./images/sacilim.png)
 ### Örnekler
 ## 7.4
 # 8
