@@ -6467,6 +6467,6 @@ plt.show()
 # 8
 
 https://www.youtube.com/watch?v=0kWrdqhJ1cY&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=104
-0000
+0733
 
 
