@@ -6421,7 +6421,7 @@ import seaborn as sns
 tarih = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs"]
 fiyat = [100, 200, 150, 180, 250]
 
-sns.lineplot(x=tarih, y=fiyat, color="red") # ls="--" ls="-." ls=":"
+sns.lineplot(x=tarih, y=fiyat, color="red", ls="--")  # ls="-." ls=":"
 plt.ylim(0,300)
 plt.show()
 ```
@@ -6435,13 +6435,27 @@ import seaborn as sns
 tarih = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs"]
 fiyat = [100, 200, 150, 180, 250]
 
-sns.lineplot(x=tarih, y=fiyat, color="red", marker="o") # ls="--" ls="-." ls=":"
+sns.lineplot(x=tarih, y=fiyat, color="red", marker="o") # marker="*"
 plt.ylim(0,300)
 plt.show()
 ```
 
 ![image](./images/sutun27.png)
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+tarih = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs"]
+fiyat = [100, 200, 150, 180, 250]
+
+sns.lineplot(x=tarih, y=fiyat, color="red", marker="o") # marker="*"
+plt.ylim(0,300)
+plt.grid()
+plt.show()
+```
+
+![image](./images/sutun28.png)
 
 
 ![image](./images/sutun2.png)
