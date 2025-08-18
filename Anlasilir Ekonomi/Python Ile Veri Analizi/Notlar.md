@@ -6457,9 +6457,29 @@ plt.show()
 
 ![image](./images/sutun28.png)
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 
+data = {
+    "Hafta": list(range(1, 34)),
+    "HisseA": [ 36, 12, 77, 30, 13, 27, 38, 84, 58, 16, 41, 33, 13, 22, 59, 92, 21, 24, 59, 60, 91, 21, 27, 69, 30, 28, 95, 85, 39, 64, 68, 26, 45 ],
+    "HisseB": [ 81, 100, 19, 15, 63, 27, 23, 33, 11, 68, 46, 27, 43, 64, 46, 99, 98, 43, 45, 76, 60, 20, 27, 54, 98, 58, 77, 80, 50, 73, 34, 50, 58 ],
+    "HisseC": [ 43, 78, 82, 43, 53, 63, 66, 57, 16, 76, 88, 74, 93, 84, 81, 15, 88, 80, 57, 69, 32, 82, 75, 52, 11, 42, 73, 67, 72, 87, 37, 41, 77 ],
+    "HisseD": [ 75, 29, 16, 25, 94, 99, 72, 45, 90, 26, 22, 51, 77, 64, 99, 57, 94, 90, 53, 33, 86, 82, 81, 26, 63, 12, 21, 64, 27, 15, 96, 32, 93 ]
+}
 
+veri = pd.DataFrame(data)
 
+tablo=pd.melt(veri, id_vars="Hafta", value_vars=["HisseA", "HisseB", "HisseC", "HisseD"])
+tablo.columns=["Hafta", "Hisseler", "Fiyatlar"]
+
+sns.lineplot(data=tablo, x="Hafta", y="Fiyatlar", hue="Hisseler")
+plt.show()
+```
+
+![image](./images/sutun29.png)
 
 ![image](./images/sutun2.png)
 ### Örnekler
