@@ -6557,6 +6557,19 @@ plt.show()
 
 ![image](./images/sacilim2.png)
 
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+x = [100, 200, 300, 400, 500]
+y = [150, 250, 350, 450, 550]
+
+sns.scatterplot(x=x,y=y, color="red", marker="P")
+plt.show()
+```
+
+![image](./images/sacilim3.png)
+
 
 
 ![image](./images/sacilim.png)
