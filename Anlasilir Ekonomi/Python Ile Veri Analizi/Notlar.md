@@ -6582,6 +6582,19 @@ plt.show()
 
 ![image](./images/sacilim4.png)
 
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+veri=sns.load_dataset("tips")
+
+sns.scatterplot(data=veri, x="total_bill",y="tip", hue="sex")
+plt.show()
+```
+
+![image](./images/sacilim5.png)
+
+
 
 
 ![image](./images/sacilim.png)
