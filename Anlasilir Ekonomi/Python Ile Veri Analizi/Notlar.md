@@ -6406,7 +6406,26 @@ sns.barplot(data=veri, x="Günler", y="Ödeme", hue="Cinsiyet", ci=False, estima
 plt.show()
 ```
 
+![image](./images/sutun25.png)
+
 ## 7.2 Çizgi Grafik
+
+Genellikle bir veya birden fazla değişkenin zaman içerisinde ki değişimini gösteren yapılar için kullanılır.
+
+Eksenler 0'dan başlamalıdır.
+
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+tarih = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs"]
+fiyat = [100, 200, 150, 180, 250]
+
+sns.lineplot(x=tarih, y=fiyat)
+plt.show()
+```
+
+![image](./images/sutun26.png)
 
 
 
@@ -6415,7 +6434,7 @@ plt.show()
 ## 7.3
 # 8
 
-https://www.youtube.com/watch?v=8O-QfFkW9tc&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=103
+https://www.youtube.com/watch?v=0kWrdqhJ1cY&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=104
 0000
 
 
