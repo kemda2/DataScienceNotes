@@ -6380,23 +6380,42 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
-fiyat=[100,200,250,150]
-marka=["A","B","C","D"]
+data = {
+    "Cinsiyet": [
+        "Kadın", "Kadın", "Kadın", "Erkek", "Kadın", "Erkek", "Kadın",  "Erkek", "Erkek", "Erkek", "Erkek", "Erkek", "Kadın", "Kadın", "Erkek", "Erkek", "Kadın", "Erkek", "Kadın", "Erkek", "Kadın",
+        "Erkek", "Kadın", "Kadın", "Erkek", "Erkek", "Kadın", "Erkek", "Kadın", "Erkek"
+    ],
+    "Günler": [
+        "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar", 
+        "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar", 
+        "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi",
+        "Pazar", 
+        "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar", 
+        "Pazartesi", "Salı"
+    ],
+    "Ödeme": [
+        800.00, 884.00, 867.00, 367.00, 738.00, 117.00, 867.00, 831.00, 447.00, 692.00,
+        235.00, 906.00, 923.00, 802.00, 827.00, 607.00, 996.00, 632.00, 203.00, 366.00,
+        854.00, 571.00, 529.00, 211.00, 804.00, 191.00, 176.00, 546.00, 812.00, 289.00
+    ]
+}
 
-sns.barplot(x=fiyat,y=marka)
+veri = pd.DataFrame(data)
+
+sns.barplot(data=veri, x="Günler", y="Ödeme", hue="Cinsiyet", ci=False, estimator=sum)
 plt.show()
 ```
-![image](./images/sutun25.png)
 
+## 7.2 Çizgi Grafik
 
 
 
 ![image](./images/sutun2.png)
 ### Örnekler
-## 7.2
+## 7.3
 # 8
 
-https://www.youtube.com/watch?v=Vrra4lfqvz8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=102
-0119
+https://www.youtube.com/watch?v=8O-QfFkW9tc&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=103
+0000
 
 
