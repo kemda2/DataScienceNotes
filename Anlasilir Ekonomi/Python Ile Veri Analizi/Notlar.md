@@ -6774,6 +6774,30 @@ veri.info()
 #  3   D4      21 non-null     float64
 # dtypes: float64(4)
 # memory usage: 1.2 KB
+
+veri.isnull().sum()
+
+# D1 5
+# D2 4
+# D3 8
+# D4 12
+
+veri[veri.isnull().any(axis=1)]
+
+#         D1     D2     D3    D4 
+#   8   58.0    NaN    NaN   NaN 
+#   9   16.0    NaN    NaN   NaN 
+#  10   41.0    NaN    NaN   NaN 
+#  13   22.0   64.0   84.0   NaN 
+#  14   59.0   46.0   81.0   NaN 
+#  15   92.0   99.0   15.0   NaN 
+#  16   21.0   98.0   88.0   NaN 
+#  24    NaN   97.0    NaN   NaN 
+#  25    NaN   69.0    NaN   NaN 
+#  26    NaN   32.0    NaN   NaN 
+#  27    NaN   82.0    NaN   NaN 
+#  28    NaN    NaN    NaN   NaN 
+
 ```
 
 
