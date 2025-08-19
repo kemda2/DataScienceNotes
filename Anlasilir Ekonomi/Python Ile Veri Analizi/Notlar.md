@@ -6706,6 +6706,10 @@ plt.show()
 
 ![image](./images/eksikdeger2.png)
 
+- Missing At Random
+- Missing Not At Random
+- Missing Completely At Random
+
 
 
 ![image](./images/eksikdeger.png)
