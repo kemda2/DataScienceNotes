@@ -6740,6 +6740,6 @@ veri = pd.DataFrame(data)
 ## 8.2
 # 9
 
-https://www.youtube.com/watch?v=3zh6L0jl2T0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=107
+https://www.youtube.com/watch?v=jBquYwPkrkI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=111
 0000
 
