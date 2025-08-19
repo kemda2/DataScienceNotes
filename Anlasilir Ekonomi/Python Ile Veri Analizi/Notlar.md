@@ -6808,6 +6808,6 @@ veri[veri.isnull().any(axis=1)]
 ## 8.2
 # 9
 
-https://www.youtube.com/watch?v=jBquYwPkrkI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=111
-0000
+https://www.youtube.com/watch?v=jBquYwPkrkI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=112
+0808
 
