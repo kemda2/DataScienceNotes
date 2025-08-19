@@ -6690,16 +6690,17 @@ plt.show()
 
 ![image](./images/kutu4.png)
 
+> Aykırı değerler yalnızca erkekler için vardır. Kadınlar için aykırı değer yoktur.
 
-
+# 8 Veri Hazırlama
 
 
 
 
 ![image](./images/kutu.png)
 ### Örnekler
-## 7.5
-# 8
+## 8.
+# 9
 
 https://www.youtube.com/watch?v=3zh6L0jl2T0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=107
 0000
