@@ -6696,7 +6696,7 @@ plt.show()
 
 ## 8.1 Eksik Değer
 
-
+Boş değerler bizim için sorun olabilir. Genelde NULL, NaN veya NA olarak görülebilir. Mesela Yaş için verideki eksiklik başka bir veriyle bağlantısı olmadığı için sonucunu etkileyecek başka bir değişkenle çalışmaz. Ama araba markası ve araba rengi gibi veri değişkenleri olduğunda araba modeli eksik olsa da bu kişinin arabası olduğunu renk kısmından anlarız.
 
 
 
