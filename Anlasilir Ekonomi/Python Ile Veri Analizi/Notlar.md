@@ -6715,6 +6715,14 @@ Temelde ikiye ayrılır;
 - Rassal Eksik Değer
 - Rassal Olmayan Eksik Değer
 
+Eksik Verilerin Değerlendirme Süreci;
+
+- Eksik Verilerin Tespiti
+- İstatistiksel Test Uygulanması
+- Çözüm Üretilmesi
+
+
+
 ![image](./images/eksikdeger.png)
 ### Örnekler
 ## 8.2
