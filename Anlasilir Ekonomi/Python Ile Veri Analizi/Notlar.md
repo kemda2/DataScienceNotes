@@ -6618,12 +6618,39 @@ plt.show()
 
 ![image](./images/sacilim7.png)
 
+## 7.4 Kutu Grafiği
+
+```Python
+import matplotlib.pyplot as plt  
+import seaborn as sns  
+
+veri = sns.load_dataset("titanic")
+
+veri.describe()
+```
+
+|       | survived | pclass  | age      | sibsp    | parch    | fare     |
+|-------|----------|---------|----------|----------|----------|----------|
+| count | 891.0000 | 891.000 | 714.0000 | 891.0000 | 891.0000 | 891.0000 |
+| mean  | 0.383838 | 2.3086  | 29.6991  | 0.5230   | 0.3816   | 32.2042  |
+| std   | 0.4866   | 0.8361  | 14.5265  | 1.1027   | 0.8061   | 49.6934  |
+| min   | 0.0000   | 1.0000  | 0.4200   | 0.0000   | 0.0000   | 0.0000   |
+| 25%   | 0.0000   | 2.0000  | 20.1250  | 0.0000   | 0.0000   | 7.9104   |
+| 50%   | 0.0000   | 3.0000  | 28.0000  | 0.0000   | 0.0000   | 14.4542  |
+| 75%   | 1.0000   | 3.0000  | 38.0000  | 1.0000   | 0.0000   | 31.0000  |
+| max   | 1.0000   | 3.0000  | 80.0000  | 8.0000   | 6.0000   | 512.3292 |
+
+```Python
+sns.boxplot(x=veri["age"])
+plt.show()
+```
+![image](./images/kutu1.png)
 
 
 
-![image](./images/sacilim.png)
+![image](./images/kutu.png)
 ### Örnekler
-## 7.4
+## 7.5
 # 8
 
 https://www.youtube.com/watch?v=3zh6L0jl2T0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=107
