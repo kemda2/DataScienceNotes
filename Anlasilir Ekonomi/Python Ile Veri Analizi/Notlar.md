@@ -6696,11 +6696,16 @@ plt.show()
 
 ## 8.1 Eksik Değer
 
-Boş değerler bizim için sorun olabilir. Genelde NULL, NaN veya NA olarak görülebilir. Mesela Yaş için verideki eksiklik başka bir veriyle bağlantısı olmadığı için sonucunu etkileyecek başka bir değişkenle çalışmaz. Ama araba markası ve araba rengi gibi veri değişkenleri olduğunda araba modeli eksik olsa da bu kişinin arabası olduğunu renk kısmından anlarız.
+> Boş değerler bizim için sorun olabilir. Genelde NULL, NaN veya NA olarak görülebilir. 
+
+> Mesela Yaş için verideki eksiklik başka bir veriyle bağlantısı olmadığı için sonucunu etkileyecek başka bir değişkenle çalışmaz. Ama araba markası ve araba rengi gibi veri değişkenleri olduğunda araba modeli eksik olsa da bu kişinin arabası olduğunu renk kısmından anlarız. Veya müşterinin kart borcu varsa ama kart durumu boşsa kredi kartı olduğunu anlarız. AMa başka çıkarım yapamayız. Mesela veri işleyen kişiye sorduğumuzda kart borcu 0 ise kartı vardır derse Mehmet'in kartı olduğunu anlarız. Ayşenin borcu varsa kartı kesin vardır. Ama Cemalin kart borcu var mı yok mu bilemeyiz.
+
+![image](./images/eksikdeger1.png)
 
 
 
-![image](./images/kutu.png)
+
+![image](./images/eksikdeger.png)
 ### Örnekler
 ## 8.2
 # 9
