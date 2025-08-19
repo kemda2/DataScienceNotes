@@ -6721,7 +6721,19 @@ Eksik Verilerin Değerlendirme Süreci;
 - İstatistiksel Test Uygulanması
 - Çözüm Üretilmesi
 
+```python
+import pandas as pd
 
+data = {
+    "D1": [36, 12, 77, 30, 13, 27, 38, 84, 58, 16, 41, 33, 13, 22, 59, 92, 21, 24, 59, 60, 91, 21, 27, 69, None, None, None, None, None, 64, 68, 26, 49],
+    "D2": [81, 100, 19, 15, 63, 27, 23, 33, None, None, None, 27, 43, 64, 46, 99, 98, 43, 45, 76, 60, 20, 27, 54, None, None, None, None, None, 73, 34, 50, 58],
+    "D3": [43, 78, 82, 43, 53, 63, 66, 57, None, None, None, 74, 93, 84, 81, 15, 88, 80, 97, 69, 32, 82, 75, 52, None, None, None, None, None, 87, 37, 41, 77],
+    "D4": [75, 29, 16, 25, 94, 99, 72, 45, None, None, None, 51, 77, 0, 0, 0, 0, 90, 53, 33, 86, 82, 81, 26, None, None, None, None, None, 15, 96, 32, 93]
+}
+
+veri = pd.DataFrame(data)
+
+```
 
 ![image](./images/eksikdeger.png)
 ### Örnekler
