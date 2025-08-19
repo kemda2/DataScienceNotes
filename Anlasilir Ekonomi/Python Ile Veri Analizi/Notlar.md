@@ -6702,6 +6702,9 @@ plt.show()
 
 ![image](./images/eksikdeger1.png)
 
+İstatistiksel olarak kayıp veri mekanizması vardır ve aşağıdaki gibidir;
+
+![image](./images/eksikdeger2.png)
 
 
 
