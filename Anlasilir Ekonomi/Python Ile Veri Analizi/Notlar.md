@@ -6694,12 +6694,15 @@ plt.show()
 
 # 8 Veri Hazırlama
 
+## 8.1 Eksik Değer
+
+
 
 
 
 ![image](./images/kutu.png)
 ### Örnekler
-## 8.
+## 8.2
 # 9
 
 https://www.youtube.com/watch?v=3zh6L0jl2T0&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=107
