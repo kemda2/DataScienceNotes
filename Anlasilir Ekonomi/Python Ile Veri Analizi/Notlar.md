@@ -6724,16 +6724,60 @@ Eksik Verilerin Değerlendirme Süreci;
 ```python
 import pandas as pd
 
-data = {
-    "D1": [36, 12, 77, 30, 13, 27, 38, 84, 58, 16, 41, 33, 13, 22, 59, 92, 21, 24, 59, 60, 91, 21, 27, 69, None, None, None, None, None, 64, 68, 26, 49],
-    "D2": [81, 100, 19, 15, 63, 27, 23, 33, None, None, None, 27, 43, 64, 46, 99, 98, 43, 45, 76, 60, 20, 27, 54, None, None, None, None, None, 73, 34, 50, 58],
-    "D3": [43, 78, 82, 43, 53, 63, 66, 57, None, None, None, 74, 93, 84, 81, 15, 88, 80, 97, 69, 32, 82, 75, 52, None, None, None, None, None, 87, 37, 41, 77],
-    "D4": [75, 29, 16, 25, 94, 99, 72, 45, None, None, None, 51, 77, 0, 0, 0, 0, 90, 53, 33, 86, 82, 81, 26, None, None, None, None, None, 15, 96, 32, 93]
-}
+data = [
+    [36, 81, 43, 75],
+    [12,100, 78, 29],
+    [77, 19, 82, 16],
+    [30, 15, 43, 25],
+    [13, 63, 53, 94],
+    [27, 27, 63, 99],
+    [38, 23, 66, 72],
+    [84, 33, 57, 45],
+    [58, None, None, None],
+    [16, None, None, None],
+    [41, None, None, None],
+    [33, 27, 74, 51],
+    [13, 43, 93, 77],
+    [22, 64, 84, None],
+    [59, 46, 81, None],
+    [92, 99, 15, None],
+    [21, 98, 88, None],
+    [24, 43, 80, 90],
+    [59, 45, 97, 53],
+    [60, 76, 69, 33],
+    [91, 60, 32, 86],
+    [21, 20, 82, 82],
+    [27, 27, 75, 81],
+    [69, 54, 52, 26],
+    [None, 97, None, None],
+    [None, 69, None, None],
+    [None, 32, None, None],
+    [None, 82, None, None],
+    [None, None, None, None],
+    [64, 73, 87, 15],
+    [68, 34, 37, 96],
+    [26, 50, 41, 32],
+    [49, 58, 77, 93]
+]
 
-veri = pd.DataFrame(data)
+veri = pd.DataFrame(data, columns=["D1", "D2", "D3", "D4"])
+veri.info()
 
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 33 entries, 0 to 32
+# Data columns (total 4 columns):
+#  #   Column  Non-Null Count  Dtype  
+# ---  ------  --------------  -----  
+#  0   D1      28 non-null     float64
+#  1   D2      29 non-null     float64
+#  2   D3      25 non-null     float64
+#  3   D4      21 non-null     float64
+# dtypes: float64(4)
+# memory usage: 1.2 KB
 ```
+
+
+
 
 ![image](./images/eksikdeger.png)
 ### Örnekler
