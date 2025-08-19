@@ -6646,6 +6646,20 @@ plt.show()
 ```
 ![image](./images/kutu1.png)
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+veri = sns.load_dataset("titanic")
+
+özet = veri.describe()
+print(özet["age"])
+
+sns.boxplot(x=veri["age"], color="red")
+plt.show()
+```
+![image](./images/kutu2.png)
+
 
 
 ![image](./images/kutu.png)
