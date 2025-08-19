@@ -6710,7 +6710,10 @@ plt.show()
 - Missing Not At Random
 - Missing Completely At Random
 
+Temelde ikiye ayrılır;
 
+- Rassal Eksik Değer
+- Rassal Olmayan Eksik Değer
 
 ![image](./images/eksikdeger.png)
 ### Örnekler
