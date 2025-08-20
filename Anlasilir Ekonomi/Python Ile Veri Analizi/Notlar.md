@@ -6846,7 +6846,13 @@ Rassal olarak ortaya çıktıysa;
 - Ortalama medyan veya mod ile doldurulabilir. Ama mesela yaş ve cinsiyet sütunları varsa ve eksik değer yaş sütunu eksik olan gözlemin cinsiyeti erkekse erkeklerin ortalaması alınarak doldurulması tavsiye edilir. 
 - Regresyon modeli tahminiyle doldurulabilir.
 - Makine Öğrenmesi metodları ile doldurulabilir.
+- Verimiz zaman serisi ise mevsimsellik ve takvim etkisinden arındırarak geçmiş dönemlere ait aynı datalarla doldurulabilir.
+- Yapı bir trend oluşturuyorsa (Doğrusallık, Paroboliklik gibi) trendin ana yapısına göre doldurulabilir.
+- Bayes yapıları ile
 
+Rassal olarak ortaya çıkmadıysa;
+
+Bu durum istemediğimiz bir durumdur. İleri teknikler kullanılarak doldurulabilir. Ama kesinlikle silinmemelidir.
 
 
 
