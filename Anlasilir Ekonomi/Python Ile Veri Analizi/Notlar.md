@@ -6854,9 +6854,24 @@ Rassal olarak ortaya çıkmadıysa;
 
 Bu durum istemediğimiz bir durumdur. İleri teknikler kullanılarak doldurulabilir. Ama kesinlikle silinmemelidir.
 
+```Python
+import missingno as msno 
+import matplotlib.pyplot as plt  
 
+veri = pd.read_excel("C:/Users/90506/Desktop/Ornek.xlsx")  
+veri2 = veri.copy()  
+
+msno.matrix(veri2)  
+plt.show()  
+```
 
 ![image](./images/eksikdeger7.png)
+
+
+
+
+
+![image](./images/eksikdeger8.png)
 ### Örnekler
 ## 8.2
 # 9
