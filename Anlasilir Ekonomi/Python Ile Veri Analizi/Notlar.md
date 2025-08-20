@@ -6843,7 +6843,9 @@ Rassal olarak ortaya çıktıysa;
 
 - Gözardı Edilebilir: Pandas eksik verileri gözardı ederek işlem yapıyor ama eksik verinin %5'ten fazla olmasını istemeyiz.
 - Satır olarak silinebilir. Ama çoğunlukla kullanılmaz.
-- Ortalama medyan veya mod ile doldurulabilir.
+- Ortalama medyan veya mod ile doldurulabilir. Ama mesela yaş ve cinsiyet sütunları varsa ve eksik değer yaş sütunu eksik olan gözlemin cinsiyeti erkekse erkeklerin ortalaması alınarak doldurulması tavsiye edilir. 
+- Regresyon modeli tahminiyle doldurulabilir.
+- Makine Öğrenmesi metodları ile doldurulabilir.
 
 
 
