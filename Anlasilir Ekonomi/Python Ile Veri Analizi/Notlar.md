@@ -6798,12 +6798,23 @@ veri[veri.isnull().any(axis=1)]
 #  27    NaN   82.0    NaN   NaN 
 #  28    NaN    NaN    NaN   NaN 
 
+import missingno as msno         
+import matplotlib.pyplot as plt  
+
+msno.bar(veri)
+plt.show()
 ```
 
+![image](./images/eksikdeger3.png)
 
+```Python
+msno.matrix(veri)  
+plt.show()         
+```
 
+![image](./images/eksikdeger4.png)
 
-![image](./images/eksikdeger.png)
+![image](./images/eksikdeger5.png)
 ### Örnekler
 ## 8.2
 # 9
