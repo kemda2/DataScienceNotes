@@ -6854,11 +6854,11 @@ Rassal olarak ortaya çıkmadıysa;
 
 Bu durum istemediğimiz bir durumdur. İleri teknikler kullanılarak doldurulabilir. Ama kesinlikle silinmemelidir.
 
+
 ```Python
 import missingno as msno 
 import matplotlib.pyplot as plt  
 
-veri = pd.read_excel("C:/Users/90506/Desktop/Ornek.xlsx")  
 veri2 = veri.copy()  
 
 msno.matrix(veri2)  
@@ -6867,8 +6867,25 @@ plt.show()
 
 ![image](./images/eksikdeger7.png)
 
+Korelasyon değerine bakılarak %80'den azsa rassal sayabiliriz.
+
+```Python
+veri2[~veri2.isnull()] = 1
+veri2[veri2.isnull()] = 0 
+
+# yukarıdakiler veri2.notnull().astype("int") ile aynı şey
 
 
+Veri2.head()
+
+    # D1   D2   D3   D4  
+#  0  1.0  1.0  1.0  1.0 
+#  1  1.0  1.0  1.0  1.0 
+#  2  1.0  1.0  1.0  1.0 
+#  3  1.0  1.0  1.0  1.0 
+#  4  1.0  1.0  1.0  1.0 
+
+```
 
 
 ![image](./images/eksikdeger8.png)
