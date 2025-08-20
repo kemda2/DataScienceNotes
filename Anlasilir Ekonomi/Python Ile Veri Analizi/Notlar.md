@@ -6948,9 +6948,49 @@ veri2.reset_index(drop=True, inplace=True) # İndex i yeniden oluşturup eski in
 
 Eğer bir sütundaki değerlerin %70 - %75 satırı nan ise direk sütunu kaldırırız.
 
+## 8.4 Eksik verilerin doldurulması
+
+```Python
+veri2.fillna(value="Eksik Gözlem", inplace=True) # Bütün eksik değerleri "Eksik Gözlem" değeriyle doldurur 
+veri2.fillna(value=0, inplace=True) # Bütün eksik değerleri 0 değeriyle doldurur 
+```
+
+Tek bir sütunu da doldurabiliriz;
+
+```Python
+veri2["D1"].fillna(value=veri2["D1"].mean(), inplace=True) # D1 sütununu D1 sütununun ortalama değeriyle doldurma
+
+veri2.fillna(value=veri2.mean()["D1":"D2"], inplace=True) # D1 ve D2 sütunlarını kendi ortalama değerleriyle doldurma
+
+veri2.fillna(value=veri2.mean()[:], inplace=True) # Bütün sütunları kendi ortalama değerleriyle doldurma
+```
+
+Standart sapması düşükse ortalama yüksekse medyan değeriyle doldurulabilir.
+
+```Python
+data = {
+    'Yaş': [35, 39, 20, 45, , 
+            29, 40, 50, 53, , 
+            44, 45, 41, 44, ,
+            28, 18, 39, , 32, 
+            32, , 33, 25, 32, 
+            41, 44, 30, 18, , 
+            23, 43, , 46],
+    'Cinsiyet': ['Kadın', 'Kadın', 'Kadın', 'Kadın', 'Erkek', 
+                 'Kadın', 'Erkek', 'Erkek', 'Kadın', 'Kadın', 
+                 'Erkek', 'Kadın', 'Erkek', 'Erkek', 'Kadın', 
+                 'Kadın', 'Erkek', 'Erkek', 'Kadın', 'Kadın', 
+                 'Erkek', 'Erkek', 'Erkek', 'Kadın', 'Kadın', 
+                 'Kadın', 'Erkek', 'Kadın', 'Erkek', 'Kadın', 
+                 'Kadın', 'Kadın', 'Erkek', 'Kadın']
+}
+
+
+```
+
 ![image](./images/eksikdeger8.png)
 ### Örnekler
-## 8.4
+## 8.5
 # 9
 
 https://www.youtube.com/watch?v=UwWYLCKbvds&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=112
