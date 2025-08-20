@@ -6837,7 +6837,13 @@ plt.show()
 
 ![image](./images/eksikdeger6.png)
 
+### Rassallık Testi
 
+Rassal olarak ortaya çıktıysa;
+
+- Gözardı Edilebilir: Pandas eksik verileri gözardı ederek işlem yapıyor ama eksik verinin %5'ten fazla olmasını istemeyiz.
+- Satır olarak silinebilir. Ama çoğunlukla kullanılmaz.
+- Ortalama medyan veya mod ile doldurulabilir.
 
 
 
@@ -6847,6 +6853,6 @@ plt.show()
 ## 8.2
 # 9
 
-https://www.youtube.com/watch?v=jBquYwPkrkI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=112
-0808
+https://www.youtube.com/watch?v=UwWYLCKbvds&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=112
+0517
 
