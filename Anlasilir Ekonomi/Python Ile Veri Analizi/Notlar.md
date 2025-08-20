@@ -7029,11 +7029,12 @@ veri2["Şehir"].fillna(veri2["Şehir"].mode()[0], inplace=True) # En sık görü
 
 ```
 
+
 ![image](./images/eksikdeger8.png)
 ### Örnekler
 ## 8.5
 # 9
 
-https://www.youtube.com/watch?v=UwWYLCKbvds&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=112
-0517
+https://www.youtube.com/watch?v=LeczUoPJaWI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=114
+0000
 
