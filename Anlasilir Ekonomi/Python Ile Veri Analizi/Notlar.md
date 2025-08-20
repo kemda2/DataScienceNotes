@@ -6892,9 +6892,9 @@ veri2.corr()
 #  D2   0.102012  1.000000  0.656532  0.491304 
 #  D3   0.747018  0.656532  1.000000  0.748331 
 #  D4   0.559017  0.491304  0.748331  1.000000 
-
 ```
 
+Eğer bir ilişki varsa %80'e yakın olduğu için D1 ile D3 arasında olmasından ve rassal olmamasından şüphelenebiliriz.  
 
 ![image](./images/eksikdeger8.png)
 ### Örnekler
