@@ -6830,10 +6830,19 @@ plt.show()
 
 ![image](./images/eksikdeger5.png)
 
-
-
+```Python
+msno.heatmap(veri)  
+plt.show()          
+```
 
 ![image](./images/eksikdeger6.png)
+
+
+
+
+
+
+![image](./images/eksikdeger7.png)
 ### Örnekler
 ## 8.2
 # 9
