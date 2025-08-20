@@ -7029,12 +7029,15 @@ veri2["Şehir"].fillna(veri2["Şehir"].mode()[0], inplace=True) # En sık görü
 
 ```
 
+## 8.5 Aykırı Değer
 
-![image](./images/eksikdeger8.png)
+
+
+![image](./images/aykirideger.png)
 ### Örnekler
-## 8.5
+## 8.6
 # 9
 
-https://www.youtube.com/watch?v=LeczUoPJaWI&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=114
+https://www.youtube.com/watch?v=oT2b1sr1V1w&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=115
 0000
 
