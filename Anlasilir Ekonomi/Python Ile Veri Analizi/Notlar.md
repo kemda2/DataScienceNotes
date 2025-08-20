@@ -6955,7 +6955,7 @@ veri2.fillna(value="Eksik Gözlem", inplace=True) # Bütün eksik değerleri "Ek
 veri2.fillna(value=0, inplace=True) # Bütün eksik değerleri 0 değeriyle doldurur 
 ```
 
-Tek bir sütunu da doldurabiliriz;
+> Tek bir sütunu da doldurabiliriz;
 
 ```Python
 veri2["D1"].fillna(value=veri2["D1"].mean(), inplace=True) # D1 sütununu D1 sütununun ortalama değeriyle doldurma
@@ -6967,15 +6967,20 @@ veri2.fillna(value=veri2.mean()[:], inplace=True) # Bütün sütunları kendi or
 
 Standart sapması düşükse ortalama yüksekse medyan değeriyle doldurulabilir.
 
+> Eğer kategorik değişkene göre doldurmak istiyorsak (eğer boş satır erkekse erkeklerin ortalamasına göre kadınsa kadınların ortalamasına göre);
+
 ```Python
+import pandas as pd
+import numpy as np
+
 data = {
-    'Yaş': [35, 39, 20, 45, , 
-            29, 40, 50, 53, , 
-            44, 45, 41, 44, ,
-            28, 18, 39, , 32, 
-            32, , 33, 25, 32, 
-            41, 44, 30, 18, , 
-            23, 43, , 46],
+    'Yaş': [35, 39, 20, 45, np.nan, 
+            29, 40, 50, 53, np.nan, 
+            44, 45, 41, 44, np.nan,
+            28, 18, 39, np.nan, 32, 
+            32, np.nan, 33, 25, 32, 
+            41, 44, 30, 18, np.nan, 
+            23, 43, np.nan, 46],
     'Cinsiyet': ['Kadın', 'Kadın', 'Kadın', 'Kadın', 'Erkek', 
                  'Kadın', 'Erkek', 'Erkek', 'Kadın', 'Kadın', 
                  'Erkek', 'Kadın', 'Erkek', 'Erkek', 'Kadın', 
@@ -6985,6 +6990,42 @@ data = {
                  'Kadın', 'Kadın', 'Erkek', 'Kadın']
 }
 
+veri = pd.DataFrame(data)
+
+veri2 = veri.copy()
+
+veri2.isnull().sum()
+
+# Yaş         7
+# Cinsiyet    0
+# dtype: int64
+
+ortalamalar = veri2.groupby("Cinsiyet")["Yaş"].mean()
+print(ortalamalar)
+
+# Cinsiyet
+# Erkek    36.636364
+# Kadın    35.375000
+# Name: Yaş, dtype: float64
+
+veri2["Yaş"].fillna(veri2.groupby("Cinsiyet")["Yaş"].transform("mean"), inplace=True) # Kadın için kadın ortalama değerini ve erkek için erkek ortalama değerini kullanır
+```
+
+> Eğer kategorik veri dolduracaksak;
+
+```Python
+import pandas as pd
+import numpy as np
+
+data = {
+    'Şehir': ['Ankara', 'İzmir', 'Mersin', np.nan, 'Adana', 'Mersin', 'Mersin', 'İzmir', 'İzmir', 'Ankara', np.nan, 'İstanbul', 'İzmir', 'Adana', 'İzmir', 'Ankara', 'İzmir', 'Mersin', np.nan, 'Ankara', 'Ankara', 'Adana', 'Ankara', 'Adana', np.nan, 'Mersin', 'Ankara', 'Mersin', 'İzmir', np.nan, 'İstanbul', 'Ankara', 'İzmir', 'Ankara']
+}
+
+veri2 = pd.DataFrame(data)
+
+mod = veri2["Şehir"].mode()[0] # Ankara
+
+veri2["Şehir"].fillna(veri2["Şehir"].mode()[0], inplace=True) # En sık görülen Ankara değerine göre doldurdu
 
 ```
 
