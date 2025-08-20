@@ -6814,7 +6814,26 @@ plt.show()
 
 ![image](./images/eksikdeger4.png)
 
+```Python
+import pandas as pd             
+import missingno as msno        
+import matplotlib.pyplot as plt 
+import seaborn as sns           
+
+veri = sns.load_dataset("titanic")
+
+
+msno.matrix(veri)
+plt.show()
+
+```
+
 ![image](./images/eksikdeger5.png)
+
+
+
+
+![image](./images/eksikdeger6.png)
 ### Örnekler
 ## 8.2
 # 9
