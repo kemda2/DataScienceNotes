@@ -6837,7 +6837,7 @@ plt.show()
 
 ![image](./images/eksikdeger6.png)
 
-### Rassallık Testi
+## 8.2 Rassallık Testi
 
 Rassal olarak ortaya çıktıysa;
 
@@ -6896,9 +6896,61 @@ veri2.corr()
 
 Eğer bir ilişki varsa %80'e yakın olduğu için D1 ile D3 arasında olmasından ve rassal olmamasından şüphelenebiliriz.  
 
+## 8.3 Eksik değerlerin silinmesi
+
+```Python
+import pandas as pd
+
+data = [
+    [36, 81, 43, 75],
+    [12,100, 78, 29],
+    [77, 19, 82, 16],
+    [30, 15, 43, 25],
+    [13, 63, 53, 94],
+    [27, 27, 63, 99],
+    [38, 23, 66, 72],
+    [84, 33, 57, 45],
+    [58, None, None, None],
+    [16, None, None, None],
+    [41, None, None, None],
+    [33, 27, 74, 51],
+    [13, 43, 93, 77],
+    [22, 64, 84, None],
+    [59, 46, 81, None],
+    [92, 99, 15, None],
+    [21, 98, 88, None],
+    [24, 43, 80, 90],
+    [59, 45, 97, 53],
+    [60, 76, 69, 33],
+    [91, 60, 32, 86],
+    [21, 20, 82, 82],
+    [27, 27, 75, 81],
+    [69, 54, 52, 26],
+    [None, 97, None, None],
+    [None, 69, None, None],
+    [None, 32, None, None],
+    [None, 82, None, None],
+    [None, None, None, None],
+    [64, 73, 87, 15],
+    [68, 34, 37, 96],
+    [26, 50, 41, 32],
+    [49, 58, 77, 93]
+]
+
+veri = pd.DataFrame(data, columns=["D1", "D2", "D3", "D4"])
+
+veri2 = veri.copy()
+
+veri2.dropna(inplace=True) # Aynısı; veri3 = veri2.dropna()
+veri2.dropna(inplace=True, how="all") # yalnızca bütün satırı boş değer içeren satırları kaldırır 
+veri2.reset_index(drop=True, inplace=True) # İndex i yeniden oluşturup eski indexi siler
+```
+
+Eğer bir sütundaki değerlerin %70 - %75 satırı nan ise direk sütunu kaldırırız.
+
 ![image](./images/eksikdeger8.png)
 ### Örnekler
-## 8.2
+## 8.4
 # 9
 
 https://www.youtube.com/watch?v=UwWYLCKbvds&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=112
