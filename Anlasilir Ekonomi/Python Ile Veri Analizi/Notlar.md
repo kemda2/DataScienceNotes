@@ -7596,7 +7596,38 @@ Doktora            0             4
 
 # 12 Veri Önişleme Örnekleri
 
+Dataset: Online Retail II Data Set from ML Repository (Kaggle)
 
+```Python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plti
+import seaborn as sns
+
+hamveri=pd.read_excel("C:/Users/90506/Desktop/veri.xlsx")
+hamveri.to_csv("C:/Users/90506/Desktop/veri.csv")
+hamveri=pd.read_csv("C:/Users/90506/Desktop/veri.csv")
+
+veri = hamveri.copy()
+veri
+
+# Unnamed: 0  Invoice  StockCode  Description                             Quantity  InvoiceDate           Price  Customer ID  Country
+# 0           536365   85123A     WHITE HANGING HEART T-LIGHT HOLDER         6     2010-12-01 08:26:00    2.55    17850.0     United Kingdom
+# 1           536365   71053      WHITE METAL LANTERN                        6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
+# 2           536365   84406B     CREAM CUPID HEARTS COAT HANGER             8     2010-12-01 08:26:00    2.75    17850.0     United Kingdom
+# 3           536365   84029G     KNITTED UNION FLAG HOT WATER BOTTLE        6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
+# 4           536365   84029E     RED WOOLLY HOTTIE WHITE HEART.             6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
+
+veri.drop(veri.columns[[0]],axis=1)
+veri
+
+# Invoice  StockCode  Description                             Quantity  InvoiceDate           Price  Customer ID  Country
+# 536365   85123A     WHITE HANGING HEART T-LIGHT HOLDER         6     2010-12-01 08:26:00    2.55    17850.0     United Kingdom
+# 536365   71053      WHITE METAL LANTERN                        6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
+# 536365   84406B     CREAM CUPID HEARTS COAT HANGER             8     2010-12-01 08:26:00    2.75    17850.0     United Kingdom
+# 536365   84029G     KNITTED UNION FLAG HOT WATER BOTTLE        6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
+# 536365   84029E     RED WOOLLY HOTTIE WHITE HEART.             6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
+```
 
 
 ![image](./images/kotogerikdegisken.png)
