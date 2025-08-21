@@ -7719,7 +7719,7 @@ print(veri.isnull().sum())
 oran=(veri["Ürün Adı"].isnull().sum())/len(veri) 
 print(oran*100) # 0.26831023601705084 yani % 0,26. Çok düşük bir oran olduğu için sileceğiz.
 
-
+veri.dropna(axis=0, inplace=True) # Birden çok sütunda nan varsa ve sadece Ürün Adı'nda boş olanları sileceksek sütun belirtmeliyiz
 ```
 
 
