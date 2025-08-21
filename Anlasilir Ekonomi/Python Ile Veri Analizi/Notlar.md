@@ -7075,7 +7075,7 @@ plt.show()
 
 ![image](./images/aykirideger3.png)
 
-Bunda aykırı değer var (25).
+Teker teker bakıldığında yaş değişkeninde aykırı değer yokken yıl değişkeninde aykırı değer var (25).
 
 
 ![image](./images/aykirideger4.png)
