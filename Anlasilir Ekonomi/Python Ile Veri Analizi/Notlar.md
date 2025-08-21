@@ -7579,6 +7579,6 @@ print(veri2[["Eğitim", "KodEğitim"]]) # Sıralı olarak oluşturmamış
 ## 10.
 # 12
 
-https://www.youtube.com/watch?v=J1npB16WyJw&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=121
+https://www.youtube.com/watch?v=iRTfus_fv6k&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=124
 00
 
