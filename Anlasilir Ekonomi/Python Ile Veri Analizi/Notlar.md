@@ -7572,12 +7572,37 @@ print(veri2[["Eğitim", "KodEğitim"]]) # Sıralı olarak oluşturmamış
 # Doktora            0
 # Üniversite         3
 
+sıralı=pd.Categorical(veri2["Eğitim"], categories=["İlkokul", "Lise", "Üniversite", "YüksekLisans", "Doktora"],ordered=True)
+
+veri2["Sıralı Eğitim"], sıra = pd.factorize(sıralı, sort=True)
+
+print(veri2[["Eğitim", "KodEğitim", "SıralıEğitim"]])
+
+Eğitim         KodEğitim   SıralıEğitim
+Üniversite         3             2
+Doktora            0             4
+Doktora            0             4
+Üniversite         3             2
+Üniversite         3             2
+İlkokul            4             0
+Doktora            0             4
+Doktora            0             4
+Doktora            0             4
+YüksekLisans       2             3
+Doktora            0             4
+Üniversite         3             2
+
 ```
+
+# 12 Veri Önişleme Örnekleri
+
+
+
 
 ![image](./images/kotogerikdegisken.png)
 ### Örnekler
 ## 10.
-# 12
+# 13
 
 https://www.youtube.com/watch?v=iRTfus_fv6k&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=124
 00
