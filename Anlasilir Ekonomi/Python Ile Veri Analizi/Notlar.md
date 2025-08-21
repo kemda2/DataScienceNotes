@@ -7090,6 +7090,12 @@ plt.show()
 
 ![image](./images/aykirideger4.png)
 
+> Aykırı değerler bütün testler için kaldırılmalıdır.
+
+
+
+
+
 
 
 ![image](./images/aykirideger5.png)
