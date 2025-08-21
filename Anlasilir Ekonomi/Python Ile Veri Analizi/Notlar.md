@@ -7344,8 +7344,27 @@ plt.show()
 
 ```Python
 import pandas as pd
+import numpy as np
+from sklearn import preprocessing as pr
 
 veri = pd.DataFrame({"D1":[577, 36, 919, 905, 573, 468, 585, 41, 397, 881, 903, 142, 498, 943, 698, 410, 235, 38, 54, 704, 749, 665, 997, 508, 512, 763, 398]})
+
+maxmindonus = pr.MinMaxScaler().fit_transform(veri)
+maxmindonus
+
+# [[0.56295525]
+#  [0.        ]
+#  [0.91883455]
+#  [0.90426639]
+#  [0.55879292]
+#  [0.44953174]
+#  [0.57127992]
+#  [0.00520291]
+#  [0.37565036]
+#  [0.8792924 ]
+#  [0.90218522]
+#  [0.11030177]
+#          ...]
 
 ```
 
