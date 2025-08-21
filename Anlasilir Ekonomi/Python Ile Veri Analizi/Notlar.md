@@ -7705,6 +7705,18 @@ print(veri.isnull().sum())
 # Diyelim ki Ürün isimlerine ulaşamıyoruz. İsteyecek veya temin edebileceğimiz bir yer yok. O zaman mode ile dolduracağız.
 veri["Ürün Adı"].fillna(veri["Ürün Adı"].mode()[0], inplace=True)
 
+print(veri.isnull().sum())
+
+# Fatura No        0
+# Stok Kodu        0
+# Ürün Adı         0
+# Adet             0
+# Fatura Tarihi    0
+# Birim Fiyat      0
+# Ülke             0
+# Toplam Tutar     0
+
+
 
 ```
 
