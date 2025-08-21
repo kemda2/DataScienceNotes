@@ -7618,7 +7618,7 @@ veri
 # 3           536365   84029G     KNITTED UNION FLAG HOT WATER BOTTLE        6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
 # 4           536365   84029E     RED WOOLLY HOTTIE WHITE HEART.             6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
 
-veri.drop(veri.columns[[0]],axis=1)
+veri.drop(veri.columns[[0]],axis=1,inplace=True)
 veri
 
 # Invoice  StockCode  Description                             Quantity  InvoiceDate           Price  Customer ID  Country
@@ -7627,6 +7627,18 @@ veri
 # 536365   84406B     CREAM CUPID HEARTS COAT HANGER             8     2010-12-01 08:26:00    2.75    17850.0     United Kingdom
 # 536365   84029G     KNITTED UNION FLAG HOT WATER BOTTLE        6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
 # 536365   84029E     RED WOOLLY HOTTIE WHITE HEART.             6     2010-12-01 08:26:00    3.39    17850.0     United Kingdom
+
+veri.rename(columns={"Invoice": "Fatura No", "StockCode":"Stok Kodu", "Description":"Ürün Adı", "Quantity":"Adet", "InvoiceDate": "Fatura Tarihi", "Price": "Fiyat", "Customer ID": "Müşteri ID", "Country":"Ülke"}, inplace=True)
+veri
+
+# Fatura No  Stok Kodu  Ürün Adı                                     Adet  Fatura Tarihi        Fiyat  Müşteri ID  Ülke
+# 536365     85123A     WHITE HANGING HEART T-LIGHT HOLDER            6    2010-12-01 08:26:00  2.55   17850.0     United Kingdom
+# 536365     71053      WHITE METAL LANTERN                           6    2010-12-01 08:26:00  3.39   17850.0     United Kingdom
+# 536365     84406B     CREAM CUPID HEARTS COAT HANGER                8    2010-12-01 08:26:00  2.75   17850.0     United Kingdom
+# 536365     84029G     KNITTED UNION FLAG HOT WATER BOTTLE           6    2010-12-01 08:26:00  3.39   17850.0     United Kingdom
+# 536365     84029E     RED WOOLLY HOTTIE WHITE HEART.                6    2010-12-01 08:26:00  3.39   17850.0     United Kingdom
+
+
 ```
 
 
