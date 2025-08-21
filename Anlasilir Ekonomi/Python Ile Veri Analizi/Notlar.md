@@ -7536,13 +7536,14 @@ onehotdonusum=pd.get_dummies(veri2, columns=["Cinsiyet", "Araç Renk"])
 onehotdonusum=pd.get_dummies (veri2, columns=["Cinsiyet"], drop_first=True) 
 ```
 
+# 11 Ordinal Değişken Dönüşümü
 
 
 
 ![image](./images/kotogerikdegisken.png)
 ### Örnekler
 ## 10.
-# 11
+# 12
 
 https://www.youtube.com/watch?v=J1npB16WyJw&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=121
 00
