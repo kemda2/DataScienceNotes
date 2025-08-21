@@ -7092,13 +7092,61 @@ plt.show()
 
 > Aykırı değerler bütün testler için kaldırılmalıdır.
 
+Tek değişkenli veride aykırı değer bulma için boxplot, çok değişkenli veride aykırı değer bulmak için saçılım grafiği kullanılabilir. Ama saçılım grafiği ile tespit etmek her zaman kolay olmayabilir. 
+
+Mahalanobis mesafesi, bir nokta ile dağılımın bir ölçüsüdür. Hoca bunu anlatmayacak.
+
+Yerel aykırı değer faktörü (LOF), noktaların en yakınındaki noktalara giderek bir yoğunluk hesaplıyor ve bu yakınlıktan uzak olan değerleri aykırı değer olarak belirliyor.
+
+### Örnekler
+
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+veri = sns.load_dataset("titanic")
+veri2 = veri.copy()
+
+veri2.isnull().sum()
+
+#  Sütun Adı     Eksik Değer Sayısı 
+#  survived    0                  
+#  pclass      0                  
+#  sex         0                  
+#  age         177            
+#  sibsp       0                  
+#  parch       0                  
+#  fare        0                  
+#  embarked    2              
+#  class       0                  
+#  who         0                  
+#  adult_male  0                  
+#  deck        688            
+
+veri2["age"].fillna(veri2.groupby("sex")["age"].transform("mean"), inplace=True)
+
+sns.boxplot(data=veri2["age"])
+plt.show()
+```
+
+![image](./images/aykirideger5.png) 
+
+```Python
+Q1 = veri2["age"].quantile(0.25)
+Q3 = veri2["age"].quantile(0.75)
+
+IQR = Q3 - Q1
+
+altsınır = Q1 - 1.5 * IQR
+üstsınır = Q3 + 1.5 * IQR
+
+askucuk = veri2[veri2["age"] < altsınır]["age"] # Alt sınırdan küçük
+usbuyuk = veri2[veri2["age"] > üstsınır]["age"] # Üst sınırdan büyük
+
+```
 
 
-
-
-
-
-![image](./images/aykirideger5.png)
+![image](./images/aykirideger6.png)
 ### Örnekler
 ## 8.6
 # 9
