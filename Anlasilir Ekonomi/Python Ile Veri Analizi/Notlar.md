@@ -7342,6 +7342,8 @@ plt.show()
 
 # 9 Değişken Ölçeklendirme
 
+> MinMaxScaler (0 ile 1 arasında)
+
 ```Python
 import pandas as pd
 import numpy as np
@@ -7366,9 +7368,36 @@ maxmindonus
 #  [0.11030177]
 #          ...]
 
+veri2 = pd.DataFrame(maxmindonus) # Dataframe e dönüştü
 ```
 
+> Robust (- ve + arasında)
 
+```Python
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing as pr
+
+veri = pd.DataFrame({"D1":[577, 36, 919, 905, 573, 468, 585, 41, 397, 881, 903, 142, 498, 943, 698, 410, 235, 38, 54, 704, 749, 665, 997, 508, 512, 763, 398]})
+
+robustdonus = pr.RobustScaler().fit_transform(veri)
+
+veri2 = pd.DataFrame(robustdonus) # Dataframe e dönüştü 
+```
+
+> Standard (Normal dağılım yapısına)
+
+```Python
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing as pr
+
+veri = pd.DataFrame({"D1":[577, 36, 919, 905, 573, 468, 585, 41, 397, 881, 903, 142, 498, 943, 698, 410, 235, 38, 54, 704, 749, 665, 997, 508, 512, 763, 398]})
+
+Standarddonus = pr.StandardScaler().fit_transform(veri)
+
+veri2 = pd.DataFrame(Standarddonus) # Dataframe e dönüştü 
+```
 
 
 
@@ -7377,6 +7406,6 @@ maxmindonus
 ## 8.6
 # 10
 
-https://www.youtube.com/watch?v=2zBxRoLap7k&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=116
-1400
+https://www.youtube.com/watch?v=J1npB16WyJw&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=121
+00
 
