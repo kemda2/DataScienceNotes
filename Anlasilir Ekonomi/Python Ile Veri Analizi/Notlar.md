@@ -7142,8 +7142,75 @@ altsınır = Q1 - 1.5 * IQR
 
 askucuk = veri2[veri2["age"] < altsınır]["age"] # Alt sınırdan küçük
 usbuyuk = veri2[veri2["age"] > üstsınır]["age"] # Üst sınırdan büyük
+```
+
+---
+
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+veri = sns.load_dataset("taxis")
+veri2 = veri.copy()
+veri2.isnull().sum()
+
+# pickup              0  
+# dropoff             0  
+# passengers          0  
+# distance            0  
+# fare                0  
+# tip                 0  
+# tolls               0  
+# total               0  
+# color               0  
+# payment            44  
+# pickup_zone        26  
+# dropoff_zone       45  
+# pickup_borough     26  
+
+sns.scatterplot(data=veri2, x="fare", y="tip")
+plt.show()
+```
+
+![image](./images/aykirideger6.png) 
+
+```Python
+import pandas as pd
+from sklearn.neighbors import LocalOutlierFactor
+
+aykırı = pd.DataFrame(data=veri, columns=["fare", "tip"])
+
+LOF = LocalOutlierFactor(n_neighbors=20, contamination=0.1)
+tahmin = LOF.fit_predict(aykırı)
+tahmin
+
+# [1 1 1 ... 1 1 1] +1 aykırı olmayan -1 aykırı olan değerleri gösterir.
+
+aykırı[tahmin == -1]
+
+#       fare   tip
+# 8    15.00  1.00
+# 19    6.50  1.08
+# 70   16.50  1.00
+# 77    5.00  1.65
+# 79    7.50  2.25
+# ...
+# 6371  6.50  0.10
+# 6374  5.00  1.45
+# 6387 18.48  0.00
+# 6413 13.61  0.00
+# 6426  4.50  0.50
 
 ```
+
+---
+
+>Temel olarak 3 çözüm var aykırı değerler için;
+
+- Silme (Çok önerilmez.)
+- Ortalama ile değiştirme
+- Baskılama (En yakın değere indirgeme)
+
 
 
 ![image](./images/aykirideger6.png)
