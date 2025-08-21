@@ -7638,6 +7638,16 @@ veri
 # 536365     84029G     KNITTED UNION FLAG HOT WATER BOTTLE           6    2010-12-01 08:26:00  3.39         17850.0     United Kingdom
 # 536365     84029E     RED WOOLLY HOTTIE WHITE HEART.                6    2010-12-01 08:26:00  3.39         17850.0     United Kingdom
 
+veri["Toplam Tutar"]=veri["Birim Fiyat"] * veri["Adet"]
+veri
+
+# Fatura No  Stok Kodu  Ürün Adı                                 Adet  Birim Fiyat  Müşteri ID  Ülke            Toplam Tutar
+# 536365     85123A     WHITE HANGING HEART T-LIGHT HOLDER         6      2.55      17850.0     United Kingdom     15.30
+# 536365     71053      WHITE METAL LANTERN                        6      3.39      17850.0     United Kingdom     20.34
+# 536365     84406B     CREAM CUPID HEARTS COAT HANGER             8      2.75      17850.0     United Kingdom     22.00
+# 536365     84029G     KNITTED UNION FLAG HOT WATER BOTTLE        6      3.39      17850.0     United Kingdom     20.34
+# 536365     84029E     RED WOOLLY HOTTIE WHITE HEART.             6      3.39      17850.0     United Kingdom     20.34
+
 
 ```
 
