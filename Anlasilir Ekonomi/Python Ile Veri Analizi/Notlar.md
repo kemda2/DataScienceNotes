@@ -7538,7 +7538,41 @@ onehotdonusum=pd.get_dummies (veri2, columns=["Cinsiyet"], drop_first=True)
 
 # 11 Ordinal Değişken Dönüşümü
 
+```Python
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing as pr
 
+veri = pd.DataFrame({
+    "Cinsiyet": ["Kadın", "Erkek", "Kadın", "Kadın", "Kadın", "Erkek", "Kadın", "Kadın", "Erkek", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Erkek", "Erkek", "Kadın", "Erkek", "Erkek", "Erkek", "Erkek", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın"],
+
+    "AraçRenk": ["Yeşil", "Mavi", "Kırmızı", "Beyaz", "Kırmızı", "Siyah", "Beyaz", "Mavi", "Siyah", "Kırmızı", "Siyah", "Siyah", "Beyaz", "Yeşil", "Beyaz", "Yeşil", "Beyaz", "Kırmızı", "Mavi", "Beyaz", "Beyaz", "Siyah", "Yeşil", "Yeşil", "Yeşil", "Kırmızı", "Yeşil", "Kırmızı", "Kırmızı", "Kırmızı", "Siyah", "Beyaz", "Siyah"],
+
+    "Eğitim": ["Üniversite", "Doktora", "Doktora", "Üniversite", "Üniversite", "İlkokul", "Doktora", "Doktora", "Doktora", "YüksekLisans", "Doktora", "Üniversite", "Lise", "YüksekLisans", "İlkokul", "İlkokul", "İlkokul", "İlkokul", "Üniversite", "Üniversite", "Lise", "YüksekLisans", "Doktora", "Lise", "Üniversite", "Üniversite", "Lise", "Üniversite", "Doktora", "Doktora", "Doktora", "Doktora", "İlkokul"]
+})
+
+veri2=veri.copy()
+
+veri2["KodCinsiyet"]=pr. LabelEncoder().fit_transform (veri2["Cinsiyet"])
+veri2["KodAraç Renk"]=pr.LabelEncoder().fit_transform (veri2 ["Araç Renk"])
+veri2["KodEğitim"]=pr.LabelEncoder().fit_transform (veri2["Eğitim"])
+
+print(veri2[["Eğitim", "KodEğitim"]]) # Sıralı olarak oluşturmamış
+# Eğitim         KodEğitim
+# Üniversite         3
+# Doktora            0
+# Doktora            0
+# Üniversite         3
+# Üniversite         3
+# İlkokul            4
+# Doktora            0
+# Doktora            0
+# Doktora            0
+# YüksekLisans       2
+# Doktora            0
+# Üniversite         3
+
+```
 
 ![image](./images/kotogerikdegisken.png)
 ### Örnekler
