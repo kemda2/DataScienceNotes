@@ -7648,6 +7648,22 @@ veri
 # 536365     84029G     KNITTED UNION FLAG HOT WATER BOTTLE        6      3.39      17850.0     United Kingdom     20.34
 # 536365     84029E     RED WOOLLY HOTTIE WHITE HEART.             6      3.39      17850.0     United Kingdom     20.34
 
+print(veri.info())
+
+# #   Column          Non-Null Count  Dtype  
+# ---  ------          --------------  -----  
+# 0   Fatura No        541910 non-null  object  
+# 1   Stok Kodu        541910 non-null  object  
+# 2   Ürün Adı         540456 non-null  object  
+# 3   Adet             541910 non-null  int64  
+# 4   Fatura Tarihi    541910 non-null  object  
+# 5   Birim Fiyat      541910 non-null  float64  
+# 6   Müşteri ID       406830 non-null  float64  
+# 7   Ülke             541910 non-null  object  
+# 8   Toplam Tutar     541910 non-null  float64  
+# dtypes float64(3), int64(1), object (5)
+
+
 
 ```
 
