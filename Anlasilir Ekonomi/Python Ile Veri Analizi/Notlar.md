@@ -7312,11 +7312,36 @@ plt.show()
 
 ![image](./images/aykirideger9.png) 
 
+---
+
+>Baskılama;
+
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+veri = sns.load_dataset("taxis")
+veri2 = veri.copy()
+
+q1 = veri2["tip"].quantile(0.25)
+q3 = veri2["tip"].quantile(0.75)
+IQR = q3 - q1
+
+altsınır = q1 - 1.5 * IQR
+ustsınır = q3 + 1.5 * IQR
+
+veri2.loc[veri2["tip"] < altsınır, "tip"] = altsınır
+veri2.loc[veri2["tip"] > ustsınır, "tip"] = ustsınır
+
+sns.boxplot(data=veri2["tip"])
+plt.show()
+```
+
+![image](./images/aykirideger10.png) 
 
 
-
-
-![image](./images/aykirideger10.png)
+![image](./images/aykirideger11.png)
 ### Örnekler
 ## 8.6
 # 9
