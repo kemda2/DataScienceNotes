@@ -7469,12 +7469,72 @@ print(veri)
 # 241    22.67        2.00  Male    Yes     Sat   Dinner  2     1
 # 242    17.82        1.75  Male    No      Sat   Dinner  2     1
 # 243    18.78        3.00  Female  No      Thur  Dinner  2     3
-
-
 ```
 
+---
 
+```Python
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing as pr
 
+veri = pd.DataFrame({
+    "Cinsiyet": ["Kadın", "Erkek", "Kadın", "Kadın", "Kadın", "Erkek", "Kadın", "Kadın", "Erkek", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Erkek", "Erkek", "Kadın", "Erkek", "Erkek", "Erkek", "Erkek", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın", "Kadın"],
+
+    "AraçRenk": ["Yeşil", "Mavi", "Kırmızı", "Beyaz", "Kırmızı", "Siyah", "Beyaz", "Mavi", "Siyah", "Kırmızı", "Siyah", "Siyah", "Beyaz", "Yeşil", "Beyaz", "Yeşil", "Beyaz", "Kırmızı", "Mavi", "Beyaz", "Beyaz", "Siyah", "Yeşil", "Yeşil", "Yeşil", "Kırmızı", "Yeşil", "Kırmızı", "Kırmızı", "Kırmızı", "Siyah", "Beyaz", "Siyah"],
+
+    "Eğitim": ["Üniversite", "Doktora", "Doktora", "Üniversite", "Üniversite", "İlkokul", "Doktora", "Doktora", "Doktora", "YüksekLisans", "Doktora", "Üniversite", "Lise", "YüksekLisans", "İlkokul", "İlkokul", "İlkokul", "İlkokul", "Üniversite", "Üniversite", "Lise", "YüksekLisans", "Doktora", "Lise", "Üniversite", "Üniversite", "Lise", "Üniversite", "Doktora", "Doktora", "Doktora", "Doktora", "İlkokul"]
+})
+
+veri2=veri.copy()
+
+veri2["KodCinsiyet"]=pr. LabelEncoder().fit_transform (veri2["Cinsiyet"])
+veri2["KodAraç Renk"]=pr.LabelEncoder().fit_transform (veri2 ["Araç Renk"])
+veri2["KodEğitim"]=pr.LabelEncoder().fit_transform (veri2["Eğitim"])
+
+veri2
+
+# Cinsiyet  AraçRenk  Eğitim       KodCinsiyet  KodAraçRenk  KodEğitim
+# Kadın     Yeşil     Üniversite        1            4           3
+# Erkek     Mavi      Doktora           0            2           0
+# Kadın     Kırmızı   Doktora           1            1           0
+# Kadın     Beyaz     Üniversite        1            0           3
+# Kadın     Kırmızı   Üniversite        1            1           3
+# Erkek     Siyah     İlkokul           0            3           4
+# Kadın     Beyaz     Doktora           1            0           0
+# Kadın     Mavi      Doktora           1            2           0
+
+print(veri2.sort_values(by=["KodEğitim"]))
+
+# Cinsiyet  AraçRenk  Eğitim   KodCinsiyet  KodAraçRenk  KodEğitim
+# Erkek     Mavi      Doktora       0            2           0
+# Kadın     Kırmızı   Doktora       1            1           0
+# Erkek     Yeşil     Doktora       0            4           0
+# Kadın     Siyah     Doktora       1            3           0
+# Kadın     Beyaz     Doktora       1            0           0
+# Kadın     Mavi      Doktora       1            2           0
+# Erkek     Siyah     Doktora       0            3           0
+# Kadın     Siyah     Doktora       1            3           0
+# Kadın     Beyaz     Doktora       1            0           0
+# Kadın     Kırmızı   Doktora       1            1           0
+# Kadın     Kırmızı   Doktora       1            1           0
+# Kadın     Yeşil     Lise          1            4           1
+# ...
+
+# Sayıları istediğimiz sırada vermemiş. Doktora 0 lise 1.
+
+# Cinsiyet ve renk sıralı olmadığı için one hot ile kodlanır.
+
+onehotdonusum=pd.get_dummies(veri2, columns=["Cinsiyet", "Araç Renk"])
+```
+
+> Kukla Değişken Tuzağı
+
+4 kategori için 3 tane sütun kullanmak yeterlidir. Aksi halde kukla değişken tuzağına düşeriz. Python'da `drop_first=True` ile kullanılır.
+
+```Python
+onehotdonusum=pd.get_dummies (veri2, columns=["Cinsiyet"], drop_first=True) 
+```
 
 
 
