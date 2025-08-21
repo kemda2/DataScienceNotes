@@ -7722,7 +7722,21 @@ print(oran*100) # 0.26831023601705084 yani % 0,26. Çok düşük bir oran olduğ
 veri.dropna(axis=0, inplace=True) # Birden çok sütunda nan varsa ve sadece Ürün Adı'nda boş olanları sileceksek sütun belirtmeliyiz
 
 veri.reset_index(drop=True, inplace=True) # indexleri yenile
+
+# c ile başlayan yapılar iptal olanlar içinmiş. Biz iptal olmayanları kullanacağız. O yüzden c ile başlayanları silelim
+
+# C içeren satırlar var mı bulalım
+iptal=veri[veri["Fatura No"].str.contains("C", na=False)]
+
+# Olanları silelim
+iptalindeks=[]
+
+for i in iptal.index:
+    iptalindeks.append(i)
+
+veri.drop(veri.index[iptalindeks], inplace=True)
 ```
+
 
 
 ![image](./images/kotogerikdegisken.png)
