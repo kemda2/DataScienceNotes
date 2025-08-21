@@ -7340,11 +7340,18 @@ plt.show()
 
 ![image](./images/aykirideger10.png) 
 
+# 9 Değişken Ölçeklendirme
 
-![image](./images/aykirideger11.png)
+
+
+
+
+
+
+![image](./images/degiskenolceklendirme.png)
 ### Örnekler
 ## 8.6
-# 9
+# 10
 
 https://www.youtube.com/watch?v=2zBxRoLap7k&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=116
 1400
