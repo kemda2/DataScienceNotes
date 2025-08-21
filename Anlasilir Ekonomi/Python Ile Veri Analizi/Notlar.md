@@ -7075,10 +7075,24 @@ plt.show()
 
 ![image](./images/aykirideger3.png)
 
-Teker teker bakıldığında yaş değişkeninde aykırı değer yokken yıl değişkeninde aykırı değer var (25).
+>Teker teker bakıldığında yaş değişkeninde aykırı değer yokken yıl değişkeninde aykırı değer var (25). Bunları mesela t testi veya Anova için kullanacaksak tekli olarak kullanabiliriz fakat Manova, Kanonik korelasyon gibi çoklu testler için grup halince kullanmalıyız.
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+yaş = [30, 33, 31, 33, 30]
+yıl = [7, 10, 9, 12, 25]
+
+sns.scatterplot(x=yaş, y=yıl)
+plt.show()
+```
 
 ![image](./images/aykirideger4.png)
+
+
+
+![image](./images/aykirideger5.png)
 ### Örnekler
 ## 8.6
 # 9
