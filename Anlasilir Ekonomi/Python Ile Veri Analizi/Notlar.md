@@ -7739,6 +7739,13 @@ veri.reset_index(drop=True, inplace=True)
 
 hata=veri[(veri["Fatura No"].str.len()!=6) | (~veri["Fatura No"].str.isdigit())]
 print(hata)
+
+#  Fatura No  Stok Kodu  Ürün Adı          Adet  Fatura Tarihi           Birim Fiyat  Ülke            Toplam Tutar  
+# ------------------------------------------------------------------------------------------------------------------
+#  293414     A563185    Adjust bad debt   1     2011-08-12 14:50:00     -11062.06    United Kingdom  11062.06      
+#  293415     A563186    Adjust bad debt   1     2011-08-12 14:51:00     -11062.06    United Kingdom  11062.06      
+#  293416     A563187    Adjust bad debt   1     2011-08-12 14:52:00     -11062.06    United Kingdom  11062.06      
+
 ```
 
 
