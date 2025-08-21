@@ -7663,8 +7663,9 @@ print(veri.info())
 # 8   Toplam Tutar     541910 non-null  float64  
 # dtypes float64(3), int64(1), object (5)
 
+# Fatura Tarihi datetime'e çevirme
 veri["Fatura Tarihi"]=pd.to_datetime(veri ["Fatura Tarihi"])
-print(veri.info)
+print(veri.info())
 
 # #   Column          Non-Null Count  Dtype         
 # ---  ------          --------------  -----         
@@ -7677,6 +7678,18 @@ print(veri.info)
 # 6   Müşteri ID       406830 non-null  float64       
 # 7   Ülke             541910 non-null  object        
 # 8   Toplam Tutar     541910 non-null  float64       
+
+# Müşteri ID sütununu silme
+veri.drop("Müşteri ID", axis=1,inplace=True)
+print(veri.Head())
+
+# Fatura No  Stok Kodu  Ürün Adı                                   Adet  Fatura Tarihi          Birim Fiyat  Ülke              Toplam Tutar
+# ------------------------------------------------------------------------------------------------------------------------------------------
+# 536365     85123A     WHITE HANGING HEART T-LIGHT HOLDER         6     2010-12-01 08:26:00    2.55         United Kingdom    15.30
+# 536365     71053      WHITE METAL LANTERN                        6     2010-12-01 08:26:00    3.39         United Kingdom    20.34
+# 536365     84406B     CREAM CUPID HEARTS COAT HANGER             8     2010-12-01 08:26:00    2.75         United Kingdom    22.00
+# 536365     84029G     KNITTED UNION FLAG HOT WATER BOTTLE        6     2010-12-01 08:26:00    3.39         United Kingdom    20.34
+# 536365     84029E     RED WOOLLY HOTTIE WHITE HEART.             6     2010-12-01 08:26:00    3.39         United Kingdom    20.34
 
 
 ```
