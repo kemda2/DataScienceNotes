@@ -7151,6 +7151,6 @@ usbuyuk = veri2[veri2["age"] > üstsınır]["age"] # Üst sınırdan büyük
 ## 8.6
 # 9
 
-https://www.youtube.com/watch?v=oT2b1sr1V1w&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=115
-0000
+https://www.youtube.com/watch?v=2zBxRoLap7k&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=116
+1400
 
