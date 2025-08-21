@@ -7036,6 +7036,8 @@ veri2["Şehir"].fillna(veri2["Şehir"].mode()[0], inplace=True) # En sık görü
 - Tek Değişkenli Aykırı Değer (Mesela Yaş değişkeninde 32, 35, 33, 100 değerleri varsa 100 aykırı değerdir. Kutu grafiği ile rahatlıkla tespit edilebilir.)
 - Çok Değişkenli Aykırı Değer
 
+>Tek değişkenli;
+
 ```Python
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -7048,13 +7050,35 @@ plt.show()
 
 ![image](./images/aykirideger1.png)
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+yaş = [30, 33, 31, 33, 30]
+
+sns.boxplot(data=yaş)
+plt.show()
+```
+
+![image](./images/aykirideger2.png)
+
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+yaş = [30, 33, 31, 33, 30]
+yıl = [7, 10, 9, 12, 25]
+
+sns.boxplot(data=yıl)
+plt.show()
+```
+
+![image](./images/aykirideger3.png)
+
+Bunda aykırı değer var (25).
 
 
-
-
-
-
-![image](./images/aykirideger.png)
+![image](./images/aykirideger4.png)
 ### Örnekler
 ## 8.6
 # 9
