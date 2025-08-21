@@ -7716,6 +7716,8 @@ print(veri.isnull().sum())
 # Ülke             0
 # Toplam Tutar     0
 
+oran=(veri["Ürün Adı"].isnull().sum())/len(veri) 
+print(oran*100) # 0.26831023601705084 yani % 0,26. Çok düşük bir oran olduğu için sileceğiz.
 
 
 ```
