@@ -7735,6 +7735,10 @@ for i in iptal.index:
     iptalindeks.append(i)
 
 veri.drop(veri.index[iptalindeks], inplace=True)
+veri.reset_index(drop=True, inplace=True)
+
+hata=veri[(veri["Fatura No"].str.len()!=6) | (~veri["Fatura No"].str.isdigit())]
+print(hata)
 ```
 
 
