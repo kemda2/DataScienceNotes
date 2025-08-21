@@ -7211,9 +7211,112 @@ aykırı[tahmin == -1]
 - Ortalama ile değiştirme
 - Baskılama (En yakın değere indirgeme)
 
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+veri = sns.load_dataset("taxis")
+veri2 = veri.copy()
+
+print(veri2.isnull().sum())
+# pickup             0
+# dropoff            0
+# passengers         0
+# distance           0
+# fare               0
+# tip                0
+# tolls              0
+# total              0
+# color              0
+# payment           44
+# pickup_zone       26
+# dropoff_zone      45
+# pickup_borough    26
+
+sns.boxplot(data=veri2["tip"])
+plt.show()
+```
+
+![image](./images/aykirideger7.png) 
+
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+veri = sns.load_dataset("taxis")
+veri2 = veri.copy()
+
+q1 = veri2["tip"].quantile(0.25)
+q3 = veri2["tip"].quantile(0.75)
+IQR = q3 - q1
+
+altsınır = q1 - 1.5 * IQR
+ustsınır = q3 + 1.5 * IQR
+
+aykırimin = veri2[veri2["tip"] < altsınır]["tip"]
+aykırimax = veri2[veri2["tip"] > ustsınır]["tip"]
+
+aykırı = pd.concat([aykırimin, aykırimax], axis=0).index
+
+indeksler = []
+
+for i in aykırı:
+    indeksler.append(i)
+
+veri3 = veri2.drop(veri2.index[indeksler]) # veri3 aykırı değerlerin eksiltildiği df
+
+sns.boxplot(data=veri3["tip"])
+plt.show()
+```
+
+![image](./images/aykirideger8.png) 
+
+En üst aykırı değer 30'dan 7'ye düşmüştür.
+
+> Aykırı değerleri ortalama ile doldurma
+
+```Python
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+veri = sns.load_dataset("taxis")
+veri2 = veri.copy()
+
+q1 = veri2["tip"].quantile(0.25)
+q3 = veri2["tip"].quantile(0.75)
+IQR = q3 - q1
+
+altsınır = q1 - 1.5 * IQR
+ustsınır = q3 + 1.5 * IQR
+
+aykırimin = veri2[veri2["tip"] < altsınır]["tip"]
+aykırimax = veri2[veri2["tip"] > ustsınır]["tip"]
+
+aykırı = pd.concat([aykırimin, aykırimax], axis=0).index
+
+indeksler = []
+
+for i in aykırı:
+    indeksler.append(i)
+
+ortalama = veri["tip"].mean()
+
+veri2.loc[indeksler, "tip"] = ortalama
+
+sns.boxplot(data=veri2["tip"])
+plt.show()
+```
+
+![image](./images/aykirideger9.png) 
 
 
-![image](./images/aykirideger6.png)
+
+
+
+![image](./images/aykirideger10.png)
 ### Örnekler
 ## 8.6
 # 9
