@@ -7399,12 +7399,21 @@ Standarddonus = pr.StandardScaler().fit_transform(veri)
 veri2 = pd.DataFrame(Standarddonus) # Dataframe e dönüştü 
 ```
 
+# 10 Kategorik Değişken Kodlama
 
 
-![image](./images/degiskenolceklendirme.png)
+
+
+
+
+
+
+
+
+![image](./images/kotogerikdegisken.png)
 ### Örnekler
-## 8.6
-# 10
+## 10.
+# 11
 
 https://www.youtube.com/watch?v=J1npB16WyJw&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=121
 00
