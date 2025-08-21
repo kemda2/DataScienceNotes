@@ -7691,6 +7691,20 @@ print(veri.Head())
 # 536365     84029G     KNITTED UNION FLAG HOT WATER BOTTLE        6     2010-12-01 08:26:00    3.39         United Kingdom    20.34
 # 536365     84029E     RED WOOLLY HOTTIE WHITE HEART.             6     2010-12-01 08:26:00    3.39         United Kingdom    20.34
 
+print(veri.isnull().sum())
+
+# Fatura No        0
+# Stok Kodu        0
+# Ürün Adı      1454
+# Adet             0
+# Fatura Tarihi    0
+# Birim Fiyat      0
+# Ülke             0
+# Toplam Tutar     0
+
+# Diyelim ki Ürün isimlerine ulaşamıyoruz. İsteyecek veya temin edebileceğimiz bir yer yok. O zaman mode ile dolduracağız.
+veri["Ürün Adı"].fillna(veri["Ürün Adı"].mode()[0], inplace=True)
+
 
 ```
 
@@ -7700,6 +7714,6 @@ print(veri.Head())
 ## 10.
 # 13
 
-https://www.youtube.com/watch?v=iRTfus_fv6k&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=124
+https://www.youtube.com/watch?v=qwdNNgaa0h8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=126
 00
 
