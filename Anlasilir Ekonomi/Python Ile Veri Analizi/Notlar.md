@@ -7401,8 +7401,77 @@ veri2 = pd.DataFrame(Standarddonus) # Dataframe e dönüştü
 
 # 10 Kategorik Değişken Kodlama
 
+```Python
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing as pr
+import seaborn as sns
+
+label=pr.LabelEncoder().fit_transform(veri["sex"])
+
+print(label) # [1 0 0 ...]
+
+veri2=pd.DataFrame (label)
+
+print(veri2)
+
+# 0     1
+# 1     0
+# 2     0
+# 3     0
+# 4     1
+# ...
+# 886   1
+# 887   0
+# 888   0
+# 889   1
+# 890   1
+
+veri["kodsex"]=veri2
+```
+
+---
+
+```Python
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing as pr
+import seaborn as sns
+
+veri=sns.load_dataset("tips")
+veri
+
+# total_bill   tip   sex    smoker   day   time    size
+# 16.99        1.01  Female   No     Sun   Dinner    2
+# 10.34        1.66  Male     No     Sun   Dinner    3
+# 21.01        3.50  Male     No     Sun   Dinner    3
+# 23.68        3.31  Male     No     Sun   Dinner    2
+# 24.59        3.61  Female   No     Sun   Dinner    4
+# ...          ...   ...      ...    ...   ...       ...
+# 29.03        5.92  Male     No     Sat   Dinner    3
+# 27.18        2.00  Female   Yes    Sat   Dinner    2
+# 22.67        2.00  Male     Yes    Sat   Dinner    2
+# 17.82        1.75  Male     No     Sat   Dinner    2
+# 18.78        3.00  Female   No     Thur  Dinner    2
+
+veri["DayKod"] = pr.LabelEncoder().fit_transform(veri["day"])
+print(veri)
+
+# index  total_bill   tip   sex     smoker  day   time    size  DayKod
+# 0      16.99        1.01  Female  No      Sun   Dinner  2     2
+# 1      10.34        1.66  Male    No      Sun   Dinner  3     2
+# 2      21.01        3.50  Male    No      Sun   Dinner  3     2
+# 3      23.68        3.31  Male    No      Sun   Dinner  2     2
+# 4      24.59        3.61  Female  No      Sun   Dinner  4     2
+# ...    ...          ...  ...     ...     ...   ...     ...   ...
+# 239    29.03        5.92  Male    No      Sat   Dinner  3     1
+# 240    27.18        2.00  Female  Yes     Sat   Dinner  2     1
+# 241    22.67        2.00  Male    Yes     Sat   Dinner  2     1
+# 242    17.82        1.75  Male    No      Sat   Dinner  2     1
+# 243    18.78        3.00  Female  No      Thur  Dinner  2     3
 
 
+```
 
 
 
