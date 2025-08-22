@@ -7865,6 +7865,24 @@ print(len(set(veri["Ülke"]))) # 38 Ülke
 
 veri=pd.get_dummies (data=veri, columns=["Ülke"], drop_first=True)
 
+print(veri.info())
+
+# Sütun Adı                   Girdi Sayısı  Boş Değer  Veri Türü 
+# --------------------------  ------------  ---------  --------- 
+# Ülke\_RSA                   439569        non-null   uint8     
+# Ülke\_Saudi Arabia          439569        non-null   uint8     
+# Ülke\_Singapore             439569        non-null   uint8     
+# Ülke\_Spain                 439569        non-null   uint8     
+# Ülke\_Sweden                439569        non-null   uint8     
+# Ülke\_Switzerland           439569        non-null   uint8     
+# Ülke\_USA                   439569        non-null   uint8     
+# Ülke\_United Arab Emirates  439569        non-null   uint8     
+# Ülke\_United Kingdom        439569        non-null   uint8     
+# Ülke\_Unspecified           439569        non-null   uint8 
+# dtypes: datetime64 [ns](1) , float64(2), int64(1), object(3), uint8(37)
+# memory usage: 39.0+ MB
+
+
 
 
 
