@@ -7839,6 +7839,27 @@ for i in hata5.index:
 veri.drop(veri.index[hataindeks4], inplace=True)
 veri.reset_index(drop=True, inplace=True)
 
+print(veri("Ülke"].unique())
+
+
+for j in ["Adet", "Birim Fiyat", "Toplam Tutar"]:
+    Q1 = veri[j].quantile(0.25)
+    Q3 = veri[j].quantile(0.75)
+    IQR = Q3 - Q1
+
+    ust_sınır = Q3 + 1.5 * IQR
+    alt_sınır = Q1 - 1.5 * IQR
+
+    aykırı = veri[(veri[j] > ust_sınır) | (veri[j] < alt_sınır)]
+
+    hataindeks5 = []
+
+    for i in aykırı.index:
+        hataindeks5.append(i)
+
+    veri.drop(veri.index[hataindeks5], inplace=True)
+
+veri.reset_index(drop=True, inplace=True)
 
 
 ```
