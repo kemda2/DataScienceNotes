@@ -7903,7 +7903,18 @@ $$
 Doğrusal regresyon 2 ye ayrılır;
 
 - Basit doğrusal regresyon
+
+$$
+y = \beta_0 + \beta_1 \cdot x + \epsilon
+$$
+
 - Çok değişkenli regresyon
+
+$$
+y = \beta_0 + \beta_1 \cdot x_1 + \beta_2 \cdot x_2 + \cdot\cdot\cdot + \epsilon
+$$
+
+
 
 ![image](./images/regresyon.png)
 ### Örnekler
