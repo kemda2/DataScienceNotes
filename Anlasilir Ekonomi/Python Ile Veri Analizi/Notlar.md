@@ -7720,7 +7720,6 @@ oran=(veri["Ürün Adı"].isnull().sum())/len(veri)
 print(oran*100) # 0.26831023601705084 yani % 0,26. Çok düşük bir oran olduğu için sileceğiz.
 
 veri.dropna(axis=0, inplace=True) # Birden çok sütunda nan varsa ve sadece Ürün Adı'nda boş olanları sileceksek sütun belirtmeliyiz
-
 veri.reset_index(drop=True, inplace=True) # indexleri yenile
 
 # c ile başlayan yapılar iptal olanlar içinmiş. Biz iptal olmayanları kullanacağız. O yüzden c ile başlayanları silelim
@@ -7756,5 +7755,5 @@ print(hata)
 # 13
 
 https://www.youtube.com/watch?v=qwdNNgaa0h8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=126
-00
+23
 
