@@ -7822,6 +7822,13 @@ print(hata4)
 #  473410     581226     missing                     -338   2011-12-08 09:56:00  0.0          United Kingdom  -0.0         
 #  475243     581422     23169      smashed   -235  2011-12-08 15:24:00  0.0          United Kingdom  -0.0         
 
+hataindeks3=[]
+
+for i in hata4.index:
+    hataindeks3.append(i)
+
+veri.drop(veri.index[hataindeks3], inplace=True)
+veri.reset_index(drop=True, inplace=True)
 
 ```
 
