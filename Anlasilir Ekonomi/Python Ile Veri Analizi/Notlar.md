@@ -7918,6 +7918,9 @@ $$
 \hat{y} = \hat{\beta_0} + \hat{\beta_1} \cdot x + \epsilon
 $$
 
+$$
+\epsilon = y - \hat{y}
+$$
 
 ![image](./images/regresyon.png)
 ### Örnekler
