@@ -7780,6 +7780,31 @@ print(hata2)
 hata3=veri[~veri["Stok Kodu"].str.isdigit()]
 print(hata3)
 
+#  Row     Invoice  StockCode  Description                          Quantity  InvoiceDate          Price  Country         Total 
+#  ------  -------  ---------  -----------------------------------  --------  -------------------  -----  --------------  ----- 
+#  0       536365   85123A     WHITE HANGING HEART T-LIGHT HOLDER   6         2010-12-01 08:26:00  2.55   United Kingdom  15.30 
+#  2       536365   84406B     CREAM CUPID HEARTS COAT HANGER       8         2010-12-01 08:26:00  2.75   United Kingdom  22.00 
+#  3       536365   84029G     KNITTED UNION FLAG HOT WATER BOTTLE  6         2010-12-01 08:26:00  3.39   United Kingdom  20.34 
+#  4       536365   84029E     RED WOOLLY HOTTIE WHITE HEART.       6         2010-12-01 08:26:00  3.39   United Kingdom  20.34 
+#  45      536370   POST       POSTAGE                              3         2010-12-01 08:45:00  18.00  France          54.00 
+#  ...     ...      ...        ...                                  ...       ...                  ...    ...             ...   
+#  531064  581579   85099C     JUMBO BAG BAROQUE BLACK WHITE        10        2011-12-09 12:19:00  1.79   United Kingdom  17.90 
+#  531096  581580   84993A     75 GREEN PETIT FOUR CASES            2         2011-12-09 12:20:00  0.42   United Kingdom  0.84  
+#  531102  581580   85049A     TRADITIONAL CHRISTMAS RIBBONS        1         2011-12-09 12:20:00  1.25   United Kingdom  1.25  
+#  531111  581580   85049E     SCANDINAVIAN REDS RIBBONS            2         2011-12-09 12:20:00  1.25   United Kingdom  2.50  
+#  531164  581587   POST       POSTAGE                              1         2011-12-09 12:50:00  18.00  France          18.00 
+
+# Satır sayıları aynı olduğu için 5 tane uzunlukta olmamasıyla ilgili bir sorun yok diyebiliriz.
+
+hata3=veri[~veri["Stok Kodu"].str.isdigit()]
+hataindeks2=[]
+
+for i in hata3.index:
+    hataindeks2.append(i)
+
+veri.drop(veri.index [hataindeks2], inplace=True)
+veri.reset_index(drop=True, inplace=True)
+
 ```
 
 
