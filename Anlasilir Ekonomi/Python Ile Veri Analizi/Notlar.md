@@ -7890,7 +7890,7 @@ Regresyon formülüne ulaşmak için Doğrusallık formülüne hata terimi ($\ep
 
 Eğer biz bir tahmin yaptığımızda yaptığımız tahminle gerçek model arasındaki bu hatalara **epsilon** diyoruz.
 
-Sık kullanılan doğrusal regresyon formülü;
+Sık kullanılan doğrusal regresyon formülü (şapka tahmin olduğunu gösterir);
 
 $$
 \hat{y} = \hat{\beta_0} + \hat{\beta_1} \cdot x + \epsilon
