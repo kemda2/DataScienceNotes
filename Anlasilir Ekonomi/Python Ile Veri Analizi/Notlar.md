@@ -7886,14 +7886,17 @@ print(veri.info())
 
 # 13 Regresyon 
 
+Regresyon formülüne ulaşmak için Doğrusallık formülüne hata terimi ($\epsilon$) ekliyoruz.
+
+$$
+y = b + m \cdot x + \epsilon
+$$
 
 
 
-
-
-![image](./images/kotogerikdegisken.png)
+![image](./images/regresyon.png)
 ### Örnekler
-## 10.
+## 14.
 # 14
 
 https://www.youtube.com/watch?v=gTPVYjvhIvM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=129
