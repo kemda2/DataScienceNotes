@@ -7933,6 +7933,15 @@ import statsmodels.api as sm
 veri=sns.load_dataset("tips")
 print(veri)
 
+# total\_bill  tip   sex     smoker  day  time    size 
+# -----------  ----  ------  ------  ---  ------  ---- 
+# 16.99        1.01  Female  No      Sun  Dinner  2    
+# 10.34        1.66  Male    No      Sun  Dinner  3    
+# 21.01        3.50  Male    No      Sun  Dinner  3    
+# 24.59        3.61  Female  No      Sun  Dinner  4    
+# ...          ...   ...     ...     ...  ...     ...  
+# 29.03        5.92  Male    No      Sat  Dinner  3    
+# 27.18        2.00  Female  Yes     Sat  Dinner  2    
 
 ```
 
