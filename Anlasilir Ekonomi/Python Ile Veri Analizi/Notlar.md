@@ -7861,7 +7861,11 @@ for j in ["Adet", "Birim Fiyat", "Toplam Tutar"]:
 
 veri.reset_index(drop=True, inplace=True)
 
-print(len(set(veri["Ülke"]))) # 8
+print(len(set(veri["Ülke"]))) # 38 Ülke 
+
+veri=pd.get_dummies (data=veri, columns=["Ülke"], drop_first=True)
+
+
 
 
 ```
