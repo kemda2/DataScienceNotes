@@ -7745,6 +7745,38 @@ print(hata)
 #  293415     A563186    Adjust bad debt   1     2011-08-12 14:51:00     -11062.06    United Kingdom  11062.06      
 #  293416     A563187    Adjust bad debt   1     2011-08-12 14:52:00     -11062.06    United Kingdom  11062.06      
 
+hataindeks=[]
+for i in hata.index:
+    hataindeks.append(i)
+
+print(hataindeks) # [293414, 293415, 293416]
+
+veri.drop(veri.index[hataindeks], inplace=True)
+veri.reset_index(drop=True, inplace=True)
+
+hata2=veri[(veri["Fatura No"].str.len()!=6) | (~veri["Fatura No"].str.isdigit())]
+print(hata2)
+
+# Columns: [Fatura No, Stok Kodu, Ürün Adı, Adet, Fatura Tarihi, Birim Fiyat, Ülke, Toplam Tutar]
+# Index: []
+
+hata2=veri[(veri["Stok Kodu"].str.len()!=5) | (~veri["Stok Kodu"].str.isdigit())]
+print(hata2)
+
+# Satır   Ürün Kodu  Ürün Numarası  Ürün Açıklaması                       Adet  Tarih ve Saat        Fiyat  Ülke              Toplam Tutar 
+# ------  ---------  -------------  ------------------------------------  ----  -------------------  -----  ----------------  ------------ 
+# 0       536365     85123A         Beyaz Asılı Kalp Mum Tutucu           6     2010-12-01 08:26:00  2.55   Birleşik Krallık  15.30        
+# 1       536365     84406B         Krem Cupid Kalpler Kaban Askısı       8     2010-12-01 08:26:00  2.75   Birleşik Krallık  22.00        
+# 2       536365     84029G         Örme İngiliz Bayrağı Sıcak Su Şişesi  6     2010-12-01 08:26:00  3.39   Birleşik Krallık  20.34        
+# 3       536365     84029E         Kırmızı Yünlü Sevgili Beyaz Kalp      6     2010-12-01 08:26:00  3.39   Birleşik Krallık  20.34        
+# 45      536370     POST           Posta Ücreti                          3     2010-12-01 08:45:00  18.00  Fransa            54.00        
+# ...     ...        ...            ...                                   ...   ...                  ...    ...               ...          
+# 531064  581579     85099C         Jumbo Çanta Barok Siyah Beyaz         10    2011-12-09 12:19:00  1.79   Birleşik Krallık  17.90        
+# 531096  581580     84993A         75 Yeşil Petit Dört Kutu              2     2011-12-09 12:20:00  0.42   Birleşik Krallık  0.84         
+# 531102  581580     85049A         Geleneksel Noel Kurdaları             1     2011-12-09 12:20:00  1.25   Birleşik Krallık  1.25         
+# 531111  581580     85049E         İskandinav Kırmızı Kurdalar           2     2011-12-09 12:20:00  1.25   Birleşik Krallık  2.50         
+# 531164  581587     POST           Posta Ücreti                          1     2011-12-09 12:50:00  18.00  Fransa            18.00        
+
 ```
 
 
