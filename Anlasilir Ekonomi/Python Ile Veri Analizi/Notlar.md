@@ -7805,6 +7805,24 @@ for i in hata3.index:
 veri.drop(veri.index [hataindeks2], inplace=True)
 veri.reset_index(drop=True, inplace=True)
 
+hata4=veri[veri["Adet"]<=0] 
+print(hata4)
+
+#  Fatura No  Stok Kodu  Ürün Adı                    Adet   Fatura Tarihi        Birim Fiyat  Ülke            Toplam Tutar 
+#  ---------  ---------  --------------------------  -----  -------------------  -----------  --------------  ------------ 
+#  6244       537032     ?                           -30    2010-12-03 16:50:00  0.0          United Kingdom  -0.0         
+#  18405      538072     faulty                      -13    2010-12-09 14:10:00  0.0          United Kingdom  -0.0         
+#  18548      538090     ?                           -723   2010-12-09 14:48:00  0.0          United Kingdom  -0.0         
+#  36378      540010     reverse 21/5/10 adjustment  -100   2011-01-04 11:13:00  0.0          United Kingdom  -0.0         
+#  36379      540012     reverse 21/5/10 adjustment  -100   2011-01-04 11:14:00  0.0          United Kingdom  -0.0         
+#  ...        ...        ...                         ...    ...                  ...          ...             ...          
+#  471985     581210     check                       -26    2011-12-07 18:36:00  0.0          United Kingdom  -0.0         
+#  471987     581212     lost                        -1050  2011-12-07 18:38:00  0.0          United Kingdom  -0.0         
+#  471988     581213     check                       -30    2011-12-07 18:38:00  0.0          United Kingdom  -0.0         
+#  473410     581226     missing                     -338   2011-12-08 09:56:00  0.0          United Kingdom  -0.0         
+#  475243     581422     23169      smashed   -235  2011-12-08 15:24:00  0.0          United Kingdom  -0.0         
+
+
 ```
 
 
