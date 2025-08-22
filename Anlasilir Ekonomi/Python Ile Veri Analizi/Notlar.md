@@ -7888,16 +7888,12 @@ print(veri.info())
 
 Regresyon formülüne ulaşmak için Doğrusallık formülüne hata terimi ($\epsilon$) ekliyoruz.
 
-$$
-y = b + m \cdot x + \epsilon
-$$
-
 Eğer biz bir tahmin yaptığımızda yaptığımız tahminle gerçek model arasındaki bu hatalara **epsilon** diyoruz.
 
 Sık kullanılan doğrusal regresyon formülü;
 
 $$
-y = \beta_0 + \beta_1 \cdot x + \epsilon
+\hat{y} = \hat{\beta_0} + \hat{\beta_1} \cdot x + \epsilon
 $$
 
 Doğrusal regresyon 2 ye ayrılır;
@@ -7905,20 +7901,27 @@ Doğrusal regresyon 2 ye ayrılır;
 - Basit doğrusal regresyon
 
 $$
-y = \beta_0 + \beta_1 \cdot x + \epsilon
+\hat{y} = \hat{\beta_0} + \hat{\beta_1} \cdot x + \epsilon
 $$
 
 - Çok değişkenli regresyon
 
 $$
-y = \beta_0 + \beta_1 \cdot x_1 + \beta_2 \cdot x_2 + \cdot\cdot\cdot + \epsilon
+\hat{y} = \hat{\beta_0} + \hat{\beta_1} \cdot \hat{x_1} + \hat{\beta_2} \cdot \hat{x_2} + \cdot\cdot\cdot + \epsilon
 $$
 
+## 13.1 En Küçük Kareler Yöntemi
+
+Tahmin edilen regresyon formülü
+
+$$
+\hat{y} = \hat{\beta_0} + \hat{\beta_1} \cdot x + \epsilon
+$$
 
 
 ![image](./images/regresyon.png)
 ### Örnekler
-## 14.
+## 13.2
 # 14
 
 https://www.youtube.com/watch?v=gTPVYjvhIvM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=129
