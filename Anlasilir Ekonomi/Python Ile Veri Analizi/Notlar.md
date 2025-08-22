@@ -7895,6 +7895,5 @@ print(veri.info())
 ## 10.
 # 13
 
-https://www.youtube.com/watch?v=qwdNNgaa0h8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=126
-23
-
+https://www.youtube.com/watch?v=gTPVYjvhIvM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=129
+0
