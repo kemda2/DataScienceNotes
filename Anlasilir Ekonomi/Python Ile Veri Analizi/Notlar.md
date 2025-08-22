@@ -7943,7 +7943,10 @@ print(veri)
 # 29.03        5.92  Male    No      Sat  Dinner  3    
 # 27.18        2.00  Female  Yes     Sat  Dinner  2    
 
+sns.regplot(x=veri["total_bill"],y=veri["tip"],ci=None)
+plt.show()
 ```
+![image](./images/regresyon1.png) 
 
 
 
@@ -7953,7 +7956,7 @@ print(veri)
 
 
 
-![image](./images/regresyon.png)
+![image](./images/regresyon2.png)
 ### Örnekler
 ## 13.3
 # 14
