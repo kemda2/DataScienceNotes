@@ -7892,7 +7892,13 @@ $$
 y = b + m \cdot x + \epsilon
 $$
 
+Eğer biz bir tahmin yaptığımızda yaptığımız tahminle gerçek model arasındaki bu hatalara **epsilon** diyoruz.
 
+Sık kullanılan formül;
+
+$$
+y = \beta_0 + \beta_1 \cdot x + \epsilon
+$$
 
 ![image](./images/regresyon.png)
 ### Örnekler
