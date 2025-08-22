@@ -7777,6 +7777,9 @@ print(hata2)
 # 531111  581580     85049E         İskandinav Kırmızı Kurdalar           2     2011-12-09 12:20:00  1.25   Birleşik Krallık  2.50         
 # 531164  581587     POST           Posta Ücreti                          1     2011-12-09 12:50:00  18.00  Fransa            18.00        
 
+hata3=veri[~veri["Stok Kodu"].str.isdigit()]
+print(hata3)
+
 ```
 
 
