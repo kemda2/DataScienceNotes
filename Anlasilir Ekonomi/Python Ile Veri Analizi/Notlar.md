@@ -7820,7 +7820,7 @@ print(hata4)
 #  471987     581212     lost                        -1050  2011-12-07 18:38:00  0.0          United Kingdom  -0.0         
 #  471988     581213     check                       -30    2011-12-07 18:38:00  0.0          United Kingdom  -0.0         
 #  473410     581226     missing                     -338   2011-12-08 09:56:00  0.0          United Kingdom  -0.0         
-#  475243     581422     23169      smashed   -235  2011-12-08 15:24:00  0.0          United Kingdom  -0.0         
+#  475243     581422     23169      smashed          -235   2011-12-08 15:24:00  0.0          United Kingdom  -0.0         
 
 hataindeks3=[]
 
