@@ -7861,6 +7861,8 @@ for j in ["Adet", "Birim Fiyat", "Toplam Tutar"]:
 
 veri.reset_index(drop=True, inplace=True)
 
+print(len(set(veri["Ülke"]))) # 8
+
 
 ```
 
