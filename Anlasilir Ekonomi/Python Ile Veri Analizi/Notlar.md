@@ -7922,9 +7922,31 @@ $$
 \epsilon = y - \hat{y}
 $$
 
+## 13.2 Basit Doğrusal Regresyon
+
+```Python
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import statsmodels.api as sm
+
+veri=sns.load_dataset("tips")
+print(veri)
+
+
+```
+
+
+
+
+
+
+
+
+
 ![image](./images/regresyon.png)
 ### Örnekler
-## 13.2
+## 13.3
 # 14
 
 https://www.youtube.com/watch?v=gTPVYjvhIvM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=129
