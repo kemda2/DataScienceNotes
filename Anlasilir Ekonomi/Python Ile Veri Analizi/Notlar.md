@@ -7882,18 +7882,19 @@ print(veri.info())
 # dtypes: datetime64 [ns](1) , float64(2), int64(1), object(3), uint8(37)
 # memory usage: 39.0+ MB
 
-
-
-
-
 ```
+
+# 13 Regresyon 
+
+
+
 
 
 
 ![image](./images/kotogerikdegisken.png)
 ### Örnekler
 ## 10.
-# 13
+# 14
 
 https://www.youtube.com/watch?v=gTPVYjvhIvM&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=129
 0
