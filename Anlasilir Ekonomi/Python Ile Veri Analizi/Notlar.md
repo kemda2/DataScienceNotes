@@ -7830,6 +7830,17 @@ for i in hata4.index:
 veri.drop(veri.index[hataindeks3], inplace=True)
 veri.reset_index(drop=True, inplace=True)
 
+hata5=veri[veri["Birim Fiyat"]<=0]
+hataindeks4=[]
+
+for i in hata5.index:
+    hataindeks4.append(i)
+
+veri.drop(veri.index[hataindeks4], inplace=True)
+veri.reset_index(drop=True, inplace=True)
+
+
+
 ```
 
 
