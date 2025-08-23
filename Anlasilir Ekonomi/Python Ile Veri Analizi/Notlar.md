@@ -8095,15 +8095,13 @@ $R^2$ değeri bu modelin tip değişkeninin yalnızca %46'lik kısmını açıkl
 Birden fazla değişkenli regresyon modeli kurduğumuzda bakmamız gereken kısım düzeltilmiş R Kare kısmıdır çünkü birden fazla değişken olduğunda r kare değeri olması gerekenden fazla artabilmektedir.
 
 $$
-R_{\text{adj}}^2 = 1 - \left( \frac{(1 - R^2)(n - 1)}{n - k - 1} \right)
-$$
-
-$$
-R_{\text{adj}}^2 = 1 - \left( \frac{(1 - 0,457)(244 - 1)}{244 - k - 1} \right)
+R_{\text{adj}}^2 = 1 - \left( \frac{(1 - R^2)(n - 1)}{n - k - 1} \right) \\[3mm]
+R_{\text{adj}}^2 = 1 - \left( \frac{(1 - 0,457)(244 - 1)}{244 - 1 - 1} \right) \\[3mm]
+R_{\text{adj}}^2 = 0,454
 $$
 
 n: Gözlem sayısı
-k: Bağımsız değişken sayısı
+k: Bağımsız değişken sayısı (sabit kabul edilmez)
 
 ### Örnekler
 
