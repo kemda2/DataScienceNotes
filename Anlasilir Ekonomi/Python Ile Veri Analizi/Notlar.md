@@ -8022,7 +8022,7 @@ print(model.bse) # Standart hata
 # total_bill 0.007365
 ```
 
-Coef katsayı değerleri, std err standart hata değerleri, t test sonuçları
+Coef katsayı değerleri, std err standart hata değerleri, test sonuçları t değeri 
 
 
 
