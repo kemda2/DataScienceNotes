@@ -8231,7 +8231,15 @@ plt.show()
 
 TV ve Radio değişkenleri doğrusal bir ilişki gösteriyor fakat Newspaper değişkeni biraz daha dağınık duruyor.
 
+```Python
+y=veri ["Sales"]
+x=veri [["TV", "Radio", "Newspaper"]]
 
+sabit=sm.add_constant(x)
+model=sm.OLS (y, sabit).fit()
+
+print(model.summary())
+```
 
 ![image](./images/regresyon3.png)
 ### Örnekler
