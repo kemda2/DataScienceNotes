@@ -8199,9 +8199,13 @@ print(model.summary())
 
 Son durumda tavuk fiyatı 0,09 olsa da çok anlamsız değil. 
 
+## 13.8 EKK Varsayımları
+
+
+
 ![image](./images/regresyon2.png)
 ### Örnekler
-## 13.8
+## 13.9
 # 14
 
 https://www.youtube.com/watch?v=NYRP_h0Y2ek&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=134
