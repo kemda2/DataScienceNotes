@@ -8311,7 +8311,7 @@ Modelin çıktısı sonucunda oluşan hata değerlerinin normallik göstermesidi
 Normallik Yapıları;
 
 - Deterministik yapı: elimizdeki denkleme göre sonuç üreten yapı. Rastlantısallık yok.
-- Stokastik yapı: 
+- Stokastik yapı: Sonucu net olarak bilemediğimiz ama tahmin yaparak sonucu bulmaya çalıştığımız yapı. Rastlantısallık var.
 
 ![image](./images/regresyon3.png)
 ### Örnekler
