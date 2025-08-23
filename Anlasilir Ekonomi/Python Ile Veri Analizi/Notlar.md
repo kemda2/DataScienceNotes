@@ -8030,8 +8030,34 @@ P>|t| değeri 0,05 değerinden küçükse (%95 güven aralığı) testin anlaml�
 
 ## 13.4 Model Anlamlılığı
 
+```Python
+#                             OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                    tip   R-squared:                       0.457
+# Model:                            OLS   Adj. R-squared:                  0.454
+# Method:                 Least Squares   F-statistic:                     203.4
+# Date:                Thu, 14 Jul 2022   Prob (F-statistic):           6.69e-34
+# Time:                        01:43:48   Log-Likelihood:                -350.54
+# No. Observations:                 244   AIC:                             705.1
+# Df Residuals:                     242   BIC:                             712.1
+# Df Model:                           1                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const          0.9203      0.160      5.761      0.000       0.606       1.235
+# total_bill     0.1050      0.007     14.260      0.000       0.091       0.120
+# ==============================================================================
+# Omnibus:                       20.185   Durbin-Watson:                   2.151
+# Prob(Omnibus):                  0.000   Jarque-Bera (JB):               37.750
+# Skew:                           0.443   Prob(JB):                     6.35e-09
+# Kurtosis:                       4.711   Cond. No.                         53.0
+# ==============================================================================
+# Notes:
+# [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+```
 
-
+Prob (F-statistic) 0.05 değerinden küçük çıktığı için (6.69e-34) model anlamlıdır.
 
 
 ![image](./images/regresyon2.png)
