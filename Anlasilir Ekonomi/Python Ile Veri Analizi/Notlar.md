@@ -8379,7 +8379,7 @@ print(model.summary())
 # ==============================================================================
 ```
 
-Eğer Prob(JB) değeri 0,05'ten küçükse normal dağılım diyebiliriz.
+Eğer Prob(JB) değeri 0,05'ten küçükse normal dağılım göstermiyor diyebiliriz. Ama Jarque-Bera testi aykırı değerlere ve az sayıda gözlemlere karşı hassastır. Bu yüzden normal dağılım değilmiş gibi çıkıyor test sonucu.
 
 
 
