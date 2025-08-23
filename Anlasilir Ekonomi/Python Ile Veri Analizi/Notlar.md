@@ -8239,6 +8239,32 @@ sabit=sm.add_constant(x)
 model=sm.OLS (y, sabit).fit()
 
 print(model.summary())
+
+#                             OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                Sales     R-squared:                       0.897
+# Model:                            OLS   Adj. R-squared:                  0.896
+# Method:                 Least Squares   F-statistic:                     570.3
+# Date:                Mon, 25 Jul 2022   Prob (F-statistic):           1.58e-96
+# Time:                        00:12:59   Log-Likelihood:                -386.18
+# No. Observations:                 200   AIC:                             780.4
+# Df Residuals:                     196   BIC:                             793.6
+# Df Model:                           3                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                 coef    std err          t      P>|t|       [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const         2.9389      0.312      9.422      0.000        2.324       3.554
+# TV            0.0458      0.001     32.809      0.000        0.043       0.049
+# Radio         0.1885      0.009     21.893      0.000        0.172       0.206
+# Newspaper    -0.0010      0.006     -0.177      0.860       -0.013       0.011
+# ==============================================================================
+# Omnibus:                  60.414              Durbin-Watson:             2.084
+# Prob(Omnibus):             0.000              Jarque-Bera (JB):        151.241
+# Skew:                     -1.327              Prob(JB):               1.44e-33
+# Kurtosis:                  6.332              Cond. No.:                  454.
+# ==============================================================================
+
 ```
 
 ![image](./images/regresyon3.png)
