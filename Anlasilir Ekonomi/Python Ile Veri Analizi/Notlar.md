@@ -8199,9 +8199,19 @@ print(model.summary())
 
 Son durumda tavuk fiyatı 0,09 olsa da çok anlamsız değil. 
 
-## 13.8 EKK Varsayımları
+## 13.8 En Küçük Kareler Varsayımları
 
-Regresyon için bazı varsayımlar vardır ve bu varsayımlar sayesinde modelin uygunluğunu anlayabiliriz.
+Regresyonda En Küçük Kareler için bazı varsayımlar vardır ve bu varsayımlar sayesinde modelin uygunluğunu anlayabiliriz.
+
+Varsayımlar;
+
+- Doğrusallık (Modelin katsayılarının doğrusallığı)
+- Normallik (modeldeki hataların normallik göstermesi)
+- Otokorelasyon varsayımı (Hatalar arasında otokorelasyon olmamalı)
+- Sabit varyans (Her bir gözlem için hata varyansları sabit olmalı)
+- Çoklu doğrusal bağlantı (Bağımsız değişkenler arasında çoklu doğrusal bağlantı olmamalı)
+- Gözlem sayısı bağımsız değişken sayısından fazla olmalı
+- Aykırı ve eksik değer olmamalı
 
 ![image](./images/regresyon2.png)
 ### Örnekler
