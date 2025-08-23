@@ -8065,6 +8065,11 @@ $$
 \frac{(n-2) \cdot R^2}{1-R^2} = \frac{(244-2) \cdot 0,457^2}{1-0,457^2} = 203,6
 $$
 
+$$
+H_0: \beta_0 = \beta_1 = \cdot \cdot \cdot = \beta_k = 0\\
+H_1: \beta_0 != \beta_1 != \cdot \cdot \cdot != \beta_k != 0
+$$
+
 F istatistik sonucuna baktığımızda tablodaki 203,4 değeriyle neredeyse aynı olduğunu görürüz. Tabloda karşılaştırıp P değerini bulabiliriz ama Python bizim için bunu yapıyor.
 
 ![image](./images/regresyon2.png)
