@@ -8342,8 +8342,16 @@ plt.show()
 
 Çarpık da olsa normal dağılım gözlemlenmektedir.
 
+```python
+sm.qqplot(model.resid, line="s")
+plt.show()
+```
 
-![image](./images/regresyon4.png)
+![image](./images/regresyon4.png) 
+
+
+
+![image](./images/regresyon5.png)
 ### Örnekler
 ## 13.11
 # 14
