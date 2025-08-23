@@ -8313,6 +8313,10 @@ Normallik Yapıları;
 - Deterministik yapı: elimizdeki denkleme göre sonuç üreten yapı. Rastlantısallık yok.
 - Stokastik yapı: Sonucu net olarak bilemediğimiz ama tahmin yaparak sonucu bulmaya çalıştığımız yapı. Rastlantısallık var.
 
+```python
+print(model.resid)
+```
+
 ![image](./images/regresyon3.png)
 ### Örnekler
 ## 13.11
