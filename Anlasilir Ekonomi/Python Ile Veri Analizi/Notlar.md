@@ -8268,6 +8268,18 @@ print(model.summary())
 
 Newspaper görmüş olduğumuz gibi 0,86 p değeri ile anlamsız olarak gözükmektedir. Diğer değişkenler anlamlı ve model de anlamlı.
 
+```Python
+y=veri ["Sales"]
+x=veri [["TV", "Radio"]]
+
+sabit=sm.add_constant(x)
+model=sm.OLS (y, sabit).fit()
+
+print(model.summary())
+```
+
+
+
 ![image](./images/regresyon3.png)
 ### Örnekler
 ## 13.10
