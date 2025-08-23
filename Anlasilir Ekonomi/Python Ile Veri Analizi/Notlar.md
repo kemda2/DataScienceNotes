@@ -8070,6 +8070,11 @@ H_0: \beta_0 = \beta_1 = \cdot \cdot \cdot = \beta_k = 0\\
 H_1: \text{en az birisi sıfırdan farklı}
 $$
 
+```Python
+print("{0:.3f}".format(model.f_pvalue))
+# 0.000 P değerinin okunaklı hali
+```
+
 F istatistik sonucuna baktığımızda tablodaki 203,4 değeriyle neredeyse aynı olduğunu görürüz. Tabloda karşılaştırıp P değerini bulabiliriz ama Python bizim için bunu yapıyor.
 
 ![image](./images/regresyon2.png)
