@@ -8090,10 +8090,29 @@ print(1-(HKT/GKT)) # 0.45661658635167657 Tabloda da 0,457 olarak gösterilmişti
 
 $R^2$ değeri bu modelin tip değişkeninin yalnızca %46'lik kısmını açıkladığını anlatıyor. Yani tip değişkenini etkileyen başka faktörler de vardır.
 
+## 13.6 Düzeltilmiş R Kare
+
+Birden fazla değişkenli regresyon modeli kurduğumuzda bakmamız gereken kısım düzeltilmiş R Kare kısmıdır çünkü birden fazla değişken olduğunda r kare değeri olması gerekenden fazla artabilmektedir.
+
+$$
+R_{\text{adj}}^2 = 1 - \left( \frac{(1 - R^2)(n - 1)}{n - k - 1} \right)
+$$
+
+$$
+R_{\text{adj}}^2 = 1 - \left( \frac{(1 - 0,457)(244 - 1)}{244 - k - 1} \right)
+$$
+
+n: Gözlem sayısı
+k: Bağımsız değişken sayısı
+
+### Örnekler
+
+
+
 
 ![image](./images/regresyon2.png)
 ### Örnekler
-## 13.6
+## 13.7
 # 14
 
 https://www.youtube.com/watch?v=NYRP_h0Y2ek&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=134
