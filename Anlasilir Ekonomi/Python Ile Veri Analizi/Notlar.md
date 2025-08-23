@@ -8026,6 +8026,8 @@ Coef katsayı değerleri, std err standart hata değerleri, test sonuçları t d
 
 P>|t| değeri 0,05 değerinden küçükse (%95 güven aralığı) testin anlamlı olduğunu gösterir. Hem sabit hem de total-bill katsayısı doğrusal olarak anlamlıdır.
 
+[0.025      0.975] ise %95 güven aralığında katsayıların içerisinde bulunması gereken aralığı gösterir.
+
 
 
 
