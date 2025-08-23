@@ -7983,6 +7983,9 @@ print(model.summary())
 
 coef kısmnından $\beta_0$ 0,9203 ve $\beta_1$ 0,1050 bulunur.
 
+## 13.3 Parametre Anlamlılığı
+
+
 
 
 
@@ -7990,7 +7993,7 @@ coef kısmnından $\beta_0$ 0,9203 ve $\beta_1$ 0,1050 bulunur.
 
 ![image](./images/regresyon2.png)
 ### Örnekler
-## 13.3
+## 13.4
 # 14
 
 https://www.youtube.com/watch?v=uTWTElzpvPs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=132
