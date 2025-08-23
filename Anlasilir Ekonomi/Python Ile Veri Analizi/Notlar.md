@@ -8394,5 +8394,5 @@ Eğer Prob(JB) değeri 0,05'ten küçükse normal dağılım göstermiyor diyebi
 ## 13.12
 # 14
 
-https://www.youtube.com/watch?v=J6lhSDgSiHA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=139
-0
+https://www.youtube.com/watch?v=59HT-MYqzIE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=140
+2
