@@ -8300,16 +8300,16 @@ print(model.summary())
 # Skew:                      -1.323       Prob(JB):                5.19e-33
 # Kurtosis:                   6.292       Cond. No.:                  425.
 # ==============================================================================
-
-
 ```
 
+Bu model şuan için anlamlı gözükmektedir. Doğrusallık varsayımı sağlanmıştır.
 
+## 13.10 Normallik Varsayımı
 
 ![image](./images/regresyon3.png)
 ### Örnekler
-## 13.10
+## 13.11
 # 14
 
-https://www.youtube.com/watch?v=lDusEwvKyaA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=138
+https://www.youtube.com/watch?v=J6lhSDgSiHA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=139
 0
