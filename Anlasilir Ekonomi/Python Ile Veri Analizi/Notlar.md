@@ -8126,7 +8126,13 @@ veri.head()
 #  1   29.9          38.1        413.3    79.2       
 #  2   29.8          40.3        439.2    79.2       
 #  3   30.8          39.5        459.7    79.2       
-#  4   31.2          37.3        492.9    77.4       
+#  4   31.2          37.3        492.9    77.4  
+
+x=veri[["TavukFiyat", "Gelir", "SıgırFiyat"]]
+y=veri["Tavuk Tüketim"]
+
+sabit=sm.add_constant(x)
+model=sm.OLS(y, sabit).fit()
 ```
 
 
