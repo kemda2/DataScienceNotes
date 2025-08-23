@@ -8334,10 +8334,16 @@ print(np.mean(model.resid)) # Hata terimlerinin ortalaması
 
 # 1.858069254012662e-14
 
-
+sns.distplot(model.resid, kde=True)
+plt.show()
 ```
 
 ![image](./images/regresyon3.png)
+
+Çarpık da olsa normal dağılım gözlemlenmektedir.
+
+
+![image](./images/regresyon4.png)
 ### Örnekler
 ## 13.11
 # 14
