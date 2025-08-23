@@ -8095,5 +8095,5 @@ print(1-(HKT/GKT)) # 0.45661658635167657 Tabloda da 0,457 olarak gösterilmişti
 ## 13.6
 # 14
 
-https://www.youtube.com/watch?v=uTWTElzpvPs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=132
-0
+https://www.youtube.com/watch?v=NYRP_h0Y2ek&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=134
+19
