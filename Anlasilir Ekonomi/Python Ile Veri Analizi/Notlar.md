@@ -8327,6 +8327,11 @@ print(model.resid) # Hata terimlerini yazdırma
 # 197    0.031952  
 # 198    1.707077  
 # 199    -1.757543 
+
+import numpy as np
+
+print(np.mean(model.resid)) # Hata terimlerinin ortalaması
+
 ```
 
 ![image](./images/regresyon3.png)
