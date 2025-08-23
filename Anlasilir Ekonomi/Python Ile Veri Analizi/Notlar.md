@@ -8264,8 +8264,9 @@ print(model.summary())
 # Skew:                     -1.327              Prob(JB):               1.44e-33
 # Kurtosis:                  6.332              Cond. No.:                  454.
 # ==============================================================================
-
 ```
+
+Newspaper görmüş olduğumuz gibi 0,86 p değeri ile anlamsız olarak gözükmektedir. Diğer değişkenler anlamlı ve model de anlamlı.
 
 ![image](./images/regresyon3.png)
 ### Örnekler
