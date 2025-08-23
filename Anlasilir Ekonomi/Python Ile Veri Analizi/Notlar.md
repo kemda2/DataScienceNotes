@@ -8381,6 +8381,7 @@ print(model.summary())
 
 Eğer Prob(JB) değeri 0,05'ten küçükse normal dağılım göstermiyor diyebiliriz. Ama Jarque-Bera testi aykırı değerlere ve az sayıda gözlemlere karşı hassastır. Bu yüzden normal dağılım değilmiş gibi çıkıyor test sonucu.
 
+## 13.11 Otokorelasyon Varsayımı
 
 
 
@@ -8390,7 +8391,7 @@ Eğer Prob(JB) değeri 0,05'ten küçükse normal dağılım göstermiyor diyebi
 
 ![image](./images/regresyon5.png)
 ### Örnekler
-## 13.11
+## 13.12
 # 14
 
 https://www.youtube.com/watch?v=J6lhSDgSiHA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=139
