@@ -8316,6 +8316,8 @@ Normallik Yapıları;
 ```python
 print(model.resid)
 
+# 0      1.544535  
+# 1      -1.945362 
 # 2      -3.037018 
 # 3      0.882884  
 # 4      -0.323908 
