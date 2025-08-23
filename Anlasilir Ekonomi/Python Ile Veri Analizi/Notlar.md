@@ -8201,7 +8201,7 @@ Son durumda tavuk fiyatı 0,09 olsa da çok anlamsız değil.
 
 ## 13.8 EKK Varsayımları
 
-
+Regresyon için bazı varsayımlar vardır ve bu varsayımlar sayesinde modelin uygunluğunu anlayabiliriz.
 
 ![image](./images/regresyon2.png)
 ### Örnekler
