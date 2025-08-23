@@ -8308,7 +8308,10 @@ Bu model şuan için anlamlı gözükmektedir. Doğrusallık varsayımı sağlan
 
 Modelin çıktısı sonucunda oluşan hata değerlerinin normallik göstermesidir.
 
+Normallik Yapıları;
 
+- Deterministik yapı: elimizdeki denkleme göre sonuç üreten yapı.
+- Stokastik yapı: 
 
 ![image](./images/regresyon3.png)
 ### Örnekler
