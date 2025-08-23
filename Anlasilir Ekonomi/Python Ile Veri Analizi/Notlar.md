@@ -8133,10 +8133,71 @@ y=veri["Tavuk Tüketim"]
 
 sabit=sm.add_constant(x)
 model=sm.OLS(y, sabit).fit()
+
+print(model.summary())
+
+#                             OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:           TavukTüketim   R-squared:                       0.912
+# Model:                            OLS   Adj. R-squared:                  0.898
+# Method:                 Least Squares   F-statistic:                     65.35
+# Date:                Fri, 22 Jul 2022   Prob (F-statistic):           3.38e-10
+# Time:                        17:15:14   Log-Likelihood:                -50.170
+# No. Observations:                  23   AIC:                             108.3
+# Df Residuals:                      19   BIC:                             112.9
+# Df Model:                           3                                         
+# Covariance Type:            nonrobust                                         
+
+# ==============================================================================
+#              coef    std err          t      P>|t|      [0.025      0.975]
+# ----------------------------------------------------------------------------
+# const      33.7991      4.287      7.885      0.000      24.827      42.771
+# TavukFiyat -0.2223      0.126     -1.762      0.094      -0.486      0.042
+# Gelir       0.0130      0.005      2.577      0.018       0.002      0.024
+# SığırFiyat  0.0250      0.059      0.423      0.677      -0.099      0.149
+# ==============================================================================
+# Omnibus:              7.523           Durbin-Watson:         0.395
+# Prob(Omnibus):        0.023           Jarque-Bera (JB):      2.215
+# Skew:                -0.307           Prob(JB):              0.330
+# Kurtosis:             1.609           Cond. No.              1.05e+04
+# ==============================================================================
 ```
 
+Sığır fiyatının p değeri görüldüğü gibi 0,677 olarak anlamsız bir ilişkiye sahiptir. Sığır fiyatlarını kaldırıp tekrar deneyelim.
 
+```Python
+x=veri [["TavukFiyat", "Gelir"]]
+y=veri ["Tavuk Tüketim"]
+sabit=sm.add_constant(x)
+model=sm.OLS(y, sabit).fit()
+print(model.summary())
 
+#                             OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:           TavukTüketim   R-squared:                       0.911
+# Model:                            OLS   Adj. R-squared:                  0.902
+# Method:                 Least Squares   F-statistic:                     102.1
+# Date:                Fri, 22 Jul 2022   Prob (F-statistic):           3.18e-11
+# Time:                        17:16:20   Log-Likelihood:                -50.277
+# No. Observations:                  23   AIC:                             106.6
+# Df Residuals:                      20   BIC:                             110.0
+# Df Model:                           2                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const         34.5156      3.856      8.952      0.000      26.473      42.559
+# TavukFiyat    -0.2136      0.122     -1.752      0.095     -0.468      0.041
+# Gelir          0.0149      0.002      6.785      0.000       0.010      0.019
+# ==============================================================================
+# Omnibus:              5.606           Durbin-Watson:         0.433
+# Prob(Omnibus):        0.061           Jarque-Bera (JB):      1.843
+# Skew:                -0.224           Prob(JB):              0.398
+# Kurtosis:             1.688           Cond. No.              9.61e+03
+# ==============================================================================
+```
+
+Son durumda tavuk fiyatı 0,09 olsa da çok anlamsız değil. 
 
 ![image](./images/regresyon2.png)
 ### Örnekler
