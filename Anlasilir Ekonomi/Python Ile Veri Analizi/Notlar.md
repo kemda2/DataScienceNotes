@@ -8217,6 +8217,9 @@ Varsayımlar;
 
 ```Python
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
 
 veri = pd.read_csv("advertising.csv") # kaggle
 ```
