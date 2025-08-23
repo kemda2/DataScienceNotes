@@ -8351,6 +8351,41 @@ plt.show()
 
 Genel olarak çizgiye yakın bir dağılım varsa hataların dağılımı normal dağılım diyebiliriz.
 
+```python
+print(model.summary())
+
+# OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                Sales     R-squared:                       0.897
+# Model:                            OLS   Adj. R-squared:                  0.896
+# Method:                 Least Squares   F-statistic:                     859.6
+# Date:                Mon, 25 Jul 2022   Prob (F-statistic):           4.83e-98
+# Time:                        00:13:58   Log-Likelihood:                -386.20
+# No. Observations:                 200   AIC:                             778.4
+# Df Residuals:                     197   BIC:                             788.3
+# Df Model:                           2                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const          2.9211      0.294      9.919      0.000       2.340       3.502
+# TV             0.0458      0.001     32.909      0.000       0.043       0.048
+# Radio          0.1880      0.008     23.382      0.000       0.172       0.204
+# ==============================================================================
+# Omnibus:                   60.022       Durbin-Watson:              2.081
+# Prob(Omnibus):              0.000       Jarque-Bera (JB):         148.679
+# Skew:                      -1.323       Prob(JB):                5.19e-33
+# Kurtosis:                   6.292       Cond. No.:                  425.
+# ==============================================================================
+```
+
+Eğer Prob(JB) değeri 0,05'ten küçükse normal dağılım diyebiliriz.
+
+
+
+
+
+
 
 
 ![image](./images/regresyon5.png)
