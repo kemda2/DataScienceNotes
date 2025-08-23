@@ -8024,6 +8024,8 @@ print(model.bse) # Standart hata
 
 Coef katsayı değerleri, std err standart hata değerleri, test sonuçları t değeri 
 
+P>|t| değeri 0,05 değerinden küçükse (%95 güven aralığı) testin anlamlı olduğunu gösterir.
+
 
 
 ![image](./images/regresyon2.png)
