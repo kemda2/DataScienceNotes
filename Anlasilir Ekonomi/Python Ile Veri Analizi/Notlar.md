@@ -8103,14 +8103,29 @@ $$
 n: Gözlem sayısı
 k: Bağımsız değişken sayısı (sabit kabul edilmez)
 
-### Örnekler
+## 13.7 Çoklu Doğrusal Regresyon
+
+Tavuk tüketimi üzerinde diğer 3 değişkenin etkisi olup olmadığını inceleyelim.
+
+```Python
+
+import pandas as pd
+
+data = {
+    "TavukTüketim":[27.8, 29.9, 29.8, 30.8, 31.2, 33.3 , 35.6, 36.4, 36.7, 38.4, 40.4, 40.3, 41.8, 40.4, 40.7, 40.1, 42.7, 44.1, 46.7, 50.6, 50.1, 51.7, 52.9],
+    "TavukFiyat":[42.2, 38.1, 40.3, 39.5, 37.3, 38.1, 39.3, 37.8, 38.4, 40.1, 38.6, 39.8, 39.7, 52.1, 48.9, 58.3, 57.9, 56.5, 63.7, 61.6, 58.9, 66.4, 70.4]
+    "Gelir":[397.5, 413.3, 439.2, 459.7, 492.9, 528.6, 560.3, 624.6, 666.4, 717.8, 768.2, 843.3, 911.6, 931.1, 1021.5, 1165.9, 1349.6, 1449.4, 1575.5, 1759.1, 1994.2, 2258.1, 2478.7]
+    "SıgırFiyat":[78.3, 79.2, 79.2, 79.2, 77.4, 80.2, 80.4, 83.9, 85.5, 93.7, 106.1, 104.8, 114, 124.1, 127.6, 142.9, 143.6, 139.2, 165.5, 203.3, 219.6, 221.6, 232.6]
+}
+
+```
 
 
 
 
 ![image](./images/regresyon2.png)
 ### Örnekler
-## 13.7
+## 13.8
 # 14
 
 https://www.youtube.com/watch?v=NYRP_h0Y2ek&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=134
