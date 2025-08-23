@@ -8306,7 +8306,7 @@ Bu model şuan için anlamlı gözükmektedir. Doğrusallık varsayımı sağlan
 
 ## 13.10 Normallik Varsayımı
 
-
+Modelin çıktısı sonucunda oluşan hata değerlerinin normallik göstermesidir.
 
 
 
