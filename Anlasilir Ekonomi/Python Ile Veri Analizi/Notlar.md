@@ -8059,6 +8059,13 @@ P>|t| değeri 0,05 değerinden küçükse (%95 güven aralığı) testin anlaml�
 
 Prob (F-statistic) 0.05 değerinden küçük çıktığı için (6.69e-34) model anlamlıdır.
 
+F testi;
+
+$$
+\frac{(n-2) \cdot R^2}{1-R^2} = \frac{(244-2) \cdot 0,457^2}{1-0,457^2} = 203,6
+$$
+
+F istatistik sonucuna baktığımızda tablodaki 203,4 değeriyle neredeyse aynı olduğunu görürüz. Tabloda karşılaştırıp P değerini bulabiliriz ama Python bizim için bunu yapıyor.
 
 ![image](./images/regresyon2.png)
 ### Örnekler
