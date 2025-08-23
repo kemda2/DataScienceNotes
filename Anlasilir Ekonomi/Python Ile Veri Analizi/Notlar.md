@@ -8077,9 +8077,14 @@ print("{0:.3f}".format(model.f_pvalue))
 
 F istatistik sonucuna baktığımızda tablodaki 203,4 değeriyle neredeyse aynı olduğunu görürüz. Tabloda karşılaştırıp P değerini bulabiliriz ama Python bizim için bunu yapıyor.
 
+## 13.5 R Kare
+
+
+
+
 ![image](./images/regresyon2.png)
 ### Örnekler
-## 13.5
+## 13.6
 # 14
 
 https://www.youtube.com/watch?v=uTWTElzpvPs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=132
