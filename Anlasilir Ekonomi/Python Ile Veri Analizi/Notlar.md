@@ -8314,7 +8314,7 @@ Normallik Yapıları;
 - Stokastik yapı: Sonucu net olarak bilemediğimiz ama tahmin yaparak sonucu bulmaya çalıştığımız yapı. Rastlantısallık var.
 
 ```python
-print(model.resid)
+print(model.resid) # Hata terimlerini yazdırma
 
 # 0      1.544535  
 # 1      -1.945362 
