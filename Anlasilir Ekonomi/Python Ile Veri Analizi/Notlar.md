@@ -8213,10 +8213,20 @@ Varsayımlar;
 - Gözlem sayısı bağımsız değişken sayısından fazla olmalı
 - Aykırı ve eksik değer olmamalı
 
+## 13.9 Doğrusallık Varsayımı
+
+
+
+
+
+
+
+
+
 ![image](./images/regresyon2.png)
 ### Örnekler
-## 13.9
+## 13.10
 # 14
 
-https://www.youtube.com/watch?v=NYRP_h0Y2ek&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=134
-19
+https://www.youtube.com/watch?v=lDusEwvKyaA&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=138
+0
