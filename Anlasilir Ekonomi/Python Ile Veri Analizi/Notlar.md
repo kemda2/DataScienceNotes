@@ -8215,7 +8215,11 @@ Varsayımlar;
 
 ## 13.9 Doğrusallık Varsayımı
 
+```Python
+import pandas as pd
 
+veri = pd.read_csv("advertising.csv") # kaggle
+```
 
 
 
