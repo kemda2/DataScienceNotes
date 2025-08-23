@@ -8088,6 +8088,7 @@ HKT = model.ssr
 print(1-(HKT/GKT)) # 0.45661658635167657 Tabloda da 0,457 olarak gösterilmişti.
 ```
 
+$R^2$ değeri bu modelin tip değişkeninin yalnızca %46'lik kısmını açıkladığını anlatıyor. Yani tip değişkenini etkileyen başka faktörler de vardır.
 
 
 ![image](./images/regresyon2.png)
