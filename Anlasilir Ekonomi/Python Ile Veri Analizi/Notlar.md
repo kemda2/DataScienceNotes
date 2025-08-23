@@ -8028,6 +8028,7 @@ P>|t| değeri 0,05 değerinden küçükse (%95 güven aralığı) testin anlaml�
 
 [0.025      0.975] ise %95 güven aralığında katsayıların içerisinde bulunması gereken aralığı gösterir.
 
+## 13.4 Model Anlamlılığı
 
 
 
@@ -8035,7 +8036,7 @@ P>|t| değeri 0,05 değerinden küçükse (%95 güven aralığı) testin anlaml�
 
 ![image](./images/regresyon2.png)
 ### Örnekler
-## 13.4
+## 13.5
 # 14
 
 https://www.youtube.com/watch?v=uTWTElzpvPs&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=132
