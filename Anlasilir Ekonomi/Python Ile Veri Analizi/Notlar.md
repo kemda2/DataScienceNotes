@@ -8229,7 +8229,7 @@ plt.show()
 
 ![image](./images/regresyon2.png) 
 
-
+TV ve Radio değişkenleri doğrusal bir ilişki gösteriyor fakat Newspaper değişkeni biraz daha dağınık duruyor.
 
 
 
