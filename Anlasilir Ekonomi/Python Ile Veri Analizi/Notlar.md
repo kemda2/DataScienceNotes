@@ -8349,6 +8349,8 @@ plt.show()
 
 ![image](./images/regresyon4.png) 
 
+Genel olarak çizgiye yakın bir dağılım varsa hataların dağılımı normal dağılım diyebiliriz.
+
 
 
 ![image](./images/regresyon5.png)
