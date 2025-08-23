@@ -8079,6 +8079,14 @@ F istatistik sonucuna baktığımızda tablodaki 203,4 değeriyle neredeyse ayn�
 
 ## 13.5 R Kare (Belirlilik Katsayısı)
 
+Genel Kareler Toplamı = Regresyon Kareler Toplamı + Hata Kareler Toplamı
+
+```Python
+GKT = model.ess + model.ssr
+HKT = model.ssr
+
+print(1-(HKT/GKT)) # 0.45661658635167657 Tabloda da 0,457 olarak gösterilmişti.
+```
 
 
 
