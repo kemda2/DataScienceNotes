@@ -8222,15 +8222,18 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 
 veri = pd.read_csv("advertising.csv") # kaggle
+
+sns.pairplot(data=veri, y_vars="Sales", x_vars=["TV", "Radio", "Newspaper"], kind="reg")
+plt.show()
 ```
 
+![image](./images/regresyon2.png) 
 
 
 
 
 
-
-![image](./images/regresyon2.png)
+![image](./images/regresyon3.png)
 ### Örnekler
 ## 13.10
 # 14
