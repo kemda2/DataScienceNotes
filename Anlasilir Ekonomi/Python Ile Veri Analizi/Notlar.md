@@ -8077,7 +8077,7 @@ print("{0:.3f}".format(model.f_pvalue))
 
 F istatistik sonucuna baktığımızda tablodaki 203,4 değeriyle neredeyse aynı olduğunu görürüz. Tabloda karşılaştırıp P değerini bulabiliriz ama Python bizim için bunu yapıyor.
 
-## 13.5 R Kare
+## 13.5 R Kare (Belirlilik Katsayısı)
 
 
 
