@@ -8383,7 +8383,7 @@ Eğer Prob(JB) değeri 0,05'ten küçükse normal dağılım göstermiyor diyebi
 
 ## 13.11 Otokorelasyon Varsayımı
 
-
+bir gözlemin bir sonraki gözlemle arasında bir korelasyon var olup olmadığını inceleyen yapı.
 
 
 
