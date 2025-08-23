@@ -8306,6 +8306,10 @@ Bu model şuan için anlamlı gözükmektedir. Doğrusallık varsayımı sağlan
 
 ## 13.10 Normallik Varsayımı
 
+
+
+
+
 ![image](./images/regresyon3.png)
 ### Örnekler
 ## 13.11
