@@ -8465,5 +8465,5 @@ print(lm)
 ## 13.12
 # 14
 
-https://www.youtube.com/watch?v=59HT-MYqzIE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=140
-19
+www.youtube.com/watch?v=eR8DgvwqR3k&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=141
+0
