@@ -8443,10 +8443,19 @@ print(model.summary())
 # ==============================================================================
 ```
 
-Buradaki Durbin-Watson test sonucu 1,5 ile 2,5 arasında olursa otokorelasyon sorunu olmadığını kabul ederiz. Ama kararsız bir yapıda olsaydı ek testler uygulayabiliriz. LM test örneği;
+Buradaki Durbin-Watson test sonucu 1,5 ile 2,5 arasında olursa otokorelasyon sorunu olmadığını kabul ederiz. Ama kararsız bir yapıda olsaydı ek testler uygulayabiliriz. 
 
+> LM test örneği;
 
+```python
+import statsmodels.stats.diagnostic as smd
 
+lm = smd.acorr_breusch_godfrey(model, nlags=2)
+print(lm)
+# (0.680417447474024371, 0.7116217749296911, 0.33283584217940715, 0.7172943226656876)
+```
+
+İkinci olan 0,7116 değeri bizim p değerimiz. 0,05'ten fazla olduğu için otokorelasyon yoktur.
 
 
 
