@@ -8413,7 +8413,7 @@ sm.graphics.tsa.plot_acf(hata)
 
 ![image](./images/regresyon5.png)
 
-
+En soldaki dik kısım önemli değil. Eğer değerler işaretli kısım içerisinde kalıyorsa otokorelasyon yok deriz. 
 
 ![image](./images/regresyon5.png)
 ### Örnekler
