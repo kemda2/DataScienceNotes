@@ -8443,7 +8443,7 @@ print(model.summary())
 # ==============================================================================
 ```
 
-Buradaki Durbin-Watson test sonucu 1,5 ile 2,5 arasında olursa otokorelasyon aorunu olmadığını kabul ederiz.
+Buradaki Durbin-Watson test sonucu 1,5 ile 2,5 arasında olursa otokorelasyon sorunu olmadığını kabul ederiz.
 
 
 
