@@ -8443,7 +8443,9 @@ print(model.summary())
 # ==============================================================================
 ```
 
-Buradaki Durbin-Watson test sonucu 1,5 ile 2,5 arasında olursa otokorelasyon sorunu olmadığını kabul ederiz.
+Buradaki Durbin-Watson test sonucu 1,5 ile 2,5 arasında olursa otokorelasyon sorunu olmadığını kabul ederiz. Ama kararsız bir yapıda olsaydı ek testler uygulayabiliriz. LM test örneği;
+
+
 
 
 
