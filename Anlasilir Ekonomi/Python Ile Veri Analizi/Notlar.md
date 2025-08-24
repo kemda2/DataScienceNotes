@@ -8457,12 +8457,13 @@ print(lm)
 
 İkinci olan 0,7116 değeri bizim p değerimiz. 0,05'ten fazla olduğu için otokorelasyon yoktur.
 
+## 13.12 Newey–West Yöntemi
 
 
 
 ![image](./images/regresyon5.png)
 ### Örnekler
-## 13.12
+## 13.13
 # 14
 
 www.youtube.com/watch?v=eR8DgvwqR3k&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=141
