@@ -8385,7 +8385,33 @@ Eğer Prob(JB) değeri 0,05'ten küçükse normal dağılım göstermiyor diyebi
 
 bir gözlemin bir sonraki gözlemle arasında bir korelasyon var olup olmadığını inceleyen yapı. Bir önceki ile bir sonraki gözlem arasında ilişki olmamalı diyor.
 
+```python
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
 
+# Veri setini oku
+veri = pd.read_csv("C:/Users/90506/Desktop/Reklam.csv")
+
+# Bağımlı ve bağımsız değişkenleri seç
+y = veri["Sales"]
+x = veri[["TV", "Radio"]]
+
+# Sabit terimi modele ekle
+sabit = sm.add_constant(x)
+
+# Modeli oluştur ve eğit
+model = sm.OLS(y, sabit).fit()
+
+# Hataları (residuals) al
+hata = model.resid
+
+# Artıkların (hataların) otokorelasyon fonksiyonunu çiz
+sm.graphics.tsa.plot_acf(hata)
+```
+
+![image](./images/regresyon5.png)
 
 
 
