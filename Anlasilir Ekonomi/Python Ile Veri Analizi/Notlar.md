@@ -8443,10 +8443,16 @@ print(model.summary())
 # ==============================================================================
 ```
 
+Buradaki Durbin-Watson test sonucu 1,5 ile 2,5 arasında olursa otokorelasyon aorunu olmadığını kabul ederiz.
+
+
+
+
+
 ![image](./images/regresyon5.png)
 ### Örnekler
 ## 13.12
 # 14
 
 https://www.youtube.com/watch?v=59HT-MYqzIE&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=140
-2
+19
