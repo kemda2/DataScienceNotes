@@ -8753,7 +8753,7 @@ print(bpt) # (np.float64(2.6379691721565446), np.float64(0.10433683974725937), n
 
 ## 13.15 Çoklu Doğrusal Bağlantı
 
-Modelimizde Çoklu Doğrusal Bağlantı problemi olmamalıdır.
+Modelimizde Çoklu Doğrusal Bağlantı problemi olmamalıdır. Mesela dondurma satışlarına hava sıcaklığı ve soğuk su satışlarının etkisini incelerken hava sıcaklığı ve soğuk su satışlarının da kendi içinde ilişkisi olduğu için bağımsız değişkenler birbirinden etkilenerek ortaya çıkıyor demektir.
 
 
 
