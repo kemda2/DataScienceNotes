@@ -8583,6 +8583,10 @@ Hala otokorelasyon var (p değeri hala0,02) ama hata yapısı otokorelasyon zara
 
 Ortalaya çıkan hataların rassallığı ile ilgilidir. Rassallık saparsa p değeri bizi yanıltabilir.
 
+2 tür test ile inceleyebiliriz;
+
+> Whitetest;
+
 ```Python
 import pandas as pd
 import statsmodels.api as sm
@@ -8633,8 +8637,16 @@ print(whitetest) # (64.523967678888, 1.4967931342835437e-12, 18.479584477648945,
 - F-istatistik sonucu (18.479584477648945)
 - P değeri 0'dır. (5.4016313950434115e-15) H0 hipotezi reddedilir. Değişken varyanslıdır diyebiliriz.
 
+> Pagan test
 
+```Python
+BPtest=smd.het_breuschpagan (hata, model.model.exog)
+print(BPtest) # (4.809299865939609, 0.09029710011528648, 2.426939585081127, 0.09094292734128712)
+```
 
+p değeri 0.0909 bulunmuştur. 
+
+> Normallik testi sonucunda hataların normallik dağılımının olduğunu bulursak pagan testi, normallik dağılımı olmadığını bulursak white testini kullanırız.
 
 
 
