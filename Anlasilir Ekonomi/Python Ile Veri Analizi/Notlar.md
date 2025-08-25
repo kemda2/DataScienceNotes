@@ -8457,7 +8457,7 @@ print(lm)
 
 İkinci olan 0,7116 değeri bizim p değerimiz. 0,05'ten fazla olduğu için otokorelasyon yoktur.
 
-## 13.12 Newey–West Yöntemi (HAC)
+## 13.12 Newey–West Tahmincisi Yöntemi (HAC)
 
 Otokorelasyon var ise;
 
@@ -8465,6 +8465,61 @@ Otokorelasyon var ise;
 - Genelleştirilmiş Fark Yöntemi
 
 Ama biz Newey–West Yöntemini kullanacağız. Bu yöntem diğer fark yöntemleri gibi otokorelasyonu kaldırmaz. Parametrelerin standart hatalarına bir düzeltme yapar.
+
+### Örnekler
+
+```Python
+import pandas as pd 
+import seaborn as sns
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+import statsmodels.stats.diagnostic as smd
+
+data = pd.DataFrame(
+    {
+        "Y": [27.8, 29.9, 29.8, 30.8, 31.2, 33.3, 35.6, 36.4, 36.7, 38.4, 40.4, 40.3, 41.8, 40.4, 40.7, 40.1, 42.7, 44.1, 46.7, 50.6, 50.1, 51.7, 52.9],
+        "X1": [397.5, 413.3, 439.2, 459.7, 492.9, 528.6, 560.3, 624.6, 666.4, 717.8, 768.2, 843.3, 911.6, 931.1, 1021.5, 1165.9, 1349.6, 1449.4, 1575.5, 1759.1, 1994.2, 2258.1, 2478.7],
+        "X2": [42.2, 38.2, 40.3, 39.5, 37.3, 38.1, 39.3, 37.8, 38.4, 40.1, 38.6, 39.8, 39.7, 52.1, 48.9, 58.3, 57.9, 56.5, 63.7, 61.6, 58.9, 66.4, 70.4],
+        "X3": [50.7, 52, 54, 55.3, 54.7, 63.7, 69.8, 65.9, 64.5, 70, 73.2, 67.8, 79.1, 95.4, 94.2, 123.5, 129.9, 117.6, 130.9, 129.8, 128, 141, 168.2]
+    }
+)
+
+veri = pd.DataFrame(data)
+
+y=veri["Y"]
+x=veri[["X1", "X2", "X3"]]
+sabit=sm.add_constant(x)
+model=sm.OLS(y, sabit).fit()
+print(model.summary())
+
+#                             OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                      Y   R-squared:                       0.937
+# Model:                            OLS   Adj. R-squared:                  0.927
+# Method:                 Least Squares   F-statistic:                     93.88
+# Date:                Mon, 25 Aug 2025   Prob (F-statistic):           1.42e-11
+# Time:                        12:48:51   Log-Likelihood:                -46.317
+# No. Observations:                  23   AIC:                             100.6
+# Df Residuals:                      19   BIC:                             105.2
+# Df Model:                           3                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const         38.6654      3.644     10.609      0.000      31.037      46.293
+# X1             0.0109      0.002      4.574      0.000       0.006       0.016
+# X2            -0.5415      0.158     -3.436      0.003      -0.871      -0.212
+# X3             0.1741      0.062      2.790      0.012       0.043       0.305
+# ==============================================================================
+# Omnibus:                        0.190   Durbin-Watson:                   0.884
+# Prob(Omnibus):                  0.909   Jarque-Bera (JB):                0.323
+# Skew:                           0.181   Prob(JB):                        0.851
+# Kurtosis:                       2.546   Cond. No.                     1.06e+04
+# ==============================================================================
+```
+
+
+
 
 ![image](./images/regresyon6.png)
 ### Örnekler
