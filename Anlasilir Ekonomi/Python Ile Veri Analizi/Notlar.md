@@ -8579,10 +8579,12 @@ print(lm2)
 
 Hala otokorelasyon var (p değeri hala0,02) ama hata yapısı otokorelasyon zararını giderecek şekilde güncellenmiştir. 
 
+## 13.13 Sabit Varyans Varsayımı
+
 ![image](./images/regresyon7.png)
 ### Örnekler
-## 13.13
+## 13.14
 # 14
 
-www.youtube.com/watch?v=eR8DgvwqR3k&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=141
+https://www.youtube.com/watch?v=NwHNaPGQLM8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=142
 0
