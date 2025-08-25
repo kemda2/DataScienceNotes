@@ -8845,5 +8845,5 @@ Genellikle 0,70'ten fazla olanlar incelenir.
 ## 13.16
 # 14
 
-https://www.youtube.com/watch?v=NwHNaPGQLM8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=142
-0
+https://www.youtube.com/watch?v=SicDcAvqqa4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=144
+22
