@@ -8459,9 +8459,12 @@ print(lm)
 
 ## 13.12 Newey–West Yöntemi
 
+Otokorelasyon var ise;
 
+- Birincil Fark Yöntemi
+- Genelleştirilmiş Fark Yöntemi
 
-![image](./images/regresyon5.png)
+![image](./images/regresyon6.png)
 ### Örnekler
 ## 13.13
 # 14
