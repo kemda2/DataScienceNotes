@@ -8820,12 +8820,23 @@ print(model.summary())
 # Skew:                          -0.236   Prob(JB):                        0.906
 # Kurtosis:                       3.158   Cond. No.                     1.68e+05
 # ==============================================================================
+# Notes:
+# [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+# [2] The condition number is large, 1.68e+05. This might indicate that there are
+# strong multicollinearity or other numerical problems.
 ```
 
+Python bizi 2. notta çoklu doğrusal bağlantı veya sayısal bir problem olabileceğine dair uyarıyor. Model anlamlı fakat bazı bağımsız değişkenler anlamsız çıkarsa bu durumdan kaynaklanıyor olabilir.
+
+```Python
+kor=x.corr()
+sns.heatmap(data=kor, annot=True, fmt=".2f")
+plt.show()
+```
+![image](./images/regresyon7.png) 
 
 
-
-![image](./images/regresyon7.png)
+![image](./images/regresyon8.png)
 ### Örnekler
 ## 13.16
 # 14
