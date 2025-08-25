@@ -8518,10 +8518,29 @@ print(model.summary())
 # ==============================================================================
 ```
 
+Durbin-Watson değeri olması gerekenden küçük ama detaylı inceleyelim.
+
+```Python
+hata=model.resid
+sm.graphics.tsa.plot_acf(hata)
+plt.show()
+```
+
+![image](./images/regresyon6.png) 
+
+Soldan ikinci nokta yüzünden şüpheleniyoruz. LM testi yapacağız.
+
+```Python
+lm=smd.acorr_breusch_godfrey (model, nlags=2)
+print(lm)
+# (np.float64(7.30063796320477), np.float64(0.025982839408998214), 3.952735311269253, 0.03893233337310393)
+```
+
+lm testinde 0,02 p değeri 0,05 değerinden küçük olduğu için otokorelasyon sorunu var deriz.
 
 
 
-![image](./images/regresyon6.png)
+![image](./images/regresyon7.png)
 ### Örnekler
 ## 13.13
 # 14
