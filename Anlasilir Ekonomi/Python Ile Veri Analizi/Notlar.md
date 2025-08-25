@@ -8835,6 +8835,10 @@ plt.show()
 ```
 ![image](./images/regresyon7.png) 
 
+Genellikle 0,70'ten fazla olanlar incelenir.
+
+
+
 
 ![image](./images/regresyon8.png)
 ### Örnekler
