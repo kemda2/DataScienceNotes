@@ -8709,9 +8709,52 @@ print(wt) # (np.float64(7.101394954910178), np.float64(0.028704611850957604), np
 bpt=smd.het_breuschpagan (hata, model.model.exog)
 print(bpt) # (np.float64(4.441885848078955), np.float64(0.035067491333201306), np.float64(4.86627467922403), np.float64(0.035760979485465735))
 
+# Her iki test için de 0,05 ten küçük olduğu için sabit varyans yok diyebiliriz. 
+y=np.log(veri["Y"])
+x=np.log(veri["X"])
 
+sabit=sm.add_constant(x)
+model=sm.OLS (y, sabit).fit()
 
+print(model.summary())
+
+#                             OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                      Y   R-squared:                       0.880
+# Model:                            OLS   Adj. R-squared:                  0.875
+# Method:                 Least Squares   F-statistic:                     204.9
+# Date:                Mon, 25 Aug 2025   Prob (F-statistic):           2.09e-14
+# Time:                        16:26:22   Log-Likelihood:                 12.674
+# No. Observations:                  30   AIC:                            -21.35
+# Df Residuals:                      28   BIC:                            -18.55
+# Df Model:                           1                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const         -1.9118      0.295     -6.484      0.000      -2.516      -1.308
+# X              0.7548      0.053     14.315      0.000       0.647       0.863
+# ==============================================================================
+# Omnibus:                       14.888   Durbin-Watson:                   1.309
+# Prob(Omnibus):                  0.001   Jarque-Bera (JB):               16.929
+# Skew:                           1.311   Prob(JB):                     0.000211
+# Kurtosis:                       5.582   Cond. No.                         56.7
+# ==============================================================================
+
+hata=model.resid
+wt=smd.het_white(hata, model.model.exog)
+print(wt) # (np.float64(5.355370157510676), np.float64(0.06872205630845575), np.float64(2.9336004471752077), np.float64(0.07032570666146737))
+
+bpt=smd.het_breuschpagan (hata, model.model.exog)
+print(bpt) # (np.float64(2.6379691721565446), np.float64(0.10433683974725937), np.float64(2.699475681652276), np.float64(0.11156580270896385))
 ```
+
+> Dikkat edilmesi gereken husus bu modeli yorumlarken coef üzerinden y = B0 + B1*X şeklinde yorumlayamayız. Ama yüzdelik bazda yorumlanır. Mesela; modelde %1'lik bir değişim y'yi 0,75 lik arttırır.
+
+
+
+
+
 
 ![image](./images/regresyon7.png)
 ### Örnekler
