@@ -8536,9 +8536,48 @@ print(lm)
 # (np.float64(7.30063796320477), np.float64(0.025982839408998214), 3.952735311269253, 0.03893233337310393)
 ```
 
-lm testinde 0,02 p değeri 0,05 değerinden küçük olduğu için otokorelasyon sorunu var deriz.
+lm testinde 0,02 p değeri 0,05 değerinden küçük olduğu için otokorelasyon sorunu var deriz. Düzeltmek için;
 
+```Python
+model2=sm.OLS (y, sabit).fit(cov_type="HAC", cov_kwds={"maxlags":3})
+print(model2.summary())
 
+# OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                      Y   R-squared:                       0.937
+# Model:                            OLS   Adj. R-squared:                  0.927
+# Method:                 Least Squares   F-statistic:                     59.74
+# Date:                Mon, 25 Aug 2025   Prob (F-statistic):           7.30e-10
+# Time:                        12:57:29   Log-Likelihood:                -46.317
+# No. Observations:                  23   AIC:                             100.6
+# Df Residuals:                      19   BIC:                             105.2
+# Df Model:                           3                                         
+# Covariance Type:                  HAC                                         
+# ==============================================================================
+#                  coef    std err          z      P>|z|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const         38.6654      3.541     10.920      0.000      31.726      45.605
+# X1             0.0109      0.002      6.841      0.000       0.008       0.014
+# X2            -0.5415      0.160     -3.376      0.001      -0.856      -0.227
+# X3             0.1741      0.055      3.159      0.002       0.066       0.282
+# ==============================================================================
+# Omnibus:                        0.190   Durbin-Watson:                   0.884
+# Prob(Omnibus):                  0.909   Jarque-Bera (JB):                0.323
+# Skew:                           0.181   Prob(JB):                        0.851
+# Kurtosis:                       2.546   Cond. No.                     1.06e+04
+# ==============================================================================
+```
+
+Görüldüğü gibi standart hata değerleri değişmiştir.
+
+```Python
+lm2=smd.acorr_breusch_godfrey (model2, nlags=2)
+print(lm2)
+
+# (np.float64(7.30063796320477), np.float64(0.025982839408998214), 3.952735311269253, 0.03893233337310393) 
+```
+
+Hala otokorelasyon var (p değeri hala0,02) ama hata yapısı otokorelasyon zararını giderecek şekilde güncellenmiştir. 
 
 ![image](./images/regresyon7.png)
 ### Örnekler
