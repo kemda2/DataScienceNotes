@@ -8648,12 +8648,32 @@ p değeri 0.0909 bulunmuştur.
 
 > Normallik testi sonucunda hataların normallik dağılımının olduğunu bulursak pagan testi, normallik dağılımı olmadığını bulursak white testini kullanırız.
 
+## 13.14 Log Model Dönüşümü
 
+Hataların sabit varyans varsayımına uymayan durumda;
 
+- Newey West yöntemini kullanabiliriz. (sorunu çözmez. sadece modele verdiği zararı çözer.)
+- Logaritmik dönüşüm
+
+Log dönüşümü;
+
+```Python
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.stats.diagnostic as smd
+import numpy as np
+
+data = {
+    "Y":[5.2, 5.1, 5.3, 5.2, 5.4, 5.5, 7.1, 7.2, 7.4, 7.3, 7.1, 7.1, 9.5, 9.8, 9.9, 10.3, 10.3, 10.5, 10.3, 13.7, 13.1, 13.2, 13.2, 13.9, 16.1, 18.3, 22.1, 19.1, 27.6, 13.1],
+    "X":[100, 100, 100, 100, 100, 100, 200, 200, 200, 200, 200, 200, 300, 300, 300, 300, 300, 300, 400, 400, 400, 400, 400, 400, 500, 500, 500, 500, 500, 500]
+}
+
+veri=pd.DataFrame(data)
+```
 
 ![image](./images/regresyon7.png)
 ### Örnekler
-## 13.14
+## 13.15
 # 14
 
 https://www.youtube.com/watch?v=NwHNaPGQLM8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=142
