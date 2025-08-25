@@ -8751,6 +8751,9 @@ print(bpt) # (np.float64(2.6379691721565446), np.float64(0.10433683974725937), n
 
 > Dikkat edilmesi gereken husus bu modeli yorumlarken coef üzerinden y = B0 + B1*X şeklinde yorumlayamayız. Ama yüzdelik bazda yorumlanır. Mesela; modelde %1'lik bir değişim y'yi 0,75 lik arttırır.
 
+## 13.15 Çoklu Doğrusal Bağlantı
+
+Modelimizde Çoklu Doğrusal Bağlantı problemi olmamalıdır.
 
 
 
@@ -8758,7 +8761,7 @@ print(bpt) # (np.float64(2.6379691721565446), np.float64(0.10433683974725937), n
 
 ![image](./images/regresyon7.png)
 ### Örnekler
-## 13.15
+## 13.16
 # 14
 
 https://www.youtube.com/watch?v=NwHNaPGQLM8&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=142
