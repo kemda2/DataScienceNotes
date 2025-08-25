@@ -8457,12 +8457,14 @@ print(lm)
 
 İkinci olan 0,7116 değeri bizim p değerimiz. 0,05'ten fazla olduğu için otokorelasyon yoktur.
 
-## 13.12 Newey–West Yöntemi
+## 13.12 Newey–West Yöntemi (HAC)
 
 Otokorelasyon var ise;
 
 - Birincil Fark Yöntemi
 - Genelleştirilmiş Fark Yöntemi
+
+Ama biz Newey–West Yöntemini kullanacağız. Bu yöntem diğer fark yöntemleri gibi otokorelasyonu kaldırmaz. Parametrelerin standart hatalarına bir düzeltme yapar.
 
 ![image](./images/regresyon6.png)
 ### Örnekler
