@@ -8669,6 +8669,48 @@ data = {
 }
 
 veri=pd.DataFrame(data)
+
+y=veri["Y"]
+x=veri ["X"]
+
+sabit=sm.add_constant(x)
+model=sm.OLS (y, sabit).fit()
+
+print(model.summary())
+
+#   OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                      Y   R-squared:                       0.795
+# Model:                            OLS   Adj. R-squared:                  0.788
+# Method:                 Least Squares   F-statistic:                     108.6
+# Date:                Mon, 25 Aug 2025   Prob (F-statistic):           3.86e-11
+# Time:                        16:21:49   Log-Likelihood:                -69.264
+# No. Observations:                  30   AIC:                             142.5
+# Df Residuals:                      28   BIC:                             145.3
+# Df Model:                           1                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const          0.7933      1.079      0.735      0.468      -1.417       3.004
+# X              0.0339      0.003     10.419      0.000       0.027       0.041
+# ==============================================================================
+# Omnibus:                       30.108   Durbin-Watson:                   1.924
+# Prob(Omnibus):                  0.000   Jarque-Bera (JB):               81.764
+# Skew:                           2.004   Prob(JB):                     1.76e-18
+# Kurtosis:                      10.025   Cond. No.                         778.
+# ==============================================================================
+
+hata=model.resid
+wt=smd.het_white(hata, model.model.exog)
+print(wt) # (np.float64(7.101394954910178), np.float64(0.028704611850957604), np.float64(4.186666904054255), np.float64(0.02607863875518798))
+
+
+bpt=smd.het_breuschpagan (hata, model.model.exog)
+print(bpt) # (np.float64(4.441885848078955), np.float64(0.035067491333201306), np.float64(4.86627467922403), np.float64(0.035760979485465735))
+
+
+
 ```
 
 ![image](./images/regresyon7.png)
