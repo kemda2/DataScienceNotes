@@ -8581,6 +8581,18 @@ Hala otokorelasyon var (p değeri hala0,02) ama hata yapısı otokorelasyon zara
 
 ## 13.13 Sabit Varyans Varsayımı
 
+
+
+
+
+
+
+
+
+
+
+
+
 ![image](./images/regresyon7.png)
 ### Örnekler
 ## 13.14
