@@ -140,4 +140,4 @@ Ek olarak ROC eğrisi bize True pozitif ve false pozitif oranlarını kıyaslama
 
 # 
 
-https://www.youtube.com/watch?v=VpNNTdel75Y&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=11
+https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=13
