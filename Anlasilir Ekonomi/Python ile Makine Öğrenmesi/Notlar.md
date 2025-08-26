@@ -53,6 +53,8 @@ $$
 RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} e_i^2}
 $$
 
+Hataların nasıl bir dağılım gösterdiğine dair bilgi verir.
+
 # 
 
 https://www.youtube.com/watch?v=_khcdu1XNR0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=8
