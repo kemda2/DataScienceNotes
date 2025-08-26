@@ -45,4 +45,4 @@ Modelimizin çalışma verilerine göre;
 
 # 
 
-https://www.youtube.com/watch?v=_khcdu1XNR0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=8&pp=iAQB
+https://www.youtube.com/watch?v=_khcdu1XNR0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=8
