@@ -170,19 +170,17 @@ plt.show()
 veri["Yaş"].skew()
 
 # 0.024461786786661114
-```
 
-```Python
 veri["Yaş"].kurtosis()
 
 # -0.18269821709302603
-```
 
-```Python
 veri.groupby("Cinsiyet").mean()
-```
 
-![image](./images/cinsmean.png)
+Cinsiyet    Yaş         Adet
+Erkek       40.713932   10.093066
+Kadın       40.432118   10.115342
+```
 
 # 2 Çıkarımsal istatistik
 
