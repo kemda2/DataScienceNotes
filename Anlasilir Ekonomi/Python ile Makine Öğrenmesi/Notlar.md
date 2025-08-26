@@ -49,7 +49,9 @@ Hataların karesi alındığı için aykırı değerlerin tespiti kolaylaşır.
 
 ## Root Mean Square Error (RMSE)
 
-
+$$
+RMSE = \sqrt{\frac{1}{n} \sum_{i=1}^{n} e_i^2}
+$$
 
 # 
 
