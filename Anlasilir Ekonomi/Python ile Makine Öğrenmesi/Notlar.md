@@ -61,7 +61,7 @@ $$
 MAE = \frac{1}{n} \sum_{i=1}^{n} |e_i|
 $$
 
-
+Kare olmadığı için uçdeğerler hakkında sapmalı bir sonuç çıkarmayacaktır. Sadece mesafe bazında ölçüm yapacaktır.
 
 
 
