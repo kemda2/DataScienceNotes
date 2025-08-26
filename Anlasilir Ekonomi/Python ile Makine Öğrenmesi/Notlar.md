@@ -131,6 +131,13 @@ $$
 \text{Harmonik ortalama} = \frac{n}{\frac{1}{x_1}+\frac{1}{x_2}+ \cdot\cdot\cdot\frac{1}{x_k}}
 $$
 
+$$
+\text{F1 score} = \frac{2}{\frac{1}{\text{Kesinlik}}+\frac{1}{\text{Duyarlılık}}}
+$$
+
+
+
+
 # 
 
 https://www.youtube.com/watch?v=VpNNTdel75Y&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=11
