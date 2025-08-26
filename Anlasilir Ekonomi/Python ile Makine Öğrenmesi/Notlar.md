@@ -102,6 +102,11 @@ print(model.summary())
 # Kurtosis:           1.765                Cond. No.                    1.59e+03
 # ==============================================================================
 
+from sklearn.metrics import mean_squared_error
+
+tahmin=model.predict(sabit)
+mse=mean_squared_error(y, tahmin)
+print(mse) # 13732.6838259852
 ```
 
 # 
