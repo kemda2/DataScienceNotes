@@ -1,3 +1,6 @@
+# Makine Öğrenmesi
+
+Computer Vision: Bilgisayarların fotoğraf veya videolardan nesneleri tanıma ve takip etmelerini sağlayan bir kavram.
 
 
 
