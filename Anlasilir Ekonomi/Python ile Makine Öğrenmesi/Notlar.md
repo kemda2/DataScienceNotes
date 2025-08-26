@@ -111,6 +111,10 @@ mae=mean_absolute_error(y, tahmin)
 
 # Hata Matrisi (Confusion matrix)
 
+|               | Tahmin Doğru | Tahmin Yanlış |
+| ------------- | ------------ | ------------- |
+| Gerçek Doğru  |              |               |
+| Gerçek Yanlış |              |               |
 
 
 # 
