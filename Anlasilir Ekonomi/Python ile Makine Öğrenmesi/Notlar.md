@@ -123,7 +123,7 @@ Bu yapı üzerinden bazı performans değerleri hesaplanır;
 1. Kesinlik (Precision): Yüzde kaç hatalı tahmin ettiğini gösterir TP / (TP + FP)
 1. Duyarlılık (Recall): Modelin yüzde kaç oranla yanlış tahmin ettiğini verir TP / (TP + FN)
 
-Burada yanlış olan bir değeri doğru olarak tahmin etmemiz riskliyse 
+> Burada yanlış olan bir değeri doğru olarak tahmin etmemiz riskliyse kesinlik, doğru bir değere yanlış denilmesi riskliyse duyarlılık a bakılır.
 
 # 
 
