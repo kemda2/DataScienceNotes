@@ -33,6 +33,7 @@ X=veri[["X1", "X2"]]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 ```
 
+# Aşırı ve Eksik Öğrenme
 
 
 
@@ -42,4 +43,4 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # 
 
-https://www.youtube.com/watch?v=XzsbUhFEQHo&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=2
+https://www.youtube.com/watch?v=auHYBgiKGJ4&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=7
