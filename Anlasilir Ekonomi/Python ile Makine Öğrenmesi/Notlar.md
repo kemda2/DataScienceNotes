@@ -63,7 +63,46 @@ $$
 
 Kare olmadığı için uçdeğerler hakkında sapmalı bir sonuç çıkarmayacaktır. Sadece mesafe bazında ölçüm yapacaktır.
 
+## Örnekler
 
+```Python
+import pandas as pd
+import statsmodels.api as sm
+
+veri=pd.read_excel("C:/Users/90506/Desktop/Ornek.xlsx")
+
+y=veri ["Y"]
+X=veri [["X1", "X2"]]
+
+sabit=sm.add_constant(X)
+model=sm.OLS(y, sabit).fit()
+
+print(model.summary())
+
+# OLS Regression Results
+# ==============================================================================
+# Dep. Variable:                      Y   R-squared:                       0.002
+# Model:                            OLS   Adj. R-squared:                 -0.000
+# Method:                 Least Squares   F-statistic:                    0.8301
+# Date:                Wed, 17 Aug 2022   Prob (F-statistic):              0.436
+# Time:                        13:48:23   Log-Likelihood:               -6182.7
+# No. Observations:                 1000   AIC:                        1.237e+04
+# Df Residuals:                      997   BIC:                        1.239e+04
+# Df Model:                           2   Covariance Type:             nonrobust
+# ==============================================================================
+#                    coef    std err          t      P>|t|      [0.025   0.975]
+# ---------------------------------------------------------------------
+# const          294.6826     13.597     21.672      0.000     268.000    321.365
+# X1               0.0326      0.032      1.018      0.309      -0.030     0.096
+# X2              -0.0272      0.032     -0.843      0.399      -0.091     0.036
+# ==============================================================================
+# Omnibus:          996.319                Durbin-Watson:                  2.071
+# Prob(Omnibus):      0.000                Jarque-Bera (JB):              63.904
+# Skew:               0.045                Prob(JB):                    1.33e-14
+# Kurtosis:           1.765                Cond. No.                    1.59e+03
+# ==============================================================================
+
+```
 
 # 
 
