@@ -83,7 +83,9 @@ Excelde çarpıklık fonksiyonuyla bulunabilir.
 
 ### Basıklık (Kurtosis)
 
-![kurtosis](./images/kurtosis.png)
+$$
+\text{kurtosis} = \frac{1}{n} \sum_{i=1}^{n} \frac{\left(x_i - \bar{x}\right)^4}{s^4}
+$$
 
 ![positivenegativekurtosis](./images/positivenegativekurtosis.png)
 
