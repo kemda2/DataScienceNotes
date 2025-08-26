@@ -113,8 +113,8 @@ mae=mean_absolute_error(y, tahmin)
 
 |               | Tahmin Doğru | Tahmin Yanlış |
 | ------------- | ------------ | ------------- |
-| Gerçek Doğru  |              |               |
-| Gerçek Yanlış |              |               |
+| Gerçek Doğru  |  Gerçekte doğru olup doğru tahmin edilen | Gerçekte doğru olup yanlış tahmin edilen |
+| Gerçek Yanlış |  Gerçekte yanlış olup doğru tahmin edilen | Gerçekte yanlış olup yanlış tahmin edilen |
 
 
 # 
