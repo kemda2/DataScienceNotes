@@ -8859,6 +8859,8 @@ print(vif)
 # 9         x10   4.278819
 ```
 
+Vif değeri genelde 10'dan fazlaysa veriyi inceleriz ama az değişkenli verilerde 5'ten fazla olanları da incelememiz gerekebilir.
+
 
 ![image](./images/regresyon8.png)
 ### Örnekler
