@@ -125,7 +125,7 @@ Bu yapı üzerinden bazı performans değerleri hesaplanır;
 
 > Burada yanlış olan bir değeri doğru olarak tahmin etmemiz riskliyse kesinlik, doğru bir değere yanlış denilmesi riskliyse duyarlılık a bakılır.
 
-F1 score bize hme kesinlik hem de duyarlılık üzerinden işlem gerçekleştiriyor ve bize
+F1 score bize hme kesinlik hem de duyarlılık üzerinden işlem gerçekleştiriyor ve bize kesinlik ve duyarlılık değerlerinin harmonik ortalamasını verir.
 
 
 # 
