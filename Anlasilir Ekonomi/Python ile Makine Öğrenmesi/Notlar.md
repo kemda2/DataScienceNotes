@@ -57,6 +57,11 @@ Hataların nasıl bir dağılım gösterdiğine dair bilgi verir.
 
 ## Mean Absolute Error (MAE)
 
+$$
+MAE = \frac{1}{n} \sum_{i=1}^{n} |e_i|
+$$
+
+
 
 
 
