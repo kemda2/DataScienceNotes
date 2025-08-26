@@ -12,9 +12,10 @@ Denetimsiz Öğrenme;
 - Kümeleme
 - Boyut İndirgeme
 
+Aşağıdaki kavramlar da ihtiyaç halinde öğrenilebilir. 
 
-
-
+- Yarı-Denetimli Öğrenme
+- Takviyeli Öğrenme
 
 
 
