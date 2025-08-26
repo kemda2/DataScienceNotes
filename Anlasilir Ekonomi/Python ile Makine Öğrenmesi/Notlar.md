@@ -107,8 +107,10 @@ from sklearn.metrics import mean_squared_error, mean_squared_error
 mse=mean_squared_error(y, tahmin)
 rmse=mean_squared_error (y, tahmin, squared=False)
 mae=mean_absolute_error(y, tahmin)
-
 ```
+
+# Hata Matrisi 
+
 
 # 
 
