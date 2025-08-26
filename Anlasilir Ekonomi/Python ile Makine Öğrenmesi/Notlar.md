@@ -17,6 +17,9 @@ Aşağıdaki kavramlar da ihtiyaç halinde öğrenilebilir.
 - Yarı-Denetimli Öğrenme
 - Takviyeli Öğrenme
 
+# Eğitim ve Test Verisi Ayırma
+
+Genel olarak %80 veya %70 eğitim seti olacak şekilde ayırılır.
 
 
 
