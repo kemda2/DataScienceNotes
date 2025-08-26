@@ -8987,12 +8987,4 @@ print(vif)
 # 7         x10  3.559896
 ```
 
-Bütün değerlerin 5'in altına indiği görülmektedir. Model içinde yine anlamsız olan değişkenler mevcut. (x4, x7, x9, x10)
-
-![image](./images/regresyon8.png)
-### Örnekler
-## 13.17
-# 14
-
-https://www.youtube.com/watch?v=SicDcAvqqa4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=144
-22
+Bütün değerlerin 5'in altına indiği görülmektedir. Model içinde yine anlamsız olan değişkenler mevcut. (x4, x7, x9, x10) En büyük anlamsızlık değer x10'da olduğu için x10 u atabiliriz. Bir değişken atıp yeniden hesaplayarak yapılır. VIF değeri dışındaki modelde anlamsız gözüken değerler her zaman dışlanmaz. Başka yöntemler de mevcuttur.
