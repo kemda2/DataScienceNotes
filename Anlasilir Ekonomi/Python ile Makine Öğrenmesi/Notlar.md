@@ -55,6 +55,11 @@ $$
 
 Hataların nasıl bir dağılım gösterdiğine dair bilgi verir.
 
+## Mean Absolute Error (MAE)
+
+
+
+
 # 
 
 https://www.youtube.com/watch?v=_khcdu1XNR0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=8
