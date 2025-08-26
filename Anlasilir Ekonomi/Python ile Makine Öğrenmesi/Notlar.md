@@ -111,15 +111,16 @@ mae=mean_absolute_error(y, tahmin)
 
 # Hata Matrisi (Confusion matrix)
 
-|               | Tahmin Doğru | Tahmin Yanlış |
-| ------------- | ------------ | ------------- |
-| Gerçek Doğru  |  Gerçekte doğru olup doğru tahmin edilen | Gerçekte doğru olup yanlış tahmin edilen |
-| Gerçek Yanlış |  Gerçekte yanlış olup doğru tahmin edilen | Gerçekte yanlış olup yanlış tahmin edilen |
+|               | Tahmin Doğru   | Tahmin Yanlış   |
+| ------------- | :------------: | :-------------: |
+| Gerçek Doğru  |  TP            | FN              |
+| Gerçek Yanlış |  FP            | TN              |
 
 Bu yapı üzerinden bazı performans değerleri hesaplanır;
 
-1. Doğruluk: Yüzde kaç doğru tahmin ettiğini gösterir (TP + TN) / Toplam
+1. Doğruluk (Accuracy): Yüzde kaç doğru tahmin ettiğini gösterir (TP + TN) / Toplam
 1. Hata Oranı: Yüzde kaç hatalı tahmin ettiğini gösterir (FP + FN) / Toplam
+1. Kesinlik (Precision): Yüzde kaç hatalı tahmin ettiğini gösterir TP / TP + FP
 
 
 # 
