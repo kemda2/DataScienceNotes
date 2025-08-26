@@ -8861,10 +8861,137 @@ print(vif)
 
 Vif değeri genelde 10'dan fazlaysa veriyi inceleriz ama az değişkenli verilerde 5'ten fazla olanları da incelememiz gerekebilir.
 
+x3 değişkeni vif değeri 10'un üzerinde ve başka bir değişkenle korelasyona sahip olması mümkün. x1 ve x5 ile yüksek korelasyona sahip olduğu görülmektedir. 0,70 veya 0,75 değeri üzerinde güçlü bir korelasyondan bahsedebiliriz.
+
+## 13.16 Değişken Dışlama
+
+x3 değişkeni en yüksek vif değerine sahip olduğu için dışlanır.
+
+```Python
+y=veri["y"]
+x=veri [["x1", "x2", "x4", "x5", "x6", "x7","x8","x9","x10"]]
+
+sabit=sm.add_constant(x)
+model=sm.OLS (y, sabit).fit()
+print(model.summary())
+
+# OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                      y   R-squared:                       0.987
+# Model:                            OLS   Adj. R-squared:                  0.975
+# Method:                 Least Squares   F-statistic:                     78.46
+# Date:                Tue, 26 Aug 2025   Prob (F-statistic):           1.80e-07
+# Time:                        11:07:33   Log-Likelihood:                -100.43
+# No. Observations:                  19   AIC:                             220.9
+# Df Residuals:                       9   BIC:                             230.3
+# Df Model:                           9                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const        827.2306    174.491      4.741      0.001     432.505    1221.957
+# x1             0.1677      0.099      1.692      0.125      -0.057       0.392
+# x2             0.0521      0.038      1.359      0.207      -0.035       0.139
+# x4             0.0044      0.017      0.251      0.808      -0.035       0.044
+# x5             0.1036      0.040      2.592      0.029       0.013       0.194
+# x6             0.1529      0.030      5.031      0.001       0.084       0.222
+# x7             0.0131      0.058      0.225      0.827      -0.119       0.145
+# x8             0.1833      0.053      3.437      0.007       0.063       0.304
+# x9             0.0962      0.062      1.542      0.158      -0.045       0.237
+# x10           -0.0118      0.071     -0.165      0.873      -0.173       0.149
+# ==============================================================================
+# Omnibus:                        0.989   Durbin-Watson:                   2.718
+# Prob(Omnibus):                  0.610   Jarque-Bera (JB):                0.369
+# Skew:                          -0.341   Prob(JB):                        0.832
+# Kurtosis:                       3.033   Cond. No.                     1.28e+05
+# ==============================================================================
+
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+vif=pd.DataFrame()
+vif["Değişkenler"]=x.columns
+vif["VIF"]=[variance_inflation_factor(sabit.values, i+1) for i in range(x.shape[1])] 
+print(vif)
+
+#   Değişkenler       VIF
+# 0          x1  6.917257
+# 1          x2  4.717059
+# 2          x4  3.826473
+# 3          x5  4.986684
+# 4          x6  4.102593
+# 5          x7  4.697606
+# 6          x8  3.813651
+# 7          x9  5.617810
+# 8         x10  4.054058
+```
+
+Bu durum diğer değişkenlerin vif değerlerinde de düşüşe sebep olmaktadır. x1 değişkenini de dışlayalım.
+
+```Python
+y=veri["y"]
+x=veri [["x2", "x4", "x5", "x6", "x7","x8","x9","x10"]]
+
+sabit=sm.add_constant(x)
+model=sm.OLS (y, sabit).fit()
+print(model.summary())
+#                             OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                      y   R-squared:                       0.983
+# Model:                            OLS   Adj. R-squared:                  0.970
+# Method:                 Least Squares   F-statistic:                     74.10
+# Date:                Tue, 26 Aug 2025   Prob (F-statistic):           6.75e-08
+# Time:                        11:12:20   Log-Likelihood:                -103.06
+# No. Observations:                  19   AIC:                             224.1
+# Df Residuals:                      10   BIC:                             232.6
+# Df Model:                           8                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const        717.6051    176.463      4.067      0.002     324.421    1110.789
+# x2             0.0734      0.039      1.862      0.092      -0.014       0.161
+# x4             0.0134      0.018      0.745      0.474      -0.027       0.053
+# x5             0.1247      0.041      3.015      0.013       0.033       0.217
+# x6             0.1758      0.030      5.934      0.000       0.110       0.242
+# x7             0.0787      0.047      1.659      0.128      -0.027       0.184
+# x8             0.1539      0.055      2.802      0.019       0.032       0.276
+# x9             0.0409      0.058      0.707      0.496      -0.088       0.170
+# x10            0.0303      0.073      0.417      0.685      -0.132       0.192
+# ==============================================================================
+# Omnibus:                        0.212   Durbin-Watson:                   2.438
+# Prob(Omnibus):                  0.899   Jarque-Bera (JB):                0.371
+# Skew:                          -0.193   Prob(JB):                        0.831
+# Kurtosis:                       2.434   Cond. No.                     1.17e+05
+# ==============================================================================
+
+# Notes:
+# [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+# [2] The condition number is large, 1.17e+05. This might indicate that there are
+# strong multicollinearity or other numerical problems.
+
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+vif=pd.DataFrame()
+vif["Değişkenler"]=x.columns
+vif["VIF"]=[variance_inflation_factor(sabit.values, i+1) for i in range(x.shape[1])] 
+print(vif)
+
+#   Değişkenler       VIF
+# 0          x2  4.208323
+# 1          x4  3.463815
+# 2          x5  4.501310
+# 3          x6  3.287290
+# 4          x7  2.621968
+# 5          x8  3.408026
+# 6          x9  4.078270
+# 7         x10  3.559896
+```
+
+Bütün değerlerin 5'in altına indiği görülmektedir.
 
 ![image](./images/regresyon8.png)
 ### Örnekler
-## 13.16
+## 13.17
 # 14
 
 https://www.youtube.com/watch?v=SicDcAvqqa4&list=PLK8LlaNiWQOvAYUMGMTFeZIOo0oKmZhdw&index=144
