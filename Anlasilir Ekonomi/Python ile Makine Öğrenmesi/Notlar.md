@@ -109,7 +109,8 @@ rmse=mean_squared_error (y, tahmin, squared=False)
 mae=mean_absolute_error(y, tahmin)
 ```
 
-# Hata Matrisi 
+# Hata Matrisi (Confusion matrix)
+
 
 
 # 
