@@ -120,7 +120,8 @@ Bu yapı üzerinden bazı performans değerleri hesaplanır;
 
 1. Doğruluk (Accuracy): Yüzde kaç doğru tahmin ettiğini gösterir (TP + TN) / Toplam
 1. Hata Oranı: Yüzde kaç hatalı tahmin ettiğini gösterir (FP + FN) / Toplam
-1. Kesinlik (Precision): Yüzde kaç hatalı tahmin ettiğini gösterir TP / TP + FP
+1. Kesinlik (Precision): Yüzde kaç hatalı tahmin ettiğini gösterir TP / (TP + FP)
+1. Duyarlılık (Recall): Modelin yüzde kaç oranla yanlış tahmin ettiğini verir TP / (TP + FN)
 
 
 # 
