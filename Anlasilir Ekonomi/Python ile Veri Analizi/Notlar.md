@@ -139,11 +139,13 @@ veri.describe()
 
 ```Python
 veri["Cinsiyet"].describe()
-```
 
-![cinsiyetdescribe](./images/cinsiyetdescribe.png)
+# count     500
+# unique       2
+# top      Erkek
+# freq       250
+# Name: Cinsiyet, dtype: object
 
-```Python
 veri["Cinsiyet"].value_counts()
 ```
 
