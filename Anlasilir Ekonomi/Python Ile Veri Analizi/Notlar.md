@@ -8838,7 +8838,26 @@ plt.show()
 
 Genellikle 0,70'ten fazla olanlar incelenir.
 
+```Python
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 
+vif=pd.DataFrame()
+vif["Değişkenler"]=x.columns
+vif["VIF"]=[variance_inflation_factor(sabit.values, i+1) for i in range(x.shape[1])] 
+print(vif)
+
+#   Değişkenler        VIF
+# 0          x1   8.057920
+# 1          x2   4.934190
+# 2          x3  11.000217
+# 3          x4   4.188910
+# 4          x5   8.837753
+# 5          x6   4.254056
+# 6          x7   5.365104
+# 7          x8   4.658428
+# 8          x9   7.457020
+# 9         x10   4.278819
+```
 
 
 ![image](./images/regresyon8.png)
