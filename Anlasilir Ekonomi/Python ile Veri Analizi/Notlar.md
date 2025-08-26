@@ -147,17 +147,19 @@ veri["Cinsiyet"].describe()
 # Name: Cinsiyet, dtype: object
 
 veri["Cinsiyet"].value_counts()
-```
 
-![cinsiyetvalues](./images/cinsiyetvalues.png)
+# Cinsiyet
+# Erkek    250
+# Kadın    250
+# Name: count, dtype: int64
 
-```Python
 veri["Cinsiyet"].value_counts(normalize = True) *100
-```
 
-![cinsiyetvaluesnor](./images/cinsiyetvaluesnor.png)
+# Cinsiyet
+# Erkek    50.0
+# Kadın    50.0
+# Name: proportion, dtype: float64
 
-```Python
 plt.hist(veri["Yaş"], bins = 50)
 plt.show()
 ```
