@@ -8987,7 +8987,7 @@ print(vif)
 # 7         x10  3.559896
 ```
 
-Bütün değerlerin 5'in altına indiği görülmektedir.
+Bütün değerlerin 5'in altına indiği görülmektedir. Model içinde yine anlamsız olan değişkenler mevcut. (x4, x7, x9, x10)
 
 ![image](./images/regresyon8.png)
 ### Örnekler
