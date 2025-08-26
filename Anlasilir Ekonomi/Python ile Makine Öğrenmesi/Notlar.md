@@ -33,9 +33,7 @@ X=veri[["X1", "X2"]]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 ```
 
-# Aşırı ve Eksik Öğrenme
-
-Modelimizin çalışma verilerine göre;
+# Regresyon Model Başarısı
 
 
 
