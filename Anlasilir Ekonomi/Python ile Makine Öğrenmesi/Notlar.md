@@ -20,4 +20,4 @@ Computer Vision: Bilgisayarların fotoğraf veya videolardan nesneleri tanıma v
 
 # 
 
-https://www.youtube.com/watch?v=GaSPOY68Ks8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7
+https://www.youtube.com/watch?v=XzsbUhFEQHo&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=2
