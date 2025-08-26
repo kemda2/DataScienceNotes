@@ -127,6 +127,9 @@ Bu yapı üzerinden bazı performans değerleri hesaplanır;
 
 F1 score bize hme kesinlik hem de duyarlılık üzerinden işlem gerçekleştiriyor ve bize kesinlik ve duyarlılık değerlerinin harmonik ortalamasını verir.
 
+$$
+\text{Harmonik ortalama} = \frac{n}{\frac{1}{x_1}+\frac{1}{x_2}+ \cdot\cdot\cdot\frac{1}{x_k}}
+$$
 
 # 
 
