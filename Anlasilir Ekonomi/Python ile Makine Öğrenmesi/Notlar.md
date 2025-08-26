@@ -30,7 +30,7 @@ veri=pd.read_excel("C:/Users/90506/Desktop/Ornek.xlsx")
 y=veri["Y"]
 X=veri[["X1", "X2"]]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 ```
 
 
