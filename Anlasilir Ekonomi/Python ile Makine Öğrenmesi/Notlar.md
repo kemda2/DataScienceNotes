@@ -334,7 +334,46 @@ plt.show()
 
 ![image](./images/coklureg5.png)
 
+```Python
+import statsmodels.api as sm
 
+y=veri ["Sales"]
+X=veri [["TV", "Radio", "Newspaper"]]
+
+sabit=sm.add_constant(X)
+model=sm.OLS(y, sabit).fit()
+print(model.summary())
+
+#                             OLS Regression Results                            
+# ==============================================================================
+# Dep. Variable:                  Sales   R-squared:                       0.903
+# Model:                            OLS   Adj. R-squared:                  0.901
+# Method:                 Least Squares   F-statistic:                     605.4
+# Date:                Wed, 27 Aug 2025   Prob (F-statistic):           8.13e-99
+# Time:                        11:59:52   Log-Likelihood:                -383.33
+# No. Observations:                 200   AIC:                             774.7
+# Df Residuals:                     196   BIC:                             787.9
+# Df Model:                           3                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const          4.6246      0.308     15.004      0.000       4.017       5.232
+# TV             0.0544      0.001     39.587      0.000       0.052       0.057
+# Radio          0.1070      0.008     12.594      0.000       0.090       0.124
+# Newspaper      0.0004      0.006      0.062      0.951      -0.011       0.012
+# ==============================================================================
+# Omnibus:                       16.072   Durbin-Watson:                   2.250
+# Prob(Omnibus):                  0.000   Jarque-Bera (JB):               27.634
+# Skew:                          -0.431   Prob(JB):                     9.99e-07
+# Kurtosis:                       4.604   Cond. No.                         455.
+# ==============================================================================
+
+# Notes:
+# [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+
+```
 
 
 
