@@ -299,10 +299,26 @@ plt.show()
 
 ```Python
 sns.boxplot(veri["TV"])
-plt.show
+plt.show()
 ```
 
-![image](./images/coklureg2.png)
+![image](./images/coklureg2.png) 
+
+```Python
+sns.boxplot(veri["Radio"])
+plt.show()
+```
+
+![image](./images/coklureg3.png)
+
+
+
+
+
+
+
+
+
 
 
 # 
