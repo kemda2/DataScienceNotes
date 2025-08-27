@@ -284,8 +284,17 @@ print(veri.corr()["Sales"])
 # Newspaper    0.157960
 # Sales        1.000000
 
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.pairplot(veri, kind="reg")
+plt.show()
 ```
+
+![image](./images/coklureg1.png) 
+
+
+
 
 
 # 
