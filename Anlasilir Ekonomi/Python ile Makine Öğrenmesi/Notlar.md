@@ -137,6 +137,14 @@ $$
 
 Ek olarak ROC eğrisi bize True pozitif ve false pozitif oranlarını kıyaslamamıza izin veren bir eğri grafiğidir.
 
+# Basit Doğrusal Regresyon
+
+
+
+
+
+
+
 
 # 
 
