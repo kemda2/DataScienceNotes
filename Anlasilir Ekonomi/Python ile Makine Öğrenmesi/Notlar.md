@@ -318,7 +318,7 @@ plt.show()
 
 ![image](./images/coklureg4.png) 
 
-
+TV ve Radio'da uç değer yokken Newspaper değişkeninde bulunmaktadır.
 
 
 
