@@ -437,7 +437,7 @@ df.plot(kind="line")
 plt.show()
 ```
 
-![image](./images/coklureg7.png)
+![image](./images/coklureg7.png) 
 
 
 
