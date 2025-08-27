@@ -208,9 +208,57 @@ print(model.summary())
 
 P>|t| kısmına bakıldığında sabit ve değişken katsayısı anlamlı çıkmıştır. Prob (F-statistic) kısmı incelendiğinde model anlamlı çıkmıştır. R-squared 0,957 ile gayet uyumlu gözükmektedir.
 
+Sklearn ile model oluşturalım;
+
+```Python
+from sklearn.linear_model import LinearRegression
+
+lr=LinearRegression()
+lr.fit(X.values.reshape(-1,1), y.values.reshape(-1,1)) # .values.reshape(-1,1) array olması gerektiği için yapıldı.
+print(lr.coef_, lr.intercept_) # [[9449.96232146]] [25792.20019867]
+
+print(lr.predict(X.values.reshape(-1,1)))
+
+# [[ 36187.15875227]
+#  [ 38077.15121656]
+#  [ 39967.14368085]
+#  [ 44692.12484158]
+#  [ 46582.11730587]
+#  [ 53197.09093089]
+#  [ 54142.08716303]
+#  [ 56032.07962732]
+#  [ 56032.07962732]
+#  [ 60757.06078805]
+#  [ 62647.05325234]
+#  [ 63592.04948449]
+#  [ 63592.04948449]
+#  [ 64537.04571663]
+#  [ 68317.03064522]
+#  [ 72097.0155738 ]
+#  [ 73987.00803809]
+#  [ 75877.00050238]
+#  [ 81546.97789525]
+#  [ 82491.9741274 ]
+#  [ 90051.94398456]
+#  [ 92886.932681  ]
+#  [100446.90253816]
+#  [103281.8912346 ]
+#  [108006.87239533]
+#  [110841.86109176]
+#  [115566.84225249]
+#  [116511.83848464]
+#  [123126.81210966]
+#  [125016.80457395]]
+```
+
+# Çoklu Doğrusal Regresyon
+
+
+
+
 
 # 
 
-![image](./images/basitreg.png)
+![image](./images/coklureg.png)
 
 https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=14
