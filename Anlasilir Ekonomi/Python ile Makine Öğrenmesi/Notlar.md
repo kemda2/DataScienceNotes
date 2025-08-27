@@ -632,7 +632,7 @@ $$
 y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_n x_n + \beta_{n+1} x_1^2 + \beta_{n+2} x_2^2 + \dots + \beta_{2n} x_n^2 + \epsilon
 $$
 
-
+FOrmüldeki üst yapısına polinomun derecesi denir. 
 
 
 
