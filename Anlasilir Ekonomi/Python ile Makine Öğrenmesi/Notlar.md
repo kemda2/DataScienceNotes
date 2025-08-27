@@ -318,9 +318,21 @@ plt.show()
 
 ![image](./images/coklureg4.png) 
 
-TV ve Radio'da uç değer yokken Newspaper değişkeninde bulunmaktadır.
+TV ve Radio'da uç değer yokken Newspaper değişkeninde bulunmaktadır. Baskılama işlemi yapalım;
 
+```Python
+Q1=veri ["Newspaper"].quantile(0.25)
+Q3=veri["Newspaper"].quantile(0.75)
+IQR=Q3-Q1
+ustsınır=Q3+1.5*IQR
+aykırı = veri["Newspaper"]>ustsınır
 
+veri.loc[aykırı, "Newspaper"]=ustsınır
+sns.boxplot(veri["Newspaper"])
+plt.show()
+```
+
+![image](./images/coklureg5.png)
 
 
 
