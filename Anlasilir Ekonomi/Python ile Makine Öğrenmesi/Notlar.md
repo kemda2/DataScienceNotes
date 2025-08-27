@@ -483,6 +483,35 @@ print(veri)
 # 17.82        1.75  Male   No      Sat    Dinner 2
 # 18.78        3.00  Female No      Thur   Dinner 2
 
+print(veri.isnull().sum())
+
+# total_bill   0
+# tip          0
+# sex          0
+# smoker       0
+# day          0
+# time         0
+# size         0
+# dtype: int64
+
+print(veri.dtypes)
+
+# total_bill   float64
+# tip          float64
+# sex          category
+# smoker       category
+# day          category
+# time         category
+# size         int64
+# dtype: object
+
+kategori=[]
+kategorik=veri.select_dtypes (include=["category"])
+
+for i in kategorik.columns:
+    kategori.append(i)
+print(kategori) # ['sex' 'smoker', 'day', 'time']
+
 ```
 
 # 
