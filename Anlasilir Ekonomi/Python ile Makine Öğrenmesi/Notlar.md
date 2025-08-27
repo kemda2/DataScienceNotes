@@ -550,7 +550,7 @@ Buna göre doğrusal modele göre çok uyumsuz bir yapı olduğunu düşünebili
 
 ```Python
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split,KFold
 from sklearn.linear_model import LinearRegression
 import sklearn.metrics as mt
 
@@ -580,6 +580,20 @@ def skor(model, x_train, x_test,y_train,y_test):
 print("Eğitim R2= {} Eğitim MSE= {}".format(sonuc1[0], sonuc1[2]))
 print("Test R2= {} Test MSE= {}".format(sonuc1 [1], sonuc1[3]))
 
+# Eğitim R2= 0.8957008271017818 Eğitim MSE= 2.705129423081414
+# Test R2= 0.899438024100912 Test MSE= 3.1740973539761033
+
+lr_cv=LinearRegression()
+k=5
+iterasyon=1
+cv=KFold(n_splits=k)
+
+for egitimindex, testindex in cv.split(x):
+    X_train, X_test=X.loc[egitimindex], X.loc[testindex]
+    y_train, y_test=y.loc[egitimindex], y.loc[testindex]
+    lr_cv.fit(X_train, y_train)
+
+    sonuc2=skor(model=lr_cv,x_train=X_train,x_test=X_test,y_train=y_train,y_test=y_test)
 ```
 
 
