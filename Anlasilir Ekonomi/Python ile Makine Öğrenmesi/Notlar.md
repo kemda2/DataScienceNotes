@@ -439,10 +439,51 @@ plt.show()
 
 ![image](./images/coklureg7.png) 
 
+Veride eksik değerler yok. Eğer nan değerleri olsaydı;
 
+```Python
+from sklearn.impute import SimpleImputer
+import numpy as np
 
+imputer=SimpleImputer (missing_values=np.nan, strategy="mean") # eksik değerler NaN olarak gözüktüğü için
+imputer=imputer.fit(veri)
+veri.iloc[:,:]=imputer.transform(veri)
+```
 
+```Python
+import sklearn.metrics as mt
 
+r2=mt.r2_score (y_test, tahmin)
+mse=mt.mean_squared_error(y_test, tahmin)
+rmse=np.sqrt(mse) # mt.mean_squared_error(y_test, tahmin, squared=False)
+mae=mt.mean_absolute_error(y_test, tahmin)
+print(r2, mse, rmse, mae) # -0.5917637530745343 49.18725091013148 7.013362311340509 5.448564072450313
+```
+## Kategorik değişkenler
+
+```Python
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+data=sns.load_dataset("tips")
+veri=data.copy()
+print(veri)
+
+# total_bill   tip   sex    smoker   day    time   size
+# 16.99        1.01  Female No      Sun    Dinner 2
+# 10.34        1.66  Male   No      Sun    Dinner 3
+# 21.01        3.50  Male   No      Sun    Dinner 3
+# 23.68        3.31  Male   No      Sun    Dinner 2
+# 24.59        3.61  Female No      Sun    Dinner 4
+# ...
+# 29.03        5.92  Male   No      Sat    Dinner 3
+# 27.18        2.00  Female Yes     Sat    Dinner 2
+# 22.67        2.00  Male   Yes     Sat    Dinner 2
+# 17.82        1.75  Male   No      Sat    Dinner 2
+# 18.78        3.00  Female No      Thur   Dinner 2
+
+```
 
 # 
 
