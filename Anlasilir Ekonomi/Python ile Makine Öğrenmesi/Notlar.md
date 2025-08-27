@@ -594,7 +594,31 @@ for egitimindex, testindex in cv.split(x):
     lr_cv.fit(X_train, y_train)
 
     sonuc2=skor(model=lr_cv,x_train=X_train,x_test=X_test,y_train=y_train,y_test=y_test)
+
+    print("İterasyon:{}".format(iterasyon))
+    print("Eğitim R2= {} Eğitim MSE= {}".format(sonuc2 [0], sonuc2[2]))
+    print("Test R2= {} Test MSE= {}".format(sonuc2[1], sonuc2[3]))
+    iterasyon +=1   
+
+# İterasyon: 1
+# Eğitim R2 = 0.9010130247585829 Eğitim MSE= 2.7115931715887225 
+# Test R2 = 6.8786519804831341 Test MSE= 3.1365399007617047
+# İterasyon: 2
+# Eğitim R2 = 0.8903959783952622 Eğitim MSE 2.889696157849928
+# Test R2 = 0.9176321165614462 Test MSE= 2.4256677581593875
+# İterasyon: 3
+# Eğitim R2 = 0.8896931584883978
+# Eğitim MSE= 3.104396076662706
+# Test R2 = 0.9293303235799653 Test MSE= 1.5852250798740997
+# İterasyon: 4
+# Eğitim R2= 0.9145880146193406 Eğitim nMSE = 2.241641526638164
+# Test R2 = 8.8144396391722338 Test MSE= 5.4261550604294575
+# İterasyon: 5
+# Eğitim R2= 0.8961523241120161 Eğitim MSE= 2.82179249487708
+# Test R2= 0.8954782879224387 Test MSE= 2.7911451862763954
 ```
+
+# Polinomal Regresyon
 
 
 
