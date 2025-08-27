@@ -311,7 +311,12 @@ plt.show()
 
 ![image](./images/coklureg3.png)
 
+```Python
+sns.boxplot(veri["Newspaper"])
+plt.show()
+```
 
+![image](./images/coklureg4.png) 
 
 
 
