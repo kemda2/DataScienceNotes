@@ -657,6 +657,38 @@ plt.show()
 
 ![image](./images/polreg1.png)
 
+```Python
+from sklearn.linear_model import LinearRegression
+
+y=y.values.reshape(-1,1)
+X=X.values.reshape(-1,1)
+
+lr=LinearRegression()
+lr.fit(X,y)
+
+import sklearn.metrics as mt
+
+tahmin=lr.predict(X)
+
+r2dog=mt.r2_score(y,tahmin)
+mse=mt.mean_squared_error(y,tahmin)
+
+print("Doğrusal R2= {} Doğrusal MSE= {}".format(r2dog,mse))
+# Doğrusal R2= 0.09241764560913446 Doğrusal MSE= 0.13270870870870877
+
+from sklearn.preprocessing import Polynomial Features
+
+pol=PolynomialFeatures(degree=2) # 2 ile başla arttır
+X_pol=pol.fit_transform(X)
+
+lr2=LinearRegression()
+lr2.fit(X_pol,y)
+```
+
+
+
+
+
 
 # 
 
