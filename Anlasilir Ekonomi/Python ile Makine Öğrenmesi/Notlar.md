@@ -754,13 +754,37 @@ plt.show()
 ```python
 y=veri["Ev Fiyatı"]
 X=veri.drop(columns="Ev Fiyatı", axis=1)
+
+xcol = X.columns.to_list()
+
+for i in xcol:
+    sns.boxplot(X[i])
+    plt.show()
 ```
+
+![image](./images/polreg6.png) 
+
+```python
+Q1=X["Metro Uzaklık"].quantile(0.25)
+Q3=X["Metro Uzaklık"].quantile(0.75)
+IQR=Q3-Q1
+ustsınır=Q3+1.5*IQR
+aykırı = X["Metro Uzaklık"]>ustsınır
+
+X.loc[aykırı, "Metro Uzaklık"]=ustsınır
+sns.boxplot(X["Metro Uzaklık"])
+plt.show()
+```
+
+![image](./images/polreg7.png)
+
+
 
 
 
 # 
 
-![image](./images/polreg6.png)
+![image](./images/polreg8.png)
 
 https://www.youtube.com/watch?v=-bzZt2RBT48&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=19
 
