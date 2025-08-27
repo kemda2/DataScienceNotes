@@ -544,6 +544,7 @@ import sklearn.metrics as mt
 print(mt.r2_score (y_test, tahmin)) # -1.0084298085720063
 ```
 
+Buna göre doğrusal modele göre çok uyumsuz bir yapı olduğunu düşünebiliriz.
 
 # 
 
