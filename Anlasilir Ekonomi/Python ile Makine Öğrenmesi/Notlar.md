@@ -213,4 +213,4 @@ P>|t| kısmına bakıldığında sabit ve değişken katsayısı anlamlı çıkm
 
 ![image](./images/basitreg.png)
 
-https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=13
+https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=14
