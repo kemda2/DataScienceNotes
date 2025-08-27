@@ -751,6 +751,12 @@ plt.show()
 
 ![image](./images/polreg5.png)
 
+```python
+y=veri["Ev Fiyatı"]
+X=veri.drop(columns="Ev Fiyatı", axis=1)
+```
+
+
 
 # 
 
