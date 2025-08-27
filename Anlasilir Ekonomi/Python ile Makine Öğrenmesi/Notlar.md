@@ -169,10 +169,15 @@ plt.show()
 
 ```
 
-![image](./images/basitreg.png)
+![image](./images/basitreg1.png)
+
+
+
+
 
 
 # 
 
+![image](./images/basitreg.png)
 
 https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=13
