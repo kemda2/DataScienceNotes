@@ -717,11 +717,21 @@ plt.show()
 
 ![image](./images/polreg3.png) 
 
+```python
+plt.scatter(X, y, color="red")
+plt.plot(X, tahmin2, color="blue")
+plt.show()
+```
+
+![image](./images/polreg4.png)
+
+
+
 
 
 # 
 
-![image](./images/polreg4.png)
+![image](./images/polreg5.png)
 
 https://www.youtube.com/watch?v=-bzZt2RBT48&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=19
 
