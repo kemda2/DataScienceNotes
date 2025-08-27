@@ -419,6 +419,7 @@ lr.fit(X_train, y_train)
 print(lr.coef_) # [0.05450736 0.10325764]
 
 tahmin=lr.predict(X_test)
+y_test=y_test.sort_index()
 
 df=pd.DataFrame({"Gerçek":y_test, "Tahmin": tahmin})
 df.plot(kind="line")
@@ -427,9 +428,24 @@ plt.show()
 
 ![image](./images/coklureg6.png)
 
+```Python
+tahmin=lr.predict(X_test)
+y_test=y_test.sort_index() # düzenli gösterim için
+
+df=pd.DataFrame({"Gerçek":y_test, "Tahmin": tahmin})
+df.plot(kind="line")
+plt.show()
+```
+
+![image](./images/coklureg7.png)
+
+
+
+
+
 
 # 
 
-![image](./images/coklureg7.png)
+![image](./images/coklureg8.png)
 
 https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=14
