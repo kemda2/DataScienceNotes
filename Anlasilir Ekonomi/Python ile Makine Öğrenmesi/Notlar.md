@@ -512,6 +512,19 @@ for i in kategorik.columns:
     kategori.append(i)
 print(kategori) # ['sex' 'smoker', 'day', 'time']
 
+veri=pd.get_dummies(veri, columns=kategori, drop_first=True)
+
+y=veri["tip"]
+X=veri.drop(columns="tip", axis=1)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.linear_model import LinearRegression
+
+lr=LinearRegression()
+lr.fit(X.values.reshape(-1,1), y.values.reshape(-1,1))
 ```
 
 # 
