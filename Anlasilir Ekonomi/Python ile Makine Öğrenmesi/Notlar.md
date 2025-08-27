@@ -206,7 +206,7 @@ print(model.summary())
 # [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
-P>|t| kısmına bakıldığında sabit ve değişken katsayısı anlamlı çıkmıştır. Prob (F-statistic) kısmı incelendiğinde model anlamlı çıkmıştır.
+P>|t| kısmına bakıldığında sabit ve değişken katsayısı anlamlı çıkmıştır. Prob (F-statistic) kısmı incelendiğinde model anlamlı çıkmıştır. R-squared 0,957 ile gayet uyumlu gözükmektedir.
 
 
 # 
