@@ -297,6 +297,12 @@ plt.show()
 - Radio iyi bir ilişki sergiliyor ama TV kadar iyi değil.
 - Newspaper iyi bir ilişki sergilemiyor.
 
+```Python
+sns.boxplot(veri["TV"])
+plt.show
+```
+
+![image](./images/coklureg2.png)
 
 
 # 
