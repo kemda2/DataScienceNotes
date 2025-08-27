@@ -802,12 +802,11 @@ plt.plot(X, tahmin, color="blue")
 plt.show()
 ```
 
+# Ridge Regresyon
 
 
 # 
 
-![image](./images/polreg8.png)
+![image](./images/rdgreg1.png)
 
-https://www.youtube.com/watch?v=-bzZt2RBT48&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=19
-
-17
+https://www.youtube.com/watch?v=bOuu0ZU1Ln4&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=21
