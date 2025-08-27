@@ -275,6 +275,16 @@ data = pd.DataFrame(
     }
 )
 
+veri=data.copy()
+
+print(veri.corr()["Sales"])
+
+# TV           0.901208
+# Radio        0.349631
+# Newspaper    0.157960
+# Sales        1.000000
+
+
 ```
 
 
