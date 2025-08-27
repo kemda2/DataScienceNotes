@@ -651,7 +651,7 @@ print(veri)
 y=veri["Verim"]
 X=veri["Sıcaklık"]
 
-plt.scatter(x,y)
+plt.scatter(X,y)
 plt.show()
 ```
 
@@ -709,14 +709,19 @@ plt.show()
 
 ![image](./images/polreg2.png)
 
+```python
+plt.scatter(x, y, color="red")
+plt.plot(X, tahmin, color="blue")
+plt.show()
+```
 
-
+![image](./images/polreg3.png) 
 
 
 
 # 
 
-![image](./images/polreg3.png)
+![image](./images/polreg4.png)
 
 https://www.youtube.com/watch?v=-bzZt2RBT48&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=19
 
