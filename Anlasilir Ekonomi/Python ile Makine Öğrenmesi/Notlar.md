@@ -548,7 +548,36 @@ Buna göre doğrusal modele göre çok uyumsuz bir yapı olduğunu düşünebili
 
 # Model Tuning
 
+```Python
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+import sklearn.metrics as mt
 
+data=pd.read_csv("C:/Users/90506/Desktop/Reklam.csv")
+veri=data.copy()
+
+y=veri ["Sales"]
+X=veri.drop(columns="Sales", axis=1)
+
+X_train, X_test,y_train,y_test=train_test_split(X, y, test_size=0.2, random_state=42)
+
+lr=LinearRegression()
+model=lr.fit(X_train, y_train)
+
+def skor(model, x_train, x_test,y_train,y_test):
+    egitimtahmin=model.predict(x_train)
+    testtahmin=model.predict(x_test)
+
+    r2_egitim=mt.r2_score(y_train, egitimtahmin)
+    r2_test=mt.r2_score(y_test, testtahmin)
+
+    mse_egitim=mt.mean_squared_error(y_train, egitimtahmin)
+    mse_test=mt.mean_squared_error(y_test, testtahmin)
+    
+    return [r2_egitim, r2_test, mse_egitim, mse_test]
+
+```
 
 
 
