@@ -574,8 +574,11 @@ def skor(model, x_train, x_test,y_train,y_test):
 
     mse_egitim=mt.mean_squared_error(y_train, egitimtahmin)
     mse_test=mt.mean_squared_error(y_test, testtahmin)
-    
+
     return [r2_egitim, r2_test, mse_egitim, mse_test]
+
+print("Eğitim R2= {} Eğitim MSE= {}".format(sonuc1[0], sonuc1[2]))
+print("Test R2= {} Test MSE= {}".format(sonuc1 [1], sonuc1[3]))
 
 ```
 
