@@ -634,13 +634,32 @@ $$
 
 FOrmüldeki üst yapısına polinomun derecesi denir. 
 
+```Python
+import pandas as pd
+import matplotlib.pyplot as plt
 
+data = pd.DataFrame(
+    {
+        "Sıcaklık":[50, 50, 50, 70, 70, 70, 80, 80, 80, 90, 90, 90, 100, 100, 100],
+        "Verim":[3.3, 2.8, 2.9, 2.3, 2.6, 2.1, 2.5, 2.9, 2.4, 3.0, 3.1, 2.8, 3.3, 3.5, 3.0]
+    }
+)
 
+veri=data.copy()
+print(veri)
 
+y=veri["Verim"]
+X=veri["Sıcaklık"]
+
+plt.scatter(x,y)
+plt.show()
+```
+
+![image](./images/polreg1.png)
 
 
 # 
 
-![image](./images/coklureg9.png)
+![image](./images/polreg2.png)
 
 https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=14
