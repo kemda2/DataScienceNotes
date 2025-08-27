@@ -723,15 +723,38 @@ plt.plot(X, tahmin2, color="blue")
 plt.show()
 ```
 
-![image](./images/polreg4.png)
+![image](./images/polreg4.png) 
 
+---
 
+dataset: https://www.kaggle.com/datasets/quantbruce/real-estate-price-prediction?resource=download
 
+```python
+import pandas as pd
+
+data=pd.read_csv("C:/Users/90506/Desktop/Ev.csv")
+veri=data.copy()
+
+veri.drop(columns=["No", "X1 transaction date", "X5 latitude", "X6 longitude"], axis=1,inplace=True)
+
+veri=veri.rename(columns={"X2 house age": "Ev Yaşı",
+"X3 distance to the nearest MRT station": "Metro Uzaklık",
+"X4 number of convenience stores": "Market Sayısı",
+"Y house price of unit area": "Ev Fiyatı"})
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.pairplot(veri)
+plt.show()
+```
+
+![image](./images/polreg5.png)
 
 
 # 
 
-![image](./images/polreg5.png)
+![image](./images/polreg6.png)
 
 https://www.youtube.com/watch?v=-bzZt2RBT48&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=19
 
