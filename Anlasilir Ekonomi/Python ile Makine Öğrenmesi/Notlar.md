@@ -159,11 +159,20 @@ print(veri.isnull().sum())
 # Salary             0
 # dtype: int64
 
+import matplotlib.pyplot as plt
+
+y=veri ["Salary"]
+X=veri ["YearsExperience"]
+
+plt.scatter(X,y)
+plt.show()
 
 ```
 
+![image](./images/basitreg.png)
 
 
 # 
+
 
 https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=13
