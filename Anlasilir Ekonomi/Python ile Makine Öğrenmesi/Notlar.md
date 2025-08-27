@@ -691,6 +691,18 @@ print("Doğrusal R2= {} Doğrusal MSE= {}".format(r2pol,msepol))
 
 # Pol R2= 0.6732052768464262 Pol MSE= 0.04778465063001146
 
+pol=PolynomialFeatures(degree=3) # 2 ile başla arttır
+X_pol=pol.fit_transform(X)
+
+lr2=LinearRegression()
+lr2.fit(X_pol,y)
+
+tahmin2=lr2.predict(X_pol)
+r2pol=mt.r2_score(y, tahmin2)
+msepol=mt.mean_squared_error(y, tahmin2)
+print("Pol R2= {} Pol MSE= {}".format(r2pol,msepol))
+# Pol R2= 0.7354619487297125 Pol MSE= 0.03868134171907758
+
 ```
 
 
