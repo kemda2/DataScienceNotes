@@ -778,7 +778,26 @@ plt.show()
 
 ![image](./images/polreg7.png)
 
+```python
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import Polynomial Features
+import sklearn.metrics as mt
 
+pol=Polynomial Features (degree=2)
+X_pol=pol.fit_transform(X)
+
+X_train,X_test,y_train,y_test=train_test_split(X_pol, y, test_size=0.2, random_state=42)
+
+pol_reg=LinearRegression()
+pol_reg.fit(X_train,y_train)
+tahmin=pol_reg.predict(X_test)
+r2=mt.r2_score (y_test, tahmin)
+Mse=mt.mean_squared_error(y_test, tahmin)
+print("R2: {} MSE: {}".format(r2, Mse))
+# R2: 0.7084828465358102 MSE: 48.904843188422916
+
+```
 
 
 
