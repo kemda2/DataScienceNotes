@@ -293,7 +293,9 @@ plt.show()
 
 ![image](./images/coklureg1.png) 
 
-
+- TV düşündüğümüz gibi çok iyi bir ilişki sergiliyor.
+- Radio iyi bir ilişki sergiliyor ama TV kadar iyi değil.
+- Newspaper iyi bir ilişki sergilemiyor.
 
 
 
