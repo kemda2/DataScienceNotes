@@ -703,7 +703,11 @@ msepol=mt.mean_squared_error(y, tahmin2)
 print("Pol R2= {} Pol MSE= {}".format(r2pol,msepol))
 # Pol R2= 0.7354619487297125 Pol MSE= 0.03868134171907758
 
+plt.scatter(X, y, color="red")
+plt.show()
 ```
+
+![image](./images/polreg2.png)
 
 
 
@@ -712,6 +716,6 @@ print("Pol R2= {} Pol MSE= {}".format(r2pol,msepol))
 
 # 
 
-![image](./images/polreg2.png)
+![image](./images/polreg3.png)
 
 https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=14
