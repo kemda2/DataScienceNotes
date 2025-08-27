@@ -524,11 +524,23 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 from sklearn.linear_model import LinearRegression
 
 lr=LinearRegression()
-lr.fit(X.values.reshape(-1,1), y.values.reshape(-1,1))
+lr.fit(X_train, y_train)
+
+tahmin=lr.predict(X_test)
+y_test=y_test.sort_index()
+
+df=pd.DataFrame({"Gerçek":y_test, "Tahmin": tahmin})
+df.plot(kind="line")
+plt.show()
 ```
+
+![image](./images/coklureg8.png)
+
+
+
 
 # 
 
-![image](./images/coklureg8.png)
+![image](./images/coklureg9.png)
 
 https://www.youtube.com/watch?v=ZD5A-XLDiKY&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=14
