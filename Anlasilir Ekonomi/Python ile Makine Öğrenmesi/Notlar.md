@@ -536,7 +536,13 @@ plt.show()
 
 ![image](./images/coklureg8.png)
 
+>Model kötü bir sonuç verdi. Bazı şeyleri yapmayıo atlamış olabiliriz veya model bu veri için uygun olmayabilir. 
 
+```Python
+import sklearn.metrics as mt
+
+print(mt.r2_score (y_test, tahmin)) # -1.0084298085720063
+```
 
 
 # 
