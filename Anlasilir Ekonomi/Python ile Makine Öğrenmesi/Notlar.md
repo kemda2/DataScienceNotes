@@ -620,7 +620,9 @@ for egitimindex, testindex in cv.split(x):
 
 # Polinomal Regresyon
 
-
+$$
+\hat{y} = \beta_0 + \beta_1 \cdot x + \beta_2 \cdot x^2 + \beta_3 \cdot x^3 +  \cdot  \cdot + \beta_k \cdot x^k + \epsilon
+$$
 
 
 
