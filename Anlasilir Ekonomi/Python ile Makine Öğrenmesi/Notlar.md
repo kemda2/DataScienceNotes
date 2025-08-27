@@ -372,7 +372,41 @@ print(model.summary())
 # Notes:
 # [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 
+import statsmodels.api as sm
 
+y=veri ["Sales"]
+X=veri [["TV", "Radio"]]
+
+sabit=sm.add_constant(X)
+model=sm.OLS(y, sabit).fit()
+print(model.summary())
+
+#                             OLS Regression Results                             
+# ==============================================================================
+# Dep. Variable:                  Sales   R-squared:                       0.903
+# Model:                            OLS   Adj. R-squared:                  0.902
+# Method:                 Least Squares   F-statistic:                     912.7
+# Date:                Wed, 27 Aug 2025   Prob (F-statistic):          2.39e-100
+# Time:                        12:01:06   Log-Likelihood:                -383.34
+# No. Observations:                 200   AIC:                             772.7
+# Df Residuals:                     197   BIC:                             782.6
+# Df Model:                           2                                         
+# Covariance Type:            nonrobust                                         
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const          4.6309      0.290     15.952      0.000       4.058       5.203
+# TV             0.0544      0.001     39.726      0.000       0.052       0.057
+# Radio          0.1072      0.008     13.522      0.000       0.092       0.123
+# ==============================================================================
+# Omnibus:                       16.227   Durbin-Watson:                   2.252
+# Prob(Omnibus):                  0.000   Jarque-Bera (JB):               27.973
+# Skew:                          -0.434   Prob(JB):                     8.43e-07
+# Kurtosis:                       4.613   Cond. No.                         425.
+# ==============================================================================
+
+# Notes:
+# [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
 
