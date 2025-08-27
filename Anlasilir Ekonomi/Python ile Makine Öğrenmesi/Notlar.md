@@ -139,6 +139,10 @@ Ek olarak ROC eğrisi bize True pozitif ve false pozitif oranlarını kıyaslama
 
 # Basit Doğrusal Regresyon
 
+$$
+\hat{y} = \beta_0 + \beta_1 \cdot x
+$$
+
 ```Python
 import pandas as pd 
 
@@ -253,6 +257,9 @@ print(lr.predict(X.values.reshape(-1,1)))
 
 # Çoklu Doğrusal Regresyon
 
+$$
+\hat{y} = \beta_0 + \beta_1 \cdot x_1 + \beta_2 \cdot x_2 + \cdot\cdot\cdot + \beta_k \cdot x_k
+$$
 
 
 
