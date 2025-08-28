@@ -962,11 +962,9 @@ tahmin2 = ridge_model.predict(X_test)
 
 r2rid = mt.r2_score(y_test, tahmin2)
 print("R2 Rid: {}".format(r2rid)) # R2 Rid: 0.8584004563372055
-
-
-
 ```
 
+Çoklu doğrusal bağlantının etkilerinin giderildiğinde  R2 değeri 0.89 değerinden 0.85 değerine düştü.
 
 
 
