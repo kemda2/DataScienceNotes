@@ -896,6 +896,8 @@ Lambda değeri arttıkça katsayılar 0 a yakınsar.
 
 ```Python
 import pandas as pd 
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 data = pd.DataFrame(
     {
@@ -915,10 +917,11 @@ data = pd.DataFrame(
 
 veri = data.copy()
 
-
+sns.heatmap(veri.corr(), annot=True)
+plt.show()
 ```
 
-
+![image](./images/rdgreg2.png) 
 
 
 
@@ -928,7 +931,7 @@ veri = data.copy()
 
 # 
 
-![image](./images/rdgreg2.png)
+![image](./images/rdgreg3.png)
 
 https://www.youtube.com/watch?v=ESpHtNXIqzs&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=22
 
