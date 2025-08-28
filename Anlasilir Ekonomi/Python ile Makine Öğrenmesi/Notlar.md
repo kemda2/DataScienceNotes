@@ -906,4 +906,6 @@ plt.show()
 
 ![image](./images/rdgreg2.png)
 
-https://www.youtube.com/watch?v=bOuu0ZU1Ln4&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=21
+https://www.youtube.com/watch?v=ESpHtNXIqzs&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=22
+
+1744
