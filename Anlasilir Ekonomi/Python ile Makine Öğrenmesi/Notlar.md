@@ -956,7 +956,12 @@ ridge_cv = RidgeCV(alphas=lambdalar, scoring="r2")
 ridge_cv.fit(X_train, y_train)
 print(ridge_cv.alpha_) # 2018508.6292982749
 
+ridge_model = Ridge(alpha=2018508.6292982749)
+ridge_model.fit(X_train, y_train)
+tahmin2 = ridge_model.predict(X_test)
 
+r2rid = mt.r2_score(y_test, tahmin2)
+print("R2 Rid: {}".format(r2rid)) # R2 Rid: 0.8584004563372055
 
 
 
