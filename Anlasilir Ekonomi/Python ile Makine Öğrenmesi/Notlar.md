@@ -986,7 +986,7 @@ y = veri["PRICE"]
 X = veri.drop(columns="PRICE", axis=1)
 
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import Ridge,Lasso
+from sklearn.linear_model import Ridge,Lasso,LassoCV
 import sklearn.metrics as mt
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -1040,9 +1040,22 @@ print(lasso_model.coef_)
 -0.73224678
 0.01309057
 -0.56467442]
+
+lamb=LassoCV(cv = 10 max_iter=10000).fit(X_train,y_train).alpha_
+
+lasso_model2=Lasso(alpha=lamb)
+lasso_model2.fit(X_train,y_train)
+
+print(lasso_model2.score (X_train, y_train))
+print(lasso_model2.score (X_test,y_test))
+# 0.7157406210167571
+# 0.6706431115795963
+
 ```
 
+Görüldüğü gibi cv ile arttırılmıştır.
 
+# ElasticNet Regresyon
 
 
 
