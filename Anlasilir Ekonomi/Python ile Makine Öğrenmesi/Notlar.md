@@ -928,16 +928,37 @@ y = veri["y"]
 X = veri.drop(columns="y", axis=1)
 
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Ridge, RidgeCV
 import sklearn.metrics as mt
 
 LinearRegression()
 lr.fit(X_train, y_train)
 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
 tahmin = lr.predict(X_test)
 
 r2 = mt.r2_score(y_test, tahmin)
-print("R2: {}".format(r2))
+print("R2: {}".format(r2)) # R2: 0.8980834625627182
+
+ridge_model = Ridge(alpha=0)
+ridge_model.fit(X_train, y_train)
+tahmin2 = ridge_model.predict(X_test)
+
+r2rid = mt.r2_score(y_test, tahmin2)
+print("R2 Rid: {}".format(r2rid)) # R2 Rid: 0.8980834625627178
+
+import numpy as np
+
+lambdalar = 10**np.linspace(10, -2, 100) * 0.5
+
+ridge_cv = RidgeCV(alphas=lambdalar, scoring="r2")
+ridge_cv.fit(X_train, y_train)
+print(ridge_cv.alpha_) # 2018508.6292982749
+
+
+
+
 
 ```
 
