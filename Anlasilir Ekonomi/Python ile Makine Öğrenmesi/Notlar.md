@@ -1235,7 +1235,7 @@ sonuclar = pd.DataFrame(sonuclar, columns=["Model", "RMSE", "R2", "Doğrulama"])
 | Lasso Model       | 91.155747 | 0.898084 | 0.917379  |
 | Elastic Net Model | 91.155939 | 0.898084 | 0.916542  |
 
-
+En düşük RMSE değerine lineer model sahiptir.
 
 # 
 
