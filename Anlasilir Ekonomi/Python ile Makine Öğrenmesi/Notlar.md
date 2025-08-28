@@ -1161,6 +1161,33 @@ plt.show()
 
 ![image](./images/dgrorn2.png) 
 
+```Python
+import statsmodels.api as sm
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+sabit=sm.add_constant(X)
+
+vif=pd.DataFrame()
+vif["Değişkenler"]=X.columns
+vif["VIF"]=[variance_inflation_factor(sabit, i+1) for i in range(X.shape[1])]
+```
+
+| Değişkenler |   VIF     |
+|-------------|-----------|
+| x1          | 8.057920  |
+| x2          | 4.934190  |
+| x3          | 11.000217 |
+| x4          | 4.188910  |
+| x5          | 8.837753  |
+| x6          | 4.254056  |
+| x7          | 5.365104  |
+| x8          | 4.658428  |
+| x9          | 7.457020  |
+| x10         | 4.278819  |
+
+
+
+
 
 # 
 
