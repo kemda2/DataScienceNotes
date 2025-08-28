@@ -976,6 +976,8 @@ from sklearn.datasets import load_boston
 
 df = load_boston()
 
+data = pd.DataFrame(df.data, columns=df.feature_names)
+print(data)
 ```
 
 
