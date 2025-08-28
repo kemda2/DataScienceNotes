@@ -1133,6 +1133,8 @@ print(mt.mean_squared_error(y_test, tahminelas2))
 
 # Doğrusal Regresyon Örnek
 
+dataset: https://www.kaggle.com/datasets/vedavyasv/usa-housing
+
 
 
 
