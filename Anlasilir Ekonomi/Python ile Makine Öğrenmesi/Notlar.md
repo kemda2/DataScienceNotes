@@ -1239,6 +1239,22 @@ En düşük RMSE değerine lineer model sahiptir.
 
 # 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 
+
 ![image](./images/dgrorn.png)
 
 https://www.youtube.com/watch?v=TJ2OFIndE9Q&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=23
