@@ -805,6 +805,21 @@ plt.show()
 # Ridge Regresyon
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 
 
 ![image](./images/rdgreg1.png)
