@@ -1239,9 +1239,14 @@ En düşük RMSE değerine lineer model sahiptir.
 
 # Temel Bileşenler Analizi
 
+Bu analiz için önemli olan kavramlar;
+
+- Öznitelik (Bağımsız değişken yapıları)
+- Özdeğer
+- Özvektör
 
 
-
+Yalnızca sayıysa skaler, sütun gibi sıralı değerler vektör, bir kaç sütunun oluşturduğu yapı matris. Bir matrisi bir özvektör ile çarptığımızda aynı özvektörün ve skaler bir yapıda özdeğeri çıkması gerekir.
 
 
 
