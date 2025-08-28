@@ -1262,8 +1262,6 @@ Yalnızca sayıysa skaler, sütun gibi sıralı değerler vektör, bir kaç süt
 
 # 
 
-![image](./images/dgrorn.png)
+![image](./images/tmlbls.png)
 
-https://www.youtube.com/watch?v=TJ2OFIndE9Q&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=23
-
-11
+https://www.youtube.com/watch?v=yYwuyfkHTbg&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=29
