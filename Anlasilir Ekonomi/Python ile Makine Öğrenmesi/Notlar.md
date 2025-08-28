@@ -1259,7 +1259,6 @@ Yalnızca sayıysa skaler, sütun gibi sıralı değerler vektör, bir kaç süt
 
 
 
-
 # 
 
 ![image](./images/tmlbls.png)
