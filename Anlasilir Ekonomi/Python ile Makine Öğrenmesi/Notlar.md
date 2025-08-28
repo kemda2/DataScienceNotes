@@ -977,7 +977,69 @@ from sklearn.datasets import load_boston
 df = load_boston()
 
 data = pd.DataFrame(df.data, columns=df.feature_names)
-print(data)
+
+veri=data.copy()
+
+veri["PRICE"] = df.target
+
+y = veri["PRICE"]
+X = veri.drop(columns="PRICE", axis=1)
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Ridge,Lasso
+import sklearn.metrics as mt
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+ridge_model = Ridge(alpha=0.1)
+ridge_model.fit(X_train, y_train)
+tahmin = ridge_model.predict(X_test)
+
+print(ridge_model.score(X_train, y_train))
+print(ridge_model.score(X_test, y_test))
+print(mt.r2_score(y_test, tahmin))
+# 0.750827350977196
+# 0.6686244122021412
+# 0.6686244122021412
+
+lasso_model=Lasso (alpha=0.1)
+lasso_model.fit(X_train,y_train)
+
+print(lasso_model.score (X_train, y_train))
+print(lasso_model.score(X_test,y_test))
+
+# 0.7382419735910875
+# 0.6569712802223936
+
+print(ridge_model.coef_)
+print(lasso_model.coef_)
+
+[-1.12399694e-01
+3.04593914e-02
+3.48958400e-02
+2.75033318e+00
+-1.59244585e+01
+4.44577949e+00
+-7.30474388e-03
+-1.42960751e+00
+2.60042840e-01-1.07802286e-02
+-9.00771040e-01
+1.24004789e-02
+-5.10902332e-01]
+
+[-0.10415691
+0.03489335
+-0.01678527
+0.91995182
+-0
+4.31168655
+-0.01512583
+-1.15148729
+0.23923695
+-0.01296223
+-0.73224678
+0.01309057
+-0.56467442]
 ```
 
 
