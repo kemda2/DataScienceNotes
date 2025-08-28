@@ -1135,12 +1135,31 @@ print(mt.mean_squared_error(y_test, tahminelas2))
 
 dataset: https://www.kaggle.com/datasets/vedavyasv/usa-housing
 
+```Python
+import pandas as pd
+
+df = pd.read_csv("ev.csv")
+
+veri=data.copy()
+
+veri=veri.drop(columns="Address", axis=1)
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.pairplot(veri)
+plt.show()
+```
+
+![image](./images/dgrorn1.png) 
+ 
+
 
 
 
 # 
 
-![image](./images/rdgreg3.png)
+![image](./images/dgrorn.png)
 
 https://www.youtube.com/watch?v=TJ2OFIndE9Q&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=23
 
