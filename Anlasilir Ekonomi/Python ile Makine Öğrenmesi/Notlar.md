@@ -968,6 +968,22 @@ print("R2 Rid: {}".format(r2rid)) # R2 Rid: 0.8584004563372055
 
 # Lasso Regresyon
 
+Ridge regresyon anlamsız değişkenleri sıfıra yakınlaştırırken Lasso katsayıyı sıfır yaparak modelden dışlar. 
+
+```Python
+import pandas as pd
+from sklearn.datasets import load_boston
+
+df = load_boston()
+
+```
+
+
+
+
+
+
+
 
 
 # 
