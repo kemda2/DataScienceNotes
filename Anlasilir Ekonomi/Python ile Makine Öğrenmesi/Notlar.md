@@ -966,6 +966,7 @@ print("R2 Rid: {}".format(r2rid)) # R2 Rid: 0.8584004563372055
 
 Çoklu doğrusal bağlantının etkilerinin giderildiğinde  R2 değeri 0.89 değerinden 0.85 değerine düştü.
 
+# Lasso Regresyon
 
 
 
