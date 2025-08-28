@@ -820,7 +820,9 @@ Burada:
 * $I$: Birim matris (özellikle $X^T X$'in tersini alırken düzenlemeyi sağlar)
 * $X^T$: $X$ matrisinin transpozu
 
-
+- Aşırı öğrenmeye dirençli bir yapıdır. 
+- Çoklu doğrusal bağlantı veya aykırı gözlem değerlerine dirençli bir yapıdır.
+- Anlamsız değerleri kaldırmaz, katsayılarını sıfıra yakın bir değer belirleyerek etkilerini azaltır.
 
 
 
