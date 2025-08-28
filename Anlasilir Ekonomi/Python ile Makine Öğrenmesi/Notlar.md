@@ -949,6 +949,6 @@ print("R2: {}".format(r2))
 
 ![image](./images/rdgreg3.png)
 
-https://www.youtube.com/watch?v=ESpHtNXIqzs&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=22
+https://www.youtube.com/watch?v=TJ2OFIndE9Q&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=23
 
-1744
+11
