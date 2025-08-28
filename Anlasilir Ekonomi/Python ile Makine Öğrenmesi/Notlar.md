@@ -892,7 +892,7 @@ plt.show()
 
 ![image](./images/rdgreg1.png)
 
-
+Lambda değeri arttıkça katsayılar 0 a yakınsar.
 
 
 
