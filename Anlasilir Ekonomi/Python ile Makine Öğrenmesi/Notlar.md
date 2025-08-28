@@ -1237,7 +1237,9 @@ sonuclar = pd.DataFrame(sonuclar, columns=["Model", "RMSE", "R2", "Doğrulama"])
 
 En düşük RMSE değerine lineer model sahiptir.
 
-# 
+# Temel Bileşenler Analizi
+
+
 
 
 
