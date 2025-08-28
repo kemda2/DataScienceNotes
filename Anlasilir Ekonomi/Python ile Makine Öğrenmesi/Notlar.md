@@ -1165,6 +1165,9 @@ plt.show()
 import statsmodels.api as sm
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
+y=veri["Price"]
+X=veri.drop(columns="Price", axis=1)
+
 sabit=sm.add_constant(X)
 
 vif=pd.DataFrame()
@@ -1172,18 +1175,14 @@ vif["Değişkenler"]=X.columns
 vif["VIF"]=[variance_inflation_factor(sabit, i+1) for i in range(X.shape[1])]
 ```
 
-| Değişkenler |   VIF     |
-|-------------|-----------|
-| x1          | 8.057920  |
-| x2          | 4.934190  |
-| x3          | 11.000217 |
-| x4          | 4.188910  |
-| x5          | 8.837753  |
-| x6          | 4.254056  |
-| x7          | 5.365104  |
-| x8          | 4.658428  |
-| x9          | 7.457020  |
-| x10         | 4.278819  |
+| Değişkenler                      |    VIF    |
+|----------------------------------|-----------|
+| Avg. Area Income                 | 1.001159  |
+| Avg. Area House Age              | 1.000577  |
+| Avg. Area Number of Rooms        | 1.273535  |
+| Avg. Area Number of Bedrooms     | 1.274413  |
+| Area Population                  | 1.001266  |
+
 
 
 
