@@ -923,7 +923,23 @@ plt.show()
 
 ![image](./images/rdgreg2.png) 
 
+```Python
+y = veri["y"]
+X = veri.drop(columns="y", axis=1)
 
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+import sklearn.metrics as mt
+
+LinearRegression()
+lr.fit(X_train, y_train)
+
+tahmin = lr.predict(X_test)
+
+r2 = mt.r2_score(y_test, tahmin)
+print("R2: {}".format(r2))
+
+```
 
 
 
