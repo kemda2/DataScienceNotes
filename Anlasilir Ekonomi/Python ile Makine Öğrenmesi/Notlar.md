@@ -1153,8 +1153,13 @@ plt.show()
 
 ![image](./images/dgrorn1.png) 
  
+```Python
+kor=veri.corr()
+sns.heatmap(kor, annot=True)
+plt.show()
+```
 
-
+![image](./images/dgrorn2.png) 
 
 
 # 
