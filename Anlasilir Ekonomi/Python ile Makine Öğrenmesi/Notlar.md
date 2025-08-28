@@ -804,7 +804,21 @@ plt.show()
 
 # Ridge Regresyon
 
+Ridge regresyon, bağımsız değişkenlerin yüksek oranda korelasyon gösterdiği
+senaryolarda çoklu regresyon modellerinin katsayılarını tahmin etme yöntemidir.
 
+$$
+\hat{\beta} = (X^T X + \lambda I)^{-1} X^T y
+$$
+
+Burada:
+
+* $\hat{\beta}$: Regresyon katsayıları (beta değerleri)
+* $X$: Bağımsız değişkenlerin (girdi özellikleri) matrisi
+* $y$: Bağımlı değişken (hedef) vektörü
+* $\lambda$: Regülerizasyon parametresi (pozitif bir değer)
+* $I$: Birim matris (özellikle $X^T X$'in tersini alırken düzenlemeyi sağlar)
+* $X^T$: $X$ matrisinin transpozu
 
 
 
