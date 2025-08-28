@@ -1248,6 +1248,9 @@ Bu analiz için önemli olan kavramlar;
 
 Yalnızca sayıysa skaler, sütun gibi sıralı değerler vektör, bir kaç sütunun oluşturduğu yapı matris. Bir matrisi bir özvektör ile çarptığımızda aynı özvektörün ve skaler bir yapıda özdeğeri çıkması gerekir.
 
+# Özdeğer ve Özvektör
+
+
 
 
 
