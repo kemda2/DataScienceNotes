@@ -1358,4 +1358,5 @@ print(X_train2.shape)
 
 ![image](./images/pcaorn3.png)
 
-https://www.youtube.com/watch?v=yYwuyfkHTbg&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=29
+https://www.youtube.com/watch?v=fAVo6qNFvkg&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=30
+16
