@@ -1314,7 +1314,27 @@ plt.show()
 
 ![image](./images/pcaorn2.png)
 
+```Python
+y=veri["quality"]
+X=veri.drop(columns="quality",axis=1)
 
+from sklearn.model_selection import train_test_split
+
+X_train, x_test, y_train, y_test=train_test_split(X,y,test_size=0.2,random_state=42)
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+from sklearn.decomposition import PCA
+
+pca=PCA()
+X_train2=pca.fit_transform(X_train)
+X_test=pca.transform(X_test) 
+
+```
 
 
 
