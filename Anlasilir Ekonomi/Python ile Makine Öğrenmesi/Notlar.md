@@ -1362,7 +1362,12 @@ print(np.cumsum(pca.explained_variance_ratio_)*100))
 
 ![image](./images/pcaorn3.png)
 
+```Python
+from sklearn.linear_model import LinearRegression
+import sklearn.metrics as mt
 
+
+```
 
 
 
@@ -1370,5 +1375,6 @@ print(np.cumsum(pca.explained_variance_ratio_)*100))
 
 ![image](./images/pcaorn4.png)
 
-https://www.youtube.com/watch?v=fAVo6qNFvkg&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=30
-16
+https://www.youtube.com/watch?v=Xg4bqBT2BGk&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=31
+
+5
