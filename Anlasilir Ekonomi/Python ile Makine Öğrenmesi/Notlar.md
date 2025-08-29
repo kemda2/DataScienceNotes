@@ -1432,6 +1432,5 @@ plt.show()
 
 ![image](./images/pcaorn5.png)
 
-https://www.youtube.com/watch?v=Xg4bqBT2BGk&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=31
-
-5
+https://www.youtube.com/watch?v=a5maY3KfPXE&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=32
+0
