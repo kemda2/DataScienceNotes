@@ -1306,7 +1306,13 @@ plt.show()
 
 Çok karmaşık bir yapı görülüyor.
 
+```Python
+kor=veri.corr()
+sns.heatmap(kor, annot=True, cbar=True)
+plt.show()
+```
 
+![image](./images/pcaorn2.png)
 
 
 
@@ -1318,6 +1324,6 @@ plt.show()
 
 # 
 
-![image](./images/pcaorn2.png)
+![image](./images/pcaorn3.png)
 
 https://www.youtube.com/watch?v=yYwuyfkHTbg&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=29
