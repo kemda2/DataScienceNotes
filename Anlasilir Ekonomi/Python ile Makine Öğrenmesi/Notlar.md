@@ -1381,6 +1381,21 @@ rmse = mt.mean_squared_error(y_test, tahmin, squared=True)
 print("R2: {}  RMSE: {}".format(r2, rmse))
 # R2: 0.403180341279622  RMSE: 0.390025143639549
 
+from sklearn.model_selection import KFold, cross_val_score
+
+cv = KFold(n_splits=10, shuffle=True, random_state=1)
+
+lm2 = LinearRegression()
+RMSE = []
+
+for i in range(1, X_train2.shape[1] + 1):
+    hata = np.sqrt(-1 * cross_val_score(lm2, X_train2[:, :i], y_train.ravel(), cv=cv, scoring="neg_mean_squared_error").mean())
+    RMSE.append(hata)
+
+plt.plot(RMSE, "-x")
+plt.xlabel("Bileşen Sayısı")
+plt.ylabel("RMSE")
+plt.show()
 ```
 
 
