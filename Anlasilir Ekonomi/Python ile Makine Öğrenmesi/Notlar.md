@@ -1398,11 +1398,13 @@ plt.ylabel("RMSE")
 plt.show()
 ```
 
+![image](./images/pcaorn4.png)
+
 
 
 # 
 
-![image](./images/pcaorn4.png)
+![image](./images/pcaorn5.png)
 
 https://www.youtube.com/watch?v=Xg4bqBT2BGk&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=31
 
