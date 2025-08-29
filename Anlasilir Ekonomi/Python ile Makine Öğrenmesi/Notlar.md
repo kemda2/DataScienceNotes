@@ -1360,6 +1360,7 @@ print(np.cumsum(pca.explained_variance_ratio_)*100))
 # Eğer 1 taneye indirgersek %28 2 taneye indirgersek %45 gibi.
 ```
 
+![image](./images/pcaorn3.png)
 
 
 
@@ -1367,7 +1368,7 @@ print(np.cumsum(pca.explained_variance_ratio_)*100))
 
 # 
 
-![image](./images/pcaorn3.png)
+![image](./images/pcaorn4.png)
 
 https://www.youtube.com/watch?v=fAVo6qNFvkg&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=30
 16
