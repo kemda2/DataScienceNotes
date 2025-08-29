@@ -1248,7 +1248,55 @@ Bu analiz için önemli olan kavramlar;
 
 Yalnızca sayıysa skaler, sütun gibi sıralı değerler vektör, bir kaç sütunun oluşturduğu yapı matris. Bir matrisi bir özvektör ile çarptığımızda aynı özvektörün ve skaler bir yapıda özdeğeri çıkması gerekir.
 
-# Özdeğer ve Özvektör
+## Örnekler
+
+dataset: https://www.kaggle.com/datasets/uciml/red-wine-quality-cortez-et-al-2009
+
+```Python
+import pandas as pd
+
+data=pd.read_csv("winequality-red.csv")
+
+veri=data.copy()
+
+print(veri.isnull().sum())
+# fixed acidity           0
+# volatile acidity        0
+# citric acid             0
+# residual sugar          0
+# chlorides               0
+# free sulfur dioxide     0
+# total sulfur dioxide    0
+# density                 0
+# pH                      0
+# sulphates               0
+# alcohol                 0
+# quality                 0
+# dtype: int64
+
+veri.info()
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 1599 entries, 0 to 1598
+# Data columns (total 12 columns):
+#  #   Column                Non-Null Count  Dtype  
+# ---  ------                --------------  -----  
+#  0   fixed acidity         1599 non-null   float64
+#  1   volatile acidity      1599 non-null   float64
+#  2   citric acid           1599 non-null   float64
+#  3   residual sugar        1599 non-null   float64
+#  4   chlorides             1599 non-null   float64
+#  5   free sulfur dioxide   1599 non-null   float64
+#  6   total sulfur dioxide  1599 non-null   float64
+#  7   density               1599 non-null   float64
+#  8   pH                    1599 non-null   float64
+#  9   sulphates             1599 non-null   float64
+#  10  alcohol               1599 non-null   float64
+#  11  quality               1599 non-null   int64  
+# dtypes: float64(11), int64(1)
+# memory usage: 150.0 KB
+
+
+```
 
 
 
