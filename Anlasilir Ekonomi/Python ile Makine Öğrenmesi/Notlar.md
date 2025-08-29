@@ -1295,8 +1295,14 @@ veri.info()
 # dtypes: float64(11), int64(1)
 # memory usage: 150.0 KB
 
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.pairplot(veri)
+plt.show()
 ```
+
+![image](./images/pcaorn1.png)
 
 
 
@@ -1312,6 +1318,6 @@ veri.info()
 
 # 
 
-![image](./images/tmlbls.png)
+![image](./images/pcaorn2.png)
 
 https://www.youtube.com/watch?v=yYwuyfkHTbg&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=29
