@@ -1350,11 +1350,11 @@ print(X_train2.shape)
 
 import numpy as np
 
-pca=PCA()
+pca = PCA()
+X_train2 = pca.fit_transform(X_train)
+X_test2 = pca.transform(X_test)
 
-X_train2=pca.fit_transform(X_train) 
-X_test=pca.transform(X_test)
-print(np.cumsum(pca.explained_variance_ratio_)*100))
+print(np.cumsum(pca.explained_variance_ratio_) * 100)
 # [ 28.01769042  45.58168574  59.53932155  70.62114399  79.6423922  85.55109031  90.81771725  94.70160536  97.83107305  99.43207028 100.        ]
 
 # Eğer 1 taneye indirgersek %28 2 taneye indirgersek %45 gibi.
@@ -1366,6 +1366,20 @@ print(np.cumsum(pca.explained_variance_ratio_)*100))
 from sklearn.linear_model import LinearRegression
 import sklearn.metrics as mt
 
+pca = PCA()
+X_train2 = pca.fit_transform(X_train)
+X_test2 = pca.transform(X_test)
+
+print(np.cumsum(pca.explained_variance_ratio_) * 100)
+
+lm = LinearRegression()
+lm.fit(X_train2, y_train)
+tahmin = lm.predict(X_test2)
+
+r2 = mt.r2_score(y_test, tahmin)
+rmse = mt.mean_squared_error(y_test, tahmin, squared=True)
+print("R2: {}  RMSE: {}".format(r2, rmse))
+# R2: 0.403180341279622  RMSE: 0.390025143639549
 
 ```
 
