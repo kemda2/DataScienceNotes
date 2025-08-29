@@ -1346,7 +1346,18 @@ X_test=pca.transform(X_test)
 print(X_train.shape) 
 print(X_train2.shape)
 # (1279, 11)
-# (1279, 2)
+# (1279, 2) n_components e 2 yazınca değişken sayısını ikiye indirdi.
+
+import numpy as np
+
+pca=PCA()
+
+X_train2=pca.fit_transform(X_train) 
+X_test=pca.transform(X_test)
+print(np.cumsum(pca.explained_variance_ratio_)*100))
+# [ 28.01769042  45.58168574  59.53932155  70.62114399  79.6423922  85.55109031  90.81771725  94.70160536  97.83107305  99.43207028 100.        ]
+
+# Eğer 1 taneye indirgersek %28 2 taneye indirgersek %45 gibi.
 ```
 
 
