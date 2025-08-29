@@ -1304,7 +1304,7 @@ plt.show()
 
 ![image](./images/pcaorn1.png)
 
-
+Çok karmaşık bir yapı görülüyor.
 
 
 
