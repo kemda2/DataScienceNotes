@@ -1400,6 +1400,32 @@ plt.show()
 
 ![image](./images/pcaorn4.png)
 
+3te hata azaldığı için 3 ü kullanıyoruz.
+
+# PCA Geometrisi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # 
