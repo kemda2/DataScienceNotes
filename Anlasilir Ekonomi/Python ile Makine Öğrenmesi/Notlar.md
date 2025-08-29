@@ -1334,8 +1334,20 @@ pca=PCA()
 X_train2=pca.fit_transform(X_train)
 X_test=pca.transform(X_test) 
 
-```
+X_train2.shape # (1279, 11)
+X_train.shape # (1279, 11)
 
+# bağımsız değişken sayısı azalmamış
+
+pca=PCA(n_components=2)
+
+X_train2=pca.fit_transform(X_train) 
+X_test=pca.transform(X_test)
+print(X_train.shape) 
+print(X_train2.shape)
+# (1279, 11)
+# (1279, 2)
+```
 
 
 
