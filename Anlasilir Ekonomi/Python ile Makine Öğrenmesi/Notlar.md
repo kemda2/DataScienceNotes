@@ -1406,8 +1406,24 @@ plt.show()
 
 Temel bileşen analizi bir verinin en güzel şekilde ele alınabileceği açıyı bulmaya yarar. Doğru açıyı maksimum varyans sağlar. 
 
+```python
+import pandas as pd
 
+data=pd.DataFrame(
+    {
+        "Y":[1, 2, 3, 8, 10, 11],
+        "X":[1, 2.8, 3, 5, 6, 4]
+    }
+)
 
+data.mean()
+
+# Y    5.833333
+# X    3.633333
+# dtype: float64
+```
+
+Ortalamalarının kesiştiği noktayı orjin olarak belirliyoruz.
 
 
 
