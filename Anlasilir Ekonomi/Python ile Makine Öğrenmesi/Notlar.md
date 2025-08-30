@@ -1423,7 +1423,9 @@ data.mean()
 # dtype: float64
 ```
 
-Ortalamalarının kesiştiği noktayı orjin olarak belirliyoruz.
+Ortalamalarının kesiştiği noktayı orjin olarak belirliyoruz. Orijinden geçen doğrulardan hangisinin noktaların orijine olan uzaklıkları en yüksekse bu doğruya **1. bileşen yapısı** diyoruz.
+
+
 
 
 
