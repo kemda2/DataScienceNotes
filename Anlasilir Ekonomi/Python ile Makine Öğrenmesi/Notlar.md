@@ -1423,7 +1423,7 @@ data.mean()
 # dtype: float64
 ```
 
-Ortalamalarının kesiştiği noktayı orjin olarak belirliyoruz. Orijinden geçen doğrulardan hangisinin noktaların orijine olan uzaklıkları en yüksekse bu doğruya **1. bileşen yapısı (özvektör)** diyoruz. Bu mesafelerin karelerinin toplamına da **özdeğer** diyoruz.
+Ortalamalarının kesiştiği noktayı orjin olarak belirliyoruz. Orijinden geçen doğrulardan hangisinin noktaların orijine olan uzaklıkları en yüksekse bu doğruya **1. bileşen yapısı (özvektör)** diyoruz. Bu mesafelerin karelerinin toplamına da **özdeğer** diyoruz. Mesela bulduğumuz açıya göre x 4 birim gittiğinde y 1 birim gitmelidir. pisagordan $1^2 + 4^2 = x^2$ bağlantısıyla $x=\sqrt{17}=4,12$ bulunur.
 
 
 
