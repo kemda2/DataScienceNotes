@@ -1404,7 +1404,7 @@ plt.show()
 
 # PCA Geometrisi
 
-Temel bileşen analizi bir verinin en güzel şekilde ele alınabileceği açıyı bulmaya yarar.
+Temel bileşen analizi bir verinin en güzel şekilde ele alınabileceği açıyı bulmaya yarar. Doğru açıyı maksimum varyans sağlar. 
 
 
 
