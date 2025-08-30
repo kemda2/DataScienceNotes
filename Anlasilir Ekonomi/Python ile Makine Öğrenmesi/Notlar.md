@@ -1449,7 +1449,18 @@ sc=StandardScaler()
 X_train=sc.fit_transform(x_train)
 X_test=sc.transform(x_test)
 
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
+lda=LineanDiscriminantAnalysis()
+
+X_train2=lda.fit_transform(x_train,y_train)
+X_test2=lda.transform(x_test)
+
+import numpy as np
+
+print(np.cumsum(lda.explained_variance_ratio_)*100)
+
+[85.03158458 94.47170698 98.20710389 99.56831945 100.]
 ```
 
 
