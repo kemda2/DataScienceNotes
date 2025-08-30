@@ -1427,7 +1427,30 @@ Ortalamalarının kesiştiği noktayı orjin olarak belirliyoruz. Orijinden geç
 
 # LDA
 
+Veri sınıfları arasındaki varyansı maksimize eden yöntemdir. Sınıflama yapısıdır.
 
+dataset: https://www.kaggle.com/datasets/uciml/red-wine-quality-cortez-et-al-2009
+
+```python
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+data=pd.read_csv("C:/Usens/90506/Desktop/sarap.csv")
+veri=data.copy()
+
+y=veri["quality"] 
+X=veri.drop(columns="quality",axis=1)
+
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)
+
+sc=StandardScaler()
+X_train=sc.fit_transform(x_train)
+X_test=sc.transform(x_test)
+
+
+```
 
 
 
