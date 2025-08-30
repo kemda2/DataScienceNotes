@@ -1463,7 +1463,9 @@ print(np.cumsum(lda.explained_variance_ratio_)*100)
 [85.03158458 94.47170698 98.20710389 99.56831945 100.]
 ```
 
+# Support Vector Regression
 
+Hataları en aza indirmek yerine marjin aralığını en aza indiren doğruyu bularak çalışır.
 
 
 
