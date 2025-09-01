@@ -1473,9 +1473,9 @@ Hataları en aza indirmek yerine marjin aralığını en aza indiren doğruyu bu
 
 EKK'ya göre daha dirençli bir yapıdır. Hatalara göre daha esnektir.
 
+## Örnekler
 
-
-
+dataset: https://www.kaggle.com/datasets/mariospirito/position-salariescsv
 
 
 
