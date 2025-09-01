@@ -1668,4 +1668,4 @@ plt.show()
 ![image](./images/svr10.png)
 
 https://www.youtube.com/watch?v=en8W_vJpPZs&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=37
-447
+1324
