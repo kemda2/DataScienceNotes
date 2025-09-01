@@ -1515,5 +1515,5 @@ X = np.array(X).reshape(-1, 1)
 
 ![image](./images/svr3.png)
 
-https://www.youtube.com/watch?v=a5maY3KfPXE&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=32
-0
+https://www.youtube.com/watch?v=ICt7pqEDClo&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=36
+447
