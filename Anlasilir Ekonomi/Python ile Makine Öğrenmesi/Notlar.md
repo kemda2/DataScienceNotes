@@ -1736,6 +1736,7 @@ print("R2: {}   RMSE: {}".format(r2, rmse)) # R2: 0.9829947573169796   RMSE: 0.1
 
 R2 0,95'ten 0,98'e çıkarken RMSE 0,21'den 0,13'e düştü.
 
+![image](./images/svr11.png) 
 
 
 
@@ -1745,7 +1746,7 @@ R2 0,95'ten 0,98'e çıkarken RMSE 0,21'den 0,13'e düştü.
 
 # 
 
-![image](./images/svr11.png)
+![image](./images/svr12.png)
 
 https://www.youtube.com/watch?v=en8W_vJpPZs&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=37
 1324
