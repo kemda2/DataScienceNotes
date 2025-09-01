@@ -1471,7 +1471,7 @@ Hataları en aza indirmek yerine marjin aralığını en aza indiren doğruyu bu
 
 ![image](./images/svr2.png)
 
-
+EKK'ya göre daha dirençli bir yapıdır. Hatalara göre daha esnektir.
 
 
 
