@@ -1787,6 +1787,25 @@ plt.show()
 
 Aşırı uyum gözükmektedir. Burada makina ezberlemiş, öğrenmemiştir.
 
+```python
+from sklearn.tree import plot_tree
+
+dtr = DecisionTreeRegressor(random_state=0, max_leaf_nodes=3)
+dtr.fit(X, y)
+tahmin = dtr.predict(X)
+
+plt.figure(figsize=(20,10), dpi=100)
+plot_tree(dtr, feature_names="Level", class_names="Salary", rounded=True, filled=True)
+plt.show()
+
+
+```
+
+
+
+
+
+
 # 
 
 ![image](./images/kar.png)
