@@ -1677,7 +1677,16 @@ plt.show()
 
 Modele en uygun olan kernel rbf'tir.
 
+```Python
+import sklearn.metrics as mt
 
+r2 = mt.r2_score(y, tahminrbf)
+rmse = np.sqrt(mt.mean_squared_error(y, tahminrbf))
+
+print("R2: {}   RMSE: {}".format(r2, rmse))
+# R2: 0.951723235923062   RMSE: 0.21971973984359727
+
+```
 
 
 
