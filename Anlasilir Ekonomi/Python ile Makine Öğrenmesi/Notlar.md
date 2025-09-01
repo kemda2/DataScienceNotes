@@ -1675,6 +1675,10 @@ plt.show()
 
 ![image](./images/svr9.png)
 
+Modele en uygun olan kernel rbf'tir.
+
+
+
 
 
 # 
