@@ -1686,13 +1686,22 @@ rmse = np.sqrt(mt.mean_squared_error(y, tahminrbf))
 print("R2: {}   RMSE: {}".format(r2, rmse))
 # R2: 0.951723235923062   RMSE: 0.21971973984359727
 
+svrrbf = SVR(kernel="rbf", C=10000)
+svrrbf.fit(X, y)
+tahminrbf = svrrbf.predict(X)
+
+plt.scatter(X, y, color="red")
+plt.plot(X, tahminrbf, color="green", label="RBF Model")
+plt.show()
 ```
+
+![image](./images/svr10.png)
 
 
 
 # 
 
-![image](./images/svr10.png)
+![image](./images/svr11.png)
 
 https://www.youtube.com/watch?v=en8W_vJpPZs&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=37
 1324
