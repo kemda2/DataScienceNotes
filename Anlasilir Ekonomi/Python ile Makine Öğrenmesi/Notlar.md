@@ -1808,7 +1808,7 @@ plt.show()
 
 # 
 
-![image](./images/kar.png)
+![image](./images/kar3.png)
 
 https://www.youtube.com/watch?v=vD657_rbNws&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=39
 0
