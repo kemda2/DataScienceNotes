@@ -1648,14 +1648,28 @@ y = scy.fit_transform(y)
 
 from sklearn.svm import SVR
 
-svrmodel = SVR()
-svrmodel.fit(X, y.ravel())
-tahmin = svrmodel.predict(X)
+# RBF kernel
+svr_rbf = SVR(kernel="rbf")
+svr_rbf.fit(X, y)
+tahmin_rbf = svr_rbf.predict(X)
+
+# Linear kernel
+svr_lin = SVR(kernel="linear")
+svr_lin.fit(X, y)
+tahmin_lin = svr_lin.predict(X)
+
+# Poly kernel
+svrpoly=SVR(kernel="poly")
+svrpoly.fit(X,y)
+tahmin_poly=svrpoly.predict(X)
 
 import matplotlib.pyplot as plt
 
 plt.scatter(X, y, color="red")
-plt.plot(X, tahmin)
+plt.plot(X, tahmin_rbf, color="green", label="RBF Model")
+plt.plot(X, tahmin_lin, color="blue", label="Linear Model")
+plt.plot(X, tahmin_poly, color="black", label="Poly Model")
+plt.legend()
 plt.show()
 ```
 
