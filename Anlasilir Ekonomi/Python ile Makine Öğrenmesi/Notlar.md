@@ -1809,5 +1809,5 @@ plt.show()
 
 ![image](./images/kar3.png)
 
-https://www.youtube.com/watch?v=vD657_rbNws&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=39
+https://www.youtube.com/watch?v=2oMvWmSqmbA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=41
 0
