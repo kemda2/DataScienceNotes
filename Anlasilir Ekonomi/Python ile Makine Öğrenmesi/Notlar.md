@@ -1578,7 +1578,12 @@ plt.show()
 
 ![image](./images/svr8.png)
 
+---
 
+```Python
+import yfinance as yf
+
+```
 
 # 
 
