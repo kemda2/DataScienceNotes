@@ -1697,6 +1697,50 @@ plt.show()
 
 ![image](./images/svr10.png)
 
+```Python
+r2 = mt.r2_score(y, tahminrbf)
+rmse = np.sqrt(mt.mean_squared_error(y, tahminrbf))
+
+print("R2: {}   RMSE: {}".format(r2, rmse))
+# R2: 0.9862387371531867   RMSE: 0.11730840910528659
+```
+
+```Python
+svrrbf = SVR()
+svrrbf.fit(X, y)
+tahminrbf = svrrbf.predict(X)
+
+from sklearn.model_selection import GridSearchCV
+
+parametreler = {
+    "C": [1, 10, 100, 1000, 10000],
+    "gamma": [1, 0.1, 0.001],
+    "kernel": ["rbf", "linear", "poly"]
+}
+
+tuning = GridSearchCV(estimator=SVR(), param_grid=parametreler, cv=10)
+
+tuning.fit(X, y)
+
+print(tuning.best_params_) # {'C': 100, 'gamma': 1, 'kernel': 'rbf'}
+
+svrrbf = SVR(kernel="rbf", C=100, gamma=1)
+svrrbf.fit(X, y)
+tahminrbf = svrrbf.predict(X)
+
+r2 = mt.r2_score(y, tahminrbf)
+rmse = np.sqrt(mt.mean_squared_error(y, tahminrbf))
+
+print("R2: {}   RMSE: {}".format(r2, rmse)) # R2: 0.9829947573169796   RMSE: 0.13040415132586977
+```
+
+R2 0,95'ten 0,98'e çıkarken RMSE 0,21 den 0,13 e düştü.
+
+
+
+
+
+
 
 
 # 
