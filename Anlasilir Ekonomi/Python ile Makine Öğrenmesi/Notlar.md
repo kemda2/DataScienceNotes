@@ -1486,34 +1486,47 @@ data=pd.DataFrame({
     "Salary":[45000, 50000, 60000, 80000, 110000, 150000, 200000, 300000, 500000, 1000000]
 })
 
+veri = data.copy()
+
 # Data küçük olduğu için eğitim ve test olarak ayırmayacağız.
 
 y=veri["Salary"]
 X=veri["Level"]
+
+# Eğitim test olarak ayrılmadığı için veriler dataframe formatında. Ama array olmadan modele sokamayız. O yüzden aşağıda array a çevireceğiz.
 
 import numpy as np
 
 y = np.array(y).reshape(-1, 1)
 X = np.array(X).reshape(-1, 1)
 
+from sklearn.preprocessing import StandardScaler
 
+scx = StandardScaler()
+scy = StandardScaler()
 
+y = scy.fit_transform(y)
+X = scx.fit_transform(X)
 
+from sklearn.svm import SVR
 
+svrmodel = SVR()
+svrmodel.fit(X, y)
+tahmin = svrmodel.predict(X)
 
+import matplotlib.pyplot as plt
 
-
-
-
+plt.scatter(X, y, color="red")
+plt.show()
 ```
 
-
+![image](./images/svr3.png)
 
 
 
 # 
 
-![image](./images/svr3.png)
+![image](./images/svr4.png)
 
 https://www.youtube.com/watch?v=ICt7pqEDClo&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=36
 447
