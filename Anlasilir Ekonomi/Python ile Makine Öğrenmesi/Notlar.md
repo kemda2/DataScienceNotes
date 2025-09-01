@@ -1530,6 +1530,29 @@ plt.show()
 
 ![image](./images/svr4.png) 
 
+```Python
+svrmodel = SVR(kernel="linear")
+svrmodel.fit(X, y)
+tahmin = svrmodel.predict(X)
+
+plt.scatter(X, y, color="red")
+plt.plot(X, tahmin)
+plt.show()
+```
+
+![image](./images/svr5.png) 
+
+```Python
+svrmodel = SVR(kernel="poly")
+svrmodel.fit(X, y)
+tahmin = svrmodel.predict(X)
+
+plt.scatter(X, y, color="red")
+plt.plot(X, tahmin)
+plt.show()
+```
+
+![image](./images/svr6.png)
 
 
 
@@ -1539,7 +1562,7 @@ plt.show()
 
 # 
 
-![image](./images/svr5.png)
+![image](./images/svr7.png)
 
 https://www.youtube.com/watch?v=ICt7pqEDClo&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=36
 447
