@@ -1740,7 +1740,43 @@ R2 0,95'ten 0,98'e çıkarken RMSE 0,21'den 0,13'e düştü.
 
 # Karar Ağacı Regresyonu
 
+```python
+import pandas as pd
 
+data=pd.DataFrame({
+    "Position":["Business Analyst", "Junior Consultant", "Senior Consultant", "Manager", "Country Manager", "Region Manager", "Partner", "Senior Partner", "C-level", "CEO"],
+    "Level":[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "Salary":[45000, 50000, 60000, 80000, 110000, 150000, 200000, 300000, 500000, 1000000]
+})
+
+veri = data.copy()
+
+y=veri["Salary"]
+X=veri["Level"]
+
+# Eğitim test olarak ayrılmadığı için veriler dataframe formatında. Ama array olmadan modele sokamayız. O yüzden aşağıda array a çevireceğiz.
+
+import numpy as np
+
+y = np.array(y).reshape(-1, 1)
+X = np.array(X).reshape(-1, 1)
+
+from sklearn.preprocessing import StandardScaler
+
+scx = StandardScaler()
+scy = StandardScaler()
+
+y = scy.fit_transform(y)
+X = scx.fit_transform(X)
+
+from sklearn.tree import DecisionTreeRegressor
+
+dtr = DecisionTreeRegressor(random_state=0)
+dtr.fit(X, y)
+tahmin = dtr.predict(X)
+
+
+```
 
 
 
