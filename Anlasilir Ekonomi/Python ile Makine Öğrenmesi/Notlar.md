@@ -1797,10 +1797,9 @@ tahmin = dtr.predict(X)
 plt.figure(figsize=(20,10), dpi=100)
 plot_tree(dtr, feature_names="Level", class_names="Salary", rounded=True, filled=True)
 plt.show()
-
-
 ```
 
+![image](./images/kar2.png) 
 
 
 
