@@ -1552,17 +1552,37 @@ plt.plot(X, tahmin)
 plt.show()
 ```
 
-![image](./images/svr6.png)
+![image](./images/svr6.png) 
 
+```Python
+svrmodel = SVR(kernel="poly", degree=2)
+svrmodel.fit(X, y)
+tahmin = svrmodel.predict(X)
 
+plt.scatter(X, y, color="red")
+plt.plot(X, tahmin)
+plt.show()
+```
 
+![image](./images/svr7.png) 
 
+```Python
+svrmodel = SVR(kernel="rbf")
+svrmodel.fit(X, y)
+tahmin = svrmodel.predict(X)
+
+plt.scatter(X, y, color="red")
+plt.plot(X, tahmin)
+plt.show()
+```
+
+![image](./images/svr8.png)
 
 
 
 # 
 
-![image](./images/svr7.png)
+![image](./images/svr9.png)
 
 https://www.youtube.com/watch?v=ICt7pqEDClo&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=36
 447
