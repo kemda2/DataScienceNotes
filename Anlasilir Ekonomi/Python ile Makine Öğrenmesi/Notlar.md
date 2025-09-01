@@ -1477,7 +1477,35 @@ EKK'ya göre daha dirençli bir yapıdır. Hatalara göre daha esnektir.
 
 dataset: https://www.kaggle.com/datasets/mariospirito/position-salariescsv
 
+```Python
+import pandas as pd
 
+data=pd.DataFrame({
+    "Position":["Business Analyst", "Junior Consultant", "Senior Consultant", "Manager", "Country Manager", "Region Manager", "Partner", "Senior Partner", "C-level", "CEO"],
+    "Level":[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "Salary":[45000, 50000, 60000, 80000, 110000, 150000, 200000, 300000, 500000, 1000000]
+})
+
+# Data küçük olduğu için eğitim ve test olarak ayırmayacağız.
+
+y=veri["Salary"]
+X=veri["Level"]
+
+import numpy as np
+
+y = np.array(y).reshape(-1, 1)
+X = np.array(X).reshape(-1, 1)
+
+
+
+
+
+
+
+
+
+
+```
 
 
 
