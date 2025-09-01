@@ -1467,9 +1467,9 @@ print(np.cumsum(lda.explained_variance_ratio_)*100)
 
 Hataları en aza indirmek yerine marjin aralığını en aza indiren doğruyu bularak çalışır.
 
+![image](./images/svr1.png)
 
-
-
+![image](./images/svr2.png)
 
 
 
@@ -1485,7 +1485,7 @@ Hataları en aza indirmek yerine marjin aralığını en aza indiren doğruyu bu
 
 # 
 
-![image](./images/pcaorn5.png)
+![image](./images/svr3.png)
 
 https://www.youtube.com/watch?v=a5maY3KfPXE&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=32
 0
