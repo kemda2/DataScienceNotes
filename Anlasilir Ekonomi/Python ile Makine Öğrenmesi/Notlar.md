@@ -1734,7 +1734,7 @@ rmse = np.sqrt(mt.mean_squared_error(y, tahminrbf))
 print("R2: {}   RMSE: {}".format(r2, rmse)) # R2: 0.9829947573169796   RMSE: 0.13040415132586977
 ```
 
-R2 0,95'ten 0,98'e çıkarken RMSE 0,21 den 0,13 e düştü.
+R2 0,95'ten 0,98'e çıkarken RMSE 0,21'den 0,13'e düştü.
 
 
 
