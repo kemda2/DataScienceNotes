@@ -1775,9 +1775,15 @@ dtr = DecisionTreeRegressor(random_state=0)
 dtr.fit(X, y)
 tahmin = dtr.predict(X)
 
+import matplotlib.pyplot as plt
+
+plt.scatter(X, y, color="red")
+plt.plot(X, tahmin)
+plt.show()
 
 ```
 
+![image](./images/kar1.png) 
 
 
 
