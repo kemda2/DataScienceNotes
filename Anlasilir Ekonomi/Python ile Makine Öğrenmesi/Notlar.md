@@ -1522,11 +1522,17 @@ plt.show()
 
 ![image](./images/svr3.png)
 
+```Python
+plt.scatter(X, y, color="red")
+plt.plot(X, tahmin)
+plt.show()
+```
 
+![image](./images/svr4.png) 
 
 # 
 
-![image](./images/svr4.png)
+![image](./images/svr5.png)
 
 https://www.youtube.com/watch?v=ICt7pqEDClo&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=36
 447
