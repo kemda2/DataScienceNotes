@@ -1785,7 +1785,7 @@ plt.show()
 
 ![image](./images/kar1.png) 
 
-
+Aşırı uyum gözükmektedir. Burada makina ezberlemiş, öğrenmemiştir.
 
 # 
 
