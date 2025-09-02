@@ -2318,6 +2318,20 @@ print(df)
 
 # Lojistik Regresyon
 
+Lojistik Regresyon formülü;
+
+$$
+\sigma(y) = \frac{1}{1 + e^{-y}}
+$$
+
+$ y = \beta_0 + \beta_1 \cdot x $ formülünden yola çıkarak;
+
+$$
+\sigma(y) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 \cdot x)}}
+$$
+
+Sigmoid fonksiyonunu görelim. 
+
 ```Python
 import pandas as pd
 import numpy as np
