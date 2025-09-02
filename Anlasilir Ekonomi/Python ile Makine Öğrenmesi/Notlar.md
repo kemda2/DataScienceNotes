@@ -1856,6 +1856,29 @@ print("R2: {} MSE: {}".format(r2,mse)) # R2: 0.9789043773351418 MSE: 791.7354924
 
 R2 0.96'dan 0.97'ye çıktı. MSE 1333'den 791'e düştü.
 
+# Bagging Karar Ağacı Regresyonu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 
 
 ![image](./images/kar3.png)
