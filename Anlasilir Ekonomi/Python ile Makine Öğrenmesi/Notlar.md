@@ -2702,5 +2702,4 @@ plt.show()
 
 ![image](./images/kkn2.png)
 
-https://www.youtube.com/watch?v=C6Vw5UtlPJI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=53
-1542
+https://www.youtube.com/watch?v=MGvE4A5gx1U&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=56
