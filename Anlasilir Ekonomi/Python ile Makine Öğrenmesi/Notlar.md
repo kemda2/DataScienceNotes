@@ -2459,7 +2459,8 @@ print(tahmin)
 
 # [0 1 1 0 0 1 1 1 0 0 0 1 0 1 0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 1 0 0 1 1 0 0 0 1 1 0 0 1 1 0 1 0 0 0 0 0 0 1 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 0 1 1 0 1 1 0 0 0 1 0 0 1 0 1 1]
 
-from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report, roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
 
 cm = confusion_matrix(y_test, tahmin)
 print(cm)
@@ -2480,18 +2481,20 @@ print(cr)
 #    macro avg       0.97      0.97      0.97       114
 # weighted avg       0.97      0.97      0.97       114
 
+auc = roc_auc_score(y_test, tahmin)
+
+fpr, tpr, threshold = roc_curve(y_test, model.predict_proba(X_test)[:, 1])
+plt.plot(fpr, tpr, label="Model AUC (Alan=%0.2f)" % auc)
+plt.plot([0, 1], [0, 1], "r--")
+plt.show()
 ```
 
-$$
-\text{Doğruluk} = \frac{70+41}{70+41+1+2} = 0,973
-$$
-
-
+![image](./images/lr2.png) 
 
 
 # 
 
-![image](./images/lr2.png)
+![image](./images/lr3.png)
 
 https://www.youtube.com/watch?v=19sN-CJV2_o&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=49
 353
