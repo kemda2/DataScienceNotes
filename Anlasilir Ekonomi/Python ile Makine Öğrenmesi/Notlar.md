@@ -2296,6 +2296,7 @@ print(df)
 
 Sonuç çok uzun. Müsait olduğumda yapacağım.
 
+# Sınıflandırma Algoritmaları
 
 
 
