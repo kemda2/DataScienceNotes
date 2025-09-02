@@ -2117,6 +2117,9 @@ print(rfgrid.best_params_)
 
 Karar ağacının ve Bag modelinin R2 değeri düşmüş. Demek ki tanımlarken kurduğumuz Range fonksiyonu daha geniş olmalı. 
 
+# Toplu Model Çözümü
+
+
 
 
 
