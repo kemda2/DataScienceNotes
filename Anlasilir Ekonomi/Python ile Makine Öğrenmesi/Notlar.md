@@ -2601,5 +2601,5 @@ print(cv) # [1.         1.         1.         1.         1.         1.  0.666666
 
 ![image](./images/lr3.png)
 
-https://www.youtube.com/watch?v=19sN-CJV2_o&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=49
-353
+https://www.youtube.com/watch?v=C6Vw5UtlPJI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=53
+1542
