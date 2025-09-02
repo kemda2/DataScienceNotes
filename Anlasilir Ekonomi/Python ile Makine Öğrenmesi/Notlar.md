@@ -2459,15 +2459,32 @@ print(tahmin)
 
 # [0 1 1 0 0 1 1 1 0 0 0 1 0 1 0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 1 0 0 1 1 0 0 0 1 1 0 0 1 1 0 1 0 0 0 0 0 0 1 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 0 1 1 0 1 1 0 0 0 1 0 0 1 0 1 1]
 
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 
 cm = confusion_matrix(y_test, tahmin)
 print(cm)
 # [[70  1]
 #  [ 2 41]]
 
+acs = accuracy_score(y_test, tahmin)
+print(acs) # 0.9736842105263158
+
+cr = classification_report(y_test, tahmin)
+print(cr)
+#               precision    recall  f1-score   support
+
+#            0       0.97      0.99      0.98        71
+#            1       0.98      0.95      0.96        43
+
+#     accuracy                           0.97       114
+#    macro avg       0.97      0.97      0.97       114
+# weighted avg       0.97      0.97      0.97       114
 
 ```
+
+$$
+\text{Doğruluk} = \frac{70+41}{70+41+1+2} = 0,973
+$$
 
 
 
