@@ -2491,6 +2491,25 @@ plt.show()
 
 ![image](./images/lr2.png) 
 
+---
+
+dataset: kaggle iris species
+
+```Python
+import pandas as pd
+
+data=pd.read_csv("Iris.csv")
+veri=data.copy()
+
+print(veri.isnull().sum())
+# Id               0
+# SepalLengthCm    0
+# SepalWidthCm     0
+# PetalLengthCm    0
+# PetalWidthCm     0
+# Species          0
+# dtype: int64
+```
 
 # 
 
