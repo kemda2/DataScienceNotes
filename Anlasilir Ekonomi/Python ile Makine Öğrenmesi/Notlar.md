@@ -2509,7 +2509,16 @@ print(veri.isnull().sum())
 # PetalWidthCm     0
 # Species          0
 # dtype: int64
+
+veri=veri.drop("Id",axis=1)
+
+veri["Species"].unique()
+# ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
 ```
+
+2 den fazla grup olduğu için method çoklu sınıflandırmaya girer.
+
+
 
 # 
 
