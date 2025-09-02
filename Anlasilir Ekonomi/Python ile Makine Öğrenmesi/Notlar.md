@@ -1947,10 +1947,57 @@ print( "Bagging R2: {} Bagging RMSE: {}".format(r22,rmse2))
 
 # Random Forest Regresyon
 
+```Python
+import pandas as pd 
+
+data = pd.DataFrame({
+    "Gözlem":[1, 2, 3, 4, 5],
+    "X1":[3, 2, 5, 6, 4],
+    "X2":[2, 6, 1, 3, 6],
+    "X3":[2, 6, 1, 1, 2],
+    "X4":[3, 5, 2, 1, 6],
+    "Y":[3, 2, 1, 3, 1]
+    })
+```
+
+Bagging bütün sütunları tutarken Random Forest Sample alırken sütunlarda da eksiltme yapıyor. Mesela X2 ve X5'in olmadığı durumu da model oluştururken değerlendiriyor. Bütün değişkenleri kullanmak yerine bazı değişkenleri kullanarak değerlendiriyor. (X1, X3 ve Y değişkenlerini kullanıyor ve diğer denemede X2,X3 ve Y değişkenlerini kullanıyor gibi.)
+
+```Python
+import pandas as pd
+
+data=pd.DataFrame({
+    "Position":["Business Analyst", "Junior Consultant", "Senior Consultant", "Manager", "Country Manager", "Region Manager", "Partner", "Senior Partner", "C-level", "CEO"],
+    "Level":[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "Salary":[45000, 50000, 60000, 80000, 110000, 150000, 200000, 300000, 500000, 1000000]
+})
+
+veri=data.copy()
+
+y=veri["Salary"]
+X=veri["Level"]
+
+y=np.array(y).reshape(-1,1)
+X=np.array(X).reshape(-1,1)
+
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+
+dtmodel=DecisionTreeRegressor(random_state=0)
+dtmodel.fit(X,y)
+dttahmin=dtmodel.predict(X)
 
 
+rfmodel=RandomForestRegressor(random_state=0)
+rfmodel.fit(X,y)
+rftahmin=rfmodel.predict(X)
 
+import matplotlib.pyplot as plt
 
+plt.scatter(X,y,color="red")
+plt.show()
+```
+
+![image](./images/rd1.png) 
 
 
 
@@ -1969,7 +2016,7 @@ print( "Bagging R2: {} Bagging RMSE: {}".format(r22,rmse2))
 
 # 
 
-![image](./images/kar3.png)
+![image](./images/rd2.png)
 
 https://www.youtube.com/watch?v=NDUwSldc8Co&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=42
 0
