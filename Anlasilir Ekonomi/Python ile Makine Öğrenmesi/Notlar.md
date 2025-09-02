@@ -2363,6 +2363,105 @@ Lojistik regresyon 3 çeşittir;
 - Çoklu Lojistik Regresyon (Birden fazla Kategorik değişken)
 - Çoklu Lojistik Regresyon (İyi, Orta, Kötü gibi sıralı)
 
+## Örnekler
+
+Dataset: [Kanser dataset](https://www.kaggle.com/code/kanncaa1/logistic-regression-implementation/data)
+
+```Python
+import pandas as pd
+
+data=pd.read_csv("data.csv")
+veri=data.copy()
+
+# id                           0
+# diagnosis                    0
+# radius_mean                  0
+# texture_mean                 0
+# perimeter_mean               0
+# area_mean                    0
+# smoothness_mean              0
+# compactness_mean             0
+# concavity_mean               0
+# concave points_mean          0
+# symmetry_mean                0
+# fractal_dimension_mean       0
+# radius_se                    0
+# texture_se                   0
+# perimeter_se                 0
+# area_se                      0
+# smoothness_se                0
+# compactness_se               0
+# concavity_se                 0
+# concave points_se            0
+# symmetry_se                  0
+# fractal_dimension_se         0
+# radius_worst                 0
+# texture_worst                0
+# perimeter_worst              0
+# area_worst                   0
+# smoothness_worst             0
+# compactness_worst            0
+# concavity_worst              0
+# concave points_worst         0
+# symmetry_worst               0
+# fractal_dimension_worst      0
+# Unnamed: 32                569
+# dtype: int64
+
+veri = veri.drop(columns=["id", "Unnamed: 32"], axis=1)
+
+y = veri["diagnosis"]
+X = veri.drop(columns="diagnosis", axis=1)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression(random_state=0)
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+print(tahmin)
+
+# ['B' 'M' 'M' 'B' 'B' 'M' 'M' 'M' 'B' 'B' 'B' 'M' 'B' 'M' 'B' 'M' 'B' 'B' 'B' 'M' 'B' 'B' 'M' 'B' 'B' 'B' 'B' 'B' 'B' 'M' 'B' 'B' 'B' 'B' 'B' 'B' 'M' 'B' 'M' 'B' 'B' 'M' 'B' 'B' 'B' 'B' 'B' 'B' 'B' 'B' 'M' 'M' 'B' 'B' 'B' 'B' 'B' 'M' 'M' 'B' 'B' 'M' 'M' 'B' 'B' 'B' 'M' 'M' 'B' 'B' 'M' 'M' 'B' 'M' 'B' 'B' 'B' 'B' 'B' 'B' 'M' 'B' 'M' 'M' 'M' 'M' 'M' 'M' 'B' 'B' 'B' 'B' 'B' 'B' 'B' 'B' 'M' 'M' 'B' 'M' 'M' 'B' 'M' 'M' 'B' 'B' 'B' 'M' 'B' 'B' 'M' 'B' 'M' 'M']
+```
+
+---
+
+```Python
+import pandas as pd
+
+data=pd.read_csv("data.csv")
+veri=data.copy()
+
+veri.diagnosis = [1 if kod == "M" else 0 for kod in veri.diagnosis]
+
+y = veri["diagnosis"]
+X = veri.drop(columns="diagnosis", axis=1)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression(random_state=0)
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+print(tahmin)
+
+# [0 1 1 0 0 1 1 1 0 0 0 1 0 1 0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 1 0 0 1 1 0 0 0 1 1 0 0 1 1 0 1 0 0 0 0 0 0 1 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 0 1 1 0 1 1 0 0 0 1 0 0 1 0 1 1]
+
+
+```
+
 
 
 
