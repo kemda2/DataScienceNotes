@@ -2597,9 +2597,110 @@ print(cv) # [1.         1.         1.         1.         1.         1.  0.666666
 
 ```
 
+```python
+import pandas as pd
+
+data=pd.read_csv("WineQT.csv")
+veri=data.copy()
+
+print(veri.isnull().sum())
+# fixed acidity           0
+# volatile acidity        0
+# citric acid             0
+# residual sugar          0
+# chlorides               0
+# free sulfur dioxide     0
+# total sulfur dioxide    0
+# density                 0
+# pH                      0
+# sulphates               0
+# alcohol                 0
+# quality                 0
+# Id                      0
+# dtype: int64
+
+veri["quality"].unique()
+# [5, 6, 7, 4, 8, 3]
+```
+
+En yüksek 8 ve en düşük kalite 3 olacak şekilde sıralı değerlerdir.
+
+```python
+from sklearn.preprocessing import OrdinalEncoder
+
+kategori = ["3", "4", "5", "6", "7", "8"]
+
+oe = OrdinalEncoder(categories=[kategori])
+veri["Kalite"] = oe.fit_transform(veri[["quality"]].values.reshape(-1, 1))
+
+veri = veri.drop(columns=["quality","id"], axis=1)
+
+y = veri["Kalite"]
+X = veri.drop(columns="Kalite", axis=1)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression(random_state=0, max_iter=1000)
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[ 0  3  3  0  0]
+#  [ 1 70 23  2  0]
+#  [ 0 28 63  8  0]
+#  [ 0  2 11 13  0]
+#  [ 0  0  0  2  0]]
+
+acs = accuracy_score(y_test, tahmin)
+print(acs) # 0.6375545851528385
+```
+
+# KKN 
+
+Dataset: [Kanser dataset](https://www.kaggle.com/code/kanncaa1/logistic-regression-implementation/data)
+
+```python
+import pandas as pd
+
+data=pd.read_csv("data.csv")
+veri=data.copy()
+
+M=veri[veri[ "diagnosis" ]=="M"]
+B=veri[veri[ "diagnosis" ]=="B"]
+
+import matplotlib.pyplot as plt
+
+plt.scatter(M.radius_mean, M.texture_mean, color="red", label="Kötü Huylu")
+plt.scatter(B.radius_mean, B.texture_mean, color="green", label="İyi Huylu")
+plt.legend()
+plt.show()
+```
+
+![image](./images/kkn1.png) 
+
+---
+
+
+
+
+
+
 # 
 
-![image](./images/lr3.png)
+![image](./images/kkn2.png)
 
 https://www.youtube.com/watch?v=C6Vw5UtlPJI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=53
 1542
