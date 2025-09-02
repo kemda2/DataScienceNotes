@@ -2355,7 +2355,13 @@ plt.show()
 
 ![image](./images/lr1.png) 
 
+Bu fonksiyonda en küçük kareler yöntemini kullanamayız. Maksimum olabilirlik tahmini (MLE) yapısı kullanılır.
 
+Lojistik regresyon 3 çeşittir;
+
+- İkili Lojistik Regresyon (Erkek, Kadın gibi)
+- Çoklu Lojistik Regresyon (Birden fazla Kategorik değişken)
+- Çoklu Lojistik Regresyon (İyi, Orta, Kötü gibi sıralı)
 
 
 
