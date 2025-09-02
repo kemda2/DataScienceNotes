@@ -1860,5 +1860,5 @@ R2 0.96'dan 0.97'ye çıktı. MSE 1333'den 791'e düştü.
 
 ![image](./images/kar3.png)
 
-https://www.youtube.com/watch?v=2oMvWmSqmbA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=41
+https://www.youtube.com/watch?v=NDUwSldc8Co&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=42
 0
