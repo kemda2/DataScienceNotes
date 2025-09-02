@@ -1999,9 +1999,23 @@ plt.show()
 
 ![image](./images/rd1.png) 
 
+```Python
+plt.scatter(X,y,color="red")
+plt.plot(X,dttahmin, color="blue")
+plt.show()
+```
 
+![image](./images/rd2.png)
 
+Karar ağacı görüldüğü gibi yapıyı ezberlemiştir. Random forest değerlerine bakalım;
 
+```Python
+plt.scatter(X,y,color="red")
+plt.plot(X,rftahmin, color="blue")
+plt.show()
+```
+
+![image](./images/rd3.png)
 
 
 
@@ -2016,7 +2030,7 @@ plt.show()
 
 # 
 
-![image](./images/rd2.png)
+![image](./images/rd4.png)
 
 https://www.youtube.com/watch?v=NDUwSldc8Co&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=42
 0
