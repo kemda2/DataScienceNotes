@@ -2326,5 +2326,5 @@ print(df)
 
 ![image](./images/rd4.png)
 
-https://www.youtube.com/watch?v=NDUwSldc8Co&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=42
-0
+https://www.youtube.com/watch?v=19sN-CJV2_o&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=49
+353
