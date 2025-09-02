@@ -2316,7 +2316,31 @@ print(df)
 # 7  {'max_depth': 15, 'min_samples_split': 2, 'n_e... 
 ```
 
-# Sınıflandırma Algoritmaları
+# Lojistik Regresyon
+
+```Python
+import pandas as pd
+import numpy as np
+
+sig = pd.DataFrame({"y":range(-10, 11)})
+
+# DataFrame oluşturuluyor
+sig = pd.DataFrame({"y": range(-10, 11)})
+
+# Sigmoid fonksiyonu
+sig['Fonk'] = 1 / (1 + np.exp(-sig['y']))
+
+import matplotlib.pyplot as plt
+
+plt.scatter(sig['y'], sig['Fonk'])
+plt.xlabel('y')  # x eksenine label ekliyoruz
+plt.ylabel('Fonk')  # y eksenine label ekliyoruz
+plt.title('Sigmoid Fonksiyonu Grafiği')  # Başlık ekliyoruz
+plt.show()
+```
+
+![image](./images/lr1.png) 
+
 
 
 
@@ -2324,7 +2348,7 @@ print(df)
 
 # 
 
-![image](./images/rd4.png)
+![image](./images/lr2.png)
 
 https://www.youtube.com/watch?v=19sN-CJV2_o&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=49
 353
