@@ -2459,6 +2459,13 @@ print(tahmin)
 
 # [0 1 1 0 0 1 1 1 0 0 0 1 0 1 0 1 0 0 0 1 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 1 0 0 1 1 0 0 0 1 1 0 0 1 1 0 1 0 0 0 0 0 0 1 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1 0 1 1 0 1 1 0 0 0 1 0 0 1 0 1 1]
 
+from sklearn.metrics import confusion_matrix
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[70  1]
+#  [ 2 41]]
+
 
 ```
 
