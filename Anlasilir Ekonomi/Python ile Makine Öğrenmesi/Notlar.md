@@ -2573,8 +2573,21 @@ model.fit(X_train, y_train)
 tahmin = model.predict(X_test)
 print(tahmin) # [1 0 2 1 1 0 1 2 1 1 2 0 0 0 0 1 2 1 1 2 0 2 0 2 2 2 2 2 0 0]
 
+from sklearn.metrics import confusion_matrix, accuracy_score
 
+cm = confusion_matrix(y_test, tahmin)
+acs = accuracy_score(y_test, tahmin)
+
+print(cm)
+# [[10  0  0]
+#  [ 0  9  0]
+#  [ 0  0 11]]
+
+print(acs)
+# 1.0
 ```
+
+Başarı %100 çıktı. Şüphelenmeliyiz.
 
 
 # 
