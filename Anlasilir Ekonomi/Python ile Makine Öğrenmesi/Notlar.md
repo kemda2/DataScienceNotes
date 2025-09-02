@@ -1839,9 +1839,22 @@ r2=mt.r2_score(y_test, tahmin)
 mse=mt.mean_squared_error(y_test, tahmin)
 print("R2: {} MSE: {}".format(r2,mse)) # R2: 0.9781967895258501 MSE: 818.291825510698 R2nin arttığı görülüyor.
 
+from sklearn.model_selection import GridSearchCV
+
+parametreler={"min_samples_ split":range(2,50), "max_leaf_nodes":range(2, 50)}
+grid=GridSearchCV(estimator=model, param_grid=parametreler, cv=10)
+# {'max_leaf_nodes': 21, 'min_samples_split': 17}
+
+model=DecisionTreeRegressor(random_state=0,max_leaf_nodes=21,min_samples_split=17)
+model.fit(X_train.values.reshape(-1,1),y_train.values.reshape(-1,1))
+tahmin=model.predict(X_test.values.reshape(-1,1))
+
+r2=mt.r2_score(y_test, tahmin) 
+mse=mt.mean_squared_error(y_test, tahmin)
+print("R2: {} MSE: {}".format(r2,mse)) # R2: 0.9789043773351418 MSE: 791.7354924027405
 ```
 
-
+R2 0.96'dan 0.97'ye çıktı. MSE 1333'den 791'e düştü.
 
 # 
 
