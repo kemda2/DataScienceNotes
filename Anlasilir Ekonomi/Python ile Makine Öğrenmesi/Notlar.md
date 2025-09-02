@@ -2589,6 +2589,13 @@ print(acs)
 
 Başarı %100 çıktı. Şüphelenmeliyiz.
 
+```Python
+from sklearn.model_selection import cross_val_score
+
+cv = cross_val_score(model, X_test, y_test, cv=10)
+print(cv) # [1.         1.         1.         1.         1.         1.  0.66666667 1.         1.         0.66666667]
+
+```
 
 # 
 
