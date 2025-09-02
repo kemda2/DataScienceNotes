@@ -2086,8 +2086,8 @@ print(bggrid.best_params_)
 # {'n_estimators': 13}
 
 rfparametreler = {"max_depth": range(2, 20), "max_features": range(2, 20), "n_estimators": range(2, 20)}
-rfgrid = GridSearchCV(estimator=rfmodel, param_grid=rfparametreler, cv=10)
-rfgrid.fit(X_train, y_train)
+# rfgrid = GridSearchCV(estimator=rfmodel, param_grid=rfparametreler, cv=10)
+# rfgrid.fit(X_train, y_train)
 # print(rfgrid.best_params_) çok uzun sürüyor
 
 # %100 CPU kullanımı ve süreyi azaltmak için;
@@ -2096,18 +2096,26 @@ dtparametreler = {"min_samples_split": range(2, 20), "max_leaf_nodes": range(2, 
 dtgrid = GridSearchCV(estimator=dtmodel, param_grid=dtparametreler, cv=10, n_jobs=-1)
 dtgrid.fit(X_train, y_train)
 print(dtgrid.best_params_)
+# {'max_leaf_nodes': 19, 'min_samples_split': 6}
 
 bgparametreler = {"n_estimators": range(2, 20)}
 bggrid = GridSearchCV(estimator=bgmodel, param_grid=bgparametreler, cv=10, n_jobs=-1)
 bggrid.fit(X_train, y_train)
 print(bggrid.best_params_)
+# {'n_estimators': 13}
 
 rfparametreler = {"max_depth": range(2, 20), "max_features": range(2, 20), "n_estimators": range(2, 20)}
 rfgrid = GridSearchCV(estimator=rfmodel, param_grid=rfparametreler, cv=10, n_jobs=-1)
 rfgrid.fit(X_train, y_train)
 print(rfgrid.best_params_)
+# {'max_depth': 13, 'max_features': 2, 'n_estimators': 19}
+
+# Karar Ağacı Modeli R2: 0.93453209257754829 RMSE: 1.4627849453010757
+# Bag Modeli R2: 0.9562521167856068 RMSE: 1.1957456637210488
+# Random Forest Modeli R2: 0.9639233775870784 RMSE: 1.085858481874723
 ```
 
+Karar ağacının ve Bag modelinin R2 değeri düşmüş. Demek ki tanımlarken kurduğumuz Range fonksiyonu daha geniş olmalı. 
 
 
 
