@@ -2832,6 +2832,49 @@ Ders Notları;
 https://web.cs.hacettepe.edu.tr/~pinar/teaching.html
 https://web.cs.hacettepe.edu.tr/~pinar/courses/BBS654/index.html
 
+🔷 **Temel Bayes Teoremi**
+
+Temel haliyle şu şekilde tanımlanır:
+
+$$
+P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}
+$$
+
+* **P(A|B)**: B gözlemi verildiğinde A olayının olasılığı (posterior)
+* **P(B|A)**: A olayı gerçekleştiğinde B’nin olasılığı (likelihood)
+* **P(A)**: A olayının ön olasılığı (prior)
+* **P(B)**: B olayının toplam olasılığı (evidence)
+
+---
+
+🔷 **Bayes Sınıflandırıcıları (Bayesian Classifiers)**
+
+Bayes Teoremi, özellikle **makine öğrenmesinde** çok kullanılır. Bu kullanım türleri:
+
+- **Naive Bayes Sınıflandırıcı**
+
+    * Özelliklerin birbirinden bağımsız olduğu varsayılır.
+    * Hızlı ve basit bir sınıflandırıcıdır.
+    * Metin sınıflandırma (spam filtresi gibi) alanında yaygındır.
+
+- **Gaussian Naive Bayes**
+
+    * Sürekli değişkenler için kullanılır.
+    * Verilerin **normal dağıldığı** varsayılır.
+
+- **Multinomial Naive Bayes**
+
+    * Genellikle kelime sayımlarına dayalı veriyle çalışır (metin madenciliği).
+    * Özellikle belge sınıflandırmada yaygındır.
+
+- **Bernoulli Naive Bayes**
+
+    * Özellikler ikili (0 veya 1) olduğunda kullanılır.
+    * Genellikle "kelime var mı, yok mu" gibi durumlar için.
+
+
+
+
 
 
 
