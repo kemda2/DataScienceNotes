@@ -2884,5 +2884,4 @@ Bayes Teoremi, özellikle **makine öğrenmesinde** çok kullanılır. Bu kullan
 
 ![image](./images/bys.png)
 
-https://www.youtube.com/watch?v=gb8VNE-zRNI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=62
-2
+https://www.youtube.com/watch?v=L4u-zQ2E41w&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=63
