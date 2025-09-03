@@ -2693,6 +2693,83 @@ plt.show()
 
 ---
 
+```Python
+import pandas as pd
+
+data=pd.read_csv("data.csv")
+veri=data.copy()
+
+veri = veri.drop(columns=["id", "Unnamed: 32"], axis=1)
+
+veri.diagnosis = [1 if i == "M" else 0 for i in veri.diagnosis]
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+from sklearn.neighbors import KNeighborsClassifier
+
+model = KNeighborsClassifier()
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[68  3]
+#  [ 3 40]]
+
+acs = accuracy_score(y_test, tahmin)
+print(acs) # 0.9473684210526315
+
+import matplotlib.pyplot as plt
+
+basari = []
+
+for k in range(1, 20):
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, y_train)
+    tahmin2 = knn.predict(X_test)
+    basari.append(accuracy_score(y_test, tahmin2))
+
+print(max(basari)) # 0.9649122807017544
+
+plt.plot(range(1, 20), basari)
+plt.xlabel("K")
+plt.ylabel("Başarı")
+plt.show()
+```
+
+![image](./images/kkn2.png)
+
+9 değerinin en yüksek başarıyı verdiği görülür.
+
+```Python
+knn = KNeighborsClassifier(n_neighbors=9)
+knn.fit(X_train, y_train)
+tahmin2 = knn.predict(X_test)
+print(accuracy_score(y_test, tahmin2)) # 0.9649122807017544
+```
+
+Görüldüğü gibi en yüksek başarı puanına ulaşıldığı görülür.
+
+# SVM (Support Vector Classifier/Machine)
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2700,6 +2777,6 @@ plt.show()
 
 # 
 
-![image](./images/kkn2.png)
+![image](./images/kkn3.png)
 
 https://www.youtube.com/watch?v=MGvE4A5gx1U&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=56
