@@ -2827,7 +2827,10 @@ Sonuç değişmedi.
 
 # Bayes Teoremi
 
+Ders Notları;
 
+https://web.cs.hacettepe.edu.tr/~pinar/teaching.html
+https://web.cs.hacettepe.edu.tr/~pinar/courses/BBS654/index.html
 
 
 
@@ -2838,4 +2841,5 @@ Sonuç değişmedi.
 
 ![image](./images/bys.png)
 
-https://www.youtube.com/watch?v=3n0HANdtWMQ&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=61
+https://www.youtube.com/watch?v=gb8VNE-zRNI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=62
+2
