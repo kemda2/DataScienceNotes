@@ -2872,6 +2872,7 @@ Bayes Teoremi, özellikle **makine öğrenmesinde** çok kullanılır. Bu kullan
     * Özellikler ikili (0 veya 1) olduğunda kullanılır.
     * Genellikle "kelime var mı, yok mu" gibi durumlar için.
 
+## Örnekler
 
 
 
