@@ -3120,6 +3120,69 @@ print(cm)
 
 acs = accuracy_score(y_test, tahmin)
 print(acs) # 0.9787234042553191
+
+import numpy as np
+
+for i in np.arange(0.0, 1.1, 0.1):
+    model = MultinomialNB(alpha=i)
+    model.fit(X_train, y_train)
+    tahmin = model.predict(X_test)
+    skor = accuracy_score(y_test, tahmin)
+    print("Alfa {} değeri için Skor: {}".format(round(i, 1), round(skor * 100, 2)))
+
+# Alfa 0.0 değeri için Skor: 85.98
+# Alfa 0.1 değeri için Skor: 98.07
+# Alfa 0.2 değeri için Skor: 97.97
+# Alfa 0.3 değeri için Skor: 97.97
+# Alfa 0.4 değeri için Skor: 97.87
+# Alfa 0.5 değeri için Skor: 97.87
+# Alfa 0.6 değeri için Skor: 97.87
+# Alfa 0.7 değeri için Skor: 97.78
+# Alfa 0.8 değeri için Skor: 97.87
+# Alfa 0.9 değeri için Skor: 97.87
+# Alfa 1.0 değeri için Skor: 97.87
+
+import numpy as np
+
+for i in np.arange(0.0, 0.2, 0.01):
+    model = MultinomialNB(alpha=i)
+    model.fit(X_train, y_train)
+    tahmin = model.predict(X_test)
+    skor = accuracy_score(y_test, tahmin)
+    print("Alfa {} değeri için Skor: {}".format(i, skor * 100))
+
+# Alfa 0.0 değeri için Skor: 85.97678916827853
+# Alfa 0.01 değeri için Skor: 97.48549323017409
+# Alfa 0.02 değeri için Skor: 97.678916827853
+# Alfa 0.03 değeri için Skor: 97.87234042553192
+# Alfa 0.04 değeri için Skor: 97.87234042553192
+# Alfa 0.05 değeri için Skor: 98.06576402321083
+# Alfa 0.06 değeri için Skor: 98.16247582205028
+# Alfa 0.07 değeri için Skor: 98.16247582205028
+# Alfa 0.08 değeri için Skor: 98.16247582205028
+# Alfa 0.09 değeri için Skor: 98.16247582205028
+# Alfa 0.1 değeri için Skor: 98.06576402321083
+# Alfa 0.11 değeri için Skor: 98.06576402321083
+# Alfa 0.12 değeri için Skor: 98.06576402321083
+# Alfa 0.13 değeri için Skor: 98.06576402321083
+# Alfa 0.14 değeri için Skor: 98.06576402321083
+# Alfa 0.15 değeri için Skor: 97.96905222437138
+# Alfa 0.16 değeri için Skor: 98.06576402321083
+# Alfa 0.17 değeri için Skor: 98.06576402321083
+# Alfa 0.18 değeri için Skor: 98.06576402321083
+# Alfa 0.19 değeri için Skor: 97.96905222437138
+
+model = MultinomialNB(alpha=0.06)
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[875  14]
+#  [  5 140]]
+
+acs = accuracy_score(y_test, tahmin)
+print(acs) # 0.9816247582205029
 ```
 
 
