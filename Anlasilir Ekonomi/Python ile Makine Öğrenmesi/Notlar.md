@@ -3240,11 +3240,20 @@ print(acs) # 0.9210526315789473
 
 ![image](./images/krr1.png) 
 
+```Python
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
 
+plt.figure(figsize=(40, 20))
+plot_tree(model, filled=True, fontsize=15)
+plt.show()
+```
+
+![image](./images/krr2.png)
 
 
 # 
 
-![image](./images/krr2.png)
+![image](./images/krr3.png)
 
 https://www.youtube.com/watch?v=NCwGREA2UtI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=69
