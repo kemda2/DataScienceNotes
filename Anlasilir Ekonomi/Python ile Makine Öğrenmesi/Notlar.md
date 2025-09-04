@@ -3028,7 +3028,70 @@ def harfler(cumle):
 print(veri["Sms"][0]) # Go until jurong point, crazy.. Available only in bugis n great world la e buffet... Cine there got amore wat...
 print(harfler(veri["Sms"][0])) # Go until jurong point crazy Available only in bugis n great world la e buffet Cine there got amore wat
 
+import nltk
+nltk.download("stopwords")
+from nltk.corpus import stopwords
 
+durdurma = stopwords.words("english")
+print(durdurma)
+# ['a', 'about', 'above', 'after', 'again', 'against', 'ain', 'all', 'am', 'an', 'and', 'any', 'are', 'aren', "aren't", 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', 'can', 'couldn', "couldn't", 'd', 'did', 'didn', "didn't", 'do', 'does', 'doesn', "doesn't", 'doing', 'don', "don't", 'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', 'hadn', "hadn't", 'has', 'hasn', "hasn't", 'have', 'haven', "haven't", 'having', 'he', "he'd", "he'll", 'her', 'here', 'hers', 'herself', "he's", 'him', 'himself', 'his', 'how', 'i', "i'd", 'if', "i'll", "i'm", 'in', 'into', 'is', 'isn', "isn't", 'it', "it'd", "it'll", "it's", 'its', 'itself', "i've", 'just', 'll', 'm', 'ma', 'me', 'mightn', "mightn't", 'more', 'most', 'mustn', "mustn't", 'my', 'myself', 'needn', "needn't", 'no', 'nor', 'not', 'now', 'o', 'of', 'off', 'on', 'once', 'only', 'or', 'other', 'our', 'ours', 'ourselves', 'out', 'over', 'own', 're', 's', 'same', 'shan', "shan't", 'she', "she'd", "she'll", "she's", 'should', 'shouldn', "shouldn't", "should've", 'so', 'some', 'such', 't', 'than', 'that', "that'll", 'the', 'their', 'theirs', 'them', 'themselves', 'then', 'there', 'these', 'they', "they'd", "they'll", "they're", "they've", 'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up', 've', 'very', 'was', 'wasn', "wasn't", 'we', "we'd", "we'll", "we're", 'were', 'weren', "weren't", "we've", 'what', 'when', 'where', 'which', 'while', 'who', 'whom', 'why', 'will', 'with', 'won', "won't", 'wouldn', "wouldn't", 'y', 'you', "you'd", "you'll", 'your', "you're", 'yours', 'yourself', 'yourselves', "you've"]
+
+spam = []
+ham = []
+tumcumleler = []
+
+for i in range(len(veri["Sms"].values)):
+    r1 = veri["Sms"].values[i]
+    r2 = veri["Etiket"].values[i]
+
+    temizcumle = []
+    cumleler = harfler(r1)
+    cumleler = cumleler.lower()
+
+    for kelimeler in cumleler.split():
+        temizcumle.append(kelimeler)
+
+    if r2 == 1:
+        spam.append(cumleler)
+    else:
+        ham.append(cumleler)
+        
+    tumcumleler.append(" ".join(temizcumle))
+
+veri["Yeni Sms"] = tumcumleler
+
+veri
+
+#  Etiket  Sms                                                 Karakter Sayısı  Yeni Sms                                          
+#  ------  --------------------------------------------------  ---------------  ------------------------------------------------- 
+#  0       Go until jurong point, crazy.. Available only ...   111              go until jurong point crazy available only in ... 
+#  1       Ok lar... Joking wif u oni...                       29               ok lar joking wif u oni                           
+#  2       Free entry in 2 a wkly comp to win FA Cup fina...   155              free entry in a wkly comp to win fa cup final ... 
+#  3       U dun say so early hor... U c already then say...   49               u dun say so early hor u c already then say       
+#  4       Nah I don't think he goes to usf, he lives aro...   61               nah i don t think he goes to usf he lives arou    
+#  ...     ...                                                 ...              ...                                               
+#  5567    This is the 2nd time we have tried 2 contact u...   161              this is the nd time we have tried contact u u     
+#  5568    Will l\_b going to esplanade fr home?               37               will b going to esplanade fr home                 
+#  5569    Pity, \* was in mood for that. So...any other s...  57               pity was in mood for that so any other suggest    
+#  5570    The guy did some bitching but I acted like i'd...   125              the guy did some bitching but i acted like i d    
+#  5571    Rofl. Its true to its name                          26               rofl its true to its name                         
+
+veri = veri.drop(columns=["Sms", "Karakter Sayısı"], axis=1)
+veri
+
+#  Etiket  Yeni Sms                                           
+#  ------  -------------------------------------------------- 
+#  0       go until jurong point crazy available only in ...  
+#  1       ok lar joking wif u oni                            
+#  2       free entry in a wkly comp to win fa cup final ...  
+#  3       u dun say so early hor u c already then say        
+#  4       nah i don t think he goes to usf he lives arou ... 
+#  ...     ...                                                
+#  5567    this is the nd time we have tried contact u u ...  
+#  5568    will b going to esplanade fr home                  
+#  5569    pity was in mood for that so any other suggest ... 
+#  5570    the guy did some bitching but i acted like i d ... 
+#  5571    rofl its true to its name                          
 
 
 ```
