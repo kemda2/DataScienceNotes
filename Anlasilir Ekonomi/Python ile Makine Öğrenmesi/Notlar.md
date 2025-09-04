@@ -3187,15 +3187,64 @@ print(acs) # 0.9816247582205029
 
 # Karar Ağacı
 
+Dataset: [Kanser dataset](https://www.kaggle.com/code/kanncaa1/logistic-regression-implementation/data)
+
+```Python
+import pandas as pd
+
+data=pd.read_csv("data.csv")
+veri=data.copy()
+
+veri = veri.drop(columns=["id", "Unnamed: 32"], axis=1)
+
+veri.diagnosis = [1 if kod == "M" else 0 for kod in veri.diagnosis]
+
+y = veri["diagnosis"]
+X = veri.drop(columns="diagnosis", axis=1)
 
 
 
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+
+
+from sklearn.tree import DecisionTreeClassifier
+
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+
+
+
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report, roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[69  3]
+#  [ 6 36]]
+
+acs = accuracy_score(y_test, tahmin)
+print(acs) # 0.9210526315789473
+```
+
+![image](./images/krr1.png) 
 
 
 
 
 # 
 
-![image](./images/sms2.png)
+![image](./images/krr2.png)
 
 https://www.youtube.com/watch?v=bi_NQVW_A_E&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=66
