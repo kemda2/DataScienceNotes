@@ -3289,7 +3289,101 @@ print(acs) # 0.9298245614035088
 
 Dataset kaggle diabetes Mehmet Aktürk
 
+```Python
+import pandas as pd
 
+data=pd.read_csv("diabetes.csv")
+veri=data.copy()
+veri
+
+#  Index  Pregnancies  Glucose  BloodPressure  SkinThickness  Insulin   BMI   DiabetesPedigreeFunction  Age  Outcome 
+# ----------------------------------------------------------------------------------------------------------------------
+#    0         6         148          72              35           0     33.6             0.627             50     1    
+#    1         1         85           66              29           0     26.6             0.351             31     0    
+#    2         8         183          64               0           0     23.3             0.672             32     1    
+#    3         1         89           66              23          94     28.1             0.167             21     0    
+#    4         0         137          40              35         168     43.1             2.288             33     1    
+#   ...       ...        ...         ...             ...         ...     ...              ...              ...    ...   
+#  763        10         101          76              48         180     32.9             0.171             63     0    
+#  764         2         122          70              27           0     36.8             0.340             27     0    
+#  765         5         121          72              23         112     26.2             0.245             30     0    
+#  766         1         126          60               0           0     30.1             0.349             47     1    
+#  767         1         93           70              31           0     30.4             0.315             23     0    
+
+veri.info()
+
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 768 entries, 0 to 767
+# Data columns (total 9 columns):
+#  #   Column                    Non-Null Count  Dtype  
+# ---  ------                    --------------  -----  
+#  0   Pregnancies               768 non-null    int64  
+#  1   Glucose                   768 non-null    int64  
+#  2   BloodPressure             768 non-null    int64  
+#  3   SkinThickness             768 non-null    int64  
+#  4   Insulin                   768 non-null    int64  
+#  5   BMI                       768 non-null    float64
+#  6   DiabetesPedigreeFunction  768 non-null    float64
+#  7   Age                       768 non-null    int64  
+#  8   Outcome                   768 non-null    int64  
+# dtypes: float64(2), int64(7)
+# memory usage: 54.1 KB
+
+y = veri["Outcome"]
+X = veri.drop(columns="Outcome", axis=1)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+def modeller(model):
+    model.fit(X_train, y_train)
+    tahmin = model.predict(X_test)
+    skor = accuracy_score(y_test, tahmin)
+    return round(skor * 100, 2)
+
+models = []
+
+models.append(("Log Regresyon", LogisticRegression(random_state=0)))
+models.append(("KNN", KNeighborsClassifier()))
+models.append(("SVC", SVC(random_state=0)))
+models.append(("Bayes", GaussianNB()))
+models.append(("Karar Ağacı", DecisionTreeClassifier(random_state=0)))
+
+modelad = []
+basari = []
+
+for i in models:
+    modelad.append(i[0])
+    basari.append(modeller(i[1]))
+
+a = list(zip(modelad, basari))
+sonuc = pd.DataFrame(a, columns=["Model", "Skor"])
+sonuc
+
+#  Model          Skor  
+#  -------------  ----- 
+#  Log Regresyon  97.37 
+#  KNN            94.74 
+#  SVC            98.25 
+#  Bayes          96.49 
+#  Karar Ağacı    93.86 
+
+
+```
 
 # 
 
