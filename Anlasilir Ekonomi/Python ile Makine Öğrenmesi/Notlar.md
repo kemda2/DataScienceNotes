@@ -2922,6 +2922,120 @@ acs = accuracy_score(y_test, tahmin)
 print(acs) # 0.9385964912280702
 ```
 
+# Sms Spam Detection
+
+```Python
+import pandas as pd
+
+data=pd.read_csv("spam.csv") # Hata aldık 
+
+import chardet
+
+with open("spam.csv", "rb") as x:
+    sonuc = chardet.detect(x.read())
+
+print(sonuc) # {'encoding': 'Windows-1252', 'confidence': 0.7269493857068697, 'language': ''}
+
+
+import pandas as pd
+
+data=pd.read_csv("spam.csv", encoding="Windows-1252") 
+veri=data.copy()
+
+
+veri = veri.drop(columns=["Unnamed: 2", "Unnamed: 3", "Unnamed: 4"], axis=1)
+veri = veri.rename(columns={"v1": "Etiket", "v2": "Sms"})
+
+print(veri.groupby("Etiket").count())
+
+#          Sms
+# Etiket      
+# ham     4825
+# spam     747
+
+print(veri.describe())
+
+#        Etiket                     Sms
+# count    5572                    5572
+# unique      2                    5169
+# top       ham  Sorry, I'll call later
+# freq     4825                      30
+
+
+veri=veri.drop_duplicates()
+print(veri.describe())
+
+#        Etiket                                                Sms
+# count    5169                                               5169
+# unique      2                                               5169
+# top       ham  Go until jurong point, crazy.. Available only ...
+# freq     4516                                                  1
+
+
+print(veri.isnull().sum())
+
+# Etiket    0
+# Sms       0
+# dtype: int64
+
+veri["Karakter Sayısı"]=veri["Sms"].apply(len) 
+
+import matplotlib.pyplot as plt
+
+veri.hist(column="Karakter Sayısı",by="Etiket",bins=50)
+plt.show()
+```
+
+![image](./images/sms1.png)
+
+```Python
+veri.Etiket = [1 if i=="spam" else 0 for i in veri.Etiket]
+veri
+
+#        Etiket  Sms                                                 Karakter Sayısı 
+#  0     0       Go until jurong point, crazy.. Available only ...   111             
+#  1     0       Ok lar... Joking wif u oni...                       29              
+#  2     1       Free entry in 2 a wkly comp to win FA Cup fina...   155             
+#  3     0       U dun say so early hor... U c already then say...   49              
+#  4     0       Nah I don't think he goes to usf, he lives aro...   61              
+#  ...   ...     ...                                                 ...             
+#  5567  1       This is the 2nd time we have tried 2 contact u...   161             
+#  5568  0       Will l\_b going to esplanade fr home?               37              
+#  5569  0       Pity, \* was in mood for that. So...any other s...  57              
+#  5570  0       The guy did some bitching but I acted like i'd...   125             
+#  5571  0       Rofl. Its true to its name                          26              
+
+import re
+
+mesaj=re.sub("[^a-zA-Z]", " ", veri["Sms"][0]) 
+print(veri["Sms"][0]) # Go until jurong point, crazy.. Available only in bugis n great world la e buffet... Cine there got amore wat...
+print(mesaj) # Go until jurong point  crazy   Available only in bugis n great world la e buffet    Cine there got amore wat   
+
+def harfler(cumle):
+    yer=re.compile("[^a-zA-Z]")
+    return re.sub(yer, " ", cumle)
+
+print(harfler("tuyRTF11")) # tuyRTF  
+
+print(veri["Sms"][0]) # Go until jurong point, crazy.. Available only in bugis n great world la e buffet... Cine there got amore wat...
+print(harfler(veri["Sms"][0])) # Go until jurong point  crazy   Available only in bugis n great world la e buffet    Cine there got amore wat   
+
+def harfler(cumle):
+    yer = re.compile("[^a-zA-Z]")
+    temiz = re.sub(yer, " ", cumle)         # Harf olmayanları boşluk yap
+    return re.sub(r"\s+", " ", temiz).strip()
+
+print(veri["Sms"][0]) # Go until jurong point, crazy.. Available only in bugis n great world la e buffet... Cine there got amore wat...
+print(harfler(veri["Sms"][0])) # Go until jurong point crazy Available only in bugis n great world la e buffet Cine there got amore wat
+
+
+
+
+```
+
+
+
+
 
 
 
@@ -2929,6 +3043,6 @@ print(acs) # 0.9385964912280702
 
 # 
 
-![image](./images/bys.png)
+![image](./images/sms2.png)
 
 https://www.youtube.com/watch?v=k6s3Dsv_R3k&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=64
