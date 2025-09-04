@@ -3247,4 +3247,4 @@ print(acs) # 0.9210526315789473
 
 ![image](./images/krr2.png)
 
-https://www.youtube.com/watch?v=bi_NQVW_A_E&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=66
+https://www.youtube.com/watch?v=NCwGREA2UtI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=69
