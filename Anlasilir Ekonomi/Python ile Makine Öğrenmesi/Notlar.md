@@ -3185,6 +3185,7 @@ acs = accuracy_score(y_test, tahmin)
 print(acs) # 0.9816247582205029
 ```
 
+# Karar Ağacı
 
 
 
@@ -3197,4 +3198,4 @@ print(acs) # 0.9816247582205029
 
 ![image](./images/sms2.png)
 
-https://www.youtube.com/watch?v=k6s3Dsv_R3k&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=64
+https://www.youtube.com/watch?v=bi_NQVW_A_E&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=66
