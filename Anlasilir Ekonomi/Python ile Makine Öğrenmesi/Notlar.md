@@ -3093,7 +3093,33 @@ veri
 #  5570    the guy did some bitching but i acted like i d ... 
 #  5571    rofl its true to its name                          
 
+from sklearn.feature_extraction.text import CountVectorizer
 
+cv = CountVectorizer()
+x = cv.fit_transform(veri["Yeni Sms"]).toarray()
+
+y = veri["Etiket"]
+X = x
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.naive_bayes import MultinomialNB
+
+model = MultinomialNB()
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[874  15]
+#  [  7 138]]
+
+acs = accuracy_score(y_test, tahmin)
+print(acs) # 0.9787234042553191
 ```
 
 
