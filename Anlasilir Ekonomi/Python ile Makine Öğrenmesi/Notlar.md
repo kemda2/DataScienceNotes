@@ -3251,6 +3251,43 @@ plt.show()
 
 ![image](./images/krr2.png)
 
+```Python
+parametreler = {
+    "criterion": ["gini", "entropy", "log_loss"],            # Hedef fonksiyonu
+    "max_leaf_nodes": range(2, 10),                          # Maksimum yaprak sayısı
+    "max_depth": range(2, 10),                               # Maksimum derinlik
+    "min_samples_split": range(2, 10),                       # Dallanma için min örnek sayısı
+    "min_samples_leaf": range(2, 10)                         # Yaprakta kalması gereken min örnek sayısı
+}
+
+grid = GridSearchCV(model, param_grid=parametreler, cv=10, n_jobs=-1)
+
+grid.fit(X_train, y_train)
+print(grid.best_params_) # {'criterion': 'entropy', 'max_depth': 4, 'max_leaf_nodes': 8, 'min_samples_leaf': 6, 'min_samples_split': 2}
+
+
+
+model = DecisionTreeClassifier(random_state=0, criterion='entropy', max_depth=4, max_leaf_nodes=8, min_samples_leaf=6, min_samples_split=2)
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+
+
+
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report, roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[72  0]
+#  [ 8 34]]
+
+acs = accuracy_score(y_test, tahmin)
+print(acs) # 0.9298245614035088
+```
+
+---
+
+
 
 # 
 
