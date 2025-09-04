@@ -3287,6 +3287,8 @@ print(acs) # 0.9298245614035088
 
 ---
 
+Dataset kaggle diabetes Mehmet Aktürk
+
 
 
 # 
