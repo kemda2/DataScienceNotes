@@ -3389,4 +3389,4 @@ sonuc
 
 ![image](./images/krr3.png)
 
-https://www.youtube.com/watch?v=NCwGREA2UtI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=69
+https://www.youtube.com/watch?v=WDji_eA1Wvw&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=71
