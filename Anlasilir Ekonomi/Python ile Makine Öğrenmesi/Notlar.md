@@ -3385,6 +3385,21 @@ sonuc
 
 ```
 
+# Random Forest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 
 
 ![image](./images/krr3.png)
