@@ -2874,7 +2874,55 @@ Bayes Teoremi, özellikle **makine öğrenmesinde** çok kullanılır. Bu kullan
 
 ## Örnekler
 
+```Python
+import pandas as pd
 
+data=pd.read_csv("data.csv")
+veri=data.copy()
+
+veri = veri.drop(columns=["id", "Unnamed: 32"], axis=1)
+
+veri.diagnosis = [1 if kod == "M" else 0 for kod in veri.diagnosis]
+
+y = veri["diagnosis"]
+X = veri.drop(columns="diagnosis", axis=1)
+
+
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+
+
+from sklearn.naive_bayes import GaussianNB, BernoulliNB, MultinomialNB
+
+nbg = GaussianNB()
+nbg.fit(X_train, y_train)
+tahmin = nbg.predict(X_test)
+
+
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[72  0]
+#  [ 7 35]]
+
+acs = accuracy_score(y_test, tahmin)
+print(acs) # 0.9385964912280702
+
+
+```
 
 
 
@@ -2885,4 +2933,4 @@ Bayes Teoremi, özellikle **makine öğrenmesinde** çok kullanılır. Bu kullan
 
 ![image](./images/bys.png)
 
-https://www.youtube.com/watch?v=L4u-zQ2E41w&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=63
+https://www.youtube.com/watch?v=k6s3Dsv_R3k&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=64
