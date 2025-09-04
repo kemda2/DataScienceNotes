@@ -2920,8 +2920,6 @@ print(cm)
 
 acs = accuracy_score(y_test, tahmin)
 print(acs) # 0.9385964912280702
-
-
 ```
 
 
