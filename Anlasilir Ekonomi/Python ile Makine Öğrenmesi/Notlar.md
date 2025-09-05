@@ -3387,7 +3387,68 @@ sonuc
 
 # Random Forest
 
+```Python
+import pandas as pd
 
+data=pd.read_csv("diabetes.csv")
+veri=data.copy()
+
+veri.info()
+
+y = veri["Outcome"]
+X = veri.drop(columns="Outcome", axis=1)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+from sklearn.ensemble import RandomForestClassifier
+
+model=RandomForestClassifier(random_state=0)
+model.fit(X_train, y_train)
+tahmin=model.predict(X_test)
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[81 18]
+#  [18 37]]
+
+accuracy_score(y_test, tahmin) # 0.7662337662337663
+
+
+
+from sklearn.model_selection import GridSearchCV
+
+parametreler = {
+    "criterion": ["gini", "entropy"],
+    "max_depth": [2, 5, 10],
+    "min_samples_split": [2, 5, 10],
+    "n_estimators": [50, 200, 500, 1000]
+}
+
+grid = GridSearchCV(model, param_grid=parametreler, cv=10, n_jobs=-1)
+grid.fit(X_train,y_train)
+grid.best_params_ {'criterion': 'entropy', 'max_depth': 10, 'min_samples_split': 5, 'n_estimators': 1000}
+
+model=RandomForestClassifier(random_state=0, criterion='entropy', max_depth=10, min_samples_split=5, n_estimators=1000)
+model.fit(X_train, y_train)
+tahmin=model.predict(X_test)
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[80 19]
+#  [19 36]]
+
+accuracy_score(y_test, tahmin) # 0.7532467532467533
+```
 
 
 
