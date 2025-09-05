@@ -3602,6 +3602,9 @@ accuracy_score(y_test, tahmin) # 0.7532467532467533
 
 Doğruluk skoru 70'ten 75'e çıkarılmıştır. 
 
+# Accuracy Paradox
+
+
 
 
 
