@@ -3608,7 +3608,177 @@ Eğer TP veya TN üzerinde tahminler yoğunlaşıyorsa bu istenmeyen şekilde bi
 
 # Müşteri Kayıp Analiz Modeli
 
+Dataset: Telco Customer Churn Kaggle
 
+```Python
+import pandas as pd
+
+data=pd.read_csv("telco.csv")
+veri=data.copy()
+
+veri = veri.drop(columns="customerID", axis=1)
+
+veri = veri.rename({
+    "gender": "Cinsiyet",
+    "SeniorCitizen": "65 Yaş Üstü",
+    "Partner": "Medeni Durum",
+    "Dependents": "Bakma Sorumluluğu",
+    "tenure": "Müşteri Olma Süresi (Ay)",
+    "PhoneService": "Ev Telefonu Aboneliği",
+    "MultipleLines": "Birden Fazla Abonelik Durumu",
+    "InternetService": "İnternet Aboneliği",
+    "OnlineSecurity": "Güvenlik Hizmeti Aboneliği",
+    "OnlineBackup": "Yedekleme Hizmeti Aboneliği",
+    "DeviceProtection": "Ekipman Güvenlik Aboneliği",
+    "TechSupport": "Teknik Destek Aboneliği",
+    "StreamingTV": "IP Tv Aboneliği",
+    "StreamingMovies": "Film Aboneliği",
+    "Contract": "Sözleşme Süresi",
+    "PaperlessBilling": "Online Fatura (Kağıtsız)",
+    "PaymentMethod": "Ödeme Şekli",
+    "MonthlyCharges": "Aylık Ücret",
+    "TotalCharges": "Toplam Ücret",
+    "Churn": "Kayıp Durumu"
+},axis=1)
+
+for i in veri.columns:
+    print(i)
+    print(veri[i].dtype)
+    print(veri[i].unique())
+    print()
+
+# Cinsiyet
+# object
+# ['Female' 'Male']
+
+# 65 Yaş Üstü
+# int64
+# [0 1]
+
+# Medeni Durum
+# object
+# ['Yes' 'No']
+
+# Bakma Sorumluluğu
+# object
+# ['No' 'Yes']
+
+# Müşteri Olma Süresi (Ay)
+# int64
+# [ 1 34  2 45  8 22 10 28 62 13 16 58 49 25 69 52 71 21 12 30 47 72 17 27
+#   5 46 11 70 63 43 15 60 18 66  9  3 31 50 64 56  7 42 35 48 29 65 38 68
+#  32 55 37 36 41  6  4 33 67 23 57 61 14 20 53 40 59 24 44 19 54 51 26  0
+#  39]
+
+# Ev Telefonu Aboneliği
+# object
+# ['No' 'Yes']
+
+# Birden Fazla Abonelik Durumu
+# object
+# ['No phone service' 'No' 'Yes']
+
+# İnternet Aboneliği
+# object
+# ['DSL' 'Fiber optic' 'No']
+
+# Güvenlik Hizmeti Aboneliği
+# object
+# ['No' 'Yes' 'No internet service']
+
+# Yedekleme Hizmeti Aboneliği
+# object
+# ['Yes' 'No' 'No internet service']
+
+# Ekipman Güvenlik Aboneliği
+# object
+# ['No' 'Yes' 'No internet service']
+
+# Teknik Destek Aboneliği
+# object
+# ['No' 'Yes' 'No internet service']
+
+# IP Tv Aboneliği
+# object
+# ['No' 'Yes' 'No internet service']
+
+# Film Aboneliği
+# object
+# ['No' 'Yes' 'No internet service']
+
+# Sözleşme Süresi
+# object
+# ['Month-to-month' 'One year' 'Two year']
+
+# Online Fatura (Kağıtsız)
+# object
+# ['Yes' 'No']
+
+# Ödeme Şekli
+# object
+# ['Electronic check' 'Mailed check' 'Bank transfer (automatic)'
+#  'Credit card (automatic)']
+
+# Aylık Ücret
+# float64
+# [29.85 56.95 53.85 ... 63.1  44.2  78.7 ]
+
+# Toplam Ücret
+# object
+# ['29.85' '1889.5' '108.15' ... '346.45' '306.6' '6844.5']
+
+# Kayıp Durumu
+# object
+# ['No' 'Yes']
+
+veri["Cinsiyet"] = ["Erkek" if kod == "Male" else "Kadın" for kod in veri["Cinsiyet"]]
+veri["65 Yaş Üstü"] = ["Evet" if kod == 1 else "Hayır" for kod in veri["65 Yaş Üstü"]]
+veri["Medeni Durum"] = ["Evli" if kod == "Yes" else "Bekar" for kod in veri["Medeni Durum"]]
+veri["Bakma Sorumluluğu"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Bakma Sorumluluğu"]]
+veri["Ev Telefonu Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Ev Telefonu Aboneliği"]]
+veri["Birden Fazla Abonelik Durumu"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Birden Fazla Abonelik Durumu"]]
+veri["İnternet Aboneliği"] = ["Yok" if kod == "No" else "Var" for kod in veri["İnternet Aboneliği"]]
+veri["Güvenlik Hizmeti Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Güvenlik Hizmeti Aboneliği"]]
+veri["Yedekleme Hizmeti Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Yedekleme Hizmeti Aboneliği"]]
+veri["Ekipman Güvenlik Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Ekipman Güvenlik Aboneliği"]]
+veri["Teknik Destek Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Teknik Destek Aboneliği"]]
+veri["IP Tv Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["IP Tv Aboneliği"]]
+veri["Film Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Film Aboneliği"]]
+veri["Sözleşme Süresi"] = ["1 Yıllık" if kod == "One year" else "2 Yıllık" if kod == "Two year" else "1 Aylık" for kod in veri["Sözleşme Süresi"]]
+veri["Online Fatura (Kağıtsız)"] = ["Evet" if kod == "Yes" else "Hayır" for kod in veri["Online Fatura (Kağıtsız)"]]
+veri["Ödeme Şekli"] = ["Elektronik" if kod == "Electronic check" else "Mail" if kod == "Mailed check" else "Havale" if kod == "Bank transfer" else "Kredi Kartı" for kod in veri["Ödeme Şekli"]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+y = veri["Outcome"]
+X = veri.drop(columns="Outcome", axis=1)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+```
 
 
 
