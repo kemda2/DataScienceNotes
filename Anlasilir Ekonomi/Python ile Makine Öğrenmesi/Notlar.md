@@ -3789,4 +3789,6 @@ X_test=sc.transform(X_test)
 
 ![image](./images/lgb1.png)
 
-https://www.youtube.com/watch?v=WDji_eA1Wvw&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=71
+https://www.youtube.com/watch?v=my-hMGksh5M&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=78
+
+37
