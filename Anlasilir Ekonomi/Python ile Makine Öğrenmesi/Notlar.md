@@ -3520,14 +3520,35 @@ parametreler = {
 
 grid = GridSearchCV(modelxgb, param_grid=parametreler, cv=10, n_jobs=-1)
 grid.fit(X_train, y_train)
-print(grid.best_params_)
+print(grid.best_params_) # {'learning_rate': 0.7, 'max_depth': 7, 'n_estimators': 500, 'subsample': 0.7}
+
+modelxgb = XGBClassifier(learning_rate=0.7, max_depth=7, n_estimators=500, subsample=0.7)
+modelxgb.fit(X_train, y_train)
+tahminxgb = modelxgb.predict(X_test)
+
+cm = confusion_matrix(y_test, tahminxgb)
+print(cm)
+# [[71 28]
+#  [18 37]]
+
+accuracy_score(y_test, tahminxgb) # 0.7012987012987013
 ```
+
+# LightGBM 
+
+Satır sayısı 10000 ve üzeri olduğunda genellikle tercih edilir.
+
+
+
+
+
+
 
 
 
 
 # 
 
-![image](./images/xgb1.png)
+![image](./images/lgb1.png)
 
 https://www.youtube.com/watch?v=WDji_eA1Wvw&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=71
