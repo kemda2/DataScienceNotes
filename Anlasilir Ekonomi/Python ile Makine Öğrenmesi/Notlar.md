@@ -3452,9 +3452,16 @@ accuracy_score(y_test, tahmin) # 0.7532467532467533
 
 ![image](./images/rndfr1.png)
 
+```Python
+önem = pd.DataFrame({"Önem": model.feature_importances_}, index=X.columns)
+önem.sort_values(by="Önem", axis=0, ascending=True).plot(kind="barh", color="blue")
+plt.title("Değişken Önem Seviyeleri")
+plt.show()
+```
 
+![image](./images/rndfr2.png) 
 
-
+# XGBoost 
 
 
 
@@ -3463,6 +3470,6 @@ accuracy_score(y_test, tahmin) # 0.7532467532467533
 
 # 
 
-![image](./images/rndfr2.png)
+![image](./images/xgb1.png)
 
 https://www.youtube.com/watch?v=WDji_eA1Wvw&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=71
