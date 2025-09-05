@@ -3604,6 +3604,9 @@ Doğruluk skoru 70'ten 75'e çıkarılmıştır.
 
 # Accuracy Paradox
 
+Eğer TP veya TN üzerinde tahminler yoğunlaşıyorsa bu istenmeyen şekilde bizi yönlendirir.
+
+# 
 
 
 
