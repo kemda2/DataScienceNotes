@@ -3536,11 +3536,71 @@ accuracy_score(y_test, tahminxgb) # 0.7012987012987013
 
 # LightGBM 
 
-Satır sayısı 10000 ve üzeri olduğunda genellikle tercih edilir.
+Satır sayısı 10000 ve üzeri olduğunda genellikle tercih edilir. Veri seti az satırlıysa genelde performansı düştüğü için tercih edilmez.
 
+```Python
+from lightgbm import LGBMClassifier
+import pandas as pd
 
+data=pd.read_csv("diabetes.csv")
+veri=data.copy()
 
+y = veri["Outcome"]
+X = veri.drop(columns="Outcome", axis=1)
 
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+modellgbm = LGBMClassifier()
+modellgbm.fit(X_train, y_train)
+tahmin = modellgbm.predict(X_test)
+
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[72 27]
+#  [18 37]]
+
+accuracy_score(y_test, tahmin) # 0.7077922077922078
+
+parametreler = {
+    "learning_rate": [0.001, 0.01, 0.1],
+    "n_estimators": [200, 500, 1000],
+    "max_depth": [3, 5, 7],
+    "subsample": [0.6, 0.8, 1.0]
+}
+
+from sklearn.model_selection import GridSearchCV
+
+grid = GridSearchCV(modellgbm, param_grid=parametreler, cv=10, n_jobs=-1)
+grid.fit(X_train, y_train)
+print(grid.best_params_) # {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 1000, 'subsample': 0.6}
+
+modellgbm = LGBMClassifier(learning_rate=0.01, max_depth=3, n_estimators=1000, subsample=0.6)
+modellgbm.fit(X_train, y_train)
+tahmin = modellgbm.predict(X_test)
+
+modellgbm = LGBMClassifier(learning_rate=0.01, max_depth=3, n_estimators=1000, subsample=0.6)
+modellgbm.fit(X_train, y_train)
+tahmin = modellgbm.predict(X_test)
+
+cm = confusion_matrix(y_test, tahmin)
+print(cm)
+# [[79 20]
+#  [18 37]]
+
+accuracy_score(y_test, tahmin) # 0.7532467532467533
+```
+
+Doğruluk skoru 70'ten 75'e çıkarılmıştır. 
 
 
 
