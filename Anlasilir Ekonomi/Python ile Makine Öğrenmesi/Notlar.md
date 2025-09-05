@@ -3606,7 +3606,9 @@ Doğruluk skoru 70'ten 75'e çıkarılmıştır.
 
 Eğer TP veya TN üzerinde tahminler yoğunlaşıyorsa bu istenmeyen şekilde bizi yönlendirir.
 
-# 
+# Müşteri Kayıp Analiz Modeli
+
+
 
 
 
