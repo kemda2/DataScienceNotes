@@ -3731,43 +3731,269 @@ for i in veri.columns:
 # object
 # ['No' 'Yes']
 
-veri["Cinsiyet"] = ["Erkek" if kod == "Male" else "Kadın" for kod in veri["Cinsiyet"]]
-veri["65 Yaş Üstü"] = ["Evet" if kod == 1 else "Hayır" for kod in veri["65 Yaş Üstü"]]
-veri["Medeni Durum"] = ["Evli" if kod == "Yes" else "Bekar" for kod in veri["Medeni Durum"]]
-veri["Bakma Sorumluluğu"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Bakma Sorumluluğu"]]
-veri["Ev Telefonu Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Ev Telefonu Aboneliği"]]
-veri["Birden Fazla Abonelik Durumu"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Birden Fazla Abonelik Durumu"]]
-veri["İnternet Aboneliği"] = ["Yok" if kod == "No" else "Var" for kod in veri["İnternet Aboneliği"]]
-veri["Güvenlik Hizmeti Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Güvenlik Hizmeti Aboneliği"]]
-veri["Yedekleme Hizmeti Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Yedekleme Hizmeti Aboneliği"]]
-veri["Ekipman Güvenlik Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Ekipman Güvenlik Aboneliği"]]
-veri["Teknik Destek Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Teknik Destek Aboneliği"]]
-veri["IP Tv Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["IP Tv Aboneliği"]]
-veri["Film Aboneliği"] = ["Var" if kod == "Yes" else "Yok" for kod in veri["Film Aboneliği"]]
-veri["Sözleşme Süresi"] = ["1 Yıllık" if kod == "One year" else "2 Yıllık" if kod == "Two year" else "1 Aylık" for kod in veri["Sözleşme Süresi"]]
-veri["Online Fatura (Kağıtsız)"] = ["Evet" if kod == "Yes" else "Hayır" for kod in veri["Online Fatura (Kağıtsız)"]]
-veri["Ödeme Şekli"] = ["Elektronik" if kod == "Electronic check" else "Mail" if kod == "Mailed check" else "Havale" if kod == "Bank transfer" else "Kredi Kartı" for kod in veri["Ödeme Şekli"]]
+# Cinsiyet
+veri["Cinsiyet"] = veri["Cinsiyet"].map({"Male": "Erkek", "Female": "Kadın"})
+
+# 65 Yaş Üstü
+veri["65 Yaş Üstü"] = veri["65 Yaş Üstü"].map({1: "Evet", 0: "Hayır"})
+
+# Medeni Durum
+veri["Medeni Durum"] = veri["Medeni Durum"].map({"Yes": "Evli", "No": "Bekar"})
+
+# Bakma Sorumluluğu
+veri["Bakma Sorumluluğu"] = veri["Bakma Sorumluluğu"].map({"Yes": "Var", "No": "Yok"})
+
+# Ev Telefonu Aboneliği
+veri["Ev Telefonu Aboneliği"] = veri["Ev Telefonu Aboneliği"].map({"Yes": "Var", "No": "Yok"})
+
+# Birden Fazla Abonelik Durumu
+veri["Birden Fazla Abonelik Durumu"] = veri["Birden Fazla Abonelik Durumu"].map({"Yes": "Var", "No": "Yok", "No phone service": "Yok"})
+
+# İnternet Aboneliği
+veri["İnternet Aboneliği"] = veri["İnternet Aboneliği"].map({'DSL': "Var", 'Fiber optic': "Var",  "No": "Yok"})
+
+# Güvenlik Hizmeti Aboneliği
+veri["Güvenlik Hizmeti Aboneliği"] = veri["Güvenlik Hizmeti Aboneliği"].map({"Yes": "Var", "No internet service":"Yok", "No": "Yok"})
+
+# Yedekleme Hizmeti Aboneliği
+veri["Yedekleme Hizmeti Aboneliği"] = veri["Yedekleme Hizmeti Aboneliği"].map({"Yes": "Var", "No": "Yok", "No internet service": "Yok"})
+
+# Ekipman Güvenlik Aboneliği
+veri["Ekipman Güvenlik Aboneliği"] = veri["Ekipman Güvenlik Aboneliği"].map({"Yes": "Var", "No": "Yok", "No internet service": "Yok"})
+
+# Teknik Destek Aboneliği
+veri["Teknik Destek Aboneliği"] = veri["Teknik Destek Aboneliği"].map({"Yes": "Var", "No": "Yok", "No internet service": "Yok"})
+
+# IP Tv Aboneliği
+veri["IP Tv Aboneliği"] = veri["IP Tv Aboneliği"].map({"Yes": "Var", "No": "Yok", "No internet service": "Yok"})
+
+# Film Aboneliği
+veri["Film Aboneliği"] = veri["Film Aboneliği"].map({"Yes": "Var", "No": "Yok", "No internet service": "Yok"})
+
+# Sözleşme Süresi
+veri["Sözleşme Süresi"] = veri["Sözleşme Süresi"].map({
+    "One year": "1 Yıllık",
+    "Two year": "2 Yıllık",
+    "Month-to-month": "1 Aylık"
+})
+
+# Online Fatura (Kağıtsız)
+veri["Online Fatura (Kağıtsız)"] = veri["Online Fatura (Kağıtsız)"].map({"Yes": "Evet", "No": "Hayır"})
+
+# Ödeme Şekli
+veri["Ödeme Şekli"] = veri["Ödeme Şekli"].map({
+    "Electronic check": "Elektronik",
+    "Mailed check": "Mail",
+    "Bank transfer (automatic)": "Havale",
+    "Credit card (automatic)": "Kredi Kartı"
+})
+
+# Kayıp Durumu
+veri["Kayıp Durumu"] = veri["Kayıp Durumu"].map({"Yes": "Evet", "No": "Hayır"})
 
 
 
+for i in veri.columns:
+    print(i)
+    print(veri[i].dtype)
+    print(veri[i].unique())
+    print()
+
+# Cinsiyet
+# object
+# ['Kadın' 'Erkek']
+
+# 65 Yaş Üstü
+# object
+# ['Hayır' 'Evet']
+
+# Medeni Durum
+# object
+# ['Evli' 'Bekar']
+
+# Bakma Sorumluluğu
+# object
+# ['Yok' 'Var']
+
+# Müşteri Olma Süresi (Ay)
+# int64
+# [ 1 34  2 45  8 22 10 28 62 13 16 58 49 25 69 52 71 21 12 30 47 72 17 27
+#   5 46 11 70 63 43 15 60 18 66  9  3 31 50 64 56  7 42 35 48 29 65 38 68
+#  32 55 37 36 41  6  4 33 67 23 57 61 14 20 53 40 59 24 44 19 54 51 26  0
+#  39]
+
+# Ev Telefonu Aboneliği
+# object
+# ['Yok' 'Var']
+
+# Birden Fazla Abonelik Durumu
+# object
+# ['Yok' 'Var']
+
+# İnternet Aboneliği
+# object
+# ['Var' 'Yok']
+
+# Güvenlik Hizmeti Aboneliği
+# object
+# ['Yok' 'Var']
+
+# Yedekleme Hizmeti Aboneliği
+# object
+# ['Var' 'Yok']
+
+# Ekipman Güvenlik Aboneliği
+# object
+# ['Yok' 'Var']
+
+# Teknik Destek Aboneliği
+# object
+# ['Yok' 'Var']
+
+# IP Tv Aboneliği
+# object
+# ['Yok' 'Var']
+
+# Film Aboneliği
+# object
+# ['Yok' 'Var']
+
+# Sözleşme Süresi
+# object
+# ['1 Aylık' '1 Yıllık' '2 Yıllık']
+
+# Online Fatura (Kağıtsız)
+# object
+# ['Evet' 'Hayır']
+
+# Ödeme Şekli
+# object
+# ['Elektronik' 'Mail' 'Havale' 'Kredi Kartı']
+
+# Aylık Ücret
+# float64
+# [29.85 56.95 53.85 ... 63.1  44.2  78.7 ]
+
+# Toplam Ücret
+# object
+# ['29.85' '1889.5' '108.15' ... '346.45' '306.6' '6844.5']
+
+# Kayıp Durumu
+# object
+# ['Hayır' 'Evet']
+
+veri["Toplam Ücret"] = pd.to_numeric(veri["Toplam Ücret"], errors="coerce")
+
+veri.info()
+
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 7043 entries, 0 to 7042
+# Data columns (total 20 columns):
+#  #   Column                        Non-Null Count  Dtype  
+# ---  ------                        --------------  -----  
+#  0   Cinsiyet                      7043 non-null   object 
+#  1   65 Yaş Üstü                   7043 non-null   object 
+#  2   Medeni Durum                  7043 non-null   object 
+#  3   Bakma Sorumluluğu             7043 non-null   object 
+#  4   Müşteri Olma Süresi (Ay)      7043 non-null   int64  
+#  5   Ev Telefonu Aboneliği         7043 non-null   object 
+#  6   Birden Fazla Abonelik Durumu  7043 non-null   object 
+#  7   İnternet Aboneliği            7043 non-null   object 
+#  8   Güvenlik Hizmeti Aboneliği    7043 non-null   object 
+#  9   Yedekleme Hizmeti Aboneliği   7043 non-null   object 
+#  10  Ekipman Güvenlik Aboneliği    7043 non-null   object 
+#  11  Teknik Destek Aboneliği       7043 non-null   object 
+#  12  IP Tv Aboneliği               7043 non-null   object 
+#  13  Film Aboneliği                7043 non-null   object 
+#  14  Sözleşme Süresi               7043 non-null   object 
+#  15  Online Fatura (Kağıtsız)      7043 non-null   object 
+#  16  Ödeme Şekli                   7043 non-null   object 
+#  17  Aylık Ücret                   7043 non-null   float64
+#  18  Toplam Ücret                  7032 non-null   float64
+#  19  Kayıp Durumu                  7043 non-null   object 
+# dtypes: float64(2), int64(1), object(17)
+# memory usage: 1.1+ MB
+
+veri.isnull().sum()
+
+# Cinsiyet                         0
+# 65 Yaş Üstü                      0
+# Medeni Durum                     0
+# Bakma Sorumluluğu                0
+# Müşteri Olma Süresi (Ay)         0
+# Ev Telefonu Aboneliği            0
+# Birden Fazla Abonelik Durumu     0
+# İnternet Aboneliği               0
+# Güvenlik Hizmeti Aboneliği       0
+# Yedekleme Hizmeti Aboneliği      0
+# Ekipman Güvenlik Aboneliği       0
+# Teknik Destek Aboneliği          0
+# IP Tv Aboneliği                  0
+# Film Aboneliği                   0
+# Sözleşme Süresi                  0
+# Online Fatura (Kağıtsız)         0
+# Ödeme Şekli                      0
+# Aylık Ücret                      0
+# Toplam Ücret                    11
+# Kayıp Durumu                     0
+# dtype: int64
+
+# Toplam ücretin aylık ücret ile müşteri olma süresi çarpımıyla doldurabilir miyiz diye düşünüyoruz. 
+
+(veri["Toplam Ücret"] - veri["Müşteri Olma Süresi (Ay)"]*veri["Aylık Ücret"]).max() # 373.2500000000009
+(veri["Toplam Ücret"] - veri["Müşteri Olma Süresi (Ay)"]*veri["Aylık Ücret"]).min() # -370.84999999999945
+
+# Müşteri olma süresi 0 olursa hesabımızı yanlış etkileyebilir.
+
+veri[veri["Müşteri Olma Süresi (Ay)"] == 0]
+```
+
+|      | Cinsiyet | 65 Yaş Üstü | Medeni Durum | Bakma Sorumluluğu | Müşteri Olma Süresi (Ay) | Ev Telefonu Aboneliği | Birden Fazla Abonelik Durumu | İnternet Aboneliği | Güvenlik Hizmeti Aboneliği | Yedekleme Hizmeti Aboneliği | Ekipman Güvenlik Aboneliği | Teknik Destek Aboneliği | IP Tv Aboneliği | Film Aboneliği | Sözleşme Süresi | Online Fatura (Kağıtsız) | Ödeme Şekli | Aylık Ücret | Toplam Ücret | Kayıp Durumu |
+| ---- | -------- | ----------- | ------------ | ----------------- | ------------------------ | --------------------- | ---------------------------- | ------------------ | -------------------------- | --------------------------- | -------------------------- | ----------------------- | --------------- | -------------- | --------------- | ------------------------ | ----------- | ----------- | ------------ | ------------ |
+| 488  | Kadın    | Hayır       | Evli         | Var               | 0                        | Yok                   | Yok                          | Var                | Yok                        | Yok                         | Yok                        | Var                     | Var             | Yok            | 2 Yıllık        | Evet                     | Havale      | 52.55       | NaN          | Hayır        |
+| 753  | Erkek    | Hayır       | Bekar        | Var               | 0                        | Var                   | Yok                          | Yok                | Yok                        | Yok                         | Yok                        | Yok                     | Yok             | Yok            | 2 Yıllık        | Hayır                    | Mail        | 20.25       | NaN          | Hayır        |
+| 936  | Kadın    | Hayır       | Evli         | Var               | 0                        | Yok                   | Yok                          | Var                | Var                        | Yok                         | Var                        | Yok                     | Yok             | Yok            | 2 Yıllık        | Hayır                    | Mail        | 80.85       | NaN          | Hayır        |
+| 1082 | Erkek    | Hayır       | Evli         | Var               | 0                        | Var                   | Yok                          | Yok                | Yok                        | Yok                         | Yok                        | Var                     | Yok             | Yok            | 2 Yıllık        | Hayır                    | Mail        | 23.75       | NaN          | Hayır        |
+| 1340 | Kadın    | Hayır       | Evli         | Var               | 0                        | Yok                   | Yok                          | Yok                | Yok                        | Yok                         | Yok                        | Var                     | Yok             | Yok            | 2 Yıllık        | Hayır                    | Kredi Kartı | 56.05       | NaN          | Hayır        |
+| 3331 | Erkek    | Hayır       | Evli         | Var               | 0                        | Yok                   | Yok                          | Yok                | Yok                        | Yok                         | Yok                        | Yok                     | Yok             | Yok            | 2 Yıllık        | Hayır                    | Mail        | 19.85       | NaN          | Hayır        |
+| 3826 | Erkek    | Hayır       | Evli         | Var               | 0                        | Yok                   | Yok                          | Yok                | Yok                        | Yok                         | Yok                        | Yok                     | Yok             | Yok            | 2 Yıllık        | Hayır                    | Mail        | 25.35       | NaN          | Hayır        |
+| 4380 | Erkek    | Hayır       | Evli         | Var               | 0                        | Yok                   | Yok                          | Yok                | Yok                        | Yok                         | Yok                        | Yok                     | Yok             | Yok            | 2 Yıllık        | Hayır                    | Mail        | 20.00       | NaN          | Hayır        |
+| 5218 | Erkek    | Hayır       | Evli         | Var               | 0                        | Yok                   | Yok                          | Yok                | Yok                        | Yok                         | Yok                        | Yok                     | Yok             | Yok            | 2 Yıllık        | Hayır                    | Mail        | 19.75       | NaN          | Hayır        |
+| 6670 | Kadın    | Hayır       | Evli         | Var               | 0                        | Yok                   | Yok                          | Yok                | Yok                        | Yok                         | Yok                        | Yok                     | Yok             | Yok            | 2 Yıllık        | Hayır                    | Mail        | 33.45       | NaN          | Hayır        |
+| 6754 | Erkek    | Hayır       | Bekar        | Var               | 0                        | Yok                   | Yok                          | Yok                | Yok                        | Yok                         | Yok                        | Yok                     | Yok             | Yok            | 2 Yıllık        | Evet                     | Havale      | 61.90       | NaN          | Hayır        |
+
+Aylık ücreti 0 olanlar da hesaplamada sorun çıkartabilir. Onlara bakalım;
+
+```Python
+veri[veri["Aylık Ücret"] == 0]
+
+# yok
+
+# Eksik değerleri 0 ay abonelikle alakalı olduğu için ve çok az kayıtta olduğu için siliyoruz.
+veri = veri.dropna()
+veri.isnull().sum()
+
+import matplotlib.pyplot as plt
+
+plt.boxplot(veri["Müşteri Olma Süresi (Ay)"])
+plt.show()
+```
+
+![image](./images/mstr1.png) 
+
+```Python
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+degisken = veri.select_dtypes(include="object").columns
+veri.update(veri[degisken].apply(le.fit_transform))
+
+veri["Kayıp Durumu"] = [1 if kod == 0 else 0 for kod in veri["Kayıp Durumu"]]
+
+y = veri["Kayıp Durumu"]
+X = veri.drop(columns="Kayıp Durumu", axis=1)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-y = veri["Outcome"]
-X = veri.drop(columns="Outcome", axis=1)
 
 from sklearn.model_selection import train_test_split
 
@@ -3781,13 +4007,9 @@ X_test=sc.transform(X_test)
 ```
 
 
-
-
-
-
 # 
 
-![image](./images/lgb1.png)
+![image](./images/mstr2.png)
 
 https://www.youtube.com/watch?v=my-hMGksh5M&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=78
 
