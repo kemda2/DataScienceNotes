@@ -4004,6 +4004,43 @@ from sklearn.preprocessing import StandardScaler
 sc=StandardScaler()
 X_train=sc.fit_transform(X_train)
 X_test=sc.transform(X_test)
+
+from lazypredict.Supervised import LazyClassifier
+
+clf = LazyClassifier()
+modeller, tahmin = clf.fit(X_train, X_test, y_train, y_test)
+modeller
+
+#  Model                          Accuracy  Balanced Accuracy  ROC AUC  F1 Score  Time Taken 
+#  -----------------------------  --------  -----------------  -------  --------  ---------- 
+#  NearestCentroid                0.71      0.74               0.74     0.73      0.05       
+#  SGDClassifier                  0.76      0.74               0.74     0.77      0.14       
+#  GaussianNB                     0.72      0.74               0.74     0.74      0.07       
+#  BernoulliNB                    0.74      0.73               0.73     0.75      0.06       
+#  LogisticRegression             0.80      0.73               0.73     0.80      0.08       
+#  PassiveAggressiveClassifier    0.70      0.73               0.73     0.72      0.06       
+#  LinearSVC                      0.80      0.72               0.72     0.79      0.07       
+#  LinearDiscriminantAnalysis     0.79      0.72               0.72     0.79      0.08       
+#  CalibratedClassifierCV         0.80      0.72               0.72     0.80      0.14       
+#  RidgeClassifier                0.79      0.71               0.71     0.79      0.07       
+#  RidgeClassifierCV              0.79      0.71               0.71     0.79      0.06       
+#  AdaBoostClassifier             0.79      0.71               0.71     0.79      0.45       
+#  KNeighborsClassifier           0.76      0.70               0.70     0.76      0.08       
+#  LGBMClassifier                 0.78      0.70               0.70     0.77      0.31       
+#  SVC                            0.79      0.70               0.70     0.78      1.52       
+#  XGBClassifier                  0.76      0.69               0.69     0.76      0.18       
+#  RandomForestClassifier         0.79      0.69               0.69     0.78      0.87       
+#  NuSVC                          0.79      0.68               0.68     0.78      1.77       
+#  ExtraTreesClassifier           0.77      0.68               0.68     0.76      0.90       
+#  BaggingClassifier              0.77      0.67               0.67     0.76      0.36       
+#  QuadraticDiscriminantAnalysis  0.64      0.67               0.67     0.67      0.06       
+#  LabelPropagation               0.73      0.66               0.66     0.73      1.04       
+#  LabelSpreading                 0.73      0.66               0.66     0.73      1.49       
+#  ExtraTreeClassifier            0.72      0.65               0.65     0.72      0.07       
+#  DecisionTreeClassifier         0.71      0.64               0.64     0.71      0.09       
+#  Perceptron                     0.76      0.60               0.60     0.72      0.07       
+#  DummyClassifier                0.73      0.50               0.50     0.62      0.06       
+
 ```
 
 
@@ -4011,6 +4048,6 @@ X_test=sc.transform(X_test)
 
 ![image](./images/mstr2.png)
 
-https://www.youtube.com/watch?v=my-hMGksh5M&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=78
+https://www.youtube.com/watch?v=w31MlA6eIow&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=80
 
-37
+3
