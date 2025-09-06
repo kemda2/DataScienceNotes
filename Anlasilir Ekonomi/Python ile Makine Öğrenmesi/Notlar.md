@@ -4043,6 +4043,7 @@ modeller
 
 sıra=modeller.sort_values(by="Accuracy", ascending=True)
 sıra
+#tablo sırası farklı
 
 #  Model                          Accuracy  Balanced Accuracy  ROC AUC  F1 Score  Time Taken 
 #  -----------------------------  --------  -----------------  -------  --------  ---------- 
@@ -4079,15 +4080,78 @@ plt.show()
 ```
 ![image](./images/mstr2.png)
 
+```Python
+from sklearn.svm import LinearSVC, SVC
+from sklearn.linear_model import RidgeClassifier, LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from lightgbm import LGBMClassifier
+from xgboost import XGBClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score
 
+models=["LinearSVC","SVC","Ridge","Logistic","RandomForest","LGBM","XGBM"]
 
+sınıflar=[LinearSVC(random_state=0),SVC(random_state=0),RidgeClassifier(random_state=0),LogisticRegression(random_state=0),RandomForestClassifier(random_state=0),LGBMClassifier(random_state=0),XGBClassifier()]
 
+parametreler={
+    models[0]:{"C":[0.1,1,10,100],"penalty":["l1","l2"]},
+    models[1]:{"kernel":["linear","rbf"],"C":[0.1,1],"gamma":[0.01,0.001]},
+    models[2]:{"alpha":[0.1,1.0]},
+    models[3]:{"C":[0.1,1],"penalty":["l1","l2"]},
+    models[4]:{"n_estimators":[1000,2000],"max_depth":[4,10],"min_samples_split":[2,5]},
+    models[5]:{"learning_rate":[0.001,0.01],"n_estimators":[1000,2000],"max_depth":[4,10],"subsample":[0.6,0.8]},
+    models[6]:{"learning_rate":[0.001,0.01],"n_estimators":[1000,2000],"max_depth":[4,10],"subsample":[0.6,0.8]}
+}
+
+def cozum(model):
+    model.fit(X_train,y_train)
+    return model
+
+def skor(model2):
+    tahmin=cozum(model2).predict(X_test)
+    acs=accuracy_score(y_test,tahmin)
+    return acs*100
+
+for i,j in zip(models,sınıflar):
+    print(i)
+    grid=GridSearchCV(cozum(j),parametreler[i],cv=10,n_jobs=-1)
+    grid.fit(X_train,y_train)
+    print(grid.best_params_)
+
+# Devamı çıkmadı
+# LinearSVC
+# {'C': 0.1, 'penalty': 'l1'}
+# SVC
+
+sınıflar=[
+    LinearSVC(random_state=0, C=0.1, penalty="l1",dual=False),
+    SVC(random_state=0, C=1, gamma=0.01),
+    RidgeClassifier(random_state=0, alpha=0.1),
+    LogisticRegression(random_state=0, C=0.1, penalty="l2",dual=False),
+    RandomForestClassifier(random_state=0, max_depth=10, min_samples_split=2, n_estimators=2000),
+    LGBMClassifier(random_state=0, learning_rate=0.01, max_depth=4, n_estimators=1000, subsample=0.6),
+    XGBClassifier(learning_rate=0.001, max_depth=4, n_estimators=2000, subsample=0.8)
+]
+
+for i in sınıflar:
+    basari.append(skor(i))
+
+a = list(zip(models, basari))
+sonuc = pd.DataFrame(a, columns=["Model", "Başarı"])
+sonuc.sort_values("Başarı", ascending=False)
+```
+
+###################################### Çalıştır bunu sonuçları gir
+
+# Denetimsiz Öğrenme Algoritmaları
+
+Algoritma ile veriyi bölen ve bağımlı değişkeni olmayan yapılardır.
+
+# K-Means Algoritması
 
 
 # 
 
-![image](./images/mstr3.png)
+![image](./images/doa.png)
 
-https://www.youtube.com/watch?v=w31MlA6eIow&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=80
-
-3
+https://www.youtube.com/watch?v=ZYB75MNoITc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=82
