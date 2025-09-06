@@ -4150,6 +4150,13 @@ Algoritma ile veriyi bölen ve bağımlı değişkeni olmayan yapılardır.
 # K-Means Algoritması
 
 
+
+
+
+
+
+
+
 # 
 
 ![image](./images/doa.png)
