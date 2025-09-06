@@ -4041,12 +4041,52 @@ modeller
 #  Perceptron                     0.76      0.60               0.60     0.72      0.07       
 #  DummyClassifier                0.73      0.50               0.50     0.62      0.06       
 
+sıra=modeller.sort_values(by="Accuracy", ascending=True)
+sıra
+
+#  Model                          Accuracy  Balanced Accuracy  ROC AUC  F1 Score  Time Taken 
+#  -----------------------------  --------  -----------------  -------  --------  ---------- 
+#  CalibratedClassifierCV         0.80      0.72               0.72     0.80      0.14       
+#  LogisticRegression             0.80      0.73               0.73     0.80      0.08       
+#  LinearSVC                      0.80      0.72               0.72     0.79      0.07       
+#  RidgeClassifier                0.79      0.71               0.71     0.79      0.07       
+#  RidgeClassifierCV              0.79      0.71               0.71     0.79      0.06       
+#  LinearDiscriminantAnalysis     0.79      0.72               0.72     0.79      0.08       
+#  NuSVC                          0.79      0.68               0.68     0.78      1.77       
+#  AdaBoostClassifier             0.79      0.71               0.71     0.79      0.45       
+#  SVC                            0.79      0.70               0.70     0.78      1.52       
+#  RandomForestClassifier         0.79      0.69               0.69     0.78      0.87       
+#  LGBMClassifier                 0.78      0.70               0.70     0.77      0.31       
+#  BaggingClassifier              0.77      0.67               0.67     0.76      0.36       
+#  ExtraTreesClassifier           0.77      0.68               0.68     0.76      0.90       
+#  Perceptron                     0.76      0.60               0.60     0.72      0.07       
+#  XGBClassifier                  0.76      0.69               0.69     0.76      0.18       
+#  KNeighborsClassifier           0.76      0.70               0.70     0.76      0.08       
+#  SGDClassifier                  0.76      0.74               0.74     0.77      0.14       
+#  BernoulliNB                    0.74      0.73               0.73     0.75      0.06       
+#  DummyClassifier                0.73      0.50               0.50     0.62      0.06       
+#  LabelPropagation               0.73      0.66               0.66     0.73      1.04       
+#  LabelSpreading                 0.73      0.66               0.66     0.73      1.49       
+#  GaussianNB                     0.72      0.74               0.74     0.74      0.07       
+#  ExtraTreeClassifier            0.72      0.65               0.65     0.72      0.07       
+#  DecisionTreeClassifier         0.71      0.64               0.64     0.71      0.09       
+#  NearestCentroid                0.71      0.74               0.74     0.73      0.05       
+#  PassiveAggressiveClassifier    0.70      0.73               0.73     0.72      0.06       
+#  QuadraticDiscriminantAnalysis  0.64      0.67               0.67     0.67      0.06       
+
+plt.barh(sıra.index, sıra["Accuracy"])
+plt.show()
 ```
+![image](./images/mstr2.png)
+
+
+
+
 
 
 # 
 
-![image](./images/mstr2.png)
+![image](./images/mstr3.png)
 
 https://www.youtube.com/watch?v=w31MlA6eIow&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=80
 
