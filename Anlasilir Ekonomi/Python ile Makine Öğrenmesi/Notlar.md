@@ -4261,10 +4261,44 @@ plt.show()
 
 ![image](./images/kmns3.png) 
 
+En son görülen belirgin kırılım 6 değerinde olduğu için 6 olarak belirleyebiliriz. Başka bir yöntem;
+
+```python
+from yellowbrick.cluster import KElbowVisualizer
+
+kmodel = KMeans(random_state=0)
+grafik = KElbowVisualizer(kmodel, k=(1, 20))
+grafik.fit(X)
+grafik.poof()
+```
+
+![image](./images/kmns4.png) 
+
+Olması gereken değerin 4 olduğunu bize gösteriyor.
+
+```python
+from sklearn.cluster import KMeans
+
+kmodel = KMeans(n_clusters=4, random_state=0)
+kfit = kmodel.fit(X)
+kumeler = kfit.labels_
+merkezler = kfit.cluster_centers_
+
+figure, axis = plt.subplots(1, 2)
+axis[0].scatter(X.iloc[:, 0], X.iloc[:, 1], color="black")
+axis[1].scatter(X.iloc[:, 0], X.iloc[:, 1], c=kumeler, cmap="winter")
+axis[1].scatter(merkezler[:, 0], merkezler[:, 1], c="red", s=200)
+plt.show()
+```
+
+![image](./images/kmns5.png)
+
+# Hiyerarşik Kümeleme Algoritması
+
 
 
 # 
 
-![image](./images/kmns4.png)
+![image](./images/kmns6.png)
 
 https://www.youtube.com/watch?v=ZYB75MNoITc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=82
