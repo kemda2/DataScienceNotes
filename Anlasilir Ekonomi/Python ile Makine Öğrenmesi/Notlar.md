@@ -4180,12 +4180,91 @@ Noktalar arasında küme içi benzerliklerin maksimum olacağı şekilde kümele
 
 ## Örnek
 
+```python
+import pandas as pd
 
+data=pd.read_csv("customers.csv")
+veri=data.copy()
+
+veri = veri.drop(columns="CustomerID", axis=1)
+
+print(veri.info())
+
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 200 entries, 0 to 199
+# Data columns (total 4 columns):
+#  #   Column                  Non-Null Count  Dtype 
+# ---  ------                  --------------  ----- 
+#  0   Gender                  200 non-null    object
+#  1   Age                     200 non-null    int64 
+#  2   Annual Income (k$)      200 non-null    int64 
+#  3   Spending Score (1-100)  200 non-null    int64 
+# dtypes: int64(3), object(1)
+# memory usage: 6.4+ KB
+# None
+
+veri.describe()
+
+#                       Age     Annual Income (k\$)  Spending Score (1-100) 
+#  -------------------  ------  -------------------  ---------------------- 
+#  **count**            200.00  200.00               200.00                 
+#  **mean**             38.85   60.56                50.20                  
+#  **std**              13.97   26.26                25.82                  
+#  **min**              18.00   15.00                1.00                   
+#  **25%** (1. çeyrek)  28.75   41.50                34.75                  
+#  **50%** (medyan)     36.00   61.50                50.00                  
+#  **75%** (3. çeyrek)  49.00   78.00                73.00                  
+#  **max**              70.00   137.00               99.00                  
+
+X = veri.iloc[:, 1:3]
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.scatter(X.iloc[:, 0], X.iloc[:, 1], color="black")
+plt.show()
+```
+![image](./images/kmns1.png) 
+
+```python
+from sklearn.cluster import KMeans
+
+kmodel = KMeans(n_clusters=2, random_state=0)
+kfit = kmodel.fit(X)
+kumeler = kfit.labels_
+merkezler = kfit.cluster_centers_
+
+figure, axis = plt.subplots(1, 2)
+axis[0].scatter(X.iloc[:, 0], X.iloc[:, 1], color="black")
+axis[1].scatter(X.iloc[:, 0], X.iloc[:, 1], c=kumeler, cmap="winter")
+axis[1].scatter(merkezler[:, 0], merkezler[:, 1], c="red", s=200)
+plt.show()
+```
+
+![image](./images/kmns2.png) 
+
+K sayısı kaç olmalı ona bakalım;
+
+```python
+wcss = []
+
+for k in range(1, 20):
+    kmodel = KMeans(n_clusters=k, random_state=0)
+    kmodel.fit(X)
+    wcss.append(kmodel.inertia_)
+
+plt.plot(range(1, 20), wcss)
+plt.xlabel("Küme Sayısı")
+plt.ylabel("WCSS")
+plt.show()
+```
+
+![image](./images/kmns3.png) 
 
 
 
 # 
 
-![image](./images/kmns.png)
+![image](./images/kmns4.png)
 
 https://www.youtube.com/watch?v=ZYB75MNoITc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=82
