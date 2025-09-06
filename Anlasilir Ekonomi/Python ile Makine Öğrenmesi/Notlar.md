@@ -4117,21 +4117,40 @@ for i,j in zip(models,sınıflar):
     grid=GridSearchCV(cozum(j),parametreler[i],cv=10,n_jobs=-1)
     grid.fit(X_train,y_train)
     print(grid.best_params_)
+    print()
 
-# Devamı çıkmadı
 # LinearSVC
 # {'C': 0.1, 'penalty': 'l1'}
+
 # SVC
+# {'C': 1, 'gamma': 0.01, 'kernel': 'rbf'}
+
+# Ridge
+# {'alpha': 0.1}
+
+# Logistic
+# {'C': 0.1, 'penalty': 'l2'}
+
+# RandomForest
+# {'max_depth': 10, 'min_samples_split': 2, 'n_estimators': 2000}
+
+# LGBM
+# {'learning_rate': 0.01, 'max_depth': 4, 'n_estimators': 1000, 'subsample': 0.6}
+
+# XGBM
+# {'learning_rate': 0.001, 'max_depth': 4, 'n_estimators': 2000, 'subsample': 0.6}
 
 sınıflar=[
     LinearSVC(random_state=0, C=0.1, penalty="l1",dual=False),
-    SVC(random_state=0, C=1, gamma=0.01),
+    SVC(random_state=0, C=1, gamma=0.01, kernel='rbf'),
     RidgeClassifier(random_state=0, alpha=0.1),
     LogisticRegression(random_state=0, C=0.1, penalty="l2",dual=False),
     RandomForestClassifier(random_state=0, max_depth=10, min_samples_split=2, n_estimators=2000),
     LGBMClassifier(random_state=0, learning_rate=0.01, max_depth=4, n_estimators=1000, subsample=0.6),
-    XGBClassifier(learning_rate=0.001, max_depth=4, n_estimators=2000, subsample=0.8)
+    XGBClassifier(learning_rate=0.001, max_depth=4, n_estimators=2000, subsample=0.6)
 ]
+
+basari = []
 
 for i in sınıflar:
     basari.append(skor(i))
@@ -4139,9 +4158,17 @@ for i in sınıflar:
 a = list(zip(models, basari))
 sonuc = pd.DataFrame(a, columns=["Model", "Başarı"])
 sonuc.sort_values("Başarı", ascending=False)
-```
 
-###################################### Çalıştır bunu sonuçları gir
+#  Model         Başarı 
+#  ------------  ------ 
+#  LinearSVC     79.67  
+#  Ridge         79.46  
+#  RandomForest  79.46  
+#  LGBM          79.18  
+#  SVC           79.10  
+#  XGBM          79.03  
+#  Logistic      78.96  
+```
 
 # Denetimsiz Öğrenme Algoritmaları
 
