@@ -4159,6 +4159,6 @@ Algoritma ile veriyi bölen ve bağımlı değişkeni olmayan yapılardır.
 
 # 
 
-![image](./images/doa.png)
+![image](./images/kmns.png)
 
 https://www.youtube.com/watch?v=ZYB75MNoITc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=82
