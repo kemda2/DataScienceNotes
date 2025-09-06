@@ -4178,7 +4178,7 @@ Algoritma ile veriyi bölen ve bağımlı değişkeni olmayan yapılardır.
 
 Noktalar arasında küme içi benzerliklerin maksimum olacağı şekilde kümeleme yapar. Kümeleme sayısı olan k yi bizim vermemiz gerekir.
 
-
+## Örnek
 
 
 
