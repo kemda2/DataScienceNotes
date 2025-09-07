@@ -4429,16 +4429,27 @@ plt.show()
 
 ![image](./images/hca2.png) 
 
-Aşağıdaki gibi incelendğinde en uygun bölünebileceği uzun alan 2 kez kestiği yerdir.
+Aşağıdaki gibi incelendğinde en uygun bölünebileceği uzun alan 2 kez kestiği yerdir. En çok kullanılan modeller ward ile single'dır
 
 ![image](./images/hca3.png) 
 
+```python
+from sklearn.cluster import AgglomerativeClustering
 
+model = AgglomerativeClustering(n_clusters=2, linkage="ward")
+tahmin = model.fit_predict(X)
+labels = model.labels_
+
+sns.scatterplot(x="SepalLengthCm", y="SepalWidthCm", data=X, hue=labels, palette="deep")
+plt.show()
+```
+
+![image](./images/hca4.png)
 
 
 
 # 
 
-![image](./images/hca4.png)
+![image](./images/hca5.png)
 
 https://www.youtube.com/watch?v=ZYB75MNoITc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=82
