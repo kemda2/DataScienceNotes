@@ -4446,6 +4446,16 @@ plt.show()
 
 ![image](./images/hca4.png)
 
+# Bist30 Kümeleme Analizi
+
+
+
+
+
+
+
+
+
 
 
 # 
