@@ -4448,7 +4448,55 @@ plt.show()
 
 # Bist30 Kümeleme Analizi
 
+```python
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
 
+url = "https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/Temel-Degerler-Ve-Oranlar.aspx?endeks=03#page-1"
+r = requests.get(url)
+s = BeautifulSoup(r.text, "html.parser")
+
+tablo = s.find("table", {"id": "summaryBasicData"})
+tablo = pd.read_html(str(tablo), flavor="bs4")[0]
+tablo
+
+#  Kod    Hisse Adı               Sektör                          Kapanış (TL)  Piyasa Değeri (mn TL)  Piyasa Değeri (mn $)  Halka Açıklık Oranı (%)  Sermaye (mn TL) 
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#  AEFES  Anadolu Efes            Meşrubat / İçecek               1490           88.223,7                2.142,9                 328                        5.921,1          
+#  AKBNK  Akbank                  Bankacılık                      6245           324.740,0               7.887,6                 537                        5.200,0          
+#  ASELS  Aselsan                 Savunma                         17500          798.000,0               19.382,5                258                        4.560,0          
+#  ASTOR  Astor Enerji            Elektrik Enerji Ürt.Teş/Tesis   11300          112.774,0               2.739,2                 277                        9980             
+#  BIMAS  Bim Birleşik Mağazalar  Perakande - Ticaret             51500          309.000,0               7.505,3                 675                        6000             
+#  CIMSA  Çimsa                   Çimento                         4506           42.608,3                1.034,9                 450                        9456             
+#  EKGYO  Emlak Konut GYO         GYO                             1951           74.138,0                1.800,7                 484                        3.800,0          
+#  ENKAI  Enka İnşaat             İnşaat- Taahhüt                 6920           415.200,0               10.084,7                83                         6.000,0          
+#  EREGL  Ereğli Demir Çelik      Demir-Çelik Temel               2734           191.380,0               4.648,4                 473                        7.000,0          
+#  FROTO  Ford Otosan             Otomotiv                        10700          375.473,7               9.119,8                 177                        3.509,1          
+#  GARAN  Garanti Bankası         Bankacılık                      13880          582.960,0               14.159,4                140                        4.200,0          
+#  GUBRF  Gübre Fabrikaları       Tarım Kimyasalları              26950          90.013,0                2.186,3                 211                        3340             
+#  ISCTR  İş Bankası (C)          Bankacılık                      1369           342.249,6               8.312,9                 323                        25.000,0         
+#  KCHOL  Koç Holding             Holdingler                      16800          426.030,9               10.347,8                264                        2.535,9          
+#  KOZAL  Koza Altın              Madencilik                      2420           77.500,5                1.882,4                 299                        3.202,5          
+#  KRDMD  Kardemir (D)            Demir-Çelik Temel               2674           20.863,2                5067                    928                        7802             
+#  MGROS  Migros                  Perakande - Ticaret             45775          82.877,6                2.013,0                 508                        1811             
+#  PETKM  Petkim                  Petrol                          1818           46.075,4                1.119,1                 480                        2.534,4          
+#  PGSUS  Pegasus Hava Taşımac.   Havayolları ve Hizm.            22590          112.950,0               2.743,4                 463                        5000             
+#  SAHOL  Sabancı Holding         Holdingler                      8580           180.212,3               4.377,2                 532                        2.100,4          
+#  SASA   Sasa Polyester          Endüstriyel Tekstil             443            194.103,2               4.714,5                 263                        43.815,6         
+#  SISE   Şişecam                 Cam                             3768           115.421,9               2.803,5                 471                        3.063,2          
+#  TAVHL  TAV Holding             Havayolları ve Hizm.            24300          88.277,3                2.144,2                 492                        3633             
+#  TCELL  Turkcell                İletişim                        9005           198.110,0               4.811,9                 539                        2.200,0          
+#  THYAO  Türk Hava Yolları       Havayolları ve Hizm.            31950          440.910,0               10.709,2                506                        1.380,0          
+#  TOASO  Tofaş Fabrika           Otomotiv                        22510          112.550,0               2.733,7                 241                        5000             
+#  TTKOM  Türk Telekom            İletişim                        5290           185.150,0               4.497,1                 133                        3.500,0          
+#  TUPRS  Tüpraş                  Petrol                          16750          322.738,3               7.839,0                 465                        1.926,8          
+#  ULKER  Ülker Bisküvi           Gıda                            10500          38.774,0                9418                    409                        3693             
+#  YKBNK  Yapı Kredi Bankası      Bankacılık                      3030           255.945,7               6.216,6                 388                        8.447,1          
+
+
+
+```
 
 
 
