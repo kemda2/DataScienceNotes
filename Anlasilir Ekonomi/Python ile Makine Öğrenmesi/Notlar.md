@@ -4399,12 +4399,39 @@ veri=data.copy()
 
 X = veri.drop(columns=["Id", "Species"], axis=1)
 
+from scipy.cluster.hierarchy import linkage, dendrogram
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+hcsingle = linkage(X, method="single")
+hccomplete = linkage(X, method="complete")
+hcaverage = linkage(X, method="average")
+hccentroid = linkage(X, method="centroid")
+hcmedian = linkage(X, method="median")
+hcward = linkage(X, method="ward")
+
+fig, axes = plt.subplots(2, 3)
+dendrogram(hcsingle, ax=axes[0, 0])
+axes[0, 0].set_title("Single")
+dendrogram(hccomplete, ax=axes[0, 1])
+axes[0, 1].set_title("Complete")
+dendrogram(hcaverage, ax=axes[0, 2])
+axes[0, 2].set_title("Average")
+dendrogram(hccentroid, ax=axes[1, 0])
+axes[1, 0].set_title("Centroid")
+dendrogram(hcmedian, ax=axes[1, 1])
+axes[1, 1].set_title("Median")
+dendrogram(hcward, ax=axes[1, 2])
+axes[1, 2].set_title("Ward")
+plt.show()
 
 ```
 
+![image](./images/hca2.png) 
 
+Aşağıdaki gibi incelendğinde en uygun bölünebileceği uzun alan 2 kez kestiği yerdir.
 
+![image](./images/hca3.png) 
 
 
 
@@ -4412,6 +4439,6 @@ X = veri.drop(columns=["Id", "Species"], axis=1)
 
 # 
 
-![image](./images/hca1.png)
+![image](./images/hca4.png)
 
 https://www.youtube.com/watch?v=ZYB75MNoITc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=82
