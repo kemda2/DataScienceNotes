@@ -4293,12 +4293,26 @@ plt.show()
 
 ![image](./images/kmns5.png)
 
-# Hiyerarşik Kümeleme Algoritması
+# Hiyerarşik Kümeleme Algoritması (HCA)
+
+İki çeşittir;
+
+- Birleştirici (Agglomerative): Bu, "aşağıdan yukarıya" bir yaklaşımdır: Her gözlem kendi kümesinde başlar ve kümeler yukarı doğru ilerledikçe birleştirilir.
+
+- Bölücü (Divisive): Bu, "yukarıdan aşağıya" bir yaklaşımdır: Tüm gözlemler tek bir kümede başlar ve aşağı doğru ilerledikçe kümeler tekrar tekrar bölünür.
+
+
+
+
+
+
+
+
 
 
 
 # 
 
-![image](./images/kmns6.png)
+![image](./images/hca1.png)
 
 https://www.youtube.com/watch?v=ZYB75MNoITc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=82
