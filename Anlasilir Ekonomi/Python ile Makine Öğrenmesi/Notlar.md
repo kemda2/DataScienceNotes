@@ -4494,6 +4494,39 @@ tablo
 #  ULKER  Ülker Bisküvi           Gıda                            10500          38.774,0                9418                    409                        3693             
 #  YKBNK  Yapı Kredi Bankası      Bankacılık                      3030           255.945,7               6.216,6                 388                        8.447,1          
 
+hisseler=[i for i in tablo["Kod"]]
+hisseler 
+
+# ['AEFES',
+#  'AKBNK',
+#  'ASELS',
+#  'ASTOR',
+#  'BIMAS',
+#  'CIMSA',
+#  'EKGYO',
+#  'ENKAI',
+#  'EREGL',
+#  'FROTO',
+#  'GARAN',
+#  'GUBRF',
+#  'ISCTR',
+#  'KCHOL',
+#  'KOZAL',
+#  'KRDMD',
+#  'MGROS',
+#  'PETKM',
+#  'PGSUS',
+#  'SAHOL',
+#  'SASA',
+#  'SISE',
+#  'TAVHL',
+#  'TCELL',
+#  'THYAO',
+#  'TOASO',
+#  'TTKOM',
+#  'TUPRS',
+#  'ULKER',
+#  'YKBNK']
 
 
 ```
