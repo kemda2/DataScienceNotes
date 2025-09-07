@@ -4374,9 +4374,34 @@ print(X["Age"][X["Label"] == 1])
 # 116    63
 # Name: Age, Length: 83, dtype: int64
 
+plt.scatter(X["Age"][X["Label"] == 0], X["Annual Income (k$)"][X["Label"] == 0], c="red")
+plt.scatter(X["Age"][X["Label"] == 1], X["Annual Income (k$)"][X["Label"] == 1], c="black")
+plt.show()
 
+![image](./images/hca1.png) 
+
+from scipy.cluster.hierarchy import dendrogram, linkage
+
+link = linkage(X)
+dendrogram(link)
+plt.xlabel("Veri Noktaları")
+plt.ylabel("Mesafe")
+plt.show()
 ```
 
+---
+
+```python
+import pandas as pd
+
+data=pd.read_csv("iris.csv")
+veri=data.copy()
+
+X = veri.drop(columns=["Id", "Species"], axis=1)
+
+
+
+```
 
 
 
