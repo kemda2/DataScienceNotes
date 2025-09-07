@@ -5099,6 +5099,46 @@ veri = df.drop(columns="Tarih", axis=1)
 # 499  112.2030  17.1000  49.6008  50.6000  10.0600  
 # 500  115.8008  17.2100  49.2971  52.3000  10.4554 
 
+gelir = veri.pct_change().mean() * 252
+sonuc = pd.DataFrame(gelir)
+sonuc.columns = ["Gelir"]
+
+import numpy as np
+sonuc["Oynaklık"] = veri.pct_change().std() * np.sqrt(252)
+sonuc = sonuc.reset_index()
+sonuc = sonuc.rename({"index":"Hisse"},axis=1)
+# print(sonuc)
+#     Hisse     Gelir  Oynaklık
+# 0   AKBNK  0.662954  0.438267
+# 1   AKSEN  1.461318  0.442212
+# 2   ARCLK  0.734791  0.365845
+# 3   ASELS  0.599736  0.416809
+# 4   BIMAS  0.433783  0.332923
+# 5   EKGYO  0.721017  0.468984
+# 6   EREGL  0.900761  0.438097
+# 7   FROTO  0.882042  0.492344
+# 8   GARAN  0.681301  0.428096
+# 9   GUBRF  0.789535  0.504619
+# 10  HEKTS  1.882756  0.585034
+# 11  ISCTR  0.773748  0.458313
+# 12  KCHOL  0.808473  0.395130
+# 13  KOZAA  0.748871  0.482213
+# 14  KOZAL  0.872406  0.481678
+# 15  KRDMD  0.682948  0.469010
+# 16  PETKM  0.839628  0.440136
+# 17  PGSUS  1.075582  0.497158
+# 18  SAHOL  0.844788  0.386068
+# 19   SASA  1.733621  0.588744
+# 20   SISE  0.992491  0.383484
+# 21  TAVHL  0.865711  0.452449
+# 22  TCELL  0.563173  0.380947
+# 23  THYAO  1.264411  0.440684
+# 24  TKFEN  0.616058  0.407903
+# 25  TOASO  0.985238  0.444968
+# 26  TTKOM  0.588538  0.403197
+# 27  TUPRS  0.916426  0.416672
+# 28  VESTL  0.691594  0.415665
+# 29  YKBNK  0.851200  0.461357
 
 ```
 
@@ -5114,5 +5154,4 @@ veri = df.drop(columns="Tarih", axis=1)
 
 ![image](./images/hca5.png)
 
-https://www.youtube.com/watch?v=x9z0c0qxrmQ&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=90
-1812
+https://www.youtube.com/watch?v=C4dN73gUzgc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=91
