@@ -4457,6 +4457,9 @@ url = "https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/Temel-Degerler-V
 r = requests.get(url)
 s = BeautifulSoup(r.text, "html.parser")
 
+# ⚠️⚠️⚠️ Tablo adını incele diyerek öğeler kısmından buluyoruz. Bulduğumuz id ile tabloyu find ile arayarak buluyoruz.
+# <table class="dataTable hover nowrap excelexport data-tables no-footer" data-csvname="temelozet" cellspacing="0" width="100%" id="summaryBasicData" data-id="0" style="width: 100%;">
+
 tablo = s.find("table", {"id": "summaryBasicData"})
 tablo = pd.read_html(str(tablo), flavor="bs4")[0]
 tablo
@@ -4528,6 +4531,138 @@ hisseler
 #  'ULKER',
 #  'YKBNK']
 
+# ⚠️⚠️⚠️ https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/Tarihsel-Fiyat-Bilgileri.aspx linkinde hisse seçince link değişmiyor ama veri değişiyor. İncele deyip tekrar veri talep edince ağ kısmında bir link görülecektir;
+# https://www.isyatirim.com.tr/_layouts/15/Isyatirim.Website/Common/Data.aspx/HisseTekil?hisse=AKBNK&startdate=07-09-2023&enddate=07-09-2025
+# Bu linki "https://www.isyatirim.com.tr/_layouts/15/Isyatirim.Website/Common/Data.aspx/HisseTekil?" ve hisse=AKBNK&startdate=07-09-2023&enddate=07-09-2025 olarak ikiye ayırıyoruz.
+
+parametreler = (
+    ("hisse", "GEDIK"),
+    ("startdate", "28-11-2020"),
+    ("enddate", "28-11-2022")
+)
+
+url2 = "https://www.isyatirim.com.tr/_layouts/15/Isyatirim.Website/Common/Data.aspx/HisseTekil?"
+
+r2 = requests.get(url2, params=parametreler).json()["value"]
+veri = pd.DataFrame.from_dict(r2)
+print(veri)
+
+#     HGDG_HS_KODU  HGDG_TARIH  HGDG_KAPANIS  HGDG_AOF  HGDG_MIN  HGDG_MAX  \
+# 0          GEDIK  30-11-2020        0.4739  0.473772  0.472841  0.476980   
+# 1          GEDIK  01-12-2020        0.4822  0.478531  0.473876  0.484222   
+# 2          GEDIK  02-12-2020        0.4992  0.485567  0.474910  0.499225   
+# 3          GEDIK  03-12-2020        0.5489  0.527781  0.500777  0.548889   
+# 4          GEDIK  04-12-2020        0.5266  0.536214  0.524574  0.557166   
+# ..           ...         ...           ...       ...       ...       ...   
+# 496        GEDIK  22-11-2022        1.1519  1.144592  1.123663  1.168194   
+# 497        GEDIK  23-11-2022        1.2083  1.168936  1.132569  1.220147   
+# 498        GEDIK  24-11-2022        1.2172  1.213021  1.190459  1.245381   
+# 499        GEDIK  25-11-2022        1.2587  1.247310  1.211240  1.279521   
+# 500        GEDIK  28-11-2022        1.2617  1.281154  1.258740  1.321083   
+
+#      HGDG_HACIM END_ENDEKS_KODU      END_TARIH  END_SEANS  ...  HG_MIN HG_MAX  \
+# 0     1460219.0              01  1606683600000          2  ...    9.14   9.22   
+# 1     1496344.0              01  1606770000000          2  ...    9.16   9.36   
+# 2     7933326.0              01  1606856400000          2  ...    9.18   9.65   
+# 3    18237296.0              01  1606942800000          2  ...    9.68  10.61   
+# 4    12858738.0              01  1607029200000          2  ...   10.14  10.77   
+# ..          ...             ...            ...        ...  ...     ...    ...   
+# 496  20091388.0              01  1669064400000          2  ...    7.57   7.87   
+# 497  22082588.0              01  1669150800000          2  ...    7.63   8.22   
+# 498  26033507.0              01  1669237200000          2  ...    8.02   8.39   
+# 499  29041247.0              01  1669323600000          2  ...    8.16   8.62   
+# 500  26910425.0              01  1669582800000          2  ...    8.48   8.90   
+
+#                PD        PD_USD        HAO_PD    HAO_PD_USD    HG_HACIM  \
+# 0    1.099200e+09  1.408653e+08  1.154160e+08  1.479085e+07   1460219.0   
+# 1    1.118400e+09  1.423752e+08  1.174320e+08  1.494940e+07   1496344.0   
+# 2    1.158000e+09  1.480421e+08  1.215900e+08  1.554442e+07   7933326.0   
+# 3    1.273200e+09  1.619559e+08  1.336860e+08  1.700537e+07  18237296.0   
+# 4    1.221600e+09  1.567440e+08  1.282680e+08  1.645812e+07  12858738.0   
+# ..            ...           ...           ...           ...         ...   
+# 496  2.542176e+09  1.364055e+08  3.556504e+08  1.908313e+07  20091388.0   
+# 497  2.666664e+09  1.430637e+08  3.730663e+08  2.001461e+07  22082588.0   
+# 498  2.686320e+09  1.441313e+08  3.758162e+08  2.016397e+07  26033507.0   
+# 499  2.778048e+09  1.490321e+08  3.886489e+08  2.084959e+07  29041247.0   
+# 500  2.784600e+09  1.493852e+08  3.895655e+08  2.089899e+07  26910425.0   
+
+#      DOLAR_BAZLI_MIN  DOLAR_BAZLI_MAX  DOLAR_BAZLI_AOF  
+# 0             0.0606           0.0611           0.0607  
+# 1             0.0603           0.0616           0.0609  
+# 2             0.0607           0.0638           0.0621  
+# 3             0.0637           0.0698           0.0671  
+# 4             0.0673           0.0715           0.0688  
+# ..               ...              ...              ...  
+# 496           0.0603           0.0627           0.0614  
+# 497           0.0608           0.0655           0.0627  
+# 498           0.0639           0.0668           0.0651  
+# 499           0.0650           0.0686           0.0669  
+# 500           0.0675           0.0709           0.0687  
+
+parametreler = (
+    ("hisse", "AKBNK"),
+    ("startdate", "28-11-2020"),
+    ("enddate", "28-11-2022")
+)
+
+url2 = "https://www.isyatirim.com.tr/_layouts/15/Isyatirim.Website/Common/Data.aspx/HisseTekil?"
+
+r2 = requests.get(url2, params=parametreler).json()["value"]
+veri = pd.DataFrame.from_dict(r2)
+print(veri)
+
+#     HGDG_HS_KODU  HGDG_TARIH  HGDG_KAPANIS   HGDG_AOF   HGDG_MIN   HGDG_MAX  \
+# 0          AKBNK  30-11-2020        4.8341   4.965814   4.834120   5.042903   
+# 1          AKBNK  01-12-2020        5.0670   4.948148   4.842151   5.066993   
+# 2          AKBNK  02-12-2020        5.0188   5.040494   4.970632   5.099113   
+# 3          AKBNK  03-12-2020        5.0028   4.989904   4.914421   5.058964   
+# 4          AKBNK  04-12-2020        4.9626   4.968223   4.938512   5.026843   
+# ..           ...         ...           ...        ...        ...        ...   
+# 496        AKBNK  22-11-2022       14.4321  14.231405  13.930346  14.517156   
+# 497        AKBNK  23-11-2022       14.9934  14.700002  14.296040  15.120976   
+# 498        AKBNK  24-11-2022       14.6277  14.934728  14.500146  15.197515   
+# 499        AKBNK  25-11-2022       14.3045  14.461876  14.287535  14.687246   
+# 500        AKBNK  28-11-2022       14.8743  14.782496  14.355571  15.052939   
+
+#        HGDG_HACIM END_ENDEKS_KODU      END_TARIH  END_SEANS  ...  HG_MIN  \
+# 0    9.761698e+08              01  1606683600000          2  ...    6.02   
+# 1    7.437196e+08              01  1606770000000          2  ...    6.03   
+# 2    5.958969e+08              01  1606856400000          2  ...    6.19   
+# 3    6.962983e+08              01  1606942800000          2  ...    6.12   
+# 4    3.508742e+08              01  1607029200000          2  ...    6.15   
+# ..            ...             ...            ...        ...  ...     ...   
+# 496  4.193727e+09              01  1669064400000          2  ...   16.38   
+# 497  4.581212e+09              01  1669150800000          2  ...   16.81   
+# 498  4.967338e+09              01  1669237200000          2  ...   17.05   
+# 499  2.567450e+09              01  1669323600000          2  ...   16.80   
+# 500  3.301224e+09              01  1669582800000          2  ...   16.88   
+
+#     HG_MAX            PD        PD_USD        HAO_PD    HAO_PD_USD  \
+# 0     6.28  3.130400e+10  4.011688e+09  1.583669e+10  2.029513e+09   
+# 1     6.31  3.281200e+10  4.177052e+09  1.659959e+10  2.113171e+09   
+# 2     6.35  3.250000e+10  4.154894e+09  1.644175e+10  2.101961e+09   
+# 3     6.30  3.239600e+10  4.120895e+09  1.638914e+10  2.084761e+09   
+# 4     6.26  3.213600e+10  4.123383e+09  1.625760e+10  2.086020e+09   
+# ..     ...           ...           ...           ...           ...   
+# 496  17.07  8.824400e+10  4.734907e+09  4.479265e+10  2.403439e+09   
+# 497  17.78  9.167600e+10  4.918319e+09  4.653474e+10  2.496539e+09   
+# 498  17.87  8.944000e+10  4.798798e+09  4.539975e+10  2.435870e+09   
+# 499  17.27  8.746400e+10  4.692124e+09  4.439673e+10  2.381722e+09   
+# 500  17.70  9.094800e+10  4.879080e+09  4.616520e+10  2.476621e+09   
+
+#          HG_HACIM  DOLAR_BAZLI_MIN  DOLAR_BAZLI_MAX  DOLAR_BAZLI_AOF  
+# 0    9.761698e+08           0.6195           0.6463           0.6364  
+# 1    7.437196e+08           0.6164           0.6450           0.6299  
+# 2    5.958969e+08           0.6355           0.6519           0.6444  
+# 3    6.962983e+08           0.6251           0.6435           0.6347  
+# 4    3.508742e+08           0.6337           0.6450           0.6375  
+# ..            ...              ...              ...              ...  
+# 496  4.193727e+09           0.7475           0.7789           0.7636  
+# 497  4.581212e+09           0.7670           0.8112           0.7886  
+# 498  4.967338e+09           0.7780           0.8154           0.8013  
+# 499  2.567450e+09           0.7665           0.7879           0.7758  
+# 500  3.301224e+09           0.7701           0.8075           0.7930  
+
 
 ```
 
@@ -4543,4 +4678,5 @@ hisseler
 
 ![image](./images/hca5.png)
 
-https://www.youtube.com/watch?v=ZYB75MNoITc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=82
+https://www.youtube.com/watch?v=x9z0c0qxrmQ&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=90
+1812
