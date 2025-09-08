@@ -5833,7 +5833,31 @@ plt.show()
 
 ![image](./images/rfm5.png)
 
+```Python
+# print(RFM.groupby("Labels")["Customer"].count())
+# Labels
+# 0    2047
+# 1     613
+# 2     480
+# 3    1054
+# Name: Customer, dtype: int64
 
+# print(RFM.groupby("Labels").mean())
+#             Customer     Recency  Frequency     Monetary
+# Labels                                                  
+# 0       15311.653151   18.258915   6.033708  1600.294378
+# 1       15467.446982  189.349103   1.849918   414.972073
+# 2       15213.558333  307.245833   1.327083   278.799083
+# 3       15200.811195   78.835863   2.546490   694.622583
+
+# print(RFM.groupby("Labels").mean().iloc[:,1:])
+#            Recency  Frequency     Monetary
+# Labels                                    
+# 0        18.258915   6.033708  1600.294378
+# 1       189.349103   1.849918   414.972073
+# 2       307.245833   1.327083   278.799083
+# 3        78.835863   2.546490   694.622583
+```
 
 
 
