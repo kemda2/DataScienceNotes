@@ -6798,5 +6798,4 @@ df2 = association_rules(df1, metric="lift", min_threshold=1)
 
 ![image](./images/apr1.png)
 
-https://www.youtube.com/watch?v=3Iqgd2sSPm4&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=99
-955
+https://www.youtube.com/watch?v=k9JTNgTh5Pc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=101
