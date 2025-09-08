@@ -5859,6 +5859,41 @@ plt.show()
 # 3        78.835863   2.546490   694.622583
 ```
 
+# Birliktelik Kuralları Analizi
+
+Temel amacı, büyük veri setleri içerisindeki öğeler arasında anlamlı ilişkiler veya kurallar keşfetmektir.
+
+## Ne İşe Yarar?
+
+Özellikle perakende satış, pazarlama, e-ticaret gibi alanlarda, müşterilerin satın aldığı ürünler arasındaki ortaklıkları bulmak için kullanılır. Örneğin; “Bir müşteri ekmek alıyorsa, büyük ihtimalle tereyağı da alır” gibi.
+
+Temel Kavramlar:
+
+- Öğe (Item): Analiz edilen veri setindeki temel birim (örneğin bir ürün).
+
+- Öğe Seti (Itemset): Bir arada bulunan birden fazla öğe.
+
+- Destek (Support): Bir öğe setinin toplam veri içindeki görülme sıklığı. (Örneğin, alışverişlerin %10'unda ekmek ve tereyağı birlikte alınmışsa destek %10’dur.)
+
+- Güven (Confidence): Bir kurala bağlı olarak, koşulun gerçekleştiği durumda sonuç öğesinin görülme olasılığı. (Örneğin, ekmek alanların %70’i tereyağı da alıyorsa, kuralın güveni %70’tir.)
+
+- Kaldıraç (Lift): Kuralın rastlantısal olmayan gücünü gösterir; iki öğenin birlikte görülme olasılığının bağımsızlıktan ne kadar saptığını belirtir.
+
+Örnek Kural;
+
+- Kural: Ekmek → Tereyağı
+
+- Destek: %10 (Ekmek ve tereyağı birlikte alınan alışverişlerin oranı)
+
+- Güven: %70 (Ekmek alanların %70’i tereyağı da alıyor)
+
+- Lift: 1.5 (Bu birlikte almanın rastgele olmaktan 1.5 kat daha fazla gerçekleştiği anlamına gelir)
+
+
+
+
+
+
 
 
 # 
