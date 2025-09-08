@@ -5201,10 +5201,27 @@ plt.show()
 
 2 ve 4 nokta geçen kümelemeler önemli gibi gözüküyor.
 
+```Python
+model = AgglomerativeClustering(n_clusters=4, linkage="single")
+tahmin = model.fit_predict(X)
+labels = model.labels_
+sonuc["Labels"] = labels
+
+sns.scatterplot(x="Labels", y="Hisse", data=sonuc, hue="Labels", palette="deep")
+plt.show()
+```
+
+![image](./images/bist5.png) 
+
+
+
+
+
+
 
 
 # 
 
-![image](./images/bist5.png)
+![image](./images/bist6.png)
 
 https://www.youtube.com/watch?v=C4dN73gUzgc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=91
