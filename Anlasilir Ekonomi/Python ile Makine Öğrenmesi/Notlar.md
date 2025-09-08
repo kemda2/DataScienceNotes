@@ -6318,7 +6318,253 @@ A, B, C, E için üçlü yapalım;
 
 Hepsi elenir.
 
+```Python
+import pandas as pd
 
+data=pd.read_csv("grocery.csv")
+veri=data.copy()
+# print(veri)
+#                 MILK,BREAD,BISCUIT
+# 0    BREAD,MILK,BISCUIT,CORNFLAKES
+# 1              BREAD,TEA,BOURNVITA
+# 2             JAM,MAGGI,BREAD,MILK
+# 3                MAGGI,TEA,BISCUIT
+# 4              BREAD,TEA,BOURNVITA
+# 5             MAGGI,TEA,CORNFLAKES
+# 6          MAGGI,BREAD,TEA,BISCUIT
+# 7              JAM,MAGGI,BREAD,TEA
+# 8                       BREAD,MILK
+# 9   COFFEE,COCK,BISCUIT,CORNFLAKES
+# 10  COFFEE,COCK,BISCUIT,CORNFLAKES
+# 11          COFFEE,SUGER,BOURNVITA
+# 12               BREAD,COFFEE,COCK
+# 13             BREAD,SUGER,BISCUIT
+# 14         COFFEE,SUGER,CORNFLAKES
+# 15           BREAD,SUGER,BOURNVITA
+# 16              BREAD,COFFEE,SUGER
+# 17              BREAD,COFFEE,SUGER
+# 18      TEA,MILK,COFFEE,CORNFLAKES
+
+data=pd.read_csv("grocery.csv",header=None)
+veri=data.copy()
+# print(veri)
+#     0
+# 0               MILK,BREAD,BISCUIT
+# 1    BREAD,MILK,BISCUIT,CORNFLAKES
+# 2              BREAD,TEA,BOURNVITA
+# 3             JAM,MAGGI,BREAD,MILK
+# 4                MAGGI,TEA,BISCUIT
+# 5              BREAD,TEA,BOURNVITA
+# 6             MAGGI,TEA,CORNFLAKES
+# 7          MAGGI,BREAD,TEA,BISCUIT
+# 8              JAM,MAGGI,BREAD,TEA
+# 9                       BREAD,MILK
+# 10  COFFEE,COCK,BISCUIT,CORNFLAKES
+# 11  COFFEE,COCK,BISCUIT,CORNFLAKES
+# 12          COFFEE,SUGER,BOURNVITA
+# 13               BREAD,COFFEE,COCK
+# 14             BREAD,SUGER,BISCUIT
+# 15         COFFEE,SUGER,CORNFLAKES
+# 16           BREAD,SUGER,BOURNVITA
+# 17              BREAD,COFFEE,SUGER
+# 18              BREAD,COFFEE,SUGER
+# 19      TEA,MILK,COFFEE,CORNFLAKES
+
+veri.columns=["Ürün"]
+# print(veri)
+#                               Ürün
+# 0               MILK,BREAD,BISCUIT
+# 1    BREAD,MILK,BISCUIT,CORNFLAKES
+# 2              BREAD,TEA,BOURNVITA
+# 3             JAM,MAGGI,BREAD,MILK
+# 4                MAGGI,TEA,BISCUIT
+# 5              BREAD,TEA,BOURNVITA
+# 6             MAGGI,TEA,CORNFLAKES
+# 7          MAGGI,BREAD,TEA,BISCUIT
+# 8              JAM,MAGGI,BREAD,TEA
+# 9                       BREAD,MILK
+# 10  COFFEE,COCK,BISCUIT,CORNFLAKES
+# 11  COFFEE,COCK,BISCUIT,CORNFLAKES
+# 12          COFFEE,SUGER,BOURNVITA
+# 13               BREAD,COFFEE,COCK
+# 14             BREAD,SUGER,BISCUIT
+# 15         COFFEE,SUGER,CORNFLAKES
+# 16           BREAD,SUGER,BOURNVITA
+# 17              BREAD,COFFEE,SUGER
+# 18              BREAD,COFFEE,SUGER
+# 19      TEA,MILK,COFFEE,CORNFLAKES
+
+veri = list(veri["Ürün"].apply(lambda x: x.split(",")))
+# print(veri)
+# [['MILK', 'BREAD', 'BISCUIT'], ['BREAD', 'MILK', 'BISCUIT', 'CORNFLAKES'], ['BREAD', 'TEA', 'BOURNVITA'], ['JAM', 'MAGGI', 'BREAD', 'MILK'], ['MAGGI', 'TEA', 'BISCUIT'], ['BREAD', 'TEA', 'BOURNVITA'], ['MAGGI', 'TEA', 'CORNFLAKES'], ['MAGGI', 'BREAD', 'TEA', 'BISCUIT'], ['JAM', 'MAGGI', 'BREAD', 'TEA'], ['BREAD', 'MILK'], ['COFFEE', 'COCK', 'BISCUIT', 'CORNFLAKES'], ['COFFEE', 'COCK', 'BISCUIT', 'CORNFLAKES'], ['COFFEE', 'SUGER', 'BOURNVITA'], ['BREAD', 'COFFEE', 'COCK'], ['BREAD', 'SUGER', 'BISCUIT'], ['COFFEE', 'SUGER', 'CORNFLAKES'], ['BREAD', 'SUGER', 'BOURNVITA'], ['BREAD', 'COFFEE', 'SUGER'], ['BREAD', 'COFFEE', 'SUGER'], ['TEA', 'MILK', 'COFFEE', 'CORNFLAKES']]
+
+veri2=pd.DataFrame(veri)
+
+# print(veri2)
+#          0       1           2           3
+# 0     MILK   BREAD     BISCUIT        None
+# 1    BREAD    MILK     BISCUIT  CORNFLAKES
+# 2    BREAD     TEA   BOURNVITA        None
+# 3      JAM   MAGGI       BREAD        MILK
+# 4    MAGGI     TEA     BISCUIT        None
+# 5    BREAD     TEA   BOURNVITA        None
+# 6    MAGGI     TEA  CORNFLAKES        None
+# 7    MAGGI   BREAD         TEA     BISCUIT
+# 8      JAM   MAGGI       BREAD         TEA
+# 9    BREAD    MILK        None        None
+# 10  COFFEE    COCK     BISCUIT  CORNFLAKES
+# 11  COFFEE    COCK     BISCUIT  CORNFLAKES
+# 12  COFFEE   SUGER   BOURNVITA        None
+# 13   BREAD  COFFEE        COCK        None
+# 14   BREAD   SUGER     BISCUIT        None
+# 15  COFFEE   SUGER  CORNFLAKES        None
+# 16   BREAD   SUGER   BOURNVITA        None
+# 17   BREAD  COFFEE       SUGER        None
+# 18   BREAD  COFFEE       SUGER        None
+# 19     TEA    MILK      COFFEE  CORNFLAKES
+
+from mlxtend.preprocessing import TransactionEncoder
+
+te = TransactionEncoder()
+teveri = te.fit_transform(veri)
+veri = pd.DataFrame(teveri, columns=te.columns_)
+# print(veri)
+#     BISCUIT  BOURNVITA  BREAD   COCK  COFFEE  CORNFLAKES    JAM  MAGGI   MILK  \
+# 0      True      False   True  False   False       False  False  False   True   
+# 1      True      False   True  False   False        True  False  False   True   
+# 2     False       True   True  False   False       False  False  False  False   
+# 3     False      False   True  False   False       False   True   True   True   
+# 4      True      False  False  False   False       False  False   True  False   
+# 5     False       True   True  False   False       False  False  False  False   
+# 6     False      False  False  False   False        True  False   True  False   
+# 7      True      False   True  False   False       False  False   True  False   
+# 8     False      False   True  False   False       False   True   True  False   
+# 9     False      False   True  False   False       False  False  False   True   
+# 10     True      False  False   True    True        True  False  False  False   
+# 11     True      False  False   True    True        True  False  False  False   
+# 12    False       True  False  False    True       False  False  False  False   
+# 13    False      False   True   True    True       False  False  False  False   
+# 14     True      False   True  False   False       False  False  False  False   
+# 15    False      False  False  False    True        True  False  False  False   
+# 16    False       True   True  False   False       False  False  False  False   
+# 17    False      False   True  False    True       False  False  False  False   
+# 18    False      False   True  False    True       False  False  False  False   
+# 19    False      False  False  False    True        True  False  False   True   
+
+#     SUGER    TEA  
+# 0   False  False  
+# 1   False  False  
+# 2   False   True  
+# 3   False  False  
+# 4   False   True  
+# 5   False   True  
+# 6   False   True  
+# 7   False   True  
+# 8   False   True  
+# 9   False  False  
+# 10  False  False  
+# 11  False  False  
+# 12   True  False  
+# 13  False  False  
+# 14   True  False  
+# 15   True  False  
+# 16   True  False  
+# 17   True  False  
+# 18   True  False  
+# 19  False   True 
+
+from mlxtend.frequent_patterns import apriori
+df1 = apriori(veri, min_support=0.05)
+# print(df1)
+#     support       itemsets
+# 0      0.35            (0)
+# 1      0.20            (1)
+# 2      0.65            (2)
+# 3      0.15            (3)
+# 4      0.40            (4)
+# ..      ...            ...
+# 78     0.05  (0, 2, 10, 7)
+# 79     0.10   (0, 3, 4, 5)
+# 80     0.05   (8, 2, 6, 7)
+# 81     0.05  (2, 10, 6, 7)
+# 82     0.05  (8, 10, 4, 5)
+
+df1 = apriori(veri, min_support=0.05,use_colnames=True)
+# print(df1)
+#     support                             itemsets
+# 0      0.35                            (BISCUIT)
+# 1      0.20                          (BOURNVITA)
+# 2      0.65                              (BREAD)
+# 3      0.15                               (COCK)
+# 4      0.40                             (COFFEE)
+# ..      ...                                  ...
+# 78     0.05         (BREAD, TEA, BISCUIT, MAGGI)
+# 79     0.10  (COCK, COFFEE, CORNFLAKES, BISCUIT)
+# 80     0.05            (MILK, JAM, BREAD, MAGGI)
+# 81     0.05             (BREAD, TEA, JAM, MAGGI)
+# 82     0.05      (MILK, TEA, COFFEE, CORNFLAKES)
+
+from mlxtend.frequent_patterns import association_rules
+
+df2=association_rules(df1,metric="confidence",min_threshold=0.5)
+# print(df2)
+#             antecedents           consequents  antecedent support  \
+# 0             (BISCUIT)               (BREAD)                0.35   
+# 1                (COCK)             (BISCUIT)                0.15   
+# 2          (CORNFLAKES)             (BISCUIT)                0.30   
+# 3           (BOURNVITA)               (BREAD)                0.20   
+# 4           (BOURNVITA)               (SUGER)                0.20   
+# ..                  ...                   ...                 ...   
+# 141         (MILK, TEA)  (COFFEE, CORNFLAKES)                0.05   
+# 142      (MILK, COFFEE)     (TEA, CORNFLAKES)                0.05   
+# 143  (MILK, CORNFLAKES)         (TEA, COFFEE)                0.10   
+# 144       (TEA, COFFEE)    (MILK, CORNFLAKES)                0.05   
+# 145   (TEA, CORNFLAKES)        (MILK, COFFEE)                0.10   
+
+#      consequent support  support  confidence       lift  leverage  conviction  \
+# 0                  0.65     0.20    0.571429   0.879121   -0.0275    0.816667   
+# 1                  0.35     0.10    0.666667   1.904762    0.0475    1.950000   
+# 2                  0.35     0.15    0.500000   1.428571    0.0450    1.300000   
+# 3                  0.65     0.15    0.750000   1.153846    0.0200    1.400000   
+# 4                  0.30     0.10    0.500000   1.666667    0.0400    1.400000   
+# ..                  ...      ...         ...        ...       ...         ...   
+# 141                0.20     0.05    1.000000   5.000000    0.0400         inf   
+# 142                0.10     0.05    1.000000  10.000000    0.0450         inf   
+# 143                0.05     0.05    0.500000  10.000000    0.0450    1.900000   
+# 144                0.10     0.05    1.000000  10.000000    0.0450         inf   
+# 145                0.05     0.05    0.500000  10.000000    0.0450    1.900000   
+
+#      zhangs_metric  
+# 0        -0.174603  
+# 1         0.558824  
+# 2         0.428571  
+# 3         0.166667  
+# 4         0.500000  
+# ..             ...  
+# 141       0.842105  
+# 142       0.947368  
+# 143       1.000000  
+# 144       0.947368  
+# 145       1.000000 
+
+minürün = 2
+mindestek = 0.2
+maxürün = max([len(x) for x in veri])
+
+from pyECLAT import ECLAT
+
+ec = ECLAT(veri2, verbose=True)
+
+a, b = ec.fit(
+    min_support=mindestek,
+    min_combination=minürün,
+    max_combination=maxürün
+)
+
+# print(b)
+# {'BISCUIT & BREAD': 0.2, 'MILK & BREAD': 0.2, 'BREAD & TEA': 0.2, 'BREAD & SUGER': 0.2, 'COFFEE & SUGER': 0.2, 'COFFEE & CORNFLAKES': 0.2, 'TEA & MAGGI': 0.2}
+
+```
 
 # 
 
