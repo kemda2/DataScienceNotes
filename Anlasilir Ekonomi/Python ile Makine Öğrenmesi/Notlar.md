@@ -6563,8 +6563,236 @@ a, b = ec.fit(
 
 # print(b)
 # {'BISCUIT & BREAD': 0.2, 'MILK & BREAD': 0.2, 'BREAD & TEA': 0.2, 'BREAD & SUGER': 0.2, 'COFFEE & SUGER': 0.2, 'COFFEE & CORNFLAKES': 0.2, 'TEA & MAGGI': 0.2}
+```
+
+# Birliktelik Analizi E-Ticaret Örneği
+
+```Python
+import pandas as pd
+
+data=pd.read_csv("Online Retail.csv")
+veri=data.copy()
+veri.dropna()
+# print(veri)
+#         Unnamed: 0 InvoiceNo StockCode  ... UnitPrice  CustomerID         Country
+# 0                0    536365    85123A  ...      2.55     17850.0  United Kingdom
+# 1                1    536365     71053  ...      3.39     17850.0  United Kingdom
+# 2                2    536365    84406B  ...      2.75     17850.0  United Kingdom
+# 3                3    536365    84029G  ...      3.39     17850.0  United Kingdom
+# 4                4    536365    84029E  ...      3.39     17850.0  United Kingdom
+# ...            ...       ...       ...  ...       ...         ...             ...
+# 541904      541904    581587     22613  ...      0.85     12680.0          France
+# 541905      541905    581587     22899  ...      2.10     12680.0          France
+# 541906      541906    581587     23254  ...      4.15     12680.0          France
+# 541907      541907    581587     23255  ...      4.15     12680.0          France
+# 541908      541908    581587     22138  ...      4.95     12680.0          France
+
+# print(veri.isnull().sum())
+# Unnamed: 0          0
+# InvoiceNo           0
+# StockCode           0
+# Description      1454
+# Quantity            0
+# InvoiceDate         0
+# UnitPrice           0
+# CustomerID     135080
+# Country             0
+
+# veri = veri.dropna()
+# print(veri.isnull().sum())
+# Unnamed: 0     0
+# InvoiceNo      0
+# StockCode      0
+# Description    0
+# Quantity       0
+# InvoiceDate    0
+# UnitPrice      0
+# CustomerID     0
+# Country        0
+# dtype: int64
+
+# print(veri.shape)
+# (541909, 9)
+veri = veri[~veri["InvoiceNo"].str.contains("C")]
+# print(veri.shape)
+# (532621, 9)
+
+# print(veri)
+#         Unnamed: 0 InvoiceNo StockCode  ... UnitPrice  CustomerID         Country
+# 0                0    536365    85123A  ...      2.55     17850.0  United Kingdom
+# 1                1    536365     71053  ...      3.39     17850.0  United Kingdom
+# 2                2    536365    84406B  ...      2.75     17850.0  United Kingdom
+# 3                3    536365    84029G  ...      3.39     17850.0  United Kingdom
+# 4                4    536365    84029E  ...      3.39     17850.0  United Kingdom
+# ...            ...       ...       ...  ...       ...         ...             ...
+# 541904      541904    581587     22613  ...      0.85     12680.0          France
+# 541905      541905    581587     22899  ...      2.10     12680.0          France
+# 541906      541906    581587     23254  ...      4.15     12680.0          France
+# 541907      541907    581587     23255  ...      4.15     12680.0          France
+# 541908      541908    581587     22138  ...      4.95     12680.0          France
+
+# print(veri["Country"].value_counts())
+# Country
+# United Kingdom          487622
+# Germany                   9042
+# France                    8408
+# EIRE                      7894
+# Spain                     2485
+# Netherlands               2363
+# Belgium                   2031
+# Switzerland               1967
+# Portugal                  1501
+# Australia                 1185
+# Norway                    1072
+# Italy                      758
+# Channel Islands            748
+# Finland                    685
+# Cyprus                     614
+# Sweden                     451
+# Unspecified                446
+# Austria                    398
+# Denmark                    380
+# Poland                     330
+# Japan                      321
+# Israel                     295
+# Hong Kong                  284
+# Singapore                  222
+# Iceland                    182
+# USA                        179
+# Canada                     151
+# Greece                     145
+# Malta                      112
+# United Arab Emirates        68
+# European Community          60
+# RSA                         58
+# Lebanon                     45
+# Lithuania                   35
+# Brazil                      32
+# Czech Republic              25
+# Bahrain                     18
+# Saudi Arabia                 9
+# Name: count, dtype: int64
+
+ulke = veri[veri["Country"] == "United Kingdom"]
+# print(ulke)
+#         Unnamed: 0 InvoiceNo StockCode  ... UnitPrice  CustomerID         Country
+# 0                0    536365    85123A  ...      2.55     17850.0  United Kingdom
+# 1                1    536365     71053  ...      3.39     17850.0  United Kingdom
+# 2                2    536365    84406B  ...      2.75     17850.0  United Kingdom
+# 3                3    536365    84029G  ...      3.39     17850.0  United Kingdom
+# 4                4    536365    84029E  ...      3.39     17850.0  United Kingdom
+# ...            ...       ...       ...  ...       ...         ...             ...
+# 541889      541889    581585     22466  ...      1.95     15804.0  United Kingdom
+# 541890      541890    581586     22061  ...      2.95     13113.0  United Kingdom
+# 541891      541891    581586     23275  ...      1.25     13113.0  United Kingdom
+# 541892      541892    581586     21217  ...      8.95     13113.0  United Kingdom
+# 541893      541893    581586     20685  ...      7.08     13113.0  United Kingdom
+
+# [487622 rows x 9 columns]
+
+sepet = ulke.iloc[:, [1, 3, 4]]
+# print(sepet)
+#        InvoiceNo                          Description  Quantity
+# 0         536365   WHITE HANGING HEART T-LIGHT HOLDER         6
+# 1         536365                  WHITE METAL LANTERN         6
+# 2         536365       CREAM CUPID HEARTS COAT HANGER         8
+# 3         536365  KNITTED UNION FLAG HOT WATER BOTTLE         6
+# 4         536365       RED WOOLLY HOTTIE WHITE HEART.         6
+# ...          ...                                  ...       ...
+# 541889    581585       FAIRY TALE COTTAGE NIGHT LIGHT        12
+# 541890    581586  LARGE CAKE STAND  HANGING STRAWBERY         8
+# 541891    581586     SET OF 3 HANGING OWLS OLLIE BEAK        24
+# 541892    581586        RED RETROSPOT ROUND CAKE TINS        24
+# 541893    581586                DOORMAT RED RETROSPOT        10
+
+# [487622 rows x 3 columns]
+
+sepet = sepet.groupby(["InvoiceNo", "Description"])["Quantity"].sum().unstack().reset_index().fillna(0).set_index("InvoiceNo")
+# print(sepet)
+# Description InvoiceNo   4 PURPLE FLOCK DINNER CANDLES  ...  wrongly sold as sets  wrongly sold sets
+# 0              536365                             0.0  ...                   0.0                0.0
+# 1              536366                             0.0  ...                   0.0                0.0
+# 2              536367                             0.0  ...                   0.0                0.0
+# 3              536368                             0.0  ...                   0.0                0.0
+# 4              536369                             0.0  ...                   0.0                0.0
+# ...               ...                             ...  ...                   ...                ...
+# 18663          581585                             0.0  ...                   0.0                0.0
+# 18664          581586                             0.0  ...                   0.0                0.0
+# 18665         A563185                             0.0  ...                   0.0                0.0
+# 18666         A563186                             0.0  ...                   0.0                0.0
+# 18667         A563187                             0.0  ...                   0.0                0.0
+
+# [18668 rows x 4189 columns]
+
+def num(x):
+    if x <= 0:
+        return 0
+    if x >= 1:
+        return 1
+
+sepetson = sepet.map(num)
+# print(sepetson)
+# Description   4 PURPLE FLOCK DINNER CANDLES   50'S CHRISTMAS GIFT BAG LARGE  ...  wrongly sold as sets  wrongly sold sets
+# InvoiceNo                                                                    ...                                         
+# 536365                                    0                               0  ...                     0                  0
+# 536366                                    0                               0  ...                     0                  0
+# 536367                                    0                               0  ...                     0                  0
+# 536368                                    0                               0  ...                     0                  0
+# 536369                                    0                               0  ...                     0                  0
+# ...                                     ...                             ...  ...                   ...                ...
+# 581585                                    0                               0  ...                     0                  0
+# 581586                                    0                               0  ...                     0                  0
+# A563185                                   0                               0  ...                     0                  0
+# A563186                                   0                               0  ...                     0                  0
+# A563187                                   0                               0  ...                     0                  0
+
+# [18668 rows x 4188 columns]
+
+from mlxtend.frequent_patterns import apriori, association_rules
+
+df1 = apriori(sepetson.astype("bool"), min_support=0.02, use_colnames=True)
+df2 = association_rules(df1, metric="confidence")
+# print(df2)
+#                                          antecedents                         consequents  ...  conviction  zhangs_metric
+# 0                   (PINK REGENCY TEACUP AND SAUCER)   (GREEN REGENCY TEACUP AND SAUCER)  ...    5.300218       0.975789
+# 1  (PINK REGENCY TEACUP AND SAUCER, ROSES REGENCY...   (GREEN REGENCY TEACUP AND SAUCER)  ...    9.786461       0.973049
+# 2  (PINK REGENCY TEACUP AND SAUCER, GREEN REGENCY...  (ROSES REGENCY TEACUP AND SAUCER )  ...    6.516911       0.969982
+# 3  (JUMBO BAG PINK POLKADOT, JUMBO STORAGE BAG SUKI)           (JUMBO BAG RED RETROSPOT)  ...    4.525739       0.894758
+
+# [4 rows x 10 columns]
+
+# print(df2.iloc[0])
+# antecedents            (PINK REGENCY TEACUP AND SAUCER)
+# consequents           (GREEN REGENCY TEACUP AND SAUCER)
+# antecedent support                             0.037658
+# consequent support                             0.050032
+# support                                        0.030909
+# confidence                                     0.820768
+# lift                                          16.404818
+# leverage                                       0.029024
+# conviction                                     5.300218
+# zhangs_metric                                  0.975789
+# Name: 0, dtype: object
+
+df2 = association_rules(df1, metric="lift", min_threshold=1)
+# print(df2.iloc[0])
+# antecedents           (PACK OF 72 RETROSPOT CAKE CASES)
+# consequents               (60 TEATIME FAIRY CAKE CASES)
+# antecedent support                             0.060478
+# consequent support                             0.040336
+# support                                        0.021909
+# confidence                                     0.362267
+# lift                                           8.981155
+# leverage                                        0.01947
+# conviction                                     1.504806
+# zhangs_metric                                  0.945859
+# Name: 0, dtype: object
 
 ```
+
+# Doğal Dil İşleme-NLP
+
+
 
 # 
 
