@@ -7069,4 +7069,4 @@ veri4=veri["Sms"].str.replace("[\d]","",regex=True)
 
 ![image](./images/apr1.png)
 
-https://www.youtube.com/watch?v=m-9RpYSsvSU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=103
+https://www.youtube.com/watch?v=LLI9p1Nf0dc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=105
