@@ -6885,6 +6885,14 @@ metin="Anlaşılır Ekonomi"
 
 # print(metin.istitle())
 # True
+
+metin="Ahmet-Can-28-İstanbul"
+
+# print(metin.split("-"))
+# ['Ahmet', 'Can', '28', 'İstanbul']
+
+# print("---".join(metin.split("-")))
+# Ahmet---Can---28---İstanbul
 ```
 
 # 
