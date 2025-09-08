@@ -5250,8 +5250,475 @@ RFM Açılımı:
     - En çok harcama yapan müşteriler genellikle en değerli müşterilerdir
 
 
+## Örnek
+
+| **Değişken Adı** | **Rolü** | **Türü**  | **Açıklama**                                                                                                                        | **Birim** | **Eksik Değerler** |
+| ---------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------ |
+| **InvoiceNo**    | Kimlik   | Kategorik | Her işleme benzersiz olarak atanmış 6 basamaklı tamsayı bir numara. Bu kod 'C' harfi ile başlıyorsa, iptal edildiği anlamına gelir. | -         | hayır              |
+| **StockCode**    | Kimlik   | Kategorik | Her ürüne benzersiz olarak atanmış 5 basamaklı tamsayı bir numara.                                                                  | -         | hayır              |
+| **Description**  | Özellik  | Kategorik | Ürün adı                                                                                                                            | -         | hayır              |
+| **Quantity**     | Özellik  | Tamsayı   | Her işlemdeki her ürünün (öğe) miktarı                                                                                              | -         | hayır              |
+| **InvoiceDate**  | Özellik  | Tarih     | Her işlemin ne zaman gerçekleştiğini gösteren tarih ve saat                                                                         | -         | hayır              |
+| **UnitPrice**    | Özellik  | Sürekli   | Birim ürün fiyatı                                                                                                                   | Sterlin   | hayır              |
+| **CustomerID**   | Özellik  | Kategorik | Her müşteriye benzersiz olarak atanmış 5 basamaklı tamsayı bir numara                                                               | -         | hayır              |
+| **Country**      | Özellik  | Kategorik | Her müşterinin ikamet ettiği ülkenin adı                                                                                            | -         | hayır              |
+
+```Python
+import pandas as pd
+import numpy as np
+
+data=pd.read_csv("Online Retail.csv")
+
+veri=data.copy()
+
+# print(veri)
+#         Unnamed: 0 InvoiceNo StockCode                          Description  \
+# 0                0    536365    85123A   WHITE HANGING HEART T-LIGHT HOLDER   
+# 1                1    536365     71053                  WHITE METAL LANTERN   
+# 2                2    536365    84406B       CREAM CUPID HEARTS COAT HANGER   
+# 3                3    536365    84029G  KNITTED UNION FLAG HOT WATER BOTTLE   
+# 4                4    536365    84029E       RED WOOLLY HOTTIE WHITE HEART.   
+# ...            ...       ...       ...                                  ...   
+# 541904      541904    581587     22613          PACK OF 20 SPACEBOY NAPKINS   
+# 541905      541905    581587     22899         CHILDREN'S APRON DOLLY GIRL    
+# 541906      541906    581587     23254        CHILDRENS CUTLERY DOLLY GIRL    
+# 541907      541907    581587     23255      CHILDRENS CUTLERY CIRCUS PARADE   
+# 541908      541908    581587     22138        BAKING SET 9 PIECE RETROSPOT    
+
+#         Quantity          InvoiceDate  UnitPrice  CustomerID         Country  
+# 0              6  2010-12-01 08:26:00       2.55     17850.0  United Kingdom  
+# 1              6  2010-12-01 08:26:00       3.39     17850.0  United Kingdom  
+# 2              8  2010-12-01 08:26:00       2.75     17850.0  United Kingdom  
+# 3              6  2010-12-01 08:26:00       3.39     17850.0  United Kingdom  
+# 4              6  2010-12-01 08:26:00       3.39     17850.0  United Kingdom  
+# ...          ...                  ...        ...         ...             ...  
+# 541904        12  2011-12-09 12:50:00       0.85     12680.0          France  
+# 541905         6  2011-12-09 12:50:00       2.10     12680.0          France  
+# 541906         4  2011-12-09 12:50:00       4.15     12680.0          France  
+# 541907         4  2011-12-09 12:50:00       4.15     12680.0          France  
+# 541908         3  2011-12-09 12:50:00       4.95     12680.0          France  
+
+# print(veri.isnull().sum())
+# Unnamed: 0          0
+# InvoiceNo           0
+# StockCode           0
+# Description      1454
+# Quantity            0
+# InvoiceDate         0
+# UnitPrice           0
+# CustomerID     135080
+# Country             0
+# dtype: int64
+
+veri=veri.dropna()
+# print(veri.isnull().sum())
+# Unnamed: 0     0
+# InvoiceNo      0
+# StockCode      0
+# Description    0
+# Quantity       0
+# InvoiceDate    0
+# UnitPrice      0
+# CustomerID     0
+# Country        0
+# dtype: int64
+
+veri["Total"] = veri["Quantity"] * veri["UnitPrice"]
+# print(veri)
+#         Unnamed: 0 InvoiceNo StockCode                          Description  \
+# 0                0    536365    85123A   WHITE HANGING HEART T-LIGHT HOLDER   
+# 1                1    536365     71053                  WHITE METAL LANTERN   
+# 2                2    536365    84406B       CREAM CUPID HEARTS COAT HANGER   
+# 3                3    536365    84029G  KNITTED UNION FLAG HOT WATER BOTTLE   
+# 4                4    536365    84029E       RED WOOLLY HOTTIE WHITE HEART.   
+# ...            ...       ...       ...                                  ...   
+# 541904      541904    581587     22613          PACK OF 20 SPACEBOY NAPKINS   
+# 541905      541905    581587     22899         CHILDREN'S APRON DOLLY GIRL    
+# 541906      541906    581587     23254        CHILDRENS CUTLERY DOLLY GIRL    
+# 541907      541907    581587     23255      CHILDRENS CUTLERY CIRCUS PARADE   
+# 541908      541908    581587     22138        BAKING SET 9 PIECE RETROSPOT    
+
+#         Quantity          InvoiceDate  UnitPrice  CustomerID         Country  \
+# 0              6  2010-12-01 08:26:00       2.55     17850.0  United Kingdom   
+# 1              6  2010-12-01 08:26:00       3.39     17850.0  United Kingdom   
+# 2              8  2010-12-01 08:26:00       2.75     17850.0  United Kingdom   
+# 3              6  2010-12-01 08:26:00       3.39     17850.0  United Kingdom   
+# 4              6  2010-12-01 08:26:00       3.39     17850.0  United Kingdom   
+# ...          ...                  ...        ...         ...             ...   
+# 541904        12  2011-12-09 12:50:00       0.85     12680.0          France   
+# 541905         6  2011-12-09 12:50:00       2.10     12680.0          France   
+# 541906         4  2011-12-09 12:50:00       4.15     12680.0          France   
+# 541907         4  2011-12-09 12:50:00       4.15     12680.0          France   
+# 541908         3  2011-12-09 12:50:00       4.95     12680.0          France   
+
+#         Total  
+# 0       15.30  
+# 1       20.34  
+# 2       22.00  
+# 3       20.34  
+# 4       20.34  
+# ...       ...  
+# 541904  10.20  
+# 541905  12.60  
+# 541906  16.60  
+# 541907  16.60  
+# 541908  14.85 
+
+# print(veri[veri["Total"] <= 0])
+#         Unnamed: 0 InvoiceNo StockCode                       Description  \
+# 141            141   C536379         D                          Discount   
+# 154            154   C536383    35004C   SET OF 3 COLOURED  FLYING DUCKS   
+# 235            235   C536391     22556    PLASTERS IN TIN CIRCUS PARADE    
+# 236            236   C536391     21984  PACK OF 12 PINK PAISLEY TISSUES    
+# 237            237   C536391     21983  PACK OF 12 BLUE PAISLEY TISSUES    
+# ...            ...       ...       ...                               ...   
+# 540449      540449   C581490     23144   ZINC T-LIGHT HOLDER STARS SMALL   
+# 541541      541541   C581499         M                            Manual   
+# 541715      541715   C581568     21258        VICTORIAN SEWING BOX LARGE   
+# 541716      541716   C581569     84978  HANGING HEART JAR T-LIGHT HOLDER   
+# 541717      541717   C581569     20979     36 PENCILS TUBE RED RETROSPOT   
+
+#         Quantity          InvoiceDate  UnitPrice  CustomerID         Country  \
+# 141           -1  2010-12-01 09:41:00      27.50     14527.0  United Kingdom   
+# 154           -1  2010-12-01 09:49:00       4.65     15311.0  United Kingdom   
+# 235          -12  2010-12-01 10:24:00       1.65     17548.0  United Kingdom   
+# 236          -24  2010-12-01 10:24:00       0.29     17548.0  United Kingdom   
+# 237          -24  2010-12-01 10:24:00       0.29     17548.0  United Kingdom   
+# ...          ...                  ...        ...         ...             ...   
+# 540449       -11  2011-12-09 09:57:00       0.83     14397.0  United Kingdom   
+# 541541        -1  2011-12-09 10:28:00     224.69     15498.0  United Kingdom   
+# 541715        -5  2011-12-09 11:57:00      10.95     15311.0  United Kingdom   
+# 541716        -1  2011-12-09 11:58:00       1.25     17315.0  United Kingdom   
+# 541717        -5  2011-12-09 11:58:00       1.25     17315.0  United Kingdom   
+
+#          Total  
+# 141     -27.50  
+# 154      -4.65  
+# 235     -19.80  
+# 236      -6.96  
+# 237      -6.96  
+# ...        ...  
+# 540449   -9.13  
+# 541541 -224.69  
+# 541715  -54.75  
+# 541716   -1.25  
+# 541717   -6.25  
+
+# Total sütununda 0 dan küçük olan değerler var. Bunların InvoiceNo  değeri C ile başlıyor.
+
+veri = veri.drop(veri[veri["Total"] <= 0].index)
+# print(veri[veri["Total"] <= 0])
+# Empty DataFrame
+# Columns: [Unnamed: 0, InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, Country, Total]
+# Index: []
+
+# Total sütunu 0 dan küçük değer içeren verileri kaldırdık.
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.boxplot(veri["Total"])
+plt.show()
+```
+
+![image](./images/rfm1.png) 
+
+```Python
+Q1 = veri["Total"].quantile(0.25)
+Q3 = veri["Total"].quantile(0.75)
+
+IQR = Q3 - Q1
+
+altsınır = Q1 - 1.5 * IQR
+ustsınır = Q3 + 1.5 * IQR
+
+veri = veri[~((veri["Total"] > ustsınır) | (veri["Total"] < altsınır))]
+# veri.shape
+# (366643, 10)
+
+# print(veri)
+#         Unnamed: 0 InvoiceNo StockCode                          Description  \
+# 0                0    536365    85123A   WHITE HANGING HEART T-LIGHT HOLDER   
+# 1                1    536365     71053                  WHITE METAL LANTERN   
+# 2                2    536365    84406B       CREAM CUPID HEARTS COAT HANGER   
+# 3                3    536365    84029G  KNITTED UNION FLAG HOT WATER BOTTLE   
+# 4                4    536365    84029E       RED WOOLLY HOTTIE WHITE HEART.   
+# ...            ...       ...       ...                                  ...   
+# 541904      541904    581587     22613          PACK OF 20 SPACEBOY NAPKINS   
+# 541905      541905    581587     22899         CHILDREN'S APRON DOLLY GIRL    
+# 541906      541906    581587     23254        CHILDRENS CUTLERY DOLLY GIRL    
+# 541907      541907    581587     23255      CHILDRENS CUTLERY CIRCUS PARADE   
+# 541908      541908    581587     22138        BAKING SET 9 PIECE RETROSPOT    
+
+#         Quantity          InvoiceDate  UnitPrice  CustomerID         Country  \
+# 0              6  2010-12-01 08:26:00       2.55     17850.0  United Kingdom   
+# 1              6  2010-12-01 08:26:00       3.39     17850.0  United Kingdom   
+# 2              8  2010-12-01 08:26:00       2.75     17850.0  United Kingdom   
+# 3              6  2010-12-01 08:26:00       3.39     17850.0  United Kingdom   
+# 4              6  2010-12-01 08:26:00       3.39     17850.0  United Kingdom   
+# ...          ...                  ...        ...         ...             ...   
+# 541904        12  2011-12-09 12:50:00       0.85     12680.0          France   
+# 541905         6  2011-12-09 12:50:00       2.10     12680.0          France   
+# 541906         4  2011-12-09 12:50:00       4.15     12680.0          France   
+# 541907         4  2011-12-09 12:50:00       4.15     12680.0          France   
+# 541908         3  2011-12-09 12:50:00       4.95     12680.0          France   
+
+#         Total  
+# 0       15.30  
+# 1       20.34  
+# 2       22.00  
+# 3       20.34  
+# 4       20.34  
+# ...       ...  
+# 541904  10.20  
+# 541905  12.60  
+# 541906  16.60  
+# 541907  16.60  
+# 541908  14.85  
+
+# veri indexlerini resetleyelim;
+veri = veri.reset_index()
+# print(veri)
+#          index  Unnamed: 0 InvoiceNo StockCode  \
+# 0            0           0    536365    85123A   
+# 1            1           1    536365     71053   
+# 2            2           2    536365    84406B   
+# 3            3           3    536365    84029G   
+# 4            4           4    536365    84029E   
+# ...        ...         ...       ...       ...   
+# 360169  541904      541904    581587     22613   
+# 360170  541905      541905    581587     22899   
+# 360171  541906      541906    581587     23254   
+# 360172  541907      541907    581587     23255   
+# 360173  541908      541908    581587     22138   
+
+#                                 Description  Quantity          InvoiceDate  \
+# 0        WHITE HANGING HEART T-LIGHT HOLDER         6  2010-12-01 08:26:00   
+# 1                       WHITE METAL LANTERN         6  2010-12-01 08:26:00   
+# 2            CREAM CUPID HEARTS COAT HANGER         8  2010-12-01 08:26:00   
+# 3       KNITTED UNION FLAG HOT WATER BOTTLE         6  2010-12-01 08:26:00   
+# 4            RED WOOLLY HOTTIE WHITE HEART.         6  2010-12-01 08:26:00   
+# ...                                     ...       ...                  ...   
+# 360169          PACK OF 20 SPACEBOY NAPKINS        12  2011-12-09 12:50:00   
+# 360170         CHILDREN'S APRON DOLLY GIRL          6  2011-12-09 12:50:00   
+# 360171        CHILDRENS CUTLERY DOLLY GIRL          4  2011-12-09 12:50:00   
+# 360172      CHILDRENS CUTLERY CIRCUS PARADE         4  2011-12-09 12:50:00   
+# 360173        BAKING SET 9 PIECE RETROSPOT          3  2011-12-09 12:50:00   
+
+#         UnitPrice  CustomerID         Country  Total  
+# 0            2.55     17850.0  United Kingdom  15.30  
+# 1            3.39     17850.0  United Kingdom  20.34  
+# 2            2.75     17850.0  United Kingdom  22.00  
+# 3            3.39     17850.0  United Kingdom  20.34  
+# 4            3.39     17850.0  United Kingdom  20.34  
+# ...           ...         ...             ...    ...  
+# 360169       0.85     12680.0          France  10.20  
+# 360170       2.10     12680.0          France  12.60  
+# 360171       4.15     12680.0          France  16.60  
+# 360172       4.15     12680.0          France  16.60  
+# 360173       4.95     12680.0          France  14.85 
+
+# print(len(veri["CustomerID"].unique()))
+# 4194
+
+# print(veri["CustomerID"].nunique()) # Boş değerleri saymaz
+# 4194
+
+# print(veri["InvoiceNo"].nunique())
+# 16806
+
+veri["CustomerID"] = veri["CustomerID"].astype("int")
+# print(veri)
+#          index  Unnamed: 0 InvoiceNo StockCode  \
+# 0            0           0    536365    85123A   
+# 1            1           1    536365     71053   
+# 2            2           2    536365    84406B   
+# 3            3           3    536365    84029G   
+# 4            4           4    536365    84029E   
+# ...        ...         ...       ...       ...   
+# 366638  541904      541904    581587     22613   
+# 366639  541905      541905    581587     22899   
+# 366640  541906      541906    581587     23254   
+# 366641  541907      541907    581587     23255   
+# 366642  541908      541908    581587     22138   
+
+#                                 Description  Quantity          InvoiceDate  \
+# 0        WHITE HANGING HEART T-LIGHT HOLDER         6  2010-12-01 08:26:00   
+# 1                       WHITE METAL LANTERN         6  2010-12-01 08:26:00   
+# 2            CREAM CUPID HEARTS COAT HANGER         8  2010-12-01 08:26:00   
+# 3       KNITTED UNION FLAG HOT WATER BOTTLE         6  2010-12-01 08:26:00   
+# 4            RED WOOLLY HOTTIE WHITE HEART.         6  2010-12-01 08:26:00   
+# ...                                     ...       ...                  ...   
+# 366638          PACK OF 20 SPACEBOY NAPKINS        12  2011-12-09 12:50:00   
+# 366639         CHILDREN'S APRON DOLLY GIRL          6  2011-12-09 12:50:00   
+# 366640        CHILDRENS CUTLERY DOLLY GIRL          4  2011-12-09 12:50:00   
+# 366641      CHILDRENS CUTLERY CIRCUS PARADE         4  2011-12-09 12:50:00   
+# 366642        BAKING SET 9 PIECE RETROSPOT          3  2011-12-09 12:50:00   
+
+#         UnitPrice  CustomerID         Country  Total  
+# 0            2.55       17850  United Kingdom  15.30  
+# 1            3.39       17850  United Kingdom  20.34  
+# 2            2.75       17850  United Kingdom  22.00  
+# 3            3.39       17850  United Kingdom  20.34  
+# 4            3.39       17850  United Kingdom  20.34  
+# ...           ...         ...             ...    ...  
+# 366638       0.85       12680          France  10.20  
+# 366639       2.10       12680          France  12.60  
+# 366640       4.15       12680          France  16.60  
+# 366641       4.15       12680          France  16.60  
+# 366642       4.95       12680          France  14.85 
+
+# print(veri.info())
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 366643 entries, 0 to 366642
+# Data columns (total 11 columns):
+#  #   Column       Non-Null Count   Dtype  
+# ---  ------       --------------   -----  
+#  0   index        366643 non-null  int64  
+#  1   Unnamed: 0   366643 non-null  int64  
+#  2   InvoiceNo    366643 non-null  object 
+#  3   StockCode    366643 non-null  object 
+#  4   Description  366643 non-null  object 
+#  5   Quantity     366643 non-null  int64  
+#  6   InvoiceDate  366643 non-null  object 
+#  7   UnitPrice    366643 non-null  float64
+#  8   CustomerID   366643 non-null  int32  
+#  9   Country      366643 non-null  object 
+#  10  Total        366643 non-null  float64
+# dtypes: float64(2), int32(1), int64(3), object(5)
+# memory usage: 29.4+ MB
+# None
+
+veri["InvoiceDate"]=pd.to_datetime(veri["InvoiceDate"])
+# print(veri.info())
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 366643 entries, 0 to 366642
+# Data columns (total 11 columns):
+#  #   Column       Non-Null Count   Dtype         
+# ---  ------       --------------   -----         
+#  0   index        366643 non-null  int64         
+#  1   Unnamed: 0   366643 non-null  int64         
+#  2   InvoiceNo    366643 non-null  object        
+#  3   StockCode    366643 non-null  object        
+#  4   Description  366643 non-null  object        
+#  5   Quantity     366643 non-null  int64         
+#  6   InvoiceDate  366643 non-null  datetime64[ns]
+#  7   UnitPrice    366643 non-null  float64       
+#  8   CustomerID   366643 non-null  int32         
+#  9   Country      366643 non-null  object        
+#  10  Total        366643 non-null  float64       
+# dtypes: datetime64[ns](1), float64(2), int32(1), int64(3), object(4)
+# memory usage: 29.4+ MB
+# None
+
+# Normalde güncel verilerle çalışıyor olsaydık bugünün tarihini alırdık. Ama veriler güncel tarihli olmadığı için son işlem yapılan tarihi alacağız.
+bugün=veri["InvoiceDate"].max()
+# print(bugün)
+# 2011-12-09 12:50:00
+
+import datetime as dt
+bugün=dt.datetime(2011,12,9,12,50,0)
+# print(bugün)
+# 2011-12-09 12:50:00
+
+r = (bugün - veri.groupby("CustomerID").agg({"InvoiceDate": "max"})).apply(lambda x: x.dt.days)
+# print(r)
+#             InvoiceDate
+# CustomerID             
+# 12347                 1
+# 12348                74
+# 12349                18
+# 12350               309
+# 12352                35
+# ...                 ...
+# 18280               277
+# 18281               180
+# 18282                 7
+# 18283                 3
+# 18287                42
+
+f = veri.groupby(["CustomerID", "InvoiceNo"]).agg({"InvoiceNo": "count"})
+# print(f)
+#                       InvoiceNo
+# CustomerID InvoiceNo           
+# 12347      537626            29
+#            542237            29
+#            549222            23
+#            556201            17
+#            562032            20
+# ...                         ...
+# 18283      579673            52
+#            580872            50
+# 18287      554065            25
+#            570715            31
+#            573167             2
+
+f = veri.groupby(["CustomerID", "InvoiceNo"]).agg({"InvoiceNo": "count"})
+f = f.groupby("CustomerID").agg({"InvoiceNo": "count"})
+# print(f)
+#             InvoiceNo
+# CustomerID           
+# 12347               7
+# 12348               4
+# 12349               1
+# 12350               1
+# 12352               7
+# ...               ...
+# 18280               1
+# 18281               1
+# 18282               2
+# 18283              16
+# 18287               3
+
+m = veri.groupby("CustomerID").agg({"Total": "sum"})
+# print(m)
+#               Total
+# CustomerID         
+# 12347       3174.62
+# 12348        601.64
+# 12349       1145.35
+# 12350        334.40
+# 12352       1505.74
+# ...             ...
+# 18280        180.60
+# 18281         80.82
+# 18282        178.05
+# 18283       2094.88
+# 18287       1068.74
+
+RFM = r.merge(f, on="CustomerID").merge(m, on="CustomerID")
+# print(RFM)
+#             InvoiceDate  InvoiceNo    Total
+# CustomerID                                 
+# 12347                 1          7  3174.62
+# 12348                74          4   601.64
+# 12349                18          1  1145.35
+# 12350               309          1   334.40
+# 12352                35          7  1505.74
+# ...                 ...        ...      ...
+# 18280               277          1   180.60
+# 18281               180          1    80.82
+# 18282                 7          2   178.05
+# 18283                 3         16  2094.88
+# 18287                42          3  1068.74
+
+RFM=RFM.reset_index()
+# print(RFM)
+#       CustomerID  InvoiceDate  InvoiceNo    Total
+# 0          12347            1          7  3174.62
+# 1          12348           74          4   601.64
+# 2          12349           18          1  1145.35
+# 3          12350          309          1   334.40
+# 4          12352           35          7  1505.74
+# ...          ...          ...        ...      ...
+# 4189       18280          277          1   180.60
+# 4190       18281          180          1    80.82
+# 4191       18282            7          2   178.05
+# 4192       18283            3         16  2094.88
+# 4193       18287           42          3  1068.74
 
 
+```
 
 
 
@@ -5262,6 +5729,6 @@ RFM Açılımı:
 
 # 
 
-![image](./images/bist7.png)
+![image](./images/rfm2.png)
 
 https://www.youtube.com/watch?v=YbTxVCE6JKU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=92
