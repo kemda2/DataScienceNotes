@@ -5717,9 +5717,80 @@ RFM=RFM.reset_index()
 # 4192       18283            3         16  2094.88
 # 4193       18287           42          3  1068.74
 
+RFM = RFM.rename(columns={
+    "CustomerID": "Customer",
+    "InvoiceDate": "Recency",
+    "InvoiceNo": "Frequency",
+    "Total": "Monetary"
+})
+# print(RFM)
+#       Customer  Recency  Frequency  Monetary
+# 0        12347        1          7   3174.62
+# 1        12348       74          4    601.64
+# 2        12349       18          1   1145.35
+# 3        12350      309          1    334.40
+# 4        12352       35          7   1505.74
+# ...        ...      ...        ...       ...
+# 4189     18280      277          1    180.60
+# 4190     18281      180          1     80.82
+# 4191     18282        7          2    178.05
+# 4192     18283        3         16   2094.88
+# 4193     18287       42          3   1068.74
 
+df = RFM.iloc[:, 1:]
+# print(df)
+#       Recency  Frequency  Monetary
+# 0           1          7   3174.62
+# 1          74          4    601.64
+# 2          18          1   1145.35
+# 3         309          1    334.40
+# 4          35          7   1505.74
+# ...       ...        ...       ...
+# 4189      277          1    180.60
+# 4190      180          1     80.82
+# 4191        7          2    178.05
+# 4192        3         16   2094.88
+# 4193       42          3   1068.74
+
+from sklearn.preprocessing import MinMaxScaler
+sc = MinMaxScaler()
+dfnorm = sc.fit_transform(df)
+dfnorm = pd.DataFrame(dfnorm, columns=df.columns)
+# print(dfnorm)
+#        Recency  Frequency  Monetary
+# 0     0.002681      0.030  0.035451
+# 1     0.198391      0.015  0.006701
+# 2     0.048257      0.000  0.012777
+# 3     0.828418      0.000  0.003715
+# 4     0.093834      0.030  0.016804
+# ...        ...        ...       ...
+# 4189  0.742627      0.000  0.001997
+# 4190  0.482574      0.000  0.000882
+# 4191  0.018767      0.005  0.001968
+# 4192  0.008043      0.075  0.023386
+# 4193  0.112601      0.010  0.011921
+
+# print(dfnorm.describe())
+#            Recency    Frequency     Monetary
+# count  4194.000000  4194.000000  4194.000000
+# mean      0.245479     0.015036     0.011691
+# std       0.267357     0.035127     0.024861
+# min       0.000000     0.000000     0.000000
+# 25%       0.045576     0.000000     0.002481
+# 50%       0.134048     0.005000     0.005537
+# 75%       0.383378     0.015000     0.013299
+# max       1.000000     1.000000     1.000000
+
+from yellowbrick.cluster import KElbowVisualizer
+from sklearn.cluster import KMeans
+
+kmodel = KMeans(random_state=0)
+grafik = KElbowVisualizer(kmodel, k=(2, 10))
+grafik.fit(dfnorm)
+grafik.poof()
 ```
 
+![image](./images/rfm2.png)
 
 
 
@@ -5729,6 +5800,6 @@ RFM=RFM.reset_index()
 
 # 
 
-![image](./images/rfm2.png)
+![image](./images/rfm3.png)
 
 https://www.youtube.com/watch?v=YbTxVCE6JKU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=92
