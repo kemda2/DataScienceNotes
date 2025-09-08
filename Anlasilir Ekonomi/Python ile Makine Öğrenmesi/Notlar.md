@@ -6792,7 +6792,52 @@ df2 = association_rules(df1, metric="lift", min_threshold=1)
 
 # Doğal Dil İşleme-NLP
 
+```Python
+metin="Anlaşılır Ekonomi"
+# print(metin*2)
+# Anlaşılır EkonomiAnlaşılır Ekonomi
 
+# print(metin+"Merhaba")
+# Anlaşılır EkonomiMerhaba
+
+# print(metin+" "+"Merhaba")
+# Anlaşılır Ekonomi Merhaba
+
+# print(len(metin))
+# 17
+
+# print(metin[0])
+# A
+
+# print(metin[-1])
+# i
+
+# print(metin[0:5])
+# Anlaş
+
+# print(metin[0:5:2])
+# Alş
+
+metin="anLaşıLır EkoNoMi"
+
+# print(metin.capitalize())
+# Anlaşılır ekonomi
+
+# print(metin.title())
+# Anlaşılır Ekonomi
+
+# print(metin.lower())
+# anlaşılır ekonomi
+
+# print(metin.upper())
+# ANLAŞILIR EKONOMI
+
+# print(metin.swapcase())
+# ANlAŞIlIR eKOnOmI
+
+# print(metin.replace("a","A"))
+# AnLAşıLır EkoNoMi
+```
 
 # 
 
