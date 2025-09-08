@@ -5213,15 +5213,23 @@ plt.show()
 
 ![image](./images/bist5.png) 
 
+```Python
+model = AgglomerativeClustering(n_clusters=2, linkage="single")
+tahmin = model.fit_predict(X)
+labels = model.labels_
+sonuc["Labels"] = labels
 
+sns.scatterplot(x="Labels", y="Hisse", data=sonuc, hue="Labels", palette="deep")
+plt.show()
+```
 
-
+![image](./images/bist6.png)
 
 
 
 
 # 
 
-![image](./images/bist6.png)
+![image](./images/bist7.png)
 
 https://www.youtube.com/watch?v=C4dN73gUzgc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=91
