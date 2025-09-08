@@ -5227,6 +5227,37 @@ plt.show()
 
 # RFM 
 
+RFM, pazarlama ve müşteri ilişkileri yönetiminde kullanılan bir müşteri segmentasyon yöntemidir. RFM, üç temel ölçüme dayanır:
+
+RFM Açılımı:
+
+- R - Recency (En Son Ne Zaman Alışveriş Yaptı?)
+
+    - Müşterinin en son alışveriş yaptığı tarih.
+
+    - Ne kadar yakınsa, müşteri o kadar aktif kabul edilir.
+
+- F - Frequency (Ne Sıklıkla Alışveriş Yaptı?)
+
+    - Müşterinin belirli bir zaman aralığında kaç kez alışveriş yaptığı.
+
+    - Daha sık alışveriş yapan müşteriler, daha sadık sayılır.
+
+- M - Monetary (Ne Kadar Harcama Yaptı?)
+
+    - Müşterinin toplam harcama miktarı.
+
+    - En çok harcama yapan müşteriler genellikle en değerli müşterilerdir
+
+
+
+
+
+
+
+
+
+
 
 
 # 
