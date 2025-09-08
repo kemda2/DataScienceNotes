@@ -6907,7 +6907,7 @@ metin="Anlaşılır Ekonomi"
 ```
 
 ---
-
+```python
 import requests
 import pdfplumber
 
