@@ -6893,10 +6893,21 @@ metin="Ahmet-Can-28-İstanbul"
 
 # print("---".join(metin.split("-")))
 # Ahmet---Can---28---İstanbul
+
+metin="Anlaşılır Ekonomi"
+
+# print(metin.strip(" "))
+# Anlaşılır Ekonomi
+
+# print(metin.rstrip(" ")) # Sadece sondaki boşluğu siliyor
+     # Anlaşılır Ekonomi
+
+# print([i for i in metin]) 
+# ['A', 'n', 'l', 'a', 'ş', 'ı', 'l', 'ı', 'r', ' ', 'E', 'k', 'o', 'n', 'o', 'm', 'i']
 ```
 
 # 
 
 ![image](./images/apr1.png)
 
-https://www.youtube.com/watch?v=k9JTNgTh5Pc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=101
+https://www.youtube.com/watch?v=m-9RpYSsvSU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=103
