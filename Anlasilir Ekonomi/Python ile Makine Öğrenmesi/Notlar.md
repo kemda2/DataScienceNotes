@@ -5889,15 +5889,165 @@ Temel Kavramlar:
 
 - Lift: 1.5 (Bu birlikte almanın rastgele olmaktan 1.5 kat daha fazla gerçekleştiği anlamına gelir)
 
+Destek formülü = birinci ve ikinci grubun olduğu eylem sayısı / toplam eylem sayısı
 
+Güven formülü = birinci ve ikinci grubun olduğu eylem sayısı / birinci  grubun olduğu eylem sayısı
 
+|MID | Alışveriş|
+|---|---|
+| 1 |Ekmek, Süt|
+| 2 |Ekmek, Çay, Kahve, Yumurta|
+| 3 |Süt, Çay, Kahve, Kola|
+| 4 |Ekmek, Süt, Çay, Kahve|
+| 5 |Ekmek, Süt, Çay, Kola|
 
+x(süt ve çay)'dan y(kahve)'ye;
 
+D(x,y) = 2 (3,4 satırlar) / 5 = 0,4
+G(x,y) = 2 (3,4 satırlar) / 3 (2,3,4 satırlar) = 0,66
+
+## Apriori Algoritması
+
+| ID | Ürün                          |
+| -- | ----------------------------- |
+| 1  | Ekmek-Süt-Çay-Salça           |
+| 2  | Su-Bebek Bezi-Ekmek-Yumurta   |
+| 3  | Su-Kola-Bebek Bezi-Süt        |
+| 4  | Su-Ekmek-Bebek Bezi-Çay       |
+| 5  | Kola-Ekmek-Bebek Bezi-Süt     |
+| 6  | Su-Ekmek-Bebek Bezi-Süt-Salça |
+| 7  | Kola-Ekmek-Bebek Bezi-Süt     |
+
+| ID | Ekmek | Süt | Çay | Salça | Su | Bebek Bezi | Yumurta | Kola |
+| -- | ----- | --- | --- | ----- | -- | ---------- | ------- | ---- |
+| 1  | 1     | 1   | 1   | 1     | 0  | 0          | 0       | 0    |
+| 2  | 1     | 0   | 0   | 0     | 1  | 1          | 1       | 0    |
+| 3  | 0     | 1   | 0   | 0     | 1  | 1          | 0       | 1    |
+| 4  | 1     | 0   | 1   | 0     | 1  | 1          | 0       | 0    |
+| 5  | 1     | 1   | 0   | 0     | 0  | 1          | 0       | 1    |
+| 6  | 1     | 1   | 0   | 1     | 1  | 1          | 0       | 0    |
+| 7  | 1     | 1   | 0   | 0     | 0  | 1          | 0       | 1    |
+
+```Python
+import pandas as pd
+
+data = {
+    "ID": [1, 2, 3, 4, 5, 6, 7],
+    "Ekmek": [1, 1, 0, 1, 1, 1, 1],
+    "Süt": [1, 0, 1, 0, 1, 1, 1],
+    "Çay": [1, 0, 0, 1, 0, 0, 0],
+    "Salça": [1, 0, 0, 0, 0, 1, 0],
+    "Su": [0, 1, 1, 1, 0, 1, 0],
+    "Bebek Bezi": [0, 1, 1, 1, 1, 1, 1],
+    "Yumurta": [0, 1, 0, 0, 0, 0, 0],
+    "Kola": [0, 0, 1, 0, 1, 0, 1]
+}
+
+df = pd.DataFrame(data)
+
+# print(df)
+#    ID  Ekmek  Süt  Çay  Salça  Su  Bebek Bezi  Yumurta  Kola
+# 0   1      1    1    1      1   0           0        0     0
+# 1   2      1    0    0      0   1           1        1     0
+# 2   3      0    1    0      0   1           1        0     1
+# 3   4      1    0    1      0   1           1        0     0
+# 4   5      1    1    0      0   0           1        0     1
+# 5   6      1    1    0      1   1           1        0     0
+# 6   7      1    1    0      0   0           1        0     1
+
+import pandas as pd
+
+data = {
+    "ID": [1, 2, 3, 4, 5, 6, 7],
+    "Ekmek": [1, 1, 0, 1, 1, 1, 1],
+    "Süt": [1, 0, 1, 0, 1, 1, 1],
+    "Çay": [1, 0, 0, 1, 0, 0, 0],
+    "Salça": [1, 0, 0, 0, 0, 1, 0],
+    "Su": [0, 1, 1, 1, 0, 1, 0],
+    "Bebek Bezi": [0, 1, 1, 1, 1, 1, 1],
+    "Yumurta": [0, 1, 0, 0, 0, 0, 0],
+    "Kola": [0, 0, 1, 0, 1, 0, 1]
+}
+
+df = pd.DataFrame(data)
+
+# print(df)
+#    ID  Ekmek  Süt  Çay  Salça  Su  Bebek Bezi  Yumurta  Kola
+# 0   1      1    1    1      1   0           0        0     0
+# 1   2      1    0    0      0   1           1        1     0
+# 2   3      0    1    0      0   1           1        0     1
+# 3   4      1    0    1      0   1           1        0     0
+# 4   5      1    1    0      0   0           1        0     1
+# 5   6      1    1    0      1   1           1        0     0
+# 6   7      1    1    0      0   0           1        0     1
+
+df2 = df.sum().iloc[1:]
+# Ekmek         6
+# Süt           5
+# Çay           2
+# Salça         2
+# Su            4
+# Bebek Bezi    6
+# Yumurta       1
+# Kola          3
+# dtype: int64
+
+df2=df2.reset_index()
+df2=df2.rename(columns={"index":"Ürünler",0:"Frekans"})
+df2["Destek"] = df2["Frekans"] / 7
+# print(df2)
+#       Ürünler  Frekans    Destek
+# 0       Ekmek        6  0.857143
+# 1         Süt        5  0.714286
+# 2         Çay        2  0.285714
+# 3       Salça        2  0.285714
+# 4          Su        4  0.571429
+# 5  Bebek Bezi        6  0.857143
+# 6     Yumurta        1  0.142857
+# 7        Kola        3  0.428571
+```
+
+Destek seviyesi 0,50'nin altında olanlarla işimiz yok. Olmayanların ikili frekanslarını bulalım;
+
+| Ürün             | Frekans | Destek   |
+| ---------------- | ------- | -------- |
+| Ekmek-Süt        | 5       | 0.714286 |
+| **Ekmek-Su**     | 3       | 0.428571 |
+| Ekmek-Bebek Bezi | 5       | 0.714286 |
+| **Süt-Su**       | 3       | 0.428571 |
+| Süt-Bebek Bezi   | 5       | 0.714286 |
+| Su-Bebek Bezi    | 4       | 0.571429 |
+
+Yine 0,5'ten küçük olanlar elenecek.
+
+| Ürün             | Frekans | Destek   |
+| ---------------- | ------- | -------- |
+| Ekmek-Süt        | 5       | 0.714286 |
+| Ekmek-Bebek Bezi | 5       | 0.714286 |
+| Süt-Bebek Bezi   | 5       | 0.714286 |
+| Su-Bebek Bezi    | 4       | 0.571429 |
+
+Ekmek, Süt, Su ve Bebek Bezi 3 olarak bakılır;
+
+| Ürün                 | Frekans | Destek   |
+| -------------------- | ------- | -------- |
+| Ekmek-Süt-Su         | 2       | 0.285714 |
+| Ekmek-Süt-Bebek Bezi | 4       | 0.571429 |
+| Ekmek-Su-Bebek Bezi  | 3       | 0.428571 |
+| Süt-Su-Bebek Bezi    | 3       | 0.428571 |
+
+Yine 0,5'ten küçük olanlar elenecek.
+
+| Ürün                 | Frekans | Destek   |
+| -------------------- | ------- | -------- |
+| Ekmek-Süt-Bebek Bezi | 4       | 0.571429 |
+
+Ekmek, Süt ve Bebek Bezi için kural uygulanır. Bunu python'da yapacağız.
 
 
 
 # 
 
-![image](./images/rfm6.png)
+![image](./images/apr1.png)
 
-https://www.youtube.com/watch?v=YbTxVCE6JKU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=92
+https://www.youtube.com/watch?v=034t73eSfOc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=97
