@@ -6305,10 +6305,21 @@ support 0.5 olduğu için yine 3 ten az olanları eleyelim;
 | 5   |     | 5   |
 |     |     | 6   |
 
+A, B, C, E için üçlü yapalım;
 
+| A-B-C | A-B-E | A-C-E | B-C-E |
+| ----- | ----- | ----- | ----- |
+|       |       |       |       |
+|       |       |       | 2     |
+| 3     | 3     | 3     | 3     |
+|       |       |       |       |
+|       |       | 5     |       |
+|       |       |       |       |
+
+Hepsi elenir.
 
 # 
 
 ![image](./images/apr1.png)
 
-https://www.youtube.com/watch?v=034t73eSfOc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=97
+https://www.youtube.com/watch?v=3Iqgd2sSPm4&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=99
