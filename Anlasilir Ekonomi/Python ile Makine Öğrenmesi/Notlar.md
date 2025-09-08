@@ -6906,6 +6906,78 @@ metin="Anlaşılır Ekonomi"
 # ['A', 'n', 'l', 'a', 'ş', 'ı', 'l', 'ı', 'r', ' ', 'E', 'k', 'o', 'n', 'o', 'm', 'i']
 ```
 
+---
+
+import requests
+import pdfplumber
+
+# https://ankaenstitusu.com/wp-content/uploads/2016/06/Gen%C3%A7li%C4%9Fe-hitabe.pdf
+
+with pdfplumber.open("genclige_hitabe.pdf") as pdf:
+    metin = "\n\n\n".join(page.extract_text() for page in pdf.pages if page.extract_text())
+
+# print(metin)
+# ATATÜRK'ün Gençliğe Hitabesi
+# Ey Türk gençliği!
+# Birinci vazifen, Türk istiklalini, Türk Cumhuriyeti'ni, ilelebet, muhafaza ve müdafaa etmektir.
+# Mevcudiyetinin ve istikbalinin yegâne temeli budur. Bu temel, senin, en kıymetli hazinendir.
+# İstikbalde dahi, seni, bu hazineden mahrum etmek isteyecek, dâhilî ve harici, bedhahların
+# olacaktır. Bir gün, istiklal ve cumhuriyeti müdafaa mecburiyetine düşersen, vazifeye atılmak için,
+# içinde bulunacağın vaziyetin imkân ve şeraitini düşünmeyeceksin! Bu imkân ve şerait, çok
+# namüsait bir mahiyette tezahür edebilir. İstiklal ve cumhuriyetine kastedecek düşmanlar, bütün
+# dünyada emsali görülmemiş bir galibiyetin mümessili olabilirler. Cebren ve hile ile aziz vatanın
+# bütün kaleleri zapt edilmiş, bütün tersanelerine girilmiş, bütün orduları dağıtılmış ve memleketin
+# her köşesi bilfiil işgal edilmiş olabilir. Bütün bu şeraitten daha elim ve daha vahim olmak üzere,
+# memleketin dâhilinde iktidara sahip olanlar gaflet ve dalalet ve hatta hıyanet içinde bulunabilirler.
+# Hatta bu iktidar sahipleri şahsi menfaatlerini, müstevlilerin siyasi emelleriyle tevhit edebilirler.
+# Millet, fakr ü zaruret içinde harap ve bitap düşmüş olabilir.
+# Ey Türk istikbalinin evladı!
+# İşte; bu ahval ve şerait içinde dahi, vazifen, Türk istiklal ve cumhuriyetini kurtarmaktır! Muhtaç
+# olduğun kudret, damarlarındaki asil kanda mevcuttur.
+# Ankara, 1927
+
+
+# print(metin.split())
+# ["ATATÜRK'ün", 'Gençliğe', 'Hitabesi', 'Ey', 'Türk', 'gençliği!', 'Birinci', 'vazifen,', 'Türk', 'istiklalini,', 'Türk', "Cumhuriyeti'ni,", 'ilelebet,', 'muhafaza', 've', 'müdafaa', 'etmektir.', 'Mevcudiyetinin', 've', 'istikbalinin', 'yegâne', 'temeli', 'budur.', 'Bu', 'temel,', 'senin,', 'en', 'kıymetli', 'hazinendir.', 'İstikbalde', 'dahi,', 'seni,', 'bu', 'hazineden', 'mahrum', 'etmek', 'isteyecek,', 'dâhilî', 've', 'harici,', 'bedhahların', 'olacaktır.', 'Bir', 'gün,', 'istiklal', 've', 'cumhuriyeti', 'müdafaa', 'mecburiyetine', 'düşersen,', 'vazifeye', 'atılmak', 'için,', 'içinde', 'bulunacağın', 'vaziyetin', 'imkân', 've', 'şeraitini', 'düşünmeyeceksin!', 'Bu', 'imkân', 've', 'şerait,', 'çok', 'namüsait', 'bir', 'mahiyette', 'tezahür', 'edebilir.', 'İstiklal', 've', 'cumhuriyetine', 'kastedecek', 'düşmanlar,', 'bütün', 'dünyada', 'emsali', 'görülmemiş', 'bir', 'galibiyetin', 'mümessili', 'olabilirler.', 'Cebren', 've', 'hile', 'ile', 'aziz', 'vatanın', 'bütün', 'kaleleri', 'zapt', 'edilmiş,', 'bütün', 'tersanelerine', 'girilmiş,', 'bütün', 'orduları', 'dağıtılmış', 've', 'memleketin', 'her', 'köşesi', 'bilfiil', 'işgal', 'edilmiş', 'olabilir.', 'Bütün', 'bu', 'şeraitten', 'daha', 'elim', 've', 'daha', 'vahim', 'olmak', 'üzere,', 'memleketin', 'dâhilinde', 'iktidara', 'sahip', 'olanlar', 'gaflet', 've', 'dalalet', 've', 'hatta', 'hıyanet', 'içinde', 'bulunabilirler.', 'Hatta', 'bu', 'iktidar', 'sahipleri', 'şahsi', 'menfaatlerini,', 'müstevlilerin', 'siyasi', 'emelleriyle', 'tevhit', 'edebilirler.', 'Millet,', 'fakr', 'ü', 'zaruret', 'içinde', 'harap', 've', 'bitap', 'düşmüş', 'olabilir.', 'Ey', 'Türk', 'istikbalinin', 'evladı!', 'İşte;', 'bu', 'ahval', 've', 'şerait', 'içinde', 'dahi,', 'vazifen,', 'Türk', 'istiklal', 've', 'cumhuriyetini', 'kurtarmaktır!', 'Muhtaç', 'olduğun', 'kudret,', 'damarlarındaki', 'asil', 'kanda', 'mevcuttur.', 'Ankara,', '1927']
+
+# print(metin.split("\n"))
+# ["ATATÜRK'ün Gençliğe Hitabesi", 'Ey Türk gençliği!', "Birinci vazifen, Türk istiklalini, Türk Cumhuriyeti'ni, ilelebet, muhafaza ve müdafaa etmektir.", 'Mevcudiyetinin ve istikbalinin yegâne temeli budur. Bu temel, senin, en kıymetli hazinendir.', 'İstikbalde dahi, seni, bu hazineden mahrum etmek isteyecek, dâhilî ve harici, bedhahların', 'olacaktır. Bir gün, istiklal ve cumhuriyeti müdafaa mecburiyetine düşersen, vazifeye atılmak için,', 'içinde bulunacağın vaziyetin imkân ve şeraitini düşünmeyeceksin! Bu imkân ve şerait, çok', 'namüsait bir mahiyette tezahür edebilir. İstiklal ve cumhuriyetine kastedecek düşmanlar, bütün', 'dünyada emsali görülmemiş bir galibiyetin mümessili olabilirler. Cebren ve hile ile aziz vatanın', 'bütün kaleleri zapt edilmiş, bütün tersanelerine girilmiş, bütün orduları dağıtılmış ve memleketin', 'her köşesi bilfiil işgal edilmiş olabilir. Bütün bu şeraitten daha elim ve daha vahim olmak üzere,', 'memleketin dâhilinde iktidara sahip olanlar gaflet ve dalalet ve hatta hıyanet içinde bulunabilirler.', 'Hatta bu iktidar sahipleri şahsi menfaatlerini, müstevlilerin siyasi emelleriyle tevhit edebilirler.', 'Millet, fakr ü zaruret içinde harap ve bitap düşmüş olabilir.', 'Ey Türk istikbalinin evladı!', 'İşte; bu ahval ve şerait içinde dahi, vazifen, Türk istiklal ve cumhuriyetini kurtarmaktır! Muhtaç', 'olduğun kudret, damarlarındaki asil kanda mevcuttur.', 'Ankara, 1927']
+
+d1=metin.split(".")
+d2=[i.replace("\n","").strip(" ") for i in d1]
+# print(d2)
+# ["ATATÜRK'ün Gençliğe HitabesiEy Türk gençliği!Birinci vazifen, Türk istiklalini, Türk Cumhuriyeti'ni, ilelebet, muhafaza ve müdafaa etmektir", 'Mevcudiyetinin ve istikbalinin yegâne temeli budur', 'Bu temel, senin, en kıymetli hazinendir', 'İstikbalde dahi, seni, bu hazineden mahrum etmek isteyecek, dâhilî ve harici, bedhahlarınolacaktır', 'Bir gün, istiklal ve cumhuriyeti müdafaa mecburiyetine düşersen, vazifeye atılmak için,içinde bulunacağın vaziyetin imkân ve şeraitini düşünmeyeceksin! Bu imkân ve şerait, çoknamüsait bir mahiyette tezahür edebilir', 'İstiklal ve cumhuriyetine kastedecek düşmanlar, bütündünyada emsali görülmemiş bir galibiyetin mümessili olabilirler', 'Cebren ve hile ile aziz vatanınbütün kaleleri zapt edilmiş, bütün tersanelerine girilmiş, bütün orduları dağıtılmış ve memleketinher köşesi bilfiil işgal edilmiş olabilir', 'Bütün bu şeraitten daha elim ve daha vahim olmak üzere,memleketin dâhilinde iktidara sahip olanlar gaflet ve dalalet ve hatta hıyanet içinde bulunabilirler', 'Hatta bu iktidar sahipleri şahsi menfaatlerini, müstevlilerin siyasi emelleriyle tevhit edebilirler', 'Millet, fakr ü zaruret içinde harap ve bitap düşmüş olabilir', 'Ey Türk istikbalinin evladı!İşte; bu ahval ve şerait içinde dahi, vazifen, Türk istiklal ve cumhuriyetini kurtarmaktır! Muhtaçolduğun kudret, damarlarındaki asil kanda mevcuttur', 'Ankara, 1927']
+
+d1=metin.replace("!",".").split(".")
+d2=[i.replace("\n","").strip(" ") for i in d1]
+# print(d2)
+# ["ATATÜRK'ün Gençliğe HitabesiEy Türk gençliği", "Birinci vazifen, Türk istiklalini, Türk Cumhuriyeti'ni, ilelebet, muhafaza ve müdafaa etmektir", 'Mevcudiyetinin ve istikbalinin yegâne temeli budur', 'Bu temel, senin, en kıymetli hazinendir', 'İstikbalde dahi, seni, bu hazineden mahrum etmek isteyecek, dâhilî ve harici, bedhahlarınolacaktır', 'Bir gün, istiklal ve cumhuriyeti müdafaa mecburiyetine düşersen, vazifeye atılmak için,içinde bulunacağın vaziyetin imkân ve şeraitini düşünmeyeceksin', 'Bu imkân ve şerait, çoknamüsait bir mahiyette tezahür edebilir', 'İstiklal ve cumhuriyetine kastedecek düşmanlar, bütündünyada emsali görülmemiş bir galibiyetin mümessili olabilirler', 'Cebren ve hile ile aziz vatanınbütün kaleleri zapt edilmiş, bütün tersanelerine girilmiş, bütün orduları dağıtılmış ve memleketinher köşesi bilfiil işgal edilmiş olabilir', 'Bütün bu şeraitten daha elim ve daha vahim olmak üzere,memleketin dâhilinde iktidara sahip olanlar gaflet ve dalalet ve hatta hıyanet içinde bulunabilirler', 'Hatta bu iktidar sahipleri şahsi menfaatlerini, müstevlilerin siyasi emelleriyle tevhit edebilirler', 'Millet, fakr ü zaruret içinde harap ve bitap düşmüş olabilir', 'Ey Türk istikbalinin evladı', 'İşte; bu ahval ve şerait içinde dahi, vazifen, Türk istiklal ve cumhuriyetini kurtarmaktır', 'Muhtaçolduğun kudret, damarlarındaki asil kanda mevcuttur', 'Ankara, 1927']
+
+import pandas as pd
+
+df=pd.DataFrame(d2, columns=["Cümleler"])
+# print(df)
+#     Cümleler
+# 0        ATATÜRK'ün Gençliğe HitabesiEy Türk gençliği
+# 1   Birinci vazifen, Türk istiklalini, Türk Cumhur...
+# 2   Mevcudiyetinin ve istikbalinin yegâne temeli b...
+# 3             Bu temel, senin, en kıymetli hazinendir
+# 4   İstikbalde dahi, seni, bu hazineden mahrum etm...
+# 5   Bir gün, istiklal ve cumhuriyeti müdafaa mecbu...
+# 6   Bu imkân ve şerait, çoknamüsait bir mahiyette ...
+# 7   İstiklal ve cumhuriyetine kastedecek düşmanlar...
+# 8   Cebren ve hile ile aziz vatanınbütün kaleleri ...
+# 9   Bütün bu şeraitten daha elim ve daha vahim olm...
+# 10  Hatta bu iktidar sahipleri şahsi menfaatlerini...
+# 11  Millet, fakr ü zaruret içinde harap ve bitap d...
+# 12                        Ey Türk istikbalinin evladı
+# 13  İşte; bu ahval ve şerait içinde dahi, vazifen,...
+# 14  Muhtaçolduğun kudret, damarlarındaki asil kand...
+# 15                                       Ankara, 1927
+
+---
+
+
 # 
 
 ![image](./images/apr1.png)
