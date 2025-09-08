@@ -5825,10 +5825,20 @@ plt.show()
 
 ![image](./images/rfm4.png)
 
+```Python
+sns.scatterplot(x="Labels", y="Customer", data=RFM, hue=labels, palette="deep")
+plt.xlim(-1,5)
+plt.show()
+```
+
+![image](./images/rfm5.png)
+
+
+
 
 
 # 
 
-![image](./images/rfm5.png)
+![image](./images/rfm6.png)
 
 https://www.youtube.com/watch?v=YbTxVCE6JKU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=92
