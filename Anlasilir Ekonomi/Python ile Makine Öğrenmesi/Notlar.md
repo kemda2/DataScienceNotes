@@ -6253,6 +6253,58 @@ antecedent support ve consequent support kuralı çalıştırdığımız anteced
 
 # Eclat Algoritması
 
+| ID | Ürün    |
+| -- | ------- |
+| 1  | A-C-D   |
+| 2  | B-C-E   |
+| 3  | A-B-C-E |
+| 4  | B-C     |
+| 5  | A-C-E   |
+| 6  | C-E     |
+
+| A | B | C | D | E |
+| - | - | - | - | - |
+| 1 |   | 1 | 1 |   |
+|   | 2 | 2 |   | 2 |
+| 3 | 3 | 3 |   | 3 |
+|   | 4 | 4 |   |   |
+| 5 |   | 5 |   | 5 |
+|   |   | 6 |   | 6 |
+
+Support %50 verilirse 6 ID olduğundan 3 ID'den az ID'si kalanlar elenerek ikili kısma geçilir.
+
+| A | B | C | E |
+| - | - | - | - |
+| 1 |   | 1 |   |
+|   | 2 | 2 | 2 |
+| 3 | 3 | 3 | 3 |
+|   | 4 | 4 |   |
+| 5 |   | 5 | 5 |
+|   |   | 6 | 6 |
+
+İkili kısım;
+
+| A-B | A-C | A-E | B-C | B-E | C-E |
+| --- | --- | --- | --- | --- | --- |
+|     | 1   |     |     |     |     |
+|     |     |     | 2   | 2   | 2   |
+| 3   | 3   | 3   | 3   | 3   | 3   |
+|     |     |     | 4   |     |     |
+|     | 5   | 5   |     |     | 5   |
+|     |     |     |     |     | 6   |
+
+
+support 0.5 olduğu için yine 3 ten az olanları eleyelim;
+
+| A-C | B-C | C-E |
+| --- | --- | --- |
+| 1   |     |     |
+|     | 2   | 2   |
+| 3   | 3   | 3   |
+|     | 4   |     |
+| 5   |     | 5   |
+|     |     | 6   |
+
 
 
 # 
