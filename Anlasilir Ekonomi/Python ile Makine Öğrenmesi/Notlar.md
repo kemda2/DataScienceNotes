@@ -5792,7 +5792,16 @@ grafik.poof()
 
 ![image](./images/rfm2.png)
 
+```Python
+kmodel = KMeans(random_state=0, n_clusters=4, init="k-means++")
+kfit = kmodel.fit(dfnorm)
+labels = kfit.labels_
 
+sns.scatterplot(x="Recency", y="Frequency", data=dfnorm, hue=labels, palette="deep")
+plt.show()
+```
+
+![image](./images/rfm3.png)
 
 
 
@@ -5800,6 +5809,6 @@ grafik.poof()
 
 # 
 
-![image](./images/rfm3.png)
+![image](./images/rfm4.png)
 
 https://www.youtube.com/watch?v=YbTxVCE6JKU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=92
