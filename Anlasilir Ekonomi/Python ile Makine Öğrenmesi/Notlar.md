@@ -6318,8 +6318,11 @@ A, B, C, E için üçlü yapalım;
 
 Hepsi elenir.
 
+
+
 # 
 
 ![image](./images/apr1.png)
 
 https://www.youtube.com/watch?v=3Iqgd2sSPm4&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=99
+955
