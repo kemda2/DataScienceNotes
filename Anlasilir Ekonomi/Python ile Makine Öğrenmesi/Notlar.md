@@ -6837,6 +6837,54 @@ metin="anLaşıLır EkoNoMi"
 
 # print(metin.replace("a","A"))
 # AnLAşıLır EkoNoMi
+
+metin="Anlaşılır Ekonomi"
+
+
+# print(metin.startswith("A"))
+# True
+
+# print(metin.startswith("C"))
+# False
+
+# print(metin.endswith("nomi"))
+# True
+
+# print(metin.endswith("u"))
+# False
+
+# print(metin.find("ı"))
+# 5
+
+# print(metin.find("x")) # Olmayan değer
+# -1
+
+# print(metin.rfind("ı")) # Sondan arama
+# 7
+
+# print(metin.count("o"))
+# 2
+
+# print(metin.isalpha()) # boşluk var False
+# False
+
+# print(metin.isalnum()) # boşluk var, harf ve rakam arıyor
+# False
+
+# print(metin.isdigit()) # False rakam arıyor
+# False
+
+# print(metin.isspace()) # yalnızca boşluk arıyor
+# False
+
+# print(metin.islower()) # hepsi küçük harf mi diye bakıyor
+# False
+
+# print(metin.upper()) # hepsi küçük harf mi diye bakıyor
+# False
+
+# print(metin.istitle())
+# True
 ```
 
 # 
