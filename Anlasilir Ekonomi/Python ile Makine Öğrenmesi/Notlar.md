@@ -5140,18 +5140,71 @@ sonuc = sonuc.rename({"index":"Hisse"},axis=1)
 # 28  VESTL  0.691594  0.415665
 # 29  YKBNK  0.851200  0.461357
 
+from sklearn.preprocessing import MinMaxScaler
+
+ms = MinMaxScaler()
+X = ms.fit_transform(sonuc.iloc[:, [1, 2]])
+X = pd.DataFrame(X, columns=["Gelir", "Oynaklık"])
+# print(X.describe())
+#            Gelir   Oynaklık
+# count  30.000000  30.000000
+# mean    0.309447   0.434068
+# std     0.224518   0.219957
+# min     0.000000   0.000000
+# 25%     0.173452   0.300679
+# 50%     0.269341   0.420165
+# 75%     0.330391   0.531936
+# max     1.000000   1.000000
+
+from yellowbrick.cluster import KElbowVisualizer
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+kmodel = KMeans(random_state=0)
+grafik = KElbowVisualizer(kmodel, k=(2, 20))
+grafik.fit(X)
+grafik.poof()
+```
+![image](./images/bist1.png) 
+
+```Python
+kmodel = KMeans(n_clusters=6, random_state=0)
+kfit = kmodel.fit(X)
+labels = kfit.labels_
+
+sns.scatterplot(x="Gelir", y="Oynaklık", data=X, hue=labels, palette="deep")
+plt.show()
 ```
 
+![image](./images/bist2.png)
 
+```Python
+sonuc["Labels"] = labels
 
+sns.scatterplot(x="Labels", y="Hisse", data=sonuc, hue=labels, palette="deep")
+plt.show()
+```
 
+![image](./images/bist3.png) 
 
+```Python
+from sklearn.cluster import AgglomerativeClustering
+from scipy.cluster.hierarchy import linkage, dendrogram
 
+hc = linkage(X, method="single")
+dendrogram(hc)
+plt.show()
+```
+
+![image](./images/bist4.png) 
+
+2 ve 4 nokta geçen kümelemeler önemli gibi gözüküyor.
 
 
 
 # 
 
-![image](./images/hca5.png)
+![image](./images/bist5.png)
 
 https://www.youtube.com/watch?v=C4dN73gUzgc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=91
