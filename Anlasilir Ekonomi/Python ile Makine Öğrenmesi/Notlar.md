@@ -7050,23 +7050,160 @@ veri2=veri2.str.lower()
 # 5571                            rofl its true to its name
 # Name: Sms, Length: 5572, dtype: object
 
-veri4=veri["Sms"].str.replace("[\d]","",regex=True)
-# print(veri4)
-# 0       Go until jurong point, crazy.. Available only ...
-# 1                           Ok lar... Joking wif u oni...
-# 2       Free entry in  a wkly comp to win FA Cup final...
-# 3       U dun say so early hor... U c already then say...
-# 4       Nah I don't think he goes to usf, he lives aro...
+veri4=veri2.str.replace("[\d]","",regex=True)
+print(veri4)
+# 0       go until jurong point crazy available only in ...
+# 1                                 ok lar joking wif u oni
+# 2       free entry in  a wkly comp to win fa cup final...
+# 3             u dun say so early hor u c already then say
+# 4       nah i dont think he goes to usf he lives aroun...
 #                               ...                        
-# 5567    This is the nd time we have tried  contact u. ...
-# 5568                Will Ì_ b going to esplanade fr home?
-# 5569    Pity, * was in mood for that. So...any other s...
-# 5570    The guy did some bitching but I acted like i'd...
-# 5571                           Rofl. Its true to its name
+# 5567    this is the nd time we have tried  contact u u...
+# 5568                 will ì_ b going to esplanade fr home
+# 5569    pity  was in mood for that soany other suggest...
+# 5570    the guy did some bitching but i acted like id ...
+# 5571                            rofl its true to its name
+
+import nltk
+nltk.download("stopwords")
+from nltk.corpus import stopwords
+
+etkisiz = stopwords.words("english")
+# print(etkisiz)
+# ['a', 'about', 'above', 'after', 'again', 'against', 'ain', 'all', 'am', 'an', 'and', 'any', 'are', 'aren', "aren't", 'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', 'can', 'couldn', "couldn't", 'd', 'did', 'didn', "didn't", 'do', 'does', 'doesn', "doesn't", 'doing', 'don', "don't", 'down', 'during', 'each', 'few', 'for', 'from', 'further', 'had', 'hadn', "hadn't", 'has', 'hasn', "hasn't", 'have', 'haven', "haven't", 'having', 'he', "he'd", "he'll", 'her', 'here', 'hers', 'herself', "he's", 'him', 'himself', 'his', 'how', 'i', "i'd", 'if', "i'll", "i'm", 'in', 'into', 'is', 'isn', "isn't", 'it', "it'd", "it'll", "it's", 'its', 'itself', "i've", 'just', 'll', 'm', 'ma', 'me', 'mightn', "mightn't", 'more', 'most', 'mustn', "mustn't", 'my', 'myself', 'needn', "needn't", 'no', 'nor', 'not', 'now', 'o', 'of', 'off', 'on', 'once', 'only', 'or', 'other', 'our', 'ours', 'ourselves', 'out', 'over', 'own', 're', 's', 'same', 'shan', "shan't", 'she', "she'd", "she'll", "she's", 'should', 'shouldn', "shouldn't", "should've", 'so', 'some', 'such', 't', 'than', 'that', "that'll", 'the', 'their', 'theirs', 'them', 'themselves', 'then', 'there', 'these', 'they', "they'd", "they'll", "they're", "they've", 'this', 'those', 'through', 'to', 'too', 'under', 'until', 'up', 've', 'very', 'was', 'wasn', "wasn't", 'we', "we'd", "we'll", "we're", 'were', 'weren', "weren't", "we've", 'what', 'when', 'where', 'which', 'while', 'who', 'whom', 'why', 'will', 'with', 'won', "won't", 'wouldn', "wouldn't", 'y', 'you', "you'd", "you'll", 'your', "you're", 'yours', 'yourself', 'yourselves', "you've"]
+
+veri5 = veri4.apply(lambda x: " ".join(x for x in x.split() if x not in etkisiz))
+# print(veri5)
+# 0       go jurong point crazy available bugis n great ...
+# 1                                 ok lar joking wif u oni
+# 2       free entry wkly comp win fa cup final tkts st ...
+# 3                     u dun say early hor u c already say
+# 4             nah dont think goes usf lives around though
+#                               ...                        
+# 5567    nd time tried contact u u å pound prize claim ...
+# 5568                         ì_ b going esplanade fr home
+# 5569                          pity mood soany suggestions
+# 5570    guy bitching acted like id interested buying s...
+# 5571                                       rofl true name
+
+```
+
+---
+
+```python
+import pandas as pd
+import nltk
+nltk.download("stopwords")
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+import re
+
+data = pd.read_csv("spam.csv", encoding="Windows-1252")
+veri = data.copy()
+
+veri = veri.drop(columns=["Unnamed: 2", "Unnamed: 3", "Unnamed: 4"], axis=1)
+veri = veri.rename(columns={"v1": "Etiket", "v2": "Sms"})
+# print(veri)
+#      Etiket                                                Sms
+# 0       ham  Go until jurong point, crazy.. Available only ...
+# 1       ham                      Ok lar... Joking wif u oni...
+# 2      spam  Free entry in 2 a wkly comp to win FA Cup fina...
+# 3       ham  U dun say so early hor... U c already then say...
+# 4       ham  Nah I don't think he goes to usf, he lives aro...
+# ...     ...                                                ...
+# 5567   spam  This is the 2nd time we have tried 2 contact u...
+# 5568    ham              Will Ì_ b going to esplanade fr home?
+# 5569    ham  Pity, * was in mood for that. So...any other s...
+# 5570    ham  The guy did some bitching but I acted like i'd...
+# 5571    ham                         Rofl. Its true to its name
+
+ps = PorterStemmer()
+
+temiz = []
+
+for i in range(len(veri)):
+    duzenle = re.sub('[^a-zA-Z]', ' ', veri["Sms"][i])
+    duzenle = duzenle.lower()
+    duzenle = duzenle.split()
+    duzenle = [ps.stem(kelime) for kelime in duzenle if not kelime in set(stopwords.words("english"))]
+    duzenle = " ".join(duzenle)
+    temiz.append(duzenle)
+
+# print(veri["Sms"][20])
+# Is that seriously how you spell his name?
+
+# print(temiz[20])
+# serious spell name
+
+df = pd.DataFrame(list(zip(veri["Sms"], temiz)), columns=["Orjinal Sms", "Temiz Sms"])
+# print(df)
+#                                             Orjinal Sms                                          Temiz Sms
+# 0     Go until jurong point, crazy.. Available only ...  go jurong point crazi avail bugi n great world...
+# 1                         Ok lar... Joking wif u oni...                              ok lar joke wif u oni
+# 2     Free entry in 2 a wkly comp to win FA Cup fina...  free entri wkli comp win fa cup final tkt st m...
+# 3     U dun say so early hor... U c already then say...                u dun say earli hor u c alreadi say
+# 4     Nah I don't think he goes to usf, he lives aro...               nah think goe usf live around though
+# ...                                                 ...                                                ...
+# 5567  This is the 2nd time we have tried 2 contact u...  nd time tri contact u u pound prize claim easi...
+# 5568              Will Ì_ b going to esplanade fr home?                              b go esplanad fr home
+# 5569  Pity, * was in mood for that. So...any other s...                                  piti mood suggest
+# 5570  The guy did some bitching but I acted like i'd...  guy bitch act like interest buy someth els nex...
+# 5571                         Rofl. Its true to its name                                     rofl true name
+```
+
+---
+
+```python
+# print(df.iloc[0])
+# Orjinal Sms    Go until jurong point, crazy.. Available only ...
+# Temiz Sms      go jurong point crazi avail bugi n great world...
+# Name: 0, dtype: object
+# crazy crazi ye dönüşmüş....
+
+import nltk
+nltk.download("wordnet")
+lema = nltk.WordNetLemmatizer()
+
+temiz = []
+
+for i in range(len(veri)):
+    duzenle = re.sub('[^a-zA-Z]', ' ', veri["Sms"][i])
+    duzenle = duzenle.lower()
+    duzenle = duzenle.split()
+    duzenle = [lema.lemmatize(kelime) for kelime in duzenle if not kelime in set(stopwords.words("english"))]
+    duzenle = " ".join(duzenle)
+    temiz.append(duzenle)
+
+# print(veri["Sms"][20])
+# Is that seriously how you spell his name?
+
+# print(temiz[20])
+# serious spell name
+
+df = pd.DataFrame(list(zip(veri["Sms"], temiz)), columns=["Orjinal Sms", "Temiz Sms"])
+# print(df)
+#                                             Orjinal Sms                                          Temiz Sms
+# 0     Go until jurong point, crazy.. Available only ...  go jurong point crazy available bugis n great ...
+# 1                         Ok lar... Joking wif u oni...                            ok lar joking wif u oni
+# 2     Free entry in 2 a wkly comp to win FA Cup fina...  free entry wkly comp win fa cup final tkts st ...
+# 3     U dun say so early hor... U c already then say...                u dun say early hor u c already say
+# 4     Nah I don't think he goes to usf, he lives aro...                nah think go usf life around though
+# ...                                                 ...                                                ...
+# 5567  This is the 2nd time we have tried 2 contact u...  nd time tried contact u u pound prize claim ea...
+# 5568              Will Ì_ b going to esplanade fr home?                          b going esplanade fr home
+# 5569  Pity, * was in mood for that. So...any other s...                               pity mood suggestion
+# 5570  The guy did some bitching but I acted like i'd...  guy bitching acted like interested buying some...
+# 5571                         Rofl. Its true to its name                                     rofl true name
+```
+
+---
+
+```python
+
 ```
 
 # 
 
 ![image](./images/apr1.png)
 
-https://www.youtube.com/watch?v=LLI9p1Nf0dc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=105
+https://www.youtube.com/watch?v=xoyVbcRGZZI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=108
