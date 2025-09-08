@@ -5232,4 +5232,4 @@ plt.show()
 
 ![image](./images/bist7.png)
 
-https://www.youtube.com/watch?v=C4dN73gUzgc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=91
+https://www.youtube.com/watch?v=YbTxVCE6JKU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=92
