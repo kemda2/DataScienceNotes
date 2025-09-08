@@ -5803,12 +5803,32 @@ plt.show()
 
 ![image](./images/rfm3.png)
 
+```Python
+RFM["Labels"] = labels
+# print(RFM)
+#       Customer  Recency  Frequency  Monetary  Labels
+# 0        12347        1          7   3174.62       0
+# 1        12348       74          4    601.64       3
+# 2        12349       18          1   1145.35       0
+# 3        12350      309          1    334.40       2
+# 4        12352       35          7   1505.74       0
+# ...        ...      ...        ...       ...     ...
+# 4189     18280      277          1    180.60       2
+# 4190     18281      180          1     80.82       1
+# 4191     18282        7          2    178.05       0
+# 4192     18283        3         16   2094.88       0
+# 4193     18287       42          3   1068.74       0
 
+sns.scatterplot(x="Labels", y="Customer", data=RFM, hue=labels, palette="deep")
+plt.show()
+```
+
+![image](./images/rfm4.png)
 
 
 
 # 
 
-![image](./images/rfm4.png)
+![image](./images/rfm5.png)
 
 https://www.youtube.com/watch?v=YbTxVCE6JKU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=92
