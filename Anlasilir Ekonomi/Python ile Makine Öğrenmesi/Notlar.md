@@ -6978,6 +6978,7 @@ df=pd.DataFrame(d2, columns=["Cümleler"])
 ---
 
 
+
 # 
 
 ![image](./images/apr1.png)
