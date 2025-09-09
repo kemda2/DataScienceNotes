@@ -7265,12 +7265,50 @@ plt.show()
 
 ![image](./images/nlp2.png) 
 
+```Python
+from wordcloud import WordCloud
 
+# Örneğin ilk temiz SMS'i alalım
+text = df["Temiz Sms"][0]
+
+# WordCloud nesnesini oluştur ve metni işle
+bulut = WordCloud(background_color="white").generate(text)
+
+print(df["Temiz Sms"][0])
+
+# Görselleştir
+plt.figure(figsize=(5, 5))
+plt.imshow(bulut, interpolation='bilinear')
+plt.axis("off")
+plt.show()
+```
+
+![image](./images/nlp3.png) 
+
+```Python
+from wordcloud import WordCloud
+
+# Örneğin ilk temiz SMS'i alalım
+text = df["Temiz Sms"][0]
+
+# WordCloud nesnesini oluştur ve metni işle
+bulut = WordCloud(background_color="white", max_words=3).generate(text)
+
+print(df["Temiz Sms"][0])
+
+# Görselleştir
+plt.figure(figsize=(5, 5))
+plt.imshow(bulut, interpolation='bilinear')
+plt.axis("off")
+plt.show()
+```
+
+![image](./images/nlp4.png)
 
 
 # 
 
-![image](./images/nlp3.png)
+![image](./images/nlp5.png)
 
 https://www.youtube.com/watch?v=xoyVbcRGZZI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=109
 1034
