@@ -8109,11 +8109,29 @@ print(veri)
 # 99997  2022-12-10  @oktymc @spkgovtr @omergonul Onlar benim para...   ...  [2.1670000000000007, 1.8800000000000008, 19.953]   Nötr
 # 99998  2022-12-10  "ÜCRETSİZ" CANLI BORSA VERİSİ İÇİN TIKLAYIN! h...  ...  [0.40800000000000003, 0.36, 5.232]                 Nötr
 # 99999  2022-12-10  @ALSoydan13 Borsa oynanmaz paşam yatırım amacı...  ...  [0.34, 0.3, 4.36]                                  Nötr
-
-
 ```
 
+---
 
+```Python
+import pandas as pd
+import re
+
+data = pd.read_csv("Tweet.csv")
+veri = data.copy()
+
+def temizle(tweet):
+    tweet = re.sub(r'#[a-zA-ZçÇğĞıİöÖşŞüÜ0-9]+', ' ', tweet)
+    tweet = re.sub('\\n', ' ', tweet)
+    tweet = re.sub('@[\S]*', ' ', tweet)
+    tweet = re.sub("https?:\/\/\S+", " ", tweet)
+    tweet = tweet.lower()
+    tweet = re.sub('[^a-zA-ZçÇşŞğĞüÜöÖıİ0-9]+', ' ', tweet)
+    tweet = re.sub(r'^[\s]+|[\s]+$', ' ', tweet)
+    return tweet
+
+veri["Temiz Tweet"] = veri["Tweetler"].apply(temizle)
+```
 
 # 
 
