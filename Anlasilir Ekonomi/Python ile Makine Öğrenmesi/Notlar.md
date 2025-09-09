@@ -8087,6 +8087,16 @@ veri["Skor"] = veri["Temiz Tweet"].apply(skor)
 # 99998 2022-12-10 ... [0.40800000000000003, 0.36, 5.232]
 # 99999 2022-12-10 ... [0.34, 0.3, 4.36]
 
+def durum(skor):
+    if max(skor) == skor[0] and max(skor) != skor[1] and max(skor) != skor[2]:
+        return "Pozitif"
+    elif max(skor) == skor[1] and max(skor) != skor[0] and max(skor) != skor[2]:
+        return "Negatif"
+    else:
+        return "Nötr"
+
+veri["Durum"] = veri["Skor"].apply(durum)
+print(veri)
 
 
 ```
