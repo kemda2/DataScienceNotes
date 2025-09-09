@@ -7930,6 +7930,14 @@ def temizle(tweet):
 
 veri["Temiz Tweet"] = veri["Tweetler"].apply(temizle)
 
+from googletrans import Translator, LANGUAGES
+
+print(LANGUAGES) # Dili öğrenmek için
+
+ceviri = Translator()
+metin = "Merhaba, benim adım Ali"
+sonuc = ceviri.translate(metin, src="tr", dest="en")
+print(sonuc.text)
 
 
 
@@ -7948,4 +7956,5 @@ veri["Temiz Tweet"] = veri["Tweetler"].apply(temizle)
 
 ![image](./images/twt1.png)
 
-https://www.youtube.com/watch?v=hQXpqotQqSI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=115
+https://www.youtube.com/watch?v=UPUlNv-U_J0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=116
+1037
