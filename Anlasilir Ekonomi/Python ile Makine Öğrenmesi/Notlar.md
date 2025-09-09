@@ -7199,10 +7199,9 @@ frekans = (df["Temiz Sms"]
            .apply(lambda x: pd.value_counts(x.split(" ")))
            .sum(axis=0)
            .reset_index())
-
-frekans.columns=["Kelimeler","Frekanslar"]
+frekans.columns=["Kelimeler","Frekans"]
 # print(frekans)
-#       Kelimeler  Frekanslar
+#       Kelimeler     Frekans
 # 0            go       313.0
 # 1        jurong         1.0
 # 2         point        33.0
@@ -7222,27 +7221,56 @@ frekans.columns=["Kelimeler","Frekanslar"]
 #  #   Column      Non-Null Count  Dtype  
 # ---  ------      --------------  -----  
 #  0   Kelimeler   7044 non-null   object 
-#  1   Frekanslar  7044 non-null   float64
+#  1   Frekans     7044 non-null   float64
 # dtypes: float64(1), object(1)
 # memory usage: 110.2+ KB
 # None
 
 # print(frekans.nunique())
 # Kelimeler     7044
-# Frekanslar     150
+# Frekans        150
 # dtype: int64
 
 import matplotlib.pyplot as plt
 
-plt.bar(x="Kelimeler",height="Frekans",data=frekans)
+filtre = frekans[frekans["Frekanslar"] > 250]
+filtre.plot.bar(x="Kelimeler", y="Frekans")
 plt.show()
 ```
+
+![image](./images/nlp1.png) 
+
+pythondaki kütüphanelerle versiyon sorunu yaşamamak için aşağıdaki linkten import edeceğiz.
+
+lfd.uci.edu/~gohlke/pythonlibs/
+
+```Python
+from wordcloud import WordCloud
+
+# Örneğin ilk temiz SMS'i alalım
+text = df["Temiz Sms"][0]
+
+# WordCloud nesnesini oluştur ve metni işle
+bulut = WordCloud().generate(text)
+
+# print(df["Temiz Sms"][0])
+# go jurong point crazy available bugis n great world la e buffet cine got amore wat
+
+# Görselleştir
+plt.figure(figsize=(5, 5))
+plt.imshow(bulut, interpolation='bilinear')
+plt.axis("off")
+plt.show()
+```
+
+![image](./images/nlp2.png) 
+
 
 
 
 # 
 
-![image](./images/apr1.png)
+![image](./images/nlp3.png)
 
 https://www.youtube.com/watch?v=xoyVbcRGZZI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=109
 1034
