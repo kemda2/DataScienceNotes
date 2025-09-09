@@ -8097,6 +8097,18 @@ def durum(skor):
 
 veri["Durum"] = veri["Skor"].apply(durum)
 print(veri)
+#       Tarih                          Tweetler                         ...                  Skor                               Durum
+# 0  2023-01-07      Velhasıl sözün özeti borsa matematiksel olarak...  ...  [1.5600000000000005, 0.6600000000000001, 8.78]     Nötr
+# 1  2023-01-07      #tcell\n\nHaftalık logo grafik son görüntü ; \n... ...                        [0.272, 0.24, 3.488]         Nötr
+# 2  2023-01-07      @AdnanAk86466060 Yapılan işlerle kaplarda smar...  ...  [1.4920000000000004, 0.6000000000000001, 7.907...] Nötr
+# 3  2023-01-07      Anket Borsa İstanbul Ana Pazar ın gelecek v...     ...  [3.1170000000000002, 2.8250000000000002, 40.058]   Nötr
+# 4  2023-01-07      Arkadaşlar kirada olan, #memur, #işçi aylık ge...  ...  [2.209, 1.2520000000000002, 16.538999999999999]    Nötr
+# ...
+# 99995  2022-12-10  Ttkom, \n\n üretim, tüketim, taşımacılık, pera...  ...  [3.5550000000000001, 2.3100000000000001, 21.1349]  Nötr
+# 99996  2022-12-10  #Borsa #Bist100 #XU100 (Saatlik) Grafik:\n\nTe...  ...  [0.8160000000000003, 1.1400000000000003, 10.044]   Nötr
+# 99997  2022-12-10  @oktymc @spkgovtr @omergonul Onlar benim para...   ...  [2.1670000000000007, 1.8800000000000008, 19.953]   Nötr
+# 99998  2022-12-10  "ÜCRETSİZ" CANLI BORSA VERİSİ İÇİN TIKLAYIN! h...  ...  [0.40800000000000003, 0.36, 5.232]                 Nötr
+# 99999  2022-12-10  @ALSoydan13 Borsa oynanmaz paşam yatırım amacı...  ...  [0.34, 0.3, 4.36]                                  Nötr
 
 
 ```
