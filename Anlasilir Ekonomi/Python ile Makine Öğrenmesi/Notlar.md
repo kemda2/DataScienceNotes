@@ -7385,6 +7385,60 @@ plt.show()
 
 ![image](./images/nlp8.png)
 
+```Python
+import numpy as np
+from PIL import Image
+
+resim = np.array(Image.open("logo.png"))
+
+from wordcloud import WordCloud
+
+# Örneğin ilk temiz SMS'i alalım
+text = df["Temiz Sms"][0]
+
+# WordCloud nesnesini oluştur ve metni işle
+bulut = WordCloud(background_color="white", mask=resim).generate(text)
+
+print(df["Temiz Sms"][0])
+
+# Görselleştir
+plt.figure(figsize=(5, 5))
+plt.imshow(bulut, interpolation='bilinear')
+plt.axis("off")
+plt.show()
+```
+
+![image](./images/nlp9.png)
+
+```Python
+import numpy as np
+from PIL import Image
+
+resim = np.array(Image.open("logo.png"))
+
+from wordcloud import WordCloud
+
+# Örneğin ilk temiz SMS'i alalım
+text = df["Temiz Sms"][0]
+
+# WordCloud nesnesini oluştur ve metni işle
+bulut = WordCloud(background_color="white", mask=resim, contour_width=3, contour_color="red").generate(text)
+
+print(df["Temiz Sms"][0])
+
+# Görselleştir
+plt.figure(figsize=(5, 5))
+plt.imshow(bulut, interpolation='bilinear')
+plt.axis("off")
+plt.show()
+```
+
+![image](./images/nlp10.png)
+
+
+
+
+
 
 
 
@@ -7393,7 +7447,7 @@ plt.show()
 
 # 
 
-![image](./images/nlp9.png)
+![image](./images/nlp11.png)
 
 https://www.youtube.com/watch?v=xoyVbcRGZZI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=109
 1034
