@@ -7792,12 +7792,13 @@ skor2 = accuracy_score(y_test, tahmin2)
 print(skor2 * 100) #68.0
 ```
 
+# Twitter Analizi
 
 
 
 
 # 
 
-![image](./images/nlp13.png)
+![image](./images/twt1.png)
 
-https://www.youtube.com/watch?v=irRA42JN2Ww&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=111
+https://www.youtube.com/watch?v=FZgn1xSATeU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=112
