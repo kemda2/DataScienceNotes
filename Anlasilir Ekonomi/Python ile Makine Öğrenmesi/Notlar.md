@@ -7909,6 +7909,29 @@ for i in metin:
 # Pozitifse olumlu negatifse olumsuz 0 ise nötr.
 ```
 
+---
+
+```Python
+import pandas as pd
+import re
+
+data = pd.read_csv("Tweet.csv")
+veri = data.copy()
+
+def temizle(tweet):
+    tweet = re.sub(r'#[a-zA-ZçÇğĞıİöÖşŞüÜ0-9]+', ' ', tweet)
+    tweet = re.sub('\\n', ' ', tweet)
+    tweet = re.sub('@[\S]*', ' ', tweet)
+    tweet = re.sub("https?:\/\/\S+", " ", tweet)
+    tweet = tweet.lower()
+    return tweet
+
+veri["Temiz Tweet"] = veri["Tweetler"].apply(temizle)
+
+
+
+
+```
 
 
 
