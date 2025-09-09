@@ -8180,11 +8180,13 @@ veri2["Skor"] = veri2["Temiz Tweet"].apply(skor)
 # 8    2023-01-07  @Sedefci @binance Boş bir cümle olmuş hoca, d...   boş bir cümle olmuş hoca daha gerçekçi ve a...    positive
 # 9    2023-01-07  @Kartalavseren @MustafaKemal619 @louclark_bors...  evet bende etmiyorumuşum                          positive
 
+# tüm veri için yapalım;
+veri["Skor"] = veri["Temiz Tweet"].apply(skor)
+
 ```
 
 # 
 
 ![image](./images/twt2.png)
 
-https://www.youtube.com/watch?v=UPUlNv-U_J0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=116
-1037
+https://www.youtube.com/watch?v=_mcvFWzk_IU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=119
