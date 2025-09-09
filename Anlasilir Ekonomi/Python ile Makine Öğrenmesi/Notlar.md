@@ -8185,8 +8185,66 @@ veri["Skor"] = veri["Temiz Tweet"].apply(skor)
 
 ```
 
-# 
+---
+
+```python
+import pandas as pd
+
+data = pd.read_csv("C:/Users/90506/Desktop/Data/sontweet.csv")
+veri = data.copy()
+veri = veri.dropna()
+veri = veri.drop("Unnamed: 0", axis=1).reset_index(drop=True)
+
+def skor2(tweet):
+    if tweet == "positive":
+        return 1
+    else:
+        return 0
+
+veri["Skor2"] = veri["Skor"].apply(skor2)
+# print(veri)
+#  Tarih       Tweetler                                  Skor      Skor2 
+#  ----------  ----------------------------------------  --------  ----- 
+#  2023-01-07  Velhasıl sözün özeti borsa matematiksel…  negative  0     
+#  2023-01-07  #tcell Haftalık log grafik son görüntü…   positive  1     
+#  2023-01-07  @AdnanAk… Yapılan işlerle kaplarda smar…  negative  0     
+#  2023-01-07  Anket Borsa İstanbul Ana Pazar…           positive  1     
+#  …           …                                         …         …     
+#  2022-12-10  Ttkom üretim, tüketim, taşımacılık…       negative  0     
+#  2022-12-10  #Borsa #Bist100 #XU100…                   negative  0     
+#  2022-12-10  @oktymc… Onlar benim para…                negative  0     
+#  2022-12-10  "ÜCRETSİZ" CANLI BORSA VERİSİ…            positive  1     
+#  2022-12-10  @ALSoydan13 Borsa oynanmaz paşam…         positive  1     
+
+grupla = veri["Skor2"].groupby(veri["Tarih"]).mean().reset_index()
+# print(grupla.head())
+#   Tarih         Skor2   
+# ------------------------
+#  2022-12-10    0.427226 
+#  2022-12-11    0.431560 
+#  2022-12-12    0.516213 
+#  2022-12-13    0.494579 
+#  2022-12-14    0.427167 
+#  2022-12-15    0.477730 
+#  2022-12-16    0.491233 
+#  2022-12-17    0.452598 
+#  2022-12-18    0.494912 
+#  2022-12-19    0.515787 
+#  2022-12-20    0.499856 
+#  2022-12-21    0.536021 
+
+grupla["Tarih"] = pd.to_datetime(grupla["Tarih"])
+
+grupla.plot(kind="line", x="Tarih")
+plt.show()
+```
 
 ![image](./images/twt2.png)
+
+
+
+# 
+
+![image](./images/twt3.png)
 
 https://www.youtube.com/watch?v=_mcvFWzk_IU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=119
