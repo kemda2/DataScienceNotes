@@ -7194,13 +7194,46 @@ df = pd.DataFrame(list(zip(veri["Sms"], temiz)), columns=["Orjinal Sms", "Temiz 
 # 5569  Pity, * was in mood for that. So...any other s...                               pity mood suggestion
 # 5570  The guy did some bitching but I acted like i'd...  guy bitching acted like interested buying some...
 # 5571                         Rofl. Its true to its name                                     rofl true name
+
+frekans = (df["Temiz Sms"]
+           .apply(lambda x: pd.value_counts(x.split(" ")))
+           .sum(axis=0)
+           .reset_index())
+
+frekans.columns=["Kelimeler","Frekanslar"]
+# print(frekans)
+#       Kelimeler  Frekanslar
+# 0            go       313.0
+# 1        jurong         1.0
+# 2         point        33.0
+# 3         crazy        15.0
+# 4     available        18.0
+# ...         ...         ...
+# 7039       heap         1.0
+# 7040      lowes         1.0
+# 7041   salesman         1.0
+# 7042       pity         1.0
+# 7043   bitching         1.0
+
+# print(frekans.info())
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 7044 entries, 0 to 7043
+# Data columns (total 2 columns):
+#  #   Column      Non-Null Count  Dtype  
+# ---  ------      --------------  -----  
+#  0   Kelimeler   7044 non-null   object 
+#  1   Frekanslar  7044 non-null   float64
+# dtypes: float64(1), object(1)
+# memory usage: 110.2+ KB
+# None
+
+# print(frekans.nunique())
+# Kelimeler     7044
+# Frekanslar     150
+# dtype: int64
 ```
 
----
 
-```python
-
-```
 
 # 
 
