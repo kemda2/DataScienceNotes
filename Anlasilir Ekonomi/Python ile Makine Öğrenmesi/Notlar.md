@@ -7460,9 +7460,118 @@ plt.show()
 
 ![image](./images/nlp11.png)
 
+---
 
+```Python
+import pandas as pd
 
+data = pd.read_csv("spam.csv", encoding="Windows-1252")
+veri = data.copy()
 
+veri = veri.drop(columns=["Unnamed: 2", "Unnamed: 3", "Unnamed: 4"], axis=1)
+veri = veri.rename(columns={"v1": "Etiket", "v2": "Sms"})
+
+import nltk
+nltk.download("wordnet")
+lema = nltk.WordNetLemmatizer()
+
+temiz = []
+
+for i in range(len(veri)):
+    duzenle = re.sub('[^a-zA-Z]', ' ', veri["Sms"][i])
+    duzenle = duzenle.lower()
+    duzenle = duzenle.split()
+    duzenle = [lema.lemmatize(kelime) for kelime in duzenle if not kelime in set(stopwords.words("english"))]
+    duzenle = " ".join(duzenle)
+    temiz.append(duzenle)
+
+from sklearn.feature_extraction.text import CountVectorizer
+
+cv = CountVectorizer()
+matrix=cv.fit_transform(temiz)
+# print(matrix)
+#   (0, 2448)	1
+#   (0, 3163)	1
+#   (0, 4546)	1
+#   :	:
+#   (5571, 3948)	1
+#   (5571, 6331)	1
+#   (5571, 5092)	1
+
+matrix=cv.fit_transform(temiz).toarray()
+# print(matrix)
+# [[0 0 0 ... 0 0 0]
+#  [0 0 0 ... 0 0 0]
+#  [0 0 0 ... 0 0 0]
+#  ...
+#  [0 0 0 ... 0 0 0]
+#  [0 0 0 ... 0 0 0]
+#  [0 0 0 ... 0 0 0]]
+
+matrixdf=pd.DataFrame(matrix,columns=cv.get_feature_names_out())
+# print(matrixdf)
+#       aa  aah  aaniye  aaooooright  aathi  ab  abbey  abdomen  abeg  abel  \
+# 0      0    0       0            0      0   0      0        0     0     0   
+# 1      0    0       0            0      0   0      0        0     0     0   
+# 2      0    0       0            0      0   0      0        0     0     0   
+# 3      0    0       0            0      0   0      0        0     0     0   
+# 4      0    0       0            0      0   0      0        0     0     0   
+# ...   ..  ...     ...          ...    ...  ..    ...      ...   ...   ...   
+# 5567   0    0       0            0      0   0      0        0     0     0   
+# 5568   0    0       0            0      0   0      0        0     0     0   
+# 5569   0    0       0            0      0   0      0        0     0     0   
+# 5570   0    0       0            0      0   0      0        0     0     0   
+# 5571   0    0       0            0      0   0      0        0     0     0   
+
+#       ...  zed  zero  zf  zhong  zindgi  zoe  zogtorius  zoom  zouk  zyada  
+# 0     ...    0     0   0      0       0    0          0     0     0      0  
+# 1     ...    0     0   0      0       0    0          0     0     0      0  
+# 2     ...    0     0   0      0       0    0          0     0     0      0  
+# 3     ...    0     0   0      0       0    0          0     0     0      0  
+# 4     ...    0     0   0      0       0    0          0     0     0      0  
+# ...   ...  ...   ...  ..    ...     ...  ...        ...   ...   ...    ...  
+# 5567  ...    0     0   0      0       0    0          0     0     0      0  
+# 5568  ...    0     0   0      0       0    0          0     0     0      0  
+# 5569  ...    0     0   0      0       0    0          0     0     0      0  
+# 5570  ...    0     0   0      0       0    0          0     0     0      0  
+# 5571  ...    0     0   0      0       0    0          0     0     0      0  
+
+# [5572 rows x 7021 columns]
+
+cv = CountVectorizer(max_features=500)
+matrix=cv.fit_transform(temiz).toarray()
+matrixdf=pd.DataFrame(matrix,columns=cv.get_feature_names_out())
+# print(matrixdf)
+#       able  abt  account  actually  address  aft  afternoon  age  ah  aight  \
+# 0        0    0        0         0        0    0          0    0   0      0   
+# 1        0    0        0         0        0    0          0    0   0      0   
+# 2        0    0        0         0        0    0          0    0   0      0   
+# 3        0    0        0         0        0    0          0    0   0      0   
+# 4        0    0        0         0        0    0          0    0   0      0   
+# ...    ...  ...      ...       ...      ...  ...        ...  ...  ..    ...   
+# 5567     0    0        0         0        0    0          0    0   0      0   
+# 5568     0    0        0         0        0    0          0    0   0      0   
+# 5569     0    0        0         0        0    0          0    0   0      0   
+# 5570     0    0        0         0        0    0          0    0   0      0   
+# 5571     0    0        0         0        0    0          0    0   0      0   
+
+#       ...  xxx  ya  yeah  year  yes  yesterday  yet  yo  yr  yup  
+# 0     ...    0   0     0     0    0          0    0   0   0    0  
+# 1     ...    0   0     0     0    0          0    0   0   0    0  
+# 2     ...    0   0     0     0    0          0    0   0   0    0  
+# 3     ...    0   0     0     0    0          0    0   0   0    0  
+# 4     ...    0   0     0     0    0          0    0   0   0    0  
+# ...   ...  ...  ..   ...   ...  ...        ...  ...  ..  ..  ...  
+# 5567  ...    0   0     0     0    0          0    0   0   0    0  
+# 5568  ...    0   0     0     0    0          0    0   0   0    0  
+# 5569  ...    0   0     0     0    0          0    0   0   0    0  
+# 5570  ...    0   0     0     0    0          0    0   0   0    0  
+# 5571  ...    0   0     0     0    0          0    0   0   0    0  
+
+# [5572 rows x 500 columns]
+```
+
+Max features 7000 den 500 e sayıyı indirdi.
 
 
 
