@@ -7923,4 +7923,4 @@ for i in metin:
 
 ![image](./images/twt1.png)
 
-https://www.youtube.com/watch?v=FZgn1xSATeU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=112
+https://www.youtube.com/watch?v=hQXpqotQqSI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=115
