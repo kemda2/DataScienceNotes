@@ -7939,6 +7939,37 @@ metin = "Merhaba, benim adım Ali"
 sonuc = ceviri.translate(metin, src="tr", dest="en")
 print(sonuc.text)
 
+from time import sleep
+
+def ceviri(tweet):
+    try:
+        t = Translator()
+        sonuc = t.translate(tweet, src="tr", dest="en")
+        sleep(0.5)
+        return sonuc.text
+    except TypeError:
+        return "Hata"
+
+veri2["Çeviri"] = veri2["Temiz Tweet"].apply(ceviri)
+
+from textblob import TextBlob
+
+def duygu_skor(tweet):
+    blob = TextBlob(tweet)
+    return blob.sentiment.polarity
+
+veri2["Duygu Skor"] = veri2["Çeviri"].apply(duyguskor)
+
+def duygudurum(durum):
+    if durum < 0:
+        return "Negatif"
+    elif durum > 0:
+        return "Pozitif"
+    else:
+        return "Nötr"
+
+veri2["Duygu Durumu"] = veri2["Duygu Skor"].apply(duygudurum)
+
 
 
 ```
