@@ -7846,6 +7846,10 @@ veri = sntwitter.TwitterSearchScraper("Turkiye lang:en").get_items() # Turkiye i
 veri = sntwitter.TwitterSearchScraper("from:Merkez_Bankasi").get_items() # Merkez Bankası hesabından tweetler
 veri = sntwitter.TwitterSearchScraper("to:Merkez_Bankasi").get_items() # Merkez Bankası hesabına atılan tweetler
 veri = sntwitter.TwitterSearchScraper("from:AnlasEkonomi to:sarigulhalill").get_items() # Merkez Bankası hesabına atılan tweetler
+veri = sntwitter.TwitterSearchScraper("from:AnlasEkonomi since:2023-01-01 until:2023-01-05").get_items() # Merkez Bankası hesabına atılan tweetler
+veri = sntwitter.TwitterSearchScraper("Samsung min_faves:10000").get_items() # Samsung içeren ve en az 10000 beğeni alan tweetler
+veri = sntwitter.TwitterSearchScraper("Samsung min_retweets:10000").get_items() # Samsung içeren ve en az 10000 retweet alan tweetler
+veri = sntwitter.TwitterSearchScraper("Samsung near:Ankara").get_items() # Samsung içeren ve ANkaradan atılan tweetler
 
 for i in veri:
     if len(liste) == 20:
