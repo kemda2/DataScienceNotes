@@ -7983,12 +7983,113 @@ plt.show()
 Türkçe için kaynak;
 
 https://github.com/akoksal/BERT-Sentiment-Analysis-Turkish
+https://myweb.sabanciuniv.edu/rdehkharghani/sentiturknet-3/
+
+Sentitürkün içindeki exceli alıp tanıtıyoruz.
+
+```Python
+import pandas as pd
+import re
+
+data = pd.read_csv("Tweet.csv")
+veri = data.copy()
+
+def temizle(tweet):
+    tweet = re.sub(r'#[a-zA-ZçÇğĞıİöÖşŞüÜ0-9]+', ' ', tweet)
+    tweet = re.sub('\\n', ' ', tweet)
+    tweet = re.sub('@[\S]*', ' ', tweet)
+    tweet = re.sub("https?:\/\/\S+", " ", tweet)
+    tweet = tweet.lower()
+    tweet = re.sub('[^a-zA-ZçÇşŞğĞüÜöÖıİ0-9]+', ' ', tweet)
+    tweet = re.sub(r'^[\s]+|[\s]+$', ' ', tweet)
+    return tweet
+
+veri["Temiz Tweet"] = veri["Tweetler"].apply(temizle)
+
+senturk = pd.read_excel("STN.xlsx")
+v = senturk.iloc[:, [0, 4, 5, 6]]
+# print(v)
+#    synonyms                       neg value  obj value  pos value
+# 0  ayva reçeli                        0.060      0.872      0.068
+# 1  gül reçeli                         0.060      0.872      0.068
+# 2  incir reçeli                       0.060      0.872      0.068
+# 3  iştah                              0.060      0.872      0.068
+# 4  iştahlı                            0.060      0.462      0.478
+# ...
+# 14790 kritik                          0.060      0.872      0.068
+# 14791 sönük , loş                     0.125      0.818      0.057
+# 14792 fok , fok balığı                0.060      0.872      0.068
+# 14793 örtü , battaniye                0.060      0.872      0.068
+# 14794 litre , desimetreküp , desimetre küp , l , 1 ... 0.060 0.872 0.068
+
+# print(v[v["synonyms"] == "güzel"])
+#    synonyms  neg value  obj value  pos value
+# 886 güzel      0.0       0.0        1.0
+# print(v[v["synonyms"] == "çirkin"])
+#    synonyms  neg value  obj value  pos value
+# 893 çirkin     0.731     0.208      0.062
+# print(v[v["synonyms"] == "amca"])
+#    synonyms  neg value  obj value  pos value
+# 25  amca      0.06      0.872      0.068
+
+v = v.drop_duplicates(["synonyms"]).set_index("synonyms")
+# print(v)
+# synonyms                       neg value  obj value  pos value
+# ayva reçeli                        0.060      0.872      0.068
+# gül reçeli                         0.060      0.872      0.068
+# incir reçeli                       0.060      0.872      0.068
+# iştah                              0.060      0.872      0.068
+# iştahlı                            0.060      0.462      0.478
+# ...       
+# kritik                             0.060      0.872      0.068
+# sönük , loş                        0.125      0.818      0.057
+# fok , fok balığı                   0.060      0.872      0.068
+# örtü , battaniye                   0.060      0.872      0.068
+
+son_v = {}
+
+import numpy as np
+
+for kelimeler in v.index:
+    if kelimeler is np.nan:
+        continue
+    for kelime in kelimeler.split(","):
+        son_v[kelime.strip()] = {
+            "pozitif": v.loc[kelimeler]["pos value"],
+            "negatif": v.loc[kelimeler]["neg value"],
+            "nötr": v.loc[kelimeler]["obj value"]
+        }
+
+def skor(tweet):
+    pozitif = 0
+    negatif = 0
+    nötr = 0
+
+    for metin in tweet.split(" "):
+        if metin in son_v:
+            pozitif += son_v[metin]["pozitif"]
+            negatif += son_v[metin]["negatif"]
+            nötr += son_v[metin]["nötr"]
+    return [pozitif, negatif, nötr]
+
+veri["Skor"] = veri["Temiz Tweet"].apply(skor)
+# print(veri)
+#  Tarih       ...                    Skor
+# 0  2023-01-07 ... [1.5600000000000005, 0.6600000000000001, 8.78]
+# 1  2023-01-07 ... [0.272, 0.24, 3.488]
+# 2  2023-01-07 ... [1.4920000000000004, 0.6000000000000001, 7.907...]
+# 3  2023-01-07 ... [3.1170000000000002, 1.8250000000000002, 40.058]
+# 4  2023-01-07 ... [2.209, 1.2520000000000002, 16.538999999999998]
+# ...
+# 99995 2022-12-10 ... [3.5550000000000001, 2.3100000000000001, 21.1349]
+# 99996 2022-12-10 ... [0.8160000000000003, 1.1400000000000003, 10.044]
+# 99997 2022-12-10 ... [2.1670000000000007, 1.8800000000000008, 19.953]
+# 99998 2022-12-10 ... [0.40800000000000003, 0.36, 5.232]
+# 99999 2022-12-10 ... [0.34, 0.3, 4.36]
 
 
 
-
-
-
+```
 
 
 
