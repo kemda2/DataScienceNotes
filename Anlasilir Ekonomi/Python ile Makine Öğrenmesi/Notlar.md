@@ -8131,6 +8131,35 @@ def temizle(tweet):
     return tweet
 
 veri["Temiz Tweet"] = veri["Tweetler"].apply(temizle)
+
+from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipeline
+
+model = AutoModelForSequenceClassification.from_pretrained("savasy/bert-base-turkish-sentiment-cam")
+tokenizer = AutoTokenizer.from_pretrained("savasy/bert-base-turkish-sentiment-cam")
+sa = pipeline('sentiment-analysis', tokenizer=tokenizer, model=model)
+
+veri2 = veri.iloc[0:10, :]
+
+def skor(tweet):
+    return sa(tweet)
+
+
+veri2["Skor"] = veri2["Temiz Tweet"].apply(skor)
+
+# veri2
+
+#      Tarih       Tweetler                                           Temiz Tweet                                       Skor
+# 0    2023-01-07  Velhasıl sözün özeti borsa matematiksel olarak...  velhası sözün özeti borsa matematiksel olarak...  {'label': 'negative', 'score': 0.6548815369060...
+# 1    2023-01-07  #tcell\n\nHaftalık log grafik son görüntü ; \n...  haftalık log grafik son görüntü ;                 {'label': 'positive', 'score': 0.866255769233...
+# 2    2023-01-07  @AdnanAk86466060 Yapılan işlerle kaplarda smar...  yapı lan işlerle kaplarda smartg gerekeni yapa... {'label': 'negative', 'score': 0.958139836788...
+# 3    2023-01-07  Anket Borsa İstanbul Ana Pazar ın gelecek v...     anket borsa istanbul ana pazarın gelecek ...      {'label': 'positive', 'score': 0.66198482222...
+# 4    2023-01-07  Arkadaşlar kirada olan, #memur, #işçi aylık ge...  arkadaşlar kirada olan aylık gelirli devl...      {'label': 'negative', 'score': 0.984765887260...
+# 5    2023-01-07  @louclark_borsa Bende olmayan bir hostadmis, t...  bende olmayan bir hostadmis teşekkürler ...       {'label': 'negative', 'score': 0.993367493152...
+# 6    2023-01-07  @AzizzPetro Hocam cumartesi nasıl batıyor Bors...  hocam cumartesi nasıl batıyor borsa kapal yke...  {'label': 'positive', 'score': 0.6360675984616...
+# 7    2023-01-07  @louclark_borsa Çok iyi ya iyi akşam lar Har...    çok iyi ya iyi akşam lar harika ya                {'label': 'positive', 'score': 0.991190671920...
+# 8    2023-01-07  @Sedefci @binance Boş bir cümle olmuş hoca, d...   boş bir cümle olmuş hoca daha gerçekçi ve a...    {'label': 'positive', 'score': 0.994123399257...
+# 9    2023-01-07  @Kartalavseren @MustafaKemal619 @louclark_bors...  evet bende etmiyorumuşum                          {'label': 'positive', 'score': 0.538648545742...
+
 ```
 
 # 
