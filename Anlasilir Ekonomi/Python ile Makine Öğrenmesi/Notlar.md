@@ -8241,10 +8241,76 @@ plt.show()
 
 ![image](./images/twt2.png)
 
+```python
+endeks = yf.download("XU100.IS", start=min(grupla["Tarih"]), end=max(grupla["Tarih"])).reset_index()
+endeks = endeks.rename(columns={"Date": "Tarih"})
+
+df = pd.merge(endeks, grupla, on="Tarih")
+df
+#     Tarih       Open         High         Low          Close        Adj Close    Volume     Skor2    
+#  -  ----------  -----------  -----------  -----------  -----------  -----------  ---------  -------- 
+#  0  2022-12-12  5057.500000  5222.600098  5057.500000  5193.299805  5193.299805  691207610  0.516213 
+#  1  2022-12-13  5212.600098  5299.299805  5179.799805  5256.200195  5256.200195  623443000  0.494579 
+#  2  2022-12-14  5274.899902  5302.100098  5041.700195  5066.500000  5066.500000  835564760  0.427167 
+#  3  2022-12-15  5174.399902  5247.799805  5050.399902  5188.799805  5188.799805  652048220  0.477730 
+#  4  2022-12-16  5211.799805  5259.000000  5154.600098  5214.299805  5214.299805  629149800  0.491233 
+#  5  2022-12-19  5270.600098  5404.000000  5267.700195  5391.899902  5391.899902  719519350  0.515787 
+#  6  2022-12-20  5480.799805  5445.899902  5344.299805  5419.000000  5419.000000  691291700  0.499856 
+#  7  2022-12-21  5449.299805  5491.100098  5412.700195  5429.100098  5429.100098  594396900  0.536021 
+#  8  2022-12-22  5426.200195  5515.700195  5398.399902  5447.200195  5447.200195  475588900  0.499131 
+
+from sklearn.preprocessing import StandardScaler
+
+df2 = df[["Close", "Skor2"]]
+sc = StandardScaler()
+dfstan = pd.DataFrame(sc.fit_transform(df2), columns=["Bist100", "Duygu Skor"])
+print(dfstan)
+#     Bist100    Duygu Skor 
+#  -  ---------  ---------- 
+#  0  -1.176823  0.740204   
+#  1  -0.780451  0.328411   
+#  2  -1.975864  -0.954741  
+#  3  -1.205181  0.007689   
+#  4  -1.044490  0.264726   
+#  5  0.074673   0.732083   
+#  6  0.245447   0.428857   
+#  7  0.309094   1.117237   
+#  8  0.423153   0.415050   
+
+dfstan["Tarih"] = df["Tarih"]
+print(dfstan)
+
+#     Bist100    Duygu Skor  Tarih      
+#  -  ---------  ----------  ---------- 
+#  0  -1.176823  0.740204    2022-12-12 
+#  1  -0.780451  0.328411    2022-12-13 
+#  2  -1.975864  -0.954741   2022-12-14 
+#  3  -1.205181  0.007689    2022-12-15 
+#  4  -1.044490  0.264726    2022-12-16 
+#  5  0.074673   0.732083    2022-12-19 
+#  6  0.245447   0.428857    2022-12-20 
+#  7  0.309094   1.117237    2022-12-21 
+#  8  0.423153   0.415050    2022-12-22 
+
+import matplotlib.pyplot as plt
+import matplotlib.dates as dt
+
+plt.plot(dfstan["Tarih"], dfstan["Bist100"], color="Red")
+plt.plot(dfstan["Tarih"], dfstan["Duygu Skor"], color="Blue")
+plt.gca().xaxis.set_major_locator(dt.DayLocator(interval=1))
+plt.gcf().autofmt_xdate()
+plt.legend(["Bist100", "Duygu Skor"])
+plt.show()
+```
+
+![image](./images/twt3.png)
+
+# Öneri Sistemleri
+
 
 
 # 
 
-![image](./images/twt3.png)
+![image](./images/os1.png)
 
-https://www.youtube.com/watch?v=_mcvFWzk_IU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=119
+https://www.youtube.com/watch?v=XMyRrAga6n4&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=120
