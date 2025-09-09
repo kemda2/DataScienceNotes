@@ -8160,6 +8160,26 @@ veri2["Skor"] = veri2["Temiz Tweet"].apply(skor)
 # 8    2023-01-07  @Sedefci @binance Boş bir cümle olmuş hoca, d...   boş bir cümle olmuş hoca daha gerçekçi ve a...    {'label': 'positive', 'score': 0.994123399257...
 # 9    2023-01-07  @Kartalavseren @MustafaKemal619 @louclark_bors...  evet bende etmiyorumuşum                          {'label': 'positive', 'score': 0.538648545742...
 
+def skor(tweet):
+    return sa(tweet)[0].get("Label)
+
+
+veri2["Skor"] = veri2["Temiz Tweet"].apply(skor)
+
+# veri2
+
+#      Tarih       Tweetler                                           Temiz Tweet                                       Skor
+# 0    2023-01-07  Velhasıl sözün özeti borsa matematiksel olarak...  velhası sözün özeti borsa matematiksel olarak...  negative
+# 1    2023-01-07  #tcell\n\nHaftalık log grafik son görüntü ; \n...  haftalık log grafik son görüntü ;                 positive
+# 2    2023-01-07  @AdnanAk86466060 Yapılan işlerle kaplarda smar...  yapı lan işlerle kaplarda smartg gerekeni yapa... negative
+# 3    2023-01-07  Anket Borsa İstanbul Ana Pazar ın gelecek v...     anket borsa istanbul ana pazarın gelecek ...      positive
+# 4    2023-01-07  Arkadaşlar kirada olan, #memur, #işçi aylık ge...  arkadaşlar kirada olan aylık gelirli devl...      negative
+# 5    2023-01-07  @louclark_borsa Bende olmayan bir hostadmis, t...  bende olmayan bir hostadmis teşekkürler ...       negative
+# 6    2023-01-07  @AzizzPetro Hocam cumartesi nasıl batıyor Bors...  hocam cumartesi nasıl batıyor borsa kapal yke...  positive
+# 7    2023-01-07  @louclark_borsa Çok iyi ya iyi akşam lar Har...    çok iyi ya iyi akşam lar harika ya                positive
+# 8    2023-01-07  @Sedefci @binance Boş bir cümle olmuş hoca, d...   boş bir cümle olmuş hoca daha gerçekçi ve a...    positive
+# 9    2023-01-07  @Kartalavseren @MustafaKemal619 @louclark_bors...  evet bende etmiyorumuşum                          positive
+
 ```
 
 # 
