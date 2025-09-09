@@ -7976,11 +7976,13 @@ veri2["Duygu Durumu"].value_counts().plot(kind="bar")
 plt.show()
 
 ![image](./images/twt1.png)
-
-
-
 ```
 
+---
+
+Türkçe için kaynak;
+
+https://github.com/akoksal/BERT-Sentiment-Analysis-Turkish
 
 
 
