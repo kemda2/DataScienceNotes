@@ -7924,6 +7924,8 @@ def temizle(tweet):
     tweet = re.sub('@[\S]*', ' ', tweet)
     tweet = re.sub("https?:\/\/\S+", " ", tweet)
     tweet = tweet.lower()
+    tweet = re.sub('[^a-zA-ZçÇşŞğĞüÜöÖıİ0-9]+', ' ', tweet)
+    tweet = re.sub(r'^[\s]+|[\s]+$', ' ', tweet)
     return tweet
 
 veri["Temiz Tweet"] = veri["Tweetler"].apply(temizle)
