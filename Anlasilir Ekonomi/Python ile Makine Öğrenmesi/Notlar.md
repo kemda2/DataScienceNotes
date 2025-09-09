@@ -7573,11 +7573,231 @@ matrixdf=pd.DataFrame(matrix,columns=cv.get_feature_names_out())
 
 Max features 7000 den 500 e sayıyı indirdi.
 
+# NLP-Restoran Yorum Analizi 
+
+```Python
+import pandas as pd
+
+data = pd.read_csv("restoran.tsv", delimiter="\t")
+veri=data.copy()
+# print(veri)
+#                                                 Review  Liked
+# 0                             Wow... Loved this place.      1
+# 1                                   Crust is not good.      0
+# 2            Not tasty and the texture was just nasty.      0
+# 3    Stopped by during the late May bank holiday of...      1
+# 4    The selection on the menu was great and so wer...      1
+# ..                                                 ...    ...
+# 995  I think food should have flavor and texture an...      0
+# 996                           Appetite instantly gone.      0
+# 997  Overall I was not impressed and would not go b...      0
+# 998  The whole experience was underwhelming, and I ...      0
+# 999  Then, as if I hadn't wasted enough of my life ...      0
+
+import re
+import nltk
+nltk.download("stopwords")
+from nltk.corpus import stopwords
+nltk.download("wordnet")
+lema = nltk.WordNetLemmatizer()
+
+temiz=[]
+
+for i in veri["Review"]:
+    duzenle = re.sub('[^a-zA-Z]', ' ', i)
+    duzenle = duzenle.lower()
+    duzenle = duzenle.split()
+    duzenle = [lema.lemmatize(kelime) for kelime in duzenle if not kelime in set(stopwords.words("english"))]
+    duzenle = " ".join(duzenle)
+    temiz.append(duzenle)
+
+df = pd.DataFrame(list(zip(veri["Review"], temiz)), columns=["Orjinal Yorum", "Temiz Yorum"])
+# print(df)
+#                                          Orjinal Yorum  \
+# 0                             Wow... Loved this place.   
+# 1                                   Crust is not good.   
+# 2            Not tasty and the texture was just nasty.   
+# 3    Stopped by during the late May bank holiday of...   
+# 4    The selection on the menu was great and so wer...   
+# ..                                                 ...   
+# 995  I think food should have flavor and texture an...   
+# 996                           Appetite instantly gone.   
+# 997  Overall I was not impressed and would not go b...   
+# 998  The whole experience was underwhelming, and I ...   
+# 999  Then, as if I hadn't wasted enough of my life ...   
+
+#                                            Temiz Yorum  
+# 0                                      wow loved place  
+# 1                                           crust good  
+# 2                                  tasty texture nasty  
+# 3    stopped late may bank holiday rick steve recom...  
+# 4                           selection menu great price  
+# ..                                                 ...  
+# 995                  think food flavor texture lacking  
+# 996                            appetite instantly gone  
+# 997                    overall impressed would go back  
+# 998  whole experience underwhelming think go ninja ...  
+# 999  wasted enough life poured salt wound drawing t...
+
+frekans = df["Temiz Yorum"].apply(lambda x: pd.value_counts(x.split(" "))).sum(axis=0).reset_index()
+frekans.columns=["Kelimeler","Frekans"]
+# print(frekans)
+#      Kelimeler  Frekans
+# 0          wow      3.0
+# 1        loved     10.0
+# 2        place    111.0
+# 3        crust      2.0
+# 4         good     95.0
+# ...        ...      ...
+# 1764     ninja      1.0
+# 1765    wasted      1.0
+# 1766    poured      1.0
+# 1767     wound      1.0
+# 1768   drawing      1.0
+
+# [1769 rows x 2 columns]
+
+import matplotlib.pyplot as plt
+
+filtre = frekans[frekans["Frekans"] > 10]
+filtre.plot.bar(x="Kelimeler", y="Frekans")
+plt.show()
+```
+![image](./images/nlp12.png)
+
+```Python
+from sklearn.feature_extraction.text import CountVectorizer
+
+cv = CountVectorizer(max_features=1500)
+matrix = cv.fit_transform(temiz).toarray()
+matrixdf=pd.DataFrame(matrix,columns=cv.get_feature_names_out())
+# print(matrixdf)
+#      absolute  absolutely  absolutley  accident  accommodation  accomodate  \
+# 0           0           0           0         0              0           0   
+# 1           0           0           0         0              0           0   
+# 2           0           0           0         0              0           0   
+# 3           0           0           0         0              0           0   
+# 4           0           0           0         0              0           0   
+# ..        ...         ...         ...       ...            ...         ...   
+# 995         0           0           0         0              0           0   
+# 996         0           0           0         0              0           0   
+# 997         0           0           0         0              0           0   
+# 998         0           0           0         0              0           0   
+# 999         0           0           0         0              0           0   
+
+#      accordingly  accountant  ache  acknowledged  ...  year  yellow  \
+# 0              0           0     0             0  ...     0       0   
+# 1              0           0     0             0  ...     0       0   
+# 2              0           0     0             0  ...     0       0   
+# 3              0           0     0             0  ...     0       0   
+# 4              0           0     0             0  ...     0       0   
+# ..           ...         ...   ...           ...  ...   ...     ...   
+# 995            0           0     0             0  ...     0       0   
+# 996            0           0     0             0  ...     0       0   
+# 997            0           0     0             0  ...     0       0   
+# 998            0           0     0             0  ...     0       0   
+# 999            0           0     0             0  ...     0       0   
+
+#      yellowtail  yelpers  yet  yucky  yukon  yum  yummy  zero  
+# 0             0        0    0      0      0    0      0     0  
+# 1             0        0    0      0      0    0      0     0  
+# 2             0        0    0      0      0    0      0     0  
+# 3             0        0    0      0      0    0      0     0  
+# 4             0        0    0      0      0    0      0     0  
+# ..          ...      ...  ...    ...    ...  ...    ...   ...  
+# 995           0        0    0      0      0    0      0     0  
+# 996           0        0    0      0      0    0      0     0  
+# 997           0        0    0      0      0    0      0     0  
+# 998           0        0    0      0      0    0      0     0  
+# 999           0        0    0      0      0    0      0     0  
+
+# [1000 rows x 1500 columns]
+
+print(veri["Liked"].unique()) #[1 0]
+
+# print(veri.iloc[:,1].values)
+# array([1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1,
+#        1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1,
+#        0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1,
+#        1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1,
+#        1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+#        0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1,
+#        1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0,
+#        1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0,
+#        0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0,
+#        1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1,
+#        0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1,
+#        0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1,
+#        1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1,
+#        0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0,
+#        1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0,
+#        0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0,
+#        1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1,
+#        0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+#        0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1,
+#        1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1,
+#        0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1,
+#        1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0,
+#        1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0,
+#        0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1,
+#        1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1,
+#        1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0,
+#        0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0,
+#        0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1,
+#        0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1,
+#        0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1,
+#        1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0,
+#        1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+#        1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1,
+#        1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1,
+#        0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1,
+#        0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0,
+#        0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0,
+#        1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+#        1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1,
+#        0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0,
+#        0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1,
+#        0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+#        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+#        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+#        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+#        0, 0, 0, 0, 0, 0, 0, 0, 0, 0], dtype=int64)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(matrix, y, test_size=0.2, random_state=0)
+
+from sklearn.naive_bayes import GaussianNB
+
+model = GaussianNB()
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.ensemble import RandomForestClassifier
+
+model = GaussianNB()
+model.fit(X_train, y_train)
+tahmin = model.predict(X_test)
+
+model2 = RandomForestClassifier(random_state=0)
+model2.fit(X_train, y_train)
+tahmin2 = model2.predict(X_test)
+
+skor = accuracy_score(y_test, tahmin)
+print(skor * 100) #69.0
+
+skor2 = accuracy_score(y_test, tahmin2)
+print(skor2 * 100) #68.0
+```
+
+
 
 
 
 # 
 
-![image](./images/nlp12.png)
+![image](./images/nlp13.png)
 
 https://www.youtube.com/watch?v=irRA42JN2Ww&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=111
