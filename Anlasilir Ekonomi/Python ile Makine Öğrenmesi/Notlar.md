@@ -7794,6 +7794,77 @@ print(skor2 * 100) #68.0
 
 # Twitter Analizi
 
+```Python
+import snscrape.modules.twitter as sntwitter
+import pandas as pd
+from itertools import islice
+
+df = pd.DataFrame(islice(sntwitter.TwitterSearchScraper("Borsa").get_items(), 1))
+
+veri = sntwitter.TwitterSearchScraper("Borsa").get_items()
+
+icerik = []
+
+for i in veri:
+    if len(icerik) == 50:
+        break
+    else:
+        icerik.append(i.content)
+
+
+
+icerik = []
+
+for i in veri:
+    if len(icerik) == 50:
+        break
+    else:
+        icerik.append([i.url, i.date, i.content])
+
+df = pd.DataFrame(icerik, columns=["Link", "Tarih", "Tweetler"])
+print(df)
+
+
+tarih = df.select_dtypes(include=['datetime64[ns, UTC]']).columns
+
+for i in tarih:
+    df[i] = df[i].dt.date
+```
+
+---
+
+```Python
+import snscrape.modules.twitter as sntwitter
+import pandas as pd
+
+liste = []
+
+veri = sntwitter.TwitterSearchScraper("Türkiye").get_items()
+veri = sntwitter.TwitterSearchScraper("Türkiye Turkey").get_items() # Hem Türkiye hem Turkey
+veri = sntwitter.TwitterSearchScraper("Türkiye -Turkey").get_items() # Türkiye içerip Turkey içermeyen
+veri = sntwitter.TwitterSearchScraper("Turkiye lang:en").get_items() # Turkiye içeren ingilizce tweetler
+veri = sntwitter.TwitterSearchScraper("from:Merkez_Bankasi").get_items() # Merkez Bankası hesabından tweetler
+
+for i in veri:
+    if len(liste) == 20:
+        break
+    else:
+        liste.append(i.content)
+
+df = pd.DataFrame(liste, columns=["Tweetler"])
+
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
