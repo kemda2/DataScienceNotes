@@ -7858,11 +7858,56 @@ for i in veri:
         liste.append(i.content)
 
 df = pd.DataFrame(liste, columns=["Tweetler"])
-
-
 ```
 
+---
 
+```Python
+import snscrape.modules.twitter as sntwitter
+import pandas as pd
+
+liste = []
+
+veri = sntwitter.TwitterSearchScraper("Borsa lang:tr").get_items()
+
+for i in veri:
+    if len(liste) == 100000:
+        break
+    else:
+        liste.append([i.date, i.content])
+
+df = pd.DataFrame(liste, columns=["Tarih", "Tweetler"])
+
+tarihduzelt = df.select_dtypes(include=['datetime64[ns, UTC]']).columns
+
+for i in tarihduzelt:
+    df[i] = df[i].dt.date
+
+df.to_csv("Tweet.csv", index=False)
+
+data=pd.read_csv("Tweet.csv")
+veri=data.copy()
+
+import pandas as pd
+from textblob import TextBlob
+
+metin = [
+    "Ben elmayı çok severim.",
+    "Ben elmadan nefret ederim.",
+    "Elma bir meyvedir."
+]
+
+for i in metin:
+    blob = TextBlob(i)  # Türkçe cümle TextBlob nesnesine çevriliyor
+    ingblob = blob.translate(from_lang="tr", to="en")  # Türkçe'den İngilizce'ye çeviri
+    print(ingblob.sentiment)  # İngilizce metnin duygu analizi sonucu yazdırılıyor
+
+# Sentiment(polarity=0.5, subjectivity=0.6)
+# Sentiment(polarity=-0.8, subjectivity=0.9)
+# Sentiment(polarity=0.0, subjectivity=0.0)
+
+# Pozitifse olumlu negatifse olumsuz 0 ise nötr.
+```
 
 
 
