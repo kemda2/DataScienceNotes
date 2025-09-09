@@ -7435,8 +7435,30 @@ plt.show()
 
 ![image](./images/nlp10.png)
 
+```Python
+import numpy as np
+from PIL import Image
 
+resim = np.array(Image.open("logo.png"))
 
+from wordcloud import WordCloud
+
+# Örneğin ilk temiz SMS'i alalım
+text = df["Temiz Sms"][0]
+
+kelimeler=dict(frekans.values)
+
+# WordCloud nesnesini oluştur ve metni işle
+bulut = WordCloud(background_color="black", mask=resim, contour_color="white", contour_width=3, max_words=250).generate_from_frequencies(kelimeler)
+
+# Görselleştir
+plt.figure(figsize=(5, 5))
+plt.imshow(bulut, interpolation='bilinear')
+plt.axis("off")
+plt.show()
+```
+
+![image](./images/nlp11.png)
 
 
 
@@ -7447,7 +7469,7 @@ plt.show()
 
 # 
 
-![image](./images/nlp11.png)
+![image](./images/nlp12.png)
 
 https://www.youtube.com/watch?v=xoyVbcRGZZI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=109
 1034
