@@ -7844,6 +7844,8 @@ veri = sntwitter.TwitterSearchScraper("Türkiye Turkey").get_items() # Hem Türk
 veri = sntwitter.TwitterSearchScraper("Türkiye -Turkey").get_items() # Türkiye içerip Turkey içermeyen
 veri = sntwitter.TwitterSearchScraper("Turkiye lang:en").get_items() # Turkiye içeren ingilizce tweetler
 veri = sntwitter.TwitterSearchScraper("from:Merkez_Bankasi").get_items() # Merkez Bankası hesabından tweetler
+veri = sntwitter.TwitterSearchScraper("to:Merkez_Bankasi").get_items() # Merkez Bankası hesabına atılan tweetler
+veri = sntwitter.TwitterSearchScraper("from:AnlasEkonomi to:sarigulhalill").get_items() # Merkez Bankası hesabına atılan tweetler
 
 for i in veri:
     if len(liste) == 20:
