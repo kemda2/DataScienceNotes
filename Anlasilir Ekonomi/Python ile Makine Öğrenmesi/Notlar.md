@@ -7580,5 +7580,4 @@ Max features 7000 den 500 e sayıyı indirdi.
 
 ![image](./images/nlp12.png)
 
-https://www.youtube.com/watch?v=xoyVbcRGZZI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=109
-1034
+https://www.youtube.com/watch?v=irRA42JN2Ww&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=111
