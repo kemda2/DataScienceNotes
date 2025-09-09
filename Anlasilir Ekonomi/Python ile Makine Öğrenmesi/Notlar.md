@@ -7970,6 +7970,13 @@ def duygudurum(durum):
 
 veri2["Duygu Durumu"] = veri2["Duygu Skor"].apply(duygudurum)
 
+import matplotlib.pyplot as plt
+
+veri2["Duygu Durumu"].value_counts().plot(kind="bar")
+plt.show()
+
+![image](./images/twt1.png)
+
 
 
 ```
@@ -7985,7 +7992,7 @@ veri2["Duygu Durumu"] = veri2["Duygu Skor"].apply(duygudurum)
 
 # 
 
-![image](./images/twt1.png)
+![image](./images/twt2.png)
 
 https://www.youtube.com/watch?v=UPUlNv-U_J0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=116
 1037
