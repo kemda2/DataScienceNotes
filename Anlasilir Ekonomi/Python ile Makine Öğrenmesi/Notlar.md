@@ -7231,6 +7231,11 @@ frekans.columns=["Kelimeler","Frekanslar"]
 # Kelimeler     7044
 # Frekanslar     150
 # dtype: int64
+
+import matplotlib.pyplot as plt
+
+plt.bar(x="Kelimeler",height="Frekans",data=frekans)
+plt.show()
 ```
 
 
@@ -7239,4 +7244,5 @@ frekans.columns=["Kelimeler","Frekanslar"]
 
 ![image](./images/apr1.png)
 
-https://www.youtube.com/watch?v=xoyVbcRGZZI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=108
+https://www.youtube.com/watch?v=xoyVbcRGZZI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=109
+1034
