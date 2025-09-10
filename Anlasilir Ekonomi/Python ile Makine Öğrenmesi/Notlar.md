@@ -9049,4 +9049,4 @@ tahmin=model.predict(X_test)
 
 ![image](./images/trv1.png)
 
-https://www.youtube.com/watch?v=2CVnCq6UXbU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=137
+https://www.youtube.com/watch?v=VRnxJlch0_c&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=146
