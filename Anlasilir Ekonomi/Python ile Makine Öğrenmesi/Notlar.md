@@ -9053,7 +9053,7 @@ model.add(Dense(6, activation="relu", kernel_initializer="normal"))
 model.add(Dense(1, kernel_initializer="normal"))
 
 model.compile(loss="mse", optimizer="adam", metrics=["mean_squared_error"])
-model.fit(x_train, y_train, epochs=100, validation_data=(x_val, y_val))
+model.fit(x_train, y_train, epochs=100, validation_data=(x_val, y_val), verbose=0) # verbose epoch bilgilerini görmemek için
 
 sonuc = model.evaluate(x_test, y_test)
 # print('{}:{}'.format(model.metrics_names[1], sonuc[1]))
