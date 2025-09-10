@@ -9058,7 +9058,6 @@ model.fit(x_train, y_train, epochs=100, validation_data=(x_val, y_val), verbose=
 sonuc = model.evaluate(x_test, y_test)
 # print('{}:{}'.format(model.metrics_names[1], sonuc[1]))
 # mean_squared_error:21.768083572387695
-
 ```
 
 
@@ -9082,4 +9081,4 @@ sonuc = model.evaluate(x_test, y_test)
 
 ![image](./images/trv1.png)
 
-https://www.youtube.com/watch?v=VRnxJlch0_c&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=146
+https://www.youtube.com/watch?v=qtItwDh5-ZM&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=147
