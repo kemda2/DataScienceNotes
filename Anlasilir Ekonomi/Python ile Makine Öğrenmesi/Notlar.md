@@ -8632,9 +8632,80 @@ df=veri[["id","title","overview"]]
 
 # Filmin içeriği başka bir filmin içeriği ile ne kadar benzerlik içeriyor ona bakacağız.
 
+from sklearn.feature_extraction.text import TfidfVectorizer
 
+df = veri[["id", "title", "overview"]]
+tdidf = TfidfVectorizer(stop_words="english")
+df["overview"] = df["overview"].fillna(" ")
+tdidf_matris = tdidf.fit_transform(df["overview"])
+# print(tdidf_matris.shape)
+# (45466, 75827)
+
+from sklearn.metrics.pairwise import linear_kernel
+
+benzerlik_matrisi = linear_kernel(tdidf_matris, tdidf_matris)
+
+indeksler = pd.Series(df.index, index=df["title"]).drop_duplicates()
+
+film_indeks = indeksler["Toy Story"]
+
+filmbenzerleri = list(enumerate(benzerlik_matrisi[film_indeks]))
+
+siralama = sorted(filmbenzerleri, key=lambda x: x[1], reverse=True)
+
+siralamapuan = siralama[1:6]
+
+siralamaindeks = [i[0] for i in siralamapuan]
+
+sonuc = df["title"].iloc[siralamaindeks]
+
+# print(sonuc)
+# 15348                    Toy Story 3
+# 2997                     Toy Story 2
+# 10301         The 40 Year Old Virgin
+# 24523                      Small Fry
+# 23843    Andy Hardy's Blonde Trouble
+# Name: title, dtype: object
 ```
 
+---
+
+Dataset: https://files.grouplens.org/datasets/movielens/ml-100k.zip
+
+```Python
+import pandas as pd
+import numpy as np
+
+from lightfm import LightFM
+from lightfm.datasets import fetch_movielens
+from lightfm.evaluation import precision_at_k
+
+data = fetch_movielens()
+
+model = LightFM(loss="warp")
+
+model.fit(data["train"], item_features=data["item_features"])
+
+perf = precision_at_k(model, data["test"], k=5).mean()
+perf
+# 0.11049841
+
+kullanicisay, itemsay = data["train"].shape
+
+kullanicigorus = data["item_labels"][data["train"].tocrs()[2].indices]
+
+skor = model.predict(2, np.arange(itemsay))
+
+eniyiskor = data["item_labels"][np.argsort(-skor)]
+
+eniyiskor
+# array(['Liar Liar (1997)', 'English Patient, The (1996)',
+#        'Air Force One (1997)', ..., 
+#        'Promise, The (Versprechen, Das) (1994)',
+#        'Getting Even with Dad (1994)',
+#        'Spirits of the Dead (Tre passi nel delirio) (1968)'], dtype=object)
+
+```
 
 # 
 
