@@ -8600,6 +8600,36 @@ veri=data.copy()
 
 # [45466 rows x 24 columns]
 
+df=veri[["id","title","overview"]]
+# print(df)
+#            id                        title  \
+# 0         862                    Toy Story   
+# 1        8844                      Jumanji   
+# 2       15602             Grumpier Old Men   
+# 3       31357            Waiting to Exhale   
+# 4       11862  Father of the Bride Part II   
+# ...       ...                          ...   
+# 45461  439050                       Subdue   
+# 45462  111109          Century of Birthing   
+# 45463   67758                     Betrayal   
+# 45464  227506             Satan Triumphant   
+# 45465  461257                     Queerama   
+
+#                                                 overview  
+# 0      Led by Woody, Andy's toys live happily in his ...  
+# 1      When siblings Judy and Peter discover an encha...  
+# 2      A family wedding reignites the ancient feud be...  
+# 3      Cheated on, mistreated and stepped on, the wom...  
+# 4      Just when George Banks has recovered from his ...  
+# ...                                                  ...  
+# 45461        Rising and falling between a man and woman.  
+# 45462  An artist struggles to finish his work while a...  
+# 45463  When one of her hits goes wrong, a professiona...  
+# 45464  In a small town live two brothers, one a minis...  
+# 45465  50 years after decriminalisation of homosexual...  
+
+# [45466 rows x 3 columns]
+
 
 ```
 
