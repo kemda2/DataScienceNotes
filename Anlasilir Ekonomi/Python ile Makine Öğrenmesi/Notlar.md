@@ -9026,7 +9026,40 @@ model.fit(x_train, y_train, epochs=500)
 tahmin=model.predict(X_test)
 ```
 
+---
 
+```Python
+from keras.datasets import boston_housing
+import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense, Activation
+from sklearn.preprocessing import StandardScaler
+
+(x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+
+x_val = x_train[204:]
+y_val = y_train[204:]
+
+sc = StandardScaler()
+
+x_train = sc.fit_transform(x_train)
+x_test = sc.fit_transform(x_test)
+x_val = sc.fit_transform(x_val)
+
+model = Sequential()
+
+model.add(Dense(13, input_dim=x_train.shape[1], activation="relu", kernel_initializer="normal"))
+model.add(Dense(6, activation="relu", kernel_initializer="normal"))
+model.add(Dense(1, kernel_initializer="normal"))
+
+model.compile(loss="mse", optimizer="adam", metrics=["mean_squared_error"])
+model.fit(x_train, y_train, epochs=100, validation_data=(x_val, y_val))
+
+sonuc = model.evaluate(x_test, y_test)
+# print('{}:{}'.format(model.metrics_names[1], sonuc[1]))
+# mean_squared_error:21.768083572387695
+
+```
 
 
 
