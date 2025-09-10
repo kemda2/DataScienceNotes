@@ -8484,6 +8484,124 @@ film_indexes = indexler.index("Godfather, The (1972)")
 # 3499
 ```
 
+---
+
+Dataset Movies_metadata Fahim ishrak kaggle
+
+```Python
+import pandas as pd
+
+data=pd.read_csv("movies_metadata.csv")
+veri=data.copy()
+# print(veri)
+#        adult                              belongs_to_collection    budget  \
+# 0      False  {'id': 10194, 'name': 'Toy Story Collection', ...  30000000   
+# 1      False                                                NaN  65000000   
+# 2      False  {'id': 119050, 'name': 'Grumpy Old Men Collect...         0   
+# 3      False                                                NaN  16000000   
+# 4      False  {'id': 96871, 'name': 'Father of the Bride Col...         0   
+# ...      ...                                                ...       ...   
+# 45461  False                                                NaN         0   
+# 45462  False                                                NaN         0   
+# 45463  False                                                NaN         0   
+# 45464  False                                                NaN         0   
+# 45465  False                                                NaN         0   
+
+#                                                   genres  \
+# 0      [{'id': 16, 'name': 'Animation'}, {'id': 35, '...   
+# 1      [{'id': 12, 'name': 'Adventure'}, {'id': 14, '...   
+# 2      [{'id': 10749, 'name': 'Romance'}, {'id': 35, ...   
+# 3      [{'id': 35, 'name': 'Comedy'}, {'id': 18, 'nam...   
+# 4                         [{'id': 35, 'name': 'Comedy'}]   
+# ...                                                  ...   
+# 45461  [{'id': 18, 'name': 'Drama'}, {'id': 10751, 'n...   
+# 45462                      [{'id': 18, 'name': 'Drama'}]   
+# 45463  [{'id': 28, 'name': 'Action'}, {'id': 18, 'nam...   
+# 45464                                                 []   
+# 45465                                                 []   
+
+#                                    homepage      id    imdb_id  \
+# 0      http://toystory.disney.com/toy-story     862  tt0114709   
+# 1                                       NaN    8844  tt0113497   
+# 2                                       NaN   15602  tt0113228   
+# 3                                       NaN   31357  tt0114885   
+# 4                                       NaN   11862  tt0113041   
+# ...                                     ...     ...        ...   
+# 45461  http://www.imdb.com/title/tt6209470/  439050  tt6209470   
+# 45462                                   NaN  111109  tt2028550   
+# 45463                                   NaN   67758  tt0303758   
+# 45464                                   NaN  227506  tt0008536   
+# 45465                                   NaN  461257  tt6980792   
+
+#       original_language               original_title  \
+# 0                    en                    Toy Story   
+# 1                    en                      Jumanji   
+# 2                    en             Grumpier Old Men   
+# 3                    en            Waiting to Exhale   
+# 4                    en  Father of the Bride Part II   
+# ...                 ...                          ...   
+# 45461                fa                      رگ خواب   
+# 45462                tl          Siglo ng Pagluluwal   
+# 45463                en                     Betrayal   
+# 45464                en          Satana likuyushchiy   
+# 45465                en                     Queerama   
+
+#                                                 overview  ... release_date  \
+# 0      Led by Woody, Andy's toys live happily in his ...  ...   1995-10-30   
+# 1      When siblings Judy and Peter discover an encha...  ...   1995-12-15   
+# 2      A family wedding reignites the ancient feud be...  ...   1995-12-22   
+# 3      Cheated on, mistreated and stepped on, the wom...  ...   1995-12-22   
+# 4      Just when George Banks has recovered from his ...  ...   1995-02-10   
+# ...                                                  ...  ...          ...   
+# 45461        Rising and falling between a man and woman.  ...          NaN   
+# 45462  An artist struggles to finish his work while a...  ...   2011-11-17   
+# 45463  When one of her hits goes wrong, a professiona...  ...   2003-08-01   
+# 45464  In a small town live two brothers, one a minis...  ...   1917-10-21   
+# 45465  50 years after decriminalisation of homosexual...  ...   2017-06-09   
+
+#            revenue runtime                                   spoken_languages  \
+# 0      373554033.0    81.0           [{'iso_639_1': 'en', 'name': 'English'}]   
+# 1      262797249.0   104.0  [{'iso_639_1': 'en', 'name': 'English'}, {'iso...   
+# 2              0.0   101.0           [{'iso_639_1': 'en', 'name': 'English'}]   
+# 3       81452156.0   127.0           [{'iso_639_1': 'en', 'name': 'English'}]   
+# 4       76578911.0   106.0           [{'iso_639_1': 'en', 'name': 'English'}]   
+# ...            ...     ...                                                ...   
+# 45461          0.0    90.0             [{'iso_639_1': 'fa', 'name': 'فارسی'}]   
+# 45462          0.0   360.0                  [{'iso_639_1': 'tl', 'name': ''}]   
+# 45463          0.0    90.0           [{'iso_639_1': 'en', 'name': 'English'}]   
+# 45464          0.0    87.0                                                 []   
+# 45465          0.0    75.0           [{'iso_639_1': 'en', 'name': 'English'}]   
+
+#          status                                            tagline  \
+# 0      Released                                                NaN   
+# 1      Released          Roll the dice and unleash the excitement!   
+# 2      Released  Still Yelling. Still Fighting. Still Ready for...   
+# 3      Released  Friends are the people who let you be yourself...   
+# 4      Released  Just When His World Is Back To Normal... He's ...   
+# ...         ...                                                ...   
+# 45461  Released         Rising and falling between a man and woman   
+# 45462  Released                                                NaN   
+# 45463  Released                             A deadly game of wits.   
+# 45464  Released                                                NaN   
+# 45465  Released                                                NaN   
+
+#                              title  video vote_average vote_count  
+# 0                        Toy Story  False          7.7     5415.0  
+# 1                          Jumanji  False          6.9     2413.0  
+# 2                 Grumpier Old Men  False          6.5       92.0  
+# 3                Waiting to Exhale  False          6.1       34.0  
+# 4      Father of the Bride Part II  False          5.7      173.0  
+# ...                            ...    ...          ...        ...  
+# 45461                       Subdue  False          4.0        1.0  
+# 45462          Century of Birthing  False          9.0        3.0  
+# 45463                     Betrayal  False          3.8        6.0  
+# 45464             Satan Triumphant  False          0.0        0.0  
+# 45465                     Queerama  False          0.0        0.0  
+
+# [45466 rows x 24 columns]
+
+
+```
 
 
 # 
