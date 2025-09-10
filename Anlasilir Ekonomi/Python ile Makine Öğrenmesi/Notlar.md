@@ -8307,6 +8307,42 @@ plt.show()
 
 # Öneri Sistemleri
 
+Öneri sistemi, kullanıcıların tercihlerine veya geçmiş davranışlarına dayalı olarak onlara uygun içerik, ürün veya hizmetler sunmayı amaçlayan bir yazılım sistemidir. Özellikle dijital platformlarda (örneğin e-ticaret siteleri, müzik servisleri, film öneri platformları gibi) yaygın olarak kullanılır. Temelde, kullanıcı deneyimini kişiselleştirerek, kullanıcıların ilgisini çekebilecek şeyleri önermeye çalışır.
+
+Öneri sistemleri genellikle üç ana yaklaşımdan birini veya bir kombinasyonunu kullanır:
+
+1. İçerik Tabanlı Filtreleme (Content-Based Filtering):
+
+Kullanıcılara, geçmişte beğendikleri veya ilgi gösterdikleri içeriklere benzer yeni içerikler önerilir.
+
+Örneğin, bir kullanıcı bir film izlediğinde, sistem bu filmin türünü, oyuncularını, yönetmeni vb. özelliklerini analiz eder ve benzer özelliklere sahip diğer filmleri önerir.
+
+Kullanıcı profilleri oluşturularak, öneriler kişiselleştirilir.
+
+2. İşbirlikçi Filtreleme (Collaborative Filtering):
+
+Bu yöntem, benzer zevklere sahip kullanıcılar arasındaki ilişkiyi kullanarak önerilerde bulunur. Yani, bir kullanıcı neyi beğendiyse, aynı zevklere sahip diğer kullanıcıların beğendiği içerikler önerilir.
+
+Kullanıcı-temelli işbirlikçi filtreleme: Benzer kullanıcıların beğendiği içerikler önerilir.
+
+Öğe-temelli işbirlikçi filtreleme: Kullanıcıların geçmişte tercih ettiği öğelere benzer diğer öğeler önerilir.
+
+Bu tür sistemler, genellikle büyük veri kümeleri üzerinde çalışarak doğru önerilerde bulunabilir.
+
+3. Hibrid Yöntemler:
+
+Hem içerik tabanlı filtreleme hem de işbirlikçi filtreleme yöntemlerinin bir kombinasyonudur.
+
+Bu yaklaşım, her iki yöntemin de güçlü yönlerini birleştirerek daha doğru ve çeşitli öneriler sunmayı hedefler.
+
+Örneğin, içerik tabanlı filtreleme, kullanıcının geçmiş tercihleriyle ilgili önerilerde bulunurken, işbirlikçi filtreleme de benzer kullanıcıların tercihlerine göre önerilerde bulunabilir.
+
+4. Derin Öğrenme ve Yapay Zeka Yöntemleri:
+
+Modern öneri sistemlerinde, derin öğrenme (deep learning) ve yapay zeka (AI) algoritmaları da kullanılmaktadır. Bu, daha karmaşık ilişkileri keşfetmeye ve daha doğru, kişiselleştirilmiş önerilerde bulunmaya olanak tanır.
+
+Bu tür sistemler, kullanıcıların davranışlarını zaman içinde izleyerek ve büyük veri analizleri yaparak daha isabetli sonuçlar elde edebilir.
+
 ![image](./images/os1.png)
 
 
