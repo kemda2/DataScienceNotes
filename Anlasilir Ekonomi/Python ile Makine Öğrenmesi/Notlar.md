@@ -8345,6 +8345,130 @@ plt.show()
 
 ![image](./images/os1.png)
 
+Dataset: https://files.grouplens.org/datasets/movielens/ml-latest-small.zip
+
+```Python
+import pandas as pd
+
+links=pd.read_csv("links.csv")
+movies=pd.read_csv("movies.csv")
+ratings=pd.read_csv("ratings.csv")
+tags=pd.read_csv("tags.csv")
+
+df = pd.merge(movies, ratings, on="movieId")
+
+df = df[["userId", "title", "rating"]]
+# print(df)
+#         userId                                      title  rating
+# 0            1                           Toy Story (1995)     4.0
+# 1            5                           Toy Story (1995)     4.0
+# 2            7                           Toy Story (1995)     4.5
+# 3           15                           Toy Story (1995)     2.5
+# 4           17                           Toy Story (1995)     4.5
+# ...        ...                                        ...     ...
+# 100831     184  Black Butler: Book of the Atlantic (2017)     4.0
+# 100832     184               No Game No Life: Zero (2017)     3.5
+# 100833     184                               Flint (2017)     3.5
+# 100834     184        Bungo Stray Dogs: Dead Apple (2018)     3.5
+# 100835     331        Andrew Dice Clay: Dice Rules (1991)     4.0
+
+# [100836 rows x 3 columns]
+
+pivot = df.pivot_table(index="title", columns="userId", values="rating")
+# print(pivot)
+# userId                                     1    2    3    4    5    6    7    \
+# title                                                                          
+# '71 (2014)                                 NaN  NaN  NaN  NaN  NaN  NaN  NaN   
+# 'Hellboy': The Seeds of Creation (2004)    NaN  NaN  NaN  NaN  NaN  NaN  NaN   
+# 'Round Midnight (1986)                     NaN  NaN  NaN  NaN  NaN  NaN  NaN   
+# 'Salem's Lot (2004)                        NaN  NaN  NaN  NaN  NaN  NaN  NaN   
+# 'Til There Was You (1997)                  NaN  NaN  NaN  NaN  NaN  NaN  NaN   
+# ...                                        ...  ...  ...  ...  ...  ...  ...   
+# eXistenZ (1999)                            NaN  NaN  NaN  NaN  NaN  NaN  NaN   
+# xXx (2002)                                 NaN  NaN  NaN  NaN  NaN  NaN  NaN   
+# xXx: State of the Union (2005)             NaN  NaN  NaN  NaN  NaN  NaN  NaN   
+# ¡Three Amigos! (1986)                      4.0  NaN  NaN  NaN  NaN  NaN  NaN   
+# À nous la liberté (Freedom for Us) (1931)  NaN  NaN  NaN  NaN  NaN  NaN  NaN   
+
+# userId                                     8    9    10   ...  601  602  603  \
+# title                                                     ...                  
+# '71 (2014)                                 NaN  NaN  NaN  ...  NaN  NaN  NaN   
+# 'Hellboy': The Seeds of Creation (2004)    NaN  NaN  NaN  ...  NaN  NaN  NaN   
+# 'Round Midnight (1986)                     NaN  NaN  NaN  ...  NaN  NaN  NaN   
+# 'Salem's Lot (2004)                        NaN  NaN  NaN  ...  NaN  NaN  NaN   
+# 'Til There Was You (1997)                  NaN  NaN  NaN  ...  NaN  NaN  NaN   
+# ...                                        ...  ...  ...  ...  ...  ...  ...   
+# eXistenZ (1999)                            NaN  NaN  NaN  ...  NaN  NaN  5.0   
+# xXx (2002)                                 NaN  1.0  NaN  ...  NaN  NaN  NaN   
+# xXx: State of the Union (2005)             NaN  NaN  NaN  ...  NaN  NaN  NaN   
+# ¡Three Amigos! (1986)                      NaN  NaN  NaN  ...  NaN  NaN  NaN   
+# À nous la liberté (Freedom for Us) (1931)  NaN  NaN  NaN  ...  NaN  NaN  NaN   
+
+# userId                                     604  605  606  607  608  609  610  
+# title                                                                         
+# '71 (2014)                                 NaN  NaN  NaN  NaN  NaN  NaN  4.0  
+# 'Hellboy': The Seeds of Creation (2004)    NaN  NaN  NaN  NaN  NaN  NaN  NaN  
+# 'Round Midnight (1986)                     NaN  NaN  NaN  NaN  NaN  NaN  NaN  
+# 'Salem's Lot (2004)                        NaN  NaN  NaN  NaN  NaN  NaN  NaN  
+# 'Til There Was You (1997)                  NaN  NaN  NaN  NaN  NaN  NaN  NaN  
+# ...                                        ...  ...  ...  ...  ...  ...  ...  
+# eXistenZ (1999)                            NaN  NaN  NaN  NaN  4.5  NaN  NaN  
+# xXx (2002)                                 NaN  NaN  NaN  NaN  3.5  NaN  2.0  
+# xXx: State of the Union (2005)             NaN  NaN  NaN  NaN  NaN  NaN  1.5  
+# ¡Three Amigos! (1986)                      NaN  NaN  NaN  NaN  NaN  NaN  NaN  
+# À nous la liberté (Freedom for Us) (1931)  NaN  NaN  NaN  NaN  NaN  NaN  NaN  
+
+# [9719 rows x 610 columns]
+
+pivot = df.pivot_table(index="title", columns="userId", values="rating", fill_value=0)
+# print(pivot)
+# userId                                     1    2    3    4    5    6    7    \
+# title                                                                          
+# '71 (2014)                                 0.0  0.0  0.0  0.0  0.0  0.0  0.0   
+# 'Hellboy': The Seeds of Creation (2004)    0.0  0.0  0.0  0.0  0.0  0.0  0.0   
+# 'Round Midnight (1986)                     0.0  0.0  0.0  0.0  0.0  0.0  0.0   
+# 'Salem's Lot (2004)                        0.0  0.0  0.0  0.0  0.0  0.0  0.0   
+# 'Til There Was You (1997)                  0.0  0.0  0.0  0.0  0.0  0.0  0.0   
+# ...                                        ...  ...  ...  ...  ...  ...  ...   
+# eXistenZ (1999)                            0.0  0.0  0.0  0.0  0.0  0.0  0.0   
+# xXx (2002)                                 0.0  0.0  0.0  0.0  0.0  0.0  0.0   
+# xXx: State of the Union (2005)             0.0  0.0  0.0  0.0  0.0  0.0  0.0   
+# ¡Three Amigos! (1986)                      4.0  0.0  0.0  0.0  0.0  0.0  0.0   
+# À nous la liberté (Freedom for Us) (1931)  0.0  0.0  0.0  0.0  0.0  0.0  0.0   
+
+# userId                                     8    9    10   ...  601  602  603  \
+# title                                                     ...                  
+# '71 (2014)                                 0.0  0.0  0.0  ...  0.0  0.0  0.0   
+# 'Hellboy': The Seeds of Creation (2004)    0.0  0.0  0.0  ...  0.0  0.0  0.0   
+# 'Round Midnight (1986)                     0.0  0.0  0.0  ...  0.0  0.0  0.0   
+# 'Salem's Lot (2004)                        0.0  0.0  0.0  ...  0.0  0.0  0.0   
+# 'Til There Was You (1997)                  0.0  0.0  0.0  ...  0.0  0.0  0.0   
+# ...                                        ...  ...  ...  ...  ...  ...  ...   
+# eXistenZ (1999)                            0.0  0.0  0.0  ...  0.0  0.0  5.0   
+# xXx (2002)                                 0.0  1.0  0.0  ...  0.0  0.0  0.0   
+# xXx: State of the Union (2005)             0.0  0.0  0.0  ...  0.0  0.0  0.0   
+# ¡Three Amigos! (1986)                      0.0  0.0  0.0  ...  0.0  0.0  0.0   
+# À nous la liberté (Freedom for Us) (1931)  0.0  0.0  0.0  ...  0.0  0.0  0.0   
+
+# userId                                     604  605  606  607  608  609  610  
+# title                                                                         
+# '71 (2014)                                 0.0  0.0  0.0  0.0  0.0  0.0  4.0  
+# 'Hellboy': The Seeds of Creation (2004)    0.0  0.0  0.0  0.0  0.0  0.0  0.0  
+# 'Round Midnight (1986)                     0.0  0.0  0.0  0.0  0.0  0.0  0.0  
+# 'Salem's Lot (2004)                        0.0  0.0  0.0  0.0  0.0  0.0  0.0  
+# 'Til There Was You (1997)                  0.0  0.0  0.0  0.0  0.0  0.0  0.0  
+# ...                                        ...  ...  ...  ...  ...  ...  ...  
+# eXistenZ (1999)                            0.0  0.0  0.0  0.0  4.5  0.0  0.0  
+# xXx (2002)                                 0.0  0.0  0.0  0.0  3.5  0.0  2.0  
+# xXx: State of the Union (2005)             0.0  0.0  0.0  0.0  0.0  0.0  1.5  
+# ¡Three Amigos! (1986)                      0.0  0.0  0.0  0.0  0.0  0.0  0.0  
+# À nous la liberté (Freedom for Us) (1931)  0.0  0.0  0.0  0.0  0.0  0.0  0.0  
+
+# [9719 rows x 610 columns]
+
+
+```
+
 
 
 # 
