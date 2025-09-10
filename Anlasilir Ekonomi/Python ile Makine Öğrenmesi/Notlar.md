@@ -8976,6 +8976,29 @@ plt.show()
 
 ![image](./images/ysa1.png)
 
+Önceki fonksiyonlara ek olarak step fonksiyonu var. x 0 değerine kadar y=0 x sıfırdan büyük değerlerde y=1. 
+
+# Türev
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # 
