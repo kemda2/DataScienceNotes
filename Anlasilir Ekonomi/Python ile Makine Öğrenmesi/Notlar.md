@@ -9060,6 +9060,66 @@ sonuc = model.evaluate(x_test, y_test)
 # mean_squared_error:21.768083572387695
 ```
 
+# Rossmann Satış Örneği (Veri Mühendisliği)
+
+Dataset:https://www.kaggle.com/search?q=rossmann+store+sales+in%3Adatasets
+
+```python
+# import zipfile
+#df_zip = zipfile.ZipFile("/content/archive.zip")
+#train = pd.read_csv(df_zip.open("train.csv"), low_memory=False)
+
+import pandas as pd
+train = pd.read_csv("train.csv",low_memory=False)
+store = pd.read_csv("store.csv",low_memory=False)
+
+veri = train.merge(store, on=["Store"], how="inner")
+
+# print("Toplam Mağaza Sayısı:%d" % (len(veri["Store"].unique())) )
+# Toplam Mağaza Sayısı:1115
+# print("Günlük Ortalama Satış:%.2f" % (veri["Sales"].mean()) )
+# Günlük Ortalama Satış:5773.82
+
+# veri.info()
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 1017209 entries, 0 to 1017208
+# Data columns (total 18 columns):
+#  #   Column                     Non-Null Count    Dtype  
+# ---  ------                     --------------    -----  
+#  0   Store                      1017209 non-null  int64  
+#  1   DayOfWeek                  1017209 non-null  int64  
+#  2   Date                       1017209 non-null  object 
+#  3   Sales                      1017209 non-null  int64  
+#  4   Customers                  1017209 non-null  int64  
+#  5   Open                       1017209 non-null  int64  
+#  6   Promo                      1017209 non-null  int64  
+#  7   StateHoliday               1017209 non-null  object 
+#  8   SchoolHoliday              1017209 non-null  int64  
+#  9   StoreType                  1017209 non-null  object 
+#  10  Assortment                 1017209 non-null  object 
+#  11  CompetitionDistance        1014567 non-null  float64
+#  12  CompetitionOpenSinceMonth  693861 non-null   float64
+#  13  CompetitionOpenSinceYear   693861 non-null   float64
+#  14  Promo2                     1017209 non-null  int64  
+#  15  Promo2SinceWeek            509178 non-null   float64
+#  16  Promo2SinceYear            509178 non-null   float64
+#  17  PromoInterval              509178 non-null   object 
+# dtypes: float64(5), int64(8), object(5)
+# memory usage: 139.7+ MB
+
+veri["Date"] = pd.to_datetime(veri["Date"],infer_datetime_format=True)
+
+veri["Gün"] = veri["Date"].dt.day
+veri["Hafta"] = veri["Date"].dt.week
+veri["Ay"] = veri["Date"].dt.month
+veri["Yıl"] = veri["Date"].dt.year
+
+veri["Mevsim"] = np.where(veri["Ay"].isin([3, 4, 5]), "İlk Bahar",
+                  np.where(veri["Ay"].isin([6, 7, 8]), "Yaz",
+                  np.where(veri["Ay"].isin([9, 10, 11]), "Son Bahar",
+                  np.where(veri["Ay"].isin([12, 1, 2]), "Kış", "None"))))
+
+```
 
 
 
@@ -9079,6 +9139,6 @@ sonuc = model.evaluate(x_test, y_test)
 
 # 
 
-![image](./images/trv1.png)
+![image](./images/rso1.png)
 
-https://www.youtube.com/watch?v=qtItwDh5-ZM&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=147
+https://www.youtube.com/watch?v=CHL-zD7cGKI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=148
