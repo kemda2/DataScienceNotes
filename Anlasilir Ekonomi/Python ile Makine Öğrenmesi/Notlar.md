@@ -8705,6 +8705,58 @@ eniyiskor
 #        'Getting Even with Dad (1994)',
 #        'Spirits of the Dead (Tre passi nel delirio) (1968)'], dtype=object)
 
+def oneri(model, data, kullaniciidler):
+    kullanicisay, itemsay = data["train"].shape
+
+    for i in kullaniciidler:
+        kullanicigorus = data["item_labels"][data["train"].tocsr()[i].indices]
+
+        skor = model.predict(i, np.arange(itemsay))
+        eniyiskor = data["item_labels"][np.argsort(-skor)]
+
+        print("Kullanıcı:{}".format(i))
+        print("En Sevdiği Filmler:...")
+
+        for j in kullanicigorus[:3]:
+            print("  {}".format(j))
+
+        print("Önerilen Filmler:...")
+
+        for k in eniyiskor[:3]:
+            print("  {}".format(k))
+
+oneri(model, data, [1, 100, 500])
+# Kullanıcı:1
+# En Sevdiği Filmler:...
+#   Toy Story (1995)
+#   Richard III (1995)
+#   Postino, Il (1994)
+# Önerilen Filmler:...
+#   Scream (1996)
+#   English Patient, The (1996)
+#   Contact (1997)
+
+# Kullanıcı:100
+# En Sevdiği Filmler:...
+#   Toy Story (1995)
+#   Twelve Monkeys (1995)
+#   Rumble in the Bronx (1995)
+# Önerilen Filmler:...
+#   Scream (1996)
+#   Liar Liar (1997)
+#   Contact (1997)
+
+# Kullanıcı:500
+# En Sevdiği Filmler:...
+#   Twelve Monkeys (1995)
+#   Mighty Aphrodite (1995)
+#   Rumble in the Bronx (1995)
+# Önerilen Filmler:...
+#   Scream (1996)
+#   Return of the Jedi (1983)
+#   Star Wars (1977)
+
+# Hiperparametre ayarları yapılmadı. Yapılması gerekir.
 ```
 
 # 
