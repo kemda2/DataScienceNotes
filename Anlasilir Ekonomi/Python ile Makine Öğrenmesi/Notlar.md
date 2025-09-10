@@ -8466,7 +8466,22 @@ pivot = df.pivot_table(index="title", columns="userId", values="rating", fill_va
 
 # [9719 rows x 610 columns]
 
+from sklearn.metrics import pairwise_distances
 
+benzerlik_matrisi = pairwise_distances(pivot, metric="correlation")
+# print(benzerlik_matrisi)
+# [[0.         1.00164204 1.0023241  ... 0.67471266 1.00818543 1.00164204]
+#  [1.00164204 0.         0.293474   ... 1.00359434 1.00818543 1.00164204]
+#  [1.0023241  0.293474   0.         ... 1.00508734 1.01158546 1.0023241 ]
+#  ...
+#  [0.67471266 1.00359434 1.00508734 ... 0.         1.0179175  1.00359434]
+#  [1.00818543 1.00818543 1.01158546 ... 1.0179175  0.         1.00818543]
+#  [1.00164204 1.00164204 1.0023241  ... 1.00359434 1.00818543 0.        ]]
+
+indexler = list(pivot.index)
+film_indexes = indexler.index("Godfather, The (1972)")
+# print(film_indexes)
+# 3499
 ```
 
 
