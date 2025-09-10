@@ -8307,10 +8307,12 @@ plt.show()
 
 # Öneri Sistemleri
 
+![image](./images/os1.png)
+
 
 
 # 
 
-![image](./images/os1.png)
+![image](./images/os2.png)
 
 https://www.youtube.com/watch?v=XMyRrAga6n4&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=120
