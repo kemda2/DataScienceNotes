@@ -8630,6 +8630,8 @@ df=veri[["id","title","overview"]]
 
 # [45466 rows x 3 columns]
 
+# Filmin içeriği başka bir filmin içeriği ile ne kadar benzerlik içeriyor ona bakacağız.
+
 
 ```
 
