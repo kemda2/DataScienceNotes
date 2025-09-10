@@ -8761,6 +8761,6 @@ oneri(model, data, [1, 100, 500])
 
 # 
 
-![image](./images/os2.png)
+![image](./images/do1.png)
 
-https://www.youtube.com/watch?v=XMyRrAga6n4&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=120
+https://www.youtube.com/watch?v=reIKVk80G-o&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=125
