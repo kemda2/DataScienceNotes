@@ -9024,8 +9024,6 @@ model.compile(optimizer=sgd, loss="mse", metrics=["mean_squared_error"])
 
 model.fit(x_train, y_train, epochs=500)
 tahmin=model.predict(X_test)
-
-
 ```
 
 
