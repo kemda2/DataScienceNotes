@@ -8759,8 +8759,227 @@ oneri(model, data, [1, 100, 500])
 # Hiperparametre ayarları yapılmadı. Yapılması gerekir.
 ```
 
+# Derin Öğrenme
+
+`!cat /proc/cpuinfo` Colabda cpu bilgisi görme
+`!cat /proc/meminfo` Colabda RAM bilgisi görme
+
+```Python
+from google.colab import drive
+drive.mount('/gdrive')
+%cd /gdrive
+
+# Mounted at /gdrive
+# /gdrive
+
+
+from tensorflow.python.client import device_lib
+device_lib.list_local_devices()
+
+# [name: "/device:CPU:0"
+#  device_type: "CPU"
+#  memory_limit: 268435456
+#  locality {
+#  }
+#  incarnation: 1585669663075618386
+#  xla_global_id: -1]
+```
+
+GPU ya bağlandıktan sonra device_type değişkeninin GPU olduğunu görebiliriz;
+
+```Python
+from tensorflow.python.client import device_lib
+device_lib.list_local_devices()
+
+# [name: "/device:CPU:0"
+#  device_type: "CPU"
+#  memory_limit: 268435456
+#  locality {
+#  }
+#  incarnation: 4876834698346401635
+#  xla_global_id: -1
+# , name: "/device:GPU:0"
+#  device_type: "GPU"
+#  memory_limit: 14417788928
+#  locality {
+#    bus_id: 
+#    links {
+#    }
+#  }
+#  incarnation: 15679932945741647813
+#  physical_device_desc: "device: 0, name: Tesla T4, pci bus id: 0000:00:04.0, compute capability: 7.5"
+#  xla_global_id: 4610904319
+# ]
+
+```
+
+En yaygın kullanılan aktivasyon fonksiyonları:
+
+> 🔹 1. **Sigmoid Fonksiyonu**
+
+**Formül:**
+
+$$
+f(x) = \frac{1}{1 + e^{-x}}
+$$
+
+**Özellikler:**
+
+* Çıktı aralığı: (0, 1)
+* Genellikle binary sınıflandırma problemlerinde kullanılır.
+* Küçük türev değerleri nedeniyle **vanishing gradient** (kaybolan gradyan) problemi yaşatabilir.
+
+---
+
+> 🔹 2. **Tanh (Hiperbolik Tanjant) Fonksiyonu**
+
+**Formül:**
+
+$$
+f(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+$$
+
+**Özellikler:**
+
+* Çıktı aralığı: (-1, 1)
+* Sigmoid'e göre merkezlidir (0 etrafında simetriktir).
+* Yine de kaybolan gradyan problemi yaşanabilir.
+
+---
+
+> 🔹 3. **ReLU (Rectified Linear Unit)**
+
+**Formül:**
+
+$$
+f(x) = \max(0, x)
+$$
+
+**Özellikler:**
+
+* Pozitif girişler için doğrusal, negatifler için sıfır.
+* Hızlı öğrenme sağlar.
+* Negatif değerlerde türev sıfır olduğundan "ölü nöron" problemi olabilir.
+
+---
+
+> 🔹 4. **Leaky ReLU**
+
+**Formül:**
+
+$$
+f(x) = \begin{cases}
+x & x > 0 \\
+\alpha x & x \leq 0
+\end{cases}
+$$
+
+**Özellikler:**
+
+* ReLU'nun geliştirilmiş halidir.
+* Negatif değerlerde küçük bir eğim ($\alpha \approx 0.01$) ile "ölü nöron" problemi azaltılır.
+
+---
+
+> 🔹 5. **ELU (Exponential Linear Unit)**
+
+**Formül:**
+
+$$
+f(x) = \begin{cases}
+x & x > 0 \\
+\alpha (e^x - 1) & x \leq 0
+\end{cases}
+$$
+
+**Özellikler:**
+
+* ReLU'ya benzer ama negatif tarafta daha yumuşak geçiş sağlar.
+* Gradyan sorunlarını azaltabilir.
+
+---
+
+> 🔹 6. **Softmax Fonksiyonu**
+
+**Formül:**
+
+$$
+f(x_i) = \frac{e^{x_i}}{\sum_{j} e^{x_j}}
+$$
+
+**Özellikler:**
+
+* Genellikle **çok sınıflı sınıflandırma** problemlerinde **çıkış katmanında** kullanılır.
+* Girdileri olasılık dağılımına dönüştürür (toplam 1 olacak şekilde normalize eder).
+
+---
+
+> 📌 Hangi Durumda Hangi Fonksiyon Kullanılır?
+
+| Durum             | Kullanılabilecek Aktivasyon                         |
+| ----------------- | --------------------------------------------------- |
+| Gizli katman      | ReLU, Leaky ReLU, ELU, tanh                         |
+| Binary çıktı      | Sigmoid                                             |
+| Çok sınıflı çıktı | Softmax                                             |
+| Derin ağlarda     | ReLU veya türevleri (daha stabil gradyanlar sağlar) |
+
+```Python
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Giriş değerleri
+x = np.linspace(-10, 10, 400)
+
+# Aktivasyon fonksiyonları
+sigmoid = 1 / (1 + np.exp(-x))
+tanh = np.tanh(x)
+relu = np.maximum(0, x)
+leaky_relu = np.where(x > 0, x, 0.01 * x)
+elu = np.where(x > 0, x, 1 * (np.exp(x) - 1))
+
+# Softmax için örnek vektör
+x_softmax = np.array([1.0, 2.0, 3.0])
+softmax = np.exp(x_softmax) / np.sum(np.exp(x_softmax))
+
+# Grafik çizimi
+fig, axs = plt.subplots(3, 2, figsize=(12, 12))
+axs = axs.ravel()
+
+axs[0].plot(x, sigmoid, label='Sigmoid', color='blue')
+axs[0].set_title('Sigmoid')
+axs[0].grid(True)
+
+axs[1].plot(x, tanh, label='Tanh', color='orange')
+axs[1].set_title('Tanh')
+axs[1].grid(True)
+
+axs[2].plot(x, relu, label='ReLU', color='green')
+axs[2].set_title('ReLU')
+axs[2].grid(True)
+
+axs[3].plot(x, leaky_relu, label='Leaky ReLU', color='red')
+axs[3].set_title('Leaky ReLU')
+axs[3].grid(True)
+
+axs[4].plot(x, elu, label='ELU', color='purple')
+axs[4].set_title('ELU')
+axs[4].grid(True)
+
+axs[5].bar(['x1', 'x2', 'x3'], softmax, color='cyan')
+axs[5].set_title('Softmax (örnek: [1, 2, 3])')
+axs[5].set_ylim(0, 1)
+axs[5].grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
+![image](./images/ysa1.png)
+
+
+
 # 
 
-![image](./images/do1.png)
+![image](./images/ysa2.png)
 
 https://www.youtube.com/watch?v=reIKVk80G-o&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=125
