@@ -9878,7 +9878,7 @@ Eğer modelin performansını daha iyiye götürmek istersek Hiperparametre Opti
 
 ## Hiperparametre Optimizasyonu Yöntemleri
 
-Hiperparametre Optimizasyonu Yöntemleri şunlardır:
+Genellikle kullanılan Hiperparametre Optimizasyonu Yöntemleri şunlardır:
 
 * Manual Search
 * Grid Search CV
