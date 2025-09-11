@@ -9755,6 +9755,26 @@ veri["Title"] = veri["Title"].str.strip()
 # 890     Mr  
 # Name: Title, Length: 891, dtype: object
 
+# veri.groupby("Title").count()
+# veri["Title"].value_counts() # alternatif
+# Title         Survived  Pclass  Name  Sex  Age  SibSp  Parch  Ticket  Fare  Embarked
+# Capt                1       1     1    1    1      1      1       1     1         1
+# Col                 2       2     2    2    2      2      2       2     2         2
+# Don                 1       1     1    1    1      1      1       1     1         1
+# Dr                  7       7     7    7    7      7      7       7     7         7
+# Jonkheer            1       1     1    1    1      1      1       1     1         1
+# Lady                1       1     1    1    1      1      1       1     1         1
+# Major               2       2     2    2    2      2      2       2     2         2
+# Master             40      40    40   40   40     40     40      40    40        40
+# Miss              182     182   182  182  182    182    182     182   182       182
+# Mlle                2       2     2    2    2      2      2       2     2         2
+# Mme                 1       1     1    1    1      1      1       1     1         1
+# Mr                517     517   517  517  517    517    517     517   517       517
+# Mrs               125     125   125  125  125    125    125     125   125       125
+# Ms                  1       1     1    1    1      1      1       1     1         1
+# Rev                 6       6     6    6    6      6      6       6     6         6
+# Sir                 1       1     1    1    1      1      1       1     1         1
+# the Countess        1       1     1    1    1      1      1       1     1         1
 
 
 
