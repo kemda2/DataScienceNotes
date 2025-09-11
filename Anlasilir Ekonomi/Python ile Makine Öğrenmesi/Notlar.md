@@ -9319,4 +9319,4 @@ for column in kc:
 
 ![image](./images/rso3.png)
 
-https://www.youtube.com/watch?v=CHL-zD7cGKI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=148
+https://www.youtube.com/watch?v=Ydyiuxf9eYs&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=149
