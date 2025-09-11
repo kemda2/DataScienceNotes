@@ -10320,13 +10320,13 @@ plt.legend()
 plt.show()
 ```
 
-
+![image](./images/kr7.png)
 
 
 
 
 # 
 
-![image](./images/kr7.png)
+![image](./images/kr8.png)
 
 https://www.youtube.com/watch?v=jEZeQnwUEPM&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=162
