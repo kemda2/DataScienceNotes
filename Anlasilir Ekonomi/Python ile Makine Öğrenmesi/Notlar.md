@@ -9141,7 +9141,34 @@ plt.show()
 
 ![image](./images/rso2.png)
 
+```Python
+# veri.isnull().sum()
+# Store                             0
+# DayOfWeek                         0
+# Date                              0
+# Sales                             0
+# Customers                         0
+# Open                              0
+# Promo                             0
+# StateHoliday                      0
+# SchoolHoliday                     0
+# StoreType                         0
+# Assortment                        0
+# CompetitionDistance            2642
+# CompetitionOpenSinceMonth    323348
+# CompetitionOpenSinceYear     323348
+# Promo2                            0
+# Promo2SinceWeek              508031
+# Promo2SinceYear              508031
+# PromoInterval                508031
+# Gün                               0
+# Hafta                             0
+# Ay                                0
+# Yıl                               0
+# Mevsim                            0
+# dtype: int64
 
+```
 
 
 
