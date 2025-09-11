@@ -9549,6 +9549,7 @@ model.compile(loss="mse", optimizer="adam", metrics=["mse"])
 model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100)
 ```
 
+# Sınıflandırma
 
 
 
