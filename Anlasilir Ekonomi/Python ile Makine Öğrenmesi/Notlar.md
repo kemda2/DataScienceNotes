@@ -9776,6 +9776,29 @@ veri["Title"] = veri["Title"].str.strip()
 # Sir                 1       1     1    1    1      1      1       1     1         1
 # the Countess        1       1     1    1    1      1      1       1     1         1
 
+ftitle = ["Don", "Dona", "Mme", "Ms", "Mra", "Mlle"]
+etitle = ["Mr", "Mrs", "Mrs", "Mrs", "Mrs", "Miss"]
+
+for i in range(len(ftitle)):
+    for j in range(len(etitle)):
+        if i == j:
+            veri["Title"] = veri["Title"].str.replace(ftitle[i], etitle[j])
+
+veri.groupby("Title").count()
+# Title         Survived  Pclass  Name  Sex  Age  SibSp  Parch  Ticket  Fare  Embarked
+# Capt                1       1     1    1    1      1      1       1     1         1
+# Col                 2       2     2    2    2      2      2       2     2         2
+# Dr                  7       7     7    7    7      7      7       7     7         7
+# Jonkheer            1       1     1    1    1      1      1       1     1         1
+# Lady                1       1     1    1    1      1      1       1     1         1
+# Major               2       2     2    2    2      2      2       2     2         2
+# Master             40      40    40   40   40     40     40      40    40        40
+# Miss              184     184   184  184  184    184    184     184   184       184
+# Mr                518     518   518  518  518    518    518     518   518       518
+# Mrs               127     127   127  127  127    127    127     127   127       127
+# Rev                 6       6     6    6    6      6      6       6     6         6
+# Sir                 1       1     1    1    1      1      1       1     1         1
+# the Countess        1       1     1    1    1      1      1       1     1         1
 
 
 ```
