@@ -9800,6 +9800,14 @@ veri.groupby("Title").count()
 # Sir                 1       1     1    1    1      1      1       1     1         1
 # the Countess        1       1     1    1    1      1      1       1     1         1
 
+veri["Title"] = veri["Title"].apply(lambda x: x if x in ["Mr", "Miss", "Mrs", "Master"] else "Others")
+# veri.groupby("Title").count()
+# Title     Survived  Pclass  Name  Sex  Age  SibSp  Parch  Ticket  Fare  Embarked
+# Master           40      40    40   40   40     40     40      40    40        40
+# Miss            184     184   184  184  184    184    184     184   184       184
+# Mr              518     518   518  518  518    518    518     518   518       518
+# Mrs             127     127   127  127  127    127    127     127   127       127
+# Others           22      22    22   22   22     22     22      22    22        22
 
 ```
 
