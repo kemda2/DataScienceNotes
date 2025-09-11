@@ -9513,7 +9513,6 @@ model.compile(loss="mse", optimizer="adam", metrics=["mse"])
 es = EarlyStopping(monitor="val_loss", patience=5, mode="min", verbose=1) # Mode sınıflamada accuracy olduğu için max olarak seçilir.
 m1 = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100, verbose=0, callbacks=[es])
 
-
 plt.figure(figsize=(40,25))
 plt.plot(m1.history["mse"])
 plt.plot(m1.history["val_mse"])
