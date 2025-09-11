@@ -9463,7 +9463,7 @@ plt.show()
 
 ![image](./images/dor3.png)
 
-Dropout tan sonra aşırı öğrenme giderilmiştir. 
+Dropout tan sonra aşırı öğrenme giderilmiştir. Dropouttaki 0.2 değeri nöronların % 20'sini kapatması içindir.
 
 
 
