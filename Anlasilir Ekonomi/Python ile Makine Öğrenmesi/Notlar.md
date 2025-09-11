@@ -9373,12 +9373,27 @@ plt.show()
 
 ![image](./images/rso3.png)
 
+```Python
+plt.figure(figsize=(25,10))
+plt.plot(metric)
+plt.plot(val_metric)
+plt.title("Training and Validation Metrics")
+plt.ylabel("Metrics")
+plt.xlabel("Epochs")
+plt.legend(["Train", "Validation"], loc="upper right")
+plt.show()
+```
+
+![image](./images/rso4.png)
+
+
+
 
 
 
 # 
 
-![image](./images/rso4.png)
+![image](./images/rso5.png)
 
 https://www.youtube.com/watch?v=ahXp-gy7WK8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=150
 300
