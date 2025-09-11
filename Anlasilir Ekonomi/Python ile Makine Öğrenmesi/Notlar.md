@@ -10307,6 +10307,18 @@ plt.show()
 
 ![image](./images/kr6.png)
 
+```python
+tahmin = model.predict(x_test)
+
+plt.figure(figsize=(25,10))
+plt.plot(range(len(y_test[:50])), y_test[:50], label="Gerçek")
+plt.plot(range(len(y_test[:50])), tahmin[:50], label="Tahmin")
+plt.title("Araç Fiyat Tahmini")
+plt.xlabel("Gözlem No")
+plt.ylabel("Fiyat")
+plt.legend()
+plt.show()
+```
 
 
 
