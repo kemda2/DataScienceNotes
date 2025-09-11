@@ -9972,6 +9972,9 @@ veri
 y = veri["Sales"]
 x = veri.drop(columns="Sales")
 
+sc = StandardScaler()
+x = sc.fit_transform(x)
+
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
 
@@ -9994,7 +9997,7 @@ plt.legend(["Eğitim", "Doğrulama"], loc="upper right")
 plt.show()
 ```
 
-
+![image](./images/kr2.png)
 
 
 
@@ -10002,7 +10005,7 @@ plt.show()
 
 # 
 
-![image](./images/kr2.png)
+![image](./images/kr3.png)
 
 https://www.youtube.com/watch?v=sjlrb2NQ6Ts&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=156
 839
