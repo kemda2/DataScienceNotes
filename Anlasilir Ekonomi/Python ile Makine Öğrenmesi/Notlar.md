@@ -9708,6 +9708,39 @@ veri["Embarked"] = veri["Embarked"].fillna(veri["Embarked"].mode()[0])
 #  9   Embarked  891 non-null    object 
 # dtypes: float64(2), int64(4), object(4)
 # memory usage: 69.7+ KB
+
+# veri["Name"].str.split(".")
+# 0      [Braund, Mr, Owen Harris]
+# 1    [Cumings, Mrs, John Bradley (Florence Briggs ...
+# 2          [Heikkinen, Miss, Laina]
+# 3    [Futrelle, Mrs, Jacques Heath (Lily May Peel)]
+# 4           [Allen, Mr, William Henry]
+# ...
+# 886         [Montvila, Rev, Juozas]
+# 887    [Graham, Miss, Margaret Edith]
+# 888      [Johnston, Miss, Catherine Helen "Carrie"]
+# 889           [Behr, Mr, Karl Howell]
+# 890               [Dooley, Mr, Patrick]
+# Name: Name, Length: 891, dtype: object
+
+# veri["Name"].str.split(".").str.get(0)
+# 0        Braund, Mr
+# 1       Cumings, Mrs
+# 2      Heikkinen, Miss
+# 3      Futrelle, Mrs
+# 4         Allen, Mr
+# ...
+# 886       Montvila, Rev
+# 887       Graham, Miss
+# 888    Johnston, Miss
+# 889         Behr, Mr
+# 890       Dooley, Mr
+# Name: Name, Length: 891, dtype: object
+
+veri["Title"] = veri["Name"].str.split(".").str.get(0)
+
+
+
 ```
 
 
