@@ -9525,7 +9525,27 @@ plt.show()
 
 # Batch Size 
 
+```Python
+import numpy as np
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Dense
 
+x = np.random.rand(10000, 10)
+y = np.random.rand(10000, 1)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
+
+model = Sequential()
+model.add(Dense(10, input_dim=10, activation="relu"))
+model.add(Dense(6, activation="relu"))
+model.add(Dense(1, activation="linear"))
+
+model.compile(loss="mse", optimizer="adam", metrics=["mse"])
+
+model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100)
+```
 
 
 
