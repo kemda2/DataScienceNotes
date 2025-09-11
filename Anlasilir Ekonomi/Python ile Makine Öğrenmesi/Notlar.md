@@ -9916,6 +9916,24 @@ veri
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
 
+model = Sequential()
+
+model.add(Dense(64, input_dim=x_train.shape[1], activation="linear"))
+model.add(Dense(32, activation="linear"))
+model.add(Dense(1, activation="linear"))
+
+model.compile(optimizer="adam", loss="mae", metrics=["mae"])
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=20, verbose=0)
+
+plt.figure(figsize=(25,10))
+plt.plot(cikti.history["loss"])
+plt.plot(cikti.history["val_loss"])
+plt.title("Model Loss")
+plt.ylabel("Loss")
+plt.xlabel("Epok")
+plt.legend(["Eğitim", "Doğrulama"], loc="upper right")
+plt.show()
+
 ```
 
 
