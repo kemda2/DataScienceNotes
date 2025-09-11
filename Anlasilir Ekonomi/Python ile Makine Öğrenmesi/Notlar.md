@@ -9305,8 +9305,26 @@ for column in kc:
 # 1017208               0.0         0.0               0.0  
 
 # [1017209 rows x 95 columns]
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(t, y, test_size=0.2, random_state=0)
+
+X_train,X_val,y_train,y_val=train_test_split(X_train,y_train,test_size=0.1,random_state=0)
+
+from keras.models import Sequential
+from keras.layers import Dense, Activation
+
+model = Sequential()
+model.add(Dense(64, input_dim=x_train.shape[1], activation="relu"))
+model.add(Dense(64, activation="relu"))
+model.add(Dense(1, activation="relu"))
+
+model.compile(optimizer="adam", loss="mae", metrics=["mean_absolute_error"])
+model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=10)
 ```
 
+# History Objesi
 
 
 
