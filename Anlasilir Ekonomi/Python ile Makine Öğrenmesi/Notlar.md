@@ -9690,7 +9690,24 @@ veri["Embarked"] = veri["Embarked"].fillna(veri["Embarked"].mode()[0])
 # Embarked    0.0
 # dtype: float64
 
-
+# veri.info()
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 891 entries, 0 to 890
+# Data columns (total 10 columns):
+#  #   Column    Non-Null Count  Dtype  
+# ---  ------    --------------  -----  
+#  0   Survived  891 non-null    int64  
+#  1   Pclass    891 non-null    int64  
+#  2   Name      891 non-null    object 
+#  3   Sex       891 non-null    object 
+#  4   Age       891 non-null    float64
+#  5   SibSp     891 non-null    int64  
+#  6   Parch     891 non-null    int64  
+#  7   Ticket    891 non-null    object 
+#  8   Fare      891 non-null    float64
+#  9   Embarked  891 non-null    object 
+# dtypes: float64(2), int64(4), object(4)
+# memory usage: 69.7+ KB
 ```
 
 
