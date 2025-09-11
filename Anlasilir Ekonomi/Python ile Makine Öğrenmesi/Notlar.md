@@ -10071,11 +10071,79 @@ plt.show()
 ```
 ![image](./images/kr3.png)
 
+# KerasClassifier
+
+```python
+import pandas as pd
+
+veri = pd.read_csv("/content/diyabet.csv")
+veri
+#  Pregnancies  Glucose  BloodPressure  SkinThickness  Insulin  BMI   DiabetesPedigreeFunction  Age  Outcome 
+#  -----------  -------  -------------  -------------  -------  ----  ------------------------  ---  ------- 
+#  6            148      72             35             0        33.6  0.627                     50   1       
+#  1            85       66             29             0        26.6  0.351                     31   0       
+#  8            183      64             0              0        23.3  0.672                     32   1       
+#  1            89       66             23             94       28.1  0.167                     21   0       
+#  0            137      40             35             168      43.1  2.288                     33   1       
+#  ...          ...      ...            ...            ...      ...   ...                       ...  ...     
+#  1            93       70             31             0        30.4  0.315                     23   0       
+
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+veri["Outcome"] = le.fit_transform(veri["Outcome"])
+
+y = veri["Outcome"]
+x = veri.drop(columns="Outcome")
+
+from sklearn.preprocessing import StandartScaler
+sc=StandartScaler()
+x=sc.fit_transform(x)
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
+
+from keras.models import Sequential
+from keras.layers import Dense
+
+model = Sequential()
+
+model.add(Dense(64, input_dim=x_train.shape[1], activation="relu"))
+model.add(Dense(32, activation="relu"))
+model.add(Dense(1, activation="sigmoid"))
+
+model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=20, verbose=0)
+
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(1, 2, figsize=(25, 10))
+
+ax[0].plot(cikti.history["loss"], label="Training Loss")
+ax[0].plot(cikti.history["val_loss"], label="Validation Loss")
+ax[0].set_title("Loss Grafiği")
+ax[0].set_ylabel("Loss")
+ax[0].set_xlabel("Epok")
+ax[0].legend()
+
+ax[1].plot(cikti.history["accuracy"], label="Training Accuracy")
+ax[1].plot(cikti.history["val_accuracy"], label="Validation Accuracy")
+ax[1].set_title("Accuracy Grafiği")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("Epok")
+ax[1].legend()
+```
+
+![image](./images/kr4.png)
+
+
+
 
 
 # 
 
-![image](./images/kr.png)
+![image](./images/kr5.png)
 
 https://www.youtube.com/watch?v=wAUrWcNTEiA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=160
 1247
