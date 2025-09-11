@@ -9525,7 +9525,7 @@ plt.show()
 
 # Batch Size 
 
-Modelin epochları gösterilirken x_train satır sayısının 32'ye bölünmüş hali (7200 için 225 gibi) her epochtaki işlem sayısı vardır.  Gerektiğinde integer girerek batch size değeri değiştirilebilir.
+Modelin epochları gösterilirken x_train satır sayısının 32'ye bölünmüş hali (7200 için 225 gibi) her epochtaki işlem sayısı (iş yükü) vardır.  Gerektiğinde integer girerek batch size değeri değiştirilebilir.
 
 ```Python
 import numpy as np
