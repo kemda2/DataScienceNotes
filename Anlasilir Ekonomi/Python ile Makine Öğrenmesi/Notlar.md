@@ -10007,5 +10007,5 @@ plt.show()
 
 ![image](./images/kr3.png)
 
-https://www.youtube.com/watch?v=sjlrb2NQ6Ts&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=156
-839
+https://www.youtube.com/watch?v=wAUrWcNTEiA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=160
+1247
