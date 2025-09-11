@@ -9168,6 +9168,31 @@ plt.show()
 # Mevsim                            0
 # dtype: int64
 
+# veri.isnull().sum()/veri.shape[0]*100
+# Store                         0.000000
+# DayOfWeek                     0.000000
+# Date                          0.000000
+# Sales                         0.000000
+# Customers                     0.000000
+# Open                          0.000000
+# Promo                         0.000000
+# StateHoliday                  0.000000
+# SchoolHoliday                 0.000000
+# StoreType                     0.000000
+# Assortment                    0.000000
+# CompetitionDistance           0.259730
+# CompetitionOpenSinceMonth    31.787764
+# CompetitionOpenSinceYear     31.787764
+# Promo2                        0.000000
+# Promo2SinceWeek              49.943620
+# Promo2SinceYear              49.943620
+# PromoInterval                49.943620
+# Gün                           0.000000
+# Hafta                         0.000000
+# Ay                            0.000000
+# Yıl                           0.000000
+# Mevsim                        0.000000
+# dtype: float64
 ```
 
 
