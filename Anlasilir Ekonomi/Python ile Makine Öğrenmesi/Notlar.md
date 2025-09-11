@@ -9129,10 +9129,9 @@ plt.hist(veri["Sales"])
 plt.title("Mağaza Satış Histogramı")
 plt.xlabel("Frekans")
 plt.show()
-
 ```
 
-
+![image](./images/rso1.png) 
 
 
 
@@ -9150,6 +9149,6 @@ plt.show()
 
 # 
 
-![image](./images/rso1.png)
+![image](./images/rso2.png)
 
 https://www.youtube.com/watch?v=CHL-zD7cGKI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=148
