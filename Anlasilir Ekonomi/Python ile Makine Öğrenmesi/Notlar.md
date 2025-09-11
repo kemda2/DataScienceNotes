@@ -9523,6 +9523,19 @@ plt.legend(["Train", "Validation"], loc="upper right")
 plt.show()
 ```
 
+# Batch Size 
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 
 
