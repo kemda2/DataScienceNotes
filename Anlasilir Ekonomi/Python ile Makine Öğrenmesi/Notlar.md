@@ -9551,17 +9551,69 @@ model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100)
 
 # Sınıflandırma
 
+```Python
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder, StandardS
+from sklearn.model_selection import train_test_split
 
+veri = pd.read_csv("/content/iris.csv")
+veri = veri.drop(columns="Id")
 
+y = veri["Species"]
+x = veri.drop(columns="Species")
 
+lb = LabelEncoder()
+y = lb.fit_transform(y)
 
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
 
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+x_train = sc.fit_transform(x_train)
+x_val = sc.transform(x_val)
+
+from keras.models import Sequential
+from keras.layers import Dense
+
+model = Sequential()
+
+model.add(Dense(10, input_dim=x_train.shape[1], activation="relu"))
+model.add(Dense(6, activation="sigmoid"))
+model.add(Dense(3, activation="softmax"))
+
+model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
+
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100, verbose=0)
+
+plt.figure(figsize=(25,10))
+plt.plot(cikt1.history["accuracy"])
+plt.plot(cikt1.history["val_accuracy"])
+plt.ylabel("Başarı")
+plt.xlabel("Epok Adımı")
+plt.legend(["Eğitim", "Doğrulama"], loc="upper right")
+plt.show()
+```
+
+![image](./images/snf1.png) 
+
+```Python
+plt.figure(figsize=(25,10))
+plt.plot(cikt1.history["loss"])
+plt.plot(cikt1.history["val_loss"])
+plt.ylabel("Loss")
+plt.xlabel("Epok Adımı")
+plt.legend(["Eğitim", "Doğrulama"], loc="upper right")
+plt.show()
+```
+
+![image](./images/snf2.png)
 
 
 
 
 # 
 
-![image](./images/dor4.png)
+![image](./images/snf3.png)
 
 https://www.youtube.com/watch?v=JSIS_geXleA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=154
