@@ -9196,6 +9196,37 @@ plt.show()
 
 veri["CompetitionDistance"] = veri["CompetitionDistance"].fillna(veri["CompetitionDistance"].mode()[0])
 
+# veri.info()
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 1017209 entries, 0 to 1017208
+# Data columns (total 23 columns):
+#  #   Column                     Non-Null Count    Dtype         
+# ---  ------                     --------------    -----         
+#  0   Store                      1017209 non-null  int64         
+#  1   DayOfWeek                  1017209 non-null  int64         
+#  2   Date                       1017209 non-null  datetime64[ns]
+#  3   Sales                      1017209 non-null  int64         
+#  4   Customers                  1017209 non-null  int64         
+#  5   Open                       1017209 non-null  int64         
+#  6   Promo                      1017209 non-null  int64         
+#  7   StateHoliday               1017209 non-null  object        
+#  8   SchoolHoliday              1017209 non-null  int64         
+#  9   StoreType                  1017209 non-null  object        
+#  10  Assortment                 1017209 non-null  object        
+#  11  CompetitionDistance        1017209 non-null  float64       
+#  12  CompetitionOpenSinceMonth  693861 non-null   float64       
+#  13  CompetitionOpenSinceYear   693861 non-null   float64       
+#  14  Promo2                     1017209 non-null  int64         
+#  15  Promo2SinceWeek            509178 non-null   float64       
+#  16  Promo2SinceYear            509178 non-null   float64       
+#  17  PromoInterval              509178 non-null   object        
+#  18  Gün                        1017209 non-null  int32         
+#  19  Hafta                      1017209 non-null  UInt32        
+#  20  Ay                         1017209 non-null  int32         
+#  21  Yıl                        1017209 non-null  int32         
+#  22  Mevsim                     1017209 non-null  object        
+# dtypes: UInt32(1), datetime64[ns](1), float64(5), int32(3), int64(8), object(5)
+# memory usage: 163.9+ MB
 ```
 
 
