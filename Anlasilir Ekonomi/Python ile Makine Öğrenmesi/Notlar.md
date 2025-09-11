@@ -9620,6 +9620,65 @@ df_zip = zipfile.ZipFile("/content/titanic.zip")
 veri = pd.read_csv(df_zip.open("train.csv"))
 veri = veri.drop(columns="PassengerId")
 
+# veri.isnull().sum()
+# Survived      0
+# Pclass        0
+# Name          0
+# Sex           0
+# Age         177
+# SibSp         0
+# Parch         0
+# Ticket        0
+# Fare          0
+# Cabin       687
+# Embarked      2
+# dtype: int64
+
+# veri.isnull().mean()*100
+
+# Survived     0.000000
+# Pclass       0.000000
+# Name         0.000000
+# Sex          0.000000
+# Age         19.865320
+# SibSp        0.000000
+# Parch        0.000000
+# Ticket       0.000000
+# Fare         0.000000
+# Cabin       77.104377
+# Embarked     0.224467
+# dtype: float64
+
+veri = veri.drop(columns="Cabin")
+# veri.isnull().mean()*100
+# Survived     0.000000
+# Pclass       0.000000
+# Name         0.000000
+# Sex          0.000000
+# Age         19.865320
+# SibSp        0.000000
+# Parch        0.000000
+# Ticket       0.000000
+# Fare         0.000000
+# Embarked     0.224467
+# dtype: float64
+
+veri = veri.drop(columns="Cabin")
+veri["Age"] = veri["Age"].fillna(veri["Age"].mean())
+# veri.isnull().mean()*100
+# Survived     0.000000
+# Pclass       0.000000
+# Name         0.000000
+# Sex          0.000000
+# Age          0.000000
+# SibSp        0.000000
+# Parch        0.000000
+# Ticket       0.000000
+# Fare         0.000000
+# Embarked     0.224467
+# dtype: float64
+
+
 
 ```
 
