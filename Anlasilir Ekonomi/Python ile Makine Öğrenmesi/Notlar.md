@@ -9420,10 +9420,21 @@ model.add(Dense(10, activation="relu"))
 model.add(Dense(1, activation="linear"))
 
 model.compile(loss="mse", optimizer="adam", metrics=["mse"])
+m1 = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100, verbose=0)
 
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(40,25))
+plt.plot(m1.history["mse"])
+plt.plot(m1.history["val_mse"])
+plt.title("Model MSE Without DropOut")
+plt.ylabel("MSE")
+plt.xlabel("Epoch")
+plt.legend(["Train", "Validation"], loc="upper right")
+plt.show()
 ```
 
-
+![image](./images/dor2.png)
 
 
 
@@ -9432,7 +9443,7 @@ model.compile(loss="mse", optimizer="adam", metrics=["mse"])
 
 # 
 
-![image](./images/dor2.png)
+![image](./images/dor3.png)
 
 https://www.youtube.com/watch?v=ahXp-gy7WK8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=150
 300
