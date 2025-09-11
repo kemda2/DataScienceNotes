@@ -9738,6 +9738,7 @@ veri["Embarked"] = veri["Embarked"].fillna(veri["Embarked"].mode()[0])
 # Name: Name, Length: 891, dtype: object
 
 veri["Title"] = veri["Name"].str.split(".").str.get(0)
+veri["Title"] = veri["Name"].str.split(",").str.get(1)
 
 
 
