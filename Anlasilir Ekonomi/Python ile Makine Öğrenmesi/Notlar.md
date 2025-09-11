@@ -9933,8 +9933,9 @@ plt.ylabel("Loss")
 plt.xlabel("Epok")
 plt.legend(["Eğitim", "Doğrulama"], loc="upper right")
 plt.show()
-
 ```
+
+![image](./images/kr1.png)
 
 
 
@@ -9947,7 +9948,7 @@ plt.show()
 
 # 
 
-![image](./images/ttnc3.png)
+![image](./images/kr2.png)
 
 https://www.youtube.com/watch?v=sjlrb2NQ6Ts&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=156
 839
