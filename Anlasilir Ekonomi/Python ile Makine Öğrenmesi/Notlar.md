@@ -9326,7 +9326,18 @@ model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=10)
 
 # History Objesi
 
+```Python
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+from keras.models import Sequential
+from keras.layers import Dense
 
+veri = pd.read_csv("/content/Reklam.csv")
+y = veri["Sales"]
+x = veri.drop(columns="Sales")
+
+```
 
 
 
