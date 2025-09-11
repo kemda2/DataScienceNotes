@@ -9564,5 +9564,4 @@ model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100)
 
 ![image](./images/dor4.png)
 
-https://www.youtube.com/watch?v=ahXp-gy7WK8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=150
-300
+https://www.youtube.com/watch?v=JSIS_geXleA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=154
