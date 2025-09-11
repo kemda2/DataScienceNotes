@@ -10137,7 +10137,17 @@ ax[1].legend()
 
 ![image](./images/kr4.png)
 
+```python
+from keras.layers import Dropout
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import GridSearchCV
+from keras.optimizers import Adam
+from keras.regularizers import L2
 
+
+
+
+```
 
 
 
