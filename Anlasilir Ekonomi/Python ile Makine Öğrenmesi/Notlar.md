@@ -9348,4 +9348,4 @@ x = veri.drop(columns="Sales")
 
 ![image](./images/rso3.png)
 
-https://www.youtube.com/watch?v=Ydyiuxf9eYs&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=149
+https://www.youtube.com/watch?v=ahXp-gy7WK8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=150
