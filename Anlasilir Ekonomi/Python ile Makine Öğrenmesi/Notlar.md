@@ -9070,6 +9070,8 @@ Dataset:https://www.kaggle.com/search?q=rossmann+store+sales+in%3Adatasets
 #train = pd.read_csv(df_zip.open("train.csv"), low_memory=False)
 
 import pandas as pd
+import numpy as np
+
 train = pd.read_csv("train.csv",low_memory=False)
 store = pd.read_csv("store.csv",low_memory=False)
 
@@ -9110,7 +9112,7 @@ veri = train.merge(store, on=["Store"], how="inner")
 veri["Date"] = pd.to_datetime(veri["Date"],infer_datetime_format=True)
 
 veri["Gün"] = veri["Date"].dt.day
-veri["Hafta"] = veri["Date"].dt.week
+veri["Hafta"] = veri["Date"].dt.isocalendar().week
 veri["Ay"] = veri["Date"].dt.month
 veri["Yıl"] = veri["Date"].dt.year
 
@@ -9118,6 +9120,15 @@ veri["Mevsim"] = np.where(veri["Ay"].isin([3, 4, 5]), "İlk Bahar",
                   np.where(veri["Ay"].isin([6, 7, 8]), "Yaz",
                   np.where(veri["Ay"].isin([9, 10, 11]), "Son Bahar",
                   np.where(veri["Ay"].isin([12, 1, 2]), "Kış", "None"))))
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.figure(figsize=(15,8))
+plt.hist(veri["Sales"])
+plt.title("Mağaza Satış Histogramı")
+plt.xlabel("Frekans")
+plt.show()
 
 ```
 
