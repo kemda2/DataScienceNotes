@@ -9351,6 +9351,12 @@ model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=20)
 # 5/5 [==============================] - 0s 11ms/step - loss: 15.3632 - mean_absolute_error: 15.3632 - val_loss: 15.2875 - val_mean_absolute_error: 15.2875
 # <keras.callbacks.History at 0x7ff434c4a3b0>
 
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=20, verbose=0)
+
+# print(cikti.history.keys())
+# dict_keys(['loss', 'mean_absolute_error', 'val_loss', 'val_mean_absolute_error'])
+
+
 ```
 
 
