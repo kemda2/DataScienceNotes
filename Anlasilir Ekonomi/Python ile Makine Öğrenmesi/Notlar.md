@@ -9859,7 +9859,18 @@ plt.show()
 
 ![image](./images/ttnc1.png) 
 
+```Python
+plt.figure(figsize=(25,10))
+plt.plot(cikti.history["loss"])
+plt.plot(cikti.history["val_loss"])
+plt.title("Loss Grafiği")
+plt.ylabel("Loss")
+plt.xlabel("Epoklar")
+plt.legend(["Train", "Validation"], loc="upper right")
+plt.show()
+```
 
+![image](./images/ttnc2.png)
 
 
 
@@ -9880,7 +9891,7 @@ plt.show()
 
 # 
 
-![image](./images/ttnc2.png)
+![image](./images/ttnc3.png)
 
 https://www.youtube.com/watch?v=sjlrb2NQ6Ts&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=156
 839
