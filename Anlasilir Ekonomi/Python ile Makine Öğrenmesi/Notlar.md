@@ -9887,6 +9887,36 @@ Genellikle kullanılan Hiperparametre Optimizasyonu Yöntemleri şunlardır:
 
 # KerasRegressor
 
+```Python
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+from keras.models import Sequential
+from keras.layers import Dense
+
+veri = pd.read_csv("/content/Reklam.csv")
+veri
+#        TV    Radio   Newspaper  Sales  
+# ---------------------------------------
+#   0  230.1   37.8    69.2       22.1   
+#   1   44.5   39.3    45.1       10.4   
+#   2   17.2   45.9    69.3       12.0   
+#   3  151.5   41.3    58.5       16.5   
+#   4  180.8   10.8    58.4       17.9   
+# ...
+# 195   38.2    3.7    13.8        7.6   
+# 196   94.2    4.9     8.1       14.0   
+# 197  177.0    9.3     6.4       14.8   
+# 198  283.6   42.0    66.2       25.5   
+# 199  232.1    8.6     8.7       18.4   
+
+# [200 rows × 4 columns]
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
+
+```
 
 
 
