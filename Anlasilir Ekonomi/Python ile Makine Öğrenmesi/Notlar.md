@@ -9133,9 +9133,13 @@ plt.show()
 
 ![image](./images/rso1.png) 
 
+```Python
+plt.figure(figsize=(15,8))
+sns.barplot(data=veri, x="Mevsim", y="Sales")
+plt.show()
+```
 
-
-
+![image](./images/rso2.png)
 
 
 
@@ -9149,6 +9153,6 @@ plt.show()
 
 # 
 
-![image](./images/rso2.png)
+![image](./images/rso3.png)
 
 https://www.youtube.com/watch?v=CHL-zD7cGKI&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=148
