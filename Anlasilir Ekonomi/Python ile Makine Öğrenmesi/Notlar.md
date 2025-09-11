@@ -9876,8 +9876,14 @@ plt.show()
 
 Eğer modelin performansını daha iyiye götürmek istersek Hiperparametre Optimizasyonu kullanırız. Eğer Model başarılı olduğu halde aşırı uyum söz konusuysa Regülasyon uygularız.
 
+## Hiperparametre Optimizasyonu Yöntemleri
 
+Hiperparametre Optimizasyonu Yöntemleri şunlardır:
 
+* Manual Search
+* Grid Search CV
+* Random Search CV
+* Bayesian Optimization
 
 
 
