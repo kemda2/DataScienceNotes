@@ -9227,6 +9227,32 @@ veri["CompetitionDistance"] = veri["CompetitionDistance"].fillna(veri["Competiti
 #  22  Mevsim                     1017209 non-null  object        
 # dtypes: UInt32(1), datetime64[ns](1), float64(5), int32(3), int64(8), object(5)
 # memory usage: 163.9+ MB
+
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+
+nc = ["Customers", "Open", "Promo", "SchoolHoliday", "CompetitionDistance", "Promo2"]
+kc = ["DayOfWeek", "StateHoliday", "StoreType", "Assortment", "Hafta", "Ay", "Yıl", "Mevsim"]
+
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+
+nc = ["Customers", "Open", "Promo", "SchoolHoliday", "CompetitionDistance", "Promo2"]
+kc = ["DayOfWeek", "StateHoliday", "StoreType", "Assortment", "Hafta", "Ay", "Yıl", "Mevsim"]
+
+def kategori(df, col):
+    le = LabelEncoder()
+    le1 = le.fit_transform(veri[col]).reshape(-1,1)
+    oh = OneHotEncoder(sparse_output=False)
+    sutunad = [col + "_" + str(i) for i in le.classes_]
+    return pd.DataFrame(oh.fit_transform(le1), columns=sutunad)
+
+t = veri[nc]
+
+for column in kc:
+    t_df = kategori(veri, column)
+    t = pd.concat([t, t_df], axis=1)
+
+# t.columns[t.dtypes == "object"]
+# Index([], dtype='object')
 ```
 
 
