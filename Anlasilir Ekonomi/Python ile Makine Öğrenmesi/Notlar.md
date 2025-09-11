@@ -10199,10 +10199,19 @@ plt.show()
 
 ![image](./images/kr5.png)
 
+# Araç Fiyat Tahmin
+
+
+
+
+
+
+
+
+
 
 # 
 
 ![image](./images/kr6.png)
 
-https://www.youtube.com/watch?v=wAUrWcNTEiA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=160
-1247
+https://www.youtube.com/watch?v=jEZeQnwUEPM&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=162
