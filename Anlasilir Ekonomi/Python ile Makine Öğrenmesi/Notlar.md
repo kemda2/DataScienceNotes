@@ -9609,6 +9609,37 @@ plt.show()
 
 ![image](./images/snf2.png)
 
+# Titanik Örneği
+
+```Python
+import zipfile
+import pandas as pd
+
+df_zip = zipfile.ZipFile("/content/titanic.zip")
+
+veri = pd.read_csv(df_zip.open("train.csv"))
+veri = veri.drop(columns="PassengerId")
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
