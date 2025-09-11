@@ -9436,7 +9436,7 @@ plt.show()
 
 ![image](./images/dor2.png)
 
-
+Validation devamlı training değerlerinin üzerinde. Bu modelde overfitting var.
 
 
 
