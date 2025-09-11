@@ -9635,7 +9635,6 @@ veri = veri.drop(columns="PassengerId")
 # dtype: int64
 
 # veri.isnull().mean()*100
-
 # Survived     0.000000
 # Pclass       0.000000
 # Name         0.000000
@@ -9663,7 +9662,6 @@ veri = veri.drop(columns="Cabin")
 # Embarked     0.224467
 # dtype: float64
 
-veri = veri.drop(columns="Cabin")
 veri["Age"] = veri["Age"].fillna(veri["Age"].mean())
 # veri.isnull().mean()*100
 # Survived     0.000000
@@ -9678,6 +9676,19 @@ veri["Age"] = veri["Age"].fillna(veri["Age"].mean())
 # Embarked     0.224467
 # dtype: float64
 
+veri["Embarked"] = veri["Embarked"].fillna(veri["Embarked"].mode()[0])
+# veri.isnull().mean()*100
+# Survived    0.0
+# Pclass      0.0
+# Name        0.0
+# Sex         0.0
+# Age         0.0
+# SibSp       0.0
+# Parch       0.0
+# Ticket      0.0
+# Fare        0.0
+# Embarked    0.0
+# dtype: float64
 
 
 ```
