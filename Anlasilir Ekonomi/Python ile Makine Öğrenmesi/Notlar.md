@@ -10144,16 +10144,65 @@ from sklearn.model_selection import GridSearchCV
 from keras.optimizers import Adam
 from keras.regularizers import L2
 
+def modelkur(units=64, learning_rate=0.01, hidden_layers=2, reg=L2(0.01), dropout_rate=0.2):
+    model = Sequential()
+    model.add(Dense(units=units, input_dim=x_train.shape[1], activation="relu", kernel_regularizer=reg))
+    
+    for i in range(hidden_layers):
+        model.add(Dense(units, activation="relu", kernel_regularizer=reg))
+        model.add(Dropout(dropout_rate))
+    
+    model.add(Dense(1, activation="sigmoid"))
+    model.compile(loss="binary_crossentropy", optimizer=Adam(learning_rate), metrics=["accuracy"])
+    
+    return model
+
+parametreler = {
+    "units": [16, 32, 64],
+    "learning_rate": [0.001, 0.01],
+    "hidden_layers": [2, 3],
+    "reg": [None, L2(0.001), L2(0.01)],
+    "dropout_rate": [0.0, 0.2],
+    "epochs": [20, 50]
+}
+
+model = KerasClassifier(build_fn=modelkur, verbose=0)
+
+grid = GridSearchCV(estimator=model, param_grid=parametreler, cv=5)
+gridsonuc = grid.fit(x_train, y_train)
+bestparam = gridsonuc.best_params_
 
 
+bestmodel = modelkur(units=bestparam["units"], learning_rate=bestparam["learning_rate"],
+                    hidden_layers=bestparam["hidden_layers"], reg=bestparam["reg"], dropout_rate=bestparam["dropout_rate"])
 
+cikti = bestmodel.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=bestparam["epochs"], verbose=0)
+
+fig, ax = plt.subplots(1, 2, figsize=(25, 10))
+
+ax[0].plot(cikti.history["loss"], label="Training Loss")
+ax[0].plot(cikti.history["val_loss"], label="Validation Loss")
+ax[0].set_title("Loss Grafiği")
+ax[0].set_ylabel("Loss")
+ax[0].set_xlabel("Epok")
+ax[0].legend()
+
+ax[1].plot(cikti.history["accuracy"], label="Training Accuracy")
+ax[1].plot(cikti.history["val_accuracy"], label="Validation Accuracy")
+ax[1].set_title("Accuracy Grafiği")
+ax[1].set_ylabel("Accuracy")
+ax[1].set_xlabel("Epok")
+ax[1].legend()
+
+plt.show()
 ```
 
+![image](./images/kr5.png)
 
 
 # 
 
-![image](./images/kr5.png)
+![image](./images/kr6.png)
 
 https://www.youtube.com/watch?v=wAUrWcNTEiA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=160
 1247
