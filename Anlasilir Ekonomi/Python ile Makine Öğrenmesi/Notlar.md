@@ -9809,6 +9809,24 @@ veri["Title"] = veri["Title"].apply(lambda x: x if x in ["Mr", "Miss", "Mrs", "M
 # Mrs             127     127   127  127  127    127    127     127   127       127
 # Others           22      22    22   22   22     22     22      22    22        22
 
+veri = veri.drop(columns=["Name","Ticket"])
+
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+
+for i in kat:
+    le.fit(veri[i])
+    veri[i] = le.transform(veri[i])
+
+y = veri["Survived"]
+x = veri.drop(columns="Survived")
+
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+x = sc.fit_transform(x)
+
 ```
 
 
