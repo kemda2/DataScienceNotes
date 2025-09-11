@@ -9388,6 +9388,15 @@ plt.show()
 
 Eğer model doğruysa train ve validation benzer şekilde aşağı düşmelidir. Eğer train düşerken validation düşmüyorsa aşırı uyum vardır.
 
+# DropOut Regülasyonu
+
+
+
+
+
+
+
+
 
 
 
