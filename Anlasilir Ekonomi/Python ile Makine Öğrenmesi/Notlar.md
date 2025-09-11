@@ -9193,6 +9193,9 @@ plt.show()
 # Yıl                           0.000000
 # Mevsim                        0.000000
 # dtype: float64
+
+veri["CompetitionDistance"] = veri["CompetitionDistance"].fillna(veri["CompetitionDistance"].mode()[0])
+
 ```
 
 
