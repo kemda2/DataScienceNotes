@@ -9872,8 +9872,9 @@ plt.show()
 
 ![image](./images/ttnc2.png)
 
+# Hiperparametre Optimizasyonu ve Regülasyon
 
-
+Eğer modelin performansını daha iyiye götürmek istersek Hiperparametre Optimizasyonu kullanırız. Eğer Model başarılı olduğu halde aşırı uyum söz konusuysa Regülasyon uygularız.
 
 
 
