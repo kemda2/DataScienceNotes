@@ -9351,22 +9351,34 @@ model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=20)
 # 5/5 [==============================] - 0s 11ms/step - loss: 15.3632 - mean_absolute_error: 15.3632 - val_loss: 15.2875 - val_mean_absolute_error: 15.2875
 # <keras.callbacks.History at 0x7ff434c4a3b0>
 
-cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=20, verbose=0)
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=50, verbose=0)
 
 # print(cikti.history.keys())
 # dict_keys(['loss', 'mean_absolute_error', 'val_loss', 'val_mean_absolute_error'])
 
+loss = cikti.history["loss"]
+val_loss = cikti.history["val_loss"]
+metric = cikti.history["mean_absolute_error"]
+val_metric = cikti.history["val_mean_absolute_error"]
 
+plt.figure(figsize=(25,10))
+plt.plot(loss)
+plt.plot(val_loss)
+plt.title("Training and Validation Loss")
+plt.ylabel("Loss")
+plt.xlabel("Epochs")
+plt.legend(["Train", "Validation"], loc="upper right")
+plt.show()
 ```
 
-
+![image](./images/rso3.png)
 
 
 
 
 # 
 
-![image](./images/rso3.png)
+![image](./images/rso4.png)
 
 https://www.youtube.com/watch?v=ahXp-gy7WK8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=150
 300
