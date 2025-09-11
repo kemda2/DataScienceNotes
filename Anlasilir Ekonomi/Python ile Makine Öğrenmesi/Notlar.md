@@ -9831,6 +9831,30 @@ from sklearn.model_selection import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
+
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+import matplotlib.pyplot as plt
+
+model = Sequential()
+
+model.add(Dense(64, input_dim=x_train.shape[1], activation="relu"))
+model.add(Dropout(0.2))
+model.add(Dense(32, activation="relu"))
+model.add(Dropout(0.2))
+model.add(Dense(1, activation="sigmoid"))
+
+model.compile(optimizer="Adam", loss="binary_crossentropy", metrics=["accuracy"])
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=50, verbose=0)
+
+plt.figure(figsize=(25,10))
+plt.plot(cikti.history["accuracy"])
+plt.plot(cikti.history["val_accuracy"])
+plt.title("Başarı Grafiği")
+plt.ylabel("Başarı")
+plt.xlabel("Epoklar")
+plt.legend(["Train", "Validation"], loc="upper right")
+plt.show()
 ```
 
 
