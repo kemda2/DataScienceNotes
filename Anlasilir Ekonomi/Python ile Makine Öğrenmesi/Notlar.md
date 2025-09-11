@@ -10068,12 +10068,8 @@ plt.ylabel("Loss")
 plt.xlabel("Epok")
 plt.legend(["Eğitim", "Doğrulama"], loc="upper right")
 plt.show()
-
-![image](./images/kr3.png)
-
-
-
 ```
+![image](./images/kr3.png)
 
 
 
