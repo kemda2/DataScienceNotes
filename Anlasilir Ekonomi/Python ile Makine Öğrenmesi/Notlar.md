@@ -9337,6 +9337,20 @@ veri = pd.read_csv("/content/Reklam.csv")
 y = veri["Sales"]
 x = veri.drop(columns="Sales")
 
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
+
+model = Sequential()
+model.add(Dense(64, input_dim=x_train.shape[1], activation="relu"))
+model.add(Dense(64, activation="relu"))
+model.add(Dense(1, activation="relu"))
+
+model.compile(optimizer="adam", loss="mae", metrics=["mean_absolute_error"])
+model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=20)
+# Epoch 20/20
+# 5/5 [==============================] - 0s 11ms/step - loss: 15.3632 - mean_absolute_error: 15.3632 - val_loss: 15.2875 - val_mean_absolute_error: 15.2875
+# <keras.callbacks.History at 0x7ff434c4a3b0>
+
 ```
 
 
