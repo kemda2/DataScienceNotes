@@ -9390,6 +9390,7 @@ Eğer model doğruysa train ve validation benzer şekilde aşağı düşmelidir.
 
 # DropOut Regülasyonu
 
+![image](./images/dor1.png)
 
 
 
@@ -9402,7 +9403,7 @@ Eğer model doğruysa train ve validation benzer şekilde aşağı düşmelidir.
 
 # 
 
-![image](./images/rso5.png)
+![image](./images/dor2.png)
 
 https://www.youtube.com/watch?v=ahXp-gy7WK8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=150
 300
