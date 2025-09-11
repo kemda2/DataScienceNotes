@@ -9857,6 +9857,7 @@ plt.legend(["Train", "Validation"], loc="upper right")
 plt.show()
 ```
 
+![image](./images/ttnc1.png) 
 
 
 
@@ -9879,7 +9880,7 @@ plt.show()
 
 # 
 
-![image](./images/snf3.png)
+![image](./images/ttnc2.png)
 
 https://www.youtube.com/watch?v=sjlrb2NQ6Ts&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=156
 839
