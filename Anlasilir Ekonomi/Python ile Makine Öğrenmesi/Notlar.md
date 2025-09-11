@@ -9230,10 +9230,7 @@ veri["CompetitionDistance"] = veri["CompetitionDistance"].fillna(veri["Competiti
 
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
-nc = ["Customers", "Open", "Promo", "SchoolHoliday", "CompetitionDistance", "Promo2"]
-kc = ["DayOfWeek", "StateHoliday", "StoreType", "Assortment", "Hafta", "Ay", "Yıl", "Mevsim"]
-
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+y=veri["Sales"]
 
 nc = ["Customers", "Open", "Promo", "SchoolHoliday", "CompetitionDistance", "Promo2"]
 kc = ["DayOfWeek", "StateHoliday", "StoreType", "Assortment", "Hafta", "Ay", "Yıl", "Mevsim"]
