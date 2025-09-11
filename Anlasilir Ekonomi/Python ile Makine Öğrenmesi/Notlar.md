@@ -9438,12 +9438,38 @@ plt.show()
 
 Validation devamlı training değerlerinin üzerinde. Bu modelde overfitting var.
 
+```Python
+model = Sequential()
+model.add(Dense(20, input_dim=x_train.shape[1], activation="relu"))
+model.add(Dropout(0.2))
+model.add(Dense(10, activation="relu"))
+model.add(Dropout(0.2))
+model.add(Dense(5, activation="relu"))
+model.add(Dropout(0.2))
+model.add(Dense(1, activation="linear"))
+
+model.compile(loss="mse", optimizer="adam", metrics=["mse"])
+m1 = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=100, verbose=0)
+
+plt.figure(figsize=(40,25))
+plt.plot(m1.history["mse"])
+plt.plot(m1.history["val_mse"])
+plt.title("Model MSE With DropOut")
+plt.ylabel("MSE")
+plt.xlabel("Epoch")
+plt.legend(["Train", "Validation"], loc="upper right")
+plt.show()
+```
+
+![image](./images/dor3.png)
+
+Dropout tan sonra aşırı öğrenme giderilmiştir. 
 
 
 
 # 
 
-![image](./images/dor3.png)
+![image](./images/dor4.png)
 
 https://www.youtube.com/watch?v=ahXp-gy7WK8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=150
 300
