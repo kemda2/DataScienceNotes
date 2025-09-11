@@ -9392,7 +9392,36 @@ Eğer model doğruysa train ve validation benzer şekilde aşağı düşmelidir.
 
 ![image](./images/dor1.png)
 
+```Python
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
 
+veri = fetch_california_housing()
+
+x = veri.data
+y = veri.target.reshape(-1, 1)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
+
+sc = StandardScaler()
+
+x_train = sc.fit_transform(x_train)
+x_val = sc.transform(x_val)
+x_test = sc.transform(x_test)
+
+model = Sequential()
+model.add(Dense(20, input_dim=x_train.shape[1], activation="relu"))
+model.add(Dense(10, activation="relu"))
+model.add(Dense(10, activation="relu"))
+model.add(Dense(1, activation="linear"))
+
+model.compile(loss="mse", optimizer="adam", metrics=["mse"])
+
+```
 
 
 
