@@ -9885,6 +9885,7 @@ Genellikle kullanılan Hiperparametre Optimizasyonu Yöntemleri şunlardır:
 * Random Search CV
 * Bayesian Optimization
 
+# KerasRegressor
 
 
 
