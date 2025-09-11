@@ -9465,6 +9465,9 @@ plt.show()
 
 Dropout tan sonra aşırı öğrenme giderilmiştir. Dropouttaki 0.2 değeri nöronların % 20'sini kapatması içindir.
 
+# Early Stopping
+
+
 
 
 # 
