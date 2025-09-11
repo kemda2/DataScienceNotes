@@ -9767,4 +9767,5 @@ veri["Title"] = veri["Name"].str.split(".").str.get(0)
 
 ![image](./images/snf3.png)
 
-https://www.youtube.com/watch?v=JSIS_geXleA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=154
+https://www.youtube.com/watch?v=sjlrb2NQ6Ts&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=156
+839
