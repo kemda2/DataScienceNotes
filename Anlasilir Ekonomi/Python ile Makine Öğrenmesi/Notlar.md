@@ -10034,15 +10034,25 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_
 x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
 
 from sklearn.model_selection import GridSearchCV
-from keras.wrappers.scikit_learn import KerasRegressor
+from keras.optimizers import Adam
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
 from keras.optimizers import Adam
 
-def modelkur(units=64, activation="linear", learning_rate=0.01):
+def modelkur(units=64, activation="relu", learning_rate=0.001, hidden_layers=2, dropout_rate=0.2):
     model = Sequential()
-    model.add(Dense(units=units, input_dim=x_train.shape[1], activation=activation))
-    model.add(Dense(32, activation=activation))
-    model.add(Dense(1, activation=activation))
-    model.compile(optimizer=Adam(learning_rate=learning_rate), loss="mae", metrics=["mae"])
+    model.add(Dense(units, input_dim=x_train.shape[1], activation=activation))
+
+    for _ in range(hidden_layers):
+        model.add(Dense(units, activation=activation))
+        if dropout_rate > 0:
+            model.add(Dropout(dropout_rate))
+
+    model.add(Dense(1, activation='linear'))
+
+    optimizer = Adam(learning_rate=learning_rate)
+    model.compile(optimizer=optimizer, loss='mae', metrics=['mae'])
+    
     return model
 
 parametreler={
@@ -10139,7 +10149,7 @@ ax[1].legend()
 
 ```python
 from keras.layers import Dropout
-from keras.wrappers.scikit_learn import KerasClassifier
+from scikeras.wrappers import KerasClassifier
 from sklearn.model_selection import GridSearchCV
 from keras.optimizers import Adam
 from keras.regularizers import L2
@@ -10322,11 +10332,159 @@ plt.show()
 
 ![image](./images/kr7.png)
 
+Çok sağlıklı bir model değil.
 
+```python
+data=pd.read_csv("car_price_prediction.csv")
+veri=data.copy()
+# veri
+#       ID          Price  Levy  Manufacturer  Model     Prod. year  Category    Leather interior  Fuel type  Engine volume  Mileage      Cylinders  Gear box type  Drive wheels  Doors    Wheel           Color  Airbags 
+# -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#  0    45654403    13328  1399  LEXUS         RX 450    2010         Jeep        Yes               Hybrid     3.5             186000 km    6.0        Automatic        4x4            04-May   Left wheel      Silver  12      
+#  1    44731507    16621  1018  CHEVROLET     Equinox   2011         Jeep        No                Petrol     3               192000 km    6.0        Tiptronic        4x4            04-May   Left wheel      Black   8       
+#  2    45774419    8467   -     HONDA         FIT       2006         Hatchback   No                Petrol     1.3             200000 km    4.0        Variator         Front          04-May   Right-hand drive  Black  2       
+#  3    45679185    3607   862   FORD          Escape    2011         Jeep        Yes               Hybrid     2.5             168966 km    4.0        Automatic        4x4            04-May   Left wheel      White   0       
+#  4    45809263    11726  446   HONDA         FIT       2014         Hatchback   Yes               Petrol     1.3             91901 km     4.0        Automatic        Front          04-May   Left wheel      Silver  4       
+#  ...  ...         ...    ...   ...           ...       ...          ...         ...               ...        ...             ...          ...        ...             ...            ...      ...             ...     ...     
+#  19232  45798355  8467   -     MERCEDES-BENZ CLK 200   1999         Coupe       Yes               CNG        2.0 Turbo       300000 km    4.0        Manual           Rear           02-Mar   Left wheel      Silver  5       
+#  19233  45778856  15681  831   HYUNDAI       Sonata    2011         Sedan       Yes               Petrol     2.4             161600 km    4.0        Tiptronic        Front          04-May   Left wheel      Red     8       
+#  19234  45804997  26108  836   HYUNDAI       Tucson    2010         Jeep        Yes               Diesel     2               116365 km    4.0        Automatic        4x4            04-May   Left wheel      Grey    4       
+#  19235  45793526  5331   1288  CHEVROLET     Captiva   2007         Jeep        Yes               Diesel     2               51258 km     4.0        Automatic        Front          04-May   Left wheel      Black   4       
+#  19236  45813273  470    753   HYUNDAI       Sonata    2012         Sedan       Yes               Hybrid     2.4             186923 km    4.0        Automatic        Front          04-May   Left wheel      White   12      
+
+veri=veri.drop(columns="ID")
+# veri.isnull().sum()
+# Price               0  
+# Levy                0  
+# Manufacturer        0  
+# Model               0  
+# Prod. year          0  
+# Category            0  
+# Leather interior    0  
+# Fuel type           0  
+# Engine volume       0  
+# Mileage             0  
+# Cylinders           0  
+# Gear box type       0  
+# Drive wheels        0  
+# Doors               0  
+# Wheel               0  
+# Color               0  
+# Airbags             0  
+# dtype: int64
+
+import numpy as np
+
+veri["Levy"] = veri["Levy"].replace("-", np.nan)
+veri["Levy"] = veri["Levy"].fillna(0)
+veri["Levy"] = veri["Levy"].astype(int)
+
+veri["Turbo"] = veri["Engine volume"].apply(lambda x: "Turbo" if "Turbo" in str(x) else "Non Turbo")
+veri["Engine volume"] = veri["Engine volume"].apply(lambda x: str(x).replace("Turbo", "")).astype(float)
+veri["Mileage"] = veri["Mileage"].apply(lambda x: x.split(" ")[0]).astype(int)
+veri["Cylinders"] = veri["Cylinders"].astype(int)
+
+veri["Doors"] = np.where(veri["Doors"] == "04-May", 4, veri["Doors"])
+veri["Doors"] = np.where(veri["Doors"] == "02-Mar", 2, veri["Doors"])
+veri["Doors"] = np.where(veri["Doors"] == ">5", 5, veri["Doors"])
+veri["Doors"] = veri["Doors"].astype(int)
+
+cat = []
+
+for i in veri.columns:
+    if veri[i].dtypes == "object":
+        cat.append(i)
+
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+
+for i in cat:
+    veri[i] = le.fit_transform(veri[i])
+
+y = veri["Price"]
+x = veri.drop(columns="Price")
+
+from sklearn.preprocessing import StandardScaler
+
+sc = StandardScaler()
+x = sc.fit_transform(x)
+
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.1, random_state=0)
+
+from keras.models import Sequential
+from keras.layers import Dense
+import matplotlib.pyplot as plt
+from keras.layers import Dropout
+from scikeras.wrappers import KerasClassifier
+from sklearn.model_selection import GridSearchCV
+from keras.optimizers import Adam
+from keras.regularizers import L2
+
+def modelkur(units=64, activation="linear", learning_rate=0.01, hidden_layers=2, dropout_rate=0.2):
+
+    model = Sequential()
+    model.add(Dense(units=units, input_dim=x_train.shape[1], activation=activation))
+
+    for i in range(hidden_layers):
+        model.add(Dense(units=units, activation=activation))
+        model.add(Dropout(dropout_rate))
+
+    model.add(Dense(1, activation=activation))
+    model.compile(optimizer=Adam(learning_rate), loss="mae", metrics=["mae"])
+    return model
+
+parametreler = {
+    "units": [32, 64],
+    "activation": ["linear", "relu"],
+    "learning_rate": [0.001,0.01],
+    "hidden_layers": [2, 3],
+    "dropout_rate": [0.0, 0.2],
+    "epochs": [50, 100]
+}
+
+regres = KerasRegressor(build_fn=modelkur, verbose=0)
+grid = GridSearchCV(estimator=regres, param_grid=parametreler, cv=3)
+gridsonuc = grid.fit(x_train, y_train)
+bestparam = gridsonuc.best_params_
+
+bestmodel = modelkur(
+    units=bestparam["units"],
+    activation=bestparam["activation"],
+    learning_rate=bestparam["learning_rate"],
+    hidden_layers=bestparam["hidden_layers"],
+    dropout_rate=bestparam["dropout_rate"]
+)
+
+cikti = bestmodel.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=bestparam["epochs"], verbose=0, batch_size=64) # batch_size hızlandırmak için
+
+tahmin = bestmodel.predict(x_test)
+
+fig, ax = plt.subplots(1, 2, figsize=(25, 10))
+
+ax[0].plot(cikti.history["loss"], label="Training Loss")
+ax[0].plot(cikti.history["val_loss"], label="Validation Loss")
+ax[0].set_title("Loss Grafiği")
+ax[0].set_ylabel("Loss")
+ax[0].set_xlabel("Epochs")
+ax[0].legend()
+
+ax[1].plot(range(len(y_test[:50])), y_test[:50], label="Gerçek")
+ax[1].plot(range(len(y_test[:50])), tahmin[:50], label="Tahmin")
+ax[1].set_title("Araç Fiyat Tahmini")
+ax[1].set_xlabel("Gözlem No")
+ax[1].set_ylabel("Fiyat")
+ax[1].legend()
+
+plt.show()
+```
 
 
 # 
 
 ![image](./images/kr8.png)
 
-https://www.youtube.com/watch?v=jEZeQnwUEPM&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=162
+https://www.youtube.com/watch?v=M16yLU_-dk0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=165
