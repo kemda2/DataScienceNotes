@@ -9738,21 +9738,23 @@ veri["Embarked"] = veri["Embarked"].fillna(veri["Embarked"].mode()[0])
 # Name: Name, Length: 891, dtype: object
 
 veri["Title"] = veri["Name"].str.split(".").str.get(0)
-veri["Title"] = veri["Name"].str.split(",").str.get(1)
+veri["Title"] = veri["Title"].str.split(",").str.get(1)
+veri["Title"] = veri["Title"].str.strip()
 
 # veri["Title"]
-# 0       Mr
-# 1      Mrs
-# 2     Miss
-# 3      Mrs
-# 4       Mr
-#        ...
-# 886    Rev
-# 887   Miss
-# 888    Miss
-# 889     Mr
-# 890     Mr
+# 0       Mr  
+# 1      Mrs  
+# 2     Miss  
+# 3      Mrs  
+# 4       Mr  
+#        ...  
+# 886    Rev  
+# 887   Miss  
+# 888   Miss  
+# 889     Mr  
+# 890     Mr  
 # Name: Title, Length: 891, dtype: object
+
 
 
 
