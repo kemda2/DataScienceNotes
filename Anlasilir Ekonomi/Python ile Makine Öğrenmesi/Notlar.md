@@ -11406,11 +11406,44 @@ plt.show()
 
 ![image](./images/cfr1.png)
 
+```python
+x_test = x_test.astype("float32") / 255
+
+tahmin = model.predict(x_test)
+
+i = 30
+plt.imshow(x_test[i])
+plt.title("Gerçek Etiket: {}\nTahmin Etiket: {}".format(y_test[i], np.argmax(tahmin[i])))
+plt.show()
+```
+
+![image](./images/cfr3.png)
+
+```python
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+x_train = x_train.astype("float32") / 255
+x_test = x_test.astype("float32") / 255
+
+etiket = ["Uçak", "Otomobil", "Kuş", "Kedi", "Geyik", "Köpek", "Kurbağa", "At", "Gemi", "Kamyon"]
+
+y_test = [etiket[label[0]] for label in y_test]
+
+tahmin = model.predict(x_test)
+
+for j in range(50):
+    i = np.random.randint(0, x_test.shape[0], 1)[0]
+    plt.imshow(x_test[i])
+    plt.title("Gerçek Etiket: {}\nTahmin Etiket: {}".format(y_test[i], etiket[tahmin[i].argmax()]))
+    plt.show()
+```
+
+![image](./images/cfr2.png)
 
 
 
 # 
 
-![image](./images/cfr2.png)
+![image](./images/cfr3.png)
 
 https://www.youtube.com/watch?v=QkwN8DAM0pQ&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=182
