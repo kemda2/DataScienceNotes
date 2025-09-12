@@ -10873,6 +10873,123 @@ plt.show()
 
 ![image](./images/mnst3.png)
 
+```Python
+from keras.datasets import mnist
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+# print("Eğitim Seti Boyutu {}".format(x_train.shape))
+# print("Test Seti Boyutu {}".format(x_test.shape))
+# Eğitim Seti Boyutu (60000, 28, 28)
+# Test Seti Boyutu (10000, 28, 28)
+
+x_train = x_train.reshape(60000, 28, 28, 1)
+x_test = x_test.reshape(10000, 28, 28, 1)
+
+x_train = x_train.astype("float32") / 255
+x_test = x_test.astype("float32") / 255
+
+from keras.utils import to_categorical
+
+# print(y_train[0])
+# 5
+
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+# print(y_train[0])
+# [0. 0. 0. 0. 0. 1. 0. 0. 0. 0.]
+
+from sklearn.model_selection import train_test_split
+
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2, random_state=0)
+
+import numpy as np
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+from sklearn.model_selection import train_test_split, GridSearchCV
+from keras.wrappers.scikit_learn import KerasClassifier
+from keras.optimizers import Adam
+from keras.layers import Dropout
+
+def modelkur(filtre=32, kernel=3, conv_layer=3, dense_layer=2, units=32, learning_rate=0.01, dropout_rate=0.2):
+    model = Sequential()
+    model.add(Conv2D(filters=filtre, kernel_size=(kernel, kernel), input_shape=(28,28,1), activation="relu"))
+    model.add(MaxPooling2D(pool_size=(2,2)))
+    
+    for i in range(conv_layer):
+        model.add(Conv2D(filters=filtre, kernel_size=(kernel, kernel), activation="relu", padding="same"))
+        model.add(MaxPooling2D(pool_size=(2,2), padding="same"))
+    
+    model.add(Flatten())
+    
+    for j in range(dense_layer):
+        model.add(Dense(units, activation="relu"))
+        model.add(Dropout(dropout_rate))
+    
+    model.add(Dense(10, activation="softmax"))
+    model.compile(optimizer=Adam(learning_rate), loss="categorical_crossentropy", metrics=["accuracy"])
+
+    return model
+
+parameterler = {
+    "filtre": [32, 64],
+    "kernel": [3, 5],
+    "conv_layer": [3, 5],
+    "dense_layer": [2, 3],
+    "units": [32, 64],
+    "learning_rate": [0.001, 0.01],
+    "dropout_rate": [0.0, 0.2],
+    "epochs": [20, 30]
+}
+
+sınıf = KerasClassifier(build_fn=modelkur, verbose=0)
+grid = GridSearchCV(estimator=sınıf, param_grid=parameterler, cv=3)
+gridsonuc = grid.fit(x_train, y_train)
+bestparam = gridsonuc.best_params_
+
+bestmodel = modelkur(filtre=bestparam["filtre"], kernel=bestparam["kernel"], conv_layer=bestparam["conv_layer"], 
+                     dense_layer=bestparam["dense_layer"], units=bestparam["units"], learning_rate=bestparam["learning_rate"], 
+                     dropout_rate=bestparam["dropout_rate"])
+
+cikti = bestmodel.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=bestparam["epochs"], batch_size=128, verbose=0)
+
+
+fig, ax = plt.subplots(1, 2, figsize=(15,10))
+
+ax[0].plot(cikti.history["loss"], label="Training Loss")
+ax[0].plot(cikti.history["val_loss"], label="Validation Loss")
+ax[0].set_title("Loss Graph")
+ax[0].set_xlabel("Epochs")
+ax[0].set_ylabel("Loss")
+ax[0].legend()
+
+ax[1].plot(cikti.history["accuracy"], label="Training Accuracy")
+ax[1].plot(cikti.history["val_accuracy"], label="Validation Accuracy")
+ax[1].set_title("Accuracy Graph")
+ax[1].set_xlabel("Epochs")
+ax[1].set_ylabel("Accuracy")
+ax[1].legend()
+
+plt.show()
+```
+
+# Model Kaydetme
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # 
