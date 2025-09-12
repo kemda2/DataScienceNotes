@@ -11061,10 +11061,32 @@ ax[1].legend()
 plt.show()
 ```
 
+![image](./images/mkydt1.png)
 
+yüklemek için
+```Python
+from keras.models import load_model
+from keras.datasets import mnist
+import numpy as np as np
+import matplotlib.pyplot as plt
 
+# Load the saved model
+model = load_model("/content/drive/MyDrive/modelim.h5")
 
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
 
+x_test = x_test.reshape(10000, 28, 28, 1)
+x_test = x_test.astype("float32") / 255
+
+tahmin = model.predict(x_test)
+
+i = 40
+plt.imshow(x_test[i].reshape(28, 28), cmap="gray")
+plt.title("Gerçek Etiket: {}\nTahmin Etiket: {}".format(y_test[i], np.argmax(tahmin[i])))
+plt.show()
+```
+
+![image](./images/mkydt2.png)
 
 
 
@@ -11078,6 +11100,6 @@ plt.show()
 
 # 
 
-![image](./images/mkydt1.png)
+![image](./images/mkydt3.png)
 
 https://www.youtube.com/watch?v=ruzGkMeBk80&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=179
