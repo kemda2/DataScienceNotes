@@ -10644,9 +10644,50 @@ plt.show()
 
 ![image](./images/cnn4.png)
 
+```Python
+sobelX = np.array([[-1, 0, 1],
+                   [-2, 0, 2],
+                   [-1, 0, 1]])
+
+sobelY = np.array([[1, 2, 1],
+                   [0, 0, 0],
+                   [-1, -2, -1]])
+
+out = convolve2d(inputmat2, prewittX)
+out2 = convolve2d(inputmat2, prewittY)
+out3 = convolve2d(inputmat2, sobelX)
+out4 = convolve2d(inputmat2, sobelY)
+
+fig, ax = plt.subplots(1, 4)
+
+ax[0].imshow(out, cmap="gray")
+ax[0].set_title("Prewitt X")
+
+ax[1].imshow(out2, cmap="gray")
+ax[1].set_title("Prewitt Y")
+
+ax[2].imshow(out3, cmap="gray")
+ax[2].set_title("Sobel X")
+
+ax[3].imshow(out4, cmap="gray")
+ax[3].set_title("Sobel Y")
+
+plt.show()
+```
+
+![image](./images/cnn5.png)
+
+
+
+
+
+
+
+
+
 
 # 
 
-![image](./images/cnn5.png)
+![image](./images/cnn6.png)
 
 https://www.youtube.com/watch?v=M16yLU_-dk0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=165
