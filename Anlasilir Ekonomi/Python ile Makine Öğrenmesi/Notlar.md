@@ -10703,6 +10703,16 @@ cv2.waitKey(0)
 ![image](./images/relu2.png)
 ![image](./images/relu3.png)
 
+# Pooling Katmanı
+
+En çok kullanılan pooling yapıları;
+
+- Max Pooling (Genellikle en çok bu yapı kullanılır)
+- Ortalama Pooling
+
+
+
+
 # 
 
 ![image](./images/relu4.png)
