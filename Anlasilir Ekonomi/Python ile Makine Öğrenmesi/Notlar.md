@@ -11142,6 +11142,20 @@ satir, sutun, katman = x_train.shape[1:]
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
+model = Sequential()
+model.add(Conv2D(32, kernel_size=(3,3), input_shape=(satur, sütün, katman), padding="same", activation="relu"))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Conv2D(32, kernel_size=(3,3), padding="same", activation="relu"))
+model.add(MaxPooling2D(pool_size=(2,2)))
+
+model.add(Flatten())
+model.add(Dense(64, activation="relu"))
+model.add(Dense(10, activation="softmax"))
+
+model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=3, batch_size=128, verbose=0)
+
 ```
 
 
@@ -11161,4 +11175,5 @@ from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
 ![image](./images/kfld3.png)
 
-https://www.youtube.com/watch?v=PEkezQGOJJU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=180
+https://www.youtube.com/watch?v=PEkezQGOJJU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=181
+2207
