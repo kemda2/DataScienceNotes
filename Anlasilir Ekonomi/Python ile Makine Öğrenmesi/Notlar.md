@@ -11303,7 +11303,7 @@ ax[1].legend()
 plt.show()
 ```
 
-
+![image](./images/ktnr1.png)
 
 
 
@@ -11315,7 +11315,7 @@ plt.show()
 
 # 
 
-![image](./images/kfld3.png)
+![image](./images/kfld4.png)
 
 https://www.youtube.com/watch?v=PEkezQGOJJU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=181
 2207
