@@ -10482,6 +10482,9 @@ ax[1].legend()
 plt.show()
 ```
 
+# CNN Algoritması
+
+
 
 # 
 
