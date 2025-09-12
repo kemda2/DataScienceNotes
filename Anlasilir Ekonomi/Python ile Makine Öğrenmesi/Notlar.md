@@ -10490,6 +10490,18 @@ Bu da çok iyi bir model değil ama eskiye göre iyi.
 
 Pikselleri sayısal verilere dönüştürerek tanımlama yapan bir model.
 
+| 1     | 2       | 3     |
+| ----- | ------- | ----- |
+| Siyah | Kırmızı | Yeşil |
+| Beyaz | Mavi    | Sarı  |
+| Yeşil | Beyaz   | Mavi  |
+
+| 1             | 2             | 3           |
+| ------------- | ------------- | ----------- |
+| (0,0,0)       | (255,0,0)     | (0,255,0)   |
+| (255,255,255) | (0,0,255)     | (255,255,0) |
+| (0,255,0)     | (255,255,255) | (0,0,255)   |
+
 ```Python
 import numpy as np
 import matplotlib.pyplot as plt
