@@ -10783,12 +10783,45 @@ CNN.summary()
 
 # MNIST Örneği
 
+```Python
+from keras.datasets import mnist
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+# print("Eğitim Seti Boyutu {}".format(x_train.shape))
+# print("Test Seti Boyutu {}".format(x_test.shape))
+# Eğitim Seti Boyutu (60000, 28, 28)
+# Test Seti Boyutu (10000, 28, 28)
+
+import matplotlib.pyplot as plt
+
+plt.imshow(x_train[150])
+plt.show()
+```
+![image](./images/mnst1.png)
+
+```Python
+print("Etiket {}".format(y_train[150]))
+# Etiket 4
+
+for row in x_train[150]:
+    for i in row:
+        print("%3s" % i, end="")
+    print()
+```
+
+![image](./images/mnst2.png)
+
+```Python
+x_train = x_train.reshape(60000, 28, 28, 1)
+x_test = x_test.reshape(10000, 28, 28, 1)
+
+x_train = x_train.astype("float32") / 255
+x_test = x_test.astype("float32") / 255
+
+from keras.utils import to_categorical
 
 
-
-
-
-
+```
 
 
 
@@ -10796,6 +10829,6 @@ CNN.summary()
 
 # 
 
-![image](./images/mnst1.png)
+![image](./images/mnst3.png)
 
 https://www.youtube.com/watch?v=oNac9hexif8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=176
