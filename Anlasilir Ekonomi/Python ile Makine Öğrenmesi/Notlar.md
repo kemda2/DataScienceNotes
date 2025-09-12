@@ -11317,5 +11317,4 @@ plt.show()
 
 ![image](./images/kfld4.png)
 
-https://www.youtube.com/watch?v=PEkezQGOJJU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=181
-2207
+https://www.youtube.com/watch?v=QkwN8DAM0pQ&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=182
