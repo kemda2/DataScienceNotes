@@ -11240,9 +11240,67 @@ x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.
 
 satir, sutun, katman = x_train.shape[1:]
 
+def build_model(hp):
+    model = Sequential()
 
+    model.add(Conv2D(filters=hp.Int("filter_1", min_value=32, max_value=128, step=16),
+                     kernel_size=hp.Choice("kernel_1", values=[3, 5]),
+                     activation="relu",
+                     input_shape=(satir, sutun, katman)))
 
+    model.add(Dropout(hp.Float("dropout_1", min_value=0.0, max_value=0.5, step=0.1)))
 
+    model.add(Conv2D(filters=hp.Int("filter_2", min_value=32, max_value=128, step=16),
+                     kernel_size=hp.Choice("kernel_2", values=[3, 5]),
+                     activation="relu"))
+
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(Dropout(hp.Float("dropout_2", min_value=0.0, max_value=0.5, step=0.1)))
+
+    model.add(Flatten())
+
+    model.add(Dense(hp.Int("unit_1", min_value=16, max_value=256, step=16), activation="relu"))
+    model.add(Dense(hp.Int("unit_2", min_value=16, max_value=32, step=16), activation="relu"))
+    model.add(Dense(10, activation="softmax"))
+
+    model.compile(
+    optimizer=Adam(hp.Choice("learning_rate", values=[0.01, 0.001])),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"]
+)
+
+    return model
+
+tuner = RandomSearch(
+    build_model,
+    objective="val_accuracy",
+    max_trials=5,
+)
+
+tuner.search(x_train, y_train, epochs=3, validation_data=(x_val, y_val))
+
+best_model = tuner.get_best_models()[0]
+
+cikti = best_model.fit(x_train, y_train, epochs=20, validation_data=(x_val, y_val), verbose=0)
+
+fig, ax = plt.subplots(1, 2, figsize=(25, 10))
+
+ax[0].plot(cikti.history["loss"], label="Training Loss")
+ax[0].plot(cikti.history["val_loss"], label="Validation Loss")
+ax[0].set_title("Loss Graph")
+ax[0].set_xlabel("Epochs")
+ax[0].set_ylabel("Loss")
+ax[0].legend()
+
+ax[1].plot(cikti.history["accuracy"], label="Training Accuracy")
+ax[1].plot(cikti.history["val_accuracy"], label="Validation Accuracy")
+ax[1].set_title("Accuracy Graph")
+ax[1].set_xlabel("Epochs")
+ax[1].set_ylabel("Accuracy")
+ax[1].legend()
+
+plt.show()
 ```
 
 
