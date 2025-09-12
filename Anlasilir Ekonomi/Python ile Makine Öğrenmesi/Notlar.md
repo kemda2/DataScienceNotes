@@ -10488,6 +10488,8 @@ Bu da çok iyi bir model değil ama eskiye göre iyi.
 
 # CNN Algoritması
 
+Pikselleri sayısal verilere dönüştürerek tanımlama yapan bir model.
+
 
 
 # 
