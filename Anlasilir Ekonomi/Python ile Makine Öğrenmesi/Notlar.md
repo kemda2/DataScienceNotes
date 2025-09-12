@@ -10677,6 +10677,7 @@ plt.show()
 
 ![image](./images/cnn5.png)
 
+# Stride 
 
 
 
@@ -10688,6 +10689,6 @@ plt.show()
 
 # 
 
-![image](./images/cnn6.png)
+![image](./images/str1.png)
 
-https://www.youtube.com/watch?v=M16yLU_-dk0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=165
+https://www.youtube.com/watch?v=7Q0zCq9zHng&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=170
