@@ -10736,6 +10736,7 @@ cv2.waitKey(0)
 
 # Flatten Katmanı
 
+![image](./images/relu7.png)
 
 
 
@@ -10743,6 +10744,6 @@ cv2.waitKey(0)
 
 # 
 
-![image](./images/relu7.png)
+![image](./images/relu8.png)
 
 https://www.youtube.com/watch?v=7Q0zCq9zHng&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=170
