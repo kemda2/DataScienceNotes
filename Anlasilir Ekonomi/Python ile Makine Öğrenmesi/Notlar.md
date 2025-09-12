@@ -10710,11 +10710,36 @@ En çok kullanılan pooling yapıları;
 - Max Pooling (Genellikle en çok bu yapı kullanılır)
 - Ortalama Pooling
 
+```Python
+import numpy as np
+import cv2
+from skimage.measure import block_reduce
+
+resim = cv2.imread("C:/Users/90506/Desktop/ornek.jpg")
+resim = cv2.cvtColor(resim, cv2.COLOR_BGR2GRAY)
+
+filtre = np.array([[0,1,0], [1,-5,1], [0,1,0]])
+filtre_resim = cv2.filter2D(resim, -1, filtre)
+relu = np.maximum(filtre_resim, 0)
+
+pool_size = (2, 2)
+pool_resim = block_reduce(relu, pool_size, np.max)
+
+cv2.imshow("Orjinal Resim", resim)
+cv2.imshow("Relu Resim", relu)
+cv2.imshow("Pooling Resim", pool_resim)
+cv2.waitKey(0)
+```
+![image](./images/relu4.png)
+![image](./images/relu5.png)
+![image](./images/relu6.png)
+
+
 
 
 
 # 
 
-![image](./images/relu4.png)
+![image](./images/relu7.png)
 
 https://www.youtube.com/watch?v=7Q0zCq9zHng&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=170
