@@ -11305,6 +11305,9 @@ plt.show()
 
 ![image](./images/ktnr1.png)
 
+# Cifar10 Örnek
+
+
 
 
 
