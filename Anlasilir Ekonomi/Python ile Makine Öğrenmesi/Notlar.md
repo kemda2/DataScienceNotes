@@ -10975,7 +10975,91 @@ plt.show()
 
 # Model Kaydetme
 
+```Python
+from keras.datasets import mnist
+import matplotlib.pyplot as plt
+from keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+import numpy as np as np
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
 
+# Load dataset
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+# Reshape datasets
+x_train = x_train.reshape(60000, 28, 28, 1)
+x_test = x_test.reshape(10000, 28, 28, 1)
+
+# Normalize data
+x_train = x_train.astype('float32') / 255
+x_test = x_test.astype('float32') / 255
+
+# Convert labels to categorical
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+# Split the data
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2, random_state=0)
+
+# Build model
+model = Sequential()
+
+# Add layers
+model.add(Conv2D(filters=32, kernel_size=(3,3), input_shape=(28,28,1), activation="relu"))
+model.add(BatchNormalization())
+
+model.add(Conv2D(filters=32, kernel_size=(3,3), activation="relu"))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(filters=64, kernel_size=(3,3), activation="relu"))
+model.add(BatchNormalization())
+model.add(Dropout(0.25))
+
+model.add(Conv2D(filters=128, kernel_size=(3,3), activation="relu"))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.25))
+
+model.add(Flatten())
+
+model.add(Dense(512, activation="relu"))
+model.add(BatchNormalization())
+model.add(Dropout(0.5))
+
+model.add(Dense(128, activation="relu"))
+model.add(BatchNormalization())
+model.add(Dropout(0.5))
+
+model.add(Dense(10, activation="softmax"))
+
+model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=35, verbose=0)
+
+model.save("/content/drive/MyDrive/modelim.h5")
+
+fig, ax = plt.subplots(1, 2, figsize=(25,10))
+
+# Plot for training and validation loss
+ax[0].plot(cikti.history["loss"], label="Training Loss")
+ax[0].plot(cikti.history["val_loss"], label="Validation Loss")
+ax[0].set_title("Loss Graph")
+ax[0].set_xlabel("Epochs")
+ax[0].set_ylabel("Loss")
+ax[0].legend()
+
+# Plot for training and validation accuracy
+ax[1].plot(cikti.history["accuracy"], label="Training Accuracy")
+ax[1].plot(cikti.history["val_accuracy"], label="Validation Accuracy")
+ax[1].set_title("Accuracy Graph")
+ax[1].set_xlabel("Epochs")
+ax[1].set_ylabel("Accuracy")
+ax[1].legend()
+
+plt.show()
+```
 
 
 
