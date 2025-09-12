@@ -10482,12 +10482,16 @@ ax[1].legend()
 plt.show()
 ```
 
+![image](./images/kr8.png)
+
+Bu da çok iyi bir model değil ama eskiye göre iyi.
+
 # CNN Algoritması
 
 
 
 # 
 
-![image](./images/kr8.png)
+![image](./images/cnn1.png)
 
 https://www.youtube.com/watch?v=M16yLU_-dk0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=165
