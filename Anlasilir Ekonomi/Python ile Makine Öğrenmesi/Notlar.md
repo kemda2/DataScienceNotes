@@ -11090,17 +11090,36 @@ plt.show()
 
 # K-Fold
 
+```Python
+from keras.datasets import cifar10
 
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
 
+# print("Eğitim Boyut: {}".format(x_train.shape))
+# Eğitim Boyut: (50000, 32, 32, 3)
 
+# print("Test Boyut: {}".format(x_test.shape))
+# Test Boyut: (10000, 32, 32, 3)
 
+import matplotlib.pyplot as plt
 
+plt.imshow(x_train[0])
+plt.show()
+```
 
+![image](./images/kfld1.png)
 
+```Python
+plt.imshow(x_train[0])
+plt.title(y_train[0])
+plt.show()
+```
+
+![image](./images/kfld2.png)
 
 
 # 
 
-![image](./images/kfld1.png)
+![image](./images/kfld3.png)
 
 https://www.youtube.com/watch?v=PEkezQGOJJU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=180
