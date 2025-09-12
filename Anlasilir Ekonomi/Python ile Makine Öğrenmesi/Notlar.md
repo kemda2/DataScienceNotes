@@ -11377,15 +11377,40 @@ model.compile(Adam(0.001), loss="categorical_crossentropy", metrics=["accuracy"]
 model.save("/content/drive/Model/Modelim.h5")
 ```
 
+```python
+from keras.models import load_model
+from keras.datasets import cifar10
+import numpy as np
+import matplotlib.pyplot as plt
 
+model = load_model("/content/drive/Model/Modelim.h5")
 
+fig, ax = plt.subplots(1, 2, figsize=(25, 10))
 
+ax[0].plot(çıktı.history["loss"], label="Training Loss")
+ax[0].plot(çıktı.history["val_loss"], label="Val Loss")
+ax[0].set_title("Loss Graph")
+ax[0].set_xlabel("Epochs")
+ax[0].set_ylabel("Loss")
+ax[0].legend()
+
+ax[1].plot(çıktı.history["accuracy"], label="Training Accuracy")
+ax[1].plot(çıktı.history["val_accuracy"], label="Val Accuracy")
+ax[1].set_title("Accuracy Graph")
+ax[1].set_xlabel("Epochs")
+ax[1].set_ylabel("Accuracy")
+ax[1].legend()
+
+plt.show()
+```
+
+![image](./images/cfr1.png)
 
 
 
 
 # 
 
-![image](./images/cfr1.png)
+![image](./images/cfr2.png)
 
 https://www.youtube.com/watch?v=QkwN8DAM0pQ&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=182
