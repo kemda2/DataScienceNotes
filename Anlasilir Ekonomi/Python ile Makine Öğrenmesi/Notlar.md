@@ -11307,7 +11307,75 @@ plt.show()
 
 # Cifar10 Örnek
 
+```python
+from keras.datasets import cifar10
+import matplotlib.pyplot as plt
+import numpy as np
+from keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
+from keras.optimizers import Adam
+from keras.regularizers import l1_l2
 
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+x_train = x_train.astype("float32") / 255
+x_test = x_test.astype("float32") / 255
+
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2, random_state=0)
+
+satır, sütun, katman = x_train.shape[1:]
+
+model = Sequential()
+
+model.add(Conv2D(32, (3, 3), activation="relu", padding="same", 
+                 input_shape=(satır, sütun, katman), 
+                 kernel_regularizer=l1_l2(0.0001, 0.0001)))
+model.add(BatchNormalization())
+
+model.add(Conv2D(32, (3, 3), activation="relu", padding="same", 
+                 kernel_regularizer=l1_l2(0.0001, 0.0001)))
+model.add(BatchNormalization())
+model.add(MaxPooling2D((2, 2)))
+model.add(Dropout(0.2))
+
+model.add(Conv2D(64, (3, 3), activation="relu", padding="same", 
+                 kernel_regularizer=l1_l2(0.0001, 0.0001)))
+model.add(BatchNormalization())
+
+model.add(Conv2D(64, (3, 3), activation="relu", padding="same", 
+                 kernel_regularizer=l1_l2(0.0001, 0.0001)))
+model.add(BatchNormalization())
+model.add(MaxPooling2D((2, 2)))
+model.add(Dropout(0.3))
+
+model.add(Conv2D(128, (3, 3), activation="relu", padding="same", 
+                 kernel_regularizer=l1_l2(0.0001, 0.0001)))
+model.add(BatchNormalization())
+
+model.add(Conv2D(128, (3, 3), activation="relu", padding="same", 
+                 kernel_regularizer=l1_l2(0.0001, 0.0001)))
+model.add(MaxPooling2D((2, 2)))
+model.add(Dropout(0.35))
+
+model.add(Flatten())
+
+model.add(Dense(512, activation="relu"))
+model.add(BatchNormalization())
+model.add(Dropout(0.5))
+
+model.add(Dense(10, activation="softmax"))
+
+model.compile(Adam(0.001), loss="categorical_crossentropy", metrics=["accuracy"])
+
+çıktı = model.fit(x_train, y_train, epochs=100, validation_data=(x_val, y_val))
+
+model.save("/content/drive/Model/Modelim.h5")
+```
 
 
 
