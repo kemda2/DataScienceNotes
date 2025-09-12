@@ -11120,6 +11120,22 @@ plt.show()
 ```Python
 import numpy as np as np
 
+np.unique(y_train)
+# array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8)
+
+from keras.utils import to_categorical
+
+x_train = x_train.astype("float32") / 255
+x_test = x_test.astype("float32") / 255
+
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+from sklearn.model_selection import train_test_split
+
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2, random_state=0)
+
+
 ```
 
 
