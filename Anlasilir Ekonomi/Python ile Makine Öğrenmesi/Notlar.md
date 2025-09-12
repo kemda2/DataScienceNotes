@@ -11088,6 +11088,7 @@ plt.show()
 
 ![image](./images/mkydt2.png)
 
+# K-Fold
 
 
 
@@ -11100,6 +11101,6 @@ plt.show()
 
 # 
 
-![image](./images/mkydt3.png)
+![image](./images/kfld1.png)
 
-https://www.youtube.com/watch?v=ruzGkMeBk80&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=179
+https://www.youtube.com/watch?v=PEkezQGOJJU&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=180
