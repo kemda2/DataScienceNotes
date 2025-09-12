@@ -10589,13 +10589,19 @@ from scipy.signal import convolve2d
 
 resim = cv2.imread("C:/Users/90506/Desktop/ornek.jpg")
 resim = cv2.cvtColor(resim, cv2.COLOR_BGR2RGB)
+resimgri = cv2.cvtColor(resim, cv2.COLOR_BGR2GRAY)
+
 plt.imshow(resim)
 plt.show()
 ```
 
 ![image](./images/cnn3.png)
 
-
+```Python
+inputmat = np.asarray(resimgri)
+# print(inputmat.shape)
+# (1024,1126)
+```
 
 
 
