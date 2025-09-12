@@ -10781,6 +10781,7 @@ CNN.summary()
 # Non-trainable params: 0
 ```
 
+# MNIST Örneği
 
 
 
@@ -10795,6 +10796,6 @@ CNN.summary()
 
 # 
 
-![image](./images/relu8.png)
+![image](./images/mnst1.png)
 
-https://www.youtube.com/watch?v=7Q0zCq9zHng&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=170
+https://www.youtube.com/watch?v=oNac9hexif8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=176
