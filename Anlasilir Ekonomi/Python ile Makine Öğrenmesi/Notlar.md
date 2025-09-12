@@ -11171,6 +11171,49 @@ def modelkur():
     
     return model
 
+all_train_loss = []
+all_train_acc = []
+all_val_loss = []
+all_val_acc = []
+all_test_loss = []
+all_test_acc = []
+
+kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+
+for i, j in kfold.split(x_train, y_train):
+    x_train_fold = x_train[i]
+    y_train_fold = y_train[i]
+    x_val_fold = x_train[j]
+    y_val_fold = y_train[j]
+
+    model = modelkur
+    cikti = model.fit(x_train_fold, y_train_fold, validation_data=(x_val_fold, y_val_fold), epochs=3, batch_size=1024, verbose=0)
+
+    train_loss, train_acc = model.evaluate(x_train_fold, y_train_fold, verbose=0)
+    all_train_loss.append(train_loss)
+    all_train_acc.append(train_acc)
+
+    val_loss, val_acc = model.evaluate(x_val_fold, y_val_fold, verbose=0)
+    all_val_loss.append(val_loss)
+    all_val_acc.append(val_acc)
+
+    test_loss, test_acc = model.evaluate(x_test, y_test, verbose=0)
+    all_test_loss.append(test_loss)
+    all_test_acc.append(test_acc)
+
+print("Ortalama Training Loss: {}".format(np.mean(all_train_loss)))
+print("Ortalama Training Accuracy: {}".format(np.mean(all_train_acc)))
+print("Ortalama Validation Loss: {}".format(np.mean(all_val_loss)))
+print("Ortalama Validation Accuracy: {}".format(np.mean(all_val_acc)))
+print("Ortalama Test Loss: {}".format(np.mean(all_test_loss)))
+print("Ortalama Test Accuracy: {}".format(np.mean(all_test_acc)))
+# Ortalama Training Loss: 1.4078378080955504
+# Ortalama Training Accuracy: nan
+# Ortalama Validation Loss: 1.4072132828585444
+# Ortalama Validation Accuracy: 0.5027199939292157
+# Ortalama Test Loss: 1.4098392879878677
+# Ortalama Test Accuracy: 0.49949250522125244
+
 ```
 
 
