@@ -10738,8 +10738,48 @@ cv2.waitKey(0)
 
 ![image](./images/relu7.png)
 
+# CNN Model Kodlama
 
+```Python
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
 
+CNN = Sequential()
+
+CNN.add(Conv2D(filters=32, kernel_size=(3,3), input_shape=(28,28,1), activation="relu"))
+CNN.add(MaxPooling2D(pool_size=(2,2)))
+CNN.add(Conv2D(filters=64, kernel_size=(3,3), activation="relu"))
+CNN.add(MaxPooling2D(pool_size=(2,2)))
+
+CNN.add(Flatten())
+
+CNN.add(Dense(32, activation="relu"))
+CNN.add(Dense(1, activation="softmax"))
+
+CNN.summary()
+
+# Model: "sequential"
+# _________________________________________________________________
+# Layer (type)                Output Shape              Param #   
+# =================================================================
+# conv2d (Conv2D)             (None, 26, 26, 32)        320       
+# _________________________________________________________________
+# max_pooling2d (MaxPooling2D) (None, 13, 13, 32)       0         
+# _________________________________________________________________
+# conv2d_1 (Conv2D)           (None, 11, 11, 64)        18496     
+# _________________________________________________________________
+# max_pooling2d_1 (MaxPooling2D) (None, 5, 5, 64)        0         
+# _________________________________________________________________
+# flatten (Flatten)           (None, 1600)              0         
+# _________________________________________________________________
+# dense (Dense)               (None, 32)                51232     
+# _________________________________________________________________
+# dense_1 (Dense)             (None, 1)                 33        
+# =================================================================
+# Total params: 70,081
+# Trainable params: 70,081
+# Non-trainable params: 0
+```
 
 
 
