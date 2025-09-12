@@ -10601,12 +10601,52 @@ plt.show()
 inputmat = np.asarray(resimgri)
 # print(inputmat.shape)
 # (1024,1126)
+
+# print(inputmat)
+# [[57 57 57 ... 17 17 16]
+#  [58 58 58 ... 19 18 18]
+#  [59 59 59 ... 16 16 15]
+#  ...
+#  [37 38 39 ... 55 55 55]
+#  [36 36 37 ... 53 54 54]
+#  [34 33 33 ... 52 53 53]]
+
+inputmat = np.asarray(resim)
+inputmat2 = np.asarray(resimgri)
+
+prewittX = np.array([[-1, 0, 1],
+                     [-1, 0, 1],
+                     [-1, 0, 1]])
+
+prewittY = np.array([[1, 1, 1],
+                     [0, 0, 0],
+                     [-1, -1, -1]])
+
+out = convolve2d(inputmat2, prewittX)
+out2 = convolve2d(inputmat2, prewittY)
+
+fig, ax = plt.subplots(1, 4)
+
+ax[0].imshow(inputmat)
+ax[0].set_title("Orjinal Resim")
+
+ax[1].imshow(inputmat2)
+ax[1].set_title("Grileme Resim")
+
+ax[2].imshow(out)
+ax[2].set_title("X Eksen Filtre")
+
+ax[3].imshow(out2)
+ax[3].set_title("Y Eksen Filtre")
+
+plt.show()
 ```
 
+![image](./images/cnn4.png)
 
 
 # 
 
-![image](./images/cnn4.png)
+![image](./images/cnn5.png)
 
 https://www.youtube.com/watch?v=M16yLU_-dk0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=165
