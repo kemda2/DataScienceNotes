@@ -10580,7 +10580,19 @@ plt.show()
 
 ![image](./images/cnn2.png)
 
+# Filtre Çeşitleri
 
+```Python
+import cv2
+import matplotlib.pyplot as plt
+from scipy.signal import convolve2d
+
+resim = cv2.imread("C:/Users/90506/Desktop/ornek.jpg")
+resim = cv2.cvtColor(resim, cv2.COLOR_BGR2RGB)
+plt.imshow(resim)
+plt.show()
+
+```
 
 
 
