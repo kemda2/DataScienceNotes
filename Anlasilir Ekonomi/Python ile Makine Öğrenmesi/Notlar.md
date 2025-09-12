@@ -10549,9 +10549,36 @@ Evrişim matrisi;
 | 0 | 1 | 0 |
 | 1 | 0 | 1 |
 
+```Python
+import numpy as np
+from scipy.signal import convolve2d
 
+input = np.array([[0, 1, 0, 0],
+                  [1, 1, 0, 0],
+                  [1, 0, 1, 0],
+                  [1, 1, 1, 0],
+                  [1, 0, 0, 0]])
 
+filtre = np.array([[1, 0, 1],
+                   [0, 1, 0],
+                   [1, 0, 1]])
 
+out = convolve2d(input, filtre, mode="valid")
+
+# print(out)
+# [[3 1]
+#  [3 3]
+#  [4 1]]
+
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(1, 2)
+ax[0].imshow(input, cmap="gray")
+ax[1].imshow(out, cmap="gray")
+plt.show()
+```
+
+![image](./images/cnn2.png)
 
 
 
@@ -10563,6 +10590,6 @@ Evrişim matrisi;
 
 # 
 
-![image](./images/cnn2.png)
+![image](./images/cnn3.png)
 
 https://www.youtube.com/watch?v=M16yLU_-dk0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=165
