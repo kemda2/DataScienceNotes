@@ -11217,7 +11217,33 @@ print("Ortalama Test Accuracy: {}".format(np.mean(all_test_acc)))
 
 # KerasTuner
 
+```Python
+from keras.datasets import cifar10
+import matplotlib.pyplot as plt
+import numpy as np
+from keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from keras.optimizers import Adam
+from kerastuner.tuners import RandomSearch
 
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+x_train = x_train.astype('float32') / 255
+x_test = x_test.astype('float32') / 255
+
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2, random_state=0)
+
+satir, sutun, katman = x_train.shape[1:]
+
+
+
+
+```
 
 
 
