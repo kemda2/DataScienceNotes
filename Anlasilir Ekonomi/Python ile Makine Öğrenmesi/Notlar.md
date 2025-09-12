@@ -10996,4 +10996,4 @@ plt.show()
 
 ![image](./images/mnst4.png)
 
-https://www.youtube.com/watch?v=oNac9hexif8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=176
+https://www.youtube.com/watch?v=ruzGkMeBk80&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=179
