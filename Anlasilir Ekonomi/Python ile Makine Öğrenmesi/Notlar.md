@@ -10734,6 +10734,9 @@ cv2.waitKey(0)
 ![image](./images/relu5.png)
 ![image](./images/relu6.png)
 
+# Flatten Katmanı
+
+
 
 
 
