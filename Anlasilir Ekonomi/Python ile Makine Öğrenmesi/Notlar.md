@@ -11117,7 +11117,10 @@ plt.show()
 
 ![image](./images/kfld2.png)
 
+```Python
+import numpy as np as np
 
+```
 
 
 
