@@ -10871,12 +10871,12 @@ ax[1].legend()
 plt.show()
 ```
 
-
+![image](./images/mnst3.png)
 
 
 
 # 
 
-![image](./images/mnst3.png)
+![image](./images/mnst4.png)
 
 https://www.youtube.com/watch?v=oNac9hexif8&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=176
