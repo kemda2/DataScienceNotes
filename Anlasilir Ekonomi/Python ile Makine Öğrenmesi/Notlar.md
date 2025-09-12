@@ -10591,10 +10591,9 @@ resim = cv2.imread("C:/Users/90506/Desktop/ornek.jpg")
 resim = cv2.cvtColor(resim, cv2.COLOR_BGR2RGB)
 plt.imshow(resim)
 plt.show()
-
 ```
 
-
+![image](./images/cnn3.png)
 
 
 
@@ -10602,6 +10601,6 @@ plt.show()
 
 # 
 
-![image](./images/cnn3.png)
+![image](./images/cnn4.png)
 
 https://www.youtube.com/watch?v=M16yLU_-dk0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=165
