@@ -11213,9 +11213,9 @@ print("Ortalama Test Accuracy: {}".format(np.mean(all_test_acc)))
 # Ortalama Validation Accuracy: 0.5027199939292157
 # Ortalama Test Loss: 1.4098392879878677
 # Ortalama Test Accuracy: 0.49949250522125244
-
 ```
 
+# KerasTuner
 
 
 
