@@ -10530,6 +10530,23 @@ plt.show()
 
 ![image](./images/cnn1.png)
 
+# Evrişim Matrisi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 
 
 ![image](./images/cnn2.png)
