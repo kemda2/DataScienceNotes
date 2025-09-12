@@ -11440,10 +11440,11 @@ for j in range(50):
 
 ![image](./images/cfr2.png)
 
+# CNN Mimarileri
 
 
 # 
 
 ![image](./images/cfr3.png)
 
-https://www.youtube.com/watch?v=QkwN8DAM0pQ&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=182
+https://www.youtube.com/watch?v=4gRABapgfpc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=183
