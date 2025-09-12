@@ -11155,7 +11155,7 @@ model.add(Dense(10, activation="softmax"))
 model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
 
 cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=3, batch_size=128, verbose=0)
-
+ 
 ```
 
 
