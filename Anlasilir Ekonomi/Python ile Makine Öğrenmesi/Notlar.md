@@ -10677,18 +10677,34 @@ plt.show()
 
 ![image](./images/cnn5.png)
 
-# Stride 
+# ReLu Katmanı 
 
+```Python
+import numpy as np
+import cv2
 
+resim = cv2.imread("C:/Users/90506/Desktop/ornek.jpg")
+cv2.imshow("Ornek Resim", resim)
+cv2.waitKey(0)
+```
+![image](./images/relu1.png)
 
+```Python
+import numpy as np
+import cv2
 
-
-
-
-
+resim = cv2.imread("C:/Users/90506/Desktop/ornek.jpg")
+giris_mat = np.asarray(resim)
+filtre = cv2.Laplacian(resim, cv2.CV_64F)
+cv2.imshow("Orjinal Resim", resim)
+cv2.imshow("Filtreli Resim", filtre)
+cv2.waitKey(0)
+```
+![image](./images/relu2.png)
+![image](./images/relu3.png)
 
 # 
 
-![image](./images/str1.png)
+![image](./images/relu4.png)
 
 https://www.youtube.com/watch?v=7Q0zCq9zHng&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=170
