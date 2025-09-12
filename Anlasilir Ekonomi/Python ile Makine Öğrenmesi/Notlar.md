@@ -10820,7 +10820,55 @@ x_test = x_test.astype("float32") / 255
 
 from keras.utils import to_categorical
 
+# print(y_train[0])
+# 5
 
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+# print(y_train[0])
+# [0. 0. 0. 0. 0. 1. 0. 0. 0. 0.]
+
+from sklearn.model_selection import train_test_split
+
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2, random_state=0)
+
+import numpy as np
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+model = Sequential()
+model.add(Conv2D(filters=32, kernel_size=(3,3), input_shape=(28,28,1), activation="relu"))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Conv2D(filters=64, kernel_size=(3,3), activation="relu"))
+model.add(MaxPooling2D(pool_size=(2,2)))
+
+model.add(Flatten())
+
+model.add(Dense(32, activation="relu"))
+model.add(Dense(10, activation="softmax"))
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=["accuracy"])
+
+model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=5, batch_size=128, verbose=0)
+
+fig, ax = plt.subplots(1, 2, figsize=(15,10))
+
+ax[0].plot(cktn1.history["loss"], label="Training Loss")
+ax[0].plot(cktn1.history["val_loss"], label="Validation Loss")
+ax[0].set_title("Loss Graph")
+ax[0].set_xlabel("Epochs")
+ax[0].set_ylabel("Loss")
+ax[0].legend()
+
+ax[1].plot(cktn1.history["accuracy"], label="Training Accuracy")
+ax[1].plot(cktn1.history["val_accuracy"], label="Validation Accuracy")
+ax[1].set_title("Accuracy Graph")
+ax[1].set_xlabel("Epochs")
+ax[1].set_ylabel("Accuracy")
+ax[1].legend()
+
+plt.show()
 ```
 
 
