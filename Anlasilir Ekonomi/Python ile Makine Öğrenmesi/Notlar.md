@@ -10490,10 +10490,36 @@ Bu da çok iyi bir model değil ama eskiye göre iyi.
 
 Pikselleri sayısal verilere dönüştürerek tanımlama yapan bir model.
 
+```Python
+import numpy as np
+import matplotlib.pyplot as plt
 
+R = np.array([[0, 255, 0], [255, 0, 255], [0, 255, 0]])
+G = np.array([[0, 0, 255], [255, 0, 255], [255, 255, 0]])
+B = np.array([[0, 0, 0], [255, 255, 0], [0, 255, 255]])
+
+tensör = np.stack([R, G, B], axis=2)
+# print(tensör)
+# [[[  0   0   0]
+#   [255   0 255]
+#   [  0 255   0]]
+
+#  [[255 255 255]
+#   [  0   0 255]
+#   [255 255   0]]
+
+#  [[  0 255   0]
+#   [255 255 255]
+#   [  0   0 255]]]
+
+plt.imshow(tensör)
+plt.show()
+```
+
+![image](./images/cnn1.png)
 
 # 
 
-![image](./images/cnn1.png)
+![image](./images/cnn2.png)
 
 https://www.youtube.com/watch?v=M16yLU_-dk0&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=165
