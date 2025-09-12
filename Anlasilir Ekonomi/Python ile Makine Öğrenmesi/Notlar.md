@@ -11135,6 +11135,12 @@ from sklearn.model_selection import train_test_split
 
 x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2, random_state=0)
 
+satir, sutun, katman = x_train.shape[1:]
+# print(satir, sutun, katman)
+# 32 32 3
+
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
 ```
 
