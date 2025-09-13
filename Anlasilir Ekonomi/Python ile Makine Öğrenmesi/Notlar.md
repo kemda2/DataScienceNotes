@@ -11442,9 +11442,13 @@ for j in range(50):
 
 # CNN Mimarileri
 
+![image](./images/cnn6.png)
+
+
+
 
 # 
 
-![image](./images/cfr3.png)
+![image](./images/cnn7.png)
 
 https://www.youtube.com/watch?v=4gRABapgfpc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=183
