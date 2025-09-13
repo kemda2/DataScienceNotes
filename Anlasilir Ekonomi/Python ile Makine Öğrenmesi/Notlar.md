@@ -11549,9 +11549,23 @@ model = Model(inputs=vggmodel.input, outputs=fully)
 model.compile(optimizer=Adam(0.0001), loss="categorical_crossentropy", metrics=["accuracy"])
 
 cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=15, verbose=0)
-
 ```
 
+# Veri Etiketleme
+
+Dataset: https://www.kaggle.com/datasets/cashutosh/gender-classification-dataset
+
+```python
+import cv2
+import numpy as np
+import os
+import pandas as pd
+
+veriler = []
+etiketler = []
+konum = "/content/Cinsiyet"
+
+```
 
 
 
