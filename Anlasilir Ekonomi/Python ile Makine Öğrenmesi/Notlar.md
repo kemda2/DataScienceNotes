@@ -11508,7 +11508,7 @@ plt.show()
 
 ![image](./images/vvg3.png)
 
-
+Görüldüğü gibi preprocess_inut eklendiğinde doğruluk oranı çok artmıştır.
 
 
 
