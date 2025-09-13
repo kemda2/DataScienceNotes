@@ -2750,10 +2750,132 @@ plt.show()
 Görüldüğü gibi preprocess_inut eklendiğinde doğruluk oranı çok artmıştır.
 
 
+# VGG-16 Transfer Learning
 
+```python
+from keras.datasets import cifar10
+from keras.applications.vgg16 import VGG16, preprocess_input
+from keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+from keras.models import Model
+from keras.layers import Flatten, Dense, Dropout
+from keras.optimizers import Adam
 
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
 
+x_train = preprocess_input(x_train)
+x_test = preprocess_input(x_test)
 
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2, random_state=0)
+
+vggmodel = VGG16(include_top=False, input_shape=(32, 32, 3), classes=10)
+
+for i in vggmodel.layers:
+    i.trainable = False
+
+fully = vggmodel.output
+fully = Flatten()(fully)
+fully = Dense(512, activation="relu")(fully)
+fully = Dropout(0.5)(fully)
+fully = Dense(256, activation="relu")(fully)
+fully = Dropout(0.3)(fully)
+fully = Dense(10, activation="softmax")(fully)
+
+model = Model(inputs=vggmodel.input, outputs=fully)
+
+model.compile(optimizer=Adam(0.0001), loss="categorical_crossentropy", metrics=["accuracy"])
+
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=15, verbose=0)
+```
+
+# Veri Etiketleme
+
+Dataset: https://www.kaggle.com/datasets/cashutosh/gender-classification-dataset
+
+Verileri erkek ve kadın olarak ayıracağımız datasettir.
+
+```python
+import cv2
+import numpy as np
+import os
+import pandas as pd
+
+veriler = []
+etiketler = []
+konum = "/content/Cinsiyet"
+
+print(os.listdir(konum))
+# ['Erkek', 'Kadın']
+
+print(os.listdir(konum + "/" + "Erkek"))
+# ['606991.jpg', '149981.jpg', '134531.jpg', '117927.jpg', ...]
+
+for sınıf in os.listdir(konum):
+    for dizin in os.listdir(konum + "/" + sınıf):
+        if sınıf == "Erkek":
+            etiketler.append(0)
+        else:
+            etiketler.append(1)
+        veriler.append(os.path.join(konum, sınıf, dizin))
+
+df = pd.DataFrame()
+df["Resim"], df["Etiket"] = veriler, etiketler
+
+df
+#  Resim                               Etiket 
+#  ----------------------------------  ------ 
+#  /content/Cinsiyet/Erkek/069091.jpg  0      
+#  /content/Cinsiyet/Erkek/149981.jpg  0      
+#  /content/Cinsiyet/Erkek/134531.jpg  0      
+#  /content/Cinsiyet/Erkek/117927.jpg  0      
+#  /content/Cinsiyet/Erkek/180401.jpg  0      
+#  ...                                 ...    
+#  /content/Cinsiyet/Kadın/161723.jpg  1      
+#  /content/Cinsiyet/Kadın/143680.jpg  1      
+#  /content/Cinsiyet/Kadın/125675.jpg  1      
+#  /content/Cinsiyet/Kadın/147325.jpg  1      
+#  /content/Cinsiyet/Kadın/126144.jpg  1      
+
+import matplotlib.pyplot as plt
+from keras.utils import load_img
+
+for i, j in enumerate(aralık):
+    plt.subplot(10, 10, i + 1)
+    resim = load_img(j)
+    resim = np.array(resim)
+    plt.imshow(resim)
+    plt.title("Kadın")
+    plt.axis("off")
+```
+
+![image](./images/ve1.png)
+
+Resimlerin tamamını alamadım.
+
+```python
+for sınıf in os.listdir(konum):
+    for dizin in os.listdir(konum + "/" + sınıf):
+        resim = cv2.imread(os.path.join(konum, sınıf, dizin))
+        resim = cv2.resize(resim, (50, 50))
+        resim = resim.astype("float32")
+        resim = resim / 255
+        veriler.append(resim)
+
+        if sınıf == "Erkek":
+            etiketler.append(0)
+        else:
+            etiketler.append(1)
+
+veriler = np.array(veriler)
+etiketler = np.array(etiketler)
+
+np.savez("/content/drive/MyDrive/Colab Notebooks/Veriler.npz", veriler) # Arrayları kaydetme
+np.savez("/content/drive/MyDrive/Colab Notebooks/Etiketler.npz", etiketler) # Arrayları kaydetme
+
+```
 
 
 
@@ -2762,6 +2884,6 @@ Görüldüğü gibi preprocess_inut eklendiğinde doğruluk oranı çok artmış
 
 # 
 
-![image](./images/vvg4.png)
+![image](./images/ve2.png)
 
-https://www.youtube.com/watch?v=4gRABapgfpc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=183
+https://www.youtube.com/watch?v=6y8yoh3uIwA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=188
