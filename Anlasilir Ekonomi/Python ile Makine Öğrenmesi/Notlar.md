@@ -11510,8 +11510,42 @@ plt.show()
 
 Görüldüğü gibi preprocess_inut eklendiğinde doğruluk oranı çok artmıştır.
 
+# VGG-16 Transfer Learning
+
+```python
+from keras.datasets import cifar10
+from keras.applications.vgg16 import VGG16, preprocess_input
+from keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+from keras.models import Model
+from keras.layers import Flatten, Dense, Dropout
+from keras.optimizers import Adam
+
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+x_train = preprocess_input(x_train)
+x_test = preprocess_input(x_test)
+
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+x_train, x_val, y_train, y_val = train_test_split(x_train, y_train, test_size=0.2, random_state=0)
+
+vggmodel = VGG16(include_top=False, input_shape=(32, 32, 3), classes=10)
+
+for i in vggmodel.layers:
+    i.trainable = False
+
+fully = vggmodel.output
+fully = Flatten()(fully)
+fully = Dense(512, activation="relu")(fully)
+fully = Dropout(0.5)(fully)
+fully = Dense(256, activation="relu")(fully)
+fully = Dropout(0.3)(fully)
+fully = Dense(10, activation="softmax")(fully)
 
 
+```
 
 
 
