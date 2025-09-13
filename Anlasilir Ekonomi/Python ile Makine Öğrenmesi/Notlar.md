@@ -11448,7 +11448,27 @@ for j in range(50):
 
 ![image](./images/vvg1.png)
 
+```python
+from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
+from tensorflow.keras.preprocessing import image
+import numpy as np
 
+resim = image.load_img("/content/1.jpg", color_mode="rgb", target_size=(224, 224))
+resim = image.img_to_array(resim)
+resim = np.expand_dims(resim, axis=0)
+
+model = VGG16()
+tahmin = model.predict(resim)
+p = decode_predictions(tahmin)
+p
+# 1/1 [==============================] - 1s 679ms/step
+# [[('n03929660', 'pick', 0.4578936), 
+#   ('n04357314', 'sunscreen', 0.22737008), 
+#   ('n04509495', 'tennis_ball', 0.06562053), 
+#   ('n02782093', 'balloon', 0.05188464), 
+#   ('n03690938', 'lotion', 0.0460982)]]
+
+```
 
 
 
