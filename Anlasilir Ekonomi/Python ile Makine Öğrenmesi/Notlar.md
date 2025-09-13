@@ -11468,11 +11468,45 @@ p
 #   ('n02782093', 'balloon', 0.05188464), 
 #   ('n03690938', 'lotion', 0.0460982)]]
 
+import matplotlib.pyplot as plt
+
+etiket = [i[1] for i in p[0]]
+olasılık = [i[2] for i in p[0]]
+
+plt.bar(etiket, olasılık)
+plt.title("Tahmin")
+plt.xticks(rotation=90)
+plt.show()
 ```
 
+![image](./images/vvg2.png)
 
+```python
+from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
+from tensorflow.keras.preprocessing import image
+import numpy as np
 
+resim = image.load_img("/content/1.jpg", color_mode="rgb", target_size=(224, 224))
+resim = image.img_to_array(resim)
+resim = np.expand_dims(resim, axis=0)
 
+model = VGG16()
+resim = preprocess_input(resim)
+tahmin = model.predict(resim)
+p = decode_predictions(tahmin)
+
+import matplotlib.pyplot as plt
+
+etiket = [i[1] for i in p[0]]
+olasılık = [i[2] for i in p[0]]
+
+plt.bar(etiket, olasılık)
+plt.title("Tahmin")
+plt.xticks(rotation=90)
+plt.show()
+```
+
+![image](./images/vvg3.png)
 
 
 
@@ -11489,6 +11523,6 @@ p
 
 # 
 
-![image](./images/vvg2.png)
+![image](./images/vvg4.png)
 
 https://www.youtube.com/watch?v=4gRABapgfpc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=183
