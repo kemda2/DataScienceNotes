@@ -11444,6 +11444,26 @@ for j in range(50):
 
 ![image](./images/cnn6.png)
 
+# VGG-16
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
