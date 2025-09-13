@@ -11446,7 +11446,7 @@ for j in range(50):
 
 # VGG-16
 
-
+![image](./images/vvg1.png)
 
 
 
@@ -11469,6 +11469,6 @@ for j in range(50):
 
 # 
 
-![image](./images/cnn7.png)
+![image](./images/vvg2.png)
 
 https://www.youtube.com/watch?v=4gRABapgfpc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=183
