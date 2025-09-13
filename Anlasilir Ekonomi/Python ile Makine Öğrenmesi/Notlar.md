@@ -11544,6 +11544,11 @@ fully = Dense(256, activation="relu")(fully)
 fully = Dropout(0.3)(fully)
 fully = Dense(10, activation="softmax")(fully)
 
+model = Model(inputs=vggmodel.input, outputs=fully)
+
+model.compile(optimizer=Adam(0.0001), loss="categorical_crossentropy", metrics=["accuracy"])
+
+cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=15, verbose=0)
 
 ```
 
