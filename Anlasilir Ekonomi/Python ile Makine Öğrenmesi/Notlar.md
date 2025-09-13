@@ -11613,7 +11613,7 @@ for i, j in enumerate(aralık):
 
 ![image](./images/ve1.png)
 
-
+Resimlerin tamamını alamadım.
 
 
 
