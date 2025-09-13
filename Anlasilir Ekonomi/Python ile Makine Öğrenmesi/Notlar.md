@@ -11555,6 +11555,8 @@ cikti = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=15, v
 
 Dataset: https://www.kaggle.com/datasets/cashutosh/gender-classification-dataset
 
+Verileri erkek ve kadın olarak ayıracağımız datasettir.
+
 ```python
 import cv2
 import numpy as np
@@ -11565,7 +11567,53 @@ veriler = []
 etiketler = []
 konum = "/content/Cinsiyet"
 
+print(os.listdir(konum))
+# ['Erkek', 'Kadın']
+
+print(os.listdir(konum + "/" + "Erkek"))
+# ['606991.jpg', '149981.jpg', '134531.jpg', '117927.jpg', ...]
+
+for sınıf in os.listdir(konum):
+    for dizin in os.listdir(konum + "/" + sınıf):
+        if sınıf == "Erkek":
+            etiketler.append(0)
+        else:
+            etiketler.append(1)
+        veriler.append(os.path.join(konum, sınıf, dizin))
+
+df = pd.DataFrame()
+df["Resim"], df["Etiket"] = veriler, etiketler
+
+df
+#  Resim                               Etiket 
+#  ----------------------------------  ------ 
+#  /content/Cinsiyet/Erkek/069091.jpg  0      
+#  /content/Cinsiyet/Erkek/149981.jpg  0      
+#  /content/Cinsiyet/Erkek/134531.jpg  0      
+#  /content/Cinsiyet/Erkek/117927.jpg  0      
+#  /content/Cinsiyet/Erkek/180401.jpg  0      
+#  ...                                 ...    
+#  /content/Cinsiyet/Kadın/161723.jpg  1      
+#  /content/Cinsiyet/Kadın/143680.jpg  1      
+#  /content/Cinsiyet/Kadın/125675.jpg  1      
+#  /content/Cinsiyet/Kadın/147325.jpg  1      
+#  /content/Cinsiyet/Kadın/126144.jpg  1      
+
+import matplotlib.pyplot as plt
+from keras.utils import load_img
+
+for i, j in enumerate(aralık):
+    plt.subplot(10, 10, i + 1)
+    resim = load_img(j)
+    resim = np.array(resim)
+    plt.imshow(resim)
+    plt.title("Kadın")
+    plt.axis("off")
 ```
+
+![image](./images/ve1.png)
+
+
 
 
 
@@ -11576,6 +11624,6 @@ konum = "/content/Cinsiyet"
 
 # 
 
-![image](./images/vvg4.png)
+![image](./images/ve2.png)
 
 https://www.youtube.com/watch?v=4gRABapgfpc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=183
