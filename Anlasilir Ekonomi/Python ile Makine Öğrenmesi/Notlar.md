@@ -11615,7 +11615,27 @@ for i, j in enumerate(aralık):
 
 Resimlerin tamamını alamadım.
 
+```python
+for sınıf in os.listdir(konum):
+    for dizin in os.listdir(konum + "/" + sınıf):
+        resim = cv2.imread(os.path.join(konum, sınıf, dizin))
+        resim = cv2.resize(resim, (50, 50))
+        resim = resim.astype("float32")
+        resim = resim / 255
+        veriler.append(resim)
 
+        if sınıf == "Erkek":
+            etiketler.append(0)
+        else:
+            etiketler.append(1)
+
+veriler = np.array(veriler)
+etiketler = np.array(etiketler)
+
+np.savez("/content/drive/MyDrive/Colab Notebooks/Veriler.npz", veriler) # Arrayları kaydetme
+np.savez("/content/drive/MyDrive/Colab Notebooks/Etiketler.npz", etiketler) # Arrayları kaydetme
+
+```
 
 
 
@@ -11626,4 +11646,4 @@ Resimlerin tamamını alamadım.
 
 ![image](./images/ve2.png)
 
-https://www.youtube.com/watch?v=4gRABapgfpc&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=183
+https://www.youtube.com/watch?v=6y8yoh3uIwA&list=PLK8LlaNiWQOuTQisICOV6kAL4uoerdFs7&index=188
