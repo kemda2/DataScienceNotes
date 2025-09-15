@@ -4377,9 +4377,10 @@ print(X["Age"][X["Label"] == 1])
 plt.scatter(X["Age"][X["Label"] == 0], X["Annual Income (k$)"][X["Label"] == 0], c="red")
 plt.scatter(X["Age"][X["Label"] == 1], X["Annual Income (k$)"][X["Label"] == 1], c="black")
 plt.show()
-
+```
 ![image](./images/hca1.png) 
 
+```python
 from scipy.cluster.hierarchy import dendrogram, linkage
 
 link = linkage(X)
@@ -8757,4 +8758,5 @@ oneri(model, data, [1, 100, 500])
 #   Star Wars (1977)
 
 # Hiperparametre ayarları yapılmadı. Yapılması gerekir.
+
 ```
