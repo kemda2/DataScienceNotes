@@ -939,8 +939,126 @@ Artık eğitim verimizi hazırladığımıza ve özelliklerimizi seçtiğimize g
 
 ### 2.5 ML algorithm selection – 28
 
-  #### *Building the linear regression model* – 29
-  #### *Building the decision tree model* – 31
+Unutmayın ki, her bir ML algoritması için seçmemiz gereken dört temel bileşen vardır:
+
+1.  Eğitilecek bir **ML Modeli**.
+2.  Modelin etkinliğini ölçmek için bir **Metrik**.
+3.  O metriğe dayanarak modelin parametrelerini güncellemek için bir **Optimizasyon Yöntemi**.
+4.  Güncelleme sürecini sonlandırmak için bir **Durdurma Kriteri**.
+
+Ana odak noktamız optimizasyon olmadığı için, seçilen her model için optimizasyon yönteminden ve durdurma kriterinden sadece kısaca bahsedeceğiz.
+
+Bu örnek için, iki basit ve klasik model kullanacağız. Birincisi **Doğrusal Regresyon (Linear Regression)** modeli, ikincisi ise **Karar Ağacı (Decision Tree)** modelidir.
+
+Öncelikle, doğrusal regresyon modelinin temel fikrini ve bu modeli oluşturma, eğitme ve değerlendirme sürecini kısaca hatırlayarak başlayacağız. Modeli, eğitim verisini hiperparametre ayarı için ayrıca eğitim ve doğrulama setlerine bölmeksizin, **tüm eğitim setini kullanarak eğitecek** ve **test seti üzerinde değerlendireceğiz**.
+
+Hiperparametre ayarlama adımını ise, karar ağacı modelinin tanıtımından sonra tartışacağız.
+
+#### *Building the linear regression model* – 29
+
+Doğrusal regresyon, gözetimli makine öğrenimindeki en basit modellerden biridir ve muhtemelen öğrendiğiniz ilk ML modelidir. Bir veri noktasının hedef değerini, özelliklerinin **ağırlıklı toplamını** hesaplayarak tahmin etmeye çalışır:
+
+$$\text{Tahmin} = w_0 + w_1 x_1 + w_2 x_2 + \dots + w_m x_m$$
+
+Burada $m$ özellik sayısını gösterir. Mevcut örnekte $m=2$'dir, çünkü sadece iki özellik ("MedInc" ve "AveRooms") seçtik. $w_i$'ler veriden öğrenilecek **parametrelerdir** (veya ağırlıklar); $w_0$ **kesişim (intercept)** olarak adlandırılır ve $w_i$, $x_i$ özelliği için bir **katsayıdır (coefficient)**. Parametreler, özellikler ve hedef arasındaki **doğrusal ilişkiyi** yakalamak için eğitim verisine göre öğrenilir.
+
+Scikit-learn ile bir doğrusal regresyon modeli oluşturma kodu şöyledir:
+
+```python
+from sklearn.linear_model import LinearRegression
+linear_regressor = LinearRegression()
+```
+
+-----
+
+##### Metrik ve Optimizasyon: Ortalama Karesel Hata (MSE)
+
+Ağırlıkları öğrenmek için bir optimizasyon yöntemi ve performanslarını ölçmek için bir metrik seçmemiz gerekir. **Ortalama Karesel Hata (Mean Squared Error - MSE)**, regresyon problemleri için yaygın olarak kullanılan bir kayıp fonksiyonu ve değerlendirme metriğidir; modelin tahminleri ile hedefler arasındaki **ortalama karesel farkı** ölçer.
+
+  * **Eğitim aşamasında** modeli öğrenmek için MSE'yi **kayıp fonksiyonu** olarak kullanacağız.
+  * **Test aşamasında** ise modelin test seti üzerindeki tahmin gücünü ölçmek için **değerlendirme metriği** olarak kullanacağız.
+
+Nasıl hesaplandığını anlamanıza yardımcı olmak için, bir kod örneği aşağıda verilmiştir (Liste 2.8). Eğitim aşamasında `true_target_values`, eğitim veri setindeki tüm hedef değerlerin (evlerin gerçek fiyatları) bir listesidir ve `predictions`, model tarafından tahmin edilen tüm konut fiyatlarıdır.
+
+```python
+def mean_squared_error(predictions, true_target_values):
+ mse = 0
+ for prediction, target_value in zip(predictions, true_target_values):
+ mse += (prediction - target_value) ** 2 # Karesel hataları toplar
+ mse /= len(predictions)                  # Karesel hataların toplamının ortalamasını alır
+ return mse
+```
+
+Şekil 2.6'da tek bir değişkenli (veya özellikli) doğrusal regresyon modelinin basit bir çizimi yer almaktadır. Öğrenme süreci, veri noktaları ile regresyon çizgisi arasındaki kesikli çizgilerle gösterilen **karesel hataların ortalamasını en aza indirmek** için en iyi eğimi ve kesişimi bulmayı amaçlar.
+
+![image](images/0015.png)
+
+Scikit-learn yardımıyla, `fit` fonksiyonunu çağırarak ve eğitim verisini besleyerek ağırlıkları kolayca optimize edebiliriz. MSE, varsayılan olarak kayıp fonksiyonu olarak kullanılır:
+
+```python
+linear_regressor.fit(X_train, y_train)
+```
+
+-----
+
+##### Öğrenilen Parametrelerin İncelenmesi
+
+Öğrenilen ağırlıkları aşağıdaki kodla yazdırabiliriz:
+
+```python
+>>> coefficients = pd.DataFrame(
+... linear_regressor.coef_,
+... X_train.columns,
+... columns=['Coefficient'])
+>>> print(f'Kesişim (Intercept): {linear_regressor.intercept_:.2f}\n')
+>>> print(coefficients)
+```
+
+**Öğrenilen Kesişim:** $0.60$
+
+| | Katsayı (Coefficient) |
+|---|---|
+| MedInc | $0.44$ |
+| AveRooms | $-0.04$ |
+
+Öğrenilen katsayılar, "MedInc" özelliğinin ve hedefin pozitif doğrusal bir korelasyona sahip olduğunu gösteriyor ($0.44$). Ancak, **"AveRooms"** özelliğinin, beklentilerimizin aksine, **negatif bir korelasyona** sahip olması şaşırtıcıdır ($-0.04$). Bu durum, aşağıdaki iki olası faktörden kaynaklanabilir:
+
+1.  **Aykırı Değerler:** Eğitim verisindeki aykırı değerler (bazı yüksek fiyatlı konut bloklarının daha az odaya sahip olması gibi) eğitim sürecini etkiliyor olabilir.
+2.  **Özellikler Arasındaki Korelasyon (Çoklu Doğrusallık):** Seçtiğimiz iki özellik pozitif olarak doğrusal birbiriyle ilişkilidir (Hedefi tahmin etmede ortak bilgi paylaşıyorlar). "MedInc" zaten "AveRooms" tarafından sağlanan bilginin bir kısmını kapsadığı için, "AveRooms"un etkisi azalmış ve bu da hafif bir negatif korelasyonla sonuçlanmıştır.
+
+İdeal olarak, doğrusal regresyon için iyi bir özellik kümesi, birbiriyle yalnızca **zayıf** bir şekilde ilişkili olmalı ancak hedefle **yüksek** bir korelasyona sahip olmalıdır. Bu aşamada, farklı özellik kümelerini denemek ve iyi bir kombinasyon seçmek için özellik seçimi ve model eğitimi ile **tekrarlı bir şekilde** ilerleyebiliriz. Bu süreci, denemeniz için bir alıştırma olarak bırakıp doğrudan test aşamasına geçeceğiz.
+
+-----
+
+##### Test Sonuçları
+
+Öğrenilen modelin test seti üzerindeki MSE'si aşağıdaki kodla hesaplanabilir ve yazdırılabilir:
+
+```python
+>>> from sklearn.metrics import mean_squared_error
+>>> y_pred_test = linear_regressor.predict(X_test)
+>>> print(f'Test MSE: {mean_squared_error(y_test, y_pred_test):.2f}')
+Test MSE: 0.70
+```
+
+**Test MSE'si $0.70$'tir.** Bu, ortalama olarak, modelin tahminleri ile test verisinin gerçek hedef değerleri arasındaki karesel farkın $0.70$ olduğu anlamına gelir. MSE için daha düşük bir değer daha iyidir; ideal olarak, bu değerin $0$'a olabildiğince yakın olmasını istersiniz.
+
+Sırada bir karar ağacı modelini deneyecek ve ikisinin performansını karşılaştıracağız.
+
+#### *Building the decision tree model* – 31
+
+Karar ağacının (Decision Tree) temel fikri, **Şekil 2.7**'de gösterildiği gibi, veriyi bir dizi (genellikle ikili/binary) **koşula** dayalı olarak farklı gruplara ayırmaktır.
+
+
+
+Bir karar ağacındaki yaprak olmayan her bir düğüm (non-leaf node), her bir veri örneğinin alt düğümlerden (*child nodes*) birine yerleştirilmesine neden olan bir **koşuldur**. Her **yaprak düğüm (leaf node)** ise tahmin olarak kullanılan belirli bir değere sahiptir.
+
+Her bir veri örneği, ağacın kökünden (en üstten) başlayarak yaprak düğümlerden birine doğru ilerler ve bu da bize o örnek için tahmini verir.
+
+**Örneğin**, "MedInc=5" ve "AveRooms=3" özelliklerine sahip bir evimiz olduğunu varsayalım. Kök düğümden başlayıp "Hayır" yolu ve "Evet" yolu üzerinden ilerleyerek, o ev için tahmin edilen fiyat olan **$260.000** değerine sahip bir yaprak düğüme ulaşırız.
+
+![image](images/0016.png)
+
 ### 2.6 Fine-tuning the ML model: Introduction to grid search – 34
 
 ## 3. Deep learning in a nutshell
