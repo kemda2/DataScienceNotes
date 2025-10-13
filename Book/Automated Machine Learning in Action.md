@@ -424,7 +424,7 @@ Her AutoML algoritması, aşağıdaki **üç temel bileşenden** oluşur (bkz. �
 
 ---
 
-### 1. **Arama uzayı (Search space)**
+##### 1. **Arama uzayı (Search space)**
 
 Bu, seçilecek hiperparametreler kümesini ve her bir hiperparametrenin alabileceği değer aralığını ifade eder.
 Her hiperparametrenin aralığı, kullanıcının bilgi birikimine ve gereksinimlerine göre tanımlanabilir.
@@ -449,7 +449,7 @@ Bu kitapta, ikinci bölümde bu konuyu daha ayrıntılı ele alacak ve farklı g
 
 ---
 
-### 2. **Arama stratejisi (Search strategy)**
+##### 2. **Arama stratejisi (Search strategy)**
 
 Bu, arama uzayından **en uygun hiperparametre setini** seçme stratejisidir.
 AutoML genellikle **yinelemeli bir deneme-yanılma süreci** olduğundan, strateji çoğunlukla hiperparametreleri sırayla seçip performanslarını değerlendirir.
@@ -464,7 +464,7 @@ Bu kitapta, üçüncü bölümde farklı **arama algoritmalarını** nasıl beni
 
 ---
 
-### 3. **Performans değerlendirme stratejisi (Performance evaluation strategy)**
+##### 3. **Performans değerlendirme stratejisi (Performance evaluation strategy)**
 
 Bu strateji, seçilen hiperparametrelerle oluşturulan bir ML algoritmasının performansını değerlendirmek için kullanılır.
 Değerlendirme kriterleri genellikle manuel ayarlama sürecinde kullanılanlarla aynıdır — örneğin, seçilen ML algoritmasıyla eğitilen modelin **doğrulama performansı**.
@@ -496,8 +496,96 @@ Bu sayede, kendi kullanım durumunuza en uygun olan API’yi seçebilirsiniz.
 Bu kitapta, farklı AutoML uygulamaları için gelişmiş bir AutoML araç kiti olan **AutoKeras**’ta doğru API’yi nasıl seçeceğinizi
 ve **KerasTuner** yardımıyla kendi AutoML algoritmanızı nasıl oluşturabileceğinizi öğreneceksiniz.
 
-
 #### *Are we able to achieve full automation?* – 15
+
+AutoML alanı, endüstri ve açık kaynak topluluğunun katılımıyla **yaklaşık otuz yıldır gelişmektedir.**
+Bu süreçte birçok başarılı uygulama ve umut verici gelişme görülmüştür. Bunlardan bazıları şunlardır:
+
+---
+
+* **Birçok şirket içi araç ve açık kaynak platformu** geliştirildi.
+  Bu araçlar, ML modellerinin **hiperparametre ayarlamasını** ve **model seçimini** kolaylaştırmak için kullanılır.
+  (Örneğin: *Google Vizier*, *Facebook Ax* vb.)
+
+* **AutoML çözümleri**, birçok **Kaggle veri bilimi yarışmasında** insan seviyesine yakın performans göstermiştir.
+
+* **Auto-sklearn**, **AutoKeras** gibi geniş kapsamlı açık kaynak ML paketleri geliştirildi.
+  Bu paketler, hiperparametre ayarlamasını iyileştirmek ve ML iş akışlarını (pipeline) otomatikleştirmek için tasarlanmıştır.
+
+* **Ticari AutoML ürünleri**, küçükten büyüğe birçok şirketin üretim ortamında ML’i benimsemesine yardımcı olmaktadır.
+  Örneğin, **Disney**, herhangi bir ML mühendisi ekibi tutmadan, **Google Cloud AutoML** kullanarak çevrimiçi mağazası için ML çözümleri geliştirmiştir.
+  (Kaynak: [Google Cloud AutoML Blogu](https://blog.google/products/google-cloud/cloud-automlmaking-ai-accessible-every-business/))
+
+* **Bilgisayar bilimi dışındaki alanlardaki araştırmacılar** da AutoML’in gücünden yararlanmaktadır.
+  Artık **tıp**, **nörobilim** ve **ekonomi** gibi alanlardaki araştırmacılar, ML ve programlama konularında uzun öğrenme süreçlerinden geçmeden,
+  **tıbbi görüntü segmentasyonu**, **genomik araştırma** veya **hayvan tanıma ve koruma** gibi alanlara özel ML çözümleri geliştirebilmektedirler.
+  *(Örnek çalışmalar: Weng et al., 2019; Liu et al., 2019; Liu & Luo, 2019)*
+
+---
+
+##### AutoML’in Geleceği ve Devam Eden Zorluklar
+
+AutoML’in **makine öğrenimini demokratikleştirme** potansiyelinin tümünü hâlâ keşfetme aşamasındayız.
+Şimdiye kadar pek çok başarılı uygulama görülmüş olsa da, çözülmesi gereken önemli zorluklar ve sınırlamalar hâlâ bulunmaktadır:
+
+---
+
+* **AutoML sistemlerinin inşa edilme zorluğu:**
+  Sıfırdan bir AutoML sistemi kurmak, bir ML sistemini kurmaktan çok daha karmaşık ve kapsamlı bir süreçtir.
+
+* **Veri toplama ve temizlemenin otomatikleştirilmesi:**
+  AutoML hâlen **verinin toplanması, temizlenmesi ve etiketlenmesi** için insan müdahalesine ihtiyaç duyar.
+  Bu işlemler genellikle ML algoritmalarının tasarımından bile daha karmaşıktır ve günümüzde AutoML tarafından tam olarak otomatikleştirilememektedir.
+  Günümüzde bir AutoML sisteminin çalışabilmesi için, **açık bir görev tanımı** ve **yüksek kaliteli bir veri kümesi** gereklidir.
+
+* **AutoML algoritmasının seçimi ve ayarlanmasının maliyeti:**
+  “**No Free Lunch (Bedava Öğle Yemeği Yok)**” teoremi bize her duruma uygun tek bir AutoML algoritmasının olmadığını söyler.
+  ML algoritmalarını seçme ve ayarlama sürecinde tasarruf ettiğiniz çaba, bazen AutoML algoritmasını seçmek ve ayarlamak için harcayacağınız çabayla **eşitlenebilir veya aşılabilir.**
+
+* **Kaynak maliyetleri:**
+  AutoML süreci, **zaman** ve **hesaplama kaynakları** açısından oldukça maliyetlidir.
+  Mevcut AutoML sistemleri, benzer sonuçlara ulaşmak için genellikle insan uzmanlardan **daha fazla hiperparametre kombinasyonu** denemek zorundadır.
+
+* **İnsan–bilgisayar etkileşiminin maliyeti:**
+  AutoML’in ürettiği çözümleri ve ayarlama süreçlerini yorumlamak kolay değildir.
+  Sistemler karmaşıklaştıkça, insanların sürece müdahil olması ve modelin nasıl oluşturulduğunu anlaması daha da zorlaşmaktadır.
+
+---
+
+##### AutoML’in Gelişim Aşaması
+
+AutoML hâlâ **gelişiminin erken safhasındadır.**
+Bu alandaki ilerleme, farklı disiplinlerden **araştırmacıların, geliştiricilerin ve uygulayıcıların** katılımına bağlıdır.
+
+Bir gün siz de bu gelişime katkıda bulunabilirsiniz; ancak bu kitabın amacı bundan daha mütevazıdır.
+Bu kitap, özellikle:
+
+* Makine öğreniminde sınırlı deneyime sahip uygulayıcılara
+* Ya da temel bilgiye sahip olup ML çözümlerini daha az çabayla geliştirmek isteyenlere yöneliktir.
+
+Kitap, yalnızca **beş satır kodla** bir ML problemini otomatik olarak çözmeyi öğretecek
+ve giderek daha karmaşık veri türleri (örneğin **görseller**, **metinler** vb.) için gelişmiş AutoML çözümlerine doğru ilerleyecektir.
+
+Bir sonraki bölümde, ML’in temellerine daha derinlemesine dalacak ve bir ML projesinin **uçtan uca (end-to-end)** iş akışını inceleyeceğiz.
+Bu, ilerleyen bölümlerde AutoML tekniklerini daha iyi anlamanıza ve etkili biçimde kullanmanıza yardımcı olacaktır.
+
+---
+
+### Özet
+
+* **Makine öğrenimi**, bilgisayarların açıkça programlanmadan, verilerle etkileşime girerek işlem biçimlerini değiştirebilme yeteneğidir.
+* ML süreci, modelin parametrelerini veriye ve ölçümlere göre ayarlayan yinelemeli bir algoritmik süreçtir.
+  Süreç, model beklenen çıktıları üretebildiğinde veya kullanıcı tarafından tanımlanan bir kriter sağlandığında durur.
+* Bir ML algoritmasındaki **hiperparametrelerin ayarlanması**, öğrenme sürecini kontrol etmenizi ve probleme özel bileşenler seçmenizi sağlar.
+* **AutoML**, ML modellerinin tasarlanması ve uygulanmasından elde edilen deneyimden yararlanarak ayarlama sürecini otomatikleştirir.
+  Böylece veri bilimcilerin üzerindeki yükü azaltır ve kapsamlı deneyim gerektirmeyen, kullanıma hazır ML tekniklerini erişilebilir kılar.
+* Bir AutoML algoritması üç temel bileşenden oluşur:
+  **arama uzayı**, **arama stratejisi** ve **değerlendirme stratejisi**.
+  Farklı AutoML sistemleri, bu bileşenleri sizin için yapılandıran veya özelleştirmenize izin veren farklı düzeylerde API’ler sağlar.
+* AutoML hâlen çözülmemiş pek çok zorluk barındırmaktadır.
+  Gerçek anlamda **tam otomatik makine öğrenimi** hedefine ulaşmak zordur.
+  Bu nedenle **iyimser** olmalı, ancak AutoML’in mevcut yeteneklerini **abartmamaya** da özen göstermeliyiz.
+
 
 ## 2. The end-to-end pipeline of an ML project
 
