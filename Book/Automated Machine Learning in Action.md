@@ -1146,6 +1146,171 @@ Bu, ML boru hattında önemli bir adımı gündeme getiriyor: **Hiperparametre A
 
 ### 2.6 Fine-tuning the ML model: Introduction to grid search – 34
 
+Bir ML algoritması için, örneğin karar ağacı modelinin `max_depth`'i gibi **en uygun hiperparametreleri** işe başlamadan önce bilmek genellikle imkansızdır. Bu nedenle, **hiperparametre ayarlaması (hyperparameter tuning)** çok önemli bir adımdır; oluşturduğunuz ML algoritmasının performansını artırmak ve algoritmanızı oluşturacak en iyi bileşenleri seçmenizi sağlar.
+
+Ayarlama genellikle bir **deneme-yanılma** sürecidir. Aday hiperparametre kombinasyonlarından oluşan bir küme tanımlar, bu kombinasyonları **doğrulama süreci** ile eğitim verisine uygulayarak en iyi kombinasyonu seçersiniz ve sonuçları değerlendirirsiniz. Ayarlama sürecini daha iyi anlamanıza yardımcı olmak için, karar ağacı modelini `max_depth` hiperparametresini ayarlayarak iyileştirmeye çalışalım.
+
+---
+
+#### Model Doğrulama ve Çapraz Doğrulama
+
+Yapmamız gereken ilk şey, farklı modellerimizi doğrulama performanslarına göre karşılaştırabilmemiz için bir **doğrulama seti (validation set)** oluşturmaktır. Hiperparametre ayarlama sürecinde **test setine dokunmamanız** gerektiğini daima unutmayın. Model, ayarlama tamamlandıktan sonra bu veriye yalnızca bir kez maruz kalmalıdır.
+
+Eğitim verisini bölmek ve model doğrulaması yapmak için birçok yöntem vardır. Biz burada, özellikle veri kümesi boyutu küçük olduğunda model doğrulaması için yaygın olarak kullanılan bir teknik olan **çapraz doğrulama (cross-validation)** kullanacağız.
+
+Çapraz doğrulama, birden çok tur model eğitimi ve değerlendirmesinin sonuçlarını ortalar. Her turda, veri seti rastgele olarak birbirini tamamlayan iki alt kümeye (eğitim ve doğrulama setleri) ayrılır. Her veri noktasının, farklı turlar boyunca hem eğitim hem de doğrulama setinde olma şansı eşittir.
+
+Çapraz doğrulama yöntemlerinin iki ana grubu şunlardır:
+
+##### 1. Kapsamlı Çapraz Doğrulama Yöntemleri (Exhaustive Cross-Validation)
+Veriyi böldüğünüz iki seti oluşturmanın **mümkün olan tüm yolları** üzerinde bir modeli eğitir ve değerlendirirsiniz.
+* **Örnek:** Veri setinin %80'ini eğitim için ve %20'sini doğrulama için kullanmaya karar verdiğinizi varsayalım. Bu durumda, bu iki setteki veri noktalarının olası her kombinasyonunu tüketmeniz ve modelin tüm bu bölmelerdeki eğitim ve test sonuçlarını ortalamanız gerekir.
+* Kapsamlı çapraz doğrulamaya temsili bir örnek, **bırak-bir-dışarı çapraz doğrulamadır (leave-one-out cross-validation)**. Burada her bir örnek, bireysel bir test seti olarak kullanılırken, geri kalanların tamamı karşılık gelen eğitim setini oluşturur. $N$ örnek verildiğinde, aday modellerinizi $N$ kez eğitmek ve değerlendirmek için $N$ bölmeniz olacaktır.
+
+##### 2. Kapsamlı Olmayan Çapraz Doğrulama Yöntemleri (Nonexhaustive Cross-Validation)
+Adından da anlaşılacağı gibi, her bölme için tüm olasılıkları tüketmek zorunda değilsiniz.
+* **Tutma Yöntemi (Holdout Method):** Orijinal eğitim verisini rastgele olarak iki sete bölmekten ibarettir. Biri yeni eğitim seti, diğeri ise doğrulama setidir. Bu yöntem, tipik olarak tek bir çalıştırma içerdiği ve bireysel veri noktaları hem eğitim hem de doğrulama için kullanılmadığı için, insanlar tarafından genellikle çapraz doğrulamadan ziyade basit doğrulama olarak kabul edilir.
+* **k-Katlı Çapraz Doğrulama (k-fold Cross-Validation):** Orijinal eğitim verisini $k$ eşit bölümlenmiş alt kümeye böler. Her alt küme sırayla **doğrulama seti** olarak kullanılırken, geri kalanlar o anda karşılık gelen **eğitim setidir** (bkz. Şekil 2.9). $N$ örnek verildiğinde, $N$-katlı çapraz doğrulama, bırak-bir-dışarı çapraz doğrulamaya eşdeğerdir.
+
+![image](images/0018.png)
+
+Şimdi `max_depth` hiperparametresini ayarlamak için **beş katlı çapraz doğrulama (five-fold cross-validation)** kullanmayı deneyelim.
+
+Liste 2.14'te, çapraz doğrulama setlerini oluşturmak için scikit-learn kütüphanesindeki **`KFold`** çapraz doğrulayıcısını kullanıyor ve ağaç modelini oluşturmak ve çapraz doğrulamayı yapmak için `max_depth` hiperparametresinin tüm aday değerleri arasında döngü yapıyoruz. Bu arama stratejisine **ızgara araması (grid search)** denir ve en iyi hiperparametreleri aramak için en basit **AutoML yaklaşımlarından** biridir.
+
+Temel fikir, aday hiperparametre kümelerindeki değerlerin tüm kombinasyonları arasında gezinmek ve değerlendirme sonuçlarına göre en iyi kombinasyonu seçmektir. Ayarlanacak yalnızca bir aday hiperparametremiz olduğu için bu, tüm olası değerler üzerinde basit bir döngüye dönüşür.
+
+```python
+import numpy as np
+from sklearn.model_selection import KFold
+
+kf = KFold(n_splits = 5) # Veri bölme için beş katlı çapraz doğrulama nesnesi oluşturur
+cv_sets = []
+for train_index, test_index in kf.split(X_train):
+ cv_sets.append((X_train.iloc[train_index],
+ y_train.iloc[train_index],
+ X_train.iloc[test_index],
+ y_train.iloc[test_index]))
+
+max_depths = list(range(1, 11)) # max_depth hiperparametresi için aday değer listesini oluşturur
+
+for max_depth in max_depths:
+ cv_results = []
+ regressor = DecisionTreeRegressor(max_depth=max_depth, random_state=42)
+ for x_tr, y_tr, x_te, y_te in cv_sets:
+ regressor.fit(x_tr, y_tr)
+ cv_results.append(mean_squared_error(regressor.predict(x_te) , y_te))
+ print(f'Ağaç Derinliği: {max_depth}, Ort. MSE: {np.mean(cv_results)}') # Tüm çapraz doğrulama setlerinde döngü yapar ve doğrulama sonuçlarını ortalar
+```
+
+Aşağıdaki değerlendirme sonuçlarından, **`max_depth=6`** değerinin en düşük MSE'yi verdiğini gözlemleyebiliriz:
+
+```
+Ağaç Derinliği: 1, Ort. MSE: 0.9167
+Ağaç Derinliği: 2, Ort. MSE: 0.7384
+Ağaç Derinliği: 3, Ort. MSE: 0.6885
+Ağaç Derinliği: 4, Ort. MSE: 0.6389
+Ağaç Derinliği: 5, Ort. MSE: 0.6230
+Ağaç Derinliği: 6, Ort. MSE: 0.6182 🌟 (En Düşük MSE)
+Ağaç Derinliği: 7, Ort. MSE: 0.6315
+Ağaç Derinliği: 8, Ort. MSE: 0.6532
+Ağaç Derinliği: 9, Ort. MSE: 0.6783
+Ağaç Derinliği: 10, Ort. MSE: 0.7025
+```
+
+Aynı tekniği diğer hiperparametreler ve hatta model türü için de değer seçmek için kullanabiliriz. Örneğin, aynı doğrulama setini kullanarak hem doğrusal regresyon hem de karar ağacı modelleri için çapraz doğrulama yapabilir ve daha iyi çapraz doğrulama sonuçlarına sahip olanı seçebiliriz.
+
+-----
+
+###### GridSearchCV Kullanımı
+
+Bazen ayarlanması gereken daha fazla hiperparametreniz olabilir, bu da bu görev için basit bir `for` döngüsü kullanmayı zorlaştırır. Scikit-learn, bu görevi daha uygun hale getiren **`GridSearchCV`** adlı yerleşik bir sınıf sağlar. Buna, hiperparametrelerin arama uzayını bir sözlük olarak, ayarlamak istediğiniz modeli ve modelin performansını ölçmek için bir puanlama fonksiyonunu verirsiniz.
+
+Örneğin, bu problemde arama uzayı, değeri aday değerlerini içeren bir liste olan `max_depth` tek bir anahtara sahip bir sözlüktür. Puanlama fonksiyonu, `make_scorer` fonksiyonu kullanılarak performans metriğinden dönüştürülebilir.
+
+**Not:** Scikit-learn'deki `GridSearchCV` varsayılan olarak daha yüksek puanların daha iyi olduğunu varsayar. Biz en küçük MSE'ye sahip modeli bulmak istediğimiz için, ızgara araması için puanlama fonksiyonunu tanımlarken `make_scorer` fonksiyonunda `greater_is_better` argümanını **`False`** olarak ayarlamalıyız.
+
+```python
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import make_scorer
+
+regressor = DecisionTreeRegressor(random_state=42) # Karar ağacı regresörünü oluşturur
+hps = {'max_depth':list(range(1, 11))}             # max_depth hiperparametresi için arama uzayını (sözlük) oluşturur
+
+# MSE'yi puanlama fonksiyonuna dönüştürür (düşük değerler daha iyidir)
+scoring_fnc = make_scorer(mean_squared_error, greater_is_better=False)
+
+# GridSearchCV nesnesini oluşturur (5 katlı çapraz doğrulama ile)
+grid_search = GridSearchCV(estimator=regressor, param_grid=hps,
+                           scoring=scoring_fnc,
+                           cv=5)
+
+grid_search = grid_search.fit(X_train, y_train) # Optimal modeli bulmak için eğitim verisine uydurur
+```
+
+-----
+
+###### Sonuçların Görselleştirilmesi
+
+Aşağıdaki kodla çapraz doğrulama sonuçlarını alabilir ve MSE'yi `max_depth`'e karşı çizdirebiliriz.
+
+```python
+cvres = grid_search.cv_results_
+for mean_score, params in zip(cvres['mean_test_score'], cvres['params']):
+ print(-mean_score, params)
+
+plt.plot(hps['max_depth'], -cvres['mean_test_score'])
+plt.title('Ağaç Maksimum Derinliği Hiperparametresi ile MSE Değişimi')
+plt.xlabel('max_depth')
+plt.ylabel('MSE')
+plt.show() # 
+```
+
+![image](images/0019.png)
+
+Şekil 2.10'da, `max_depth` arttıkça MSE'nin önce azaldığını, ardından arttığını görebiliriz. Bunun nedeni, ağacın derinliği arttıkça modelin daha fazla esneklik kazanması ve bölmeleri iyileştirme kapasitesinin artmasıdır. Bu, modelin eğitim verisine daha iyi uymasına yardımcı olur, ancak sonunda **aşırı uyum (overfit)** yapmaya başlayacaktır. Bizim durumumuzda bu, `max_depth>6` olduğunda gerçekleşir. Model, **`max_depth=6`** olduğunda en iyi performansı elde eder.
+
+-----
+
+## Çapraz Doğrulama ve Test Sonuçlarının Karşılaştırılması
+
+Çapraz doğrulamanın, modellerin görülmeyen örnekler üzerindeki genelleme yeteneğini doğru bir şekilde yansıtıp yansıtmadığını merak edebilirsiniz. Bunu, `max_depth`'in farklı değerlerine sahip 10 modelin hem çapraz doğrulama MSE eğrisini hem de test MSE eğrisini çizerek doğrulayabiliriz:
+
+```python
+>>> test_results = []
+>>> for max_depth in hps['max_depth']:
+... tmp_results = []
+... regressor = DecisionTreeRegressor(max_depth=max_depth,
+... random_state=42)
+... regressor.fit(X_train, y_train)
+... test_results.append(mean_squared_error(
+... regressor.predict(X_test) , y_test))
+... print(f'Ağaç Derinliği: {max_depth}, Test MSE: {test_results[-1]}')
+
+>>> plt.plot(hps['max_depth'], -cvres['mean_test_score'])
+>>> plt.plot(hps['max_depth'], test_results)
+>>> plt.title('Çapraz Doğrulama Sonuçları ve Gerçek Test Sonuçları Değişim Eğrisinin Karşılaştırılması')
+>>> plt.legend(['CV', 'Test'])
+>>> plt.xlabel('max_depth')
+>>> plt.ylabel('MSE')
+>>> plt.show() # 
+```
+
+![image](images/0020.png)
+
+Test MSE değerlerine ve Şekil 2.11'e dayanarak, doğrulama sonuçlarının en iyi test sonuçlarına karşılık gelen `max_depth`'i mükemmel bir şekilde seçtiğini ve iki eğrinin kabaca hizalandığını gözlemleyebiliriz. **Unutmayın ki**, bu yalnızca çapraz doğrulamanın etkinliğini göstermek için yapılmıştır; pratikte modeli seçmek için test eğrisini asla kullanmamalısınız\!
+
+Şimdiye kadar, ML çözümünü devreye almadan önceki bir ML boru hattındaki genel adımları göstermek için Kaliforniya konut fiyatı tahmin problemini kullandık. Kullandığımız veri, satırların örnekleri ve sütunların özelliklerini temsil ettiği tablo formatında yapılandırılmıştır. Bu tür veriler genellikle **tablosal veri** veya **yapılandırılmış veri** olarak adlandırılır. Tablosal verinin yanı sıra, farklı ML uygulamalarında, ML boru hattında özel bileşenlerin seçilmesini gerektiren başka birçok veri türüyle karşılaşabilirsiniz. Ek B, sınıflandırma görevleri için görüntü, metin ve tablosal verilerle nasıl başa çıkılacağını gösteren üç örnek daha sunmaktadır. Bunların hepsi klasik veri hazırlama yöntemlerini ve ML modellerini kullanır. Bu konulara aşina değilseniz, bir sonraki bölüme geçmeden önce onlara bir göz atmanızı öneririm. Bu örnekler aynı zamanda, scikit-learn'deki ızgara arama yöntemini kullanarak bir ML boru hattında birden fazla hiperparametrenin eş zamanlı olarak nasıl ayarlanacağını da göstermektedir. Hiperparametre ayarlaması için daha gelişmiş seçenekler kitabın ikinci bölümünde ele alınacaktır.
+
+-----
+
+## Özet
+
+  * Bir ML projesinde ilk görev, problemi bir ML problemi olarak çerçevelemek ve kullanılacak veri setini toplamaktır.
+  * Veri setini keşfetmek ve hazırlamak önemlidir. Veriden yararlı kalıpları çıkarmak, nihai ML çözümünün performansını artırabilir.
+  * Bir ML modeli seçme sürecinde, farklı modelleri denemeli ve göreceli performanslarını değerlendirmelisiniz.
+  * Modeliniz için doğru hiperparametreleri kullanmak, ML çözümünün nihai performansı için kritiktir. **Izgara araması (Grid search)**, hiperparametre ayarlaması ve model seçimi için kullanılabilecek basit bir AutoML yaklaşımıdır.
+
 ## 3. Deep learning in a nutshell
 
 * 3.1 What is deep learning? – 42
