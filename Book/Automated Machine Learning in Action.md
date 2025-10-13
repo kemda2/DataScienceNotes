@@ -654,9 +654,156 @@ Bu sorular, probleme **yatırım yapmaya değip değmeyeceğine** karar vermeniz
 
 ### 2.2 Framing the problem and assembling the dataset – 19
 
+Bir ML projesinde yapmanız gereken ilk şey, **problemi çerçevelemek** ve buna karşılık gelen **veriyi toplamaktır**.
 
+### 1\. Problemi Çerçeveleme ve Veri Toplama
+
+Problemi çerçevelemek, ML modelinin **girdilerini** ve **çıktılarını** açıkça belirtmenizi gerektirir. Kaliforniya konut probleminde:
+
+  * **Girdiler** (Özellikler): Konut bloklarını tanımlayan özellikler kümesidir. Bu veri setinde bir konut bloğu, coğrafi olarak kompakt bir alanda yaşayan ve ortalama **1.425 bireyden** oluşan bir gruptur. Özellikler, konut bloğundaki ev başına düşen ortalama oda sayısı, bloğun merkezinin enlem (latitude) ve boylamı (longitude) gibi bilgileri içerir.
+  * **Çıktılar** (Hedefler/Targetlar): Blokların **ortalama konut fiyatları** olmalıdır.
+
+Amacımız, medyan fiyatları bilinen konut bloklarını kullanarak bir ML modeli eğitmek ve özelliklerine göre medyan fiyatı **bilinmeyen** konut bloklarının fiyatlarını tahmin etmektir. Döndürülen tahmin edilen bu değerlere aynı zamanda modelin **hedefleri** (veya **etiketleri/annotations**) de denir.
+
+Genel olarak, mevcut etiketlenmiş örneklere dayanarak **veri girdileri ile hedefler arasındaki ilişkiyi öğrenmeyi** amaçlayan her problem, bir **gözetimli öğrenme (supervised learning)** problemi olarak adlandırılır. Bu, ML'nin en çok çalışılan dalıdır ve kitabın geri kalanında ana odak noktamız olacaktır.
+
+-----
+
+### Gözetimli Öğrenme Türleri
+
+Gözetimli öğrenme problemlerini, hedef değerinin türüne göre alt kategorilere ayırabiliriz:
+
+  * **Regresyon (Regression):** Sürekli (continuous) hedeflere sahip olan gözetimli öğrenme problemleri regresyon olarak sınıflandırılır. Fiyat sürekli bir değişken olduğu için, Kaliforniya konut fiyatlarını tahmin etmek esasen bir **regresyon problemidir**.
+  * **Sınıflandırma (Classification):** Bir gözetimli öğrenme probleminde hedef değerler, sınırlı sayıda kategoriye sahip **ayrık değerler** (discrete values) ise, bu probleme **sınıflandırma problemi** denir. Sınıflandırma problemlerine bazı örnekleri ek B'de bulabilirsiniz ve bunları bir sonraki bölümde de inceleyeceğiz.
+
+-----
+
+### Veri Setini Yükleme
+
+Problemi çerçeveledikten sonraki adım veriyi toplamaktır. Kaliforniya konut veri seti, en çok kullanılan ML veri setlerinden biri olduğu için, popüler bir ML kütüphanesi olan **scikit-learn** ile kolayca erişilebilir. Ancak gerçek hayatta, veri setlerini bulmak ve edinmek önemsiz bir faaliyet değildir ve Structured Query Language (SQL) bilgisi gibi ek beceriler gerektirebilir (bu, bu kitabın kapsamı dışındadır. Daha fazla bilgi için Jeff Smith'in *Machine Learning Systems* kitabına bakabilirsiniz).
+
+Problemimiz için veri setini yükleyen kod aşağıdadır:
+
+```python
+from sklearn.datasets import fetch_california_housing # scikit-learn kütüphanesinden veri yükleme fonksiyonunu içe aktarır
+house_dataset = fetch_california_housing()           # Kaliforniya konut veri setini yükler
+```
+
+Orijinal veri, veri noktalarını **örnek-özellik matrisi** olarak biçimlendirilmiş bir sözlüktür (*dictionary*). Her bir veri noktası, matrisin bir satırındaki özelliklerle tanımlanan bir konut bloğudur. Hedefleri ise bir vektör olarak biçimlendirilmiştir. Sözlük, ayrıca özellik adlarını ve veri setinin anlamına ve oluşturulma bilgilerine işaret eden açıklamaları içerir:
+
+```python
+>>> house_dataset.keys()
+dict_keys(['data', 'target', 'feature_names', 'DESCR'])
+```
+
+Orijinal veri setini yükledikten sonra, veri noktalarını ayıklayarak onları **pandas** kütüphanesinin temel yapılarından biri olan bir **DataFrame**'e dönüştürüyoruz. Pandas, Python'da veri analizi ve manipülasyonu için güçlü bir araçtır. Aşağıdaki kodda gösterildiği gibi, hedefler, milyon dolar cinsinden konut bloğunun medyan fiyatını temsil eden **"MedPrice"** etiketine sahip bir **Series** nesnesi (yani bir vektör) olarak biçimlendirilmiştir.
+
+```python
+import pandas as pd # pandas paketini içe aktarır
+
+data = pd.DataFrame(house_dataset.data, columns=house_dataset.feature_names) # Özellikleri adlarıyla birlikte bir DataFrame'e ayıklar
+target = pd.Series(house_dataset.target, name = 'MedPrice')                 # Hedefleri "MedPrice" adıyla bir Series nesnesine ayıklar
+```
+
+Verinin ilk beş örneğini yazdıralım (şekil 2.2'de gösterilmiştir). İlk satır, özellikleri belirtir (ayrıntıları $[https://scikit-learn.org/stable/datasets.html$](https://www.google.com/search?q=https://scikit-learn.org/stable/datasets.html%24) adresinde bulunabilir). Örneğin, **"AveRooms"** özelliği, bir konut bloğu içindeki ev başına düşen ortalama oda sayısını gösterir. Hedef verilerin değerlerini de aynı şekilde kontrol edebiliriz:
+
+```python
+>>> data.head(5)
+```
+
+![image](images/0011.png)
+
+Veri ön işleme adımına geçmeden önce, **eğitim verisi (training data)** ve **test seti (test set)** olarak ayırmak için öncelikle bir **veri bölme (data split)** işlemi yapalım.
+
+Önceki bölümde öğrendiğiniz gibi, bu işlemin temel amacı, analiz yapmak ve modelinizi eğitmek için kullandığınız verinin aynısıyla modelinizi test etmekten kaçınmaktır.
+
+Veriyi eğitim ve test setlerine ayırma kodu aşağıda gösterilmiştir:
+
+```python
+from sklearn.model_selection import train_test_split # scikit-learn'den veri bölme fonksiyonunu içe aktarır
+
+X_train, X_test, y_train, y_test = train_test_split(
+ data, target,
+ test_size=0.2,    # Verinin rastgele %20'sini test seti olarak ayırır
+ random_state=42)  # Tekrarlanabilirlik için
+```
+
+Verinin rastgele **%20**'sini test seti olarak ayırdık. Şimdi bu bölme işlemini hızlıca kontrol edelim. Tüm veri setine baktığınızda, 20.640 veri noktası içerdiğini göreceksiniz. Her bir konut bloğu için özellik sayısı sekizdir. Eğitim seti **16.512** örnek, test seti ise **4.128** örnek içerir, bu durum aşağıdaki kod parçasında tasvir edilmiştir:
+
+```python
+>>> (data.shape, target.shape), (X_train.shape, y_train.shape), (X_test.shape, y_test.shape)
+(((20640, 8), (20640,)), ((16512, 8), (16512,)), ((4128, 8), (4128,)))
+```
+
+Nihai ML çözümünüzü elde edene kadar **test setindeki hedef verilere (y\_test)** dokunmamalısınız. Aksi takdirde, veri hazırlama ve model eğitimi dahil olmak üzere tüm analizleriniz **test verisine aşırı uyum sağlayabilir (overfit)** ve bu da çözüm devreye alındığında görülmemiş veriler üzerinde kötü performans göstermesine neden olur.
+
+Ancak, aşağıdaki bölümlerde yapacağımız gibi, veri ön işleme ve özellik mühendisliği aşamalarında **test setindeki özellikleri (X\_test)** eğitim özellikleriyle birleştirmek mümkündür. Özellikle veri seti boyutu küçük olduğunda, bu, özellik bilgisini bir araya getirmeye yardımcı olabilir.
 
 ### 2.3 Data preprocessing – 22
+
+Bir sonraki adımımız, veriyi ML algoritmalarına beslemek için uygun bir formata dönüştürmek amacıyla **ön işleme (preprocessing)** yapmaktır. Bu prosedür genellikle, veriye dair ön kabullere veya sorulara dayalı **keşifsel veri analizi (EDA)** içerir. EDA, veri setine aşina olmamıza ve daha iyi veri hazırlığı yapmamızı sağlayacak ek içgörüler kazanmamıza yardımcı olur.
+
+Yaygın olarak sorulan bazı sorular şunlardır:
+
+  * **Veri Tipleri:** Her bir özellikteki değerlerin veri tipleri nelerdir? Bunlar, boru hattının sonraki adımlarında doğrudan kullanılabilecek dizeler (string) veya başka nesneler mi, yoksa dönüştürülmeleri mi gerekiyor?
+  * **Ayrık Değerler:** Her bir özellik kaç farklı (distinct) değere sahip? Bunlar sayısal (numerical) değerler mi, kategorik (categorical) değerler mi, yoksa başka bir şey mi?
+  * **Ölçekler ve İstatistikler:** Her bir özelliğin ölçekleri ve temel istatistikleri nelerdir? Değerlerin dağılımını veya aralarındaki korelasyonları görselleştirerek bazı içgörüler elde edebilir miyiz?
+  * **Eksik Değerler:** Veride eksik değerler var mı? Varsa, bunları kaldırmalı mıyız yoksa doldurmalı mıyız?
+
+Pratikte, farklı veriler genellikle formatına ve özelliklerine, ilgilendiğimiz problemlere, seçilen ML modellerine ve benzeri faktörlere bağlı olarak **özel olarak hazırlanmış** veri ön işleme teknikleri gerektirir. Bu genellikle, çeşitli geçici (ad hoc) işlemlerin önerilmesiyle sonuçlanan sezgisel ve ampirik bir süreçtir.
+
+Bu örnekte, az önce bahsedilen dört soruyu ön hazırlık veri ön işleme işlemlerimizin temeli olarak kullanacağız. Daha fazla örneği ek B'de bulabilirsiniz.
+
+-----
+
+#### 1\. Veri Tiplerini Kontrol Etme
+
+İlgilendiğimiz ilk soru, özellik değerlerinin veri tipleridir. Bu örnekte, tüm özellikler ve hedefleri **kayan nokta (floating-point)** değerleridir ve bu nedenle ek bir manipülasyona gerek kalmadan doğrudan ML algoritmalarına beslenebilirler:
+
+```python
+>>> data.dtypes
+MedInc       float64
+HouseAge     float64
+AveRooms     float64
+AveBedrms    float64
+Population   float64
+AveOccup     float64
+Latitude     float64
+Longitude    float64
+dtype: object
+>>> target.dtypes
+dtype('float64')
+```
+
+#### 2\. Ayrık Değer Sayısını Kontrol Etme
+
+İkinci olarak, özelliklerdeki ayrık değerlerin sayısı ile ilgileniyoruz. Ayrık değerleri saymak, özellik türlerini ayırt etmek için faydalı olabilir, böylece onlara özel işleme stratejileri tasarlayabiliriz. Bu aynı zamanda gereksiz özellikleri kaldırmamıza da yardımcı olabilir. Örneğin, bir özellik için tüm veri örnekleri aynı değere sahipse, o özellik tahmin için yararlı herhangi bir bilgi sağlayamaz.
+
+Ayrıca, her veri noktasının bir özellik için benzersiz bir değere sahip olması da mümkündür, ancak bu değerlerin sınıflandırma için yardımcı olmayacağından eminizdir. Bu durum, yalnızca veri örneklerinin sırasını belirten veri noktalarının **ID** özelliği için sıklıkla geçerlidir.
+
+Aşağıdaki kodda, bu veri setinde tüm noktalar için değeri aynı olan hiçbir özellik olmadığını ve her veri noktasının benzersiz bir değere sahip olduğu hiçbir özellik olmadığını görebiliriz:
+
+```python
+>>> data.nunique()
+MedInc       12928
+HouseAge        52
+AveRooms     19392
+AveBedrms    14233
+Population    3888
+AveOccup     18841
+Latitude       862
+Longitude      844
+dtype: int64
+```
+
+"MedInc", "AveRooms" ve "AveBedrms" gibi bazı özellikler yüksek sayıda ayrık değere sahip olsa da, bunlar konut bloklarını karşılaştırmak ve fiyatı tahmin etmek için değerleri yararlı olan **sayısal özellikler** olduğu için bunları kaldırmamalıyız.
+
+#### 3\. Temel İstatistikleri Görüntüleme
+
+Daha fazla içgörü kazanmak için özelliklerin bazı temel istatistiklerini de görüntüleyebiliriz (şekil 2.3'te gösterildiği gibi). Örneğin, bir konut bloğundaki ortalama nüfus 1.425'tir, ancak bu veri setindeki en yoğun nüfuslu blokta 35.000'den fazla, en seyrek nüfuslu blokta ise sadece 3 kişi yaşamaktadır.
+
+![image](images/0012.png)
+
 ### 2.4 Feature engineering – 25
 ### 2.5 ML algorithm selection – 28
 
