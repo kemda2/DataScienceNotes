@@ -1059,6 +1059,91 @@ Her bir veri örneği, ağacın kökünden (en üstten) başlayarak yaprak düğ
 
 ![image](images/0016.png)
 
+Ağacın hem bölmeleri (splits) hem de her yapraktaki tahminler, **eğitim verisine** göre öğrenilir. Bir karar ağacını inşa etmek için tipik bir süreç Liste 2.11'de gösterilmiştir.
+
+### Karar Ağacının İnşası
+
+Ağaç **özyinelemeli (recursively)** olarak inşa edilir. Her bir özyinelemede, mevcut düğümdeki veri seti için **en uygun bölmeyi (optimal split)** buluruz. Her bölme düğümünde, düğüm tarafından verilen tahmin, bu düğüme düşen tüm eğitim örneklerinin **ortalama değerine** eşittir.
+
+En uygun bölme, iki alt düğümdeki tüm örneklerin tahmini değerleri ile hedef değerleri arasındaki **MSE'yi (Ortalama Karesel Hata) en aza indiren** bölme olarak tanımlanır. Özyineleme, bir çıkış koşulu karşılandığında durur. Bu koşulu tanımlamanın birden fazla yolu vardır. Örneğin, ağacın **maksimum derinliğini** önceden tanımlayabiliriz, böylece o derinliğe ulaşıldığında özyineleme durur. Ayrıca algoritmanın durdurma kriterine de dayanabiliriz. Örneğin, özyinelemenin çıkış koşulunu, "mevcut düğüme düşen eğitim örneği sayısı beşten az ise dur" şeklinde tanımlayabiliriz.
+
+```python
+decision_tree_root = construct_subtree(training_data)
+
+def construct_subtree(data):
+ if exit_condition(data):                  # Çıkış koşulu karşılanırsa, tahmin edilen değeri hesaplar
+  return LeafNode(get_predicted_value(data))
+  
+ condition = get_split_condition(data)     # Veriden en uygun bölme koşulunu alır
+ node = Node(condition)                    # Koşulla yeni bir düğüm oluşturur
+ 
+ left_data, right_data = condition.split_data(data) # Veriyi koşulla iki kısma böler
+ 
+ node.left = construct_subtree(left_data)  # Sol alt ağacı özyinelemeli olarak inşa eder
+ node.right = construct_subtree(right_data) # Sağ alt ağacı özyinelemeli olarak inşa eder
+ 
+ return node
+```
+
+### Karar Ağacı Modelinin Eğitimi ve Testi
+
+Scikit-learn ile bir karar ağacı oluşturmak kolaydır. Eğitim ve test kodu Liste 2.12'de gösterilmiştir. `max_depth` argümanı, eğitim sırasında ağaç modelinin maksimum derinliğini kısıtlayan bir **hiperparametre**dir. Bu maksimum derinliğe sahip bir düğüme ulaşıldığında veya mevcut düğüm ikiden az örnek içerdiğinde (varsayılan bir durdurma kriteri), ağaç büyümeyi durduracaktır.
+
+```python
+from sklearn.tree import DecisionTreeRegressor
+tree_regressor = DecisionTreeRegressor(max_depth=3, # Karar ağacı regresörü oluşturur
+                                       random_state=42)
+tree_regressor.fit(X_train, y_train)
+y_pred_train = tree_regressor.predict(X_train)
+y_pred_test = tree_regressor.predict(X_test)
+```
+
+Eğitim ve test setleri için MSE sonuçlarını yazdıralım. Aralarındaki fark, **küçük miktarda aşırı uyumu (overfitting)** işaret eder:
+
+```python
+>>> print(f'Eğitim MSE: {mean_squared_error(y_train, y_pred_train):.2f}')
+>>> print(f'Test MSE: {mean_squared_error(y_test, y_pred_test):.2f}')
+Eğitim MSE: 0.68
+Test MSE: 0.71
+```
+
+Mevcut karar ağacı modeli, doğrusal regresyon modeline kıyasla test setinde **biraz daha kötü** performans göstermektedir ($0.71$'e karşı $0.70$). Ancak, modelimizi sadece bu test sonuçlarına dayanarak seçmememiz gerektiğini belirtmek önemlidir. Model seçimi ve hiperparametre ayarı yapmanın doğru yolu, **ayrı bir doğrulama seti** üzerinden farklı modelleri denemektir. Test setini burada doğrudan değerlendirmemizin nedeni, sizi eğitim ve test prosedürüne alıştırmaktır.
+
+### Ağaç Modelini Görselleştirme
+
+Öğrenilen ağaç modelini daha sezgisel bir anlayış kazanmak için aşağıdaki kodla görselleştirebiliriz:
+
+```python
+# Kodu çalıştırmak için gerekli kütüphaneler (ör: pydotplus)
+from sklearn.externals.six import StringIO
+import sklearn.tree as tree
+import pydotplus
+from IPython.display import Image
+
+dot_data = StringIO()
+tree.export_graphviz(tree_regressor,
+                     out_file=dot_data,
+                     class_names=['MedPrice'],
+                     feature_names=selected_feature_set,
+                     filled=True,
+                     rounded=True)
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+Image(graph.create_png())
+```
+
+Öğrenilen ağaç, **üç derinliğinde** dengeli bir ikili ağaçtır (bkz. şekil 2.8). Bölme koşulu olmayan yaprak düğümler hariç, her düğüm dört mesaj iletir:
+
+1.  **Bölme Koşulu:** Bir örneğin bir özelliğe dayanarak hangi alt düğüme düşeceğine karar verir.
+2.  **Örnek Sayısı:** Mevcut düğüme düşen eğitim örneği sayısı.
+3.  **Ortalama Değer:** Hedeflerinin ortalama değeri.
+4.  **MSE:** Mevcut düğüme düşen tüm örneklerin MSE'si.
+
+Artık iki ML modeli oluşturduk ve karar ağacı modelinin test veri setimizde regresyon modelinden biraz daha kötü performans gösterdiğini biliyoruz. Şimdi asıl soru şudur: Test setine dokunmadan, karar ağacı modelini nihai testte doğrusal regresyon modelimizden daha iyi performans gösterecek şekilde iyileştirebilecek miyiz?
+
+Bu, ML boru hattında önemli bir adımı gündeme getiriyor: **Hiperparametre Ayarlama ve Model Seçimi.**
+
+![image](images/0017.png)
+
 ### 2.6 Fine-tuning the ML model: Introduction to grid search – 34
 
 ## 3. Deep learning in a nutshell
