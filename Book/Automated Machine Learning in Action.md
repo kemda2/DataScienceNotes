@@ -589,15 +589,80 @@ Bu, ilerleyen bölümlerde AutoML tekniklerini daha iyi anlamanıza ve etkili bi
 
 ## 2. The end-to-end pipeline of an ML project
 
-* 2.1 An overview of the end-to-end pipeline – 18
-* 2.2 Framing the problem and assembling the dataset – 19
-* 2.3 Data preprocessing – 22
-* 2.4 Feature engineering – 25
-* 2.5 ML algorithm selection – 28
+İlk bölüm sahneyi hazırladığına göre, artık **ML (Makine Öğrenimi) ve AutoML (Otomatik Makine Öğrenimi)**'nin temel kavramlarına aşina olma zamanı. AutoML, ML üzerine kurulu olduğu için, ML'nin temellerini öğrenmek, AutoML tekniklerini daha iyi anlamanıza ve kullanmanıza yardımcı olacaktır. Bu durum, özellikle bir AutoML algoritmasında, kullanılacak ML bileşenlerini ve bunların hiperparametre aralıklarını belirleyen **arama uzayını tasarlama** söz konusu olduğunda geçerlidir.
 
-  * *Building the linear regression model* – 29
-  * *Building the decision tree model* – 31
-* 2.6 Fine-tuning the ML model: Introduction to grid search – 34
+Bu bölümde, somut bir ML problemini çözme örneği üzerinden ilerleyeceğiz. Bu, özellikle ML projelerinde az deneyiminiz varsa, bir ML boru hattını (pipeline) oluşturmanın genel sürecini daha derinlemesine anlamanıza yardımcı olacaktır. Ayrıca, bir ML modelinin **hiperparametrelerini ayarlamanın basit bir yolunu** da öğreneceksiniz. Bu, AutoML'nin en basit uygulamalarından biri olarak düşünülebilir ve daha iyi bir ML çözümü bulmanıza nasıl yardımcı olabileceğini gösterir. Daha gelişmiş AutoML görevleri ve çözümleri kitabın ikinci bölümünde tanıtılacaktır.
+
+-----
+
+**NOT:** Bu ve sonraki bölümlerde yer alan tüm kod parçacıkları, **Python** dilinde ve **Jupyter Notebook** biçiminde yazılmıştır. Bunların tamamı, etkileşimli kod tasarımı, veri işleme ve görselleştirme, anlatı metni gibi özellikler sunan açık kaynaklı bir web uygulaması olan **Jupyter Notebook** ([https://jupyter.org](https://jupyter.org)) tarafından oluşturulmuştur. Bu, makine öğrenimi ve veri bilimi topluluklarında yaygın olarak popülerdir. Çevresel kuruluma aşina değilseniz veya yeterli donanım kaynağınız yoksa, kodu herkesin ML deneyleri yapabileceği ücretsiz bir Jupyter Notebook ortamı olan **Google Colaboratory** ([http://colab.research.google.com/](https://www.google.com/search?q=http://colab.research.google.com/%24)) (kısaca **Colab**) içinde de çalıştırabilirsiniz. Google Colaboratory'de ortam kurulumuna ilişkin ayrıntılı talimatlar **ek A**'da sunulmuştur. Notebook'lara ise [https://github.com/datamllab/automl-in-action-notebooks](https://www.google.com/search?q=https://github.com/datamllab/automl-in-action-notebooks%24) adresinden ulaşılabilir.
+
+### 2.1 An overview of the end-to-end pipeline – 18
+
+Bir ML (Makine Öğrenimi) boru hattı (pipeline), bir ML projesini yürütmek için gereken bir dizi ardışık adımdır.
+
+---
+
+## Makine Öğrenimi Boru Hattının Adımları
+
+1.  **Problemi Çerçeveleme ve Veri Toplama** 💡:
+    * İlgili sorunu bir **ML problemi** olarak tanımlayın.
+    * Bu çözüme ulaşmak için ihtiyaç duyduğunuz veriyi toplayın.
+
+2.  **Veri Ön İşleme ve Özellik Mühendisliği** ⚙️:
+    * Veriyi, ML algoritmalarına girdi olarak verilebilecek uygun bir formata dönüştürün.
+    * Algoritmaların performansını artırmak amacıyla, hedef çıktı ile ilişkili olan **özellikleri (features)** seçin veya yeni özellikler üretin.
+    * Bu adım, veri kümesinin özelliklerini anlamak için öncelikle **keşifsel veri analizi (EDA)** yaparak gerçekleştirilir.
+    * Yapılan işlemler, göz önünde bulundurduğunuz belirli ML algoritmalarına uyumlu olmalıdır.
+
+3.  **ML Algoritması Seçimi** 🧠:
+    * Probleme dair önceki bilginize ve deneyiminize dayanarak, test etmek istediğiniz görev için **uygun ML algoritmalarını** seçin.
+
+4.  **Model Eğitimi ve Değerlendirme** 📊:
+    * Seçilen ML algoritmasını (veya algoritmalarını) uygulayarak eğitim verinizle bir ML modeli **eğitin**.
+    * Modelin performansını **doğrulama (validation) veri kümesi** üzerinde değerlendirin.
+
+5.  **Hiperparametre Ayarlama** 🔬:
+    * Modelin **hiperparametrelerini** sürekli (tekrarlı, *iteratively*) olarak ayarlayarak daha iyi bir performans elde etmeye çalışın.
+
+6.  **Hizmet Dağıtımı ve Model İzleme** 🛰️:
+    * Nihai ML çözümünü **devreye alın (deploy)**.
+    * Boru hattını sürekli sürdürebilmek ve iyileştirebilmek için modelin performansını **izleyin (monitor)**.
+
+---
+
+Gördüğünüz gibi, bir ML projesi **insan döngüsü (human-in-the-loop)** içeren bir süreçtir. Problemi çerçeveleme ve veri toplamayla başlayan bu boru hattı, genellikle **eş zamansız (asynchronously)** gerçekleşen birden fazla veri işleme adımını içerir (bkz. şekil 2.1).
+
+Kitabın geri kalanında, hizmet dağıtımı ve izleme adımları öncesindeki adımlara odaklanılacaktır. Modellerin devreye alınması ve hizmet sunumu hakkında daha fazla bilgi edinmek için Jeff Smith'in *Machine Learning Systems* (Manning, 2018) veya Doug Hudgeon ve Richard Nichol'un *Machine Learning for Business* (Manning, 2019) gibi kaynaklara başvurabilirsiniz.
+
+![image](images/0010.png) 
+
+Hadi, boru hattındaki her bir bileşene aşina olmanız için **gerçek bir problem** üzerinde çalışmaya başlayalım.
+
+Burada inceleyeceğimiz problem, evlerin konumları ve oda sayıları gibi özellikler verildiğinde, belirli bir konut bloğundaki **ortalama ev fiyatını tahmin etmektir**.
+
+Kullanacağımız veri seti, R. Kelley Pace ve Ronald Barry'nin 1997 tarihli "Sparse Spatial Autoregressions" adlı makalesinde yer alan ve 1990 nüfus sayımı aracılığıyla toplanan **Kaliforniya Konut veri setidir**. Bu veri seti, küçük ölçekli olması ve veri hazırlığının basitliği nedeniyle, birçok pratik ML kitabında başlangıç problemi olarak kullanılan temsili bir örnektir.
+
+---
+
+**NOT:** Üzerinde çalışılacak doğru problemi seçmek zor olabilir. Bu, iş ihtiyaçlarınız ve araştırma hedefleriniz gibi birden fazla faktöre bağlıdır. Bir probleme gerçekten dahil olmadan önce, kendinize şu soruları sorun:
+* "Hangi çözümlere ulaşmayı bekliyorum?"
+* "Bu çözümler, sonraki (downstream) uygulamalarıma ne gibi faydalar sağlayacak?"
+* "Mevcut çalışmalar bu ihtiyacı zaten karşıladı mı?"
+
+Bu sorular, probleme **yatırım yapmaya değip değmeyeceğine** karar vermenize yardımcı olacaktır.
+
+### 2.2 Framing the problem and assembling the dataset – 19
+
+
+
+### 2.3 Data preprocessing – 22
+### 2.4 Feature engineering – 25
+### 2.5 ML algorithm selection – 28
+
+  #### *Building the linear regression model* – 29
+  #### *Building the decision tree model* – 31
+### 2.6 Fine-tuning the ML model: Introduction to grid search – 34
 
 ## 3. Deep learning in a nutshell
 
