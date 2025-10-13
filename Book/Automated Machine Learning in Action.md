@@ -804,7 +804,139 @@ Daha fazla içgörü kazanmak için özelliklerin bazı temel istatistiklerini d
 
 ![image](images/0012.png)
 
+Gerçek dünya uygulamalarındaki temel zorluklardan biri, verideki **eksik değerlerdir**. Bu sorun, verilerin toplanması veya iletilmesi sırasında ortaya çıkabilir veya bozulma, verinin doğru yüklenememesi gibi nedenlerden kaynaklanabilir. Uygun şekilde ele alınmadığı takdirde, eksik değerler ML çözümünün performansını etkileyebilir ve hatta programın çökmesine neden olabilir.
+
+Verideki eksik ve geçersiz değerlerin yerine ikame değerler konulması işlemine **imputasyon (imputation)** denir.
+
+Aşağıdaki kod, eğitim ve test veri setlerimizde eksik değer olup olmadığını kontrol eder:
+
+```python
+train_data = X_train.copy()          # Eğitim verisini, yerinde değişikliği önlemek için kopyalar
+train_data['MedPrice'] = y_train     # Özellikleri ve hedefi, 'MedPrice' sütununu ekleyerek birleştirir
+
+print(f'-- eğitim verisindeki eksik değer kontrolü --\n{train_data.isnull().any()}') # Eğitim setinde eksik değer olup olmadığını kontrol eder
+print(f'-- test verisindeki eksik değer kontrolü --\n{X_test.isnull().any()}')      # Test setinde eksik değer olup olmadığını kontrol eder
+```
+
+Aşağıdaki sonuçlar, veri setinde eksik değer olmadığını gösterir, bu nedenle bu problemi daha fazla düşünmeden analizimize devam edebiliriz (eksik değerlerle başa çıkma örneğini 3. bölümde göreceksiniz):
+
+```
+-- eğitim verisindeki eksik değer kontrolü --
+MedInc       False
+HouseAge     False
+AveRooms     False
+AveBedrms    False
+Population   False
+AveOccup     False
+Latitude     False
+Longitude    False
+MedPrice     False
+dtype: bool
+-- test verisindeki eksik değer kontrolü --
+MedInc       False
+HouseAge     False
+AveRooms     False
+AveBedrms    False
+Population   False
+AveOccup     False
+Latitude     False
+Longitude    False
+dtype: bool
+```
+
+Basitlik açısından, burada ek bir veri ön işleme yapmayacağız. Genellikle, ML modellerinin eğitimini etkileyebilecek aykırı değerleri (outliers) kontrol etmek ve verinizde varsa bunları kaldırmak gibi diğer yaygın adımları atmak isteyebilirsiniz. Ayrıca, gerçek dünya veri setleri genellikle bu örnekte kullanılan kadar iyi biçimlendirilmiş olmaz. Farklı veri tipleriyle başa çıkan veri ön işleme tekniklerinin daha fazla örneği Ek B'de verilmiştir; bu konuya aşina değilseniz bir sonraki bölüme geçmeden önce bu örnekleri gözden geçirmenizi tavsiye ederim.
+
+Şimdi, genellikle veri ön işleme ile eş zamanlı olarak yürütülen **özellik mühendisliği (feature engineering)** adımına geçeceğiz.
+
 ### 2.4 Feature engineering – 25
+
+Ham veriyi kullanışlı veya verimli bir formata dönüştürmeye odaklanan **veri ön işlemeden** farklı olarak, **özellik mühendisliği (feature engineering)**, ML algoritmalarının performansını artırmak için bir dizi iyi özellik **üretmeyi ve seçmeyi** amaçlar. Bu süreç genellikle belirli alan bilgisine (*domain knowledge*) dayanır ve aşağıdaki iki adımla **tekrarlı (iteratively)** ilerler:
+
+-----
+
+## Özellik Mühendisliğinin Adımları
+
+### 1\. Özellik Üretimi (Feature Generation)
+
+Mevcut özellikleri dönüştürerek **yeni özellikler** oluşturmayı hedefler.
+
+  * **Tek bir özellik** üzerinde yapılabilir: Örneğin, ölçülebilir sayısal bir özellik elde etmek için kategorik bir özelliği her kategorideki sıklık sayısıyla ikame etmek gibi.
+  * **Birden fazla özellik** üzerinde yapılabilir: Örneğin, farklı mesleklerdeki erkek ve kadın çalışan sayısını sayarak, farklı sektörlerdeki işe alım adaletini analiz etmek için daha açıklayıcı bir özellik elde edebiliriz.
+
+### 2\. Özellik Seçimi (Feature Selection)
+
+ML algoritmalarının verimliliğini ve doğruluğunu artırmak için **mevcut özelliklerin en faydalı alt kümesini** seçmeyi amaçlar.
+
+Özellik seçimi ve üretimi genellikle, üretilen özelliklerin hedeflerle olan korelasyonu gibi anlık geri bildirimlerden veya eğitilmiş ML modelinin değerlendirme veri setindeki performansına dayalı gecikmeli geri bildirimlerden yararlanılarak **tekrarlı bir şekilde** yapılır.
+
+-----
+
+### Korelasyon Matrisi ile Özellik Seçimi
+
+Aşağıdaki kodda (Liste 2.6), **Pearson Korelasyon Katsayısı** kullanarak her bir özellik ile hedef arasındaki korelasyonu ölçerek basit bir özellik seçimi gerçekleştiriyoruz.
+
+**Pearson Korelasyon Katsayısı**, iki değişken arasındaki **doğrusal korelasyonu** ölçer (özellik ve hedef). Değer, **-1** ile **1** arasında değişebilir; burada -1 mükemmel bir negatif doğrusal ilişkiyi, 1 ise mükemmel bir pozitif doğrusal ilişkiyi gösterir. 0 katsayısı ise hiçbir ilişki olmadığını belirtir.
+
+```python
+import matplotlib.pyplot as plt # Genel çizim konfigürasyonu için kütüphaneyi içe aktarır
+import seaborn as sns           # Isı haritasını (heatmap) çizmek için seaborn kütüphanesini içe aktarır
+%matplotlib inline              # Jupyter notebook'larda şekil gösterimini düzenler
+
+plt.figure(figsize=(30,10))     # Şekil boyutunu ayarlar
+correlation_matrix = train_data.corr().round(2) # Pearson korelasyon katsayısı matrisini hesaplar
+sns.heatmap(data=correlation_matrix, square= True, # Tüm özellikler ve hedef arasındaki korelasyonları çizer
+            annot=True, cmap='Blues')
+```
+
+Matrisin (bkz. şekil 2.4) **en son satırına** odaklanacağız. Bu satır, hedef konut fiyatı ile her bir özellik arasındaki ikili korelasyonu göstermektedir. Ardından, seçtiğimiz iki özelliği tartışacağız.
+
+![image](images/0013.png)
+
+Katsayı matrisine ve aşağıdaki varsayımlara dayanarak, en yüksek korelasyona sahip iki özelliği seçiyoruz:
+
+  * **MedInc (Medyan Gelir)** 💰: Konut bloğu içindeki hane halkları için medyan geliri gösteren bu özellik, hedef değerlerle **yüksek pozitif doğrusal korelasyon** göstermektedir. Bu, sezgisel olarak yüksek gelirli insanların daha yüksek konut fiyatlarına sahip bloklarda yaşama olasılığının daha yüksek olduğu fikriyle (pozitif korelasyon) uyumludur.
+  * **AveRooms (Ortalama Oda Sayısı)** 🏠: Bu özellik, bir bloktaki her evdeki ortalama oda sayısını gösterir. Daha fazla odaya sahip evlerin fiyatlarının daha yüksek olma olasılığı daha fazladır (**pozitif korelasyon**).
+
+Basitlik için burada yalnızca iki özellik seçiyoruz. Özellik seçimi aşağıdaki kodda uygulanmıştır:
+
+```python
+selected_feature_set = ['MedInc', 'AveRooms',]
+sub_train_data = train_data[
+ selected_feature_set + ['MedPrice']] # Seçilen özellikleri ve hedefi içeren alt eğitim veri setini oluşturur.
+X_train = sub_train_data.drop(['MedPrice'], axis=1) # Yeni X_train'i oluşturur.
+X_test = X_test[selected_feature_set] # X_test'i de seçilen özelliklerle sınırlar.
+```
+
+**Not:** Özellik seçimini, görsel incelemeye dayandırmak yerine, hesaplanan Pearson korelasyon katsayıları için bir eşik değeri (örneğin 0.5) seçerek otomatikleştirmek de mümkündür. Seçilecek özellik sayısı, dikkatlice karar vermemiz gereken bir **hiperparametre**dir. ML modelimizi eğitmek için farklı özellik kombinasyonlarını deneyebilir ve deneme yanılma yoluyla en iyi olanı seçebiliriz.
+
+-----
+
+## Seçilen Özelliklerin Görselleştirilmesi
+
+İki özelliği seçtikten sonra, bunlar ve hedef arasındaki ikili korelasyonları göstermek için dağılım grafikleri (*scatterplots*) çizebiliriz. Dağılımları aşağıdaki kod kullanılarak histogram grafikleri aracılığıyla birlikte gösterilebilir:
+
+```python
+sns.pairplot(sub_train_data, height=3.5, plot_kws={'alpha': 0.4})
+```
+
+Dağılım grafikleri, "MedInc" özelliği ile hedef "MedPrice" arasında **güçlü bir pozitif korelasyon** olduğunu göstermektedir. "AveRooms" özelliği ile "MedPrice" arasındaki korelasyon ise, özellikler arasındaki ölçek farkları ve aykırı değerler (*outliers*) nedeniyle nispeten **daha az belirgindir** (bkz. şekil 2.5).
+
+-----
+
+## Özellik Seçiminin Sınırlamaları
+
+Özellik seçimi için Pearson korelasyon katsayısını kullanmak kolaydır, ancak pratikte her zaman etkili olmayabilir. Çünkü bu yöntem:
+
+1.  Özellikler ile hedef arasındaki **doğrusal olmayan (nonlinear) ilişkileri** göz ardı eder.
+2.  Özelliklerin kendi aralarındaki korelasyonları da dikkate almaz.
+3.  Değerleri sıralı olmayan **kategorik özellikler** için, özellik ile hedef arasındaki korelasyon anlamlı olmayabilir.
+
+Giderek daha fazla özellik mühendisliği tekniği önerildiği için, en iyi olanı nasıl seçeceğimize karar vermek zor bir nokta haline gelmiştir. Bu durum, AutoML'de önemli bir konu olan **otomatik özellik seçimi ve dönüşümü** konusunu gündeme getirir; ancak bunun tartışmasını kitabın ikinci kısmına bırakacak ve şimdilik elimizdeki problemi çözmeye devam edeceğiz.
+
+Artık eğitim verimizi hazırladığımıza ve özelliklerimizi seçtiğimize göre, önceden işlenmiş verilerle bir ML modeli eğitmek için kullanacağımız algoritmaları seçmeye hazırız. (Pratikte, daha özel bir veri hazırlama süreci izlemek için ML algoritmalarını veri ön işleme ve özellik mühendisliği adımlarından **önce** de seçebilirsiniz.)
+
+![image](images/0014.png)
+
 ### 2.5 ML algorithm selection – 28
 
   #### *Building the linear regression model* – 29
