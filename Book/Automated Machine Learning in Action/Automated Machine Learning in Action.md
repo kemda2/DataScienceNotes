@@ -1,6 +1,6 @@
 
 # Part 1: Fundamentals of AutoML
-
+ 
 Kitabın ilk üç bölümü, AutoML öğrenimine temel oluşturmak amacıyla, makine öğreniminin bazı temel kavramlarını ve modellerini tanıtarak temel yapı taşlarını anlamanıza yardımcı olur.
 
 1. bölümde AutoML’nin genel kavramlarını, ne olduğunu ve genel makine öğrenimiyle olan bağlantısını görmeye başlayacaksınız. Ayrıca AutoML’nin araştırma açısından değerini ve pratik faydalarını öğreneceksiniz.
