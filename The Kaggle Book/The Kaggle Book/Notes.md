@@ -144,7 +144,7 @@ Bu noktada, özellikle **Kaggle**’ın nasıl çalıştığını daha derinleme
 Aşağıdaki paragraflarda, Kaggle platformunun ve yarışmalarının çeşitli yönlerini ele alacağız ve Kaggle’daki bir yarışmada yer almanın ne anlama geldiğine dair bir fikir edineceksiniz.
 Daha sonra, kitabın geri kalan bölümlerinde bu konuların çoğuna çok daha ayrıntılı biçimde geri dönerek, ek öneriler ve stratejilerle birlikte tartışacağız.
 
-### Stages of a competition *(Bir yarışmanın aşamaları)*
+#### Stages of a competition *(Bir yarışmanın aşamaları)*
 
 Kaggle’daki bir yarışma, farklı adımlardan oluşacak şekilde düzenlenir.
 Bu adımların her birine göz atarak, bir veri bilimi yarışmasının nasıl işlediğini ve sizden neler beklenebileceğini daha iyi anlayabilirsiniz.
@@ -229,7 +229,7 @@ Kaggle’daki yarışmaları filtrelemek için kullanabileceğiniz **resmî kate
 
 ---
 
-#### 🏆 Featured (Öne Çıkan) Yarışmalar
+> 🏆 Featured (Öne Çıkan) Yarışmalar
 
 Bunlar en yaygın yarışma türüdür. Genellikle sponsor bir şirketin iş ile ilgili bir problemini içerir ve en iyi performans gösterenlere ödül verilir.
 Kazananlar, çözümlerinin **lisanssız (non-exclusive)** kullanım hakkını sponsor şirkete verirler; ayrıca ayrıntılı bir rapor hazırlamaları ve bazen sponsor şirketle toplantılara katılmaları gerekebilir.
@@ -243,14 +243,14 @@ Buna karşılık, **yapılandırılmamış veri** dünyasında iyi bir derin ö�
 
 ---
 
-#### 🧠 Masters (Ustalar) Yarışmaları
+> 🧠 Masters (Ustalar) Yarışmaları
 
 Artık daha az düzenlenmektedir, ancak bunlar **özel (invite-only)** yarışmalardır.
 Amaç, yalnızca uzmanlar (genellikle Kaggle sıralamasında **Master** veya **Grandmaster** unvanına sahip yarışmacılar) için yarışmalar düzenlemektir.
 
 ---
 
-#### 📅 Annuals (Yıllık) Yarışmalar
+> 📅 Annuals (Yıllık) Yarışmalar
 
 Her yıl belirli dönemlerde düzenlenen yarışmalardır.
 Bunlar arasında:
@@ -260,7 +260,7 @@ Bunlar arasında:
 
 ---
 
-#### 🔬 Research (Araştırma) Yarışmaları
+> 🔬 Research (Araştırma) Yarışmaları
 
 Bu yarışmaların amacı ticari değil, **bilimsel veya araştırma odaklıdır**, bazen de kamu yararına hizmet eder.
 Bu nedenle genellikle para ödülü sunmazlar.
@@ -270,7 +270,7 @@ Ayrıca kazananlardan çözümlerini **açık kaynak (open-source)** olarak payl
 
 ---
 
-#### 💼 Recruitment (İşe Alım) Yarışmaları
+> 💼 Recruitment (İşe Alım) Yarışmaları
 
 Bu yarışmalar, sponsor şirketlerin **potansiyel iş adaylarının yeteneklerini test etmek** için düzenlenir.
 Genellikle tek kişilik takımlarla sınırlıdır ve en iyi performans gösteren yarışmacılara **iş görüşmesi** ödülü sunulur.
@@ -283,7 +283,7 @@ Yarışma sonunda, değerlendirilmek isteyen yarışmacıların **özgeçmişler
 
 ---
 
-#### 🚀 Getting Started (Başlangıç) Yarışmaları
+> 🚀 Getting Started (Başlangıç) Yarışmaları
 
 Bu yarışmalar ödül sunmaz, ancak **yeni başlayanların** Kaggle prensiplerine ve dinamiklerine alışmaları için **kolay ve öğretici problemler** içerir.
 Genellikle **yarı kalıcıdırlar** ve liderlik tabloları zaman zaman yenilenir.
@@ -297,7 +297,7 @@ Bazı ünlü Getting Started yarışmaları:
 
 ---
 
-#### 🎮 Playground (Oyun Alanı) Yarışmaları
+> 🎮 Playground (Oyun Alanı) Yarışmaları
 
 Bu yarışmalar **Getting Started** yarışmalarından biraz daha zordur, ancak hâlâ öğrenme ve pratik yapma odaklıdır.
 Tam ölçekli Featured yarışmalar kadar baskı oluşturmazlar, fakat bazen rekabet oldukça kızışabilir.
@@ -309,13 +309,13 @@ Tam ölçekli Featured yarışmalar kadar baskı oluşturmazlar, fakat bazen rek
 
 ---
 
-#### 📊 Analytics (Analiz) Yarışmaları
+> 📊 Analytics (Analiz) Yarışmaları
 
 Bu yarışmalarda değerlendirme **niteliksel (qualitative)** olup, katılımcılardan fikirler, çözüm taslakları, PowerPoint sunumları, grafikler vb. hazırlamaları beklenir.
 
 ---
 
-#### 👥 Community (Topluluk) Yarışmaları
+> 👥 Community (Topluluk) Yarışmaları
 
 Eskiden **InClass** olarak bilinen bu yarışmalar, **akademik kurumlar** veya bireysel **Kaggler’lar** tarafından düzenlenir.
 Topluluk yarışmalarının duyurusu için:
