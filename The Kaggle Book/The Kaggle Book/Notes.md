@@ -431,7 +431,7 @@ CTF paradigması, birçok alanda en iyi çözümleri yeniden şekillendirmeye ka
 
 ---
 
-### CTF’nin bileşenleri ve “gizli sosu”
+#### CTF’nin bileşenleri ve “gizli sosu”
 
 Bir CTF, bazı bileşenlerden ve “gizli bir sostan” oluşur.
 Bileşenler şunlardır:
@@ -451,7 +451,7 @@ Bu rekabet baskısı, katılımcılar arasında belli ölçüde **bilgi paylaş�
 
 ---
 
-### CTF’nin gizli sosu: rekabetin kendisi
+#### CTF’nin gizli sosu: rekabetin kendisi
 
 CTF paradigmasındaki “gizli sos”, **bizzat yarışmanın kendisidir**.
 Bu yapı, ampirik performansın artırılmasının hedeflendiği pratik bir problem çerçevesinde, her zaman yeni **ölçütlerin (benchmark)**, **veri ve modelleme çözümlerinin**, ve genel anlamda **makine öğrenmesinin daha iyi uygulanma biçimlerinin** ortaya çıkmasını sağlar.
@@ -462,7 +462,7 @@ Bir yarışma, dolayısıyla bir tahmin problemini çözmenin yeni yollarını, 
 
 ---
 
-### CTF ve açık yazılım hareketi
+#### CTF ve açık yazılım hareketi
 
 **Açık kaynak yazılım hareketi** ile birleştiğinde (örneğin Scikit-learn, TensorFlow veya PyTorch gibi güçlü analitik araçlara herkesin erişebilmesi), CTF paradigması çok daha iyi sonuçlar üretir.
 Bunun nedeni, tüm yarışmacıların başlangıçta **aynı düzeyde olanaklara sahip** olmasıdır.
