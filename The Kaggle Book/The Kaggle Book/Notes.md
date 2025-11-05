@@ -210,7 +210,7 @@ Kazananlar açıklanır ve birçok katılımcı, yarışma tartışma forumunda 
 Bu noktada, diğer katılımcıların çözümlerini incelemek ve kendi yaklaşımınızı geliştirmeye çalışmak tamamen size kalmıştır.
 Bunu yapmanızı **şiddetle tavsiye ederiz**, çünkü bu süreç Kaggle’daki en önemli öğrenme kaynaklarından bir diğeridir.
 
-### Types of competitions and examples *(Yarışma türleri ve örnekleri)*
+#### Types of competitions and examples *(Yarışma türleri ve örnekleri)*
 
 Kaggle yarışmaları, **yarışma kategorilerine** göre sınıflandırılır ve her kategori, yarışma biçimi ve beklentiler açısından farklılık gösterir.
 Veri türü, problem zorluğu, verilen ödüller ve yarışma dinamikleri bu kategoriler içinde oldukça çeşitlidir; bu nedenle her kategorinin ne anlama geldiğini önceden anlamak önemlidir.
@@ -411,13 +411,13 @@ Son olarak, çoğu yarışmanın, birçok veri bilimcisinin iş yerinde erişeme
 Kaggle dışındaki bulut platformlarını kullanırsanız bu, **artan maliyetlere** yol açabilir.
 Bu nedenle, **Code yarışmaları** veya **zaman ve kaynak sınırlamaları olan yarışmalar**, tüm katılımcıları aynı kaynak düzeyine getirmeyi amaçladıkları için çabalarınızı yoğunlaştırmak açısından ideal bir seçenek olabilir.
 
-### Submission and leaderboard dynamics *(Gönderim ve liderlik tablosu dinamikleri)*
+#### Submission and leaderboard dynamics *(Gönderim ve liderlik tablosu dinamikleri)*
 
 Kaggle’ın çalışma biçimi basit görünebilir: Test seti katılımcılardan gizlenir; modelinizi eğitirsiniz; eğer modeliniz test setindeki sonuçları en iyi şekilde tahmin ederse yüksek puan alır ve muhtemelen kazanırsınız.
 Ne yazık ki, bu tanım Kaggle yarışmalarının iç işleyişini **fazla basitleştirilmiş** bir şekilde açıklar.
 Bu açıklama, yarışmacıların doğrudan ve dolaylı etkileşimleriyle ilgili dinamikleri ya da karşı karşıya olduğunuz problemin, eğitim ve test setinin **ince ayrıntılarını (nüanslarını)** dikkate almaz.
 
-#### Explaining the Common Task Framework paradigm *(Ortak Görev Çerçevesi paradigmasının açıklanması)*
+##### Explaining the Common Task Framework paradigm *(Ortak Görev Çerçevesi paradigmasının açıklanması)*
 
 Kaggle’ın nasıl çalıştığına dair daha kapsamlı bir açıklama, **Stanford Üniversitesi İstatistik Profesörü David Donoho** tarafından *50 Years of Data Science* (Veri Biliminin 50 Yılı) adlı makalesinde verilmiştir.
 Bu makale ilk olarak *Journal of Computational and Graphical Statistics* dergisinde yayımlanmış, ardından MIT Bilgisayar Bilimi ve Yapay Zekâ Laboratuvarı sitesinde paylaşılmıştır (bkz. [http://courses.csail.mit.edu/18.337/2015/docs/50YearsDataScience.pdf](http://courses.csail.mit.edu/18.337/2015/docs/50YearsDataScience.pdf)).
@@ -431,7 +431,7 @@ CTF paradigması, birçok alanda en iyi çözümleri yeniden şekillendirmeye ka
 
 ---
 
-##### CTF’nin bileşenleri ve “gizli sosu”
+**CTF’nin bileşenleri ve “gizli sosu”**
 
 Bir CTF, bazı bileşenlerden ve “gizli bir sostan” oluşur.
 Bileşenler şunlardır:
@@ -451,7 +451,7 @@ Bu rekabet baskısı, katılımcılar arasında belli ölçüde **bilgi paylaş�
 
 ---
 
-##### CTF’nin gizli sosu: rekabetin kendisi
+**CTF’nin gizli sosu: rekabetin kendisi**
 
 CTF paradigmasındaki “gizli sos”, **bizzat yarışmanın kendisidir**.
 Bu yapı, ampirik performansın artırılmasının hedeflendiği pratik bir problem çerçevesinde, her zaman yeni **ölçütlerin (benchmark)**, **veri ve modelleme çözümlerinin**, ve genel anlamda **makine öğrenmesinin daha iyi uygulanma biçimlerinin** ortaya çıkmasını sağlar.
@@ -462,7 +462,7 @@ Bir yarışma, dolayısıyla bir tahmin problemini çözmenin yeni yollarını, 
 
 ---
 
-##### CTF ve açık yazılım hareketi
+**CTF ve açık yazılım hareketi**
 
 **Açık kaynak yazılım hareketi** ile birleştiğinde (örneğin Scikit-learn, TensorFlow veya PyTorch gibi güçlü analitik araçlara herkesin erişebilmesi), CTF paradigması çok daha iyi sonuçlar üretir.
 Bunun nedeni, tüm yarışmacıların başlangıçta **aynı düzeyde olanaklara sahip** olmasıdır.
@@ -473,7 +473,7 @@ Ancak, bir yarışmadaki çözümün **özel donanım veya yüksek işlem gücü
 İşte bu nedenle Kaggle, yarışmalara katılanlar için **ücretsiz bulut hizmetleri** (örneğin **Kaggle Notebooks**) sunmaya başlamıştır.
 Bu uygulama, özellikle donanım yoğun yarışmalarda (örneğin derin öğrenme yarışmaları gibi) bazı farkları azaltabilir ve genel anlamda rekabeti artırabilir.
 
-#### Understanding what can go wrong in a competition *(Bir yarışmada nelerin ters gidebileceğini anlamak)*
+##### Understanding what can go wrong in a competition *(Bir yarışmada nelerin ters gidebileceğini anlamak)*
 
 ##### CTF Paradigması ve Yarışma Başarısızlıklarının Nedenleri
 
