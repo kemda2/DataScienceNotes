@@ -960,6 +960,128 @@ Yukarıdaki ekran görüntüsü, veri setinizle ilgili sağlayabileceğiniz fark
 
 ### Gathering the data *(Veri toplama)*
 
+Hukuki boyutlar dışında, veri setlerinde saklayabileceğiniz içerik türü konusunda gerçek bir sınır yoktur: tablo verileri, görseller, metin; eğer boyut gereksinimlerine uyuyorsa, bunları saklayabilirsiniz. Bu, diğer kaynaklardan elde edilen verileri de kapsar; yazının hazırlandığı tarihte popüler veri setleri arasında hashtag veya konuya göre toplanmış tweetler yer almaktadır:
+
+![](im/1010.png)
+
+Sosyal medyadan (Twitter, Reddit ve benzeri) veri toplamak için kullanılan farklı çerçevelerin tartışılması, bu kitabın kapsamı dışındadır.
+
+> **Andrew Maranhão**
+> 
+> [https://www.kaggle.com/andrewmvd](https://www.kaggle.com/andrewmvd)
+> 
+> 
+> 
+> Andrew Maranhão (diğer adıyla Larxel), Datasets Grandmaster (yazının hazırlandığı sırada Datasets’te bir numara) ve São Paulo’daki Hospital Albert Einstein’da Kıdemli Veri Bilimci, bize Datasets başarısına nasıl ulaştığını, veri seti oluşturma ipuçlarını ve Kaggle’daki genel deneyimlerini anlattı.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Kaggle’da teknikler ve çözüm yaklaşımları açısından uzmanlık alanınız nedir?**
+> 
+> Genellikle en sevdiğim alan tıbbi görüntülemedir. Hem işimle hem de amacımla örtüşüyor. Tıbbi yarışmalarda NLP dil ile sınırlıdır, tablo verileri hastaneler arasında büyük farklılık gösterir, fakat görüntüleme çoğunlukla aynıdır; bu nedenle bu bağlamda yapılan herhangi bir gelişme, dünya genelinde birçok ülke için fayda sağlayabilir ve bu etki potansiyelini seviyorum. Ayrıca NLP ve tablo verilerini de severim, ama sanırım bu oldukça standart bir tercih.
+> 
+> 
+> 
+> **Katıldığınız özellikle zorlayıcı bir yarışmayı ve bu görevi çözmek için kullandığınız yöntemleri anlatır mısınız?**
+> 
+> Bir tüberküloz tespit yarışmasında, yaklaşık 1.000 röntgen görüntüsü vardı; bu sayı, hastalığın tüm belirtilerini yakalamak için oldukça küçüktü. Bunu telafi etmek için iki fikir geliştirdim:
+> 
+> 
+> 
+> 1. Dış veri ile pnömoni tespiti için ön eğitim (~20k görüntü), çünkü pnömoni tüberküloz ile karıştırılabilir.
+> 
+> 2. Akciğer anomalilerinin çok etiketli sınıflandırması (~600k görüntü) üzerinde ön eğitim ve basit bir SSD ile sınıflandırma etiketlerinin bounding box anotasyonlarını oluşturmak için grad-CAM kullanımı.
+> 
+> 
+> 
+> Sonuçta, bu iki yaklaşımın basit bir karışımı, ikinci sıradaki takımın sonucuna göre %22 daha iyi bir performans sağladı. Bu yarışma, yaklaşık 100 takımın katıldığı bir tıbbi kongrede gerçekleşti.
+> 
+> 
+> 
+> **Dataset Grandmaster oldunuz ve Datasets’te 1 numara oldunuz. Veri setleri için konu seçimi, veri bulma, toplama ve yayımlama süreciniz nasıl işliyor?**
+> 
+> Bu büyük bir soru; parçalar hâlinde açıklamaya çalışayım:
+> 
+> 
+> 
+> 1. **Kendinize bir amaç belirleyin**
+> 
+>    Konu seçerken aklımda tuttuğum ilk şey, bunu yapmamın temel nedenidir. Derin bir amaç olduğunda, mükemmel veri setleri bir sonuç olarak ortaya çıkar, hedef olarak değil.
+> 
+> 
+> 
+> 2. **Harika bir veri seti, harika bir sorunun vücut bulmuş hâlidir**
+> 
+>    En iyi veri setlerinde ortak temalar:
+> 
+> 
+> 
+> * Cesur ve ilgili bir soru, büyük potansiyele sahip
+> 
+> * Veriler iyi toplanmış, kalite kontrolü yapılmış ve iyi belgelenmiş
+> 
+> * Mevcut donanım için yeterli veri ve çeşitlilik
+> 
+> * Veriye sürekli katkıda bulunan aktif bir topluluk
+> 
+> 
+> 
+> 3. **Sadece başarıya odaklanmayın; başarı için süreci oluşturun**
+> 
+>    Kalite, nicelikten çok daha önemlidir. Grandmaster olmak için sadece 15 veri setine ihtiyacınız vardır ve öne çıkan veri setleri az ve iyi hazırlanmış olmalıdır. Ayrıca veri setlerinin bakım ve sürekli geliştirme gerektirdiğini unutmayın. Topluluk desteği de çok önemlidir; veri setinizi analiz edenlerin ihtiyaçlarını ve seçimlerini anlamak, ön işleme adımlarınızı ve belgelerinizi geliştirebilir.
+> 
+> 
+> 
+> **Örnek süreç:**
+> 
+> Sosyal refahı artırmak istiyorsunuz → hedef: ırksal eşitlik → konular: Black Lives Matter hareketi → soru: Milyonlarca sesin ne dediğini nasıl anlayabilirim? → veri türü: NLP → veri toplama: haber makaleleri, YouTube yorumları, tweetler → ön işleme ve anonimleştirme → yayınlama → topluluk desteği ve geliştirme.
+> 
+> 
+> 
+> 4. **İyi iş yapmak, kontrolünüzde olan tek şeydir**
+> 
+>    Grandmaster olmanızı başkaları sağlar; oylar her zaman çabaya veya etkiye dönüşmez. Önemli olan sizin çabanız, öğrenmeniz ve denemenizdir.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenimi için önerdiğiniz araçlar/lisanslar nelerdir?**
+> 
+> LightGBM, CatBoost, Optuna, Streamlit, Gradio, FastAPI, Plotly, PyTorch gibi kütüphaneleri öneriyor. Ayrıca, kendi çözümlerinizi uygulamak, derinlemesine bilgi edinmek açısından çok değerli.
+> 
+> 
+> 
+> **Deneyimsiz Kagglers neyi sıklıkla gözden kaçırır?**
+> 
+> 
+> 
+> * Yarışmanın sonunda bilgiyi tam olarak absorbe etmek
+> 
+> * Bitmiş yarışmalarda kazanan çözümleri tekrar etmek
+> 
+> 
+> 
+> **Kaggle kariyerinize nasıl katkı sağladı?**
+> 
+> Kaggle bilgi, deneyim ve portföy kazandırdı. İlk veri bilimi işim büyük ölçüde Kaggle ve DrivenData yarışmaları sayesinde oldu.
+> 
+> 
+> 
+> **Portföyünüzü potansiyel işverenlere göstermek için Kaggle deneyimlerinizi kullandınız mı?**
+> 
+> Kesinlikle. İlk işimi Kaggle portföyü sayesinde aldım. Portföy, eğitim geçmişinden daha iyi veri bilimi bilgisi ve deneyimi temsil eder.
+> 
+> 
+> 
+> **Başka yarışma platformları kullanıyor musunuz? Kaggle ile karşılaştırması nasıl?**
+> 
+> DrivenData ve AICrowd’u da kullanıyorum. Kaggle daha büyük ve aktif bir topluluk sunuyor, donanım ve veri/Notebook özellikleri ile en iyi seçenek. Ancak diğer platformlar da ilginç ve çeşitli zorluklar sunuyor.
+> 
+> 
+> 
+> **Bir yarışmaya girerken en önemli şey nedir?**
+> 
+> Gelişim odaklıysanız, ilginizi çeken ve daha önce yapmadığınız bir konuyu seçin. Derinlik ve çeşitlilik kritik; derinlik, odaklanarak ve en iyinizi vererek; çeşitlilik ise daha önce yapmadığınız veya farklı yaptığınız şeyleri deneyerek elde edilir.
+
 ### Working with datasets *(Veri setleriyle çalışma)*
 
 ### Using Kaggle Datasets in Google Colab *(Google Colab’da Kaggle veri setlerini kullanma)*
