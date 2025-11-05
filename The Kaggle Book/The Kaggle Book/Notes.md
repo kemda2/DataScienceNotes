@@ -1173,7 +1173,95 @@ Bu bölümde, Kaggle platformunda verileri depolamanın ve kullanmanın standart
 
 ## Chapter 3: Working and Learning with Kaggle Notebooks *(Bölüm 3: Kaggle Notebooks ile Çalışmak ve Öğrenmek)*
 
+Kaggle Notebooks — yakın zamana kadar **Kernels** olarak adlandırılıyordu — tarayıcı üzerinden çalışan ve ücretsiz olan **Jupyter Notebook**’lardır. Bu, internet bağlantısı olan herhangi bir cihazdan deneylerinizi çalıştırabileceğiniz anlamına gelir; ancak mobil telefondan daha büyük bir cihaz kullanmak muhtemelen daha iyi olacaktır. Ortamın teknik özellikleri (yazım tarihi itibarıyla) Kaggle web sitesinden alınmıştır; en güncel sürümü **[https://www.kaggle.com/docs/notebooks](https://www.kaggle.com/docs/notebooks)** adresinden doğrulanabilir:
+
+* CPU/GPU için 12 saat çalışma süresi, TPU için 9 saat
+* 20 GB otomatik kaydedilen disk alanı (/kaggle/working)
+* Ek geçici disk alanı ( /kaggle/working dışında) — bu alan mevcut oturum dışında kaydedilmez
+
+**CPU özellikleri:**
+
+* 4 CPU çekirdeği
+* 16 GB RAM
+
+**GPU özellikleri:**
+
+* 2 CPU çekirdeği
+* 13 GB RAM
+
+**TPU özellikleri:**
+
+* 4 CPU çekirdeği
+* 16 GB RAM
+
+Bu bölümde ele alacağımız konular:
+
+* Notebook kurulumunu yapmak
+* Notebook’unuzu çalıştırmak
+* Notebook’ları GitHub’a kaydetmek
+* Notebook’lardan en iyi şekilde faydalanmak
+* Kaggle Learn kursları
+
+Hadi başlayalım. İlk yapmamız gereken, bir Notebook’un nasıl kurulacağını öğrenmek.
+
 ### Setting up a Notebook *(Bir defter oluşturma)*
+
+Bir Notebook oluşturmanın iki temel yöntemi vardır: **ana sayfadan** veya **bir Dataset üzerinden**.
+
+İlk yöntemi kullanmak için:
+
+1. [https://www.kaggle.com/](https://www.kaggle.com/) adresindeki ana sayfada, sol menüdeki **Code** bölümüne gidin.
+2. Ardından **+ New Notebook** butonuna tıklayın.
+
+Bu yöntem, kendi veri setinizi yüklemeyi içeren bir deneme planlıyorsanız tercih edilen yöntemdir.
+
+![alt text](im/1016.png)
+
+Alternatif olarak, ilgilendiğiniz Dataset’in sayfasına gidip oradaki **New Notebook** butonuna tıklayabilirsiniz; bu yöntemi bir önceki bölümde görmüştük.
+
+![alt text](im/1017.png)
+
+Hangi yöntemi seçerseniz seçin, **New Notebook** butonuna tıkladıktan sonra Notebook sayfanıza yönlendirileceksiniz:
+
+![alt text](im/1018.png)
+
+Yukarıda gösterilen yeni Notebook sayfasının sağ tarafında, ayarlanabilecek birkaç farklı ayar bulunmaktadır:
+
+![alt text](im/1019.png)
+
+Ayarları kısaca ele alalım:
+
+1. **Kodlama Dili (Language)**:
+   Kaggle ortamı, yazıldığı tarihte yalnızca Python ve R dillerini destekliyor. Yeni bir Notebook varsayılan olarak Python ile açılır. R kullanmak isterseniz açılır menüden R’yi seçebilirsiniz.
+
+2. **Ortam (Environment)**:
+   Bu seçenek, Notebook’un hangi Docker ortamında çalışacağını belirler.
+
+   * **Latest Docker**: En güncel ortamı kullanır; hızlı güncellemeler alırsınız ama bağımlılıklar bozulabilir (riskli).
+   * **Original Kaggle environment**: Kaggle tarafından sağlanan orijinal ortamı kullanır (güvenli ve varsayılan).
+
+3. **Hızlandırıcı (Accelerator)**:
+   Kodun hangi donanımda çalışacağını seçmenizi sağlar:
+
+   * **CPU**: Hızlandırmasız
+   * **GPU**: Derin öğrenme uygulamaları için gereklidir
+   * **TPU**: TPU’ya taşımak için veri işleme ve kodda daha kapsamlı değişiklik gerekir
+
+   CPU, GPU veya TPU arasında geçiş yapabilirsiniz; fakat geçiş yaptığınızda ortam yeniden başlatılır ve tüm kodu baştan çalıştırmanız gerekir.
+
+4. **İnternet (Internet) Açma/Kapama**:
+   İnternete erişimi açıp kapatmanızı sağlar. Örneğin, ek paket yüklemek gerektiğinde internet açık olmalıdır. Bazı yarışmalarda, teslim sırasında internetin kapalı olması zorunludur.
+
+Ayrıca, mevcut bir Notebook’u (kendinizin veya başkasının oluşturduğu) **kopyalayıp düzenleyebilirsiniz**. Bunun için Notebook sayfasının sağ üstündeki **Copy and Edit** butonuna tıklamanız yeterlidir. Kaggle’da bu işlem **forking** olarak adlandırılır.
+
+![alt text](im/1020.png)
+
+> Bir görgü notu: Eğer daha önce bir Kaggle yarışmasına katıldıysanız, sıralama tablosunun (leaderboard) iyi puan alan Notebook’ların kopyalarıyla (forks of forks) dolu olduğunu fark etmişsinizdir. Başkasının çalışması üzerine inşa etmek yanlış değildir; ancak bunu yaparken **orijinal yazara oy vermeyi (upvote) ve referans alınan çalışmanın sahibine açıkça kredi vermeyi** unutmayın.
+
+Oluşturduğunuz bir Notebook varsayılan olarak **özel**dir (sadece siz görebilirsiniz). Eğer başkalarının erişmesini istiyorsanız iki seçenek vardır:
+
+1. **İşbirlikçileri eklemek (adding collaborators):** Sadece açıkça eklenen kullanıcılar Notebook’u görebilir veya düzenleyebilir.
+2. **Notebook’u herkese açık yapmak (making public):** Bu durumda herkes Notebook’u görebilir.
 
 ### Running your Notebook *(Defterinizi çalıştırma)*
 
