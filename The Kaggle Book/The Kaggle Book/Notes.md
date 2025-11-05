@@ -534,7 +534,7 @@ Bu tür analizlere **adversarial testing** denir ve liderlik tablosuna ne kadar 
 
 ---
 
-##### Overfitting’e Karşı Savunma Stratejileri
+**Overfitting’e Karşı Savunma Stratejileri**
 
 Liderlik tablosuna aşırı uyumu önlemenin bir başka yolu, **güvenli stratejiler** kullanmaktır.
 Örneğin, genellikle her katılımcının **final değerlendirmesi için iki çözüm** göndermesine izin verilir.
@@ -545,7 +545,7 @@ Bu yarışmalarda katılımcılar test verisini hiç görmedikleri için, kendi 
 
 ---
 
-##### Özel Paylaşım (Private Sharing) ve Etik Dışı Davranışlar
+**Özel Paylaşım (Private Sharing) ve Etik Dışı Davranışlar**
 
 Bir yarışmayı bozabilecek bir diğer unsur, **özel paylaşım (private sharing)** yani fikir ve çözümlerin yalnızca kapalı bir grup arasında paylaşılmasıdır.
 Buna ek olarak, **birden fazla hesapla yarışmak**, **birden fazla takıma katılıp fikir çalmak** gibi etik dışı davranışlar da olabilir.
