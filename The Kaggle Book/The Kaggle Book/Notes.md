@@ -475,7 +475,7 @@ Bu uygulama, özellikle donanım yoğun yarışmalarda (örneğin derin öğrenm
 
 ##### Understanding what can go wrong in a competition *(Bir yarışmada nelerin ters gidebileceğini anlamak)*
 
-##### CTF Paradigması ve Yarışma Başarısızlıklarının Nedenleri
+**CTF Paradigması ve Yarışma Başarısızlıklarının Nedenleri**
 
 CTF paradigmasına dair önceki açıklamamızı göz önünde bulundurursak, bir yarışmanın tek ihtiyacı uygun bir platformda düzenlenmekmiş gibi görünebilir. Böyle olursa, katılımcılar için olumlu bir katılım ve sponsor şirket için olağanüstü modeller gibi iyi sonuçların kendiliğinden ortaya çıkacağını düşünebilirsiniz.
 
@@ -488,7 +488,7 @@ Ancak, hem katılımcılar hem de yarışmayı düzenleyen kurum açısından **
 
 ---
 
-##### Veri Sızıntısı (Data Leakage)
+**Veri Sızıntısı (Data Leakage)**
 
 **Veri sızıntısı**, çözümün bir kısmının bizzat verinin kendisinden geri izlenebilmesi durumudur.
 Örneğin, bazı değişkenler hedef değişkenden (target variable) sonra oluşmuş olabilir ve bu da hedef hakkında bilgi sızdırır.
@@ -504,7 +504,7 @@ Bu da sponsor için **optimal olmayan sonuçlar** anlamına gelir, ancak en azı
 
 ---
 
-##### Liderlik Tablosu Üzerinden Çözüm Denemesi (Leaderboard Probing)
+**Liderlik Tablosu Üzerinden Çözüm Denemesi (Leaderboard Probing)**
 
 Bir diğer problem, **liderlik tablosu üzerinden çözümü test etmek veya “deşifre etmek”** olasılığıdır.
 Bu durumda, yarışmacılar değerlendirme metriklerinden yararlanarak sürekli denemeler yapabilir ve bu yolla çözüm hakkında bilgi elde edebilir.
@@ -519,7 +519,7 @@ Genellikle **zaman serisi problemleri** veya test verisinde sistematik değişim
 
 ---
 
-##### Liderlik Tablosuna Aşırı Güvenme ve Aşırı Uyum (Overfitting)
+**Liderlik Tablosuna Aşırı Güvenme ve Aşırı Uyum (Overfitting)**
 
 Liderlik tablosuna aşırı güvenmek, bir başka tür **aşırı uyum (overfitting)** örneğidir.
 Katılımcılar kendi doğrulama testlerinden çok liderlik tablosundaki geri bildirimlere göre hareket ettiklerinde bu durum ortaya çıkar.
