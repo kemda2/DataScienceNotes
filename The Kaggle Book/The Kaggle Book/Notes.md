@@ -59,7 +59,7 @@ Bu konuda daha fazla bilgi için şu **Wired** makalesini okuyabilirsiniz:
 
 Netflix yarışmasının sonunda önemli olan şey, çözümün kendisi değil, **Netflix’in iş modelinin DVD kiralamadan çevrimiçi yayın platformuna geçmesiyle** birlikte elde edilen **bilgi ve deneyimdi**. Yarışmadan hem katılımcılar (öneri sistemleri alanında büyük bir ün kazandılar) hem de Netflix (geliştirilmiş öneri sistemi bilgisini yeni iş modeline aktardı) büyük fayda sağladı.
 
-### The Kaggle competition platform *(Kaggle yarışma platformu)*
+#### The Kaggle competition platform *(Kaggle yarışma platformu)*
 
 **Netflix dışındaki birçok şirket de veri bilimi yarışmalarından fayda sağlamıştır.** Liste oldukça uzundur, ancak yarışmayı düzenleyen şirketlerin açık bir şekilde fayda elde ettiğini bildirdiği birkaç örneği verebiliriz. Örneğin:
 
@@ -69,7 +69,7 @@ Netflix yarışmasının sonunda önemli olan şey, çözümün kendisi değil, 
 **Kaggle yarışma platformu** bugüne kadar yüzlerce yarışma düzenlemiştir ve bu iki örnek, platformu başarıyla kullanan şirketlerden yalnızca birkaçıdır.
 Şimdi, belirli yarışmaların ötesine geçip bu kitabın da merkezinde yer alan **Kaggle şirketi** hakkında konuşalım.
 
-### A history of Kaggle *(Kaggle’ın tarihçesi)*
+##### A history of Kaggle *(Kaggle’ın tarihçesi)*
 
 **Kaggle**, ilk adımlarını **Şubat 2010’da**, ekonomist ve ekonometrikçi olarak eğitim almış Avustralyalı **Anthony Goldbloom** sayesinde attı. Goldbloom, Avustralya Hazine Bakanlığı’nda (*Department of the Treasury*) ve Avustralya Merkez Bankası’nın (*Reserve Bank of Australia*) Araştırma Departmanı’nda çalıştıktan sonra, Londra’da haftalık uluslararası dergi **The Economist**’te staj yaptı.
 
@@ -110,7 +110,7 @@ Yıllar boyunca Kaggle, katılımcılarına aşağıdaki gibi **daha pek çok f�
 
 Ve en önemlisi, **veri bilimi ile ilgili beceriler ve teknik detaylar hakkında daha fazla bilgi edinmek**.
 
-### Other competition platforms *(Diğer yarışma platformları)*
+#### Other competition platforms *(Diğer yarışma platformları)*
 
 Bu kitap Kaggle’daki yarışmalara odaklansa da, birçok veri yarışmasının özel platformlarda veya diğer yarışma platformlarında düzenlendiğini unutmamak gerekir. Aslında, bu kitapta bulacağınız bilgilerin çoğu diğer yarışmalar için de geçerlidir; çünkü temelde hepsi benzer prensiplerle çalışır ve katılımcılara sağladıkları faydalar da aşağı yukarı aynıdır.
 
@@ -556,6 +556,8 @@ Böylece, yarışma boyunca paylaşım eksik kalır ve az sayıda takım tam rek
 Ayrıca, bu tür durumlar katılımcıların farkına vardığında (örneğin şu tartışmaya bakılabilir: [https://www.kaggle.com/c/ashrae-energy-prediction/discussion/122503](https://www.kaggle.com/c/ashrae-energy-prediction/discussion/122503)), yarışmaya ve sonraki yarışmalara olan güven ve katılım da azalabilir.
 
 ### Computational resources *(Hesaplama kaynakları)*
+
+
 
 ### Kaggle Notebooks *(Kaggle Defterleri)*
 
