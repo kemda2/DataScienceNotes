@@ -1335,7 +1335,13 @@ GCP’ye (Google Cloud Platform) geçmenin bariz avantajı, daha güçlü donan�
 
 Notebook’unuzu GCP ortamına taşımak için, sağ taraftaki yan menüden **Upgrade to Google Cloud AI Notebooks** seçeneğine tıklayın.
 
+![](im/1029.png)
 
+Şu ifadeyle karşılanacaksınız:
+
+![](im/1030.png)
+
+“Devam Et”e tıkladığınızda, faturalandırma seçeneklerinizi yapılandırmanız gereken Google Cloud Platform konsoluna yönlendirileceksiniz. Hatırlatma: GCP ücretsiz değildir. İlk kez kullanıyorsanız, gerekli adımlar boyunca size rehberlik edecek bir öğreticiyi (tutorial) tamamlamanız gerekecektir.
 
 ### One step beyond *(Bir adım öteye geçmek)*
 
