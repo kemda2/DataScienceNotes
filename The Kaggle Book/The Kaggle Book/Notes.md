@@ -2400,6 +2400,12 @@ Doğruluğun kullanılabilirliğini artırmak için, her sınıfa göre doğrulu
 
 #### Precision and recall *(Kesinlik ve duyarlılık)*
 
+Precision ve recall metriklerini elde etmek için yine **karışıklık matrisinden (confusion matrix)** başlıyoruz. Öncelikle, matrisin her bir hücresine isim vermemiz gerekiyor:
+
+![](im/1044.png)
+
+
+
 #### The F1 score *(F1 skoru)*
 
 #### Log loss and ROC-AUC *(Log kaybı ve ROC-AUC)*
