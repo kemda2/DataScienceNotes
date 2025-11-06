@@ -1707,7 +1707,9 @@ Alternatif olarak, belirli bir konuya da odaklanabilirsiniz; örneğin **bilgisa
 
 ![](im/1038.png)
 
+İnsanlar **Kaggle’a** farklı nedenlerle gelirler; ancak **Notebooks**’ların popülaritesinin artmasına rağmen, **yarışmalar** hâlâ temel çekim noktası olmaya devam etmektedir. Her Kaggle yarışmasının kendine ait özel bir **tartışma forumu** vardır. Bu foruma, yarışmanın sayfasına gidip **Discussion (Tartışma)** sekmesini seçerek erişebilirsiniz.
 
+![](im/1039.png)
 
 ### Example discussion approaches *(Tartışma örnekleri ve yaklaşımlar)*
 
