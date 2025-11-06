@@ -2733,6 +2733,20 @@ Bu, modelin çoğu durumda şansa karşı gerçekten daha iyi performans göster
 
 ### Metrics for object detection problems *(Nesne tespiti problemleri için metrikler)*
 
+Son yıllarda, derin öğrenme yarışmaları Kaggle'da giderek daha yaygın hale geldi. Bu yarışmaların çoğu, görüntü tanıma veya doğal dil işleme görevlerine odaklanmış olup, şimdiye kadar incelediğimiz değerlendirme metriklerinden çok farklı metrikler kullanmayı gerektirmemiştir. Ancak, bazı özel problemler, doğru bir şekilde değerlendirilmesi için özel bir metrik kullanılmasını gerektirmiştir: bunlar, nesne tespiti ve segmentasyonla ilgili olanlardır.
+
+![](im/1047.png)
+
+Nesne tespitinde, bir resmi sınıflandırmak yerine, resmin ilgili bölümlerini bulmanız ve bunları uygun şekilde etiketlemeniz gerekir. Örneğin, Şekil 5.4'te, bir nesne tespit sınıflandırıcısına, bir fotoğraf içinde köpeklerin veya kedilerin bulunduğu bölümleri yerleştirip her birini doğru etiketlemesi görevi verilmiştir. Sol taraftaki örnek, bir kedinin konumlandırılmasını, dikdörtgen bir kutu (bu kutuya **bounding box** denir) kullanarak gösteriyor. Sağdaki örnek ise, bir fotoğraf içinde birden fazla kedi ve köpeğin nasıl tespit edildiğini ve ardından doğru bir şekilde sınıflandırıldığını gösteriyor (mavi kutular köpekler için, kırmızı kutular ise kediler için).
+
+Nesne tespitinde, bir nesnenin mekansal konumunu tanımlamak için **bounding box**'lar kullanılır; bu kutular, nesnenin bulunduğu dikdörtgen alanı tanımlar. Bir **bounding box** genellikle iki (x, y) koordinatıyla belirtilir: üst-sol köşe ve alt-sağ köşe. Bir makine öğrenimi algoritması açısından, bounding box'ların koordinatlarını bulmak, birden fazla hedefe uygulanan bir regresyon problemine karşılık gelir. Ancak, problemi sıfırdan çözmeyeceksiniz; bunun yerine genellikle **Mask R-CNN** ([https://arxiv.org/abs/1703.06870](https://arxiv.org/abs/1703.06870)), **RetinaNet** ([https://arxiv.org/abs/2106.05624v1](https://arxiv.org/abs/2106.05624v1)), **FPN** ([https://arxiv.org/abs/1612.03144v2](https://arxiv.org/abs/1612.03144v2)), **YOLO** ([https://arxiv.org/abs/1506.02640v1](https://arxiv.org/abs/1506.02640v1)), **Faster R-CNN** ([https://arxiv.org/abs/1506.01497v1](https://arxiv.org/abs/1506.01497v1)) veya **SSD** ([https://arxiv.org/abs/1512.02325](https://arxiv.org/abs/1512.02325)) gibi önceden oluşturulmuş ve çoğu zaman önceden eğitilmiş modellere başvuracaksınız.
+
+**Segmentasyonda** ise, piksel seviyesinde bir sınıflandırma yapılır. Yani, eğer 320x200 boyutlarında bir resminiz varsa, aslında 64.000 piksel sınıflandırması yapmanız gerekir. Göreve bağlı olarak, her pikseli bir fotoğrafın içinde sınıflandırmanız gereken **semantik segmentasyon** olabilir ya da yalnızca belirli bir ilgi türündeki nesneleri (örneğin, Şekil 5.5'teki gibi bir kedi) temsil eden pikselleri sınıflandırmanız gereken **instance segmentasyon** olabilir.
+
+![](im/1048.png)
+
+
+
 #### Intersection over union (IoU) *(Kesişim/Birleşim oranı)*
 
 #### Dice *(Dice katsayısı)*
