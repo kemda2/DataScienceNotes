@@ -3282,7 +3282,7 @@ Halka açık liderlik tablosu özel tabloyla mükemmel bir şekilde ilişkili ol
 > 
 > Basit başlayın, her zaman doğrulama yapın; doğrulama skorunuza güvenin, liderlik tablosu skoruna değil.
 
-### Bias and variance *(Önyargı ve varyans)*
+#### Bias and variance *(Önyargı ve varyans)*
 
 **İyi bir doğrulama sistemi**, eğitim setinizden aldığınız hata ölçümlerinden daha güvenilir metriklerle size yardımcı olur. Aslında, eğitim seti üzerinde elde edilen metrikler, her modelin kapasitesinden ve karmaşıklığından etkilenir. Bir modelin kapasitesini, verilerden öğrenmek için kullanabileceği belleği olarak düşünebilirsiniz.
 
@@ -3359,7 +3359,7 @@ Makine öğrenimi modelinin performansının olasılıksal değerlendirilmesi, b
 
 Olasılıksal tahminciler, basit bir train-test bölmesine göre doğal olarak daha fazla hesaplama gerektirir, ancak doğru ölçütü, yani modelinizin genel performansını doğru bir şekilde tahmin ettiğinizden daha fazla emin olmanızı sağlar.
 
-#### k-fold cross-validation *(k-katlı çapraz doğrulama)*
+##### k-fold cross-validation *(k-katlı çapraz doğrulama)*
 
 En yaygın kullanılan olasılıksal doğrulama yöntemi, k-katlı çapraz doğrulama (k-fold cross-validation) olup, modelinizin daha önce görmediği, aynı dağılımdan çekilmiş test verileri üzerindeki performansını doğru bir şekilde tahmin etme yeteneğiyle tanınır.
 
@@ -3372,10 +3372,6 @@ k-katlı çapraz doğrulamanın pek çok farklı çeşidi olsa da, en basiti, Sc
 k doğrulama skoru daha sonra ortalanır ve bu ortalama skor değeri, k-katlı doğrulama skoru olur; bu skor, modelinizin herhangi bir görülmemiş veri üzerindeki tahmin edilen ortalama performansını gösterir. Skorların standart sapması ise, tahminin ne kadar belirsiz olduğunu size bildirir. Şekil 6.2, 5-katlı çapraz doğrulamanın nasıl yapılandırıldığını gösterir.
 
 ![](im/1052.png)
-
-Tabii, işte metnin Türkçe çevirisi:
-
----
 
 K-katlamalı çapraz doğrulama skorunun önemli bir yönü, modelinizin k-1 katından aynı miktarda veri ile eğitilmiş olarak ortalama skorunu tahmin etmesidir. Ancak sonrasında modelinizi tüm verinizle eğittiğinizde, önceki doğrulama tahmini geçerliliğini yitirir. K, örnek sayısı n'ye yaklaştıkça, modelinizin tüm eğitim seti üzerinde eğitilmiş haline ilişkin giderek daha doğru bir tahmin elde edersiniz; ancak her katın tahminleri arasındaki artan korelasyon nedeniyle, doğrulamanın tüm olasılık tahminlerini kaybedersiniz. Bu durumda, elde ettiğiniz sayı, modelinizin eğitim verisi üzerindeki performansını gösterir (ki bu hala karşılaştırma amaçları için yararlı bir tahmin olabilir, ancak modelinizin genelleme gücünü doğru şekilde tahmin etmenize yardımcı olmaz).
 
@@ -3402,9 +3398,117 @@ Mevcut verilerin boyutu oldukça büyükse, önerilen bantların alt tarafında 
 
 > Kaggle yarışmalarında, k-katlamalı çapraz doğrulama genellikle sadece çözüm yaklaşımınızı doğrulamak ve modelinizin performansını anlamak için değil, aynı zamanda tahmininizi üretmek için de uygulanır. Çapraz doğrulama yaparken, alt örnekleme yapıyorsunuz ve verinin alt örneklerine dayalı olarak birden çok modelin sonuçlarını ortalamak, genellikle tüm mevcut verilerle eğitim yapmaktan daha etkili bir stratejidir. Bu, genellikle varyansla mücadele etmek için daha etkili bir yol olur (bunu daha detaylı olarak 9. Bölüm'de, "Blending ve Stacking Çözümleriyle Birleştirme" başlığında tartışacağız). Bu nedenle birçok Kaggle katılımcısı, çapraz doğrulama sırasında oluşturulan modelleri kullanarak test setinde bir dizi tahmin sağlar ve bunları ortaladığında en iyi çözümü elde eder.
 
-#### Subsampling *(Alt örnekleme)*
+**K-Katlamalı Çapraz Doğrulama Varyasyonları**
 
-#### The bootstrap *(Bootstrap yöntemi)*
+K-katlamalı çapraz doğrulama, rastgele örneklemeye dayandığı için bazı durumlarda uygun olmayan bölmeler verebilir:
+
+* **Küçük sınıfların oranını korumanız gerektiğinde**, hem hedef seviyesinde hem de özellikler seviyesinde. Bu durum, hedef değişkeninizin oldukça dengesiz olduğu durumlarda yaygındır. Tipik örnekler arasında spam veri setleri (çünkü spam, normal e-posta hacminin küçük bir kısmıdır) veya bir kredi riski veri seti (düşük ihtimalle gerçekleşen bir kredi temerrüdü olayını tahmin etmek) bulunur.
+
+* **Bir sayısal değişkenin dağılımını korumanız gerektiğinde**, hem hedef seviyesinde hem de özellikler seviyesinde. Bu durum, dağılımın oldukça çarpık olduğu veya uzun kuyruklar içerdiği regresyon problemlerinde yaygındır. Yaygın bir örnek, ev fiyatı tahmini olabilir, çünkü satışa çıkan bazı evler, ortalama evden çok daha yüksek fiyatlarla satılmaktadır.
+
+* **Verileriniz bağımsız ve aynı dağılımda (i.i.d.) değilse**, özellikle zaman serisi tahmini yapıyorsanız.
+
+İlk iki senaryoda çözüm, **stratifiye k-katlamalı doğrulama** (stratified k-fold) olacaktır. Bu yöntemde, örnekleme kontrol edilmiş bir şekilde yapılır ve korumak istediğiniz dağılımı korur. Eğer tek bir sınıfın dağılımını korumanız gerekiyorsa, Scikit-learn'deki `StratifiedKFold` fonksiyonunu kullanabilirsiniz. Bu fonksiyon, genellikle hedef değişkeniniz olan, ancak aynı zamanda dağılımını korumanız gereken başka bir özellik ile stratifikasyon değişkeni kullanarak, verilerinizi doğru bir şekilde bölmenize yardımcı olacak indeksler üretir. Aynı sonuca, sayısal bir değişken ile, onu önce diskretize ettikten sonra `pandas.cut` veya Scikit-learn’ün `KBinsDiscretizer` fonksiyonları ile de ulaşabilirsiniz.
+
+Birden fazla değişken veya örtüşen etiketler (örneğin, çok etiketli sınıflandırma) ile stratifikasyon yapmanız gerektiğinde durum biraz daha karmaşık hale gelir.
+
+Bu durumu, **Scikit-multilearn** paketinde bulabilirsiniz ([http://scikit.ml/](http://scikit.ml/)), özellikle birden fazla değişkenin birleşik oranlarını korumak istediğiniz sırayı kontrol etmenizi sağlayan **IterativeStratification** komutuyla ([http://scikit.ml/api/skmultilearn.model_selection.iterative_stratification.html](http://scikit.ml/api/skmultilearn.model_selection.iterative_stratification.html)). Bu, aşağıdaki makalelerde açıklanan algoritmayı uygular:
+
+* Sechidis, K., Tsoumakas, G., ve Vlahavas, I. (2011). *On the stratification of multi-label data*. Machine Learning and Knowledge Discovery in Databases, 145-158. [Makale Linki](http://lpis.csd.auth.gr/publications/sechidis-ecmlpkdd-2011.pdf)
+* Szymański, P. ve Kajdanowicz, T.; *Proceedings of the First International Workshop on Learning with Imbalanced Domains: Theory and Applications*, PMLR 74:22-35, 2017. [Makale Linki](http://proceedings.mlr.press/v74/szyma%C5%84ski17a.html)
+
+Stratifikasyonu, bir sınıflandırma problemi değil de bir regresyon problemi ile uğraşıyorsanız da oldukça faydalı bir şekilde kullanabilirsiniz. Regresyon problemlerinde stratifikasyon kullanmak, regressor'ünüzün çapraz doğrulama sırasında hedef (veya prediktörler) değişkeninin, tüm örneklemdeki dağılıma benzer bir dağılımda eğitim yapmasını sağlar. Bu durumda, `StratifiedKFold`'un düzgün çalışması için sürekli hedefiniz yerine hedefinizin diskretize edilmiş bir proxy’sini kullanmanız gerekir.
+
+Bunu başarmanın ilk ve en basit yolu, pandas `cut` fonksiyonunu kullanarak hedefinizi 10 veya 20 gibi yeterince büyük bir bin sayısına bölmektir:
+
+```python
+import pandas as pd
+y_proxy = pd.cut(y_train, bins=10, labels=False)
+```
+
+Kullanılacak bin sayısını belirlemek için, Abhishek Thakur, mevcut örnek sayısına dayalı olarak **Sturges kuralını** kullanmayı tercih eder ve bu sayıyı pandas `cut` fonksiyonuna sağlar (bkz. [https://www.kaggle.com/abhishek/step-1-create-folds](https://www.kaggle.com/abhishek/step-1-create-folds)):
+
+```python
+import numpy as np
+bins = int(np.floor(1 + np.log2(len(X_train))))
+```
+
+Alternatif bir yaklaşım, eğitim setindeki özelliklerin dağılımlarına odaklanmak ve bunları yeniden üretmeye çalışmaktır. Bu, eğitim setinin yalnızca hedef değişkeni ve herhangi bir tanımlayıcıyı hariç tutarak, özellikler üzerinde küme analizi (denetimsiz bir yaklaşım) yapılmasını gerektirir. Sonrasında, tahmin edilen kümeler strata olarak kullanılabilir. Bunun bir örneğini bu Not Defteri’nde görebilirsiniz ([https://www.kaggle.com/lucamassaron/are-you-doing-cross-validation-the-best-way](https://www.kaggle.com/lucamassaron/are-you-doing-cross-validation-the-best-way)), burada ilk olarak **PCA** (temel bileşen analizi) yapılır, korelasyonlar kaldırılır ve ardından **k-means** küme analizi yapılır. Kullanılacak küme sayısını, deneysel testler yaparak belirleyebilirsiniz.
+
+---
+
+**Uygunsuz Bölmeler İçin Çözümler**
+
+K-katlamalı doğrulamanın uygun olmayan bölmeler verebileceği durumu tartışmaya devam edersek, işlerin karmaşıklaştığı üçüncü senaryo, **bağımsız ve aynı dağılımda olmayan (non-i.i.d.) verilerle** karşılaşıldığında yaşanır. Bu durum, örnekler arasında bir gruplaşma olduğunda meydana gelir. Bağımsız ve aynı dağılımda olmayan örneklerin sorunu, özellikler ve hedef değişkenin örnekler arasında birbirleriyle korelasyonlu olmasıdır (yani, sadece bir örneği biliyorsanız, tüm örnekleri tahmin etmek daha kolay olur). Gerçekten de, eğer aynı grup eğitim ve test setlerine bölünürse, modeliniz grupları ayırt etmeyi öğrenebilir, ancak hedefi öğrenmeyebilir ve bu da iyi bir doğrulama skoru elde etmenize ancak liderlik tablosunda çok kötü sonuçlar almanıza neden olabilir. Buradaki çözüm, **GroupKFold** kullanmaktır: bir gruplama değişkeni sağlayarak, her grubun ya eğitim setinde ya da doğrulama setinde yer almasını, ancak asla her iki set arasında bölünmemesini sağlarsınız.
+
+Verilerinizdeki gruplamaları keşfetmek, verinizin bağımsız ve aynı dağılımda olmamasını sağlayan zor bir görev olabilir. Yarışma probleminiz tarafından belirtilmedikçe, veriyi araştırma (denetimsiz öğrenme teknikleri, örneğin küme analizi kullanarak) ve problemin domainini anlamanızı gerektirir. Örneğin, veriniz mobil telefon kullanımıyla ilgiliyse, bazı örneklerin aynı kullanıcıya ait olduğunu, özelliklerdeki benzer değer sıralamalarına bakarak fark edebilirsiniz.
+
+Zaman serisi analizi de aynı sorunu sunar; veriler bağımsız ve aynı dağılımda olmadığı için, rastgele örneklemeyle doğrulama yapamazsınız çünkü farklı zaman dilimlerini karıştırmış olursunuz ve sonraki zaman dilimleri önceki zaman dilimlerinin izlerini taşıyabilir (bu, istatistikte *otokorelasyon* olarak adlandırılan bir özelliktir). Zaman serisi doğrulamasının en temel yaklaşımında, zamanı temel alarak eğitim ve doğrulama setlerini ayırabilirsiniz, bu, Şekil 6.3'te gösterildiği gibi:
+
+![](im/1053.png)
+
+"Doğrulama yetenekleriniz sınırlı olacaktır, çünkü doğrulamanız belirli bir zamana dayanacaktır. Daha karmaşık bir yaklaşım için, Scikit-learn paketi (sklearn.model_selection.TimeSeriesSplit) tarafından sağlanan zaman dilimi doğrulamasını, TimeSeriesSplit'i kullanabilirsiniz. TimeSeriesSplit, zaman serisinin eğitim ve test kısımlarının zaman dilimini ayarlamanıza yardımcı olabilir.
+
+
+Eğitim zaman dilimi durumunda, TimeSeriesSplit fonksiyonu, eğitim verilerinizi test zaman diliminden önceki tüm geçmiş verileri içerecek şekilde ayarlamanıza yardımcı olabilir veya sabit bir dönem geriye bakma süresiyle (örneğin, her zaman test zaman diliminden önceki üç ayı eğitim için kullanmak gibi) sınırlayabilirsiniz.
+
+Şekil 6.4'te, büyüyen bir eğitim seti ve hareketli bir doğrulama seti içeren zaman tabanlı doğrulama stratejisinin yapısını görebilirsiniz."
+
+![](im/1054.png)
+
+Şekil 6.5'te, eğitim setinin sabit bir geriye bakma süresi olduğu durumda stratejinin nasıl değiştiğini görebilirsiniz.
+
+![](im/1055.png)
+
+Deneyimlerimize göre, sabit bir bakış aralığı kullanmak, zaman serisi modellerinin değerlendirilmesinde daha adil bir sonuç sağlar çünkü her zaman aynı eğitim veri seti boyutuna güvenirsiniz.
+
+Bunun yerine zamanla büyüyen bir eğitim seti boyutu kullanmak, model performansının zaman dilimlerine göre etkilerini, modeldeki azalan yanlılık ile karıştırmanıza neden olur (çünkü daha fazla örnek, daha az yanlılık anlamına gelir).
+
+Son olarak, TimeSeriesSplit'in, eğitim ve test zamanları arasında önceden tanımlanmış bir boşluk bırakacak şekilde ayarlanabileceğini unutmayın. Bu, test setinizin belirli bir süre sonra (örneğin, eğitim verisinden bir ay sonra) olduğunu biliyorsanız ve modelinizin gelecekte bu kadar ileriye tahmin yapıp yapamayacağını test etmek istiyorsanız son derece kullanışlıdır.
+
+**İç İçe Çapraz Doğrulama**
+
+Bu noktada, iç içe çapraz doğrulamanın tanıtılması önemlidir. Şimdiye kadar yalnızca modelleri son performanslarına göre test etmeyi tartıştık, ancak çoğu zaman hiperparametrelerini ayarlarken ara performanslarını da test etmeniz gerekir. Gerçekten de, test setinizde model parametrelerinin nasıl çalıştığını test edemezsiniz ve ardından aynı veriyi nihai performansı değerlendirmek için kullanamazsınız. Çünkü test setinde en iyi çalışan parametreleri belirlemişsinizdir ve aynı test setindeki değerlendirme ölçütünüz çok iyimser olacaktır; farklı bir test setinde, muhtemelen aynı sonucu elde edemezsiniz. Bu durumda, çeşitli modellerin ve hiperparametrelerin performansını değerlendirmek için kullanılan **doğrulama seti** ile nihai model performansını tahmin etmek için kullanılan **test seti** arasındaki farkı ayırt etmeniz gerekir.
+
+Eğer test-eğitim ayrımı kullanıyorsanız, bu, test kısmını iki yeni parçaya ayırarak yapılır. Yaygın olarak kullanılan ayrım 70/20/10'dur: eğitim, doğrulama ve test, sırasıyla (ancak farklı bir oran seçebilirsiniz). Eğer çapraz doğrulama kullanıyorsanız, iç içe çapraz doğrulama yapmanız gerekir; yani başka bir çapraz doğrulamanın bölünmesine dayalı olarak çapraz doğrulama yaparsınız. Temelde, her zamanki çapraz doğrulamanızı çalıştırırsınız, ancak farklı modelleri veya parametreleri değerlendirmek zorunda olduğunuzda, değerlendirme ve optimizasyon yapmak için eğitim verileriyle birlikte çapraz doğrulama yaparsınız.
+
+Şekil 6.6'daki örnek, bu içsel ve dışsal çapraz doğrulama yapısını gösterir. Dışsal kısımda, değerlendirme ölçütünüzü test etmek için kullanılan veri kısmını belirlersiniz. İçsel kısımda ise, dışsal kısımdan gelen eğitim verileriyle, model seçimlerini optimize etmek ve hangi model veya hiperparametre değerlerinin seçileceğini belirlemek amacıyla eğitim/doğrulama bölünmeleri düzenlersiniz.
+
+![](im/1056.png)
+
+**Bu yaklaşımın avantajı, test ve parametre aramanızı tamamen güvenilir hale getirmesidir, ancak bunu yaparken birkaç problemle karşılaşırsınız:**
+
+* Çapraz doğrulama ile ilk bölmeyi yaptıktan sonra, bir kez daha bölme yapmanız gerektiği için eğitim setiniz azalır.
+* Daha önemlisi, çok sayıda model oluşturmanız gerekir: Eğer iki iç içe geçmiş 10 katlı çapraz doğrulama yaparsanız, 100 model çalıştırmanız gerekir.
+
+Özellikle son sebepten dolayı bazı Kaggle yarışmacıları, iç içe çapraz doğrulamayı göz ardı eder ve model/parametre arama ile performans değerlendirmesi için aynı çapraz doğrulamayı kullanmayı ya da nihai değerlendirme için sabit bir test örneği kullanmayı tercih ederler. Deneyimlerimize göre bu yaklaşım da işe yarayabilir, ancak model performansının aşırı tahmin edilmesine ve aşırı uyum (overfitting) durumlarına yol açabilir. Bu durum, modelleme sürecinde kullanılan katman dışı (out-of-fold) tahminler oluşturuyorsanız daha belirgin hale gelebilir (ki bu konuyu bir sonraki bölümde ele alacağız). Biz her zaman, modellerinizi test etmek için en uygun metodolojiyi denemenizi öneriyoruz. Eğer amacınız modelinizin performansını doğru bir şekilde tahmin etmek ve tahminlerini başka modellerde yeniden kullanmaksa, iç içe çapraz doğrulama kullanmak, mümkün olduğunda size daha az aşırı uyumlu bir çözüm sunabilir ve bazı yarışmalarda fark yaratabilir.
+
+**Katman Dışı Tahminler (OOF) Üretme**
+
+Çapraz doğrulamanın ilginç bir uygulaması, değerlendirme metriğinizin performansını tahmin etmenin yanı sıra test tahminleri ve katman dışı tahminler (OOF) üretmektir. Gerçekten de, eğitim verinizin bazı bölümleri üzerinde eğitim yaparken ve geri kalanlar üzerinde tahminler yaparken şunları yapabilirsiniz:
+
+* **Test seti üzerinde tahmin yapmak**: Tüm tahminlerin ortalaması, genellikle tüm veriler üzerinde aynı modeli tekrar eğitmekten daha etkili olabilir. Bu, blending ile ilişkili bir topluluk (ensemble) tekniğidir ve 9. Bölüm olan *Ensemble: Blending ve Stacking Çözümleri*'nde ele alınacaktır.
+
+* **Doğrulama seti üzerinde tahmin yapmak**: Sonunda, tüm eğitim seti için tahminleriniz olacak ve bunları, orijinal eğitim verileriyle aynı sırada yeniden sıralayabilirsiniz. Bu tahminlere genellikle "katman dışı (OOF) tahminleri" denir ve oldukça faydalı olabilirler.
+
+OOF tahminlerinin ilk kullanımı, performansınızı tahmin etmektir çünkü değerlendirme metriğinizi doğrudan OOF tahminleri üzerinde hesaplayabilirsiniz. Elde edilen performans, çapraz doğrulama tahminlerinden (örneklemeye dayalı) farklıdır; aynı olasılık özelliklerine sahip değildir, bu yüzden genelleme performansını ölçmek için geçerli bir yol değildir, ancak modelinizin eğitildiğiniz belirli set üzerinde nasıl performans gösterdiği hakkında size bilgi verebilir.
+
+İkinci bir kullanım, tahminleri zemin gerçek değerleriyle veya farklı modellerden elde edilen diğer tahminlerle karşılaştırarak görselleştirmek ve bir grafik oluşturmak olabilir. Bu, her bir modelin nasıl çalıştığını ve tahminlerinin birbiriyle ne kadar korelasyonlu olduğunu anlamanıza yardımcı olacaktır.
+
+Son kullanım ise meta özellikler veya meta tahminciler (meta-predictors) yaratmaktır. Bu konu, 9. Bölüm'de tam olarak ele alınacaktır, ancak burada şunu belirtmek önemlidir ki, OOF tahminleri çapraz doğrulamanın bir yan ürünü olup, çalıştıkları için kullanılır; çünkü çapraz doğrulama sırasında, modeliniz her zaman eğitim sırasında görmediği örnekler üzerinde tahmin yapar.
+
+Her OOF tahmininin farklı bir veri seti üzerinde eğitilmiş bir model tarafından üretildiğinden, bu tahminler yanlılık içermez ve bunları aşırı uyum (overfitting) riskinden korkmadan kullanabilirsiniz (bununla ilgili bazı uyarılar bir sonraki bölümde tartışılacaktır).
+
+OOF tahminlerini üretmenin iki yolu vardır:
+
+* **Bir prosedür kodlayarak** doğrulama tahminlerini bir tahmin vektörüne kaydetmek ve bunları eğitim verilerindeki örneklerle aynı indeks konumuna yerleştirmek.
+* **Scikit-learn fonksiyonu olan `cross_val_predict`'i kullanarak**, OOF tahminlerini otomatik olarak üretmek.
+
+Bu ikinci tekniği, bu bölümün ilerleyen kısımlarında *adversarial validation*'ı incelediğimizde göreceğiz.
+
+##### Subsampling *(Alt örnekleme)*
+
+##### The bootstrap *(Bootstrap yöntemi)*
 
 ### Tuning your model validation system *(Model doğrulama sistemini ayarlamak)*
 
