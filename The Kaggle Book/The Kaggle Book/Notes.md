@@ -2924,7 +2924,151 @@ Yukarıdaki örnekte, **average_precision_score** metriği kullanılarak bir sco
 
 ### Post-processing your predictions *(Tahminleri sonradan işleme)*
 
+**Post-processing ayarlaması**, tahminlerinizin, bir fonksiyon aracılığıyla, daha iyi bir değerlendirme sunacak şekilde dönüştürülmesini ifade eder. Kendi özel kayıp fonksiyonunuzu oluşturduktan veya değerlendirme metriği için optimize ettikten sonra, tahminleriniz üzerinde belirli bir fonksiyon kullanarak değerlendirme kriterinize uygun sonuçlar elde etmek için de performansınızı artırabilirsiniz. Örneğin, **Quadratic Weighted Kappa** metriğinden bahsedelim. Daha önce bu metrik, **ordinal değer** tahminlerinde kullanışlı olduğunu belirtmiştik. Kısaca hatırlamak gerekirse, orijinal **Kappa katsayısı**, algoritma ile gerçek etiket arasındaki uyumun, şansın etkisiyle düzeltilmiş bir ölçüsüdür. Bu, tahmin ile gerçek etiket arasındaki eşleşmenin, şans sonucu olup olmadığının olasılıkları ile düzeltilmiş bir doğruluk ölçüsüdür.
+
+İşte önceki bölümlerde gördüğümüz orijinal **Kappa katsayısı** formülü:
+
+$$
+\kappa = \frac{p_0 - p_e}{1 - p_e}
+$$
+
+Formülde, **p0**, değerlendirenler arasındaki gözlemlenen göreli uyumu, **pe** ise şansla olan uyum olasılığını ifade eder. Burada sadece iki matrise ihtiyacınız vardır: birisi gözlemlenen puanlarla, diğeri ise şansla uyumlu beklenen puanlarla. Kappa katsayısı ağırlıklı olduğunda, ayrıca bir ağırlık matrisi de dikkate alınır ve formül şu hale gelir:
+
+$$
+\kappa = \frac{p_0 - p_e}{1 - p_e} \times p_p
+$$
+
+**pp** matrisi, hataları farklı şekilde ağırlamak için cezalandırmaları içerir ve bu, **ordinal tahminlerde** oldukça kullanışlıdır çünkü bu matris, tahminler gerçek etiketlerden daha fazla saparsa çok daha fazla ceza verebilir. **Kareli formu** kullanmak, yani sonucu kareye almak, cezalandırmayı daha da şiddetli hale getirir. Ancak, böyle bir metriği optimize etmek gerçekten kolay değildir, çünkü bunu bir maliyet fonksiyonu olarak uygulamak oldukça zordur. İşte burada **post-processing** yardıma gelir.
+
+Bir örnek, **PetFinder.my Adoption Prediction** yarışmasında bulunabilir ([Kaggle Yarışması](https://www.kaggle.com/c/petfinder-adoption-prediction)). Bu yarışmada, sonuçlar 5 olası puana sahip olabilirdi (0, 1, 2, 3 veya 4), bunları ya bir sınıflandırma olarak ya da bir regresyon olarak ele alabilirsiniz. Eğer bir regresyon kullanıyorsanız, regresyon sonuçlarının post-processing dönüşümü, **Quadratic Weighted Kappa** metriği karşısında modelinizin performansını iyileştirebilir, bu da doğrudan **sınıflandırma** ile yapılan tahminlerden daha iyi sonuçlar verebilir.
+
+**PetFinder** yarışmasında post-processing, regresyon sonuçlarını önce [0.5, 1.5, 2.5, 3.5] sınırlarını kullanarak tam sayılara dönüştürmekle başlayarak, daha iyi bir sınır seti bulmak için iteratif ince ayar yapmayı içeren bir optimizasyon sürecinden oluşuyordu. Bu sınırların ince ayarı, **SciPy optimize.minimize** gibi bir optimizasyon aracının kullanılmasıyla yapılmıştır ve bu, **Nelder-Mead algoritması**na dayanmaktadır. Optimizasyon aracı tarafından bulunan sınırlar, bir **cross-validation** şemasıyla doğrulandı. Bu post-processing hakkında daha fazla detayı, yarışma sırasında **Abhishek Thakur** tarafından yapılan şu gönderide okuyabilirsiniz: [PetFinder Post-Processing Discussion](https://www.kaggle.com/c/petfinder-adoption-prediction/discussion/76107).
+
+> **PetFinder** yarışması dışında, birçok diğer yarışma, akıllı post-processing'in daha iyi sonuçlar ve sıralamalarla sonuçlanabileceğini göstermiştir. İşte bazı örnekler:
+> 
+> 
+> 
+> * [https://www.kaggle.com/khoongweihao/post-processing-technique-c-f-1st-place-jigsaw](https://www.kaggle.com/khoongweihao/post-processing-technique-c-f-1st-place-jigsaw)
+> 
+> * [https://www.kaggle.com/tomooinubushi/postprocessing-based-on-leakage](https://www.kaggle.com/tomooinubushi/postprocessing-based-on-leakage)
+> 
+> * [https://www.kaggle.com/saitodevel01/indoor-post-processing-by-cost-minimization](https://www.kaggle.com/saitodevel01/indoor-post-processing-by-cost-minimization)
+
+Ne yazık ki, **post-processing** çoğunlukla kullandığınız metriğe bağlıdır (metriği anlamak, iyi bir post-processing tasarlamak için çok önemlidir) ve genellikle veriye özgüdür; örneğin, zaman serisi verileri ve sızıntılar gibi durumlarda. Bu nedenle, herhangi bir yarışma için doğru post-processing yöntemini bulmak çok zordur. Yine de, her zaman bu olasılığın farkında olun ve bir yarışmada post-processing'in sonuçları iyileştirdiğine dair herhangi bir ipucu arayın. Benzer yarışmalarda daha önceki post-processing ile ilgili her zaman ipuçları bulabilirsiniz ve forum tartışmaları yoluyla – eninde sonunda biri bu konuyu gündeme getirecektir.
+
 ### Predicted probability and its adjustment *(Tahmin edilen olasılığın ayarlanması)*
+
+Yukarıdaki tartışmamızı tamamlamak için, doğru **olasılıkları** tahmin etmenin çok önemli olduğu durumları ele alacağız, ancak kullandığınız algoritmanın bu işi iyi yapıp yapmadığından emin olamıyorsunuz. Daha önce ayrıntılı olarak açıkladığımız gibi, **sınıflandırma olasılıkları** hem ikili hem de çoklu sınıf sınıflandırma problemleriyle ilgilidir ve genellikle **logaritmik kayıp** (diğer adıyla log loss, lojistik kayıp veya çapraz entropi kaybı) kullanılarak değerlendirilir ve optimize edilir (daha fazla ayrıntı için, sınıflandırma metrikleri ve çoklu sınıf sınıflandırma metrikleri başlıklarındaki önceki bölümlere bakabilirsiniz).
+
+Ancak, sadece log kaybı ile değerlendirme yapmak veya optimize etmek yeterli olmayabilir. Doğru olasılık tahminleri elde etmeye çalışırken dikkat etmeniz gereken ana sorunlar şunlardır:
+
+* Gerçekten olasılık tahmini yapmayan modeller
+* Probleminizde sınıfların dengesiz dağılımı
+* Eğitim veriniz ile test veriniz (hem public hem de private leaderboard’lar) arasında farklı sınıf dağılımı
+
+İlk madde, modelinizin **belirtilen belirsizliğe göre sınıflandırma tahminlerinin kalitesini** kontrol etme ve doğrulama gerekliliğini tek başına sağlamaktadır. Aslında, **Scikit-learn** paketinde birçok algoritma, **predict_proba** yöntemi ile birlikte sunulsa da, bu, gerçek bir olasılık döndürecekleri konusunda zayıf bir teminattır.
+
+Örneğin, **karar ağaçlarını** ele alalım. Karar ağaçları, tabular verileri modellemek için oldukça etkili bir yöntemdir ve **Scikit-learn**’deki sınıflandırma karar ağaçları, terminal yapraklarına dayalı olarak tahminler yapar. Yani, tahmin edilen olasılık, tahmin edilecek örneğin bulunduğu yaprağın sınıf dağılımına dayanır. Eğer ağaç tamamen büyütülmüşse, örneğin çok küçük bir yapraya sahip olma olasılığı yüksektir ve bu da tahmin edilen olasılığın çok yüksek olmasına yol açar. **max_depth**, **max_leaf_nodes** veya **min_samples_leaf** gibi parametreleri değiştirirseniz, ağacın büyümesine bağlı olarak tahmin edilen olasılık büyük ölçüde değişir.
+
+Karar ağaçları, **bagging** modelleri ve **random forest** gibi topluluk modelleri için en yaygın temel modeldir, ayrıca **gradient boosting** modelleri (örneğin, **XGBoost**, **LightGBM**, ve **CatBoost**) de karar ağaçlarını kullanır. Ancak, aynı sebeplerden dolayı—gerçekten sağlam olasılık tahminleri yapmayan olasılık tahminleri—bu sorun, **destek vektör makineleri** (SVM) ve **k-en yakın komşu** (k-NN) gibi yaygın olarak kullanılan diğer modelleri de etkiler. Bu konular, **Otto Group Product Classification Challenge** yarışmasında ([https://www.kaggle.com/c/otto-group-product-classification-challenge/overview/](https://www.kaggle.com/c/otto-group-product-classification-challenge/overview/)) **Christophe Bourguignat** ve diğerleri tarafından gündeme getirildiğinde, **Scikit-learn**’e yeni eklenen **kalibrasyon fonksiyonları** kullanılarak kolayca çözüldü.
+
+Kullanacağınız model dışında, probleminizdeki sınıflar arasında dengesizlik bulunması, modellerinizin hiç güvenilir olmamasına yol açabilir. Bu nedenle, dengesiz sınıflandırma problemlerinde iyi bir yaklaşım, **undersampling** veya **oversampling** stratejileri kullanarak sınıfları dengelemektir; ya da her sınıf için kaybı hesaplanırken algoritmanın uygulayacağı **özel ağırlıklar** belirlemektir. Bu stratejiler modelinizi daha performanslı hale getirebilir, ancak kesinlikle olasılık tahminlerinizi bozarlar ve bu tahminleri, leaderboard'da daha iyi bir model skoru elde etmek için ayarlamanız gerekebilir.
+
+Son olarak, üçüncü önemli nokta, **test seti**nin nasıl dağıldığı ile ilgilidir. Bu tür bilgiler genellikle gizli tutulur, ancak çoğu zaman bunu tahmin etmenin yolları vardır (örneğin, **public leaderboard** sonuçlarına dayalı deneme yanılma yöntemi kullanarak, **Bölüm 1**'de **Kaggle ve Veri Bilimi Yarışmalarını Tanıtmak** başlığında bahsettiğimiz gibi).
+
+Örneğin, bu durum, **iMaterialist Furniture Challenge** yarışmasında ([https://www.kaggle.com/c/imaterialist-challenge-furniture-2018/](https://www.kaggle.com/c/imaterialist-challenge-furniture-2018/)) ve daha popüler olan **Quora Question Pairs** yarışmasında ([https://www.kaggle.com/c/quora-question-pairs](https://www.kaggle.com/c/quora-question-pairs)) yaşanmıştır. Her iki yarışma da, test beklentilerine uygun olasılıkları ayarlamak için **post-processing** yapmanın nasıl olacağına dair çeşitli tartışmalar yaratmıştır (bu metodun kullanıldığına dair daha fazla bilgi için [Burada](https://swarbrickjones.wordpress.com/2017/03/28/cross-entropy-and-training-test-class-imbalance/) ve [Burada](https://www.kaggle.com/dowakin/probability-calibration-0-005-to-lb) tartışmaları bulabilirsiniz). Genel bir bakış açısıyla, sınıfları tahmin etmek için test dağılımı hakkında bir fikriniz olmasa bile, **eğitim verilerinden aldığınız öncülleri** kullanarak doğru olasılık tahmin etmek hala çok faydalıdır (ve karşıt bir delil elde edene kadar, bu, modelinizin taklit etmesi gereken olasılık dağılımıdır). Gerçekten de, tahmin edilen olasılık dağılımınız, eğitim setindekilerle uyuşuyorsa, tahmin edilen olasılıkları düzeltmek çok daha kolay olacaktır.
+
+Tahmin edilen olasılıkların, hedefin eğitim dağılımıyla uyumsuz olduğu durumdaki çözüm, **Scikit-learn** tarafından sağlanan **calibration fonksiyonunu** kullanmaktır:
+
+```python
+sklearn.calibration.CalibratedClassifierCV(base_estimator=None, *, method='sigmoid', cv=None, n_jobs=None, ensemble=True)
+```
+
+Kalibrasyon fonksiyonunun amacı, tahmin edilen olasılıklarınıza bir **post-processing** fonksiyonu uygulayarak onları, gerçek etiketlerde gözlemlenen ampirik olasılıklarla daha yakın hale getirmektir. Modeliniz **Scikit-learn** tabanlıysa veya ona benzer şekilde çalışıyorsa, fonksiyon, modelinizi sarmalayacak ve tahminlerini doğrudan bir post-processing fonksiyonuna yönlendirecektir. Post-processing için iki yöntem arasından seçim yapabilirsiniz: ilki **sigmoid** yöntemi (diğer adıyla **Plat’s scaling**), bu sadece bir **lojistik regresyon**dur. İkinci yöntem ise **izotonik regresyon**, parametrik olmayan bir regresyondur; ancak dikkat edin, eğer örnek sayısı azsa aşırı öğrenmeye yatkındır.
+
+Bu kalibratörü nasıl fit edeceğinizi de seçmeniz gerekir. Unutmayın ki bu bir modeldir ve modelinizin sonuçlarına uygulanır, bu yüzden tahminlerinizi sistematik olarak yeniden işlemekten kaçınarak aşırı öğrenmeden kaçınmalısınız. **Cross-validation** kullanabilir ve bir dizi model üreterek, bunları ortalayıp tahminlerinizi elde edebilirsiniz (**ensemble=True**). Aksi takdirde, genellikle bizim tercih ettiğimiz yaklaşım, **out-of-fold** tahminini kullanmak ve tüm mevcut verilerle bunu kalibre etmektir (**ensemble=False**).
+
+**CalibratedClassifierCV**, çoğu durumu yönetebilecek olsa da, en iyi performansı test zamanında elde etmek için olasılık tahminlerini düzeltmenin ampirik bir yolunu da keşfetebilirsiniz. Kendi başınıza geliştirilmiş herhangi bir dönüşüm fonksiyonunu, hatta genetik algoritmalarla türetilmiş sofistike bir fonksiyonu kullanabilirsiniz. Tek sınırınız, bunu **cross-validation** ile test etmeniz ve **public leaderboard'dan iyi bir sonuç** almanızdır (ancak kesinlikle gerekli değildir, çünkü **yerel cross-validation** skoru daha güvenilir olmalıdır, bunu bir sonraki bölümde tartışacağız). Böyle bir stratejinin iyi bir örneğini, **Silogram** ([https://www.kaggle.com/psilogram](https://www.kaggle.com/psilogram)) **Microsoft Malware Classification Challenge** yarışmasında bulmuş ve **random forests** algoritmasının güvenilir olmayan olasılık çıktılarının üzerine, **grid search** ile belirlenen bir güç uygulayarak olasılıklarını doğru hale getirmiştir (daha fazla bilgi için [Burada](https://www.kaggle.com/c/malware-classification/discussion/13509) bulabilirsiniz).
+
+> **Sudalai Rajkumar**
+> 
+> [https://www.kaggle.com/sudalairajkumar](https://www.kaggle.com/sudalairajkumar)
+> 
+> 
+> 
+> Bölümümüzün son röportajında, yarışmalarda, veri setlerinde ve not defterlerinde Grandmaster olan Sudalai Rajkumar (SRK) ile konuşuyoruz. Analytics Vidhya veri bilimi platformunda #1 sıralamasına sahip olan SRK, şu anda start-up’lar için bir AI/ML danışmanı olarak çalışıyor.
+> 
+> 
+> 
+> **Favori yarışma türünüz nedir ve neden? Kaggle'daki teknikleriniz ve çözüm yaklaşımlarınız hakkında ne söylersiniz?**
+> 
+> 
+> 
+> Favori yarışmalarım, iyi bir özellik mühendisliği gerektiren yarışmalardır. Bu da benim güçlü yönüm diyebilirim. Genellikle, veriyi derinlemesine anlamak için veri keşfi yapmaktan ilgi duyuyorum (bunu, basit keşif Not defterlerimden [https://www.kaggle.com/sudalairajkumar/code](https://www.kaggle.com/sudalairajkumar/code) görebilirsiniz) ve sonrasında bu veriye dayalı özellikler yaratıyorum.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşırısınız? Bu yaklaşım, günlük işinizden ne kadar farklıdır?**
+> 
+> 
+> 
+> Bir yarışma için genel çerçeve, veri keşfi, doğru doğrulama yöntemini bulma, özellik mühendisliği, model kurma ve toplama/katmanlama (ensembling/stacking) aşamalarını içerir. Bunlar günlük işimde de yer alır. Ancak, günlük işimde bunun dışında daha fazla paydaş görüşmesi, veri toplama, veri etiketleme, model dağıtımı, model izleme ve veri hikayeleştirme gibi unsurlar da vardır.
+> 
+> 
+> 
+> **Girdiğiniz özellikle zor bir yarışmadan ve bu zorluğu nasıl aştığınızdan bahseder misiniz?**
+> 
+> 
+> 
+> Santander Ürün Önerisi, girdiğimiz hatırladığım bir yarışmadır. Rohan ile birlikte çok fazla özellik mühendisliği yaptık ve birden fazla model kurduk. Final toplama aşamasında, farklı ürünler için farklı ağırlıklar kullandık ve bazıları toplamda 1’e eşit değildi. Veri keşfi ve anlayışından yola çıkarak bu ağırlıkları manuel olarak seçtik ve bu bize yardımcı oldu. Bu deneyim, veri biliminin bilim olduğu kadar bir sanat olduğunu ve verinin/alanın problemleri çözmedeki önemini anlamamıza yardımcı oldu.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Yardımcı olduysa nasıl?**
+> 
+> 
+> 
+> Kaggle kariyerimde çok önemli bir rol oynadı. Son iki işimi, büyük ölçüde Kaggle sayesinde kazandım. Ayrıca, Kaggle'daki başarılarım, veri bilimi alanındaki diğer önemli kişilerle kolayca bağlantı kurmama ve onlardan öğrenmeme yardımcı oldu. Şu anki AI/ML danışmanlık rolümde de, Kaggle’daki başarılarım büyük bir güvenilirlik sağlıyor.
+> 
+> 
+> 
+> **Deneyimsiz Kaggle kullanıcılarının genellikle göz ardı ettiği şeyler nedir? Başlangıçta bilseydiniz şimdi neyi farklı yapardınız?**
+> 
+> 
+> 
+> Veriyi derinlemesine anlamak. Çoğu zaman insanlar hemen model kurmaya başlıyorlar. Oysa veri keşfi yapmak, herhangi bir Kaggle yarışmasının başarısı için çok önemli bir rol oynar. Bu, doğru çapraz doğrulama yapmanıza, daha iyi özellikler oluşturmanıza ve veriden daha fazla değer elde etmenize yardımcı olur.
+> 
+> 
+> 
+> **Geçmişte katıldığınız yarışmalarda hangi hataları yaptınız?**
+> 
+> 
+> 
+> Çok uzun bir liste var, ama bunlar öğrenme fırsatlarıydı. Her yarışmada, denediğim 20-30 fikirden sadece biri işe yarayabiliyor. Bu hatalar/başarısızlıklar, gerçek başarıdan veya işe yarayan şeylerden çok daha fazla öğretici oldu. Örneğin, çok fazla overfitting (aşırı uyum sağlama) yapmayı birinci yarışmamda öğrendim; başlangıçtaki en iyi sıralamalardan, en kötü sıralamalara düşmüştüm. Ama bu ders, hayatım boyunca benimle kaldı.
+> 
+> 
+> 
+> **Veri analizi/makine öğrenimi için önerdiğiniz özel araçlar veya kütüphaneler var mı?**
+> 
+> 
+> 
+> Tabular (tablosal) veriler için genellikle XGBoost/LightGBM kullanıyorum. Son zamanlarda, erken benchmark (ilk performans testi) almak için açık kaynak AutoML kütüphaneleri ve Driverless AI de kullanıyorum. Derin öğrenme modelleri için ise Keras, Transformers ve PyTorch kullanıyorum.
+> 
+> 
+> 
+> **Bir yarışmaya girerken, birinin aklında tutması veya yapması gereken en önemli şey nedir?**
+> 
+> 
+> 
+> Tutarlılık en önemli şeydir. Her yarışmanın kendi iniş çıkışları olacaktır. Birkaç gün boyunca hiç ilerleme kaydedemeyebilirsiniz, ama pes etmemeli ve denemeye devam etmelisiniz. Bu sadece Kaggle yarışmaları için değil, her şey için geçerlidir.
+> 
+> 
+> 
+> **Başka yarışma platformlarını kullanıyor musunuz? Bunlar Kaggle ile nasıl karşılaştırılır?**
+> 
+> 
+> 
+> Analytics Vidhya DataHack platformu, Driven Data, CrowdAnalytix gibi diğer platformlarda da yer aldım. Onlar da oldukça iyi, ama Kaggle daha geniş çapta kabul görmüş ve küresel bir platform olduğu için, diğer platformlarla karşılaştırıldığında Kaggle’daki rekabet daha yüksektir.
 
 ### Summary *(Özet)*
 
