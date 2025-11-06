@@ -2554,6 +2554,59 @@ Bu reformülasyon, hem pozitif hem de negatif sınıfların doğruluğunu artır
 
 ### Metrics for multi-class classification *(Çok sınıflı sınıflandırma metrikleri)*
 
+**Çoklu Sınıf Sınıflandırması**na geçtiğimizde, daha önce incelediğimiz ikili sınıflandırma metriklerini her sınıf için ayrı ayrı uygularız ve sonra bu metrikleri, çoklu sınıf durumlarında yaygın olarak kullanılan bazı ortalama stratejileriyle özetleriz.
+
+Örneğin, çözümünüzü **F1 skoru** üzerinden değerlendirmek istiyorsanız, üç olası ortalama seçeneğiniz vardır:
+
+* **Makro ortalama (Macro averaging)**: Her sınıf için F1 skorunu hesaplar ve ardından tüm sonuçların ortalamasını alırsınız. Bu şekilde, her sınıf, pozitif vakalarının sıklığına veya sorununuz için ne kadar önemli olduğuna bakılmaksızın eşit şekilde değerlendirilir ve modelin her sınıfta kötü performans gösterdiğinde eşit cezalar verilmiş olur.
+
+  $$
+  \text{Macro-F1} = \frac{F1_{class1} + F1_{class2} + \dots + F1_{classn}}{N}
+  $$
+
+* **Mikro ortalama (Micro averaging)**: Bu yaklaşım, her sınıfın katkısını toplayarak birleştirilmiş bir F1 skoru hesaplar. Bu yöntem, hiçbir sınıfa özel bir favori veya ceza uygulamaz, çünkü tüm hesaplamalar her sınıfı dikkate almadan yapılır ve böylece sınıf dengesizliklerini daha doğru bir şekilde hesaba katar:
+
+  $$
+  \text{Micro-F1} = F1_{class1+class2+\dots+classn}
+  $$
+
+* **Ağırlıklı ortalama (Weighting)**: Makro ortalama gibi, her sınıf için F1 skoru hesaplanır, ancak ardından tüm F1 skorlarının, her sınıfın doğru etiket sayısına bağlı bir ağırlıklı ortalaması alınır. Bu ağırlık seti, her sınıfın pozitif vakalarının sıklığını veya o sınıfın sorununuz için önemini dikkate almanıza olanak tanır. Bu yaklaşım açıkça çoğunluk sınıflarına öncelik verir, çünkü bu sınıflar hesaplamalarda daha fazla ağırlık alır:
+
+  $$
+  \text{Weighted-F1} = \frac{F1_{class1} \cdot W_{class1} + F1_{class2} \cdot W_{class2} + \dots + F1_{classn} \cdot W_{classn}}
+
+  {W_1 + W_2 + \dots + W_n = 1}
+  $$
+
+Kaggle yarışmalarında karşılaşabileceğiniz bazı yaygın çoklu sınıf metrikleri şunlardır:
+
+* **Çoklu sınıf doğruluğu (Weighted Accuracy)**: **Bengali.AI Handwritten Grapheme Classification** ([Kaggle Yarışması](https://www.kaggle.com/c/bengaliai-cv19))
+* **Çoklu sınıf log kaybı (Multiclass log loss)**: **Mechanisms of Action (MoA) Prediction** ([Kaggle Yarışması](https://www.kaggle.com/c/lish-moa/))
+* **Makro-F1 ve Mikro-F1 (Macro-F1, Micro-F1)**: **University of Liverpool - Ion Switching** ([Kaggle Yarışması](https://www.kaggle.com/c/liverpool-ion-switching)), **Human Protein Atlas Image Classification** ([Kaggle Yarışması](https://www.kaggle.com/c/human-protein-atlas-image-classification/)), **TensorFlow 2.0 Question Answering** ([Kaggle Yarışması](https://www.kaggle.com/c/tensorflow2-question-answering))
+* **Ortalama F1 (Mean-F1)**: **Shopee - Price Match Guarantee** ([Kaggle Yarışması](https://www.kaggle.com/c/shopee-product-matching/))
+
+---
+
+**Kareli Ağırlıklı Kappa (Quadratic Weighted Kappa)**, sıralı tahmin problemleri için akıllıca bir değerlendirme metriği olarak daha sonra inceleyeceğimiz bir diğer metriktir. En basit haliyle **Cohen Kappa skoru**, tahminlerinizin ve gerçeklerin arasındaki uyumu ölçer. Bu metrik aslında, **annotasyonlar arası uyumu** ölçmek için geliştirilmiştir, ancak oldukça esnek olup daha iyi kullanımlar bulmuştur.
+
+**Annotasyonlar arası uyum** nedir? Bir etiketleme göreviniz olduğunu varsayalım: Fotoğrafları **kedi**, **köpek** veya **hiçbiri** olarak sınıflandırmak. Bir grup kişiye bu görevi verirseniz, yanlış etiketler alabilirsiniz, çünkü bir kişi (bu tür görevlerde "hakem" olarak adlandırılır) bir köpeği kedi olarak ya da tam tersini yanlış tanımlayabilir. Bu işi doğru yapmak için, aynı fotoğrafları etiketlemek için birden fazla hakem kullanmak ve ardından **Cohen Kappa skoru**na göre uyum düzeylerini ölçmek en akıllıca yoldur.
+
+**Cohen Kappa**, iki etiketleyici arasındaki uyum düzeyini belirten bir skordur:
+
+$$
+\kappa = \frac{p_0 - p_e}{1 - p_e}
+$$
+
+Burada ( p_0 ) gözlemlenen relatif uyum oranını, ( p_e ) ise olasılık açısından tesadüfi uyum oranını ifade eder. **Karışıklık matrisi** terimlerini kullanarak bu şu şekilde yazılabilir:
+
+$$
+\kappa = \frac{2 \cdot (TP \cdot TN - FP \cdot FN)}{(TP + FP) \cdot (TN + FP) + (TP + FN) \cdot (FN + TN)}
+$$
+
+Bu formülün ilginç yanı, skoru oluştururken, uyumun sadece şans sonucu gerçekleşmiş olma olasılığını hesaba katmasıdır. Bu sayede, ölçüm en olası sınıflandırmalara göre düzeltilmiş olur. Metrik, **tam uyum** için 1, **tam karşıtlık** (tam uyumsuzluk) için -1 olarak tanımlanır. 0 civarındaki değerler, hakemler arasındaki uyum ve uyumsuzluğun tesadüfen gerçekleştiğini gösterir.
+
+Bu, modelin çoğu durumda şansa karşı gerçekten daha iyi performans gösterip göstermediğini anlamanıza yardımcı olur.
+
 ### Metrics for object detection problems *(Nesne tespiti problemleri için metrikler)*
 
 #### Intersection over union (IoU) *(Kesişim/Birleşim oranı)*
