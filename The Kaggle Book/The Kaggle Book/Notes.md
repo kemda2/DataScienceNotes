@@ -2832,9 +2832,95 @@ Bu özel metriklerin, regresyon ve sınıflandırma metrikleri üzerindeki genel
 
 ### Optimizing evaluation metrics *(Değerlendirme metriklerini optimize etme)*
 
+Şimdiye kadar tartıştıklarımızı özetleyecek olursak, **amaç fonksiyonu**, öğrenme algoritmanızın içinde, algoritmanın iç modelinin sağlanan verilere ne kadar iyi uyduğunu ölçen bir fonksiyondur. Amaç fonksiyonu ayrıca algoritmaya, ardışık iterasyonlar boyunca uyumunu iyileştirebilmesi için geri bildirim sağlar. Açıkça söylemek gerekirse, algoritmanın tüm çabaları, amaç fonksiyonuna dayanarak iyi performans göstermeye yönlendirilir. Eğer Kaggle değerlendirme metriği, algoritmanızın amaç fonksiyonu ile mükemmel bir şekilde örtüşüyorsa, en iyi sonuçları alırsınız.
 
+Ne yazık ki, bu durum sıkça geçerli değildir. Çoğu zaman, sağlanan değerlendirme metriği yalnızca mevcut amaç fonksiyonlarıyla yaklaşık olarak elde edilebilir. İyi bir yaklaşık sonuç elde etmek veya tahminlerinizi değerlendirme kriterlerine göre daha iyi hale getirmek, Kaggle yarışmalarında iyi performans göstermek için sırrınızdır. Amaç fonksiyonunuz, değerlendirme metriğinizle örtüşmüyorsa, birkaç alternatifiniz vardır:
+
+1. **Öğrenme algoritmanızı değiştirmek** ve değerlendirme metriğinizle uyumlu bir amaç fonksiyonu eklemek; ancak bu, tüm algoritmalar için mümkün değildir (örneğin, **LightGBM** ve **XGBoost** gibi algoritmalar, özel amaç fonksiyonları ayarlamanıza izin verir, ancak çoğu **Scikit-learn** modeli bunu desteklemez).
+
+2. **Modelinizin hiperparametrelerini ayarlamak**, değerlendirme metriği kullanıldığında en iyi sonucu veren parametreleri seçmek.
+
+3. **Sonuçlarınızı post-process etmek**, böylece değerlendirme kriterlerine daha yakın hale gelmesini sağlamak. Örneğin, tahminleriniz üzerinde dönüşümler yapan bir optimizasyon algoritması yazabilirsiniz (örneğin, **probabilite kalibrasyonu algoritmaları**, bu algoritmaları bölümün sonunda tartışacağız).
+
+Yarışma metriğini, makine öğrenimi algoritmanıza entegre etmek, daha iyi tahminler elde etmenin gerçekten en etkili yöntemidir; ancak yalnızca birkaç algoritma, yarışma metriğini amaç fonksiyonu olarak kullanacak şekilde hacklenebilir. Bu nedenle, ikinci yaklaşım daha yaygın olanıdır ve birçok yarışma, modelinizin değerlendirme metriği üzerinde en iyi performansı gösterebilmesi için doğru hiperparametreleri bulma mücadelesine dönüşür.
+
+Eğer değerlendirme fonksiyonunuz kodlanmışsa, doğru **cross-validation** yapmak veya uygun test setini seçmek büyük bir fark yaratacaktır. Eğer kodlanmış bir fonksiyonunuz yoksa, önce Kaggle tarafından sağlanan formülleri takip ederek uygun şekilde kodlamanız gerekir.
+
+Her zaman, şu adımlar fark yaratacaktır:
+
+* Değerlendirme metriği ve kodlanmış fonksiyonu hakkında arama motorlarından tüm ilgili bilgileri aramak
+* En yaygın paketleri incelemek (örneğin, **Scikit-learn**: [model değerlendirme](https://scikit-learn.org/stable/modules/model_evaluation.html#model-evaluation) veya **TensorFlow**: [keras kayıpları](https://www.tensorflow.org/api_docs/python/tf/keras/losses))
+* **GitHub projelerini** taramak (örneğin, **Ben Hammer’ın Metrics** projesi: [Ben Hammer Metrics GitHub](https://github.com/benhamner/Metrics))
+* Forumlarda ve mevcut Kaggle Notebooks'larda (hem mevcut yarışma için hem de benzer yarışmalar için) sormak veya bakmak
+* Ayrıca, daha önce belirttiğimiz gibi, **Meta Kaggle veri setini** sorgulamak ([Meta Kaggle](https://www.kaggle.com/kaggle/meta-kaggle)) ve **Competitions** tablosuna bakmak, aynı değerlendirme metriğini kullanan diğer Kaggle yarışmalarını bulmanıza yardımcı olacaktır ve bu size hemen kullanışlı kodlar ve fikirler sağlayacaktır.
+
+Değerlendirme metriğiniz, algoritmanızın amaç fonksiyonu ile örtüşmediğinde, sahip olduğunuz alternatifleri daha ayrıntılı olarak tartışalım. **Özel metrikler** ile başlayalım.
 
 ### Custom metrics and custom objective functions *(Özel metrikler ve özel hedef fonksiyonları)*
+
+**Amaç fonksiyonunuz, değerlendirme metriğinizle örtüşmediğinde ilk seçenek olarak**, yukarıda öğrendiğimiz gibi, kendi **özel amaç fonksiyonunuzu** yaratabilirsiniz, ancak sadece bazı algoritmalar, özel bir amaç fonksiyonunu kolayca entegre etmenize izin verir.
+
+İyi haber şu ki, bu tür fonksiyonları ekleyebilen birkaç algoritma, Kaggle yarışmalarında ve veri bilimi projelerinde en etkili olanlar arasındadır. Tabii ki, kendi özel amaç fonksiyonunuzu oluşturmak biraz karmaşık görünebilir, ancak bu yaklaşım, bir yarışmada puanınızı artırmak için inanılmaz derecede ödüllendirici olabilir. Örneğin, **gradient boosting** algoritmalarında (**XGBoost**, **CatBoost**, **LightGBM**) ve **TensorFlow** veya **PyTorch** tabanlı tüm derin öğrenme modellerinde, kendi özel amaç fonksiyonlarınızı oluşturma seçeneğiniz vardır.
+
+**TensorFlow** ve **PyTorch**'ta özel metrikler ve amaç fonksiyonları için harika öğreticiler bulabilirsiniz:
+
+* [Custom Metrics in Keras and How Simple They Are to Use in TensorFlow2](https://towardsdatascience.com/custom-metrics-in-keras-and-how-simple-they-are-to-use-in-tensorflow2-2-6d079c2ca279)
+* [Advanced Keras Custom Loss Functions](https://petamind.com/advanced-keras-custom-loss-functions/)
+* [PyTorch Metric Learning Custom Loss Functions](https://kevinmusgrave.github.io/pytorch-metric-learning/extend/losses/)
+
+Bu kaynaklar, size özel bir amaç veya değerlendirme fonksiyonu kodlamanın temel şablonlarını ve bazı kullanışlı önerileri sunacaktır.
+
+> **Özel bir amaç fonksiyonu oluşturmak için ihtiyacınız olanı hemen almak isterseniz**, RNA tarafından yazılmış bu Notebook'u ([https://www.kaggle.com/bigironsphere](https://www.kaggle.com/bigironsphere)): [Loss Function Library Keras/PyTorch](https://www.kaggle.com/bigironsphere/loss-function-library-keras-pytorch/) inceleyebilirsiniz. Bu Notebook, farklı yarışmalarda kullanılan, **TensorFlow** ve **PyTorch** için çok sayıda özel kayıp fonksiyonu içermektedir.
+
+**LightGBM, XGBoost veya CatBoost'ta özel bir kayıp fonksiyonu oluşturmanız gerektiğinde**, ilgili dokümantasyonlarında belirtildiği gibi, tahmin ve doğru etiketleri (ground truth) girdi olarak alan ve çıktılarında **gradient** ve **hessian** döndüren bir fonksiyon yazmanız gerekecektir.
+
+> Gradient ve hessian'ın ne olduğunu daha iyi anlamak için şu Stack Overflow yazısını inceleyebilirsiniz: [Gradient ve Hessian Hesaplaması](https://stats.stackexchange.com/questions/231220/how-to-compute-the-gradient-and-hessian-of-logarithmic-loss-question-is-based).
+
+Kod uygulama açısından, yapmanız gereken tek şey, fonksiyonu yaratmak ve gerekirse daha fazla parametre geçmek için **closures** kullanmaktır. İşte, **focal loss** adlı bir kayıp fonksiyonu örneği (bu kayıp, sınıf dengesizliğini dikkate alarak kayıp hesaplamalarına daha fazla ağırlık verir, Lin, T-Y. et al.'ın **Focal loss for dense object detection** adlı makalesinde açıklandığı gibi: [Focal Loss Makalesi](https://arxiv.org/abs/1708.02002)):
+
+```python
+from scipy.misc import derivative
+import xgboost as xgb
+
+def focal_loss(alpha, gamma):
+    def loss_func(y_pred, y_true):
+        a, g = alpha, gamma
+        def get_loss(y_pred, y_true):
+            p = 1 / (1 + np.exp(-y_pred))
+            loss = (-(a * y_true + (1 - a)*(1 - y_true)) *
+                    ((1 - (y_true * p + (1 - y_true) * (1 - p)))**g) *
+                    (y_true * np.log(p) + (1 - y_true) * np.log(1 - p)))
+            return loss
+        partial_focal = lambda y_pred: get_loss(y_pred, y_true)
+        grad = derivative(partial_focal, y_pred, n=1, dx=1e-6)
+        hess = derivative(partial_focal, y_pred, n=2, dx=1e-6)
+        return grad, hess
+    return loss_func
+
+xgb = xgb.XGBClassifier(objective=focal_loss(alpha=0.25, gamma=1))
+```
+
+Yukarıdaki kod örneğinde, **focal_loss** adlı yeni bir maliyet fonksiyonu tanımladık, ardından bunu bir **XGBoost** örneğine yerleştirdik. Bu örnek, focal loss'un düzgün çalışabilmesi için bazı parametrelerin (alpha ve gamma) doğru şekilde tanımlanmasını gerektirir. Fonksiyonun içinde bu parametrelerin doğrudan kodlanması yerine, parametreler fonksiyona girildiğinde bellekte saklanır ve **loss_func** fonksiyonu tarafından referans alınır.
+
+Bir diğer ilginç nokta ise, SciPy’nin **derivative** fonksiyonu aracılığıyla, maliyet fonksiyonunun **gradient** ve **hessian**'ını hesaplamanın oldukça kolay olmasıdır. Eğer maliyet fonksiyonunuz türevlenebilir ise, herhangi bir hesaplama yapmanız gerekmez.
+
+**Özel bir amaç fonksiyonu oluşturmak, matematiksel bilgi ve çok fazla çaba gerektirir**, ancak bunu başarmak, Kaggle yarışmalarında modelinizden maksimum sonucu almanızda gerçekten belirleyici olabilir.
+
+Eğer kendi amaç fonksiyonunuzu oluşturmak işe yaramazsa, daha az iddialı olabilirsiniz, fonksiyonu **değerlendirme metriği** olarak kullanarak bunu doğrudan **optimizer** içinde kullanmak yerine, bir **özel değerlendirme metriği** olarak kodlayabilirsiniz. Modeliniz bu fonksiyonla doğrudan optimize edilmemiş olsa da, yine de hiperparametre optimizasyonu yaparak tahmin performansını iyileştirebilirsiniz. Bu, önceki bölümde tartıştığımız ikinci seçenektir.
+
+Eğer sıfırdan bir metrik yazıyorsanız, bazen fonksiyonunuzun düzgün çalışabilmesi için belirli kodlama kurallarına uymanız gerektiğini unutmayın. Örneğin, **Scikit-learn** kullanıyorsanız, fonksiyonlarınızı **make_scorer** fonksiyonu ile dönüştürmeniz gerekir. **make_scorer** fonksiyonu, değerlendirme fonksiyonunuzu **Scikit-learn** API'si ile uyumlu hale getiren bir sarmalayıcıdır. Bu fonksiyon, bazı meta-bilgileri dikkate alarak fonksiyonunuzu sarar, örneğin, tahminler için eşik belirleme gerekip gerekmediği veya optimizasyonun yönü (skoru maksimize etmek mi yoksa minimize etmek mi istediğiniz gibi):
+
+```python
+from sklearn.metrics import make_scorer
+from sklearn.metrics import average_precision_score
+
+scorer = make_scorer(average_precision_score, 
+                     average='weighted', greater_is_better=True, needs_proba=False)
+```
+
+Yukarıdaki örnekte, **average_precision_score** metriği kullanılarak bir scorer hazırlanmıştır, burada çok sınıflı sınıflandırma problemleriyle çalışırken **weighted** hesaplama kullanılması gerektiği belirtilmiştir.
+
+> Değerlendirme metriğinizi optimize ediyorsanız, **grid search**, **random search** veya daha sofistike optimizasyon tekniklerini, örneğin **Bayesian optimizasyonu** kullanarak hiperparametrelerinizi optimize edebilir ve algoritmanızı, farklı bir maliyet fonksiyonu kullanıyor olsa bile, değerlendirme metriği için en iyi performansı gösterecek şekilde parametreleri bulabilirsiniz. Model doğrulamasını tartıştıktan sonra, Kaggle yarışmalarında parametre optimizasyonunu nasıl en iyi şekilde düzenleyeceğimizi ve en iyi sonuçları nasıl alacağımızı inceleyeceğiz.
 
 ### Post-processing your predictions *(Tahminleri sonradan işleme)*
 
