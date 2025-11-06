@@ -2069,11 +2069,192 @@ Listeye göz attığınızda, karşılaşacağınız metriklerin çoğunun makin
 
 ### Handling never-before-seen metrics *(Daha önce görülmemiş metriklerle başa çıkma)*
 
+İlerlemeye başlamadan önce, en popüler 20 metriği gösteren tablonun yarışmalarda kullanılan tüm metrikleri kapsamadığını göz önünde bulundurmalıyız. Son yıllarda yalnızca bir kez kullanılmış metrikler de vardır.
 
+**Yarışma Görevleri ve Metrikler**
+
+Önceki kod sonuçlarını kullanarak, bu nadir kullanılan metriklerin neler olduğunu bulmaya devam edelim:
+
+```python
+counts = (df[time_select & competition_type_select]
+          .groupby('EvaluationAlgorithmAbbreviation'))
+total_comps_per_year = (df[time_select & competition_type_select]
+                        .groupby('year').sum())
+single_metrics_per_year = (counts.sum()[counts.sum().comps == 1]
+                           .groupby('year').sum())
+single_metrics_per_year
+table = (total_comps_per_year.rename(columns={'comps': 'n_comps'})
+         .join(single_metrics_per_year / total_comps_per_year)
+         .rename(columns={'comps': 'pct_comps'}))
+print(table)
+```
+
+Sonuç olarak, her yıl için aşağıdaki tabloyu elde ederiz. Bu tabloda, her yıl kaç yarışmanın daha sonra bir daha kullanılmamış bir metrik kullandığını (`n_comps`) ve bu yarışmaların toplam yarışmalara oranını (`pct_comps`) görebiliriz:
+
+| year | n_comps | pct_comps |
+| ---- | ------- | --------- |
+| 2015 | 28      | 0.179     |
+| 2016 | 19      | 0.158     |
+| 2017 | 34      | 0.177     |
+| 2018 | 35      | 0.229     |
+| 2019 | 36      | 0.278     |
+| 2020 | 43      | 0.302     |
+| 2021 | 8       | 0.250     |
+
+Daha sonra bir daha kullanılmamış metriklerin payına baktığımızda, bu oranın yıl geçtikçe arttığını ve son yıllarda %25–%30 seviyelerine ulaştığını hemen fark ederiz. Bu, genellikle her üç veya dört yarışmadan birinin size metrikleri baştan öğrenip anlamayı gerektirdiğini gösterir.
+
+Geçmişte kullanılmış ve bir daha tekrar edilmeyen metriklerin listesini şu kısa kodla alabilirsiniz:
+
+```python
+print(counts.sum()[counts.sum().comps == 1].index.values)
+```
+
+Bu kodu çalıştırdığınızda, benzer bir liste elde edersiniz:
+
+```
+['AHD@{Type}', 'CVPRAutoDrivingAveragePrecision', 'CernWeightedAuc',
+ 'FScore_1', 'GroupMeanLogMAE', 'ImageNetObjectLocalization',
+ 'IndoorLocalization', 'IntersectionOverUnionObjectSegmentationBeta',
+ 'IntersectionOverUnionObjectSegmentationWithClassification',
+ 'IntersectionOverUnionObjectSegmentationWithF1', 'Jaccard',
+ 'JaccardDSTLParallel', 'JigsawBiasAUC', 'LaplaceLogLikelihood',
+ 'LevenshteinMean', 'Lyft3DObjectDetectionAP', 'M5_WRMSSE', 'MASpearmanR',
+ 'MCRMSE', 'MCSpearmanR', 'MWCRMSE', 'MeanColumnwiseLogLoss',
+ 'MulticlassLossOld', 'NDCG@{K}', 'NQMicroF1', 'NWRMSLE', 'PKUAutoDrivingAP',
+ 'R2Score', 'RValue', 'RootMeanSquarePercentageError', 'SIIMDice', 'SMAPE',
+ 'SantaResident', 'SantaRideShare', 'SantaWorkshopSchedule2019', 'TrackML',
+ 'TravelingSanta2', 'TwoSigmaNews', 'WeightedAUC', 'WeightedMulticlassLoss',
+ 'WeightedPinballLoss', 'WeightedRowwisePinballLoss', 'YT8M_MeanAveragePrecisionAtK',
+ 'ZillowMAE', 'football', 'halite', 'mab']
+```
+
+Yakından incelendiğinde, listede derin öğrenme ve pekiştirmeli öğrenme yarışmalarına ilişkin birçok metrik bulabilirsiniz.
+
+Peki, daha önce hiç karşılaşmadığınız bir metrikle karşılaştığınızda ne yapmalısınız?
+
+* Tabii ki, Kaggle tartışma forumlarındaki paylaşımlara güvenebilirsiniz; burada her zaman iyi fikirler ve size yardımcı olacak birçok Kaggle katılımcısı bulabilirsiniz.
+* Ancak metriği kendi başınıza anlamak istiyorsanız, Google’da arama yapmanın yanı sıra, değerlendirme fonksiyonunu kendi kodunuzla denemeyi tavsiye ederiz. Bunu mükemmel olmasa bile yapabilir, modelin farklı hata türlerine karşı metrik nasıl tepki veriyor simüle edebilirsiniz. Ayrıca metrik fonksiyonunu yarışma eğitim verisi örnekleri üzerinde veya sizin hazırladığınız sentetik veri üzerinde test edebilirsiniz.
+
+Bazı Kaggle kullanıcılarının bu yaklaşımı nasıl kullandığına örnekler:
+
+* **Carlo Lepelaars** ile Spearman’s Rho: [Link](https://www.kaggle.com/carlolepelaars/understanding-the-metric-spearman-s-rho)
+* **Carlo Lepelaars** ile Quadratic Weighted Kappa: [Link](https://www.kaggle.com/carlolepelaars/understanding-the-metric-quadratic-weighted-kappa)
+* **Rohan Rao** ile Laplace Log Likelihood: [Link](https://www.kaggle.com/rohanrao/osic-understanding-laplace-log-likelihood)
+
+Bu yaklaşım, değerlendirme süreci hakkında daha derin bir anlayış kazandırır ve sadece Google ve forumlardan gelen cevaplara güvenen rakiplere karşı size avantaj sağlar.
+
+> **Rohan Rao**
+> 
+> [Kaggle Profili](https://www.kaggle.com/rohanrao)
+> 
+> 
+> 
+> Farklı metrikleri keşfetmeye başlamadan önce, Quadruple Grandmaster ve H2O.ai’de Kıdemli Veri Bilimcisi olan Rohan Rao (namı diğer Vopani) ile Kaggle’daki başarılarını ve bizlerle paylaşmak istediği bilgeliği konuşalım.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Kaggle’da teknikler ve çözüm yaklaşımları açısından uzmanlığınız nedir?**
+> 
+> Farklı yarışma türleriyle ilgilenmeyi seviyorum, ama en favorim kesinlikle zaman serisi yarışmaları. Endüstrideki tipik zaman serisi yaklaşımlarını ve kavramlarını pek sevmiyorum, bu yüzden çözümleri alışılmışın dışında, yenilikçi bir şekilde kurmayı tercih ediyorum ve bu bana çok başarılı sonuçlar getirdi.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşıyorsunuz? Bu yaklaşım, günlük işinizden ne kadar farklı?**
+> 
+> Her Kaggle yarışması için tipik iş akışım şöyle:
+> 
+> 
+> 
+> * Problem tanımını anlamak ve kurallar, format, zaman çizelgesi, veri setleri, metrikler ve teslimatlar ile ilgili tüm bilgileri okumak.
+> 
+> * Veriye derinlemesine dalmak. Veriyi her açıdan inceleyip dilimleyip görselleştirerek her türlü soruya cevap verebilecek hâle gelmek.
+> 
+> * Basit bir pipeline ve temel bir model kurup, sürecin çalıştığını doğrulamak için bir gönderim yapmak.
+> 
+> * Özellik mühendisliği yapmak, hiperparametreleri ayarlamak ve hangi modellerin genellikle işe yaradığını anlamak için çeşitli modellerle denemeler yapmak.
+> 
+> * Veriyi analiz etmeye, forum tartışmalarını okumaya ve özellikleri ile modelleri sürekli olarak geliştirmeye devam etmek. Belki bir noktada ekip kurmak.
+> 
+> * Birden fazla modeli ensemble yapmak ve hangi gönderimleri final olarak kullanacağınıza karar vermek.
+> 
+> 
+> 
+> Günlük veri bilimi çalışmalarımda bunların çoğu da gerçekleşiyor. Ama ek olarak iki kritik unsur var:
+> 
+> 
+> 
+> * Problem tanımı için veri setlerini hazırlamak ve düzenlemek.
+> 
+> * Nihai model veya çözümü üretime almak.
+> 
+> 
+> 
+> Geçmişte çalıştığım projelerin çoğunda zamanımın büyük kısmı bu iki aktiviteye harcandı.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Olduysa nasıl?**
+> 
+> Makine öğrenmesinde öğrendiğim şeylerin büyük çoğunluğu Kaggle’dan geldi. Topluluk, platform ve içerik gerçekten paha biçilemez; öğrenilecek inanılmaz miktarda bilgi var.
+> 
+> Kaggle yarışmalarına katılmak, sorunları anlamak, yapılandırmak ve çözmek konusunda bana büyük güven kazandırdı. Bu deneyimi, Kaggle dışında çalıştığım şirketler ve projelerde başarıyla uygulayabildim.
+> 
+> Birçok işe alım görevlisi, Kaggle’daki başarılarımı (özellikle yarışmalarda) görerek benimle iletişime geçti. Bu, adayın veri bilimi problemlerini çözme yeteneğini gösteren iyi bir göstergedir ve yeteneklerinizi sergilemek ve portföy oluşturmak için harika bir platformdur.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda yaptığınız hatalar oldu mu?**
+> 
+> Her yarışmada bazı hatalar yaptım! Böylece öğrenip gelişiyorsunuz. Bazen bir kod hatası, bazen yanlış bir doğrulama kurulumu, bazen de yanlış bir gönderim seçimi olabiliyor.
+> 
+> Önemli olan bu hatalardan ders almak ve tekrar etmemeyi sağlamaktır. Bu süreci tekrar etmek, Kaggle’daki genel performansınızı otomatik olarak artırır.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenmesi için önerdiğiniz özel araçlar veya kütüphaneler var mı?**
+> 
+> Hiçbir teknolojiye “bağlanmamak” gerektiğine inanıyorum. En iyi çalışan, en rahat ve en etkili olanı kullanın, ama sürekli olarak yeni araçlar ve kütüphaneler öğrenmeye açık olun.
 
 ### Metrics for regression (standard and ordinal) *(Regresyon için metrikler - standart ve sıralı)*
 
+Regresyon problemleriyle çalışırken, yani sürekli bir değeri tahmin etmeyi gerektiren (eksi sonsuzdan artı sonsuza kadar değişebilen) problemlerle uğraşırken, en yaygın kullanılan hata ölçüleri RMSE (karekök ortalama kare hata) ve MAE (ortalama mutlak hata) yöntemleridir. Ancak, RMSLE veya MCRMSLE gibi biraz farklı hata ölçüleri de faydalı olabilir.
+
 #### Mean squared error (MSE) and R² *(Ortalama kare hata (MSE) ve R²)*
+
+Karekök ortalama kare hata (RMSE), ortalama kare hatanın (MSE) kareköküdür. MSE, aslında regresyon çalışmasını öğrenirken tanıştığınız eski iyi hata kareleri toplamının (SSE) ortalamasından başka bir şey değildir.
+
+**MSE formülü şu şekildedir:**
+
+$$
+MSE = \frac{1}{n} \sum_{i=1}^{n} (\hat{y_i} - y_i)^2
+$$
+
+Formülün işleyişini açıklayalım:
+
+* (n) gözlem sayısını gösterir.
+* (y_i) gerçek değer (ground truth), (\hat{y_i}) ise modelin tahminidir.
+* Önce tahminler ile gerçek değerler arasındaki farkı alırsınız.
+* Farkları kareye alırsınız (pozitif ya da sıfır olur).
+* Tüm kareleri toplarsınız; işte bu sizin SSE’nizdir.
+* Son olarak, SSE’yi tahmin sayısına bölerek ortalama değeri (MSE) elde edersiniz.
+
+Genellikle tüm regresyon modelleri SSE’yi minimize eder, bu yüzden MSE’yi veya MSE’den türetilmiş R² (determinasyon katsayısı) gibi metrikleri minimize etmekte büyük sorun yaşamazsınız. R² şöyle hesaplanır:
+
+$$
+R^2 = 1 - \frac{\sum_{i=1}^{n} (\hat{y_i} - y_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}
+$$
+
+Burada SSE (hata kareleri toplamı), toplam kareler toplamına (SST) karşılaştırılır. SST, aslında hedef değişkenin varyansıdır ve şu şekilde tanımlanır:
+
+$$
+SST = \sum_{i=1}^{n} (y_i - \bar{y})^2
+$$
+
+Başka bir deyişle, R² modelin hata karelerini, en basit model olan hedefin ortalamasıyla karşılaştırır. SSE ve SST aynı ölçeğe sahip olduğu için R², hedef değişkeni dönüştürmenin tahminleri iyileştirip iyileştirmediğini anlamanıza yardımcı olabilir.
+
+Unutmayın: min-max ölçekleme veya standardizasyon gibi lineer dönüşümler, herhangi bir regresyon modelinin performansını değiştirmez; çünkü bunlar hedefin lineer dönüşümüdür. Ancak karekök, küp kök, logaritma, üs alma gibi **lineer olmayan dönüşümler** ve bunların kombinasyonları, regresyon modelinizin değerlendirme metriği üzerindeki performansını kesinlikle değiştirebilir (doğru dönüşümü seçerseniz genellikle daha iyi olur).
+
+MSE, aynı probleme uygulanan regresyon modellerini karşılaştırmak için mükemmel bir araçtır. Ancak kötü haber şu ki, Kaggle yarışmalarında genellikle MSE kullanılmaz; RMSE tercih edilir. Çünkü MSE’nin karekökünü almak, değerleri hedefin orijinal ölçeğine yaklaştırır ve modelinizin performansını gözle kontrol etmek kolaylaşır. Ayrıca, farklı veri problemleri veya yarışmalar arasında aynı regresyon modelini değerlendiriyorsanız, R² daha kullanışlıdır; çünkü MSE ile tamamen ilişkili olup 0 ile 1 arasında değer alır ve tüm karşılaştırmaları kolaylaştırır.
 
 #### Root mean squared error (RMSE) *(Kök ortalama kare hata (RMSE))*
 
