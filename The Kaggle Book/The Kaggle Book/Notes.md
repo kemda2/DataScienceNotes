@@ -2462,7 +2462,95 @@ Burada, **beta** parametresi, recall'un nasıl ağırlıklı olarak değerlendir
 
 #### Log loss and ROC-AUC *(Log kaybı ve ROC-AUC)*
 
+**Log Loss** ile başlayalım, ki bu derin öğrenme modellerinde **cross-entropy** (çapraz entropi) olarak da bilinir. **Log loss**, tahmin edilen olasılık ile gerçek (ground truth) olasılık arasındaki farkı ölçer:
+
+**Log Loss Formülü:**
+$$ L = \sum_{i=1}^{n} \left[ y_i \cdot \log(\hat{y_i}) + (1 - y_i) \cdot \log(1 - \hat{y_i}) \right] $$
+
+Burada, ( n ) örnek sayısını, ( y_i ) ith örneğin gerçek etiketini (0 veya 1) ve ( \hat{y_i} ) ise modelin ith örnek için tahmin ettiği olasılığı temsil eder.
+
+Eğer bir yarışma **log loss** kullanıyorsa, bu, amacın bir örneğin pozitif sınıfa ait olma olasılığını mümkün olduğunca doğru bir şekilde tahmin etmek olduğu anlamına gelir. Gerçekten de log loss, birçok yarışmada kullanılan bir metriktir.
+
+Örneğin, **Deepfake Detection Challenge** ([https://www.kaggle.com/c/deepfake-detection-challenge](https://www.kaggle.com/c/deepfake-detection-challenge)) veya daha eski **Quora Question Pairs** ([https://www.kaggle.com/c/quora-question-pairs](https://www.kaggle.com/c/quora-question-pairs)) gibi yarışmalarda log loss metriğini bulabilirsiniz.
+
+**ROC (Receiver Operating Characteristic)** eğrisi, bir ikili sınıflandırıcının performansını değerlendirmek ve birden fazla sınıflandırıcıyı karşılaştırmak için kullanılan grafiksel bir diyagramdır. ROC-AUC metriği, bu eğrinin altındaki alanı ifade eder. ROC eğrisi, **true positive rate** (doğru pozitif oranı, yani recall) ile **false positive rate** (yanlış pozitif oranı, yani negatif örneklerin pozitif olarak sınıflandırılması oranı) arasındaki ilişkiyi gösterir. Ayrıca, doğru negatif oranının (negatif örneklerin doğru şekilde sınıflandırılma oranı) bir eksiği ile eşdeğerdir.
+
+![](im/1046.png)
+
+İyi bir sınıflandırıcıya ait **ROC eğrisi**, **false positive rate** (yanlış pozitif oranı) düşükken **true positive rate** (doğru pozitif oranı, yani recall) hızla artmalıdır. **ROC-AUC** değeri 0.9 ile 1.0 arasında olan bir model, çok iyi kabul edilir.
+
+Kötü bir sınıflandırıcıyı, **ROC eğrisinin**, yukarıdaki şekilde, yalnızca rastgele bir sınıflandırıcının performansını temsil eden diyagonal ile çok benzer veya aynı olmasıyla fark edebilirsiniz. **ROC-AUC** skorları 0.5'e yakın olduğunda, sonuçlar neredeyse rastgele kabul edilir.
+
+Farklı sınıflandırıcıları karşılaştırırken ve **AUC** kullanıyorsanız, **daha yüksek AUC** değeri olan sınıflandırıcı daha performanslıdır.
+
+Eğer sınıflar dengeliyse veya çok fazla dengesiz değilse, **AUC**'deki artışlar, eğitimli modelin etkinliğiyle orantılıdır ve modelin **doğru pozitifler** için daha yüksek olasılıklar üretme yeteneği olarak düşünülebilir. Ayrıca, bu, örnekleri pozitiften negatife doğru daha düzgün sıralama yeteneği olarak da değerlendirilebilir. Ancak, pozitif sınıf nadir olduğunda, **AUC** başlangıçta yüksek olur ve artışlar, nadir sınıfı daha iyi tahmin etme açısından çok fazla şey ifade etmeyebilir. Bu durumda, daha önce de belirttiğimiz gibi, **ortalama kesinlik (average precision)** daha faydalı bir metrik olabilir.
+
+> Son zamanlarda, **AUC** birçok farklı yarışmada kullanılmıştır. Bu üç yarışmaya göz atmanızı öneririz:
+> 
+> 
+> 
+> * **IEEE-CIS Fraud Detection**: [https://www.kaggle.com/c/ieee-fraud-detection](https://www.kaggle.com/c/ieee-fraud-detection)
+> 
+> * **Riiid Answer Correctness Prediction**: [https://www.kaggle.com/c/riiid-test-answer-prediction](https://www.kaggle.com/c/riiid-test-answer-prediction)
+> 
+> * **Jigsaw Multilingual Toxic Comment Classification**: [https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification](https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification)
+
+**AUC ve ortalama kesinlik arasındaki ilişkiyi** daha ayrıntılı olarak açıklayan bir makale için şu kaynağa göz atabilirsiniz:
+Su, W., Yuan, Y., ve Zhu, M. "A relationship between the average precision and the area under the ROC curve." Proceedings of the 2015 International Conference on The Theory of Information Retrieval, 2015.
+
 #### Matthews correlation coefficient (MCC) *(Matthews korelasyon katsayısı)*
+
+Binary sınıflandırma metriklerinin sonuna yaklaşırken, **Matthews korelasyon katsayısı** (MCC) önemli bir yere sahiptir. MCC, **VSB Power Line Fault Detection** ([https://www.kaggle.com/c/vsb-power-line-fault-detection](https://www.kaggle.com/c/vsb-power-line-fault-detection)) ve **Bosch Production Line Performance** ([https://www.kaggle.com/c/bosch-production-line-performance](https://www.kaggle.com/c/bosch-production-line-performance)) gibi yarışmalarda kullanılmıştır.
+
+MCC formülü şu şekildedir:
+
+$$
+MCC = \frac{(TP \cdot TN) - (FP \cdot FN)}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}
+$$
+
+Burada **TP** true positives (doğru pozitifler), **TN** true negatives (doğru negatifler), **FP** false positives (yanlış pozitifler) ve **FN** false negatives (yanlış negatifler) temsil eder. Bu, **precision** ve **recall** ile ilgili önceki açıklamalarda gördüğümüz aynı terminolojidir.
+
+MCC, bir korelasyon katsayısı gibi davranır ve +1 (mükemmel tahmin) ile -1 (tersine tahmin) arasında değişir. Bu metrik, özellikle sınıflar oldukça dengesiz olduğunda bile sınıflandırmanın kalitesini ölçmek için kullanılabilir.
+
+Formülün karmaşıklığına rağmen, **Neuron Engineer** adlı bir Kaggle kullanıcısı, bu metriğin daha anlaşılır bir formülle yeniden yapılandırılmasını sağlamıştır. Neuron Engineer'in reformüle ettiği MCC şu şekildedir:
+
+İşte MCC (Matthews Korelasyon Katsayısı) formülünün basitleştirilmiş hali ve her bir bileşenin açıklamaları:
+
+$$MCC = (Posprecision + Negprecision - 1) * PosNegRatio$$
+
+Formüldeki her bir eleman şudur:
+
+* **Posprecision**: Pozitif sınıfın kesinliği
+  $$
+  \text{Posprecision} = \frac{TP}{TP + FP}
+  $$
+
+* **Negprecision**: Negatif sınıfın kesinliği
+  $$
+  \text{Negprecision} = \frac{TN}{TN + FN}
+  $$
+
+* **PosNegRatio**: Pozitif ve negatif tahmin oranı
+  $$
+  \text{PosNegRatio} = \sqrt{\frac{\text{PosPredictionCount} \times \text{NegPredictionCount}}{\text{PosLabelCount} \times \text{NegLabelCount}}}
+  $$
+
+  Buradaki bileşenler şunlardır:
+
+  * **PosPredictionCount**: Pozitif sınıf tahmin sayısı
+    $$
+    \text{PosPredictionCount} = TP + FP
+    $$
+
+  * **NegPredictionCount**: Negatif sınıf tahmin sayısı
+    $$
+    \text{NegPredictionCount} = TN + FN
+    $$
+
+  * **PosLabelCount**: Pozitif etiket sayısı
+  * **NegLabelCount**: Negatif etiket sayısı
+
+Bu reformülasyon, hem pozitif hem de negatif sınıfların doğruluğunu artırarak daha iyi bir performans elde edebileceğinizi gösteriyor. Ancak, bunun yeterli olmadığını da belirtiyor: Pozitif ve negatif tahminlerin, **gerçek dağılımla** orantılı olması gerekir. Aksi takdirde, modeliniz büyük bir şekilde cezalandırılır.
 
 ### Metrics for multi-class classification *(Çok sınıflı sınıflandırma metrikleri)*
 
