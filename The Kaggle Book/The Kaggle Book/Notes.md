@@ -3361,6 +3361,47 @@ Olasılıksal tahminciler, basit bir train-test bölmesine göre doğal olarak d
 
 #### k-fold cross-validation *(k-katlı çapraz doğrulama)*
 
+En yaygın kullanılan olasılıksal doğrulama yöntemi, k-katlı çapraz doğrulama (k-fold cross-validation) olup, modelinizin daha önce görmediği, aynı dağılımdan çekilmiş test verileri üzerindeki performansını doğru bir şekilde tahmin etme yeteneğiyle tanınır.
+
+> Bu konu, Bates, S., Hastie, T., ve Tibshirani, R.'nin **Cross-validation: what does it estimate and how well does it do it?** başlıklı makalesinde açıkça açıklanmıştır (arXiv preprint arXiv:2104.00673, 2021, [makale bağlantısı](https://arxiv.org/pdf/2104.00673.pdf)).
+
+k-katlı çapraz doğrulama, hem tahminsel modelleri karşılaştırmak hem de test seti üzerinde en iyi performansı gösterecek olan modelin hiperparametrelerini seçmek için başarıyla kullanılabilir.
+
+k-katlı çapraz doğrulamanın pek çok farklı çeşidi olsa da, en basiti, Scikit-learn'deki **KFold** fonksiyonunda uygulanan versiyonudur. Bu yöntemde, mevcut eğitim veriniz k parçaya ayrılır. Ardından, k iterasyon için bu parçalardan birisi test seti olarak alınır, diğer k-1 parça ise modelin eğitimi için kullanılır.
+
+k doğrulama skoru daha sonra ortalanır ve bu ortalama skor değeri, k-katlı doğrulama skoru olur; bu skor, modelinizin herhangi bir görülmemiş veri üzerindeki tahmin edilen ortalama performansını gösterir. Skorların standart sapması ise, tahminin ne kadar belirsiz olduğunu size bildirir. Şekil 6.2, 5-katlı çapraz doğrulamanın nasıl yapılandırıldığını gösterir.
+
+![](im/1052.png)
+
+Tabii, işte metnin Türkçe çevirisi:
+
+---
+
+K-katlamalı çapraz doğrulama skorunun önemli bir yönü, modelinizin k-1 katından aynı miktarda veri ile eğitilmiş olarak ortalama skorunu tahmin etmesidir. Ancak sonrasında modelinizi tüm verinizle eğittiğinizde, önceki doğrulama tahmini geçerliliğini yitirir. K, örnek sayısı n'ye yaklaştıkça, modelinizin tüm eğitim seti üzerinde eğitilmiş haline ilişkin giderek daha doğru bir tahmin elde edersiniz; ancak her katın tahminleri arasındaki artan korelasyon nedeniyle, doğrulamanın tüm olasılık tahminlerini kaybedersiniz. Bu durumda, elde ettiğiniz sayı, modelinizin eğitim verisi üzerindeki performansını gösterir (ki bu hala karşılaştırma amaçları için yararlı bir tahmin olabilir, ancak modelinizin genelleme gücünü doğru şekilde tahmin etmenize yardımcı olmaz).
+
+K = n'ye ulaştığınızda, bunun LOO (Leave-One-Out) doğrulama yöntemi olduğunu görürsünüz, bu yöntem birkaç örneğiniz olduğunda yararlıdır. Bu yöntem çoğunlukla tarafsız bir uyum ölçütüdür, çünkü mevcut verilerin neredeyse tamamını eğitmek için kullanır ve sadece bir örneği test için ayırır. Ancak, bu, görünmeyen verilerdeki beklenen performansın iyi bir tahmini değildir. Verisetindeki her bir testin tekrar edilmesi, birbirleriyle yüksek oranda korelasyonlu olur ve ortaya çıkan LOO metriği, modelin veri seti üzerindeki performansını daha çok temsil eder, bilinmeyen verilerdeki performansından ziyade.
+
+Doğru k sayısı, sahip olduğunuz veriye ilişkin birkaç açıya bağlı olarak belirlenir:
+
+* K küçükse (minimum 2'dir), her kat daha küçük olacak ve bu nedenle k-1 katında eğitilen bir model için öğrenmede daha fazla bias (sapma) olacaktır: daha küçük bir k ile doğrulanan model, daha büyük bir k ile eğitilen bir modele göre daha düşük performans gösterir.
+* K daha büyükse, daha fazla veri olacaktır, ancak doğrulama tahminleriniz daha fazla korelasyon gösterir: K-katlamalı çapraz doğrulamanın, görünmeyen verilere olan performansı tahmin etme özelliklerini kaybedersiniz.
+
+Genellikle, k 5, 7 veya 10 olarak belirlenir, nadiren 20 katlama kullanılır. K = 5 veya k = 10 genellikle bir yarışma için iyi bir seçenek olarak kabul edilir, çünkü 10 katlama daha fazla veriyi her eğitimde kullanır (mevcut verilerin %90'ı) ve bu nedenle modelinizin tüm veri kümesiyle yeniden eğitildiğinde beklenen performansını anlamada daha uygundur.
+
+Bir yarışmadaki belirli bir veri seti için hangi k'nın seçileceğini karar verirken, iki perspektifi göz önünde bulundurmak faydalıdır.
+
+İlk olarak, katlamalı sayının seçimi hedeflerinize göre olmalıdır:
+
+* Amacınız performans tahmini yapmaksa, düşük biaslı (yanlılıksız) modeller gerekir (yani tahminlerde sistematik bir distorsiyon olmamalıdır). Bunu başarmak için daha yüksek sayıda katlama kullanmanız gerekir, genellikle 10 ila 20 arasında.
+* Amacınız parametre ayarlaması yapmaksa, bias ve varyans karışımına ihtiyacınız vardır, bu nedenle orta sayıda katlama kullanmak uygundur, genellikle 5 ila 7 arasında.
+* Son olarak, amacınız sadece değişken seçimi yapmak ve veri setinizi basitleştirmekse, düşük varyanslı tahminler (ya da anlaşmazlık yaşamamak) gerekir. Bu nedenle daha düşük sayıda katlama yeterlidir, genellikle 3 ila 5 arasında.
+
+Mevcut verilerin boyutu oldukça büyükse, önerilen bantların alt tarafında kalmak güvenlidir.
+
+İkinci olarak, sadece performans tahmini yapmayı amaçlıyorsanız, kullandığınız daha fazla katlamanın, doğrulama setinizde daha az örnek olacağı anlamına geldiğini ve bu nedenle her katın tahminlerinin daha fazla korelasyon göstereceğini unutmayın. Belirli bir noktadan sonra, k'yı artırmak, çapraz doğrulama tahminlerinizi görünmeyen test setlerine dair daha az öngörücü hale getirir ve modelinizin eğitim setindeki performansının tahmini olarak daha çok temsil eder. Bu, daha fazla katlama ile, sizin için doğru bir "out-of-fold" tahmini almanızı sağladığından, model birleştirme ve yığılma (stacking) gibi teknikler için daha faydalı olabilir.
+
+> Kaggle yarışmalarında, k-katlamalı çapraz doğrulama genellikle sadece çözüm yaklaşımınızı doğrulamak ve modelinizin performansını anlamak için değil, aynı zamanda tahmininizi üretmek için de uygulanır. Çapraz doğrulama yaparken, alt örnekleme yapıyorsunuz ve verinin alt örneklerine dayalı olarak birden çok modelin sonuçlarını ortalamak, genellikle tüm mevcut verilerle eğitim yapmaktan daha etkili bir stratejidir. Bu, genellikle varyansla mücadele etmek için daha etkili bir yol olur (bunu daha detaylı olarak 9. Bölüm'de, "Blending ve Stacking Çözümleriyle Birleştirme" başlığında tartışacağız). Bu nedenle birçok Kaggle katılımcısı, çapraz doğrulama sırasında oluşturulan modelleri kullanarak test setinde bir dizi tahmin sağlar ve bunları ortaladığında en iyi çözümü elde eder.
+
 #### Subsampling *(Alt örnekleme)*
 
 #### The bootstrap *(Bootstrap yöntemi)*
