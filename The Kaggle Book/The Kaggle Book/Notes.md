@@ -3508,7 +3508,127 @@ Bu ikinci tekniği, bu bölümün ilerleyen kısımlarında *adversarial validat
 
 ##### Subsampling *(Alt örnekleme)*
 
+**k-katlı çapraz doğrulama dışında başka doğrulama stratejileri de vardır, ancak bunlar aynı genelleme özelliklerine sahip değildir.**
+
+Zaten LOO'yu (Leave-One-Out) tartıştık, bu durum k = n olduğunda (burada n, örneklerin sayısıdır). Diğer bir seçenek ise **alt örnekleme**dir. Alt örnekleme, k-katlıya benzer, ancak sabit katlarınız yoktur; ihtiyacınız olduğuna düşündüğünüz kadarını kullanırsınız (başka bir deyişle, eğitilmiş bir tahminde bulunursunuz). Verinizi tekrar tekrar alt örneklerken, her seferinde örneklediğiniz veriyi eğitim verisi olarak kullanır, geri kalan veriyi ise doğrulama için bırakırsınız. Tüm alt örneklerin değerlendirme metriklerinin ortalamasını alarak, modelinizin performansları için bir doğrulama tahmini elde edersiniz.
+
+k-katlı doğrulama gibi, tüm örneklerinizi sistematik olarak test ettiğiniz için, bunların hepsini test etme şansınızın iyi olabilmesi için oldukça fazla deneme yapmanız gerekir. Aynı sebeple, yeterli sayıda alt örnekleme uygulamazsanız, bazı örnekler diğerlerinden daha fazla test edilebilir. Bu tür bir doğrulamayı, Scikit-learn'deki **ShuffleSplit** kullanarak yapabilirsiniz.
+
 ##### The bootstrap *(Bootstrap yöntemi)*
+
+Son olarak, hata dağılımını sonuçlandırmak için istatistiklerde geliştirilen bootstrap yöntemini kullanmayı deneyebilirsiniz; aynı nedenlerden ötürü, bu yöntem performans tahmini için de kullanılabilir. Bootstrap, verilerinizi örnekleme yaparak, yani yerine koyarak, aynı boyutta bir örneklem oluşturmanızı gerektirir.
+
+Bu noktada bootstrap'ı iki farklı şekilde kullanabilirsiniz:
+
+* İstatistiklerde olduğu gibi, bootstrap'ı birden çok kez uygulayarak modelinizi örnekler üzerinde eğitebilir ve eğitim verisi üzerinde değerlendirme metriğinizi hesaplayabilirsiniz. Bootstrap'ların ortalaması, nihai değerlendirmenizi sağlar.
+* Alternatif olarak, alt örnekleme (subsampling) gibi, bootstrap edilmiş örneklemi eğitim için kullanabilir ve örnekleme yapılmayan veri kısmını test setiniz olarak bırakabilirsiniz.
+
+Deneyimlerimize göre, bootstrap ile eğitim verisi üzerinde değerlendirme metriği hesaplamak, doğrusal modeller için modelin katsayılarını ve hata dağılımlarını tahmin etmek amacıyla istatistiklerde sıklıkla kullanılan bir yöntem olmasına rağmen, makine öğreniminde pek faydalı değildir. Çünkü birçok makine öğrenimi algoritması eğitim verilerine aşırı uyum sağlama eğilimindedir, bu nedenle eğitim verisi üzerinde geçerli bir metrik değerlendirmesi elde edilemez. Bu sebeple, Efron ve Tibshirani (bkz: Efron, B. ve Tibshirani, R. "Cross-validation'da iyileştirmeler: 632+ bootstrap yöntemi". *Journal of the American Statistical Association* 92.438 (1997): 548-560.) final doğrulama metriği olarak 632+ estimator'ını önermişlerdir.
+
+Başlangıçta, basit bir versiyon olan 632 bootstrap’ı önermişlerdir:
+
+$$
+Err_{632} = 0.368 * err_{fit} + 0.632 * err_{bootstrap}
+$$
+
+Bu formülde, değerlendirme metriğiniz err, errfit eğitim verisi üzerinde hesapladığınız metrik ve errbootstrap ise bootstrap edilmiş veriler üzerinde hesapladığınız metriktir. Ancak, aşırı uyum sağlamış bir eğitim modelinde, errfit sıfıra yaklaşacak ve bu durumda estimator pek faydalı olmayacaktır. Bu yüzden, 632+ bootstrap’ın ikinci versiyonunu geliştirmişlerdir:
+
+$$
+Err_{.632} + (1 - w) * err_{fit} + w * err_{bootstrap}
+$$
+
+Burada w, şu şekilde tanımlanır:
+
+$$
+w = \frac{0.632}{1 - 0.632R}
+$$
+$$
+R = \frac{err_{bootstrap} - err_{fit}}{\gamma - err_{fit}}
+$$
+
+Yeni bir parametre olan (\gamma) burada "no-information error rate" (bilgi içermeyen hata oranı) olarak tanımlanır ve hedefler ile prediktörlerin tüm olası kombinasyonları üzerinde tahmin modelini değerlendirerek tahmin edilir. Ancak, (\gamma)’yı hesaplamak pratikte imkansızdır, bu konuda Scikit-learn geliştiricilerinin ([https://github.com/scikit-learn/scikit-learn/issues/9153](https://github.com/scikit-learn/scikit-learn/issues/9153)) de tartıştığı gibi.
+
+Statistiklerdeki klasik bootstrap kullanımının makine öğrenimine uygulanmasındaki sınırlamalar ve işlem zorlukları göz önüne alındığında, bunun yerine bootstrap'ın ikinci yöntemini kullanmak daha uygundur; bootstrap örnekleme yapılmamış verileri test verisi olarak kullanarak değerlendirme yapmaktır.
+
+Bu şekilde bootstrap, çapraz doğrulamaya (cross-validation) bir alternatif olabilir. Ancak, subsampling gibi, çapraz doğrulama yöntemine göre daha fazla model inşa edilmesi ve test edilmesi gerekmektedir. Ancak, çapraz doğrulama metrik değerlendirmesinde yüksek varyans gösteren durumlar ile karşılaştığınızda, bootstrap’ı bu tür durumlar için daha yoğun test ve yeniden test yaparak model doğrulamanızda kullanmanız faydalı olacaktır.
+
+Daha önce bu yöntem Scikit-learn'de uygulanmıştı ([https://github.com/scikit-learn/scikit-learn/blob/0.16.X/sklearn/cross_validation.py#L613](https://github.com/scikit-learn/scikit-learn/blob/0.16.X/sklearn/cross_validation.py#L613)), ancak sonrasında kaldırıldı. Çünkü Scikit-learn'deki bootstrap hem test verilerini hem de eğitim verilerini bootstrap'lamaktaydı. Şimdi bootstrap'ı bulamayacağınız için, kendi uygulamamızı kullanabilirsiniz. İşte örnek:
+
+```python
+import random
+def Bootstrap(n, n_iter=3, random_state=None):
+    """
+    Yerine koyarak rastgele örnekleme yapan çapraz doğrulama jeneratörü.
+    Her iterasyonda, [0, n) aralığındaki indekslerden bir bootstrap örneği oluşturulur
+    ve fonksiyon elde edilen örneklem ve dışarıda kalan tüm indekslerin listesini döndürür.
+    """
+    if random_state:
+        random.seed(random_state)
+    for j in range(n_iter):
+        bs = [random.randint(0, n-1) for i in range(n)]
+        out_bs = list({i for i in range(n)} - set(bs))
+        yield bs, out_bs
+```
+
+Sonuç olarak, bootstrap, çapraz doğrulamaya bir alternatif olarak değerlendirilebilir. İstatistik ve finans alanlarında daha yaygın kullanılsa da, makine öğreniminde altın kural genellikle k-kat çapraz doğrulama yaklaşımını kullanmaktır. Ancak, çapraz doğrulama metriğinizde çok yüksek bir varyans varsa ve daha yoğun test ve yeniden test yapmanız gerekiyorsa, bootstrap'ı unutmayın. Bu tür durumlarda bootstrap, modellerinizi doğrulamak için çok daha faydalı olacaktır.
+
+> **Ryan Chesler**
+> 
+> [https://www.kaggle.com/ryches](https://www.kaggle.com/ryches)
+> 
+> 
+> 
+> Bölümün ikinci röportajı Ryan Chesler ile yapılmıştır. Kendisi bir *Discussions Grandmaster* ve *Notebooks ve Competitions Master* unvanlarına sahiptir. H2O.ai’de veri bilimcisidir ve aynı zamanda Meetup'ta San Diego Makine Öğrenimi grubunun organizatörlerinden birisidir ([https://www.meetup.com/San-Diego-Machine-Learning/](https://www.meetup.com/San-Diego-Machine-Learning/)). Yanıtlarının birkaçında doğrulamanın önemi vurgulanmıştır.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Kaggle'da hangi tekniklerde ve çözüm yaklaşımlarında uzmanlaştınız?**
+> 
+> Ben genellikle her tür yarışmaya katılmaya çalışırım. Belirli bir alanda uzmanlaşmak yerine farklı problemlerin çözümünü denemek daha ilgi çekici. En ilginç bulduğum yarışmalar, verilerden ve tahmin hatalarından derinlemesine çıkarımlar yapabileceğimiz yarışmalardır. Benim için hata analizi en aydınlatıcı süreçlerden birisidir; modelin nerelerde başarısız olduğunu anlamak ve modelin ya da girdi verisi temsilinin zayıf yönlerini düzeltmek için bir yol aramak çok önemlidir.
+> 
+> 
+> 
+> **Kaggle yarışmalarına nasıl yaklaşırısınız? Bu yaklaşım, günlük işinizle ne kadar farklıdır?**
+> 
+> Yaklaşımım her iki durumda da benzer. Birçok kişi, herhangi bir modelleme çabasına başlamadan önce keşifsel veri analizini tercih eder, ancak ben veriyi modelleme için hazırlama sürecinin genellikle yeterli olduğunu düşünüyorum. Tipik yaklaşımım, veriyi manuel olarak gözden geçirmek ve veriyi nasıl en iyi şekilde modelleyeceğim ve keşfedebileceğim farklı seçenekler hakkında bazı ön kararlar almak. Sonrasında modelimi kurarım, performansını değerlendiririm, ardından hataları analiz etmeye odaklanırım ve modelin nerelerde hata yaptığına dayanarak bir sonraki modelleme adımlarını düşünürüm.
+> 
+> 
+> 
+> **Kaggle kariyerinizde size yardımcı oldu mu? Eğer olduysa, nasıl?**
+> 
+> Evet, şu anki işimi bu sayede buldum. H2O’da çalışıyorum ve Kaggle başarılarına çok değer veriyorlar. Önceki işim de yarışmalarda iyi performans sergilememi beğeniyordu.
+> 
+> 
+> 
+> **Aynı zamanda San Diego'da 2000'den fazla katılımcısı olan bir meet-up’ın organizatörüsünüz. Bu, Kaggle deneyiminizle ilgili mi?**
+> 
+> Evet, kesinlikle ilgili. Çok az bilgiyle başladım ve ilk başta pek başarılı olamadığım bir Kaggle yarışmasına katıldım. Bir yerel meet-up'a katıldım ve burada birlikte çalışacak ve öğrenecek insanlarla tanıştım. O zamanlar, benden çok daha yüksek beceri seviyesine sahip insanlarla çalıştım ve bir yarışmada gerçekten iyi bir performans gösterdik, 4500+ takım arasında 3. olduk.
+> 
+> Bundan sonra grup eskisi kadar düzenli olmadı ve topluluğu devam ettirmek istedim, bu yüzden kendi grubumu oluşturdum ve kendi etkinliklerimi düzenlemeye başladım. Bunu yaklaşık 4 yıldır yapıyorum ve şimdi insanların öğretildiği ve onlara makine öğrenimine başlama konusunda yardımcı olduğum tarafında yer alıyorum. Başlangıçta sadece Kaggle yarışmalarına odaklandık ve takımlar kurmaya çalıştık, ancak zamanla kitap kulüpleri ve çeşitli ilgi alanlarına yönelik dersler yapmaya başladık. Başarılarımdan birçoğunu bu haftalık zamanı makine öğrenimini çalışmak ve düşünmek için ayırmaya borçluyum.
+> 
+> 
+> 
+> **Deneyiminize göre, deneyimsiz Kaggle katılımcıları genellikle hangi noktaları gözden kaçırıyor? İlk başladığınızda şimdi bildiğiniz şeyleri bilseydiniz, neyi daha iyi yapardınız?**
+> 
+> Deneyimlerime göre, birçok kişi bias-variance (yanlılık-çeşitlilik) ticaretini ve aşırı uyum sağlamayı (overfitting) çok fazla önemseme eğiliminde. Bu, insanların sürekli olarak çok fazla endişe duyduğu bir şeydir. Odak noktası, eğitim ve doğrulama performansını yakınlaştırmak değil, doğrulama performansını mümkün olduğunca iyi hale getirmektir.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda hangi hataları yaptınız?**
+> 
+> Sürekli yaptığım hata yeterince keşif yapmamaktır. Bazen çok erken bir şekilde fikirlerimi göz ardı ederim, ancak sonradan bu fikirlerin performansı iyileştirmek için önemli olduğunu görürüm. Genellikle ilk denememde rekabetçi bir performansa yakın bir sonuç alabiliyorum ama iterasyon yaparak ve yeni şeyler deneyerek devam etmek farklı bir beceri gerektiriyor ve bunun üzerinde hala çalışıyorum.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenimi için kullanmanızı önerdiğiniz özel araçlar veya kütüphaneler var mı?**
+> 
+> Çoğunlukla standart araçları kullanırım: XGBoost, LightGBM, Pytorch, TensorFlow, Scikit-learn. Belirli bir araca ya da kütüphaneye özel bir bağlılığım yoktur, sadece probleme uygun olan ne varsa onu kullanırım.
+> 
+> 
+> 
+> **Bir yarışmaya katılırken birinin aklında tutması veya yapması gereken en önemli şey nedir?**
+> 
+> Bence en önemli şey, iyi bir doğrulama yapmaktır. Çoğu zaman insanların performanslarının iyileştiğini düşünerek kendilerini kandırdığını görüyorum, ancak sonra liderlik panosuna gönderdiklerinde bekledikleri gibi gitmediğini fark ediyorlar. Yeni görülmemiş verilerle varsayımları eşleştirmeyi ve yeni koşullara dayanıklı bir model inşa etmeyi öğrenmek önemli bir beceridir.
 
 ### Tuning your model validation system *(Model doğrulama sistemini ayarlamak)*
 
