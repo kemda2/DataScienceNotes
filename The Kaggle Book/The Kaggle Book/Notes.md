@@ -3284,6 +3284,43 @@ Halka açık liderlik tablosu özel tabloyla mükemmel bir şekilde ilişkili ol
 
 ### Bias and variance *(Önyargı ve varyans)*
 
+**İyi bir doğrulama sistemi**, eğitim setinizden aldığınız hata ölçümlerinden daha güvenilir metriklerle size yardımcı olur. Aslında, eğitim seti üzerinde elde edilen metrikler, her modelin kapasitesinden ve karmaşıklığından etkilenir. Bir modelin kapasitesini, verilerden öğrenmek için kullanabileceği belleği olarak düşünebilirsiniz.
+
+Her modelin, verilerden alınan desenleri kaydetmesine yardımcı olan bir iç parametre seti vardır. Her modelin desenleri alma yeteneği farklıdır ve bazı modeller belirli kuralları veya ilişkileri tespit ederken, diğerleri farklı kuralları bulabilir. Bir model, verilerden desenleri çıkardıkça, bunları "belleğine" kaydeder.
+
+Ayrıca, bir modelin kapasitesinden veya ifade gücünden bahsederken, bu durum genellikle sapma (bias) ve varyans (variance) ile ilgilidir. Bu durumda, bir modelin sapma ve varyansı, tahminlerle ilgilidir, ancak temel prensip doğrudan modelin ifade gücüyle ilişkilidir. Modeller, bir girdi (gözlemlenen veriler) ile bir sonuç (tahminler) arasında bir bağlantı kuran matematiksel fonksiyonlara indirgenebilir. Bazı matematiksel fonksiyonlar, sahip oldukları iç parametre sayısı ve bu parametreleri nasıl kullandıkları açısından diğerlerinden daha karmaşıktır:
+
+* Eğer bir modelin matematiksel fonksiyonu, çözmeye çalıştığınız problemin karmaşıklığını yakalamak için yeterince karmaşık veya ifade gücü yüksek değilse, bundan **sapma (bias)** olarak bahsederiz, çünkü tahminleriniz modelin sınırlarıyla sınırlı ("biased") olacaktır.
+
+* Eğer bir modelin temel matematiksel fonksiyonu, ele aldığınız problem için çok karmaşıksa, o zaman **varyans (variance)** problemi vardır, çünkü model, eğitim verilerindeki gereksiz detayları ve gürültüyü fazla kaydedecek ve tahminleri bu bilgilerden derinden etkilenecek, bu da tahminlerin düzensiz olmasına yol açacaktır.
+
+Günümüzde, makine öğrenimi alanındaki ilerlemeler ve mevcut hesaplama kaynakları göz önüne alındığında, problem genellikle varyans kaynaklıdır. Çünkü derin sinir ağları ve gradyan artırma (gradient boosting) gibi en yaygın kullanılan çözümler, çoğu zaman karşılaşacağınız problemlerin çözülmesi için gerekenin çok ötesinde matematiksel bir ifade gücüne sahiptir.
+
+Bir model, çıkarabileceği tüm yararlı desenleri elde ettikten sonra, eğer kapasitesini tüketmemişse, veriyle ilgili olmayan (genellikle gürültü olarak adlandırılır) özellikleri ve sinyalleri öğrenmeye başlar. İlk başta çıkarılan desenler, modelin test verisi üzerinde genelleme yapmasına ve daha doğru tahminlerde bulunmasına yardımcı olsa da, yalnızca eğitim seti hakkında öğrendiklerinin her biri yardımcı olmayacak; bunun yerine modelin performansını zarar verebilir. Eğitim setinin, genelleme değeri taşımayan unsurlarını öğrenme süreci **aşırı öğrenme (overfitting)** olarak adlandırılır.
+
+Doğrulamanın temel amacı, bu değerin genelleştirilebilir kısmını, eğitim seti özelliklerine aşırı uyum sağlamanın neden olduğu kısmından ayıran bir puan veya kayıp değeri tanımlamaktır.
+
+---
+
+**İyi Doğrulama Tasarımı**
+
+Bu, doğrulama kaybıdır (validation loss). Öğrenme eğrilerinin görselleştirildiği şu şekilde bir durumu görebilirsiniz:
+
+![](im/1051.png)
+
+**Eğer kayıp ölçümünü (loss measure) y-yakası üzerine ve modelin öğrenme çabasını (bu, sinir ağları için epoklar veya gradyan artırma için turlar olabilir) x-yakası üzerine grafiğe dökerseniz, öğrenmenin her zaman eğitim veri setinde gerçekleştiğini fark edeceksiniz, ancak bu her zaman diğer verilerde geçerli değildir.**
+
+Aynı şey, hiperparametreleri değiştirdiğinizde, veriyi işlediğinizde veya tamamen farklı bir model seçtiğinizde de olur. Eğri şekli değişebilir, ancak her zaman aşırı öğrenmenin (overfitting) başladığı bir tatlı nokta olacaktır. Bu nokta, modeller arasında ve modelleme sürecinizde yaptığınız çeşitli seçimlere göre farklılık gösterebilir. Eğer aşırı öğrenmenin başladığı noktayı doğru bir doğrulama stratejisi ile doğru şekilde hesapladıysanız, modelinizin performansı kesinlikle liderlik tablosu sonuçlarıyla (hem halka açık hem de özel) korele olacaktır ve doğrulama metrikleriniz, herhangi bir gönderi yapmadan çalışmalarınızı değerlendirmeniz için bir proxy (temsilci) sağlayacaktır.
+
+**Aşırı öğrenme (Overfitting) farklı seviyelerde karşınıza çıkabilir:**
+
+* Eğitim verisi seviyesinde, eğer probleme çok karmaşık bir model kullanıyorsanız
+* Doğrulama seti seviyesinde, modelinizi belirli bir doğrulama setine çok fazla göre ayarladığınızda
+* Halka açık liderlik tablosu seviyesinde, eğer sonuçlarınız eğitimle beklediğinizden çok uzaksa
+* Özel liderlik tablosu seviyesinde, halka açık liderlik tablosunda iyi sonuçlar elde etmenize rağmen, özel sonuçlarınız hayal kırıklığı yaratıyorsa
+
+Anlam açısından biraz farklı olsalar da, hepsi de modelinizin genellenebilir olmadığını gösterir, tıpkı bu bölümde tarif ettiğimiz gibi.
+
 ### Trying different splitting strategies *(Farklı veri bölme stratejilerini denemek)*
 
 #### The basic train-test split *(Temel eğitim-test bölünmesi)*
