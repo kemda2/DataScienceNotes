@@ -2404,9 +2404,61 @@ Precision ve recall metriklerini elde etmek için yine **karışıklık matrisin
 
 ![](im/1044.png)
 
+İşte hücrelerin nasıl tanımlandığı:
 
+* **True Positive (TP)**: Bu hücre, doğru bir şekilde pozitif olarak tahmin edilen örnekleri içerir. Yani, modelin doğru bir şekilde pozitif sınıfı tahmin ettiği durumlar.
+* **False Positive (FP)**: Bu hücre, aslında negatif olan ancak model tarafından pozitif olarak tahmin edilen örnekleri içerir.
+* **False Negative (FN)**: Bu hücre, aslında pozitif olan ancak model tarafından negatif olarak tahmin edilen örnekleri içerir.
+* **True Negative (TN)**: Bu hücre, doğru bir şekilde negatif olarak tahmin edilen örnekleri içerir. Yani, modelin doğru bir şekilde negatif sınıfı tahmin ettiği durumlar.
+
+Bu hücreleri kullanarak, sınıflandırıcınızın nasıl çalıştığı hakkında daha hassas bilgiler elde edebilir ve modelinizi daha iyi ayarlayabilirsiniz. İlk olarak, doğruluk formülünü kolayca gözden geçirebiliriz:
+
+**Doğruluk (Accuracy) Formülü**
+$$ \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN} $$
+
+Ardından, ilk önemli metrik **precision (kesinlik)** veya **specificity (özgüllük)** olarak adlandırılır ve aslında pozitif vakaların doğruluğunu ölçer:
+
+**Kesinlik (Precision) Formülü**
+$$ \text{Precision} = \frac{TP}{TP + FP} $$
+
+Hesaplamada sadece **true positives (TP)** ve **false positives (FP)** sayıları dikkate alınır. Temelde, bu metrik, modelin pozitif tahminlerde ne kadar doğru olduğunu gösterir. Açıkça, modeliniz yalnızca yüksek güvene sahip olduğu örneklerde pozitif tahmin yaparak yüksek skorlar alabilir. Bu ölçümün amacı da aslında şudur: Modeli, yalnızca kesin olduğunda ve bunu yapmak güvenliyse pozitif sınıfı tahmin etmeye zorlamak.
+
+Ancak, eğer amacınız mümkün olduğunca fazla pozitif tahmin yapmaksa, o zaman **recall (duyarlılık)** veya **coverage (kapsama)** veya **sensitivity (hassasiyet)** ya da **true positive rate (doğru pozitif oranı)** metriklerini de takip etmeniz gerekir:
+
+**Duyarlılık (Recall) Formülü**
+$$ \text{Recall} = \frac{TP}{TP + FN} $$
+
+Burada, **false negatives (FN)** hakkında da bilgi sahibi olmanız gerekecek. Bu iki metriğin ilginç olan yanı, örneklerin sınıflandırılmasına dayalı olmalarıdır ve bir sınıflandırma aslında olasılığa dayanır (bu genellikle pozitif ve negatif sınıf arasındaki 0.5 eşiğiyle belirlenir). Bu eşiği değiştirdiğinizde, bir metriği diğerinin pahasına iyileştirebilirsiniz. Örneğin, eşiği arttırırsanız, daha yüksek **precision** (kesinlik) elde edersiniz (sınıflandırıcı daha güvenlidir) ancak **recall** azalır. Eşiği düşürürseniz, daha düşük **precision** ancak daha yüksek **recall** elde edersiniz. Bu, **precision/recall trade-off (kesinlik/duyarlılık dengesi)** olarak bilinir.
+
+Scikit-learn sitesi, bu dengeyi anlamanızı sağlayacak pratik bir bakış açısı sunar ([https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html](https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html)), burada **precision/recall** eğrisini izleyebilir ve bu iki metriğin nasıl değiştirilebileceğini anlayarak ihtiyaçlarınıza daha uygun bir sonuç elde edebilirsiniz.
+
+![](im/1045.png)
+
+**Precision/Recall dengesine** bağlı bir metrik de **ortalama kesinlik (average precision)**'tir. Ortalama kesinlik, **recall** değerleri 0'dan 1'e kadar olan bir aralıkta (temelde eşiği 1'den 0'a değiştirirken) hesaplanan ortalama kesinliği ifade eder. Ortalama kesinlik, özellikle **nesne tespiti** ile ilgili görevlerde oldukça popülerdir ve bu konuyu biraz sonra tartışacağız, ancak aynı zamanda **tablo verisiyle yapılan sınıflandırma** için de oldukça faydalıdır.
+
+Pratikte, **ortalama kesinlik**, model performansını çok nadir bir sınıf üzerinde daha hassas ve doğru bir şekilde izlemek istediğinizde değerli bir metrik haline gelir. Bu, genellikle **dolandırıcılık tespiti** gibi dengesiz veri setlerinde karşılaşılan bir durumdur.
+
+Bu konuda daha spesifik bilgiler için Gael Varoquaux'nin tartışmasını okuyabilirsiniz:
+[Gael Varoquaux'nin tartışması](http://gael-varoquaux.info/interpreting_ml_tuto/content/01_how_well/01_metrics.html#average-precision).
 
 #### The F1 score *(F1 skoru)*
+
+Bu noktada, **kesinlik** (precision) veya **duyarlılık** (recall) gibi metriklerin bir değerlendirme ölçütü olarak ideal bir seçim olmadığını muhtemelen fark etmişsinizdir, çünkü birini optimize ettiğinizde diğeri pahasına olur. Bu nedenle, yalnızca bir metrik kullanarak yapılan Kaggle yarışmaları yoktur. Bu metrikleri birleştirmeniz gerekir (örneğin, **ortalama kesinlik** gibi). **F1 skoru**, kesinlik ve duyarlılığın harmonik ortalaması olarak, genellikle en iyi çözüm olarak kabul edilir:
+
+**F1 Skoru Formülü:**
+$$ \text{F1} = \frac{2 \times \text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} $$
+
+Eğer yüksek bir **F1 skoru** elde ediyorsanız, bu modelinizin **kesinlik** veya **duyarlılık** veya her ikisinde birden gelişme gösterdiği anlamına gelir. Bu metriğin kullanımına güzel bir örnek, **Quora Insincere Questions Classification** yarışmasında görülebilir:
+[Quora Insincere Questions Classification Yarışması](https://www.kaggle.com/c/quora-insincere-questions-classification).
+
+Bazı yarışmalarda, **F-beta skoru** da kullanılır. Bu, kesinlik ve duyarlılığın ağırlıklı harmonik ortalamasıdır ve **beta** değeri, **recall**'in birleşik skordaki ağırlığını belirler:
+
+**F-beta Skoru Formülü:**
+$$ \text{F}_\beta = \frac{(1 + \beta^2) \times (\text{Precision} \times \text{Recall})}{\beta^2 \times \text{Precision} + \text{Recall}} $$
+
+Burada, **beta** parametresi, recall'un nasıl ağırlıklı olarak değerlendirileceğini belirler. **F1 skoru**, **beta = 1** olduğunda, yani **kesinlik** ve **duyarlılık** eşit derecede önemli kabul edildiğinde elde edilir.
+
+Şimdi, **eşik** (threshold) ve **sınıflandırma olasılığı** kavramlarını zaten tanıttığımıza göre, yaygın kullanılan diğer iki sınıflandırma metriği olan **log loss** ve **ROC-AUC**'yi de tartışabiliriz.
 
 #### Log loss and ROC-AUC *(Log kaybı ve ROC-AUC)*
 
