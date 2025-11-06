@@ -4099,6 +4099,36 @@ Ancak, bunu yaptıktan sonra, **Matplotlib** ve **Seaborn**'u almalı ve sağlan
 
 ### Dimensionality reduction with t-SNE and UMAP *(t-SNE ve UMAP ile boyut indirgeme)*
 
+EDA yaparken oluşturabileceğiniz pek çok olası grafik vardır ve amacımız bunların hepsini burada listelemek değildir, ancak çok spesifik ve verilere özel çizelgeler kadar bilgi sağlayabilecek, üzerinde birkaç söz harcamaya değer birkaç **boyut indirgeme grafiği** bulunmaktadır. Bunlar **t-SNE** ([https://lvdmaaten.github.io/tsne/](https://lvdmaaten.github.io/tsne/)) ve **UMAP** ([https://github.com/lmcinnes/umap)'tır](https://github.com/lmcinnes/umap)'tır).
+
+t-SNE ve UMAP, veri bilimcileri tarafından sıklıkla kullanılan ve çok değişkenli verileri **daha düşük boyutlara yansıtmanıza** olanak tanıyan iki tekniktir. Genellikle karmaşık veri setlerini iki boyutta temsil etmek için kullanılırlar. 2 boyutlu UMAP ve t-SNE grafikleri, veri probleminiz için **aykırı değerlerin (outliers)** ve **ilgili kümelerin (clusters)** varlığını ortaya çıkarabilir.
+
+> Zaman içinde gerçekleştirilen bir dizi ölçüm size verilirse, daha iyi tahminler için açığa çıkarıcı içgörülere işaret edebilecek bir olgu olan, bir gözlem ile diğeri arasındaki farklı gecikmeleri göstererek, tek kaydedilen zaman noktalarını çizmek kadar zamana dayalı sürekli fonksiyonu çizmek de faydalıdır.
+
+Aslında, ortaya çıkan **2 boyutlu yansıtmanın dağılım grafiğini çizebilir** ve onu hedef değere göre renklendirebilirseniz, grafik size **alt gruplarla başa çıkmak için olası stratejiler** hakkında ipuçları verebilir.
+
+Bir görüntü yarışmasıyla ilgili olmasına rağmen, UMAP ve t-SNE'nin verilerinizi daha iyi anlamanıza nasıl yardımcı olabileceğinin iyi bir örneği, Chris Deotte'nin SIIM-ISIC Melanoma Sınıflandırma yarışması için yaptığı analizdir (bkz. [https://www.kaggle.com/c/siim-isic-melanoma-classification/discussion/168028](https://www.kaggle.com/c/siim-isic-melanoma-classification/discussion/168028)). Bu örnekte, Chris eğitim ve test verilerini aynı düşük boyutlu yansıtmalarda ilişkilendirmiş, yalnızca test örneklerinin bulunduğu kısımları vurgulamıştır.
+
+> UMAP ve t-SNE, verilerde bulunması zor olan örüntüleri keşfetmede paha biçilmez bir yardım sunsa da, onları modelleme çabalarınızda **özellikler** olarak da kullanabilirsiniz. Bu kullanımın ilginç bir örneği, Mike Kim'in t-SNE yansıtımlarını yarışma için eğitim özellikleri olarak kullandığı Otto Group Ürün Sınıflandırma Yarışması'nda gösterilmiştir ([https://www.kaggle.com/c/otto-group-product-classification-challenge/discussion/14295](https://www.google.com/search?q=https://www.kaggle.com/c/otto-group-product-classification-challenge/discussion/14295)).
+
+-----
+
+**⚠️ Dikkat Edilmesi Gerekenler ve İyileştirmeler**
+
+*How to t-SNE Effectively* ([https://distill.pub/2016/misread-tsne/](https://distill.pub/2016/misread-tsne/)) makalesinde belirtildiği gibi, bu teknikleri doğru bir şekilde kullanmanız gerekir, çünkü **olmayan yerlerde kümeler ve örüntüler görmek kolaydır**. Aynı uyarı UMAP için de geçerlidir, çünkü yanlış okunabilecek grafikler de üretebilir. [https://pair-code.github.io/understanding-umap/](https://pair-code.github.io/understanding-umap/) gibi kılavuzlar, hem UMAP hem de t-SNE'nin gerçek dünya verileri üzerindeki performansı hakkında sağlam tavsiyeler sunarak öneriler ve uyarılar sağlar.
+
+Bu tehlikelere rağmen, deneyimlerimize göre, bu yaklaşımlar PCA veya SVD gibi **doğrusal kombinasyonla varyans yeniden yapılandırmasına dayanan klasik yöntemlerden kesinlikle daha açıklayıcıdır**. Bu yaklaşımlarla karşılaştırıldığında, UMAP ve t-SNE, verilerin topografyasını korurken sonuçların görsel olarak çizilmesine izin vererek, boyutu aşırı derecede azaltmayı başarır. Yan etki olarak, uydurulmaları (fit) çok daha yavaştır. Ancak, NVIDIA, bir GPU destekli Notebook veya betik kullanarak hem UMAP hem de t-SNE sonuçlarını çok makul bir zaman diliminde geri döndüren ve etkili bir EDA aracı olarak kullanımlarına izin veren CUDA tabanlı **RAPIDS** paketini ([https://developer.nvidia.com/rapids](https://developer.nvidia.com/rapids)) yayınladı.
+
+> Hem UMAP hem de t-SNE'yi bir RAPIDS uygulaması ve GPU ile veri keşif amaçlı uygulamanın yararlı bir örneğini 30 Gün ML yarışması için aşağıdaki bağlantıda bulabilirsiniz: [https://www.kaggle.com/lucamassaron/interesting-eda-tsne-umap/](https://www.google.com/search?q=https://www.kaggle.com/lucamassaron/interesting-eda-tsne-umap/).
+
+Yukarıdaki örnek Notebook'un çıktısı olan şekilde, veri kümesini birden çok kümenin nasıl doldurduğunu görebilirsiniz, ancak bunların hiçbiri hedefle belirli bir ilişkiyi ortaya çıkaracak şekilde kabul edilemez:
+
+![](im/1057.png)
+
+Başka bir Notebook'ta ([https://www.kaggle.com/lucamassaron/really-not-missing-at-random](https://www.google.com/search?q=https://www.kaggle.com/lucamassaron/really-not-missing-at-random)), aynı teknikler bunun yerine **eksik örneklere ait ikili göstergelere** uygulanmış ve belirli bir yanıt türünün hakim olduğu spesifik ve ayrı alanlara işaret eden düşündürücü figürler ortaya çıkarmıştır. Gerçekten de, o örnekte, eksik örnekler rastgele oluşmamış ve oldukça tahmin edici olmuştur:
+
+![](im/1058.png)
+
 ### Reducing the size of your data *(Veri boyutunu küçültme)*
 
 ### Applying feature engineering *(Özellik mühendisliği uygulama)*
