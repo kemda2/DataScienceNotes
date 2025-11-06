@@ -3681,9 +3681,109 @@ Ayrıca, liderlik panosundan bilgi sorgulama hakkında bazı diğer fikirleri Ch
 
 ### Using adversarial validation *(Zıt doğrulama yöntemini kullanmak)*
 
+Çapraz doğrulama, modelinizin, eğitim verisinden aynı dağılımdan gelen, görülmemiş veri setlerine ne kadar iyi genelleme yapabileceğini test etmenize olanak tanır. Umarım, bir Kaggle yarışmasında, modelinizin hem kamu (public) hem de özel (private) veri setlerinde tahmin yapması istendiği için, bu test verisinin eğitim verisiyle aynı dağılımdan geldiğini varsayabilirsiniz. Gerçek hayatta, bu her zaman böyle değildir.
+
+Eğer test verisine aşırı uyum sağlamazsanız, çünkü kararınızı yalnızca liderlik panosu sonuçlarına dayandırmak yerine çapraz doğrulamanızı da göz önünde bulundurduysanız, yine de sonuçlardan şaşırabilirsiniz. Bu, test seti eğitim setinden biraz farklı olduğunda gerçekleşebilir. Aslında, hedef olasılığı ve bunun dağılımı ile öngörücü değişkenlerin buna nasıl bağlandığı, modelinizi eğitim sırasında, test verisi farklı olduğunda yerine getiremeyeceği belirli beklentiler hakkında bilgilendirir.
+
+Bu nedenle, yalnızca liderlik panosuna aşırı uyum sağlamaktan kaçınmak yeterli değildir, ilk başta test verinizin eğitim verisiyle karşılaştırılabilir olup olmadığını araştırmak da önemlidir. Eğer farklılarsa, bu dağılım farklarını test verisi üzerinde hafifletme şansınız olup olmadığını bulmanız ve bu test seti üzerinde iyi performans gösteren bir model inşa etmeniz gerekecektir.
+
+Adversarial doğrulama, eğitim ve test verisi arasındaki farkı tahmin etmek amacıyla geliştirilmiş bir tekniktir. Bu teknik, Kaggle katılımcıları arasında uzun zamandır söylenti olarak dolaşıyor ve takım takım aktarılmaya çalışılmıştı, ta ki Zygmunt Zając'ın FastML blogunda ([https://www.kaggle.com/zygmunt](https://www.kaggle.com/zygmunt)) paylaştığı bir yazı sayesinde halka açık hale gelene kadar.
+
+Fikir basittir: Eğitim verinizi alın, hedefi (target) çıkarın, eğitim verinizi ve test verinizi birleştirin ve yeni bir ikili sınıflandırma hedefi oluşturun. Burada pozitif etiket test verisine atanır. Bu noktada, bir makine öğrenmesi sınıflandırıcısı çalıştırın ve ROC-AUC değerlendirme metriğiyle değerlendirin (bu metriği önceki "Yarışma Görevleri ve Metreleri Detaylandırma" bölümünde ele almıştık).
+
+Eğer ROC-AUC değeri 0.5 civarındaysa, bu, eğitim ve test verisinin kolayca ayırt edilemediği ve muhtemelen aynı dağılımdan geldiği anlamına gelir. ROC-AUC değerleri 0.5'ten yüksek ve 1.0'a yakınsa, algoritmanın eğitim setinden neyin olduğunu ve test setinden neyin olduğunu anlamasının çok kolay olduğunu gösterir; böyle bir durumda, test setine kolayca genelleme yapmayı beklemeyin çünkü bu açıkça farklı bir dağılımdan gelmektedir.
+
+> Sberbank Rus Konut Piyasası yarışması için yazılmış bir örnek Notebook'u burada bulabilirsiniz: [Adversarial Doğrulama ve Diğer Korkutucu Terimler](https://www.kaggle.com/konradb/adversarial-validation-and-other-scary-terms), bu, adversarial doğrulama ve yarışmalarda nasıl kullanıldığı hakkında pratik bir örnek sunmaktadır.
+
+Verileriniz farklı türlerde olabilir (sayısal veya metin etiketleri gibi) ve eksik veriler olabilir, bu nedenle sınıflandırıcıyı başarıyla çalıştırmadan önce bazı veri işleme adımlarına ihtiyacınız olacak. Önerimiz, rastgele orman sınıflandırıcıyı kullanmanızdır çünkü:
+
+* Gerçek olasılıkları vermez, ancak sonuçları sadece sıralı olarak sunar, bu da ROC-AUC skoru için mükemmel bir uyum sağlar.
+* Rastgele orman, karar ağaçlarına dayalı esnek bir algoritmadır ve özellik seçimini kendisi yapabilir, farklı türdeki özelliklerle çalışabilir ve tüm verileri sayısal hale getirebilir. Ayrıca, aşırı uyuma karşı oldukça dayanıklıdır ve hiperparametreleri çok fazla düşünmek zorunda kalmazsınız.
+* Verinin çoğu zaman işlenmesine gerek yoktur, çünkü ağaç tabanlıdır. Eksik veriler için, değerleri -999 gibi olasılığı düşük bir negatif değerle değiştirebilirsiniz ve metin değişkenlerini sayılara dönüştürebilirsiniz (örneğin, Scikit-learn etiket kodlayıcısı, `sklearn.preprocessing.LabelEncoder` kullanarak). Bu çözüm, one-hot encoding'den daha düşük performans gösterebilir ancak çok hızlıdır ve problem için yeterince iyi çalışacaktır.
+
+Sınıflandırıcı kullanmak, test setinizi adversary doğrulama yoluyla değerlendirmek için en doğrudan yol olsa da, başka yaklaşımlar da kullanabilirsiniz. Bir yaklaşım, hem eğitim hem de test verilerini daha düşük boyutlu bir alana yerleştirmektir. Bu, NanoMathias tarafından yazılmış şu yazıda ([https://www.kaggle.com/nanomathias/distribution-of-test-vs-training-data](https://www.kaggle.com/nanomathias/distribution-of-test-vs-training-data)) ele alınmaktadır. Daha fazla ayar yapmayı gerektirse de, t-SNE ve PCA'ya dayalı bir yaklaşım, veriyi grafiksel olarak temsil etmenin yanı sıra anlaşılması kolay ve cazip bir şekilde sunulabilir. Çünkü beyinlerimiz sayısal verilere kıyasla görsel temsil edilen desenleri fark etmekte daha beceriklidir (görsel yeteneklerimiz üzerine detaylı bir tartışma için şu makaleye bakabilirsiniz: [https://onlinelibrary.wiley.com/doi/full/10.1002/qua.24480](https://onlinelibrary.wiley.com/doi/full/10.1002/qua.24480)).
+
+> PCA ve t-SNE, verinizin boyutunu düşürmek ve görselleştirmek için kullanılabilecek tek araçlar değildir. UMAP ([https://github.com/lmcinnes/umap](https://github.com/lmcinnes/umap)), genellikle daha hızlı bir düşük boyutlu çözüm sunar ve net ve ayrılmış veri kümeleri sağlar. Varyasyonel oto-encoders (VAE), doğrusal olmayan boyut indirgeme işlemi yapabilir ve PCA'dan daha faydalı bir temsil sunabilir; ancak daha karmaşık bir kurulum ve ayar gerektirir.
+
 #### Example implementation *(Uygulama örneği)*
 
-### Handling different distributions of training and test data *(Eğitim ve test verilerindeki farklı dağılımlarla başa çıkma)*
+Zygmunt'un orijinal makalesinde ve bağlantı verdiğimiz Not Defteri'nde, adversarial doğrulama (adversarial validation) örneklerine rastlayabilirsiniz. Ancak sizin için, Playground yarışması olan **Tabular Playground Series – Jan 2021** ([https://www.kaggle.com/c/tabular-playground-series-jan-2021](https://www.kaggle.com/c/tabular-playground-series-jan-2021)) verisi üzerinden yeni bir örnek oluşturduk.
+
+Başlamak için bazı Python paketlerini içeri aktararak ve yarışmanın eğitim ve test verilerini alarak işlemlere başlıyoruz:
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_predict
+from sklearn.metrics import roc_auc_score
+
+train = pd.read_csv("../input/tabular-playground-series-jan-2021/train.csv")
+test = pd.read_csv("../input/tabular-playground-series-jan-2021/test.csv")
+```
+
+Veri hazırlığı oldukça kısa ve net. Tüm özellikler sayısal olduğundan, etiketleme yapmanıza gerek yok, ancak eksik değerleri (-1 genellikle uygun olur) doldurmanız gerekiyor. Ayrıca, hedef sütununu ve kimlik sütunlarını (id) düşürmeniz gerekli. Kimlik sütunu ardışık bir sayıya sahipse, adversarial doğrulama sonucu yüksek bir ROC-AUC skoru elde edebilirsiniz:
+
+```python
+train = train.fillna(-1).drop(["id", "target"], axis=1)
+test = test.fillna(-1).drop(["id"], axis=1)
+
+X = train.append(test)
+y = [0] * len(train) + [1] * len(test)
+```
+
+Bu noktada, sadece verilerinizi kullanarak RandomForestClassifier ile tahminler üretmeniz gerekiyor. Bunun için **cross_val_predict** fonksiyonunu kullanıyoruz. Bu fonksiyon otomatik olarak bir çapraz doğrulama şeması oluşturur ve tahminleri doğrulama katmanında depolar:
+
+```python
+model = RandomForestClassifier()
+cv_preds = cross_val_predict(model, X, y, cv=5, n_jobs=-1, method='predict_proba')
+```
+
+Sonuç olarak, doğrulama setinde modelin üzerinde overfitting yapmadığı (çünkü eğitilen veriye göre tahmin yapılmamıştır) ve hata tahmini için kullanılabilen, tarafsız tahminler elde edersiniz. **cross_val_predict**, modelinizi fit etmediği için, modelinize ait herhangi bir bilgi (örneğin, hangi özelliklerin önemli olduğu gibi) almazsınız. Böyle bir bilgiye ihtiyacınız varsa, önce modelinizi fit etmeniz gerekir:
+
+```python
+model.fit(X, y)
+```
+
+Son olarak, tahminler için ROC-AUC skorunu sorgulayabilirsiniz:
+
+```python
+print(roc_auc_score(y_true=y, y_score=cv_preds[:, 1]))
+```
+
+Yaklaşık 0.49-0.50 arasında bir değer elde etmeniz gerekir (cross_val_predict deterministik değildir, ancak sabit bir random_seed kullanırsanız sabit sonuçlar alabilirsiniz). Bu, eğitim verisi ile test verisinin kolayca ayırt edilemediği anlamına gelir. Dolayısıyla, her iki veri de aynı dağılımdan gelmektedir.
+
+#### Handling different distributions of training and test data *(Eğitim ve test verilerindeki farklı dağılımlarla başa çıkma)*
+
+ROC-AUC skoru 0.8 veya daha fazla olan bir test seti, eğitim verilerinizden çok farklı ve ayırt edilebilir olduğunu gösterir. Bu tür bir durumda, birkaç strateji uygulayarak bu farkı yönetebilirsiniz:
+
+**Baskılama (Suppression):**
+
+Bu yöntemle, test setindeki en önemli değişkenleri çıkararak eğitim verisi ile test verisinin dağılımlarını eşitlemeyi amaçlarsınız. Bunu yapmak için, modelinizi tüm verilerle eğitir ve ardından **feature_importances_** gibi araçlar ile değişkenlerin önem derecelerini ölçersiniz. Daha sonra, modelinizi tekrar eğitirken, en önemli değişkeni veriden çıkarırsınız. Bu işlemi, ROC-AUC skorunuz yaklaşık 0.5'lere düşene kadar tekrarlarsınız.
+
+Ancak bu yöntemle karşılaşılan ana sorun, önemli değişkenlerin çoğunu veriden çıkarmak zorunda kalmanızdır. Bu durumda, modelinizin tahmin performansı önemli ölçüde düşer çünkü model, bilgilendirici özelliklerden yoksun olacaktır.
+
+**Test Setine En Benzer Örneklerle Eğitim Yapmak:**
+
+Bu yöntemde, odak noktanız değişkenlerde değil, **eğitim örnekleriniz** üzerindedir. Eğitim setinden yalnızca, test dağılımına en yakın olan örnekleri seçersiniz. Bu şekilde, eğitilen modeliniz yalnızca test setiyle uyumlu olur (ancak başka bir test verisi üzerinde genellenemez). Ancak bu yaklaşımda dikkat edilmesi gereken bir sınırlama vardır: Eğitim setindeki örneklerin sayısını azaltırsınız ve test dağılımına benzer olan örnek sayısı düşükse, modeliniz çok daha dar bir veri kümesiyle eğitilmiş olur. Bu da, eğitim örneklerinin yetersizliği nedeniyle modelin oldukça **önyargılı** olmasına neden olabilir.
+
+Örneğin, eğitim verilerinde yalnızca test setindeki adverser (anormal) tahminlerin **0.5'ten büyük** olanlarını seçerseniz, eğitim verinizin boyutu oldukça küçülür. Bu durumda, modelinizin genelleme yeteneği azalır.
+
+**Test Setini Taklit Ederek Doğrulama Yapmak:**
+
+Bu stratejide, tüm verilerle modelinizi eğitirken, doğrulama amacıyla yalnızca **adverser tahminlerin 0.5'ten büyük** olduğu örnekleri seçersiniz. Bu doğrulama seti, modelin performansını **test seti üzerinde optimize etmek** için kullanılır.
+
+Bu strateji, özellikle modelin **hyperparametrelerinin ve seçimlerinin** test setine göre en iyi şekilde ayarlanmasına yardımcı olur. Ancak dikkat edilmesi gereken bir diğer şey, test setini tam anlamıyla taklit etmeye çalışmanın, modelin başka durumlar için genellenebilirliğini kaybettirebilmesidir.
+
+**Adversarial Doğrulama (Adversarial Validation) ile İlgili Ek Notlar:**
+
+* Adversarial doğrulama, genellikle **yarışmalarda** performansınızı artırmaya yardımcı olur. Ancak her zaman işe yaramayabilir. Örneğin, Kaggle gibi platformlarda, **test setine tam erişiminiz olmadığı için adversarial doğrulama** kullanmak mümkün değildir.
+
+* Adversarial doğrulama, test setinin **genel yapısını** anlamanızı sağlar, ancak **private** ve **public** test verisi arasındaki farkı anlamanıza yardımcı olamaz. Bu, genellikle **public leaderboard overfitting** sorununu ve takip eden sıralama değişikliklerini oluşturur.
+
+* Gerçek dünyada, adversarial doğrulama birçok **pratik kullanım** sunar. Örneğin, test setinizi yanlış seçmeniz durumunda, bu yöntem size doğru test verilerini kullanıp kullanmadığınızı anlamanızı sağlar. Ayrıca, **modelin üretim ortamında** zamanla bozulabileceğini ve **concept drift** yaşandığını fark edebilirsiniz. Bu durumda, modelinizi yeniden eğitmeniz gerekebilir.
+
+Sonuç olarak, adversarial doğrulama, doğru test verisini seçmek ve test setinizin eğitim verisinden farklılıklarını anlamak için güçlü bir araçtır. Ayrıca, zaman içinde verinizde meydana gelen değişikliklerin modelinizin tahmin gücünü nasıl etkileyebileceği konusunda size bilgi verir.
 
 ### Handling leakage *(Veri sızıntısını önleme)*
 
