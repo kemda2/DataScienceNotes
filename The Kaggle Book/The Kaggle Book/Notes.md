@@ -2745,13 +2745,61 @@ Nesne tespitinde, bir nesnenin mekansal konumunu tanımlamak için **bounding bo
 
 ![](im/1048.png)
 
+Bu görevler için özel metriklerin genel bir görünümüne başlayalım; çünkü her iki problemde de (nesne tespitinde dikdörtgen, segmentasyonda ise çokgen olan) bir resmin tamamını tahmin ediyorsunuz ve tahminlerinizi gerçek etiketlerle karşılaştırmanız gerekiyor, bu etiketler de yine alanlar olarak ifade ediliyor. Segmentasyon tarafında, en basit metrik **piksel doğruluğu**dur; adı üzerinde, bu metrik, piksel sınıflandırmasındaki doğruluğu ölçer.
 
+Bu metrik mükemmel bir seçim değildir, çünkü **ikili ve çok sınıflı problemlerdeki doğruluk** gibi, eğer ilgili pikseller resmin çok küçük bir kısmını oluşturuyorsa, skoru yüksek görünebilir (sadece çoğunluk sınıfını tahmin edersiniz, bu da segmentasyon yapmadığınız anlamına gelir).
+
+Bu nedenle, özellikle yarışmalarda daha sık kullanılan iki metrik vardır: **intersection over union** (IoU) ve **dice katsayısı** (Dice coefficient).
 
 #### Intersection over union (IoU) *(Kesişim/Birleşim oranı)*
 
+**Intersection over union (IoU)**, aynı zamanda **Jaccard indeksi** olarak da bilinir. Segmentasyon problemlerinde IoU kullanmak, karşılaştırmanız gereken iki resminiz olduğu anlamına gelir: biri sizin tahmininiz, diğeri ise genellikle **1** değeriyle doğru etiketleri (ground truth) temsil eden ve **0** ile diğer bölgeleri gösteren bir **binary maske**dir. Birden fazla nesne olduğunda, her bir nesne için ayrı bir maske olur ve her maske, nesnenin sınıfıyla etiketlenir.
+
+Nesne tespiti problemlerinde IoU kullanıldığında ise, tahmin ve doğru etiketin (ground truth) dikdörtgen alanlarının sınırları vardır, bu sınırlar da köşe noktalarının koordinatlarıyla ifade edilir. Her bir sınıflandırılan sınıf için, tahmininiz ile doğru etiketin maskesi arasındaki örtüşen alanı hesaplar ve bunu, tahmininiz ile doğru etiket arasındaki birleşim alanına (yani her iki alanın toplamı) bölersiniz; bu toplam, herhangi bir örtüşmeyi dikkate alır. Bu şekilde, tahmin ettiğiniz alan fazla büyükse (payda daha büyük olur) veya çok küçükse (pay daha küçük olur) orantılı olarak cezalandırılırsınız.
+
+![](im/1049.png)
+
+Şekil 5.6'da, hesaplamada yer alan alanların görsel bir temsilini görebilirsiniz. Karelerin daha fazla örtüştüğünü hayal ederek, metriklerin, tahmininiz doğru etiketi kapsasa bile, bunu aştığında (birleşim alanı büyüdüğünde) çözümünüzü nasıl etkili bir şekilde cezalandırdığını anlayabilirsiniz.
+
+> İşte IoU'nun kullanıldığı bazı yarışmaların örnekleri:
+> 
+> 
+> 
+> * **TGS Salt Identification Challenge** ([Kaggle Yarışması](https://www.kaggle.com/c/tgs-salt-identification-challenge/)) — Intersection Over Union Nesne Segmentasyonu
+> 
+> * **iMaterialist (Fashion) 2019 at FGVC6** ([Kaggle Yarışması](https://www.kaggle.com/c/imaterialist-fashion-2019-FGVC6)) — Intersection Over Union Nesne Segmentasyonu ve Sınıflandırma
+> 
+> * **Airbus Ship Detection Challenge** ([Kaggle Yarışması](https://www.kaggle.com/c/airbus-ship-detection)) — Intersection Over Union Nesne Segmentasyonu Beta
+> 
+> 
+
 #### Dice *(Dice katsayısı)*
 
+Diğer yararlı metrik ise **Dice katsayısı**dır; bu, tahmin ile doğru etiket arasındaki örtüşen alanın iki katına çıkarılması ve ardından tahmin ile doğru etiket alanlarının toplamına bölünmesiyle hesaplanır.
+
+![](im/1050.png)
+
+Bu durumda, **Jaccard indeksi**ne kıyasla, tahminin doğru etiketle örtüşen kısmı paydada dikkate alınmaz. Burada beklenti, örtüşen alanı maksimize ederken doğru alan boyutunu tahmin etmenizdir. Yine, tahmin ettiğiniz alanlar olması gerekenden daha büyükse cezalandırılırsınız. Aslında, bu iki metrik pozitif olarak korelasyonlu olup, tek bir sınıflandırma problemi için neredeyse aynı sonuçları üretir.
+
+Farklar, aslında birden fazla sınıfla çalışırken ortaya çıkar. Hem IoU hem de Dice katsayısı ile birden fazla sınıf olduğunda, tüm sınıfların sonuçlarının ortalamasını alırsınız. Ancak, bunu yaparken, **IoU** metrik, bir sınıf tahmini yanlış olduğunda genel ortalamayı daha fazla cezalandırma eğilimindeyken, **Dice katsayısı** daha hoşgörülü olup, ortalama performansı temsil etme eğilimindedir.
+
+> **Dice katsayısını kullanan bazı Kaggle yarışmalarının örnekleri** (genellikle tıbbi amaçlı yarışmalarda sıkça karşılaşılsa da, sadece orada değil, bulutlar ve arabalar gibi diğer alanlarda da kullanılabilir):
+> 
+> 
+> 
+> * **HuBMAP - Hacking the Kidney**: [Kaggle Yarışması](https://www.kaggle.com/c/hubmap-kidney-segmentation)
+> 
+> * **Ultrasound Nerve Segmentation**: [Kaggle Yarışması](https://www.kaggle.com/c/ultrasound-nerve-segmentation)
+> 
+> * **Understanding Clouds from Satellite Images**: [Kaggle Yarışması](https://www.kaggle.com/c/understanding_cloud_organization)
+> 
+> * **Carvana Image Masking Challenge**: [Kaggle Yarışması](https://www.kaggle.com/c/carvana-image-masking-challenge)
+
+**IoU** ve **Dice katsayısı**, segmentasyon ve nesne tespiti alanındaki daha karmaşık metriklerin temelini oluşturur. IoU veya Dice için uygun bir eşik seviyesi (genellikle 0.5) seçerek, bir tespiti onaylayıp onaylamayacağınıza karar verebilirsiniz, dolayısıyla bir sınıflandırma yapabilirsiniz. Bu noktada, daha önce tartıştığımız sınıflandırma metriklerini (kesinlik, duyarlılık, F1 gibi) kullanabilirsiniz; bu, **Pascal VOC** ([http://host.robots.ox.ac.uk/pascal/VOC/voc2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012)) veya **COCO** ([https://cocodataset.org](https://cocodataset.org)) gibi popüler nesne tespiti ve segmentasyon yarışmalarında olduğu gibi yapılır.
+
 ### Metrics for multi-label classification and recommendation problems *(Çok etiketli sınıflandırma ve öneri problemleri için metrikler)*
+
+
 
 #### MAP@K *(MAP@K metriği)*
 
