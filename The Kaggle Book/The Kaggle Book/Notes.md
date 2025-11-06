@@ -2607,6 +2607,130 @@ Bu formülün ilginç yanı, skoru oluştururken, uyumun sadece şans sonucu ger
 
 Bu, modelin çoğu durumda şansa karşı gerçekten daha iyi performans gösterip göstermediğini anlamanıza yardımcı olur.
 
+> **Andrey Lukyanenko**
+> 
+> [https://www.kaggle.com/artgor](https://www.kaggle.com/artgor)
+> 
+> 
+> 
+> Bu bölümdeki ikinci röportajımız, **Notebooklar ve Tartışmalar Grandmaster'ı** ve **Yarışmalar Master'ı** Andrey Lukyanenko ile. Günlük işinde, **MTS Group**’ta bir **Makine Öğrenimi Mühendisi ve TechLead** olarak çalışmaktadır. Kaggle deneyimleri hakkında ilginç pek çok şey paylaştı!
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Teknikler ve çözüm yaklaşımları açısından, Kaggle’daki uzmanlığınız nedir?**
+> 
+> Genel olarak başka veri setlerine/alanlara transfer edilebilecek kadar genel çözümler gerektiren yarışmaları tercih ediyorum. Farklı sinir ağı mimarilerini, en son teknikleri ve post-processing tekniklerini denemekle ilgileniyorum. Ters mühendislik veya "altın özellikler" yaratmak gibi yarışmalar hoşuma gitmiyor çünkü bu tür yaklaşımlar başka veri setlerinde uygulanamaz.
+> 
+> 
+> 
+> **Kaggle’da yarışırken, aynı zamanda Notebooks ve Discussions kategorilerinde Grandmaster oldunuz (ve 1. sıraya yerleştiniz). Bu iki hedefe yatırım yaptınız mı?**
+> 
+> Notebooklar yazmaya çok zaman ve emek harcadım, ancak Discussions Grandmaster sıralamam kendiliğinden oldu.
+> 
+> 
+> 
+> **Notebook sıralamasına nasıl başladınız?**
+> 
+> 2018’de **DonorsChoose.org Application Screening** adlı özel bir yarışma vardı. DonorsChoose, ülke genelindeki kamu okulu öğretmenlerinin öğrencileri için ihtiyaç duydukları malzemeleri ve deneyimleri talep etmelerini sağlayan bir fon. Kazanan çözümler, leaderboard’daki puanlardan ziyade, Notebook’a yapılan upvote sayısına göre belirlendi. Bu ilginç geldi ve yarışma için bir Notebook yazdım. Birçok katılımcı analizlerini sosyal medya üzerinden duyurdu, ben de aynı şekilde yaptım. Sonuçta ikinci sıraya yerleştim ve bir **Pixelbook** kazandım (hala kullanıyorum!). Bu başarı beni çok motive etti ve Notebook yazmaya devam ettim. İlk başta yalnızca analizimi paylaşmak ve geri bildirim almak istiyordum, çünkü analiz ve görselleştirme becerilerimi diğer insanlarla karşılaştırmak istiyordum. İnsanlar kernel’lerimi beğendi ve becerilerimi daha da geliştirmek istedim. Bir diğer motivasyonum ise hızlı bir **MVP** (minimum viable product) yapma becerimi geliştirmekti. Yeni bir yarışma başladığında, birçok kişi Notebook yazmaya başlar, eğer ilk olmanız gerekiyorsa, kaliteden ödün vermeden hızlı bir şekilde bunu yapabilmeniz gerekir. Bu zorlu, ancak eğlenceli ve ödüllendirici bir süreçti.
+> 
+> 
+> 
+> **2019’un Şubat ayında Notebook Grandmaster sıralamasına ulaştım ve bir süre 1. sırada kaldım. Şu anda Notebook yazma sıklığım azaldı ama yine de keyif alıyorum.**
+> 
+> Tartışmalar konusunda ise, aslında kendiliğinden gelişti. Notebook’larıma yapılan yorumları yanıtladım, katıldığım yarışmalarla ilgili fikirlerimi paylaştım ve tartışmalara katıldım, bu da sıralamamın sürekli artmasını sağladı.
+> 
+> 
+> 
+> **Karşılaştığınız özellikle zorlu bir yarışma hakkında bilgi verir misiniz? Bu görevi nasıl ele aldınız?**
+> 
+> Bu, **Predicting Molecular Properties** yarışmasıydı. Bu yarışmayı daha detaylı bir şekilde yazdım ve [burada](https://towardsdatascience.com/a-story-of-my-first-gold-medal-in-one-kaggle-competition-things-done-and-lessons-learned-c269d9c233d1) okuyabilirsiniz. Bu yarışma, moleküllerdeki atomlar arasındaki etkileşimleri tahmin etmeye yönelik bir yarışmaydı. **Nükleer Manyetik Rezonans (NMR)**, MRI’ye benzer ilkeler kullanarak proteinlerin ve moleküllerin yapısını ve dinamiklerini anlamaya yarayan bir teknoloji. Araştırmacılar, dünya çapında NMR deneyleri yaparak moleküllerin yapısı ve dinamikleri hakkında daha fazla bilgi edinmeye çalışıyor. Bu yarışmada, moleküldeki iki atom arasındaki manyetik etkileşimi tahmin etmeye çalıştık (skaler bağlama sabiti). Kuantum mekaniğinden gelen en son yöntemler, yalnızca 3D moleküler yapı verisi kullanarak bu bağlama sabitlerini hesaplayabiliyor. Ancak bu hesaplamalar kaynak açısından çok yoğun olduğu için her zaman kullanılabilir değil. Makine öğrenimi yaklaşımları bu değerleri tahmin edebilirse, bu gerçekten ilaç kimyacılarının yapısal içgörüleri daha hızlı ve daha ucuza elde etmelerine yardımcı olabilir.
+> 
+> 
+> 
+> Yarışmalara genellikle **EDA** (Exploratory Data Analysis) kernel’leri yazarım, bu yarışmada da aynı şekilde başladım. Kaggle yarışmalarında tabular veriler için yaygın bir yaklaşım **özellik mühendisliği** yapmak ve **gradient boosting modelleri** kullanmaktır. Erken denemelerimde **LGBM** kullandım, ancak grafikleri daha iyi kullanmanın bir yolunun olduğunu biliyordum. Alan bilgisi burada ciddi bir avantaj sağlayacaktı, bu yüzden bu bilgileri toplamaya başladım. Tabii ki, forumda yazan ve kernel’ler oluşturan birkaç aktif uzman fark ettim, bu yüzden onlardan her şeyi okudum. Bir gün, bu alandaki bir uzmandan bir e-posta aldım ve becerilerimizin birbirini tamamlayabileceğini düşündü. Genelde yarışmalara yalnız başıma çalışmayı tercih ederim, ama bu durumda güçlerimizi birleştirmek iyi bir fikir gibi görünüyordu. Bu karar çok iyi bir karar oldu! Zamanla harika bir ekip kurmayı başardık.
+> 
+> 
+> 
+> Bir süre sonra yarışmada **sinir ağlarının** potansiyelini fark ettik: Tanınmış bir Kaggle katılımcısı, **MPNN (Message Passing Neural Network)** modelinin bir örneğini paylaştı. Bir süre sonra bunu çalıştırmayı başardım ama sonuçlar bizim modellerimizden daha kötüydü. Yine de, ekibimiz bu modellerle yüksek hedeflere ulaşmak istiyorsa bu sinir ağlarıyla çalışmamız gerektiğini biliyordu. Christof’un yeni sinir ağlarını son derece hızlı bir şekilde kurma yeteneği inanılmazdı. Kısa süre sonra, yalnızca bu modelleri geliştirmeye odaklandık.
+> 
+> 
+> 
+> **Ekip olarak 8. sıraya yerleştik ve bu yarışma boyunca çok şey öğrendim.**
+> 
+> 
+> 
+> **Kaggle kariyerinize nasıl yardımcı oldu?**
+> 
+> Kaggle kesinlikle hem becerilerime hem de kişisel markama çok yardımcı oldu. Kaggle Notebook’ları yazmak, sadece **EDA** ve **ML** becerilerini öğrenmemi sağlamakla kalmadı, aynı zamanda yeni konuları ve görevleri hızla anlayabilme, yaklaşımlar arasında daha verimli bir şekilde iterasyon yapabilme yeteneği kazandırdı. Aynı zamanda, yaptığım işler takdir gördü ve bu bana bir görünürlük sağladı. İlk portföyümde ([erlemar.github.io](https://erlemar.github.io/)) birçok farklı Notebook vardı ve bunların yarısı eski Kaggle yarışmalarına dayalıydı. Bu kesinlikle ilk işimi bulmamda yardımcı oldu. Kaggle başarılarım, iyi şirketlerden işe alımcıları cezbetmemi sağladı, bazen mülakat sürecinin bazı adımlarını atlamama yardımcı oldu ve birkaç danışmanlık işi almama da yol açtı.
+> 
+> 
+> 
+> **Deneyimsiz Kaggle katılımcılarının genellikle göz ardı ettikleri şeyler nelerdir? Şu anda bildiğiniz, ilk başladığınızda bilseydiniz neyi farklı yapardınız?**
+> 
+> Deneyimsiz Kaggle katılımcılarını iki gruba ayırmak gerektiğini düşünüyorum: Veri bilimi konusunda deneyimsiz olanlar ve Kaggle’da deneyimsiz olanlar.
+> 
+> Veri bilimi konusunda deneyimsiz olanlar çeşitli hatalar yapar (ve bu normal, herkes bir yerden başlamak zorunda):
+> 
+> 
+> 
+> * **En ciddi sorunlardan biri:** Eleştirel düşünce eksikliği ve kendi araştırmalarını yapamama;
+> 
+> * Hangi araçları/yaklaşımları ne zaman kullanacaklarını bilememe;
+> 
+> * Kamuya açık Notebook’ları körü körüne alıp, nasıl çalıştığını anlamadan kullanma;
+> 
+> * Bir fikre takılıp kalma ve bir şey işe yaramadığında bile çok fazla zaman harcama;
+> 
+> * Denemeler başarısız olduğunda umutsuzluğa kapılma ve motivasyonu kaybetme.
+> 
+> 
+> 
+> Veri bilimi konusunda deneyimi olan ama Kaggle konusunda deneyimsiz olanlar içinse şunu söyleyebilirim: **Kaggle’ın zorluğunu küçümsemek** en ciddi hatalarından biridir. Kaggle’ın çok rekabetçi olduğunu, başarılı olmak için birçok farklı şey denemeniz gerektiğini, sadece yarışmalara özgü birçok numara olduğunu ve profesyonel olarak yarışmalara katılan insanlar olduğunu beklemiyorlar.
+> 
+> 
+> 
+> **Yarışmalarda geçmişte yaptığınız hatalar nelerdi?**
+> 
+> 
+> 
+> * Veriye yeterince dikkat etmemek. Bazen daha iyi özellikler üretemedim veya daha iyi post-processing uygulayamadım.
+> 
+> * Bir fikre çok fazla zaman harcamak çünkü bunun işe yarayacağını umuyordum (bu bir **sunk-cost** yanılgısı).
+> 
+> * Yeterince deneme yapmamak. Çaba karşılığını verir – yarışmaya yeterince zaman ve kaynak ayırmazsanız, leaderboard’da üst sıralarda yer alamazsınız.
+> 
+> * "Yanlış" yarışmalara katılmak. Sızdırma, ters mühendislik, vb. içeren yarışmalar oldu.
+> 
+> * Yanlış kişilerle takım kurmak. Bazı takım arkadaşlarım beklediğim kadar aktif değildi ve bu, takım sıralamamızı kötüleştirdi.
+> 
+> 
+> 
+> **Bir yarışmaya katılırken en önemli şey nedir?**
+> 
+> Bence, hedefinizi hatırlamak, bu yarışmaya ne kadar zaman ve çaba yatırmaya hazır olduğunuzu bilmek ve olası sonuçları düşünmek önemlidir. Bir yarışmaya katılırken birçok farklı hedefiniz olabilir:
+> 
+> 
+> 
+> * Para kazanmak ya da madalya almak;
+> 
+> * Yeni beceriler kazanmak veya mevcut becerileri geliştirmek;
+> 
+> * Yeni bir görev/alan üzerinde çalışmak;
+> 
+> * Ağ kurmak;
+> 
+> * PR yapmak;
+> 
+> * vb.
+> 
+> 
+> 
+> Tabii ki, birden fazla motivasyonunuz olabilir.
+> 
+> 
+> 
+> **Yarışma bittiğinde olacakları düşünmek önemli.** Yarışmaya çok yatırım yapabilir ve kazanabilirsiniz, ancak kaybedebilirsiniz de. Bu gerçeğe hazırlıklı mısınız? Kazanmak sizin için kritik mi? Belki daha fazla çaba harcamaya hazırlıklı olmanız gerekebilir; diğer taraftan belki uzun vadeli hedefleriniz var ve bir başarısız yarışma sizi fazla etkilemez.
+
 ### Metrics for object detection problems *(Nesne tespiti problemleri için metrikler)*
 
 #### Intersection over union (IoU) *(Kesişim/Birleşim oranı)*
