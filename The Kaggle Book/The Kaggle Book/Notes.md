@@ -3785,9 +3785,74 @@ Bu strateji, özellikle modelin **hyperparametrelerinin ve seçimlerinin** test 
 
 Sonuç olarak, adversarial doğrulama, doğru test verisini seçmek ve test setinizin eğitim verisinden farklılıklarını anlamak için güçlü bir araçtır. Ayrıca, zaman içinde verinizde meydana gelen değişikliklerin modelinizin tahmin gücünü nasıl etkileyebileceği konusunda size bilgi verir.
 
+
+> Giuliano Janson
+> 
+> https://www.kaggle.com/adjgiulio
+> 
+> 
+> 
+> > Giuliano Janson, Kaggle'da *Competitions Grandmaster* unvanına sahip ve şu anda Zillow Group'ta makine öğrenimi ve doğal dil işleme (NLP) alanında kıdemli bir uygulamalı bilim insanı olarak görev yapıyor. Onunla yapılan bir röportajda, Kaggle’daki yarışmalar, veri sızıntıları, çapraz doğrulama ve yaratıcı özellik mühendisliği gibi konularda değerli bilgiler paylaşıyor. İşte önemli bazı noktalar:
+> 
+> 
+> 
+> **Favori Yarışma Türü**
+> 
+> 
+> 
+> Giuliano'nun en sevdiği yarışma tipi, çözmek için ilginç bir problem sunan, hafızaya sığacak büyüklükte fakat aşırı küçük olmayacak, yaratıcı özellik mühendisliği için fırsatlar tanıyan yarışmalardır. Bu tür yarışmalar, ona hem dikkatli bir analiz hem de yaratıcı bir yaklaşım sergileyebilme imkânı tanır.
+> 
+> 
+> 
+> **Kaggle Yarışmalarına Yaklaşım**
+> 
+> 
+> 
+> Bir Kaggle yarışmasını bir maraton gibi görür. İlk birkaç gün içinde en iyi puanlarının %90-95'ini alabilirken, kalan %5 için yoğun bir şekilde çalışmak gerekir. Günlük iş yaşamı ise farklıdır. Burada model performansı sadece bir faktördür. Zaman yönetimi, ölçeklenebilirlik, sürdürülebilirlik gibi faktörler de önemli olup, projenin zamanında hayata geçmesi için sürekli önceliklendirme yapılır.
+> 
+> 
+> 
+> **Zorlu Bir Yarışma Deneyimi**
+> 
+> 
+> 
+> Genentech Kanser Yarışması, Giuliano'nun kazandığı iki yarışmadan biridir. Bu yarışma, tıbbi verilerle ilgili ham veriler sundu ve burada veriyi doğru şekilde işlemek büyük bir zorluktu. Özellik mühendisliğinde, veri sızıntılarını tespit etme ve bunları kullanarak modelin performansını artırma konusunda önemli bir başarı elde etti. Veri sızıntısı, modelin yanlış sonuçlar üretmesine neden olabileceğinden çok dikkat edilmesi gereken bir konu.
+> 
+> 
+> 
+> **Kaggle'ın Kariyerine Etkisi**
+> 
+> 
+> 
+> Kaggle, Giuliano'ya iki ana açıdan fayda sağlamıştır: Modern makine öğrenimi tekniklerine erişim ve güçlü bir model doğrulama anlayışı geliştirme. Ayrıca Kaggle'da diğer yetenekli katılımcılarla işbirliği yaparak pek çok önemli ders almış ve bu deneyimlerini iş yerindeki diğer insanlarla da paylaşmaktadır.
+> 
+> 
+> 
+> **Yeni Başlayanların Sıklıkla Gözden Kaçırdığı Noktalar**
+> 
+> 
+> 
+> Yeni başlayanların en çok göz ardı ettiği konu doğru çapraz doğrulamanın önemi. İyi bir çapraz doğrulama çerçevesi, modelin iyileştirilmesini doğru ve objektif bir şekilde ölçmenizi sağlar. Yarışmalar uzun süreli olduğu için, başarılı olmak yalnızca iyi bir ilk fikre sahip olmakla değil, veriden gelen geribildirimle iterasyon yapabilme yeteneğiyle de ilgilidir.
+> 
+> 
+> 
+> **Hangi Araçları ve Kütüphaneleri Tavsiye Ediyor?**
+> 
+> 
+> 
+> Giuliano'nun tercih ettiği araçlar arasında **Pandas** ve **Scikit-learn** yer alıyor. Pandas, veri manipülasyonu ve keşfi için harika bir araçken, Scikit-learn ile hızlıca prototipler geliştirebilir. Nihai modelleri ise genellikle **XGBoost** ile kuruyor. Derin öğrenme içinse **Keras** kullanmayı tercih ediyor.
+> 
+> 
+> 
+> Bu gibi deneyimler, Kaggle’da başarılı olmak için gereken derin bilgi ve pratik deneyimi pekiştiriyor.
+
 ### Handling leakage *(Veri sızıntısını önleme)*
 
+
+
 ### Summary *(Özet)*
+
+
 
 ---
 
