@@ -3082,9 +3082,205 @@ Sonrasında, daha önce hiçbir yarışmada karşılaşılmamış ve muhtemelen 
 
 ## Chapter 6: Designing Good Validation *(Bölüm 6: İyi Bir Doğrulama Sistemi Tasarlama)*
 
+Bir Kaggle yarışmasında, modelleme yaparken ve sonuçları gönderdikten sonra, liderlik tablosundan aldığınız sonuçları yüzeysel bir şekilde kabul etmek yeterli gibi görünebilir. Sonuçta, bir yarışmada önemli olanın sıralamanız olduğunu düşünebilirsiniz. Bu, yarışmalarda sıkça yapılan ve tekrarlanan yaygın bir hatadır. Gerçekte, yarışma sona erene kadar gerçek liderlik tablosunun (özel olan) nasıl göründüğünü bilemezsiniz ve bunun yerine yalnızca halka açık olan kısmına güvenmek tavsiye edilmez, çünkü bu genellikle yanıltıcı olabilir.
+
+Bu bölümde, veri yarışmalarında doğrulamanın önemini tanıtacağız. Şunları öğreneceksiniz:
+
+* Aşırı uyum (overfitting) nedir ve bir halka açık liderlik tablosu nasıl yanıltıcı olabilir?
+* Korkunç sıralama değişiklikleri (shake-ups)
+* Farklı doğrulama stratejileri
+* Adversarial doğrulama
+* Sızıntıları nasıl tespit edebilir ve bunlardan nasıl yararlanabilirsiniz?
+* Son gönderilerinizi seçerken hangi stratejileri uygulamanız gerektiği
+
+Modelleme sırasında performansınızı izlemek ve aşırı uyum yapıp yapmadığınızı ayırt etmek, sadece veri bilimi yarışmalarında değil, tüm veri bilimi projelerinde anahtar bir yetkinliktir. Modellerinizi doğru şekilde doğrulamak, bir Kaggle yarışmasından öğrenebileceğiniz ve profesyonel dünyada yeniden kullanabileceğiniz en önemli becerilerden biridir.
+
 ### Snooping on the leaderboard *(Liderlik tablosunu gözetlemek)*
 
+Daha önce açıkladığımız gibi, her yarışmada Kaggle, test setini bir halkaya açık bölüm (genellikle şu anki liderlik tablosunda görülen) ve bir özel bölüm olarak ayırır. Özel bölüm, yarışma sonuçları için nihai puanları hesaplamak için kullanılır. Bu test bölümleri genellikle rastgele belirlenir (zaman serisi yarışmalarında ise zaman bazında belirlenir) ve tüm test seti, halka açık ve özel bölümler arasında herhangi bir ayrım yapılmadan yayınlanır.
+
+> Son zamanlarda, belirli yarışmalarda test verilerinin çok dikkatlice incelenmesini engellemek amacıyla, Kaggle test verilerini geri çekmiş ve yalnızca bazı örneklerini sağlamış, gerçek test seti ise gönderim yapıldığında yerine konmuştur. Bu tür yarışmalara "Kod yarışmaları" denir çünkü burada aslında tahminler değil, tahminleri oluşturacak kodu içeren bir Notebook sunulmaktadır.
+
+Buna göre, bir modelden türetilen bir gönderi, tüm test setini kapsayacaktır, ancak yalnızca halka açık bölüm hemen puanlanacak, özel bölümün puanlanması ise yarışma sona erene kadar bekleyecektir.
+
+Bundan dolayı üç önemli nokta ortaya çıkmaktadır:
+
+* Bir yarışmanın düzgün işleyebilmesi için eğitim verisi ve test verisi aynı dağılımdan gelmelidir. Ayrıca, test verisinin halka açık ve özel bölümleri, dağılım açısından birbirine benzer olmalıdır.
+* Eğitim ve test verisi görünüşte aynı dağılımdan gelmiş olsa bile, her iki sette de yeterli örnek bulunmaması, eğitim verisi ile halka açık ve özel test verisi arasında uyumlu sonuçlar elde etmeyi zorlaştırabilir.
+* Halka açık test verisi, bir veri bilimi projesinde olduğu gibi yalnızca son doğrulama için kullanılacak bir "holdout" test olarak değerlendirilmelidir. Bu yüzden, "adaptif aşırı uyum" denilen durumu engellemek için fazla sorgulanmamalıdır. Adaptif aşırı uyum, bir modelin belirli bir test seti üzerinde iyi çalışırken, diğer test setlerinde düşük performans göstermesi anlamına gelir.
+
+Bu üç önemli noktayı akılda tutmak, bir yarışmanın dinamiklerini anlamak için çok önemlidir. Çoğu yarışmada, eğitim, halka açık ve özel test verilerinin birbirine nasıl bağlı olduğu hakkında tartışma forumlarında her zaman birçok soru vardır ve genellikle yüzlerce çözüm, yalnızca halka açık liderlik tablosu üzerindeki etkinliğine göre değerlendirilerek gönderilir.
+
+Ayrıca, sıralamaları devrim niteliğinde değiştiren "shake-up" (sıralama değişikliği) tartışmalarına da sıkça rastlanır. Aslında, bunlar, daha önce halka açık liderlik tablosunda daha iyi pozisyonlar elde etmiş olan birçok kişinin hayal kırıklığına uğramasına neden olabilen, nihai sıralamaların yeniden düzenlenmesidir. Anektodal olarak, shake-up'lar genellikle eğitim verisi ile test seti arasındaki farklardan ya da test verisinin halka açık ve özel bölümleri arasındaki farklardan kaynaklandığına inanılır. Bunlar, rakiplerin beklenen yerel puanlarının liderlik tablosu geri bildirimiyle ne kadar ilişkilendiğine bakarak ex ante (yarışma başlamadan önce) ve iki sayıya dayalı yapılan analizlerle ex post (yarışma sona erdikten sonra) ölçülür:
+
+* Genel bir shake-up sayısı, **mean(abs(private_rank-public_rank)/number_of_teams)** formülü ile hesaplanır.
+* Sadece halka açık sıralamanın en üst %10'unu dikkate alarak hesaplanan üst sıralama shake-up sayısı.
+
+> Bu ex post sayıları, ilk olarak Steve Donoho ([https://www.kaggle.com/breakfastpirate](https://www.kaggle.com/breakfastpirate)) tarafından geliştirilmiş ve Kaggle shake-up'larının en kötü sıralamalarını içeren bir liste hazırlamıştır (buna şu bağlantıdan ulaşabilirsiniz: [Kaggle shake-ups](https://www.kaggle.com/c/recruit-restaurant-visitor-forecasting/discussion/49106#278831)). Bu sayılar günümüzde, Chapter 5’te tartıştığımız Meta Kaggle veriseti kullanılarak çoğu Notebook tarafından kolayca yeniden oluşturulabilir (buna şu bağlantıdan erişebilirsiniz: [Meta Kaggle Competition Shake-up](https://www.kaggle.com/jtrotman/meta-kaggle-competition-shake-up)).
+
+Örneğin, bu verilere bakarak RSNA Intracranial Hemorrhage Detection yarışmasının shake-up'ları nedeniyle ne kadar zorlayıcı olduğunu anlayabilirsiniz, özellikle de üst sıralamalarda.
+
+Ancak, bir ex post değerlendirmesinin ötesinde, önceki shake-up'lardan edindiğimiz bazı dersler, Kaggle yarışmalarında size yardımcı olabilir. UC Berkeley'den bazı araştırmacılar da bu şekilde düşünüyor. 2019'da NIPS'te sundukları makalelerinde, Roelofs, Fridovich-Keil ve diğerleri, Kaggle yarışmalarındaki halka açık ve özel liderlik tablosu dinamiklerine dair içgörüler kazanmak amacıyla birkaç bin Kaggle yarışmasını incelediler. Her ne kadar sınırlı bir yarışma kümesine odaklansalar da (120 yarışma, belirli bir katılımcı sayısının üzerindeki, ikili sınıflandırmaya dayalı yarışmalar), bazı ilginç bulgular elde ettiler:
+
+* Adaptif aşırı uyum çok azdır; diğer bir deyişle, halka açık sıralamalar genellikle açığa çıkan özel liderlik tablosunda tutar.
+* Çoğu shake-up, rastgele dalgalanmalardan ve rakiplerin sıralamalarının çok yakın olduğu aşırı kalabalık sıralamalardan kaynaklanır; özel test setlerindeki küçük bir performans değişikliği, sıralamalarda büyük değişikliklere neden olabilir.
+* Shake-up'lar, eğitim seti çok küçük olduğunda veya eğitim verisi bağımsız ve aynı dağılıma sahip değilse (i.i.d.) gerçekleşir.
+
+> Tam makale, *Roelofs, R., Fridovich-Keil, S. et al. A meta-analysis of overfitting in machine learning. Proceedings of the 33rd International Conference on Neural Information Processing Systems. 2019* şu bağlantıdan bulunabilir: [Makale Linki](https://papers.nips.cc/paper/2019/file/ee39e503b6bedf0c98c388b7e8589aca-Paper.pdf).
+
+Ancak, bizim uzun Kaggle yarışmalarındaki deneyimimize göre, adaptif aşırı uyum ile ilgili oldukça fazla problem gördük. Örneğin, Greg Park'ın ilk katıldığımız yarışmalardan birinin analizini okuyabilirsiniz: [Kaggle Psychopathy Postmortem](http://gregpark.io/blog/Kaggle-PsychopathyPostmortem/). Bu, pek çok Kaggle katılımcısı için yaygın ve sürekli bir sorun olduğu için, yalnızca halka açık liderlik tablosuna bakmak yerine daha sofistike bir strateji öneriyoruz:
+
+* Her zaman güvenilir bir çapraz doğrulama sistemi kurarak yerel puanlama yapın.
+* Duruma bağlı olarak en iyi doğrulama şemasını kullanarak i.i.d. olmayan dağılımları kontrol etmeye çalışın. Yarışma açıklamasında açıkça belirtilmedikçe, i.i.d. olmayan dağılımları fark etmek kolay bir iş değildir, ancak tartışmalardan veya stratifiye doğrulama şemaları kullanarak deney yaparak ipuçları elde edebilirsiniz (örneğin, belirli bir özelliğe göre sınıflandırma yapıldığında sonuçlar önemli ölçüde iyileşir).
+* Yerel puanlama ile halka açık liderlik tablosunu ilişkilendirerek, ikisinin aynı yönde olup olmadığını anlamaya çalışın.
+* Adversarial doğrulama kullanarak test dağılımının eğitim verisiyle benzer olup olmadığını kontrol edin.
+* Özellikle küçük veri setleriyle çalışıyorsanız, çözümlerinizi toplama (ensembling) yöntemleriyle daha dayanıklı hale getirin.
+
+Sonraki bölümlerde, bu fikirlerin her birini (toplama dışındaki, çünkü bu başka bir bölümün konusu) daha ayrıntılı olarak inceleyeceğiz ve özel test verisi üzerinde en iyi sonuçları elde etmek için size en iyi araçları ve stratejileri sağlayacağız.
+
 ### The importance of validation in competitions *(Yarışmalarda doğrulamanın önemi)*
+
+Bir yarışmayı dikkatlice düşündüğünüzde, onu büyük bir deney sistemine benzetebilirsiniz. Kim en sistematik ve verimli şekilde bu deneyleri yapabilirse, o kazanır.
+
+Gerçekten de, tüm teorik bilginize rağmen, aynı becerilere sahip olan yüzlerce ya da binlerce veri profesyoneliyle rekabet içinde olacaksınız. Üstelik, onlar da sizinle aynı veriyi kullanacaklar ve veriden öğrenmek için büyük ölçüde aynı araçları kullanacaklar (TensorFlow, PyTorch, Scikit-learn vb.). Bazılarının kesinlikle daha iyi hesaplama kaynaklarına erişimi olacak, ancak Kaggle Notebooks’un ve genel olarak düşen bulut bilişim fiyatlarının sayesinde bu fark artık o kadar geniş değil. Dolayısıyla, bilgi, veri, modeller ve kullanılabilir bilgisayarlar arasındaki farklara baktığınızda, diğer rakiplerle aranızdaki büyük performans farklılıklarını açıklayacak belirgin bir faktör bulamayabilirsiniz. Ancak, bazı katılımcılar sürekli olarak diğerlerinden daha iyi performans sergiliyor, bu da arka planda bazı başarı faktörlerinin olduğunu ima eder.
+
+Röportajlarda ve buluşmalarda, bazı Kaggle katılımcıları bu başarı faktörünü “azim” olarak tanımlarken, bazıları “her şeyi denemek” diyor, bazıları ise “yarışmaya sahip olduğunuz her şeyi koyma isteği” olarak ifade ediyor. Bunlar biraz belirsiz ve sihirli gibi gelebilir. Biz ise buna **sistematik deney yapma** diyoruz. Bizim görüşümüze göre, başarılı bir katılımın anahtarı, gerçekleştirdiğiniz deneylerin sayısı ve bu deneyleri nasıl yönettiğinizde yatmaktadır. Ne kadar fazla deney yaparsanız, diğer katılımcılardan daha iyi bir çözüm bulma şansınız o kadar artar. Bu sayı, elbette bazı faktörlere bağlıdır, örneğin sahip olduğunuz zaman, hesaplama kaynaklarınız (ne kadar hızlı olursa o kadar iyi, ancak daha önce belirttiğimiz gibi bu, başlı başına güçlü bir ayırıcı değildir), ekip büyüklüğünüz ve ekip üyelerinin görevdeki katılımı gibi. Bu, genellikle başarı için anahtarlar olarak bildirilen azim ve katılım ile uyumludur.
+
+Ancak, bunlar sonucu etkileyen tek faktörler değildir. Deneylerinizi nasıl yürüttüğünüzün de bir etkisi vardır. **Hızlıca başarısız olup ondan öğrenmek**, bir yarışmadaki önemli faktörlerden biridir. Tabii ki, hem başarısız olduğunuzda hem de başarılı olduğunuzda, deneyimlerinizden bir şeyler öğrenmek için dikkatlice düşünmeniz gerekir; yoksa yarışmanız sadece doğru çözümü bulma umuduyla rastgele bir deneme dizisine dönüşür.
+
+Bu nedenle, **her şey eşit olduğunda**, doğru bir doğrulama stratejisine sahip olmak, başarılı Kaggle katılımcıları ile sadece liderlik tablosunu aşırı uyum sağlayan ve yarışma sonrası beklenenden daha düşük sıralamalarda kalanlar arasındaki büyük farkı yaratır.
+
+> Doğrulama, modelinizin ürettiği hataları doğru bir şekilde değerlendirmeniz ve denemelerinizin sonucunda modelinizin performansının nasıl iyileştiğini ya da kötüleştiğini ölçmeniz için kullandığınız yöntemdir.
+
+Genel olarak, doğru doğrulama seçmenin etkisi, genellikle daha nicel faktörler, örneğin en son, en güçlü GPU'ya sahip olmak ya da daha büyük bir ekibin gönderim yapması gibi faktörler lehine göz ardı edilir. Ancak, sadece denemelerin gücüne ve liderlik tablosundaki sonuçlarına güvenmek, “duvara çamur atmak ve bir şeyin tutmasını ummak” gibi bir şey olur (buna şu bağlantıdan bakabilirsiniz: [Kaggle Psychopathy Postmortem](http://gregpark.io/blog/Kaggle-Psychopathy-Postmortem/)). Bazen böyle bir strateji işe yarayabilir, ancak çoğu zaman işe yaramaz çünkü doğru yönde deneme yapma fırsatlarını kaçırırsınız ve o çamurun içinde parlayan mücevheri bile görmeniz mümkün olmaz. Örneğin, halka açık liderlik tablosunda şansınızı denemek için rastgele ve sistematik olmayan bir stratejiye fazla odaklanırsanız, harika çözümler üretmiş olsanız bile, nihai gönderiminizi doğru seçemeyebilir ve en iyi skoru elde eden çözümü özel test setinde kaçırabilirsiniz.
+
+Doğru bir doğrulama stratejisi, hangi modellerinizin özel test setinde sıralama yapmak için gönderileceğine karar vermenize yardımcı olabilir. Halka açık liderlik tablosunda en iyi modellerinizi göndermeye yönelik büyük bir çekicilik olsa da, her zaman kendi doğrulama puanlarınızı dikkate alın. Nihai gönderimleriniz için, duruma göre ve liderlik tablosuna güvenip güvenmediğinize göre, en iyi modelinizi liderlik tablosuna göre ve en iyi modelinizi yerel doğrulama sonuçlarınıza göre seçin. Eğer liderlik tablosuna güvenmiyorsanız (özellikle eğitim örnekleriniz küçükse ya da örnekler i.i.d. değilse), en iyi iki doğrulama puanına sahip modelleri gönderin ve çok farklı iki model ya da toplama (ensemble) seçin. Bu şekilde, özel test setinde performans göstermeyen çözümleri seçme riskini azaltmış olursunuz.
+
+**Doğrulama Deneylerinin Pratik Yönleri**
+
+Bir deney sistemini kurmanın önemini belirttikten sonra, geriye kalan her şey, doğrulamanın pratik yönlerine dayanır. Gerçekten de, bir çözüm modellediğinizde bir dizi karşılıklı kararı verirsiniz:
+
+1. **Verinizi nasıl işleyeceksiniz?**
+2. **Hangi modeli uygulayacaksınız?**
+3. **Modelin mimarisini nasıl değiştireceksiniz? (özellikle derin öğrenme modelleri için önemlidir)**
+4. **Modelin hiperparametrelerini nasıl ayarlayacaksınız?**
+5. **Tahminleri nasıl post-process (sonraki işleme) edeceksiniz?**
+
+Halka açık liderlik tablosu özel tabloyla mükemmel bir şekilde ilişkili olsa bile, günlük gönderim sınırı (tüm yarışmalarda bulunan bir sınırlama) size yukarıda belirtilen alanların her birinde yapabileceğiniz olası testlerin yüzeyine bile dokunmanızı engeller. Doğru bir doğrulama sistemi, yaptığınız şeyin liderlik tablosunda işe yarayıp yaramayacağını önceden size söyler.
+
+> **Dmitry Larko**
+> 
+> 
+> 
+> [https://www.kaggle.com/dmitrylarko](https://www.kaggle.com/dmitrylarko)
+> 
+> 
+> 
+> Dmitry Larko, Kaggle Yarışması Büyük Ustası ve H2O.ai'da baş veri bilimcisidir. Makine öğrenimi ve veri bilimi alanında on yılı aşkın bir deneyime sahiptir. Kaggle ile 2012 Aralık ayında tanışmış ve birkaç ay sonra ilk yarışmasına katılmıştır. Kaggle yarışmalarında doğrulama konusunda güçlü bir savunucudur, bunu röportajında da vurgulamıştır.
+> 
+> 
+> 
+> ---
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Teknikler ve çözüm yaklaşımları açısından Kaggle'da uzmanlık alanınız nedir?**
+> 
+> 
+> 
+> Çoğunlukla tabular veri kümeleri için yarışmalara katıldım ama bilgisayarla görme (computer vision) yarışmalarını da seviyorum.
+> 
+> 
+> 
+> ---
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşırsınız? Bu yaklaşım, günlük işinizden ne kadar farklıdır?**
+> 
+> 
+> 
+> Her zaman basit başlayıp küçük ve daha basit modeller için bir gönderi hattı (submission pipeline) kurmayı hedeflerim. Buradaki önemli bir adım, fikirlerinizi sağlam bir şekilde doğrulamak için doğru bir doğrulama (validation) şeması oluşturmak. Ayrıca, veri üzerinde olabildiğince çok zaman geçirip analiz yapmanız her zaman iyi bir fikirdir.
+> 
+> 
+> 
+> Günlük işimde, bir AutoML platformu geliştiriyorum, bu yüzden Kaggle’da denediğim çoğu şey, bu platformun bir parçası olarak uygulanıyor.
+> 
+> 
+> 
+> ---
+> 
+> 
+> 
+> **Katıldığınız özellikle zorlayıcı bir yarışma hakkında bize bir şeyler anlatır mısınız ve görevi ele almak için hangi içgörüleri kullandınız?**
+> 
+> 
+> 
+> Aklıma herhangi bir şey gelmiyor ve aslında bunun çok önemli olduğunu düşünmüyorum, çünkü teknik olarak zorlayıcı olan bir şey, başkası için çok kolay olabilir. Teknik zorluklar çok önemli değil; önemli olan, bir yarışmanın bir maraton gibi olduğunu unutmamaktır, bir sprint değil. Ya da isterseniz bunu bir dizi sprintten oluşan bir maraton olarak görebilirsiniz. Bu yüzden tükenmemek çok önemli; iyi uyumak, egzersiz yapmak ve parkta yürüyüşe çıkmak, beyninizi yeni fikirlerle tazelemek için faydalıdır. Bir Kaggle yarışmasını kazanmak için, yaratıcılığınız, uzmanlığınız ve bazen de biraz şans gerekir.
+> 
+> 
+> 
+> ---
+> 
+> 
+> 
+> **Kaggle, kariyerinize yardımcı oldu mu? Olduysa, nasıl?**
+> 
+> 
+> 
+> Şu anki işimi, bir Kaggle Yarışması Büyük Ustası olmam sayesinde buldum. Mevcut işverenim için bu durum, alandaki uzmanlığımın yeterli bir kanıtıydı.
+> 
+> 
+> 
+> ---
+> 
+> 
+> 
+> **Tecrübesine göre, deneyimsiz Kaggle kullanıcıları genellikle neyi gözden kaçırıyor? İlk başladığınızda bilseydiniz şimdi neyi farklı yapardınız?**
+> 
+> 
+> 
+> Genellikle doğru doğrulama şemasını gözden kaçırıyorlar ve halk liderlik tablosundaki (public leaderboard) geri bildirimleri takip ediyorlar. Bu, çoğu durumda kötü sonuçlanır ve “shake-up” (sıralama çalkalanması) olarak bilinen duruma yol açar.
+> 
+> 
+> 
+> Ayrıca, keşifsel veri analizi (exploratory data analysis) yapmayı aceleyle geçip doğrudan model kurmaya başlıyorlar, bu da basit çözümlere ve ortalama liderlik tablosu skorlarına yol açar.
+> 
+> 
+> 
+> ---
+> 
+> 
+> 
+> **Geçmişte yarışmalarda yaptığınız hatalar nelerdir?**
+> 
+> 
+> 
+> Yaptığım ana hata, aslında deneyimsiz bir kişinin yapacağı aynı hatadır – liderlik tablosundaki skoru takip etmek ve iç doğrulama (internal validation) yerine ona odaklanmak. Her seferinde bunu yaptığımda, birkaç sıralama kaybettim.
+> 
+> 
+> 
+> ---
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenimi için özellikle önerdiğiniz araçlar veya kütüphaneler var mı?**
+> 
+> 
+> 
+> Bunlar genellikle bilinen araçlardır. Tabular veri için: LightGBM, XGBoost, CatBoost; derin öğrenme için: PyTorch, PyTorch-Lightning, timm; ve herkes için Scikit-learn.
+> 
+> 
+> 
+> ---
+> 
+> 
+> 
+> **Bir yarışmaya katılırken dikkat edilmesi gereken en önemli şey nedir?**
+> 
+> 
+> 
+> Basit başlayın, her zaman doğrulama yapın; doğrulama skorunuza güvenin, liderlik tablosu skoruna değil.
 
 ### Bias and variance *(Önyargı ve varyans)*
 
