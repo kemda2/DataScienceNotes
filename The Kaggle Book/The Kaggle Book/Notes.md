@@ -3323,9 +3323,41 @@ Anlam açısından biraz farklı olsalar da, hepsi de modelinizin genellenebilir
 
 ### Trying different splitting strategies *(Farklı veri bölme stratejilerini denemek)*
 
+Daha önce tartışıldığı gibi, doğrulama kaybı, eğitim setinin parçası olmayan bir veri örneğine dayanmaktadır. Bu, modelinizin tahmin etme konusundaki ne kadar iyi olduğunu belirten ampirik bir ölçüdür ve eğitim verilerinin desenlerini ne kadar ezberlediğini belirten eğitimde elde edilen sonuçlardan daha doğru bir ölçüdür. Doğrulama için kullanılan veri örneğini doğru bir şekilde seçmek, doğrulama stratejinizin temelini oluşturur.
+
+Modelinizi doğrulamak ve performansını doğru şekilde ölçmek için birkaç seçeneğiniz vardır:
+
+• İlk seçenek, bir holdout (ayırma) sistemi kullanmaktır. Ancak, bu, verilerinizi temsil eden bir örneklem seçme riskini taşır veya doğrulama holdout'unuza aşırı uyum sağlama riski içerir.
+
+• İkinci seçenek, olasılıksal bir yaklaşım kullanmak ve sonuçlara varmak için bir dizi örneklem kullanmaktır. Olasılıksal yaklaşımlar arasında çapraz doğrulama, birer bir bırakma (LOO) ve bootstrap bulunmaktadır. Çapraz doğrulama stratejileri arasında, verinizin özelliğine bağlı olarak çeşitli numaralar vardır (basit rastgele örnekleme, katmanlı örnekleme, gruplar halinde örnekleme, zamanlı örnekleme).
+
+Tüm bu stratejilerin ortak noktası, örnekleme stratejileridir. Bu stratejiler, küçük bir veri parçasına dayalı olarak genel bir ölçüm çıkarılmasına yardımcı olur (modelinizin performansı gibi). Örnekleme, istatistiğin temelidir ve kesin bir prosedür değildir, çünkü örnekleme yönteminiz, mevcut veriniz ve örnekleme sürecindeki rastlantısallık nedeniyle belirli durumların örnekleme dahil edilmesi, belirli bir hata payına yol açabilir.
+
+**İyi Bir Doğrulama Tasarımı**
+
+Örneğin, eğer taraflı bir örneklem kullanırsanız, doğrulama metriğiniz yanlış bir şekilde (aşırı veya eksik) tahmin edilebilir. Ancak, doğru bir şekilde tasarlanıp uygulanırsa, örnekleme stratejileri genel ölçümünüzün iyi bir tahminini sağlar.
+
+Bu stratejilerin ortak bir diğer özelliği de bunların bölümler olmasıdır, yani her bir vaka, eğitim veya doğrulama olarak birbirinden dışlanmış şekilde ayrılır. Gerçekten de, çoğu modelin belirli bir ezberleme yeteneği olduğundan, aynı vakaların hem eğitim hem de doğrulama için kullanılması, modelin ezberleme yeteneklerini sergilemesine izin verdiği için şişirilmiş tahminlere yol açar; bunun yerine, modelin hiç görülmemiş örneklerde çalışacak desenler ve fonksiyonlar türetme yeteneği üzerinde değerlendirilmesini istiyoruz.
+
 #### The basic train-test split *(Temel eğitim-test bölünmesi)*
 
+İlk analiz edeceğimiz strateji, eğitim-test bölme (train-test split) stratejisidir. Bu stratejide, eğitim setinizin bir kısmını (aynı zamanda holdout olarak da bilinir) örnek alır ve bu kısmı, geri kalan verilerle eğittiğiniz tüm modeller için test seti olarak kullanırsınız.
+
+Bu stratejinin büyük avantajı, çok basit olmasıdır: Verinizin bir kısmını seçer ve bu kısmı kullanarak modelinizin başarısını test edersiniz. Genellikle veriler %80/%20 oranında, eğitim seti lehine bölünür. Scikit-learn'de, bu yöntem train_test_split fonksiyonu ile uygulanır. Bu yöntemi birkaç açıdan ele alalım:
+
+* Büyük veri setleriniz olduğunda, çıkardığınız test verisinin orijinal veri setinin dağılımına benzer (temsil edici) olmasını bekleyebilirsiniz. Ancak, çıkartma işlemi rastlantısal bir şekilde yapıldığı için her zaman temsili olmayan bir örnekleme çıkarma şansınız vardır. Özellikle, başladığınız eğitim örneğiniz küçükse bu şans artar. Çıkarılan holdout bölümünü, adversarial validasyon (bunun hakkında birkaç bölüm sonra daha fazla bilgi verilecektir) kullanarak karşılaştırmak, çabalarınızı doğru bir şekilde değerlendirdiğinizden emin olmanıza yardımcı olabilir.
+
+* Ayrıca, test örneklemenizin temsil edici olmasını sağlamak için, özellikle eğitim verilerinizin hedef değişkenle nasıl ilişkilendiği konusunda, stratifikasyonu (katmanlı örnekleme) kullanabilirsiniz. Bu, belirli özelliklerin oranlarının örneklenen veride korunmasını sağlar. Bunu yapmak için train_test_split fonksiyonundaki **stratify** parametresini kullanabilir ve korumak istediğiniz sınıf dağılımını içeren bir dizi verebilirsiniz.
+
+Bir temsilci holdout'a sahip olsanız bile, bazen basit bir train-test bölmesi, yarışmalarda çabalarınızı doğru bir şekilde takip etmek için yeterli olmayabilir.
+
+Aslında, bu test setinde sürekli değerlendirme yaparken, seçimlerinizi bir tür adaptasyon aşırı uyumuna (diğer bir deyişle, eğitim setinin gürültüsünü yanlış bir şekilde sinyal olarak almak) yol açacak şekilde yönlendirebilirsiniz. Bu, özellikle sık sık halk liderliği tablosunda değerlendirme yapıldığında meydana gelir. Bu nedenle, olasılıksal bir değerlendirme, daha fazla hesaplama gerektirse de, bir yarışma için daha uygun bir yaklaşımdır.
+
 #### Probabilistic evaluation methods *(Olasılıksal değerlendirme yöntemleri)*
+
+Makine öğrenimi modelinin performansının olasılıksal değerlendirilmesi, bir dağılımdan alınan örneğin istatistiksel özelliklerine dayanır. Örnekleme yaparak, orijinal verinizin daha küçük bir kümesini oluşturmuş olursunuz ve bu kümenin, orijinal verinin aynı özelliklere sahip olması beklenir. Ayrıca, örneklemeye dokunulmayan kısım da bir örneklem oluşturur ve bu kısım da orijinal verinin özelliklerine sahip olmalıdır. Modelinizi bu örneklenmiş veriler üzerinde eğitip test ederek ve bu işlemi birçok kez tekrarlayarak, temelde modelinizin performansını ölçen bir istatistiksel tahminci yaratıyorsunuz. Her örneklemin içinde bir "hata" olabilir; yani, orijinal verinin gerçek dağılımını tam olarak temsil etmeyebilir. Ancak daha fazla örnekleme yaptıkça, bu birden fazla örneklemdeki tahmincilerinizin ortalaması, tahmin etmeye çalıştığınız ölçütün gerçek ortalamasına yakınsama gösterir (bu, olasılık teorisinde Büyük Sayılar Kanunu adı verilen bir teoremle açıklanan gözlemlenen bir sonuçtur).
+
+Olasılıksal tahminciler, basit bir train-test bölmesine göre doğal olarak daha fazla hesaplama gerektirir, ancak doğru ölçütü, yani modelinizin genel performansını doğru bir şekilde tahmin ettiğinizden daha fazla emin olmanızı sağlar.
 
 #### k-fold cross-validation *(k-katlı çapraz doğrulama)*
 
