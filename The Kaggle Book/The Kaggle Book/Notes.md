@@ -4131,6 +4131,52 @@ Başka bir Notebook'ta ([https://www.kaggle.com/lucamassaron/really-not-missing-
 
 ### Reducing the size of your data *(Veri boyutunu küçültme)*
 
+**💾 Verilerinizin Boyutunu Küçültme (Bellek Kullanımını Azaltma)**
+
+Kaggle Notebook'larında doğrudan çalışıyorsanız, bunların sınırlamaları oldukça can sıkıcı gelebilir ve bunlarla uğraşmak zaman kaybına neden olabilir. Bu sınırlamalardan biri, yürütmeyi durduracak ve betiği baştan başlatmaya zorlayacak olan **bellek yetersizliği (out-of-memory)** hatalarıdır. Bu, birçok yarışmada oldukça yaygındır. Ancak, verileri küçük yığınlar halinde diskten alıp işleyebileceğiniz metin veya görüntülere dayalı derin öğrenme yarışmalarının aksine, tablosal verilerle çalışan algoritmaların çoğu, **tüm verilerin bellekte işlenmesini** gerektirir.
+
+En yaygın durum, Pandas'ın `read_csv` işlevi kullanılarak bir CSV dosyasından verileri yüklediğinizde, ancak **DataFrame'in özellik mühendisliği ve makine öğrenimi için Kaggle Notebook'unda işlenemeyecek kadar büyük** olmasıdır. Çözüm, kullandığınız Pandas DataFrame'in boyutunu **hiçbir bilgi kaybetmeden (kayıpsız sıkıştırma)** sıkıştırmaktır. Bu, Guillaume Martin'in çalışmasından türetilen aşağıdaki betik kullanılarak kolayca başarılabilir (orijinal Notebook'u burada bulabilirsiniz: [https://www.kaggle.com/gemartin/load-data-reduce-memory-usage](https://www.kaggle.com/gemartin/load-data-reduce-memory-usage)).
+
+```python
+def reduce_mem_usage(df, verbose=True):
+    numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+    start_mem = df.memory_usage().sum() / 1024**2
+    for col in df.columns:
+        col_type = df[col].dtypes
+        if col_type in numerics:
+            c_min = df[col].min()
+            c_max = df[col].max()
+            if str(col_type)[:3] == 'int':
+                if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
+                    df[col] = df[col].astype(np.int8)
+                elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                    df[col] = df[col].astype(np.int16)
+                elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                    df[col] = df[col].astype(np.int32)
+                elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
+                    df[col] = df[col].astype(np.int64)
+            else: # float types
+                if c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                    df[col] = df[col].astype(np.float32)
+                else:
+                    df[col] = df[col].astype(np.float64)
+    end_mem = df.memory_usage().sum() / 1024**2
+    if verbose: print('Mem. usage decreased to {:5.2f} Mb ({:.1f}% reduction)'.format(end_mem, 100 * (start_mem - end_mem) / start_mem))
+    return df
+```
+
+> Guillaume Martin, Kaggle'da böyle bir fikri öneren ilk kişi değildi. Pandas DataFrame'i sıkıştırma fikrine sahip ilk Kaggle kullanıcısı, Zillow yarışması sırasında bir küçültme işlevi yazan Arjan Groen'di ([https://www.kaggle.com/arjanso/reducing-dataframe-memory-size-by-65](https://www.kaggle.com/arjanso/reducing-dataframe-memory-size-by-65)).
+
+-----
+
+**🤔 Bu Yaklaşım Nasıl Çalışır?**
+
+Bu betik, bir veri setindeki tüm **sayısal özelliklerin** belirli bir değer aralığında bulunması gerçeğinden yararlanır. Python'da bellekte kapladıkları bayt sayısına göre farklı türde tam sayı ve kayan noktalı sayısal değişkenler bulunduğundan, betik her özellikte bulunan değer aralığını, her bir sayısal tipin kabul edebileceği maksimum ve minimum değerle karşılaştırır. Bu, özelliği, kendi değer aralığıyla çalışan ve **en az bellek gerektiren sayısal tipe** ayarlamak için yapılır.
+
+Bu yaklaşım, Kaggle Notebook'larında sorunsuz çalışır, ancak bazı uyarılarla birlikte. Sıkıştırma yoluyla her özellik için en uygun sayısal tipi ayarladıktan sonra, ayarlanan sayısal tiplerin kapasitesini aşan değerlerle sonuçlanabilecek herhangi bir **özellik mühendisliği** uygulayamazsınız, çünkü böyle bir işlem **hatalı sonuçlar** üretecektir. Önerimiz, bunu özellik mühendisliğinden **sonra** veya mevcut verilerinizi yeniden ölçeklendirmeyen büyük dönüşümlerden **önce** uygulamanızdır. Bunu **çöp toplama (garbage collection)** kitaplığı `gc` ve `gc.collect()` metodu ile birleştirmek, Kaggle Notebook'unuzun bellek durumunu iyileştirecektir.
+
+Verilerinizin boyutunu azaltmanın (diğer şeylerin yanı sıra) başka bir yolu da özellik mühendisliğini (özellikle **özellik seçimi** ve **veri sıkıştırma**) kullanmaktır.
+
 ### Applying feature engineering *(Özellik mühendisliği uygulama)*
 
 #### Easily derived features *(Kolay türetilen özellikler)*
