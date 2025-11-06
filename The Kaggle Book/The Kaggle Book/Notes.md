@@ -2799,11 +2799,40 @@ Farklar, aslında birden fazla sınıfla çalışırken ortaya çıkar. Hem IoU 
 
 ### Metrics for multi-label classification and recommendation problems *(Çok etiketli sınıflandırma ve öneri problemleri için metrikler)*
 
+**Öneri sistemleri**, veri analizi ve makine öğreniminin en popüler uygulamalarından biridir ve Kaggle'da bu tür öneri yaklaşımlarını kullanan birçok yarışma bulunmaktadır. Örneğin, **Quick, Draw! Doodle Recognition Challenge**, bir öneri sistemi olarak değerlendirilen bir tahmin yarışmasıydı. Ancak, Kaggle'daki diğer bazı yarışmalar gerçekten etkili öneri sistemleri oluşturmayı hedeflemiştir (örneğin, **Expedia Hotel Recommendations**: [Kaggle Yarışması](https://www.kaggle.com/c/expedia-hotel-recommendations)) ve **RecSYS**, öneri sistemleri konferansı ([https://recsys.acm.org/](https://recsys.acm.org/)), her yıl düzenlediği yarışmalardan birini Kaggle üzerinde gerçekleştirmiştir (RecSYS 2013: [Kaggle Yarışması](https://www.kaggle.com/c/yelp-recsys-2013)).
 
+**MAP@K (Mean Average Precision at K)**, öneri sistemlerinin performansını değerlendirmek için tipik olarak tercih edilen metrik olup, Kaggle'da, öneri sistemleriyle ilgili yarışmaların çoğunda karşılaşacağınız en yaygın metriktir. Bunun yanı sıra, **P@K (precision at k)** veya **AP@K (average precision at k)** gibi bazı diğer metrikler de vardır; bunlar kayıp fonksiyonlarıdır, yani her bir tekil tahmin düzeyinde hesaplanırlar. Bu metriklerin nasıl çalıştığını anlamak, MAP@K'yi daha iyi anlamanızı sağlayabilir ve bu metriklerin hem önerilerde hem de çoklu etiketli sınıflandırmada nasıl performans gösterdiği konusunda size yardımcı olabilir.
+
+Aslında, öneri sistemleriyle benzer şekilde, **çoklu etiketli sınıflandırmalar**, modelinizin bir dizi sınıf tahmini üretmesini ima eder. Bu tür sonuçlar, bazı **ikili sınıflandırma metriklerinin** ortalaması (örneğin, **Greek Media Monitoring Multilabel Classification** (WISE 2014), bu yarışma **ortalama F1 skoru**nu kullandı: [Kaggle Yarışması](https://www.kaggle.com/c/wise-2014)) ve öneri sistemlerine daha özgü metrikler, örneğin **MAP@K** gibi metrikler kullanılarak değerlendirilebilir. Sonuç olarak, hem öneri sistemleri hem de çoklu etiketli tahminler, bir **sıralama görevi** olarak ele alınabilir; bu, öneri sistemlerinde sıralanmış öneriler ve çoklu etiketli sınıflandırmada (belirli bir sıralama olmadan) etiketlerin bir setine dönüşür.
 
 #### MAP@K *(MAP@K metriği)*
 
+**MAP@K**, karmaşık bir metriktir ve birçok hesaplamadan türetilir. MAP@K metriğini tam olarak anlayabilmek için, önce en basit bileşeni olan **precision at k (P@K)** ile başlayalım. Bu durumda, bir örneğin tahmini, sıralanmış tahminler dizisi (en olasıdan en az olasılıklıya kadar) olduğundan, fonksiyon yalnızca en üstteki **k** tahmini dikkate alır ve ardından, doğru etiketle ne kadar eşleşme sağladığını hesaplar ve bu sayıyı **k**'ye böler. Kısacası, bu, **k** tahmini üzerinden ortalama alınmış bir doğruluk ölçüsüne oldukça benzer.
+
+Biraz daha karmaşık bir hesaplama gerektiren ama kavramsal olarak basit olan **average precision at k (AP@K)**, **P@K**'nin **1**'den **k**'ye kadar olan tüm değerler üzerinde hesaplanıp ortalamasının alınmasıdır. Bu şekilde, metrik, tahminin ne kadar iyi çalıştığını genel olarak değerlendirir; ilk tahmin, ardından ilk iki tahmin, ve devam ederek **k** tahmine kadar.
+
+Son olarak, **MAP@K**, tüm tahmin örnekleri için AP@K'nin ortalamasıdır ve bu metrik, tüm tahminleri değerlendirdiği için bir metriktir. İşte **MAP@5** formülasyonu, **Expedia Hotel Recommendations** yarışmasında ([https://www.kaggle.com/c/expedia-hotel-recommendations](https://www.kaggle.com/c/expedia-hotel-recommendations)) bulabileceğiniz formül:
+
+Görüntüde, **MAP@5** metriği için kullanılan formülün bir versiyonu yer alıyor. Bu formül, öneri sistemlerinde doğruluğun değerlendirilmesi için kullanılır ve şu şekilde ifade edilebilir:
+
+$$
+\text{MAP@5} = \frac{1}{|U|} \sum_{u=1}^{|U|} \sum_{k=1}^{\min(5, n)} P(k)
+$$
+
+Bu formülde:
+
+* **|U|**, kullanıcı sayısını,
+* **P(k)**, k'ncı tahminin doğruluğunu,
+* **n**, tahmin edilen öğe sayısını,
+* **min(5, n)**, en fazla 5 tahmin yapılmasını belirler.
+
+Bu açıklama biraz daha karmaşık olsa da, formül aslında **MAP@K**'nin tüm tahminler üzerindeki **AP@K** değerlendirmelerinin ortalamasını ifade ettiğini gösterir.
+
+Bu özel metriklerin, regresyon ve sınıflandırma metrikleri üzerindeki genel bakışımızı tamamladıktan sonra, bir **Kaggle yarışmasında** değerlendirme metrikleriyle nasıl başa çıkılacağına dair tartışmaya geçelim.
+
 ### Optimizing evaluation metrics *(Değerlendirme metriklerini optimize etme)*
+
+
 
 ### Custom metrics and custom objective functions *(Özel metrikler ve özel hedef fonksiyonları)*
 
