@@ -3931,9 +3931,92 @@ Ayrıca, bu yarışmalarda öne çıkmanıza yardımcı olacak **özellik mühen
 
 ## Chapter 7: Modeling for Tabular Competitions *(Bölüm 7: Tablo Verisi Yarışmaları İçin Modellemede Yaklaşımlar)*
 
+2017 yılına kadar, yarışma türleri arasında çok fazla ayrım yapmaya gerek yoktu ve yarışmaların büyük çoğunluğu **tablosal verilere** dayandığı için Kaggle forumlarında "tablosal yarışmalar" diye bir ifade bile bulamazdınız. Aniden bir şeyler değişti. Görece bir yarışma kıtlığının ardından (bkz. [https://www.kaggle.com/general/49904](https://www.kaggle.com/general/49904)), **derin öğrenme** (deep learning) yarışmaları üstünlük sağladı ve tablosal yarışmalar nadir hale gelerek pek çok kişiyi hayal kırıklığına uğrattı. O kadar nadir hale geldiler ki, Kaggle kısa süre önce sentetik verilere dayalı bir dizi tablosal yarışma başlatmak zorunda kaldı. Ne oldu?
+
+2017-2018'e gelindiğinde, veri bilimi tam olgunluğa erişmişti ve birçok şirket kendi veri yolculuklarına başlamıştı. Veri bilimi hala sıcak bir konuydu, ancak artık o kadar da sıra dışı değildi. O zamanlar Kaggle'ı yıllardır dolduran sorunlara benzer sorunların çözümleri, birçok şirkette **standart bir uygulama** haline gelmişti. Bu koşullar altında, sponsorlar artık dışarıdan tablosal yarışmalar düzenlemeye daha az motive oldular, çünkü zaten aynı sorunlarla **içeride** baş ediyorlardı. Buna karşılık, derin öğrenme hala büyük ölçüde keşfedilmemiş bir alandır ve uzun bir süre daha öyle kalmaya devam edecektir, bu nedenle en son teknolojiyi zorlamak ve yeni bir şeyin ortaya çıkıp çıkmadığını görmek için yarışmalar başlatmak mantıklıdır.
+
+Bu bölümde **tablosal yarışmaları** ele alacağız. Bazı ünlü tarihi yarışmalara değinecek ve ayrıca **Tabular Playground Series**'in daha yeni gerçekliğine odaklanacağız, çünkü tablosal problemler çoğu veri bilimci için standart uygulamadır ve Kaggle'dan gerçekten öğrenilecek çok şey vardır. **Keşifçi Veri Analizi (EDA)** ve **Özellik Mühendisliği (Feature Engineering)**, bu yarışmalardaki iki yaygın aktiviteyi tartışarak başlayacağız.
+
+Özellik mühendisliği için temel stratejileri sunduktan sonra, **kategorik kodlama, özellik seçimi, hedef dönüşümleri ve sözde etiketleme (pseudo-labeling)** gibi birçok ilgili konuya genişleyeceğiz. Tablosal veriler için derin öğrenme metodolojilerine değinerek, **TabNet** gibi birkaç uzmanlaşmış derin sinir ağını tanıtacak ve bir **gürültü giderici otomatik kodlayıcıyı (denoising autoencoder)** göstereceğiz. Otomatik kodlayıcıların, gerçek dünya uygulamalarında hala marjinal olmasına rağmen, son Kaggle yarışmaları için neden bu kadar alakalı hale geldiğini açıklayacağız.
+
+İşleyeceğimiz konular:
+* **Tabular Playground Series**
+* Tekrarlanabilirlik için **rastgele durum (random state) ayarlama**
+* **EDA'nın önemi**
+* Verilerinizin **boyutunu küçültme**
+* **Özellik mühendisliği** uygulama
+* **Sözde etiketleme (Pseudo-labeling)**
+* **Otomatik kodlayıcılar** ile gürültü giderme
+* Tablosal yarışmalar için **sinir ağları**
+
+Bu bölüm, tablosal yarışmalarla ilgili her konuyu kapsamayacaktır, ancak veri biliminin özünü oluşturdukları için bunları diğer birçok kitapta kolayca bulabilirsiniz. Bu bölümün yapacağı şey, Kaggle'daki tablosal yarışmaları karakterize eden ve Kaggle forumları dışında başka bir yerde kolay kolay bulamayacağınız bir dizi özel teknik ve yaklaşım sunmaktır.
+
 ### The Tabular Playground Series *(Tabular Playground Serisi)*
 
+Tablosal problemlere yönelik büyük talep nedeniyle, Kaggle çalışanları 2021'de bir deney başlattı ve **Tabular Playground Series** adını verdikleri aylık bir yarışma düzenledi. Yarışmalar, halka açık verileri veya önceki yarışmalardan elde edilen verileri kopyalayan **sentetik veri setlerine** dayanıyordu. Sentetik veriler, **CTGAN** adlı derin öğrenme üretken ağı sayesinde oluşturuldu.
+
+> **CTGAN** kodunu [https://github.com/sdv-dev/CTGAN](https://github.com/sdv-dev/CTGAN) adresinde bulabilirsiniz. Ayrıca, tablosal verilerdeki satırların olasılık dağılımını modelleyerek ve ardından gerçekçi sentetik veriler üreterek nasıl çalıştığını açıklayan ilgili bir makale de mevcuttur (bkz. [https://arxiv.org/pdf/1907.00503v2.pdf](https://www.google.com/search?q=https://arxiv.org/pdf/1907.00503v2.pdf)).
+
+
+> MIT girişimi olan **Synthetic Data Vault (SDV)** ([https://sdv.dev/](https://sdv.dev/)), CTGAN'ın arkasındaki teknolojiyi ve etrafındaki oldukça fazla sayıda aracı yarattı. Sonuç, işletmelerin gerçek verileri taklit eden sentetik veriler üretmesine yardımcı olmak için oluşturulmuş bir dizi açık kaynaklı yazılım sistemidir; veri bilimcilerinin gerçek verilere dayalı anonim veri setleri oluşturmasına ve ayrıca modelleme amaçları için mevcut olanları artırmasına yardımcı olabilir.
+
+Kaggle, 2021'de puan, madalya veya ödül (yalnızca bazı promosyon ürünleri) sunmamasına rağmen birçok Kaggle kullanıcısının ilgisini çeken 13 oldukça başarılı yarışma başlattı. İşte 2021 listesi; belirli problemleri türe veya metriğe göre bulmak ve ilgili kaynakları (odaklanmış tartışmalar veya Notebook'lar gibi) aramak için kullanabilirsiniz:
+
+| Ay | Problem | Değişkenler | Metrik | Eksik Veri |
+| :--- | :--- | :--- | :--- | :--- |
+| Ocak 2021 | Belirtilmemiş bir problem üzerine Regresyon | Sayısal | RMSE | Hayır |
+| Şubat 2021 | Bir sigorta talebinin değerini tahmin eden Regresyon | Sayısal ve Kategorik | RMSE | Hayır |
+| Mart 2021 | Bir sigorta talebini tahmin eden İkili Sınıflandırma | Sayısal ve Kategorik | AUC | Hayır |
+| Nisan 2021 | Orijinal **Titanic** veri setine çok benzeyen bir kopyası üzerine İkili Sınıflandırma | Sayısal ve Kategorik | Doğruluk (Accuracy) | Evet |
+| Mayıs 2021 | Listeleme ile ilgili çeşitli nitelikler verildiğinde bir e-ticaret ürünündeki kategoriyi tahmin eden Çoklu Sınıflandırma | Kategorik | Çoklu Sınıf LogLoss | Hayır |
+| Haziran 2021 | Listeleme ile ilgili çeşitli nitelikler verildiğinde bir e-ticaret ürünündeki kategoriyi tahmin eden Çoklu Sınıflandırma | Sayısal ve Kategorik | Çoklu Sınıf LogLoss | Hayır |
+| Temmuz 2021 | Çeşitli girdi sensör değerleri (örneğin, bir zaman serisi) aracılığıyla bir şehirdeki hava kirliliğini tahmin eden Çoklu Regresyon | Sayısal, Zaman | RMSLE | Evet |
+| Ağustos 2021 | Bir kredi temerrüdü (loan default) ile ilişkili kaybı hesaplayan Regresyon | Sayısal | RMSE | Hayır |
+| 30 Gün ML | Bir sigorta talebinin değeri üzerine Regresyon | Sayısal ve Kategorik | RMSE | Hayır |
+| Eylül 2021 | Bir sigorta poliçesi için talepte bulunulup bulunulmayacağını tahmin eden İkili Sınıflandırma | Sayısal | AUC | Evet |
+| Ekim 2021 | Çeşitli kimyasal özellikler verildiğinde moleküllerin biyolojik tepkisini tahmin eden İkili Sınıflandırma | Sayısal ve Kategorik | AUC | Hayır |
+| Kasım 2021 | E-postadan çıkarılan çeşitli özellikler aracılığıyla spam e-postaları tanımlayan İkili Sınıflandırma | Sayısal | AUC | Hayır |
+| Aralık 2021 | Orijinal Forest Cover Type Prediction yarışmasına dayanan Çoklu Sınıflandırma | Sayısal ve Kategorik | Çoklu Sınıflandırma Doğruluğu | Hayır |
+
+Tabular Playground yarışmaları, daha sofistike ve zorlu problemlerle 2022'de de devam etti:
+
+| Ay | Problem | Değişkenler | Metrik | Eksik Veri |
+| :--- | :--- | :--- | :--- | :--- |
+| Ocak 2022 | İki kurgusal bağımsız mağaza zincirinden Kaggle ürünlerinin satışlarını tahmin etme | Tarihler ve Kategorik | Simetrik Ortalama Mutlak Yüzde Hatası (SMAPE) | Hayır |
+| Şubat 2022 | Veri sıkıştırma ve veri kaybı içeren bir genomik analiz tekniğinden elde edilen verileri kullanarak 10 farklı bakteri türünü sınıflandırma | Sayısal | Kategorizasyon Doğruluğu | Hayır |
+
+Bu bölümün büyük bir kısmı, geçmişteki daha görkemli yarışmaları analiz etmek yerine, bu yarışmalarda ortaya çıkan kod ve tartışmalar gözlemlenerek yazılmıştır. Belirttiğimiz gibi, değişen profesyonel ortam göz önüne alındığında, tablosal yarışmaların gerçekten ortadan kalktığına ve geçmişten ziyade **şimdiki zamana ilişkin öneri ve ipuçlarını** okumanın sizin için daha yararlı olacağına inanıyoruz.
+
+Kaggle puanları ve madalyaları içeren diğer tam teşekküllü yarışmalarda olduğu gibi, tablosal yarışmalarda da kitabın başka bir yerinde tartıştığımız basit ama çok etkili bir süreç (pipeline) izlemenizi öneririz:
+
+  * **Keşifçi Veri Analizi (EDA)**
+  * **Veri Hazırlama**
+  * **Modelleme** (model doğrulaması için bir çapraz doğrulama stratejisi kullanarak)
+  * **İşlem Sonrası (Post-processing)**
+  * **Gönderim (Submission)**
+
+Kural olarak, ayrıca **tekrarlanabilirliği** sağlamaya ve tüm modelleri (her bir katmandan/fold'dan), kullanılan parametrelerin listesini, tüm katman tahminlerini, katman dışı (out-of-fold) tahminlerin tümünü ve tüm veriler üzerinde eğitilmiş modellerden gelen tüm tahminleri kaydetmeye özen göstermelisiniz.
+
+Tüm bu bilgileri, örneğin uygun etiketleme kullanarak, **MD5 karma değerlerini** takip ederek (ayrıntılar için bu Stack Overflow yanıtına bakabilirsiniz: [https://stackoverflow.com/questions/16874598/how-do-i-calculate-the-md5-checksum-of-a-file-in-python](https://stackoverflow.com/questions/16874598/how-do-i-calculate-the-md5-checksum-of-a-file-in-python)) ve her deneyden elde edilen **CV puanlarını ve liderlik tablosu sonuçlarını** izleyerek, kurtarılması ve yeniden yapılandırılması kolay olacak şekilde kaydetmelisiniz. Kaggle kullanıcılarının çoğu bunu .txt dosyaları veya Excel elektronik tabloları gibi basit araçlarla yapar, ancak aşağıdakiler gibi daha sofistike yollar da mevcuttur:
+
+  * DVC ([https://dvc.org/](https://dvc.org/))
+  * Weights and Biases ([https://wandb.ai/site](https://wandb.ai/site))
+  * MLflow ([https://mlflow.org/](https://mlflow.org/))
+  * Neptune ([https://neptune.ai/experiment-tracking](https://neptune.ai/experiment-tracking))
+
+Sonuçta, önemli olan kullandığınız araç değil, **sonuçlardır**, bu yüzden bir yarışmanın heyecanı içinde bile deneylerinizde ve modellerinizde düzeni sağlamak için elinizden geleni yapın.
+
+Devam etmeden önce, Kaggle'ın bu yarışmalar için verileri oluşturmak için kullandığı teknolojiyi de düşünün; **verilerin nasıl oluşturulduğunu doğru bir şekilde anlayabilirseniz**, önemli bir avantaj elde edersiniz. Buna ek olarak, sentetik verilerin nasıl çalıştığını anlamak, gerçek dünyada veri bilimi yapma şekliniz üzerinde gerçekten bir etki yaratabilir, çünkü size eğitim için daha çeşitli verileri kolayca elde etme yolu sunar.
+
+> Örneğin, **Google Brain – Ventilator Pressure Prediction** yarışmasını ([https://www.kaggle.com/c/ventilator-pressure-prediction](https://www.kaggle.com/c/ventilator-pressure-prediction)) ele alalım. Bu yarışmada, mekanik ventilasyon kontrolü için makine öğrenimi geliştirmeniz gerekiyordu.
+>
+> Sağlanan verileri derin öğrenme ile modelleyerek iyi sonuçlar elde edebilmenize rağmen, verilerin sentetik kökeni göz önüne alındığında, **üretici sürecini tersine mühendislikle çözebilir** ve Jun Koda'nın ([https://www.kaggle.com/junkoda](https://www.kaggle.com/junkoda)) yaptığı ve gönderisinde açıkladığı gibi liderlik tablosunda en üst sıralarda yer alan bir sonuç elde edebilirdiniz: [https://www.kaggle.com/c/ventilator-pressure-prediction/discussion/285278](https://www.google.com/search?q=https://www.kaggle.com/c/ventilator-pressure-prediction/discussion/285278).
+
+Yapay verileri kendi başınıza üretmek ve sentetik verileri anlamak hiç bu kadar kolay olmamıştı; Dariush Bahrami ([https://www.kaggle.com/dariushbahrami](https://www.kaggle.com/dariushbahrami)) tarafından orijinal olarak kodlanmış ve test edilmiş bir Notebook'tan türetilen bu Notebook'tan ([https://www.kaggle.com/lucamassaron/how-to-use-ctgan-to-generate-more-data](https://www.kaggle.com/lucamassaron/how-to-use-ctgan-to-generate-more-data)) doğrulayabilirsiniz.
+
 ### Setting a random state for reproducibility *(Tekrarlanabilirlik için rastgele durum belirleme)*
+
+
 
 ### The importance of EDA *(Keşifsel veri analizinin önemi)*
 
