@@ -3848,11 +3848,84 @@ Sonuç olarak, adversarial doğrulama, doğru test verisini seçmek ve test seti
 
 ### Handling leakage *(Veri sızıntısını önleme)*
 
+Kaggle yarışmalarında sonucu etkileyebilecek yaygın bir sorun **veri sızıntısı**dır. Genellikle basitçe **sızıntı** (leakage) olarak veya başka süslü isimlerle (örneğin, **golden features - altın özellikler**) anılan veri sızıntısı, eğitim aşamasında mevcut olan ancak **tahmin anında kullanılamayacak** bilgileri içerir. Böyle bir bilginin (sızıntının) varlığı, modelinizin eğitimde ve testte aşırı performans göstermesine izin vererek sizi yarışmada üst sıralara taşıyacak, ancak sponsörün bakış açısından bu bilgiye dayalı herhangi bir çözümü **kullanılmaz** veya en iyi ihtimalle **en iyi olmayan** hale getirecektir.
+
+> Michael Kim'in ([https://www.kaggle.com/mikeskim](https://www.kaggle.com/mikeskim)) 2019'da Kaggle Days San Francisco'daki sunumunda belirttiği gibi, sızıntıyı "**gerçek hakkında bilgi, yapay ve kasıtsız olarak eğitim özellik verilerine veya eğitim meta verilerine dahil edildiğinde**" şeklinde tanımlayabiliriz.
+
+Sponsor ve Kaggle ekibinin dikkatli kontrolüne rağmen, sızıntının beklenmedik bir şekilde ortaya çıkabilen **ince ve sinsi doğası** nedeniyle, Kaggle yarışmalarında sızıntı sıkça bulunur. Bu durum, her zaman bir yarışmada daha iyi puan almanın yollarını arayan Kaggle katılımcılarının yürüttüğü yoğun arama faaliyetinden kaynaklanmaktadır.
+
+> **Veri sızıntısını, sızıntılı bir doğrulama stratejisiyle karıştırmayın.** Sızıntılı bir doğrulama stratejisinde, sorun, bazı bilgilerin eğitim verilerinden sızması nedeniyle doğrulama stratejinizi daha iyi doğrulama puanlarını destekleyecek şekilde düzenlemiş olmanızdır. Bu, yarışmanın kendisiyle ilgili değildir, ancak doğrulamanızı nasıl ele aldığınızla ilgilidir. Bu, verilerinizi (normalleştirme, boyutluluk azaltma, eksik değer doldurma) eğitim ve doğrulama veya test verilerini ayırmadan **önce** değiştiren herhangi bir ön işleme uygulamanız durumunda ortaya çıkar.
+> Sızıntılı doğrulamayı önlemek için, verilerinizi manipüle etmek ve işlemek için **Scikit-learn** kullanıyorsanız, doğrulama verilerinizi kesinlikle herhangi bir **uyumlandırma (fitting) işleminden** hariç tutmalısınız. Uyumlama işlemleri, doğrulama için kullandığınız herhangi bir veriye uygulanırsa sızıntı oluşturma eğilimindedir. Bunu önlemenin en iyi yolu, hem veri işleme hem de modeli bir araya getirecek olan Scikit-learn **pipelines** ([https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html)) kullanmaktır, böylece verilerinize yanlışlıkla herhangi bir sızıntı oluşturan dönüşüm uygulama riskini ortadan kaldırırsınız.
+> Buna karşılık, veri sızıntısı, doğrulama işlemlerinden kesinlikle kaynaklanmaz, ancak onları derinden etkiler. Bu bölüm esas olarak doğrulama stratejilerine ayrılmış olsa da, modellerinizi ve genelleme yeteneklerini derinden etkileyebileceği için veri sızıntısını tartışmayı gerekli görüyoruz.
+
+Genel olarak konuşursak, sızıntı **özellik (feature)** veya **örnek (example)** düzeyinde ortaya çıkabilir. **Özellik sızıntısı** açık ara en yaygın olanıdır. Hedefin bir vekilinin (proxy) varlığından veya hedefin kendisine **sonradan gelen** bir özellikten kaynaklanabilir. Bir hedef vekili, etiketin kendisinin işlenmesinden veya test ayırma sürecinden türetilmiş herhangi bir şey olabilir; örneğin, tanımlayıcılar belirlenirken, belirli tanımlayıcılar (bir numaralandırma yayı gibi) belirli hedef yanıtlarıyla ilişkilendirilebilir, bu da doğru şekilde işlenen bilgiyle beslenirse modelin tahmin etmesini kolaylaştırır. Veri işlemenin sızıntıya neden olabileceği daha incelikli bir yol, yarışma organizatörlerinin eğitim ve test setlerini **ayırmadan önce birlikte işlemesidir**. Tarihsel olarak, Kaggle yarışmalarındaki sızıntılar şunlarda bulunmuştur:
+
+1.  Organizasyon ekibinin **yanlış ele alınmış veri hazırlığı**, özellikle eğitim ve test verilerinin birleşimi üzerinde çalıştıklarında (örneğin, Loan Default Prediction'da, organizatörler başlangıçta **gelecekteki bilgileri sızdıran** toplu geçmiş verilere sahip özellikler kullandılar).
+2.  **Satır sırasının** bir zaman endeksi veya belirli veri gruplarıyla bağlantılı olması (örneğin, Telstra Network Disruptions'da, bir özellikteki kayıtların sırası, veride bulunmayan ve çok tahmine dayalı olan bir vekil bilgiye, **konuma**, işaret ediyordu).
+3.  **Sütun sırasının** bir zaman endeksiyle bağlantılı olması (sütunları satır olarak kullanarak ipuçları elde edebilirsiniz).
+4.  **Ardışık satırlardaki özellik tekrarı**, korelasyonlu yanıtlara sahip örneklere işaret edebileceği için (Bosch Production Line Performance'da olduğu gibi).
+5.  **Görüntü meta verileri** (Two Sigma Connect: Rental Listing Inquiries'da olduğu gibi).
+6.  **Hash'ler** veya kodlamaların ve tanımlayıcıların diğer kolayca kırılabilir anonimleştirme uygulamaları.
+
+**Sonradan gelen bilgiyle** ilgili sorun, zamanın etkilerini ve zaman boyunca uzanan neden-sonuç dizisini dikkate almadığımızda bilgiyle başa çıkma şeklimizden kaynaklanır. Geçmişe baktığımız için, şimdiki anda anlam ifade eden bazı değişkenlerin geçmişte bir değeri olmadığını sık sık unuturuz. Örneğin, yeni bir şirkete kredi için kredi puanı hesaplamanız gerekiyorsa, ödünç alınan paranın ödemelerinin sıklıkla geç olduğunu bilmek, borçlunun daha düşük güvenilirliğinin ve temsil ettiği daha yüksek riskin harika bir göstergesidir, ancak bunu parayı ödünç vermeden **önce** bilemezsiniz. Bu, projelerinizde şirket veritabanlarını analiz ederken de sıkça karşılaşacağınız bir sorundur: sorguladığınız veriler geçmiş durumları değil, **şimdiki durumları** temsil edecektir. Geçmiş bilgileri yeniden oluşturmak, yalnızca belirli bir zamanda mevcut olan bilgileri almak istediğinizi belirtemezseniz de zor bir görev olabilir. Bu nedenle, herhangi bir model oluşturmadan önce bu sızıntı yapan özellikleri bulmaya ve hariç tutmaya veya ayarlamaya büyük çaba harcanmalıdır.
+
+Benzer sorunlar, aynı tür verilere (örneğin, bankacılık veya sigorta) dayalı Kaggle yarışmalarında da yaygındır, ancak verilerin yarışma için hazırlanmasına çok dikkat edildiğinden, daha incelikli yollarla ve biçimlerde ortaya çıkarlar. Genel olarak, bu sızıntı yapan özellikleri tespit etmek kolaydır, çünkü hedefle güçlü bir şekilde ilişkilidirler ve bir alan uzmanı nedenini çözebilir (örneğin, verilerin veritabanlarında hangi aşamada kaydedildiğini bilmek). Bu nedenle, yarışmalarda asla bu kadar bariz özellikler bulamazsınız, ancak sponsorun kontrolünden kaçan, genellikle dönüştürülmüş veya işlenmiş, bunların türevlerini bulursunuz. Özellikler, sponsorun işini korumak için genellikle anonimleştirildiğinden, diğerlerinin arasında gizlenmiş olarak kalırlar. Bu, **altın/sihirli özellikler** için bir dizi avın doğmasına neden olmuştur, yani sızıntının ortaya çıkması için veri kümesindeki mevcut özellikleri birleştirme arayışı.
+
+> Corey Levison'ın aydınlatıcı bir yazısını buradan okuyabilirsiniz: [https://www.linkedin.com/pulse/winning-13th-place-kaggles-magic-competition-coreylevinson/](https://www.google.com/search?q=https://www.linkedin.com/pulse/winning-13th-place-kaggles-magic-competition-coreylevinson/). Bu, Santander Customer Transaction Prediction yarışmasının ekibi için nasıl sihirli özellikler avına dönüştüğünün hikayesini anlatıyor.
+> 
+> 
+> 
+> Başka bir iyi örnek dune\_dweller tarafından burada sunulmuştur: [https://www.kaggle.com/c/telstra-recruiting-network/discussion/19239\#109766](https://www.google.com/search?q=https://www.kaggle.com/c/telstra-recruiting-network/discussion/19239%23109766). dune\_dweller, verilerin nasıl sıralandığına bakarak, verilerin büyük olasılıkla zaman sırasına göre olduğunu buldu. Bu bilgiyi yeni bir özelliğe koymak puanı artırdı.
+
+Sızıntının diğer ortaya çıkma yolu ise **eğitim örneği sızıntısıdır**. Bu, özellikle **i.i.d olmayan (bağımsız ve özdeş dağılımlı olmayan)** verilerde olur. Bu, bazı vakaların aynı dönemden (veya ardışık olanlardan) veya aynı gruptan olmaları nedeniyle kendi aralarında korelasyonlu olduğu anlamına gelir. Bu tür vakaların hepsi eğitim veya test verilerinde bir arada değil, aralarında ayrılmışlarsa, makine öğrenimi algoritmasının genel kurallar kullanmak yerine vakaları nasıl tespit edeceğini (ve tahminleri nasıl türeteceğini) öğrenme şansı yüksektir. Böyle bir durumun sıkça bahsedilen bir örneği, Prof. Andrew Ng'nin ekibini içerir (bkz. [https://twitter.com/nizkroberts/status/931121395748270080](https://twitter.com/nizkroberts/status/931121395748270080)). 2017'de, 30.000 hastadan alınan 100.000 röntgen görüntüsünden oluşan bir veri kümesi kullanarak bir makale yazdılar. Eğitim ve test verilerini ayırmak için rastgele bir bölme kullandılar, ancak aynı hastanın röntgenlerinin kısmen eğitim setinde ve kısmen test setinde olabileceğini fark etmediler. Nick Roberts gibi uygulayıcılar bu gerçeği fark ederek, modelin performanslarını şişirebilecek olası bir sızıntıya dikkat çekti ve bu da makalenin önemli ölçüde revize edilmesine yol açtı.
+
+Kaggle yarışmasında veri sızıntısı olduğunda ne olur? Kaggle'ın bu konuda net politikaları vardır ve ya:
+
+  * Yarışmanın olduğu gibi devam etmesine izin verir (özellikle sızıntının yalnızca küçük bir etkisi varsa)
+  * Sızıntıyı setten kaldırır ve yarışmayı yeniden başlatır
+  * Sızıntının bulunmadığı yeni bir test seti oluşturur
+
+Özellikle, Kaggle bulunan herhangi bir sızıntıyı **kamuya açıklamayı** tavsiye eder, ancak bu zorunlu değildir veya yapılmazsa yaptırım uygulanmaz. Ancak, deneyimlerimize göre, bir yarışmada herhangi bir sızıntı varsa, yakında çok belirgin hale gelecek ve tartışma forumları sihirli şeyler ve benzerleri hakkında bir tartışmayla aydınlanmaya başlayacaktır. Forumlarda söylenenlere dikkat ederseniz ve farklı Kaggle katılımcıları tarafından sağlanan tüm ipuçlarını bir araya getirebilirseniz, kısa sürede bileceksiniz.
+
+Ancak, bazı oyuncuların diğer yarışmacıları ciddi modellemeden uzaklaştırmak için sihirli özellikler hakkındaki tartışmaları bile kullanabileceğine lütfen dikkat edin. Örneğin, Santander Customer Transaction Prediction'da, bazı Kaggle katılımcılarının diğer katılımcıları aslında o kadar da sihirli olmayan sihirli özelliklere ilgi duymaya teşvik ettiği, çabalarını yanlış yöne yönlendirdiği ünlü bir durum vardı (tartışmaya buradan bakın: [https://www.kaggle.com/c/santander-customer-transaction-prediction/discussion/87057\#502362](https://www.google.com/search?q=https://www.kaggle.com/c/santander-customer-transaction-prediction/discussion/87057%23502362)).
+
+Önerimiz, yarışma forumunda ortaya çıkan sızıntı ve sihirli özellikler hakkındaki tartışmaları dikkatlice okumanız ve yarışmaya katılma ilgi ve motivasyonlarınıza dayanarak araştırmayı sürdürüp sürdürmemeye ve bulunan herhangi bir sızıntıyı kullanıp kullanmamaya karar vermenizdir.
+
+Herhangi bir sızıntıyı kullanmamak, nihai sıralamanıza gerçekten zarar verebilir, ancak öğrenme deneyiminizi kesinlikle bozacaktır (çünkü sızıntı bir çarpıtmadır ve onu kullanan modeller hakkında herhangi bir iddiada bulunamazsınız). Bir itibar kazanmak veya daha sonra bir işe alınma fırsatı için sponsora yaklaşmak amacıyla bir yarışmaya katılmıyorsanız, karşılaştığınız herhangi bir sızıntıyı kullanmanız tamamen normaldir. Aksi takdirde, onu görmezden gelin ve modelleriniz üzerinde sıkı çalışmaya devam edin (kim bilir; belki Kaggle sonunda yarışmayı sıfırlar veya düzeltir, sızıntıyı kullanan birçok kişinin büyük hayal kırıklığına uğramasına neden olur).
+
+> Sızıntılar, yarışmadan yarışmaya çok farklıdır. Kaggle yarışmalarında gerçekleşen birkaç gerçek sızıntı hakkında fikir edinmek isterseniz, bu üç unutulmaz örneğe bakabilirsiniz:
+> 
+> 
+> 
+> * [https://www.kaggle.com/c/predicting-red-hat-business-value/discussion/22807](https://www.google.com/search?q=https://www.kaggle.com/c/predicting-red-hat-business-value/discussion/22807) Predicting Red Hat Business Value'dan, sorunun yarışmanın kusurlu bir eğitim/test bölme metodolojisinden kaynaklandığı yer.
+> 
+> * [https://www.kaggle.com/c/talkingdata-mobile-user-demographics/discussion/23403](https://www.google.com/search?q=https://www.kaggle.com/c/talkingdata-mobile-user-demographics/discussion/23403) TalkingData Mobile User Demographics'ten, bir dizi sorun ve i.i.d olmayan vakaların yarışmanın doğru eğitim/test bölmesini etkilediği yer.
+> 
+> * [https://www.kaggle.com/c/two-sigma-connect-rental-listing-inquiries/discussion/31870](https://www.google.com/search?q=https://www.kaggle.com/c/two-sigma-connect-rental-listing-inquiries/discussion/31870) Two Sigma Connect: Rental Listing Inquiries'dan, meta verilerin (her klasörün oluşturulma zamanı) işe yaradığı yer.
 
 
 ### Summary *(Özet)*
 
+Bölümün sonuna gelmiş bulunuyoruz, bu nedenle doğrulama (validation) stratejinizi düzenleyebilmeniz ve bir yarışmanın sonuna göndereceğiniz birkaç uygun modelle ulaşabilmeniz için yolda tartıştığımız tavsiyeleri özetleyeceğiz.
 
+Bu bölümde, öncelikle **halka açık liderlik tablosunun (public leaderboard) dinamiklerini** analiz ettik, uyarlanabilir aşırı öğrenme (adaptive overfitting) ve büyük değişiklikler (shake-ups) gibi sorunları araştırdık. Ardından, bir veri bilimi yarışmasında doğrulamanın önemini, **güvenilir bir sistem oluşturmayı**, bunu liderlik tablosuna göre ayarlamayı ve ardından çabalarınızın kaydını tutmayı tartıştık.
+
+Çeşitli doğrulama stratejilerini tartıştık ve **hiperparametrelerinizi ayarlamanın** ve test verilerinizi veya doğrulama bölümlerinizi **düşmanca doğrulama (adversarial validation)** kullanarak kontrol etmenin en iyi yolunu da gördük.
+
+Son olarak, **Kaggle yarışmalarında karşılaşılan bazı veri sızıntılarını (leakages)** tartıştık ve bunlarla nasıl başa çıkılacağına dair tavsiyeler sunduk.
+
+İşte kapanış önerilerimiz:
+
+* Daima yarışmanın ilk kısmını, **güvenilir bir doğrulama şeması oluşturmaya** ayırın. Olasılıksal doğası ve daha önce görülmemiş verilere genelleme yeteneği göz önüne alındığında, bir **eğitim-test bölmesinden (train-test split) ziyade k-katlı çapraz doğrulama (k-fold)** yöntemini tercih edin.
+* Doğrulama şemanız **kararsızsa**, daha fazla kat (fold) kullanın veya farklı veri bölmeleriyle **birden çok kez çalıştırın**. Test setinizi daima düşmanca doğrulama kullanarak kontrol edin.
+* Hem doğrulama şemanıza hem de liderlik tablosuna dayalı olarak **sonuçların kaydını tutun**. Olası optimizasyonlar ve çığır açıcı buluşlar (sihirli özellikler veya sızıntılar gibi) için **doğrulama puanınıza daha çok güvenin**.
+* Bölümün başında açıkladığımız gibi, yarışmaya yapacağınız **nihai gönderimlerinize karar verirken doğrulama puanlarınızı kullanın**. Nihai gönderimleriniz için, duruma ve liderlik tablosuna güvenip güvenmediğinize bağlı olarak, **en iyi yerel çapraz doğrulama yapılmış modelleriniz** ve liderlik tablosunda iyi puan alan gönderimleriniz arasından seçim yapın, **birinciyi ikinciye tercih edin**.
+
+---
+
+Bu yolculuğumuzun bu noktasında, satırların örnekleri (examples) ve sütunların özellikleri (features) temsil ettiği matrisler halinde düzenlenmiş sayısal veya kategorik veriler olan **tablosal verilerle** yarışmalara nasıl yaklaşacağımızı tartışmaya hazırız. Bir sonraki bölümde, Kaggle tarafından tablosal veriler kullanılarak düzenlenen aylık bir yarışma olan **Tabular Playground Series**'i (Inversion tarafından organize edilmiştir: [https://www.kaggle.com/inversion](https://www.kaggle.com/inversion)) tartışacağız.
+
+Ayrıca, bu yarışmalarda öne çıkmanıza yardımcı olacak **özellik mühendisliği (feature engineering), hedef kodlama (target encoding), gürültü giderici otomatik kodlayıcılar (denoising autoencoders)** ve tablosal veri sorunlarında kabul görmüş son teknoloji öğrenme algoritmalarına (XGBoost, LightGBM veya CatBoost gibi gradyan artırma algoritmaları) bir alternatif olarak **tablosal veriler için bazı sinir ağları** gibi bazı özel teknikleri tanıtacağız.
 
 ---
 
