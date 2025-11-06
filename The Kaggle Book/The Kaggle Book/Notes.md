@@ -1662,7 +1662,20 @@ Bir sonraki bölümde, Kaggle'da fikir ve görüşlerinizi paylaşmanın birinci
 
 ## Chapter 4: Leveraging Discussion Forums *(Bölüm 4: Tartışma Forumlarını Etkin Kullanma)*
 
+Tartışma forumları, Kaggle'daki bilgi alışverişinin birincil aracıdır. İster devam eden bir yarışmayı tartışmak, ister bir Veri Seti hakkında konuşmak, isterse yeni bir yaklaşım sunan bir Notebook'u ele almak olsun, Kaggle kullanıcıları her zaman bir şeyler hakkında konuşurlar.
+
+Bu bölümde, tartışma forumlarını tanıtıyoruz: nasıl organize olduklarını ve içindeki bilgilerin nasıl kullanılacağını düzenleyen davranış kurallarını. Aşağıdaki konuları ele alacağız:
+• Forumların nasıl çalıştığı
+• Örnek yarışmalar için tartışma yaklaşımları
+• İnternette uygun davranış (Netik)
+
 ### How forums work *(Forumlar nasıl çalışır)*
+
+Tartışma forumuna birkaç farklı şekilde girebilirsiniz. En doğrudan yol, sol paneldeki **Tartışmalar** sekmesine tıklamaktır:
+
+![](im/1034.png)
+
+
 
 ### Example discussion approaches *(Tartışma örnekleri ve yaklaşımlar)*
 
