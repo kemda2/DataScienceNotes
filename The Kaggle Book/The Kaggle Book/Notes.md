@@ -4016,7 +4016,43 @@ Yapay verileri kendi başınıza üretmek ve sentetik verileri anlamak hiç bu k
 
 ### Setting a random state for reproducibility *(Tekrarlanabilirlik için rastgele durum belirleme)*
 
+Tablosal bir yarışmada kullanabileceğiniz adımları ve modelleri tartışmaya başlamadan önce, yukarıda bahsettiğimiz **tekrarlanabilirlik** temasına geri dönmek faydalı olacaktır.
 
+Kaggle Notebook'larında gördüğünüz çoğu komutta, **rastgele durum (random state)** olarak bir sayı, yani bir **çekirdek (seed)** bildiren bir parametre bulacaksınız. Bu ayar, sonuçlarınızın **tekrarlanabilirliği** için önemlidir. Birçok algoritma deterministik (belirlenimci) değil, rastgeleliğe dayandığı için, bir çekirdek ayarlayarak rastgele üreticinin davranışını etkiler, böylece rastgeleliğini **öngörülebilir** hale getirirsiniz: aynı rastgele çekirdek, aynı rastgele sayı dizisine karşılık gelir. Başka bir deyişle, aynı kodun her çalıştırılmasından sonra aynı sonuçları almanızı sağlar.
+
+Bu nedenle, Scikit-learn'deki tüm makine öğrenimi algoritmalarında ve Scikit-learn uyumlu tüm modellerde (en popüler olanlardan bahsetmek gerekirse, örneğin **XGBoost, LightGBM** ve **CatBoost**) bir rastgele çekirdek ayarlama parametresi bulursunuz.
+
+Sonuçların tekrarlanabilirliği, gerçek dünya projelerinde olduğu kadar Kaggle yarışmalarında da önemlidir. Gerçek dünyada, tekrarlanabilir bir modele sahip olmak, model geliştirmenin daha iyi izlenmesine ve tutarlılığa olanak tanır. Kaggle yarışmalarında, tekrarlanabilirlik, modellerinizdeki herhangi bir varyasyon kaynağını kontrol ettiğiniz için **hipotezleri daha iyi test etmenize** yardımcı olur. Örneğin, yeni bir özellik oluşturduysanız, bunu tekrarlanabilir bir sürece (pipeline) dahil etmek, özelliğin avantajlı olup olmadığını anlamanıza yardımcı olacaktır. Modeldeki herhangi bir iyileşmenin veya kötüleşmenin yalnızca özelliğe atfedilebileceğinden ve modeli en son çalıştırdığınızdan beri değişen bazı rastgele süreçlerin etkilerine atfedilemeyeceğinden emin olursunuz.
+
+Yine, tekrarlanabilirlik **halka açık Notebook'larla** uğraşırken sizin avantajınıza kullanılabilir. Çoğu zaman, bu Notebook'lar **0, 1 veya 42** gibi sabit bir çekirdeğe sahip olacaktır. **42** değeri oldukça popülerdir çünkü Douglas Adam'ın *Otostopçunun Galaksi Rehberi*'ne bir göndermedir; kitapta, 7,5 milyon yıllık bir süre boyunca Deep Thought adlı devasa bir süper bilgisayar tarafından hesaplanan "Hayatın, Evrenin ve Her Şeyin Nihai Sorununa Cevap"tır. Şimdi, bir yarışmadaki herkes aynı rastgele çekirdeği kullanıyorsa, bunun çifte bir etkisi olabilir:
+
+* Rastgele çekirdek, halka açık liderlik tablosuyla **çok iyi çalışıyor olabilir**, bu da **aşırı öğrenme (overfitting)** anlamına gelir.
+* Birçok Kaggle kullanıcısı benzer sonuçlar üretecek ve bu da onların özel liderlik tablosundaki sıralamalarını aynı şekilde etkileyecektir.
+
+Rastgele çekirdeği değiştirerek, aşırı öğrenmeyi önlemiş ve aynı zamanda **sıralamayı bozmuş** olursunuz; başka bir deyişle, herkesten farklı sonuçlar alırsınız, bu da sonuçta size bir avantaj sağlayabilir. Ek olarak, bir Kaggle yarışmasını kazanırsanız, modellerinizin kazanan gönderimi nasıl ürettiğini göstermeniz gerekir, bu nedenle ödülünüzü hızlı bir şekilde almak istiyorsanız her şeyin tamamen **tekrarlanabilir** olması çok önemlidir.
+
+**TensorFlow** ve **PyTorch** modelleri açıkça bir rastgele çekirdek parametresi kullanmaz, bu nedenle bunların tam tekrarlanabilirliğini sağlamak daha zordur. Aşağıdaki kod parçacığı, çalıştırıldığında TensorFlow ve PyTorch modelleri için aynı rastgele çekirdeği ayarlar:
+
+```python
+def seed_everything(seed,
+                    tensorflow_init=True,
+                    pytorch_init=True):
+    """
+    Sonuçların tekrarlanabilirliği için temel parametreleri çekirdekler.
+    """
+    random.seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    np.random.seed(seed)
+    if tensorflow_init is True:
+        tf.random.set_seed(seed)
+    if pytorch_init is True:
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+```
+
+Scikit-learn'e gelince, bunun yerine, izin verildiği durumlarda, **`random_state`** parametresini kullanarak rastgele çekirdeği doğrudan sınıfta veya fonksiyonda ayarlamak tavsiye edilir.
 
 ### The importance of EDA *(Keşifsel veri analizinin önemi)*
 
