@@ -3632,6 +3632,53 @@ Sonuç olarak, bootstrap, çapraz doğrulamaya bir alternatif olarak değerlendi
 
 ### Tuning your model validation system *(Model doğrulama sistemini ayarlamak)*
 
+Bu noktada, tüm olası doğrulama stratejilerinin tam bir genel bakışını elde etmiş olmalısınız. Bir yarışmaya yaklaştığınızda, doğrulama stratejinizi belirler ve uygularsınız. Ardından, seçtiğiniz stratejinin doğru olup olmadığını test edersiniz.
+Altın kural olarak, doğrulama stratejinizi belirlerken, yarışmanın organizatörlerinin veriyi eğitim, özel ve genel test setlerine ayırma yaklaşımını taklit etmeye çalışmalısınız. Kendinize şu soruları sorun: Organizatorler veriyi nasıl ayırmış? Rastgele bir örneklem mi almışlar? Verinin belirli bir dağılımını mı korumaya çalışmışlar? Test setleri gerçekten eğitim verisi ile aynı dağılımdan mı seçilmiş?
+Bunlar, gerçek dünya projelerinde kendinize sormayacağınız sorulardır. Gerçek dünya projelerinde amacınız her koşulda genelleme yapabilmektir, ancak bir yarışma çok daha dar bir odakla, modelin verilen test setinde (özellikle özel test seti) nasıl performans gösterdiği üzerine yoğunlaşır. Başlangıçtan itibaren bu düşünceye odaklanırsanız, en iyi doğrulama stratejisini bulma şansınız daha yüksek olur ve bu da sizi yarışmada daha yüksek sıralara taşıyabilir.
+Bu süreç deneme-yanılma yöntemidir, bu yüzden yarışma için en iyi doğrulama stratejisini bulmaya çalışırken, doğru yolda olup olmadığınızı anlamak için aşağıdaki iki tutarlılık kontrolünü sistematik olarak uygulayabilirsiniz:
+
+1. **Yerel testlerinizin tutarlılığını kontrol etmelisiniz**. Yani, tek bir çapraz doğrulama katmanındaki hata oranlarının birbirinden çok farklı olmadığından emin olmalısınız veya basit bir eğitim-test bölmesi kullandığınızda, aynı sonuçların farklı eğitim-test bölmeleri kullanılarak tekrarlanabilir olup olmadığını kontrol etmelisiniz.
+2. **Yerel doğrulama hatanızın, genel liderlik panosundaki sonuçlarla tutarlı olup olmadığını kontrol etmelisiniz**.
+   Eğer ilk kontrolü geçemediyseniz, sorunun şu olasılıklardan biri olabileceğini göz önünde bulundurabilirsiniz:
+
+* Eğitim veriniz çok az
+* Veriniz çok çeşitli ve her bir eğitim parçası diğerlerinden çok farklı (örneğin, çok yüksek kardinaliteye sahip özellikleriniz varsa, yani çok fazla seviyeye sahip özellikler – zip kodları gibi – ya da çok değişken dış değerleriniz varsa).
+  Her iki durumda da, modelinizin eğitimi için veriniz yetersizdir.
+  Veri çok çeşitli göründüğü durumlarda bile, öğrenme eğrilerini çizmek, modelinizin daha fazla veriye ihtiyaç duyduğunu size gösterecektir.
+  Bu durumda, daha basit bir algoritmaya geçmenin değerlendirme metriği üzerinde işe yaradığını keşfetmediğiniz sürece (bu durumda varyansı bias ile takas yaparak modelinizin performansını kötüleştirebilirsiniz, ancak her zaman böyle olmayabilir), en iyi seçeneğiniz kapsamlı bir doğrulama yaklaşımı kullanmak olacaktır. Bunu şu şekilde uygulayabilirsiniz:
+* Daha büyük k değerleri kullanmak (bu, k = n olduğunda LOO'ya yaklaşır). Doğrulama sonuçlarınız artık modelinizin görülmemiş veriler üzerinde nasıl performans gösterdiğinden çok, daha büyük eğitim parçaları kullanarak daha kararlı değerlendirmeler yapmanız konusunda olacaktır.
+* Farklı rastgele tohum başlangıçlarıyla seçilen farklı veri bölmeleri temelinde, birden fazla k-katlamalı doğrulamanın sonuçlarını ortalamak.
+* Tekrarlı bootstrap kullanmak.
+  Unutmayın ki, yerel doğrulama sonuçlarınızın kararsız olması durumunda, yalnızca siz bu sorunu yaşamıyorsunuzdur. Genellikle, bu sorun verinin kaynağı ve özelliklerinden dolayı yaygın bir problemdir. Tartışma forumlarına kulak vererek olası çözümler hakkında ipuçları alabilirsiniz. Örneğin, yüksek kardinaliteli özellikler için hedef kodlama (target encoding) iyi bir çözüm olabilir; aykırı değerlerle başa çıkmak için ise stratifikasyon yardımcı olabilir; ve benzeri.
+  İlk kontrolü geçip ikinciyi geçemediyseniz, yerel çapraz doğrulamanız tutarlı ancak liderlik panosundaki sonuçlarla tutarsızsa, bu problemi fark edebilmeniz için tüm deneylerinizi, doğrulama test türlerini, kullanılan rastgele tohumları ve gönderilen tahminlerin liderlik panosundaki sonuçlarını dikkatlice not etmeniz gerekir. Bu şekilde, basit bir dağılım grafiği çizebilir ve doğrusal regresyon uyumlamayı ya da daha basit olarak, yerel sonuçlarınız ile ilişkili genel liderlik panosu skorları arasında bir korelasyon hesaplayabilirsiniz.
+  Tüm bunları not almak ve analiz etmek zaman ve sabır gerektirir, ancak yarışmadaki performanslarınızın en önemli meta-analizini yapmak, sizi başarıya taşıyacak en önemli adımdır.
+  Eğer uyuşmazlık, doğrulama skorunuzun sistematik olarak liderlik panosu skorlarından daha düşük ya da daha yüksek olması nedeniyle ortaya çıkıyorsa, doğrulama stratejinizde eksik bir şeyler olduğuna dair güçlü bir sinyal alıyorsunuz demektir. Ancak bu sorun, modelinizi geliştirmenizi engellemez. Modeliniz üzerinde çalışmaya devam edebilir ve ilerlemelerinizi liderlik panosunda görmek bekleyebilirsiniz, ancak bu her zaman orantılı olmayacaktır. Ancak sistematik farklar her zaman bir kırmızı bayrak anlamına gelir, bu da sizin yaptığınızla organizatörlerin modelinizi test etme yaklaşımı arasında bir fark olduğunu gösterir.
+
+Çok daha kötü bir senaryo, yerel çapraz doğrulama skorlarınızın, liderlik panosundaki geri bildirimle hiçbiriyle korelasyon göstermediği durumdur. Bu gerçekten bir kırmızı bayraktır. Böyle bir durumla karşılaştığınızı fark ettiğinizde, derhal bir dizi test ve araştırma yaparak bunun nedenini anlamaya çalışmalısınız, çünkü bu durum, final sıralamanız için ciddi bir tehdit oluşturur. Böyle bir senaryoda birkaç olasılık vardır:
+
+* Test setinin eğitim setinden farklı bir dağılımdan seçildiğini fark edebilirsiniz. Bu durumda, "adversarial validation" testi (bir sonraki bölümde tartışacağız) size bu konuda aydınlatıcı olabilir.
+* Veriler bağımsız ve aynı dağılımdan (i.i.d.) değil, ancak bu durum açıkça belirtilmemiştir. Örneğin, The Nature Conservancy Fisheries Monitoring yarışmasında ([https://www.kaggle.com/c/the-nature-conservancy-fisheries-monitoring](https://www.kaggle.com/c/the-nature-conservancy-fisheries-monitoring)), eğitim setindeki görüntüler benzer durumlardan (balıkçı tekneleri) alınmıştı. Modelin, görüntülerin bağlamını öğrenmek yerine hedefi tanımamayı engellemek için bu görüntüleri nasıl düzenlemeniz gerektiğini kendiniz keşfetmeniz gerekiyordu (örneğin, Anokas'ın bu çalışmasına bakabilirsiniz: [https://www.kaggle.com/anokas/finding-boatids](https://www.kaggle.com/anokas/finding-boatids)).
+* Özelliklerin çok değişkenli dağılımı aynı olabilir, ancak bazı gruplar test setinde farklı şekilde dağılabilir. Farklılıkları keşfedebilirseniz, eğitim setinizi ve doğrulamanızı buna göre ayarlayarak avantaj sağlayabilirsiniz. Bunun üzerinde çalışabilmek için, genel liderlik panosuna bakmanız gerekecek.
+* Test verisi kaymış veya trendlenmiş olabilir; bu, genellikle zaman serisi tahminlerinde görülen bir durumdur. Yine, liderlik panosuna bakarak bazı olası post-processing işlemleri hakkında fikir sahibi olabilirsiniz. Örneğin, tahminlerinize bir çarpan uygulamak, test verisindeki azalan veya artan bir trendi taklit edebilir.
+
+Daha önce tartıştığımız gibi, liderlik panosunu incelemek, özellikle kamu test setinin bileşimi hakkında ipuçları elde etmek amacıyla özel olarak tasarlanmış gönderimler yapma eylemidir. Bu, özel test seti kamu test setine benziyorsa özellikle iyi çalışır. İnceleme için genel bir yöntem yoktur, bu yüzden her yarışma ve problem türüne göre bir inceleme metodolojisi geliştirmeniz gerekir.
+
+Örneğin, *Climbing the Kaggle Leaderboard by Exploiting the Log-Loss Oracle* ([https://export.arxiv.org/pdf/1707.01825](https://export.arxiv.org/pdf/1707.01825)) adlı makalede, Jacob, eğitim verisini bile indirmeden bir yarışmada nasıl dördüncü sıraya çıkılabileceğini açıklar.
+
+Regresyon problemleriyle ilgili olarak, Kaggle tarafından düzenlenen *30 Days of ML* etkinliğinde, Hung Khoi, liderlik panosunu incelemenin, eğitim seti ile kamu test verisi arasındaki hedef sütununun ortalama ve standart sapma farklarını anlamasına nasıl yardımcı olduğunu açıklamıştır (bkz: [https://www.kaggle.com/c/30-days-of-ml/discussion/269541](https://www.kaggle.com/c/30-days-of-ml/discussion/269541)).
+
+Aşağıdaki denklemi kullandı:
+
+$$
+RMSE^2 = MSE = variance + (mean - guessed\_value)^2
+$$
+
+Esasen, test hedefinin ortalamasını ve varyansını çözmek için yalnızca iki sunum gereklidir, çünkü iki bilinmeyen terim vardır – varyans ve ortalama.
+
+Ayrıca, liderlik panosundan bilgi sorgulama hakkında bazı diğer fikirleri Chris Deotte'den ([https://www.kaggle.com/cdeotte](https://www.kaggle.com/cdeotte)) şu gönderisinde bulabilirsiniz: [https://www.kaggle.com/cdeotte/lb-probing-strategies-0-890-2nd-place](https://www.kaggle.com/cdeotte/lb-probing-strategies-0-890-2nd-place), bu gönderi "Don't Overfit II" yarışmasıyla ilgilidir ([https://www.kaggle.com/c/dont-overfit-ii](https://www.kaggle.com/c/dont-overfit-ii)).
+
+> Liderlik panosundan bilgi sorgulamanın çift taraflı bir kılıç olduğunu hissetmek isterseniz, Zahar Chikishev’in LANL Deprem Tahmin Yarışması’ndan nasıl bilgi sorguladığını okuyabilirsiniz, sonuç olarak halkada birinci olduğu halde özel liderlik panosunda 87. sırada yer aldı: [https://towardsdatascience.com/how-to-lb-probe-on-kaggle-c0aa21458bfe](https://towardsdatascience.com/how-to-lb-probe-on-kaggle-c0aa21458bfe)
+
 ### Using adversarial validation *(Zıt doğrulama yöntemini kullanmak)*
 
 #### Example implementation *(Uygulama örneği)*
