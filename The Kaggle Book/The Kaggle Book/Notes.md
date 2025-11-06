@@ -4056,6 +4056,47 @@ Scikit-learn'e gelince, bunun yerine, izin verildiği durumlarda, **`random_stat
 
 ### The importance of EDA *(Keşifsel veri analizinin önemi)*
 
+**EDA** terimi, modern istatistiksel metodolojinin en önde gelen temsilcilerinden biri olan **John W. Tukey**'in çalışmalarından gelmektedir. Tukey, 1977 tarihli *Exploratory Data Analysis* (dolayısıyla EDA kısaltması) adlı kitabında, EDA'yı veriyi keşfetme, kanıtları ortaya çıkarma ve daha sonra istatistiksel testlerle doğrulanabilecek **hipotezler geliştirme** yolu olarak düşünür.
+
+Onun fikri, istatistiksel hipotezleri nasıl tanımladığımızın, yalnızca matematiksel hesaplamalara dayalı sıralı testlerden ziyade **gözlem ve muhakemeye** daha fazla dayanabileceğiydi. Bu fikir, makine öğrenimi dünyasına iyi bir şekilde tercüme edilir, çünkü bir sonraki bölümde tartışacağımız gibi, öğrenme algoritmalarının daha iyi ve daha verimli çalışabilmesi için veriler iyileştirilebilir ve önceden sindirilebilir.
+
+Bir Kaggle yarışması için yapılan EDA'da şunları arayacaksınız:
+
+  * **Eksik değerler** ve en önemlisi, hedef (target) ile ilişkili eksik değer **örüntüleri**.
+  * **Çarpık (skewed) sayısal değişkenler** ve bunların olası dönüşümleri.
+  * **Birlikte gruplandırılabilecek** kategorik değişkenlerdeki **nadir kategoriler**.
+  * Hem tek değişkenli (univariate) hem de çok değişkenli (multivariate) **potansiyel aykırı değerler** (outliers).
+  * **Yüksek düzeyde korelasyonlu** (hatta yinelenen) **özellikler**. Kategorik değişkenler için, **örtüşen kategorilere** odaklanın.
+  * Problem için **en çok tahmin edici** olan özellikler.
+
+Bunu, çeşitli tanımlayıcı analizler, grafikler ve çizelgeler aracılığıyla başarırsınız; önce her bir ayrı özelliği (istatistiksel terimlerle **tek değişkenli analiz**), ardından birkaç değişkeni eşleştirerek (**iki değişkenli analiz**, örneğin bir dağılım grafiğinde) ve son olarak daha fazla özelliği aynı anda birlikte ele alarak (**çok değişkenli yaklaşım**) incelersiniz.
+
+-----
+
+**🚀 Otomatik EDA Araçları**
+
+Tembel hissediyorsanız veya nasıl ve nereden başlayacağınızdan emin değilseniz, başlangıçta **otomatik stratejilere** güvenmek size yardımcı olabilir. Örneğin, popüler bir hızlı EDA ücretsiz yazılım aracı olan **AutoViz** ([https://github.com/AutoViML/AutoViz](https://github.com/AutoViML/AutoViz)) size çok zaman kazandırabilir. Aşağıdaki komutu çalıştırarak onu Notebook'unuza kurabilirsiniz:
+
+```bash
+pip install git+git://github.com/AutoViML/AutoViz.git 
+```
+
+> AutoViz'in sizin için neler yapabileceğine dair daha net bir anlayış elde etmek için Dan Roth'un bu Medium makalesini ([https://towardsdatascience.com/autoviz-a-new-tool-for-automated-visualization-ec9c1744a6ad](https://www.google.com/search?q=https://towardsdatascience.com/autoviz-a-new-tool-for-automated-visualization-ec9c1744a6ad)) okuyabilir veya Georgii Vyshnia'nın ([https://www.kaggle.com/gvyshnya](https://www.kaggle.com/gvyshnya)) [https://www.kaggle.com/gvyshnya/automating-eda-and-feature-importance-detection](https://www.google.com/search?q=https://www.kaggle.com/gvyshnya/automating-eda-and-feature-importance-detection) gibi birkaç ilginç genel Notebook'a göz atabilirsiniz.
+>
+> İkinci bağlantıda, başka bir araç olan **Sweetviz**'e ([https://github.com/fbdesignpro/sweetviz](https://github.com/fbdesignpro/sweetviz)) de referanslar bulacaksınız. Sweetviz'in Titanic veri setine dayalı bir genel bakış makalesi ve eğitim içeriği vardır: [https://towardsdatascience.com/powerful-eda-exploratory-data-analysis-in-just-two-lines-of-code-using-sweetviz-6c943d32f34](https://towardsdatascience.com/powerful-eda-exploratory-data-analysis-in-just-two-lines-of-code-using-sweetviz-6c943d32f34). Kullanışlı bulabileceğiniz bir diğer popüler araç ise, bu makalede açıklandığı gibi, klasik istatistiksel tanımlayıcı istatistiklere ve görselleştirmeye daha fazla dayanan **Pandas Profiling**'dir ([https://github.com/pandas-profiling/pandas-profiling](https://github.com/pandas-profiling/pandas-profiling)): [https://medium.com/analytics-vidhya/pandas-profiling-5ecd0b977ecd](https://medium.com/analytics-vidhya/pandas-profiling-5ecd0b977ecd).
+
+**💡 En Önemli İpucu: Özelleştirme**
+
+Diğer Kaggle kullanıcılarının ilginç EDA Notebook'ları yayınlamasını beklemek de bir çözüm olabilir, bu yüzden her zaman Notebook bölümlerini takip edin; bazen değerli ipuçları ortaya çıkabilir. Bu, modelleme aşamanızı başlatmalı ve yarışmanın temel yapılması ve yapılmaması gerekenlerini anlamanıza yardımcı olmalıdır.
+
+Ancak, unutmayın ki EDA, eldeki **probleme yüksek oranda özgü olduğunda** bir metadan çıkıp yarışma için bir **varlık (asset)** haline gelir; bu, otomatik çözümlerde asla bulamayacağınız ve genel Notebook'larda nadiren karşılaşacağınız bir şeydir. **Kendi EDA'nızı yapmalı** ve kilit, kazandıran içgörüleri toplamalısınız.
+
+Tüm bunlar göz önüne alındığında, önerimiz, öğrenilmesi ve çalıştırılması gerçekten kolay oldukları için **otomatik araçlara** biraz bakmanızdır. Bu, size, onun yerine grafiklere bakarak ve olası içgörüler hakkında akıl yürüterek geçirebileceğiniz bolca zaman kazandıracaktır ve bu da rekabet performansınıza kesinlikle yardımcı olacaktır.
+
+Ancak, bunu yaptıktan sonra, **Matplotlib** ve **Seaborn**'u almalı ve sağlanan veri türüne ve probleme bağlı olan standart dışı çizimler üzerinde kendiniz bir şeyler denemelisiniz.
+
+> Örneğin, zaman içinde gerçekleştirilen bir dizi ölçüm size verilirse, daha iyi tahminler için açığa çıkarıcı içgörülere işaret edebilecek bir olgu olan, bir gözlem ile diğeri arasındaki farklı gecikmeleri göstererek, **tek kaydedilen zaman noktalarını çizmek** kadar **zamana dayalı sürekli fonksiyonu çizmek** de faydalıdır.
+
 ### Dimensionality reduction with t-SNE and UMAP *(t-SNE ve UMAP ile boyut indirgeme)*
 
 ### Reducing the size of your data *(Veri boyutunu küçültme)*
