@@ -3072,6 +3072,12 @@ Bu kalibratörü nasıl fit edeceğinizi de seçmeniz gerekir. Unutmayın ki bu 
 
 ### Summary *(Özet)*
 
+Bu bölümde, Kaggle yarışmalarındaki değerlendirme metriklerini tartıştık. İlk olarak, bir değerlendirme metriğinin objektif fonksiyondan nasıl farklı olabileceğini açıkladık. Ayrıca, regresyon ve sınıflandırma problemleri arasındaki farklara da değindik. Her bir problem türü için, Kaggle yarışmalarında karşınıza çıkabilecek en yaygın metrikleri inceledik.
+
+Sonrasında, daha önce hiçbir yarışmada karşılaşılmamış ve muhtemelen bir daha karşılaşmayacağınız metrikleri ele aldık. Son olarak, farklı yaygın metrikleri inceledik ve bunların önceki Kaggle yarışmalarında nasıl kullanıldığına dair örnekler verdik. Ardından, bir değerlendirme metriğini optimize etmek için birkaç strateji önerdik. Özellikle, kendi özel maliyet fonksiyonlarınızı kodlamayı denemenizi önerdik ve faydalı olabilecek bazı son işleme adımları hakkında tavsiyelerde bulunduk.
+
+Şimdi, bir değerlendirme metriğinin Kaggle yarışmasındaki rolünü kavramış olmalısınız. Ayrıca, geçmiş yarışmaları inceleyerek ve bir metriğin nasıl çalıştığını tam anlamak suretiyle her yaygın veya yaygın olmayan metriği nasıl ele alacağınız konusunda bir stratejiniz olmalı. Bir sonraki bölümde, değerlendirme metriklerini nasıl kullanacağımızı ve Kaggle çözümünüzün performansını düzgün bir şekilde nasıl tahmin edeceğimizi, bir doğrulama stratejisi aracılığıyla tartışacağız.
+
 ---
 
 ## Chapter 6: Designing Good Validation *(Bölüm 6: İyi Bir Doğrulama Sistemi Tasarlama)*
