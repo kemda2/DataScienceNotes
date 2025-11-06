@@ -1720,78 +1720,56 @@ Eskiden bu her zaman böyle değildi, ancak günümüzde neredeyse tüm yarışm
 
 ![](im/1040.png)
 
-Eskiden bu her zaman böyle değildi, ancak günümüzde neredeyse tüm yarışmaların kendilerine ait tartışma forumlarının en üst kısmına sabitlenmiş bir **SSS (Sıkça Sorulan Sorular)** konusu bulunmaktadır. Bu bölümden başlamak iki ana nedenle iyi bir fikirdir:
-
-• **Zamandan tasarruf edersiniz;** en popüler soruların yanıtları büyük olasılıkla burada yer alır.
-• **Gereksiz veya yinelenen sorular sormaktan kaçınırsınız,** böylece forumdaki herkes için daha iyi bir deneyim sağlanmış olur.
-
-**Notebooks**’larda olduğu gibi, tartışma forumlarında da daha sonra tekrar başvurmak üzere **özellikle önemli konuları yer imlerine ekleme (bookmark)** seçeneği bulunmaktadır.
+Yer işareti eklediğiniz (bookmarkladığınız) tüm konuların genel bir özetini, **profil sayfanızda** bulabilirsiniz.
 
 ![](im/1041.png)
 
-Yer işareti eklediğiniz (bookmarkladığınız) tüm konuların genel bir özetini, **profil sayfanızda** bulabilirsiniz.
-
-![](im/1042.png)
-
 ### Example discussion approaches *(Tartışma örnekleri ve yaklaşımlar)*
 
-Bir yarışma sırasında bir noktada **kafanızın karışması** veya **kaybolmuş hissetmeniz** tamamen normaldir: Katıldınız, birkaç fikir denediniz, liderlik tablosunda biraz ilerleme kaydettiniz ve sonra bir anda **“Kaggle versiyonu koşucu duvarına”** çarptınız. İşte tam bu noktada, **tartışma forumlarına başvurmak** en doğru adımdır.
+Bir yarışmada kendinizi bir noktada kaybolmuş hissetmeniz tamamen normaldir: Geldiniz, birkaç fikir denediniz, sıralamada bir ilerleme kaydettiniz ve sonra Kaggle versiyonu ile koşucuların duvarına çarptınız. İşte bu noktada tartışma forumları başvurulacak yerdir.
 
-Örneğin, şu yarışmaya bakalım: **Optiver Realized Volatility Prediction** yarışması ([https://www.kaggle.com/c/optiver-realized-volatility-prediction](https://www.kaggle.com/c/optiver-realized-volatility-prediction)). Bu yarışma, organizatörler tarafından şu şekilde tanımlanmıştır:
+Örnek olarak, Optiver Realized Volatility Prediction yarışmasına bakalım ([https://www.kaggle.com/c/optiver-realized-volatility-prediction](https://www.kaggle.com/c/optiver-realized-volatility-prediction)). Organizasyon tarafından şöyle tanımlanmış:
 
->Bu yarışmanın ilk üç ayında, farklı sektörlerdeki yüzlerce hisse senedi için **kısa vadeli oynaklığı (volatility)** tahmin eden modeller geliştireceksiniz. Elinizin altında, **yüz milyonlarca satırdan oluşan son derece ayrıntılı finansal veriler** bulunacak ve bu verilerle **10 dakikalık periyotlar** için oynaklık tahmini yapan modeller tasarlayacaksınız. Modelleriniz, eğitimden sonraki üç aylık **değerlendirme döneminde** toplanan **gerçek piyasa verilerine** göre değerlendirilecektir.
+> İlk üç ay boyunca, farklı sektörlerde yüzlerce hisse senedi için kısa vadeli volatiliteyi tahmin eden modeller geliştireceksiniz. Elinizde yüz milyonlarca detaylı finansal veri olacak ve bu verilerle 10 dakikalık periyotlar için volatiliteyi tahmin eden bir model tasarlayacaksınız. Modelleriniz, eğitim sonrası üç aylık değerlendirme döneminde gerçek piyasa verileriyle karşılaştırılarak değerlendirilecektir.
 
-Burada ele alınacak çok şey var, bu yüzden bu yarışmanın temel bileşenlerini inceleyeceğiz ve **tartışma forumları** aracılığıyla nasıl yaklaşılabileceğini göstereceğiz.
+Burada ele alınacak çok şey var; bu yüzden bu zorluğun ana bileşenlerini inceleyip, tartışma forumları aracılığıyla nasıl yaklaşılabileceğini göstereceğiz. Öncelikle, bu yarışmaya katılım belirli bir finansal bilgi gerektiriyor; belki deneyimli bir trader seviyesinde olmanız gerekmiyor, ama volatilitenin farklı hesaplama yöntemlerini anlamak, çoğu Kaggle katılımcısı için oldukça karmaşıktır. Neyse ki organizatörler yarışma boyunca oldukça aktifti ve yeni başlayanlar için kaynaklar sundular: [https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/273923](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/273923)
 
-İlk olarak, bu yarışmaya katılım **bir miktar finansal bilgi** gerektirir; belki deneyimli bir tüccar seviyesinde olmasa da, oynaklığı (volatility) hesaplamanın farklı yöntemlerini anlamak, çoğu Kaggle katılımcısı için (bu özel konuda) kolay değildir. Neyse ki organizatörler yarışma boyunca oldukça aktif olmuş ve yeni başlayanlara yardımcı olacak kaynaklar hakkında rehberlik sağlamışlardır:
-[Kaynak 1](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/273923).
-
-Başlangıç bilgisi yeterli gelmezse, **kamuya açık şekilde denemekten ve yardım istemekten çekinmeyin**, örneğin:
-[Kaynak 2](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/263039)
+Eğer başlangıç bilgisi yeterli değilse, kamuya açık şekilde sorularınızı sormaktan çekinmeyin, örneğin:
+[https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/263039](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/263039)
 veya
-[Kaynak 3](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/250612).
+[https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/250612](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/250612)
 
-Yarışma ilerledikçe, insanlar problemi çözmek için giderek daha **sofistike modeller** geliştirmeye başladılar. Burada bir denge kurmak gerekir: bir yandan, deneyimli katılımcıların paylaştığı bulgulardan öğrendiklerinizi başkalarıyla paylaşmak isteyebilirsiniz; diğer yandan, tüm harika kodunuzu bir Notebook olarak yayımlayarak **potansiyel avantajınızı kaybetmek** istemezsiniz. Mantıklı bir orta yol, örneğin **özellik fikirlerinizi (feature ideas) forumda tartışmak** olabilir:
-[Kaynak 4](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/273915).
+Yarışma ilerledikçe, katılımcılar problemi çözmek için giderek daha sofistike modeller geliştirmeye başladılar. Burada bir denge kurmak gerekiyor: bir yandan, veteriner katılımcılardan öğrendiklerinizi paylaşarak geri vermek isteyebilirsiniz; diğer yandan, tüm harika kodlarınızı Notebook olarak paylaşarak potansiyel avantajınızı kaybetmek istemezsiniz. Makul bir orta yol, örneğin forumda özellik fikirlerinizi paylaşmak olabilir: [https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/273915](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/273915)
 
-Son yıllarda, daha fazla yarışma **sabit test veri seti formatından uzaklaşıyor** ve bazı çeşitlilikler getiriyor: bazıları Kaggle API kullanımını zorunlu kılıyor (bu yarışmalarda gönderim Notebook üzerinden yapılmalı), bazıları ise eğitim ve canlı veri değerlendirme olarak özel bir zaman çizelgesi sunuyor. Optiver yarışması da bu duruma örnek teşkil etmektedir.
+Son yıllarda, daha fazla yarışma sabit test veri seti formatından uzaklaşıp farklı yaklaşımlar getirdi: bazıları Kaggle API kullanımını zorunlu kılıyor (Notebook üzerinden gönderim yapmanız gerekiyor), bazıları ise eğitim ve canlı veri değerlendirmesi olarak özel bir zaman çizelgesi sunuyor. Optiver yarışması da böyleydi:
 
-> Nihai gönderim tarihinden sonra, **liderlik tablosu (leaderboard)**, seçilen Notebook’lar üzerinden çalıştırılacak **piyasa verisi güncellemelerini** yansıtacak şekilde **periyodik olarak güncellenecektir**. Bu güncellemeler yaklaşık **iki haftada bir** yapılacak, ancak **kış tatillerini** göz önünde bulunduracak şekilde bir ayarlama uygulanacaktır.
+> Final gönderim tarihinden sonra, seçilen notebook’lar üzerinde piyasa verisi güncellemelerine bağlı olarak sıralama tablosu periyodik olarak güncellenecektir. Güncellemeler yaklaşık iki haftada bir yapılacak ve tatil dönemlerinden kaçınmak için ayarlamalar yapılacaktır.
 
-Bu kurulum basit görünebilir, ancak modellerin yeniden eğitilmesi ve güncellenmesi açısından bazı **zorluklar** ortaya çıkarmıştır. Böyle bir durumla karşılaşırsanız, çekinmeden forumlarda soru sorabilirsiniz; örneğin bu yarışmada katılımcılar bunu yapmışlardır:
-[Kaynak 1](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/249752).
+Bu kurulum, modellerin yeniden eğitilmesi ve güncellenmesi konusunda bazı zorluklar yarattı. Bu tür bir durumla karşılaşırsanız, katılımcıların yaptığı gibi sorular sormaktan çekinmeyin: [https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/249752](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/249752)
 
-Eğitilmiş modeliniz için **doğrulama (validation) yöntemi**, her Kaggle yarışmasında önemli bir konudur ve genellikle “CV vs LB” (cross-validation vs leaderboard) tartışmasıyla birlikte ele alınır. Optiver yarışması da bu kuralın istisnası değildir:
-[Kaynak 2](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/250650).
+Eğitilen modeliniz için bir doğrulama şeması her zaman önemli bir konudur ve genellikle “CV vs LB” (çapraz doğrulama vs sıralama tablosu) tartışması ile bağlantılıdır. Optiver yarışması da bu kuralın istisnası değildi: [https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/250650](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/250650)
 
-İlgili bir konu başlığı henüz yoksa — ve bunu kontrol etmek her zaman iyi bir fikirdir, böylece tekrarları azaltabilirsiniz — **tek model performansı (single-model performance)** ile ilgili bir tartışma açmayı düşünebilirsiniz. Er ya da geç herkes model **ensemble**’ları kullanmaya başlar, ancak iyi **tek model bileşenleri** olmadan bunlar verimli çalışmaz.
+Eğer ilgili başlık zaten yoksa – ve bunu kontrol etmek her zaman iyi bir fikirdir – tek model performansıyla ilgili bir başlığı düşünmek isteyebilirsiniz. Er ya da geç herkes model ansambllarını kullanmaya başlar, ancak iyi tek model bileşenleri olmadan bunlar çok verimli değildir.
 
-Bilgi paylaşımındaki iş birliği burada durmaz: problemi çözmek için daha iyi bir yol bulduğunuzu düşünüyorsanız, bunu paylaşmak iyi bir fikir olabilir. Bu sayede ya başkalarına faydalı bir şey yapmış olursunuz, ya da neden yanlış olduğunuzu öğrenirsiniz (zaman ve çabadan tasarruf sağlar); her iki durumda da kazançlı olursunuz, örneğin burada:
-[Kaynak 3](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/260694).
+Eğer problemi çözmenin daha iyi bir yolunu bulduysanız, paylaşmak genellikle iyi bir fikirdir. Ya başkaları için faydalı bir şey yapmış olursunuz, ya da neden yanlış olduğunuzu öğrenirsiniz (zaman ve çaba tasarrufu sağlar); her iki durumda da kazançlı çıkarsınız: [https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/260694](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/260694)
 
-Açık kişisel faydası dışında (diğer katılımcıların nasıl ilerlediğine göz atabilirsiniz), bu tür başlıklar **toplulukta bilgi alışverişini** kolaylaştırır, iş birliğini destekler ve yeni başlayanlar için faydalıdır. Örnek bir tartışma:
-[Kaynak 4](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/250695).
+Bunun dışında, diğer katılımcıların ne yaptığına göz atmak ve topluluk içinde bilgi paylaşımına katkıda bulunmak kişisel fayda sağlar ve özellikle yeni başlayanlar için yararlıdır: [https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/250695](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/250695)
 
-Yukarıdaki gibi konuları inceledikten sonra hâlâ “**Önemli bir şeyi kaçırıyor muyum?**” diye merak edebilirsiniz. Kaggle, bu tür soruları sormanın tamamen kabul edilebilir olduğu bir platformdur:
-[Kaynak 5](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/262203).
+Tüm bu konulara göz attıysanız, hâlâ “Önemli bir şeyi mi kaçırıyorum?” diye düşünebilirsiniz. Kaggle, bu tür soruları sormanın tamamen kabul edildiği bir platformdur: [https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/262203](https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/262203)
 
-Konumuzu diğer yarışmalara genişleterek bitirelim. Daha önce doğrulama konusuna değindik; bir Kaggler için bu genellikle **bilgi sızıntısı (information leakage) ve overfitting** ile bağlantılıdır. Sızıntılar, doğrulama yöntemlerinin tasarlanacağı 6. bölümde ayrıntılı olarak ele alınmıştır. Burada, forumlar aracılığıyla nasıl ele alındığını kısaca özetleyeceğiz. Kaggle, meraklı insanların bir topluluğu olduğundan, sızıntı şüphesi varsa genellikle birisi bunu gündeme getirir.
+Diğer yarışmalara göz atalım. Daha önce doğrulama konusundan bahsettik; bu genellikle bilgi sızıntısı ve aşırı uyum (overfitting) ile bağlantılıdır. Sızıntılar, doğrulama şemalarının tasarlanmasına ayrılmış olan 6. bölümde ayrıntılı olarak ele alınmıştır. Burada, forumlar aracılığıyla nasıl ele alındığını kısaca inceleyeceğiz. Kaggle, meraklı katılımcılardan oluşan bir topluluk olduğundan, sızıntı şüphesi varsa, biri konuyu muhtemelen gündeme getirir.
 
-Örneğin, **dosya isimleri veya kayıt ID’leri zaman damgaları içerebilir**, bu da verilerin tersine mühendislik ile geleceğe bakılmasını ve gerçekçi olmayan düşük hata değerleri elde edilmesini sağlar. Böyle bir durum **Two Sigma Connect** yarışmasında yaşanmıştır:
-[Kaynak 6](https://www.kaggle.com/c/two-sigma-connect-rental-listing-inquiries/discussion/31870#176513).
+Örneğin, dosya adları veya kayıt ID’leri zaman damgaları içerebilir, bu da geleceğe bakmak ve hatalı şekilde düşük hata metriği elde etmek için tersine mühendislik yapılabileceği anlamına gelir. Bu durum, Two Sigma Connect yarışmasında yaşanmıştır: [https://www.kaggle.com/c/two-sigma-connect-rental-listing-inquiries/discussion/31870#176513](https://www.kaggle.com/c/two-sigma-connect-rental-listing-inquiries/discussion/31870#176513)
 
-Bir başka örnek, katılımcıların uydu görüntülerinde gemileri bulmaları istenen **Airbus Ship Detection Challenge** yarışmasıdır. Test görüntülerinin önemli bir kısmı, eğitim görüntülerinin (rastgele) kırpılmış hâliymiş ve eşleştirmek nispeten kolay olmuştur:
-[Kaynak 7](https://www.kaggle.com/c/airbus-ship-detection/discussion/64355#377037).
+Başka bir örnek, Airbus Ship Detection Challenge’dır, katılımcıların uydu görüntülerinde gemileri bulması gerekiyordu. Test görüntülerinin önemli bir kısmı, eğitim görüntülerinden rastgele kırpılmıştı ve eşleştirmek oldukça kolaydı: [https://www.kaggle.com/c/airbus-ship-detection/discussion/64355#377037](https://www.kaggle.com/c/airbus-ship-detection/discussion/64355#377037)
 
-Santander tarafından sponsor olunan yarışmalar ise bir dereceye kadar **infamous** sayılır. Şirketin düzenlediği üç yarışmanın ikisi **veri sızıntısı** içeriyordu:
-[Kaynak 8](https://www.kaggle.com/c/santander-value-prediction-challenge/discussion/61172).
+Santander tarafından düzenlenen yarışmalar da oldukça ünlüdür. Şirketin düzenlediği üç yarışmadan ikisinde veri sızıntısı yaşanmıştır: [https://www.kaggle.com/c/santander-value-prediction-challenge/discussion/61172](https://www.kaggle.com/c/santander-value-prediction-challenge/discussion/61172)
 
-Bundan sonraki adımlar yarışmaya göre değişir: bazı durumlarda Kaggle yarışmayı **temizlenmiş veya yeni verilerle yeniden başlatmıştır**, bazı durumlarda ise etkisi minimal olduğu düşünüldüğünden devamına izin verilmiştir. Örneğin **Predicting Red Hat Business Value** yarışmasında durum şöyle ele alınmıştır:
-[Kaynak 9](https://www.kaggle.com/c/predicting-red-hat-business-value/discussion/23788).
+Sonraki adımlar yarışmadan yarışmaya değişir: Bazı durumlarda Kaggle, yarışmayı yeni veya temizlenmiş verilerle yeniden başlatmıştır; bazen ise minimal etki algıladıkları için devam ettirmiştir. Örneğin, Predicting Red Hat Business Value yarışmasında böyle bir durum yaşanmıştır: [https://www.kaggle.com/c/predicting-red-hat-business-value/discussion/23788](https://www.kaggle.com/c/predicting-red-hat-business-value/discussion/23788)
 
-Veri sızıntıları yarışmayı ciddi şekilde etkileyebilir, ancak iyi haber şu ki, son 2-3 yılda Kaggle’da neredeyse tamamen ortadan kalkmıştır; dolayısıyla umarız bu bölüm bir kez okunur ve platform deneyiminizin sürekli bir parçası haline gelmez.
+Veri sızıntıları yarışmayı ciddi şekilde bozabilir, ancak iyi haber şu ki, son 2-3 yılda Kaggle’da sızıntılar neredeyse tamamen ortadan kalkmıştır – dolayısıyla bu bölüm, bir kez okunacak ama platformdaki deneyiminizin sürekli bir parçası olmayacaktır.
 
-Platformdaki deneyim konusu, bir **Grandmaster röportajına** geçiş için mükemmel bir başlangıç noktasıdır.
+Platformdaki deneyim konusuna gelince, bu Grandmaster röportajına mükemmel bir geçiştir.
 
 > **Yifan Xie**
 > 
