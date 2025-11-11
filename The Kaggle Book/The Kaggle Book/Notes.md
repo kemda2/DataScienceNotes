@@ -6191,7 +6191,96 @@ print(study.best_params)
 
 Optimizasyon tamamlandığında, en iyi test performansını ve optimizasyon tarafından bulunan en iyi parametreleri yazdırabilir veya dışa aktarabilirsiniz.
 
+> **Ruchi Bhatia**
+> 
+> [https://www.kaggle.com/ruchi798](https://www.kaggle.com/ruchi798)
+> 
+> 
+> 
+> Bu yoğun bölümün sonunda, son bir röportaja göz atalım. Bu sefer, veri setleri ve Notebooks konusunda Grandmaster olan **Ruchi Bhatia** ile konuşuyoruz. Ruchi şu anda Carnegie Mellon Üniversitesi’nde yüksek lisans öğrencisi, OpenMined’da Veri Bilimci ve Z by HP’de Küresel Veri Bilimi Elçisi olarak çalışıyor.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Kaggle’da hangi teknikler ve çözüm yaklaşımları konusunda uzmansınız?**
+> 
+> En sevdiğim yarışma türleri NLP ve Analitik yarışmalarıdır. Çok dilli olmak, ana ilgi alanım ve odak noktam olan **Doğal Dil İşleme (NLP)** konusundaki çalışmalarımda önemli bir rol oynadı.
+> 
+> 
+> 
+> Analitik yarışmalar açısından ise karmaşık verilerden anlam çıkarmayı ve sorulara verdiğim yanıtları veri ile desteklemeyi seviyorum! Kaggle’daki her yarışma yenidir ve farklı teknikler gerektirir. Algoritma seçiminde genellikle veri odaklı bir yaklaşımı takip ederim ve belirli favorilerim yoktur.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşıyorsunuz? Bu yaklaşım, günlük işinizde yaptığınız şeylerden ne kadar farklı?**
+> 
+> Yeni bir yarışma duyurulduğunda önceliğim problem tanımını derinlemesine anlamaktır. Bazen problem tanımları kendi konfor alanımızın veya uzmanlık alanımızın dışında olabilir, bu yüzden EDA’ya (Keşifsel Veri Analizi) geçmeden önce bunları iyi kavramak önemlidir.
+> 
+> 
+> 
+> EDA sırasında, veri dağılımını anlamayı ve eldeki veriyi tanımayı hedeflerim. Bu süreçte belirli kalıplarla karşılaşabiliriz; bu kalıpları anlamaya ve uç değerler veya istisnai durumlar için hipotez oluşturmaya çalışmalıyız.
+> 
+> 
+> 
+> Bundan sonra yarışma metriklerini anlamaya zaman ayırırım. Sızıntısız bir çapraz doğrulama stratejisi oluşturmak bir sonraki adımdır. Ardından bir temel model seçer ve ilk gönderimi yaparım. Yerel doğrulama ile yarışma sıralaması arasındaki korelasyon tatmin edici değilse, olası tutarsızlıkları anlamak ve bunları hesaba katmak için gerekene kadar iterasyon yaparım.
+> 
+> 
+> 
+> Sonrasında, modelleme yaklaşımımı zamanla geliştirmeye devam ederim. Parametreleri ayarlamak ve yeni deneyler yapmak, verilerle en iyi şekilde neyin çalıştığını anlamama yardımcı olur (tüm süreç boyunca aşırı uyumdan kaçınarak). Yarışmanın son birkaç haftasında ise model ansamblasyonu uygular ve çözümün sağlamlığını kontrol ederim.
+> 
+> 
+> 
+> Kaggle dışındaki projelerimde ise zamanımın çoğu veri toplama, temizleme ve veriden değer elde etme üzerine geçiyor.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Nasıl?**
+> 
+> Kaggle kariyerimi hızla ilerletmemde büyük katkı sağladı. Sadece veri bilimine olan ilgimi bulmama yardımcı olmakla kalmadı, aynı zamanda etkili katkıda bulunmamı ve tutarlı olmamı da motive etti. Büyük miktarda veriyle uygulamalı deneyler yapma ve çalışmalarımızı global ölçekte sergileme imkânı sunması mükemmel bir fırsat. Ayrıca çalışmalarımız kolayca erişilebilir, bu sayede daha geniş bir kitleye ulaşabiliyoruz.
+> 
+> 
+> 
+> Kaggle’daki çalışmalarımın çoğunu portföyümde kullandım; bu, yolculuğum boyunca yaptığım çeşitli işleri göstermek için iyi bir yöntem oldu. Kaggle yarışmaları, yenilikçi ve gerçek dünya problemlerini çözmeyi hedefler ve işverenler de bu tür problemlere çözüm üretebilme yeteneğimizi görmek ister. Çeşitli veri setleri derleyerek, ham verilerle çalışma becerimi sergileyebildim. Bu projeler bana birden fazla iş fırsatı sağladı.
+> 
+> 
+> 
+> **Tecrübelerinize göre, deneyimsiz Kaggle kullanıcılarının sıkça gözden kaçırdığı şeyler nelerdir? Başladığınızda bilseydiniz iyi olurdu dediğiniz şeyler var mı?**
+> 
+> Tecrübelerime göre, birçok Kaggle kullanıcısı yarışmalarda bekledikleri sıralamayı elde edemediklerinde moralini kaybediyor. Haftalar ve aylar süren yoğun çalışmanın ardından, erken vazgeçmelerini anlayabiliyorum, ancak Kaggle yarışmalarını kazanmak kolay değil. Farklı eğitim geçmişine ve iş deneyimine sahip birçok kişi yarışıyor ve denemeye cesaret etmek en önemli şeydir. Bireysel olarak büyümeye odaklanmalı ve yolculuğumuzda ne kadar ilerlediğimizi görmeliyiz.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenmesi için önereceğiniz belirli araçlar veya kütüphaneler var mı?**
+> 
+> Kapsamlı keşifsel veri analizi ve uygun görselleştirmeler, veri trendlerini ve metodolojiyi iyileştirebilecek bağlamı anlamamıza yardımcı olur. Görselleştirmenin gücüne inandığım için, favori veri bilimi kütüphanelerim **Seaborn** ve **TensorBoard**’dur. Seaborn EDA için, TensorBoard ise makine öğrenmesi iş akışı sırasında gerekli görselleştirmeler için kullanılır. Ara sıra **Tableau** da kullanırım.
+> 
+> 
+> 
+> **Bir yarışmaya katılırken en önemli şey nedir?**
+> 
+> Bir yarışmaya katılırken, problem tanımını derinlemesine anlamaya ve araştırma yapmaya hazırlıklı olunmalıdır. Kaggle yarışmaları özellikle zorludur ve çoğu zaman gerçek hayattaki problemleri çözmeye yardımcı olur. İnsanlar olumlu bir zihniyete sahip olmalı ve moralini kaybetmemelidir. Kaggle yarışmaları, öğrenmek ve gelişmek için mükemmel bir fırsat sunar!
+
 ### Summary *(Özet)*
+
+Bu bölümde, modelinizin performansını artırmak ve liderlik tablosunda daha yüksek puanlar almak için **hiperparametre optimizasyonunu** detaylı bir şekilde ele aldık. Öncelikle, **Scikit-learn**'ün kod işlevlerini, grid search (ızgara araması) ve random search (rastgele arama) gibi yöntemleri, ayrıca daha yeni olan **yarıya indirme algoritmalarını** açıkladık.
+
+Sonrasında, **Bayesyen optimizasyonuna** geçtik ve **Scikit-optimize**, **KerasTuner** ve son olarak **Optuna**'yı inceledik. Özellikle **Gaussian süreçleri** ile **surrogate fonksiyonunun** doğrudan modellenmesi ve bu sürecin nasıl hacklenebileceği üzerinde daha fazla durduk. Çünkü bu yöntem, size daha fazla sezgi ve daha ad hoc çözümler sağlama imkanı sunabiliyor. Şu an itibarıyla, **Optuna**'nın, özellikle **tabular (tablolarla çalışılan) yarışmalar** ve **derin sinir ağları** yarışmalarında, Kaggle'da **altın standart** haline geldiğini kabul ediyoruz. Optuna'nın, Kaggle Notebook'larında verilen süre içinde optimal parametrelere daha hızlı bir şekilde ulaşması, onu diğer optimizasyon yöntemlerine göre öne çıkarıyor.
+
+---
+
+**Tecrübelerinize göre, deneyimsiz Kaggle kullanıcıları genellikle neleri gözden kaçırır? Başladığınızda bilseydiniz iyi olurdu dediğiniz şeyler nelerdir?**
+Tecrübelerime göre, birçok Kaggle kullanıcısının yarışmalarda bekledikleri sıralamayı alamadıkları zaman moralinin bozulduğunu fark ettim. Haftalarca ve aylarca süren yoğun çalışmanın ardından, erken pes etmelerini anlayabiliyorum, ancak Kaggle yarışmalarını kazanmak kolay bir iş değil. Farklı eğitim geçmişlerine ve iş deneyimlerine sahip birçok kişi yarışıyor ve önemli olan, denemeye cesaret edebilmek. Bireysel olarak ne kadar ilerlediğimize odaklanmalıyız ve yolculuğumuzda ne kadar yol katettiğimizi görmeliyiz.
+
+**Veri analizi veya makine öğrenmesi için önerdiğiniz belirli araçlar veya kütüphaneler var mı?**
+Kapsamlı bir keşifsel veri analizi ve ilgili görselleştirmeler, veri trendlerini ve metodolojimizi geliştirebilecek bağlamları görmemizi sağlar. Görselleştirmenin gücüne inandığım için, en sevdiğim veri bilimi kütüphaneleri **Seaborn** ve **TensorBoard**’dur. **Seaborn** EDA (Keşifsel Veri Analizi) için, **TensorBoard** ise makine öğrenmesi iş akışında gerekli görselleştirmeler için kullanılır. Ara sıra **Tableau** da kullanırım.
+
+**Bir yarışmaya katılırken akılda tutulması gereken en önemli şey nedir?**
+Yarışmaya katılanların, problem tanımına derinlemesine inip araştırma yapmaya kendilerini hazırlamaları gerektiğini düşünüyorum. Kaggle’daki yarışmalar özellikle zorludur ve çoğu zaman gerçek hayattaki problemleri çözmeye yardımcı olur. İnsanlar olumlu bir zihniyete sahip olmalı ve moralini kaybetmemelidir. Kaggle yarışmaları, öğrenmek ve gelişmek için mükemmel bir fırsat sunar!
+
+---
+
+Ancak, yarışmada öne çıkmak istiyorsanız, diğer optimizatörlerden de çözüm testleri yapmaya çalışmalısınız.
+
+Bir sonraki bölümde, Kaggle yarışmalarında performansınızı artırmanın bir diğer yolunu tartışacağız: **model ansamblajı**. **Ortalama alma**, **blending (karıştırma)** ve **stacking (yığılama)** yöntemlerini keşfederek, hiperparametre ayarları ile tek başına elde edebileceğinizden daha iyi sonuçlar elde etmenin nasıl mümkün olduğunu göstereceğiz.
 
 ---
 
