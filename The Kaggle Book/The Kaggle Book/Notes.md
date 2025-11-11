@@ -8350,7 +8350,232 @@ Bir sonraki bölümde, dikkatimizi başka bir son derece geniş ve popüler prob
 
 ## Chapter 11: Modeling for NLP *(Bölüm 11: Doğal Dil İşleme (NLP) için Modellemede Yaklaşımlar)*
 
+Doğal dil işleme (NLP), dilbilim, bilgisayar bilimi ve yapay zekânın kesişim noktasında faaliyet gösteren bir alandır. Temel odak noktası, büyük miktarda doğal dil verisini işlemek ve analiz etmek için algoritmalar geliştirmektir. Son birkaç yıl içinde, Kaggle yarışmalarında giderek daha popüler bir konu haline gelmiştir. Alan kendisi oldukça geniş olup, chatbotlar ve makine çevirisi gibi çok popüler konuları kapsasa da, bu bölümde Kaggle yarışmalarında sıklıkla karşılaşılan belirli alt alanlara odaklanacağız.
+
+Duygu analizi, basit bir sınıflandırma problemi olarak son derece popülerdir ve her yerde tartışılmaktadır, bu nedenle biraz daha ilginç bir varyasyonla başlayacağız: bir tweet'teki duygu destekleyici ifadeleri tanımlamak. Ardından, açık alan soru yanıtlama probleminin örnek bir çözümünü açıklayacağız ve son olarak NLP problemleri için artırma (augmentation) konusunda bir bölümle bitireceğiz. Bu konu, bilgisayarla görme alanındaki karşılığı kadar fazla ilgi görmemektedir.
+
+Özetle, şu konuları ele alacağız:
+
+* Duygu analizi
+* Açık alan Soru-Cevap (Q&A)
+* Metin artırma stratejileri
+
 ### Sentiment analysis *(Duygu analizi)*
+
+Twitter, en popüler sosyal medya platformlarından biri olup, hem bireyler hem de şirketler için önemli bir iletişim aracıdır.
+
+Duyguyu dilde yakalamak, özellikle ikinci bağlamda önemlidir: pozitif bir tweet viral olabilir ve mesajı yayabilirken, özellikle negatif bir tweet zararlı olabilir. İnsan dili karmaşık olduğu için sadece duyguyu belirlemek değil, aynı zamanda nasıl belirlediğini de incelemek önemlidir: hangi kelimeler aslında duygu tanımına yol açtı?
+
+Bu probleme yaklaşımı, Tweet Duygu Çıkartma yarışmasından ([https://www.kaggle.com/c/tweet-sentiment-extraction](https://www.kaggle.com/c/tweet-sentiment-extraction)) alınan verileri kullanarak göstereceğiz. Kısalık adına, aşağıdaki koddan ithalatları (import) çıkardık, ancak bunları bu bölümün GitHub deposundaki ilgili Notebook'ta bulabilirsiniz.
+
+Problemi daha iyi anlayabilmek için, veriye bakalım:
+
+```python
+df = pd.read_csv('/kaggle/input/tweet-sentiment-extraction/train.csv')
+df.head()
+```
+
+İlk birkaç satır şöyle:
+
+![](im/1081.png)
+
+Gerçek tweetler, *text* sütununda saklanmaktadır. Her birinin bir duygu etiketi vardır ve bu duyguya ilişkin destekleyici cümle *selected_text* sütununda yer almaktadır (bu, duygu tahminini yapmak için kullanılan tweet'in parçasıdır).
+
+Öncelikle, temel temizlik fonksiyonlarını tanımlayarak başlayacağız. İlk olarak, web sitesi URL'lerini ve karakter olmayan öğeleri temizlemek, insanları küfürlü kelimeler yerine kullandıkları yıldızları tek bir token ("swear") ile değiştirmek istiyoruz. Bunu yapmamıza yardımcı olacak bazı düzenli ifadeler kullanıyoruz:
+
+```python
+def basic_cleaning(text):
+    text = re.sub(r'https?://www\.\S+\.com', '', text)
+    text = re.sub(r'[^A-Za-z|\s]', '', text)
+    text = re.sub(r'\*+', 'swear', text)  # Küfürlü kelimeleri **** şeklinde yakala
+    return text
+```
+
+Sonraki adımda, tweet'lerin içeriğinden HTML etiketlerini ve emojileri kaldıracağız:
+
+```python
+def remove_html(text):
+    html = re.compile(r'<.*?>')
+    return html.sub(r'', text)
+
+def remove_emoji(text):
+    emoji_pattern = re.compile("[" 
+                               u"\U0001F600-\U0001F64F"  # Emoticonlar
+                               u"\U0001F300-\U0001F5FF"  # Semboller & Piktogramlar
+                               u"\U0001F680-\U0001F6FF"  # Ulaşım & Harita sembolleri
+                               u"\U0001F1E0-\U0001F1FF"  # Bayraklar (iOS)
+                               u"\U00002702-\U000027B0"
+                               u"\U000024C2-\U0001F251"
+                               "]+", flags=re.UNICODE)
+    return emoji_pattern.sub(r'', text)
+```
+
+Son olarak, tekrarlanan karakterleri (örneğin, "waaaayyyyy" yerine "way") kaldırmamız gerekiyor:
+
+```python
+def remove_multiplechars(text):
+    text = re.sub(r'(.)\1{3,}', r'\1', text)
+    return text
+```
+
+Pratiklik açısından, dört fonksiyonu tek bir temizlik fonksiyonunda birleştiriyoruz:
+
+```python
+def clean(df):
+    for col in ['text']:  # ,'selected_text']:
+        df[col] = df[col].astype(str).apply(lambda x: basic_cleaning(x))
+        df[col] = df[col].astype(str).apply(lambda x: remove_emoji(x))
+        df[col] = df[col].astype(str).apply(lambda x: remove_html(x))
+        df[col] = df[col].astype(str).apply(lambda x: remove_multiplechars(x))
+    return df
+```
+
+Son hazırlık aşaması, önceden eğitilmiş bir model (tokenizer argümanı) kullanarak gömme vektörlerini oluşturacak fonksiyonları yazmaktır:
+
+```python
+def fast_encode(texts, tokenizer, chunk_size=256, maxlen=128):
+    tokenizer.enable_truncation(max_length=maxlen)
+    tokenizer.enable_padding(max_length=maxlen)
+    all_ids = []
+
+    for i in range(0, len(texts), chunk_size):
+        text_chunk = texts[i:i+chunk_size].tolist()
+        encs = tokenizer.encode_batch(text_chunk)
+        all_ids.extend([enc.ids for enc in encs])
+
+    return np.array(all_ids)
+```
+
+Daha sonra, tüm veri kümesiyle çalışabilmemizi sağlayacak bir ön işleme fonksiyonu oluşturuyoruz:
+
+```python
+def preprocess_news(df, stop=stop, n=1, col='text'):
+    '''Veri kümesini işleyip bir metin kümesi oluşturmak için fonksiyon'''
+    new_corpus = []
+    stem = PorterStemmer()
+    lem = WordNetLemmatizer()
+    for text in df[col]:
+        words = [w for w in word_tokenize(text) if (w not in stop)]
+        words = [lem.lemmatize(w) for w in words if len(w) > n]
+        new_corpus.append(words)
+    
+    new_corpus = [word for l in new_corpus for word in l]
+    return new_corpus
+```
+
+Önceden hazırladığımız fonksiyonları kullanarak eğitim verisini temizleyip hazırlayabiliriz. Duygu sütunu hedefimizdir ve bu sütunu performans için dummy değişkenlerine (one-hot encoding) dönüştürüyoruz:
+
+```python
+df.dropna(inplace=True)
+df_clean = clean(df)
+df_clean_selection = df_clean.sample(frac=1)
+X = df_clean_selection.text.values
+y = pd.get_dummies(df_clean_selection.sentiment)
+```
+
+Gerekli bir sonraki adım, giriş metinlerinin tokenizasyonu ve dizilere dönüştürülmesidir (bu işlemin sonunda, veri kümesinin tüm örneklerinin eşit uzunlukta olması için padding yapıyoruz):
+
+```python
+tokenizer = text.Tokenizer(num_words=20000)
+tokenizer.fit_on_texts(list(X))
+list_tokenized_train = tokenizer.texts_to_sequences(X)
+X_t = sequence.pad_sequences(list_tokenized_train, maxlen=128)
+```
+
+Model için gömme vektörlerini DistilBERT kullanarak oluşturacağız ve bu haliyle kullanacağız. DistilBERT, BERT'in hafifletilmiş bir versiyonudur: %3 performans kaybı ile %40 daha az parametre sunar. Gömme katmanını eğiterek performansı artırabiliriz, ancak bu, eğitim süresinin önemli ölçüde artmasına yol açacaktır.
+
+```python
+tokenizer = transformers.AutoTokenizer.from_pretrained("distilbert-base-uncased")  
+# Yüklenen tokenizer'ı yerel olarak kaydediyoruz
+save_path = '/kaggle/working/distilbert_base_uncased/'
+if not os.path.exists(save_path):
+    os.makedirs(save_path)
+tokenizer.save_pretrained(save_path)
+# Huggingface tokenizers kütüphanesiyle yeniden yükleme
+fast_tokenizer = BertWordPieceTokenizer(
+                 'distilbert_base_uncased/vocab.txt', lowercase=True)
+fast_tokenizer
+```
+
+Yukarıda tanımladığımız *fast_encode* fonksiyonunu ve *fast_tokenizer*'ı kullanarak tweet'leri kodlayabiliriz:
+
+```python
+X = fast_encode(df_clean_selection.text.astype(str),
+                fast_tokenizer,
+                maxlen=128)
+```
+
+Veri hazır olduğunda, modelimizi oluşturabiliriz. Bu gösterim için, bu tür uygulamalar için oldukça standart bir mimariyi seçiyoruz: LSTM katmanlarının, global pooling ve dropout ile normalize edilmesi ve üst katmanda bir yoğun katman. Gerçekten rekabetçi bir çözüm elde etmek için mimaride bazı ayarlamalar yapılması gerekebilir: "daha ağır" bir model, daha büyük gömmeler, LSTM katmanlarında daha fazla birim vb.
+
+```python
+transformer_layer = transformers.TFDistilBertModel.from_pretrained('distilbert-base-uncased')
+embedding_size = 128
+input_ = Input(shape=(100,))
+inp = Input(shape=(128,))
+embedding_matrix = transformer_layer.weights[0].numpy()
+x = Embedding(embedding_matrix.shape[0],
+              embedding_matrix.shape[1],
+              embeddings_initializer=Constant(embedding_matrix),
+              trainable=False)(inp)
+x = Bidirectional(LSTM(50, return_sequences=True))(x)
+x = Bidirectional(LSTM(25, return_sequences=True))(x)
+x = GlobalMaxPool1D()(x)
+x = Dropout(0.5)(x)
+x = Dense(50, activation='relu', kernel_regularizer='L1L2')(x)
+x = Dropout(0.5)(x)
+x = Dense(3, activation='softmax')(x)
+model_DistilBert = Model(inputs=[inp], outputs=x)
+model_DistilBert.compile(loss='categorical_crossentropy',
+                         optimizer='adam',
+                         metrics=['accuracy'])
+```
+
+Veriyi eğitim ve doğrulama olarak rastgele ayırmak için, `fit` fonksiyonunu çağırıyoruz:
+
+```python
+model_DistilBert.fit(X, y, batch_size=32, epochs=10, validation_split=0.1)
+```
+
+Aşağıda örnek çıktı yer alıyor:
+
+```
+Epoch 1/10
+27480/27480 [==============================] - 480s 17ms/step - loss: 0.5100 - accuracy: 0.7994
+Epoch 2/10
+27480/27480 [==============================] - 479s 17ms/step - loss: 0.4956 - accuracy: 0.8100
+Epoch 3/10
+27480/27480 [==============================] - 475s 17ms/step - loss: 0.4740 - accuracy: 0.8158
+```
+
+Modelin tahmin üretmesi oldukça basittir. Verilen tüm veriyi kullanabilmek için, modelimizi tüm verilerle yeniden eğitiyoruz (doğrulama yok):
+
+```python
+df_clean_final = df_clean.sample(frac=1)
+X_train = fast_encode(df_clean_selection.text.astype(str),
+                      fast_tokenizer,
+                      maxlen=128)
+y_train = y
+```
+
+Modeli yeniden tüm veri seti üzerinde eğitiyoruz ve
+
+
+tahminleri üretiyoruz:
+
+```python
+y_preds = model_DistilBert.predict(X_test)
+y_predictions = pd.DataFrame(y_preds,
+                             columns=['negative', 'neutral', 'positive'])
+y_predictions_final = y_predictions.idxmax(axis=1)
+accuracy = accuracy_score(y_test, y_predictions_final)
+print(f"The final model shows {accuracy:.2f} accuracy on the test set.")
+```
+
+Sonuç olarak, modelin test seti üzerindeki doğruluğu %74'tür.Aşağıda çıktının nasıl göründüğüne dair bir örnek gösterilmektedir; bu birkaç satırdan zaten görebileceğiniz gibi, bazen duygu bir insan okuyucusu için açık olmasına rağmen, model bunu doğru bir şekilde yakalayamamaktadır:
+
+![](im/1082.png)
+
+
 
 ### Open domain Q&A *(Açık alan soru-cevap)*
 
