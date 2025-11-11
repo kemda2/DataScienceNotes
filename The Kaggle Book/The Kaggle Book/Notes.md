@@ -6286,7 +6286,95 @@ Bir sonraki bölümde, Kaggle yarışmalarında performansınızı artırmanın 
 
 ## Chapter 9: Ensembling with Blending and Stacking Solutions *(Bölüm 9: Karıştırma ve Yığınlama (Ensemble) Çözümleri)*
 
+Kaggle'da yarışmaya başladığınızda, tek bir iyi tasarlanmış modelle kazanamayacağınızı fark etmek uzun sürmez; birden fazla modeli ansambl yapmanız gerekir. Sonrasında, hemen nasıl çalışır bir ansambl kurulacağı hakkında düşünmeye başlarsınız. Bu konuda pek fazla rehber bulunmaz ve çoğu şey Kaggle'ın halk arasında yaygın olan bilgileriyle, bilimsel makalelerden daha çok ilişkilidir.
+
+Buradaki nokta şu: Eğer ansamblaj, Kaggle yarışmalarında kazanmanın anahtarıysa, gerçek dünyada bu, karmaşıklık, kötü bakım yapılabilirlik, zor tekrar üretilebilirlik ve az bir avantajla gizli teknik maliyetlerle ilişkilidir. Çoğu zaman, sizi düşük sıralamalardan liderlik tablosunun zirvesine taşıyacak olan küçük bir artış, gerçek dünya uygulamaları için aslında çok önemli değildir çünkü maliyetler avantajları gölgeler. Ancak bu, ansamblajın gerçek dünyada hiç kullanılmadığı anlamına gelmez. **Ortalama alma** ve birkaç farklı modeli karıştırma gibi sınırlı bir biçimde ansamblaj, veri bilimi problemlerini daha etkili ve verimli bir şekilde çözebilecek modeller oluşturmanıza olanak tanır.
+
+Kaggle’daki ansamblaj yalnızca ekstra tahmin performansı kazanmanın bir yolu değil, aynı zamanda bir takım stratejisidir. Diğer takım arkadaşlarınızla çalışırken, herkesin katkılarını birleştirmek, genellikle bireysel çabalarla elde edilebilen sonuçlardan daha iyi performans gösteren bir sonuç ortaya çıkarır ve aynı zamanda takımın çalışmalarını düzenlemeye yardımcı olabilir. Herkesin çabalarını net bir hedefe yönlendirerek organize etmeye yardımcı olabilir. Aslında, işin farklı zaman dilimlerinde ve her katılımcı için farklı kısıtlamalar altında yapıldığı durumlarda, **pair coding** gibi işbirlikçi teknikler açıkça uygulanabilir değildir. Bir takım üyesi ofis saatlerinden dolayı kısıtlamalara tabi olabilir, diğer bir üyeyse sınavlar veya dersler nedeniyle kısıtlamalar yaşayabilir ve buna benzer durumlar söz konusu olabilir.
+
+Yarışmalarda takımlar, genellikle tüm katılımcıları aynı görevde senkronize etmek ve hizalamak zorunda kalmazlar ve hatta bunu yapmaları gerekmez. Ayrıca, bir takımın içindeki beceriler de farklı olabilir.
+
+Bir takım arasında paylaşılan iyi bir ansamblaj stratejisi, bireylerin kendi rutinlerine ve stillerine göre çalışmaya devam etmelerini sağlar, ancak yine de grup başarısına katkıda bulunabilirler. Bu nedenle, farklı beceriler, **tahmin çeşitliliğine dayalı ansamblaj teknikleri** kullanıldığında avantaj haline gelebilir.
+
+Bu bölümde, zaten bildiğiniz ansamblaj tekniklerinden başlayacağız, çünkü bunlar **rastgele ormanlar** ve **gradyan güçlendirme** gibi algoritmalarda yerleşik olarak bulunur ve sonra **ortalama alma**, **blending (karıştırma)** ve **stacking (yığılama)** gibi birden fazla modelin ansamblajına yönelik tekniklere geçeceğiz. Size bazı teoriler, bazı uygulamalar ve aynı zamanda Kaggle’da kendi çözümlerinizi oluştururken şablon olarak kullanabileceğiniz bazı kod örnekleri de sunacağız.
+
+Bu konuları ele alacağız:
+
+* Ansamblaj algoritmalarına kısa bir giriş
+* Modelleri bir ansamblajda ortalama almak
+* Meta-model kullanarak modelleri karıştırmak
+* Modelleri yığılama (stacking) yapmak
+* Karmaşık stacking ve blending çözümleri oluşturmak
+
+> Bu bölümü okumanız ve tüm teknikleri denemeniz için sizi baş başa bırakmadan önce, Kaggle'da yarışırken hem bizim hem de tüm uygulayıcılar için harika bir ansamblaj kaynağını paylaşmalıyız: **Triskelion** (Hendrik Jacob van Veen) ve birkaç işbirlikçisi (**Le Nguyen The Dat**, **Armando Segnini**) tarafından 2015 yılında yazılan blog yazısı. Kaggle Ensembling Guide, aslında mlwave blogunda bulunuyordu ([https://mlwave.com/kaggle-ensembling-guide](https://mlwave.com/kaggle-ensembling-guide)), ancak bu blog artık aktif değil, ancak rehberin içeriğini **[https://usermanual.wiki/Document/Kaggle20ensembling20guide.685545114.pdf](https://usermanual.wiki/Document/Kaggle20ensembling20guide.685545114.pdf)** adresinden temin edebilirsiniz. Bu yazı, o dönemde Kaggle forumlarında ansamblaj hakkında yer alan, hem örtük hem de açık bilgileri derlemişti.
+
 ### A brief introduction to ensemble algorithms *(Topluluk (ensemble) algoritmalarına kısa bir giriş)*
+
+Modellerin ansamblajlarının tek modellerden daha iyi performans gösterebileceği fikri, yeni bir fikir değildir. Bu düşünceyi, Viktorya dönemi Britanya'sında yaşayan **Sir Francis Galton**'a kadar izleyebiliriz. Galton, bir kasaba festivalinde bir öküzün ağırlığını tahmin etmenin, kalabalıktan alınan eğitimli ya da eğitimsiz tahminlerin ortalamasını almak kadar, tek bir uzman tarafından yapılmış dikkatle hazırlanmış tahminden daha faydalı olduğunu fark etti.
+
+1996 yılında, **Leo Breiman** birden fazla modelin daha tahmin edici bir model oluşturacak şekilde birleştirilmesi fikrini resmiyet kazanmıştı. Breiman, bagging (bootstrap aggregating) tekniğini tanıtarak, bunun daha sonra daha etkili olan **random forests (rastgele ormanlar)** algoritmalarının gelişimine yol açtığını gösterdi. Ardından, diğer ansamblaj teknikleri, örneğin **gradient boosting (gradyan güçlendirme)** ve **stacking (yığılama)** de tanıtıldı, böylece bugün kullandığımız ansamblaj yöntemlerinin yelpazesi tamamlandı.
+
+Bu ansamblaj algoritmalarının ilk nasıl tasarlandığını öğrenmek için birkaç makaleye başvurabilirsiniz:
+
+* **Random forests** için, Breiman, L. "Bagging predictors". *Machine learning*, 24.2 – 1996: 123-140’ı okuyabilirsiniz.
+* **Boosting**'in ilk nasıl çalıştığını daha ayrıntılı öğrenmek isterseniz, Freund, Y. ve Schapire, R.E. "Experiments with a new boosting algorithm", icml, Vol. 96 – 1996 ve Friedman, J. H. "Greedy function approximation: a gradient boosting machine". *Annals of Statistics* (2001): 1189-1232'yi okuyabilirsiniz.
+* **Stacking** için, teknik hakkında ilk resmi taslak için Ting, K. M. ve Witten, I. H. "Stacking bagged and dagged models", 1997'ye başvurabilirsiniz.
+
+Kaggle yarışmalarındaki ilk ansamblaj stratejileri, doğrudan **bagging** ve **random forest** stratejilerinden alınmış, sınıflandırma ve regresyon için kullanılmıştır. Bu stratejiler, çeşitli tahminlerin ortalamasını almayı içeriyordu ve bu nedenle **ortalama alma teknikleri** olarak adlandırıldılar. Bu yaklaşımlar, Kaggle'daki ilk yarışmalardan 11 yıl önce, farklı modellerin sonuçlarının ortalamasına dayalı stratejilerin Netflix yarışmasından önce de öne çıkmasıyla hızla ortaya çıktı. Başarıları sayesinde, ortalama alma temelli temel ansamblaj teknikleri, gelecek yarışmalar için bir standart oluşturdu ve hala bugün dahi liderlik tablosunda daha yüksek puanlar almak için oldukça faydalıdır ve geçerlidir.
+
+Daha karmaşık ve hesaplama açısından daha pahalı olan **stacking**, yarışmalardaki problemler daha karmaşık hale geldiğinde ve katılımcılar arasındaki rekabet daha şiddetli bir şekilde ortaya çıktığında biraz daha sonra ortaya çıkmıştır. Tıpkı **random forest** yaklaşımının farklı tahminleri ortalama almayı teşvik etmesi gibi, **boosting** de **stacking** yaklaşımlarını büyük ölçüde etkilemiştir. Boosting’de, bilgiyi ardışık bir şekilde yeniden işleyerek, öğrenme algoritmanız, problemleri daha iyi ve daha tam bir şekilde modelleyebilir. Aslında, **gradyan boosting**'de, ardışık karar ağaçları, önceki iterasyonların yakalayamadığı verilerin kısımlarını modellemek için inşa edilir. Bu fikir, **stacking** ansamblajlarında tekrar edilir, burada önceki modellerin sonuçlarını yığıp, bunları tekrar işleyerek tahmin performansında bir artış elde edilir.
+
+> **Rob Mulla**
+> 
+> [Kaggle Profil](https://www.kaggle.com/robikscube)
+> 
+> 
+> 
+> Rob, ansamblaj konusundaki görüşlerini ve Kaggle'dan öğrendiklerini bizimle paylaştı. **Yarışmalar, Not Defterleri ve Tartışmalar** alanlarında Grandmaster olan ve Biocore LLC'de Kıdemli Veri Bilimcisi olarak çalışan Rob'dan çok şey öğrenebiliriz.
+> 
+> 
+> 
+> **Soru:** En sevdiğiniz yarışma türü nedir ve neden? Kaggle'daki teknikler ve çözüm yaklaşımları açısından, uzmanlık alanınız nedir?
+> 
+> **Cevap:** En sevdiğim yarışmalar, benzersiz veri setlerini içeren ve farklı modelleme yaklaşımlarını gerektiren yarışmalardır. Bir yarışmanın sadece büyük modellerin eğitilmesini istememesi, veriyi gerçekten çok iyi anlamayı ve görevle ilgili özel mimarileri kullanarak fikirler uygulamayı gerektirmesi hoşuma gider. Belirli bir yaklaşımda uzmanlaşmaya çalışmıyorum. Kaggle'a ilk başladığımda, çoğunlukla **gradient boosting** modellerine odaklanıyordum, ancak son yıllarda rekabetçi olabilmek için derin öğrenme, bilgisayarla görme (computer vision), doğal dil işleme (NLP) ve optimizasyon konularında bilgi sahibi oldum. En sevdiğim yarışmalar, sadece tek bir teknik kullanmakla kalmayıp, birden fazla tekniğin bir arada kullanılmasını gerektiren yarışmalardır.
+> 
+> 
+> 
+> **Soru:** Kaggle yarışmalarına nasıl yaklaşıyorsunuz? Bu yaklaşım, günlük işinizden ne kadar farklı?
+> 
+> **Cevap:** Kaggle yarışmalarına bazı açılardan iş projelerime çok benzer bir şekilde yaklaşırım. İlk olarak, veri anlayışı gelir. Gerçek dünyadaki projelerde, problemi tanımlamak ve iyi bir metrik geliştirmek gerekebilir. Kaggle'da ise bu zaten sizin için yapılmış olur. Sonrasında, verilerin ve metriklerin nasıl birbirleriyle ilişkili olduğunu anlamak ve problemi en iyi şekilde çözeceğini düşündüğünüz modelleme tekniklerini geliştirmek ve test etmek gerekir. Kaggle ile gerçek dünya veri bilimi arasındaki en büyük fark, en son aşamada modelleri ansamblajlamak ve ayarlarını yapmak için gereken küçük ince ayarları yapmaktır; birçok gerçek dünya uygulamasında, bu tür büyük ansamblajlara gerek yoktur çünkü hesaplama maliyeti ve performans artışı çok küçük olabilir.
+> 
+> 
+> 
+> **Soru:** Katıldığınız ve zorlayıcı bulduğunuz bir yarışma hakkında bilgi verir misiniz? Bu görevi nasıl ele aldınız?
+> 
+> **Cevap:** Katıldığım oldukça zorlayıcı bir yarışma, **NFL Helmet Impact Detection** yarışmasıydı. Bu yarışma video verisi içeriyordu ve bu konuda hiç deneyimim yoktu. Ayrıca, yaygın yaklaşımları araştırmam ve konuyla ilgili mevcut makaleleri okumam gerekiyordu. Çözümün karmaşıklığını artıran bir iki aşamalı bir yaklaşım üzerinde çalışmak zorunda kaldım. Zorlayıcı bulduğum bir başka yarışma da **Indoor Location Navigation** yarışmasıydı. Bu yarışma modelleme, optimizasyon ve veriyi gerçekten iyi anlama gerektiriyordu. Yarışmada çok iyi bir sonuç alamadım, ancak çok şey öğrendim.
+> 
+> 
+> 
+> **Soru:** Kaggle, kariyerinize nasıl yardımcı oldu?
+> 
+> **Cevap:** Evet, Kaggle veri bilimi alanında tanınmamı sağladı. Ayrıca yeni teknikler hakkında bilgi ve anlayışım arttı ve çok sayıda zeki insanla tanışıp çalışarak makine öğrenmesi konusundaki becerilerimi geliştirdim.
+> 
+> Takımım, **NFL Helmet Impact Detection** yarışmasında ikinci oldu. Bunun öncesinde NFL ile ilgili birçok yarışmaya katıldım. Yarışmanın düzenleyicileri benimle iletişime geçti ve sonunda şu anki rolümü almama yardımcı oldu.
+> 
+> 
+> 
+> **Soru:** Deneyimsiz Kagglers’ın genellikle göz ardı ettiği şeyler nelerdir? Başlangıçta bilseydiniz, hangi bilgileri öğrenmek isterdiniz?
+> 
+> **Cevap:** Deneyimsiz Kagglers’ın bazen modellerin ansamblajını ve hiperparametre ayarlamalarını gereğinden fazla dert ettiklerini düşünüyorum. Bunlar yarışmanın sonlarına doğru önemli olsa da, iyi bir temel modeliniz yoksa çok da önemli değillerdir. Ayrıca, yarışma metriğini tamamen anlamanın son derece önemli olduğunu düşünüyorum. Birçok Kagglers, çözümünüzü değerlendirme metriğine nasıl optimize edeceğinizi anlamanın ne kadar önemli olduğunu göz ardı eder.
+> 
+> 
+> 
+> **Soru:** Geçmişte yarışmalarda hangi hataları yaptınız?
+> 
+> **Cevap:** Birçok hata yaptım. Modelleri aşırı uyum sağladım (overfitting) ve sonunda faydalı olmayan şeylere zaman harcadım. Ancak bunun, gelecekteki yarışmalara daha iyi yaklaşmayı öğrenmem için gerekli olduğunu hissediyorum. Hatalarım, belirli bir yarışmadaki başarımı olumsuz etkileyebilir, ancak sonraki yarışmalarda daha iyi olmama yardımcı oldular.
+> 
+> 
+> 
+> **Soru:** Veri analizi veya makine öğrenmesi için kullanmanızı tavsiye edeceğiniz özel araçlar veya kütüphaneler var mı?
+> 
+> **Cevap:** **EDA** (Keşifsel Veri Analizi) için, verileri **NumPy**, **Pandas** ve **Matplotlib** veya başka bir görselleştirme kütüphanesi ile manipüle edebilmeyi bilmek gerekir. Modelleme için, uygun bir çapraz doğrulama (cross-validation) şeması kurmayı bilmek önemlidir, bunun için **Scikit-learn** kullanabilirsiniz. **XGBoost/LightGBM** gibi standart modelleri nasıl temel alacağınızı (baseline) bilmek faydalıdır. Derin öğrenme kütüphaneleri genellikle **TensorFlow/Keras** veya **PyTorch**'tur. Bu iki ana derin öğrenme kütüphanesinden birini öğrenmek önemlidir.
 
 ### Averaging models into an ensemble *(Modelleri ortalama alarak birleştirme)*
 
