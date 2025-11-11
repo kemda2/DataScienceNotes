@@ -5461,6 +5461,204 @@ Bu örnekte, **Bayesian optimizasyon** keşif ve sömürü stratejilerini birle�
 
 #### Customizing a Bayesian optimization search *(Bayesyen aramayı özelleştirme)*
 
+Scikit-optimize tarafından sunulan **BayesSearchCV** fonksiyonu kesinlikle kullanışlıdır; çünkü bir hiperparametre aramasının tüm öğelerini kendi başına sarar ve düzenler. Ancak, bazı sınırlamaları da vardır. Örneğin, bir yarışmada şu durumlarda faydalı olabilir:
+
+* Her arama iterasyonu üzerinde daha fazla kontrol sahibi olmak (örneğin, rastgele arama ile Bayesian aramayı karıştırmak)
+* Algoritmalarda erken durdurmayı uygulayabilmek
+* Doğrulama stratejinizi daha fazla özelleştirmek
+* Çalışmayan deneyleri erken durdurmak (örneğin, tüm katların ortalamasını beklemek yerine, tek bir çapraz doğrulama katının performansını hemen değerlendirmek)
+* Benzer performans gösteren hiperparametre setlerinden kümeler oluşturmak (örneğin, yalnızca kullanılan hiperparametreler farklı olan birden fazla model oluşturmak ve bunları bir *blending ensemble* için kullanmak)
+
+Bu görevlerin her biri, BayesSearchCV’nin dahili prosedürünü değiştirebilseydiniz çok karmaşık olmazdı. Neyse ki, Scikit-optimize bunu yapmanıza izin veriyor. Aslında, BayesSearchCV’nin ve paketteki diğer sarıcıların arkasında, kendi arama fonksiyonunuzun bağımsız bir parçası olarak kullanabileceğiniz belirli minimize fonksiyonları vardır:
+
+* **gp_minimize**: Gauss süreçleri kullanarak Bayesian optimizasyonu
+* **forest_minimize**: Rastgele ormanlar veya aşırı rastgeleleştirilmiş ağaçlar kullanarak Bayesian optimizasyonu
+* **gbrt_minimize**: Gradient boosting kullanarak Bayesian optimizasyonu
+* **dummy_minimize**: Sadece rastgele arama
+
+Aşağıdaki örnekte, önceki aramayı kendi özel arama fonksiyonumuzu kullanarak değiştireceğiz. Yeni özel fonksiyon, eğitim sırasında erken durdurmayı kabul edecek ve kat doğrulama sonuçlarından biri iyi performans göstermiyorsa deneyleri budayacaktır.
+
+> Örneğin çalışır hâli, Kaggle Notebook’ta bulunabilir: [Hacking Bayesian Optimization](https://www.kaggle.com/lucamassaron/hacking-bayesian-optimization).
+
+Önceki örnekte olduğu gibi, gerekli paketleri import ederek başlıyoruz:
+
+```python
+# Temel kütüphaneler
+import numpy as np
+import pandas as pd
+from time import time
+import pprint
+import joblib
+from functools import partial
+import warnings
+warnings.filterwarnings("ignore")  # skopt verbosity nedeniyle uyarıları kapatma
+
+# Sınıflandırıcı/Regresör
+from xgboost import XGBRegressor
+
+# Model seçimi
+from sklearn.model_selection import KFold, StratifiedKFold, cross_val_score, train_test_split
+
+# Ölçütler
+from sklearn.metrics import mean_squared_error, make_scorer
+
+# Skopt fonksiyonları
+from skopt import BayesSearchCV
+from skopt.callbacks import DeadlineStopper, DeltaYStopper
+from skopt.space import Real, Categorical, Integer
+from skopt import gp_minimize, forest_minimize, gbrt_minimize, dummy_minimize
+from skopt.utils import use_named_args  # Parametre listesini isimlendirilmiş argümanlara çeviren decorator
+
+# Veri işleme
+from sklearn.preprocessing import OrdinalEncoder
+```
+
+Verileri, **30 Days of ML** yarışmasından yükleyelim:
+
+```python
+X_train = pd.read_csv("../input/30-days-of-ml/train.csv")
+X_test = pd.read_csv("../input/30-days-of-ml/test.csv")
+
+y_train = X_train.target
+X_train = X_train.set_index('id').drop('target', axis='columns')
+X_test = X_test.set_index('id')
+
+# Kategorik değişkenleri belirleme
+categoricals = [item for item in X_train.columns if 'cat' in item]
+
+# Kategorik verileri OrdinalEncoder ile işleme
+ordinal_encoder = OrdinalEncoder()
+X_train[categoricals] = ordinal_encoder.fit_transform(X_train[categoricals])
+X_test[categoricals] = ordinal_encoder.transform(X_test[categoricals])
+```
+
+Şimdi hiperparametre araması için gerekli tüm öğeleri ayarlıyoruz: scoring fonksiyonu, doğrulama stratejisi, arama alanı ve optimize edilecek makine öğrenimi modeli. Scoring fonksiyonu ve doğrulama stratejisi, daha sonra Bayesian optimizasyonunun minimize etmeye çalışacağı **objective function**’ın temel öğeleri olacak:
+
+```python
+# Scoring fonksiyonu
+scoring = partial(mean_squared_error, squared=False)
+
+# CV stratejisi
+kf = KFold(n_splits=5, shuffle=True, random_state=0)
+
+# Arama alanı
+space = [
+    Real(0.01, 1.0, 'uniform', name='learning_rate'),
+    Integer(1, 8, name='max_depth'),
+    Real(0.1, 1.0, 'uniform', name='subsample'),
+    Real(0.1, 1.0, 'uniform', name='colsample_bytree'),  
+    Real(0, 100., 'uniform', name='reg_lambda'),
+    Real(0, 100., 'uniform', name='reg_alpha'),
+    Real(1, 30, 'uniform', name='min_child_weight')
+]
+
+model = XGBRegressor(n_estimators=10_000, booster='gbtree', random_state=0)
+```
+
+Bu sefer **n_estimators** parametresini arama alanına dahil etmedik; bunun yerine model örneği oluştururken yüksek bir değer verdik, çünkü modelin erken durdurulmasını doğrulama setine göre yapmayı planlıyoruz.
+
+---
+
+Devamında, objective function’ı tanımlayacağız. Bu fonksiyon, optimize edilecek parametreleri alacak ve skoru döndürecek. Ancak aynı zamanda hazırladığınız arama öğelerini de kabul etmelidir. İyi bir uygulama olarak, bu öğeleri fonksiyonun içine almak daha avantajlıdır; böylece öğeler değişmez olur ve fonksiyonla birlikte taşınabilir.
+
+```python
+# Minimize edilecek objective function
+def make_objective(model, X, y, space, cv, scoring, validation=0.2):
+    @use_named_args(space)
+    def objective(**params):
+        model.set_params(**params)
+        print("\nTesting: ", params)
+        validation_scores = list()
+        for k, (train_index, test_index) in enumerate(kf.split(X, y)):
+            val_index = list()
+            train_examples = int(train_examples * (1 - validation))
+            train_index, val_index = (train_index[:train_examples], train_index[train_examples:])
+            start_time = time()
+            model.fit(
+                X.iloc[train_index,:], y[train_index],
+                early_stopping_rounds=50,
+                eval_set=[(X.iloc[val_index,:], y[val_index])], 
+                verbose=0
+            )
+            end_time = time()
+            
+            rounds = model.best_iteration
+            test_preds = model.predict(X.iloc[test_index,:])
+            test_score = scoring(y[test_index], test_preds)
+            print(f"CV Fold {k+1} rmse:{test_score:0.5f}-{rounds} rounds - it took {end_time-start_time:0.0f} secs")
+            validation_scores.append(test_score)
+
+            # Erken durdurma kontrolü
+            if len(history[k]) >= 10:
+                threshold = np.percentile(history[k], q=25)
+                if test_score > threshold:
+                    print(f"Early stopping for under-performing fold: threshold is {threshold:0.5f}")
+                    return np.mean(validation_scores)
+            history[k].append(test_score)
+        return np.mean(validation_scores)
+    return objective
+```
+
+Bu fonksiyon, veri ve modeli kullanarak çapraz doğrulama yapar ve erken durdurma uygular. Daha sonra tüm bu öğeleri **make_objective** ile birleştirip yalnızca parametreleri alan bir fonksiyon elde ediyoruz:
+
+```python
+objective = make_objective(model, X_train, y_train, space=space, cv=kf, scoring=scoring)
+```
+
+Ayrıca her iterasyonu kaydedecek bir callback fonksiyonu hazırlıyoruz:
+
+```python
+def onstep(res):
+    global counter
+    x0 = res.x_iters   
+    y0 = res.func_vals
+    print('Last eval: ', x0[-1], ' - Score ', y0[-1])
+    print('Current iter: ', counter, ' - Best Score ', res.fun, ' - Best Args: ', res.x)
+    joblib.dump((x0, y0), 'checkpoint.pkl') 
+    counter += 1
+```
+
+Başlangıç için rastgele arama ile birkaç deney oluşturuyoruz:
+
+```python
+counter = 0
+history = {i:list() for i in range(5)}
+used_time = 0
+
+gp_round = dummy_minimize(func=objective,
+                          dimensions=space,
+                          n_calls=30,
+                          callback=[onstep],
+                          random_state=0)
+```
+
+Kaydedilen deneyleri geri çağırabilir ve Bayes optimizasyonunu devam ettirebiliriz:
+
+```python
+x0, y0 = joblib.load('checkpoint.pkl')
+gp_round = gp_minimize(func=objective,
+                       x0=x0,
+                       y0=y0,
+                       dimensions=space,
+                       acq_func='gp_hedge',
+                       n_calls=30,
+                       n_initial_points=0,
+                       callback=[onstep],
+                       random_state=0)
+```
+
+Son olarak, en iyi skoru ve hiperparametre setini yazdırabiliriz:
+
+```python
+x0, y0 = joblib.load('checkpoint.pkl')
+print(f"Best score: {gp_round.fun:0.5f}")
+print("Best hyperparameters:")
+for sp, x in zip(gp_round.space, gp_round.x):
+    print(f"{sp.name:25} : {x}")
+```
+
+Bu parametreler ile modelimizi yeniden eğitip yarışmada kullanabiliriz. Ayrıca sonuçları analiz edip benzer performans gösteren ancak farklı parametre setlerine sahip modelleri gruplayabiliriz; bu da **blending** için idealdir ve daha çeşitli bir model seti oluşturur.
+
 #### Extending Bayesian optimization to neural architecture search *(Bayesyen optimizasyonu sinir ağı mimarisi aramasına genişletme)*
 
 #### Creating lighter and faster models with KerasTuner *(KerasTuner ile daha hafif ve hızlı modeller oluşturma)*
