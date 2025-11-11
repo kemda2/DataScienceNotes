@@ -8575,7 +8575,63 @@ Sonuç olarak, modelin test seti üzerindeki doğruluğu %74'tür.Aşağıda ç�
 
 ![](im/1082.png)
 
+Şimdi, duygu atama problemlerini çözmek için örnek bir iş akışı sunduk (metnin hangi bölümlerinin duygu sınıflandırma kararlarına yol açtığını belirleme). Rekabetçi performans elde etmek istiyorsanız, aşağıda sıralanan bazı iyileştirmeler yapılabilir, etkileri muhtemel sırayla:
 
+* **Daha büyük gömme vektörleri**: Bu, zaten (işlenmiş) giriş verisi seviyesinde daha fazla bilgi yakalamamıza olanak tanır.
+* **Daha büyük model**: LSTM katmanlarında daha fazla birim kullanmak.
+* **Daha uzun eğitim**: Diğer bir deyişle, daha fazla epoch.
+
+Yukarıda listelenen iyileştirmeler kesinlikle modelin performansını artıracaktır, ancak iş akışımızın temel öğeleri yeniden kullanılabilir:
+
+* **Veri temizleme ve ön işleme**
+* **Metin gömme vektörleri oluşturma**
+* **Hedef model mimarisinde tekrar eden katmanlar ve düzenlileştirme uygulamak**
+
+Şimdi, NLP yarışmalarında sıkça karşılaşılan bir problem olan açık alanlı soru-cevap (open domain question answering) konusuna geçelim.
+
+> **Abhishek Thakur**
+> 
+> [https://www.kaggle.com/abhishek](https://www.kaggle.com/abhishek)
+> 
+> 
+> 
+> Abhishek Thakur ile görüştük; kendisi, dünyanın ilk dört katmanlı Kaggle Grandmaster'ı. Şu anda Hugging Face'te çalışıyor ve burada AutoNLP'yi geliştiriyor; aynı zamanda İngilizce dilinde yazılmış Kaggle hakkında neredeyse tek kitap olan *Approaching (Almost) Any Machine Learning Problem* kitabının da yazarı.
+> 
+> 
+> 
+> **Kaggle'daki uzmanlık alanınız nedir?**
+> 
+> Hiçbir şey. Her yarışma farklıdır ve her birinden çok şey öğrenebilirsiniz. Bir uzmanlık alanım olsaydı, o alandaki tüm yarışmaları kazanırdım.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşırısınız? Bu yaklaşım, günlük işlerinizden ne kadar farklı?**
+> 
+> Yapmam gereken ilk şey, veriyi gözden geçirmek ve biraz anlamaya çalışmaktır. Yarışmaya geç kaldıysam, genel EDA (Exploratory Data Analysis) kernel'larından yardım alırım.
+> 
+> Bir probleme (Kaggle'da veya dışında) yaklaşırken ilk yaptığım şey bir benchmark (karşılaştırma ölçütü) oluşturmaktır. Bir benchmark oluşturmak çok önemlidir çünkü size gelecekteki modellerinizi karşılaştırabileceğiniz bir temel sunar. Eğer yarışmaya geç kaldıysam, benchmark'ı oluştururken genellikle public (halka açık) Notebooks'lardan yardım almamaya çalışırım. Bunu yaparsak, yalnızca tek bir yönde düşünmeye başlarız. En azından ben böyle hissediyorum.
+> 
+> Benchmark'ı tamamladıktan sonra, karmaşık şeyler yapmadan (örneğin stacking veya blending) mümkün olduğunca fazla performans sıkıştırmaya çalışırım. Sonra veriyi ve modelleri tekrar gözden geçirir, baselini (temel) adım adım iyileştirmeye çalışırım.
+> 
+> Günlük işlerde bazen çok benzerlikler oluyor. Çoğu zaman bir benchmark vardır ve ardından o benchmark'ı aşacak teknikler, özellikler ve modeller geliştirmek gerekir.
+> 
+> 
+> 
+> **Girdiğiniz en ilginç yarışma hangisiydi? Özel bir içgörünüz oldu mu?**
+> 
+> Her yarışma ilginçtir.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu?**
+> 
+> Tabii ki, yardımcı oldu. Son birkaç yıldır Kaggle, veri bilimcisi ve makine öğrenmesi mühendisleri işe alırken oldukça iyi bir üne sahip oldu. Kaggle sıralaması ve bir dizi veri seti ile deneyim, endüstride bir şekilde kesinlikle yardımcı oluyor. Farklı türdeki problemleri çözme konusunda ne kadar deneyiminiz varsa, iterasyonu o kadar hızlı yapabilirsiniz. Bu da endüstrilerde çok faydalıdır. Kimse iş için değer yaratmayan bir şeyi aylarca yapmak istemez.
+> 
+> 
+> 
+> **Deneyiminize göre, deneyimsiz Kaggle kullanıcıları genellikle neyi gözden kaçırıyor? Şu an bildiğiniz, ama ilk başladığınızda bilmek istediğiniz şey neydi?**
+> 
+> Çoğu yeni başlayan çok kolay pes eder. Bir Kaggle yarışmasına katılmak ve üst sıralarda yer alanları görünce korkmak çok kolaydır. Eğer yeni başlayanlar Kaggle'da başarılı olmak istiyorsa, azim sahibi olmaları gerekir. Bana göre azim, anahtardır. Birçok yeni başlayan da kendi başlarına başlamayı başaramaz ve public kernel'lara sıkıca tutunurlar. Bu, onları yalnızca public kernel yazarlarının düşündüğü şekilde düşünmeye iter. Tavsiyem, kendi başınıza bir yarışmaya başlamak, verileri incelemek, özellikler geliştirmek, modeller oluşturmak ve sonra kernel'lara ve tartışmalara göz atıp başkalarının neyi farklı yaptığını görmek olacaktır. Sonra öğrendiklerinizi kendi çözümünüze dahil edin.
 
 ### Open domain Q&A *(Açık alan soru-cevap)*
 
