@@ -7054,6 +7054,110 @@ Aşağıda, bu dönüşümlerin pratikte nasıl çalıştığını, Amerikalı o
 
 ![](im/1064.png)
 
+Görüntüyü dikey veya yatay eksende çevirebiliriz:
+
+![](im/1065.png)
+
+Dönmeler oldukça açıktır; arka plandaki görüntünün otomatik olarak doldurulmasına dikkat edin:
+
+![](im/1066.png)
+
+Ayrıca, görüntüyü ilgi alanına göre kırpabiliriz:
+
+![](im/1067.png)
+
+Yüksek seviyede, artırma işlemleri iki şekilde uygulanabilir:
+
+* **Offline (Çevrimdışı):** Bu yöntemler genellikle daha küçük veri setlerinde (daha az resim veya daha küçük boyutlar, ancak "küçük" tanımınız mevcut donanıma bağlıdır) uygulanır. Burada amaç, orijinal resimlerin modifiye edilmiş versiyonlarını veri setiniz için bir ön işleme adımı olarak üretmek ve ardından bunları "orijinal" resimlerle birlikte kullanmaktır.
+
+* **Online (Çevrimiçi):** Bu yöntemler daha büyük veri setleri için kullanılır. Artırılmış resimler diske kaydedilmez; artırmalar mini-batch'ler halinde uygulanır ve modele iletilir.
+
+Sonraki bölümlerde, resim veri setinizi artırmak için en yaygın iki yöntem hakkında bir genel bakış sunacağız: Keras'ın yerleşik işlevselliği ve albumentations paketini. Ayrıca, skimage, OpenCV, imgaug, Augmentor, SOLT gibi başka seçenekler de mevcuttur, ancak en popüler olanlar üzerinde duracağız.
+
+Bu bölümde tartışılan yöntemler, GPU ile güçlendirilmiş görüntü analizine odaklanmaktadır. Tensor işleme birimlerinin (TPU'lar) kullanımı yeni bir uygulama alanı olmakla birlikte, hâlâ nispeten niş bir konu. TPU destekli analizle birlikte görüntü artırma ile ilgilenen okuyucular, Chris Deotte'in (@cdeotte) mükemmel çalışmalarını incelemeye davet edilir:
+
+[https://www.kaggle.com/cdeotte/triple-stratified-kfold-with-tfrecords](https://www.kaggle.com/cdeotte/triple-stratified-kfold-with-tfrecords)
+
+Chris, dört kez Kaggle Grandmaster'ı olup, oluşturduğu Not Defterleri ve katıldığı tartışmalarla harika bir eğitimci olarak tanınmaktadır. Deneyim seviyeniz ne olursa olsun, herhangi bir Kaggler için mutlaka takip edilmesi gereken biri.
+
+---
+
+Veriyi, **Cassava Leaf Disease Classification** yarışmasından ([https://www.kaggle.com/c/cassava-leaf-disease-classification](https://www.kaggle.com/c/cassava-leaf-disease-classification)) alacağız. Her zamanki gibi, temel hazırlıklara başlıyoruz: ilk olarak gerekli paketleri yükleyelim:
+
+```python
+import os
+import glob
+import numpy as np
+import scipy as sp
+import pandas as pd
+import cv2
+from skimage.io import imshow, imread, imsave
+# imgaug
+import imageio
+import imgaug as ia
+import imgaug.augmenters as iaa
+# Albumentations
+import albumentations as A
+# Keras
+# from keras.preprocessing.image import ImageDataGenerator, array_to_img, 
+# img_to_array, load_img
+# Visualization
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+%matplotlib inline
+import seaborn as sns
+from IPython.display import HTML, Image
+# Warnings
+import warnings
+warnings.filterwarnings("ignore")
+```
+
+Sonraki adımda, daha sonra sunumları kolaylaştıracak bazı yardımcı işlevleri tanımlayacağız. Resimleri dizilere yüklemek için bir yol oluşturmalıyız:
+
+```python
+def load_image(image_id):
+    file_path = image_id 
+    image = imread(Image_Data_Path + file_path)
+    return image
+```
+
+Birden fazla resmi galeri tarzında görüntülemek istiyoruz, bu yüzden bir dizi alacak ve istenilen sütun sayısına göre yeniden şekillendirilmiş bir ızgara şeklinde çıktı verecek bir işlev oluşturuyoruz:
+
+```python
+def gallery(array, ncols=3):
+    nindex, height, width, intensity = array.shape
+    nrows = nindex//ncols
+    assert nindex == nrows*ncols
+    result = (array.reshape(nrows, ncols, height, width, intensity)
+              .swapaxes(1,2)
+              .reshape(height*nrows, width*ncols, intensity))
+    return result
+```
+
+Temel hazırlıkları hallettik, şimdi artırma için resimleri yükleyebiliriz:
+
+```python
+data_dir = '../input/cassava-leaf-disease-classification/'
+Image_Data_Path = data_dir + '/train_images/'
+train_data = pd.read_csv(data_dir + '/train.csv')
+# İlk 10 resmi bellekte daha hızlı erişim için yüklüyoruz
+train_images = train_data["image_id"][:10].apply(load_image)
+```
+
+Şimdi, referans resmimizi bilelim diye bir tane resmi yükleyelim:
+
+```python
+curr_img = train_images[7]
+plt.figure(figsize = (15,15))
+plt.imshow(curr_img)
+plt.axis('off')
+```
+
+İşte bu:
+
+![](im/1068.png)
+
+Aşağıdaki bölümlerde, bu referans resminden hem Keras'ın yerleşik işlevselliğini hem de albumentations kütüphanesini kullanarak nasıl artırılmış resimler oluşturulacağını göstereceğiz.
 
 #### Keras built-in augmentations *(Keras’ın yerleşik artırmaları)*
 
