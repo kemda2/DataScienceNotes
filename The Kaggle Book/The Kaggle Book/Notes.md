@@ -8716,6 +8716,455 @@ xtrain.head(4)
 
 ![](im/1083.png)
 
+**30 hedef sütunumuzu belirliyoruz:**
+
+```python
+target_cols = ['question_asker_intent_understanding',
+               'question_body_critical', 
+               'question_conversational', 'question_expect_short_answer', 
+               'question_fact_seeking',
+               'question_has_commonly_accepted_answer', 
+               'question_interestingness_others',
+               'question_interestingness_self', 
+               'question_multi_intent', 'question_not_really_a_question', 
+               'question_opinion_seeking', 'question_type_choice', 
+               'question_type_compare', 'question_type_consequence', 
+               'question_type_definition', 'question_type_entity', 
+               'question_type_instructions', 'question_type_procedure', 
+               'question_type_reason_explanation',
+               'question_type_spelling', 
+               'question_well_written', 'answer_helpful', 
+               'answer_level_of_information', 'answer_plausible', 
+               'answer_relevance', 'answer_satisfaction', 
+               'answer_type_instructions', 'answer_type_procedure', 
+               'answer_type_reason_explanation', 'answer_well_written']
+```
+
+Anlamları ve yorumlarıyla ilgili tartışmalar için okuyucu, yarışmanın **Veri Sayfası**'na başvurabilir, [buradan ulaşılabilir](https://www.kaggle.com/c/google-quest-challenge/data).
+
+**Sonraki adımda özellik mühendisliğine geçiyoruz.** Başlangıç olarak, soru başlığı ve gövdesi ile cevabın kelime sayısını hesaplıyoruz. Bu, birçok uygulamada oldukça basit ama şaşırtıcı derecede faydalı bir özelliktir:
+
+```python
+for colname in ['question_title', 'question_body', 'answer']:
+    newname = colname + '_word_len'
+    
+    xtrain[newname] = xtrain[colname].str.split().str.len()
+    xtest[newname] = xtest[colname].str.split().str.len()
+```
+
+Oluşturduğumuz bir sonraki özellik, metnin içindeki benzersiz kelimelerin oranını hesaplayarak leksikal çeşitliliktir:
+
+```python
+colname = 'answer'
+xtrain[colname+'_div'] = xtrain[colname].apply
+                         (lambda s: len(set(s.split())) / len(s.split()) )
+xtest[colname+'_div'] = xtest[colname].apply
+                        (lambda s: len(set(s.split())) / len(s.split()) )
+```
+
+Çevrimiçi kaynaklardan elde edilen bilgilerle çalışırken, bir web adresinin bileşenlerini inceleyerek potansiyel olarak bilgilendirici özellikler çıkarabiliriz (bileşenleri, adresin nokta ile ayrılmış elemanları olarak tanımlıyoruz); bileşen sayısını sayarız ve her birini ayrı özellik olarak saklarız:
+
+```python
+for df in [xtrain, xtest]:
+    df['domcom'] = df['question_user_page'].apply
+                   (lambda s: s.split('://')[1].split('/')[0].split('.'))
+    # Bileşen sayısını say
+    df['dom_cnt'] = df['domcom'].apply(lambda s: len(s))
+    # Eğer bazı alan adlarının adı daha kısa ise, uzunluğu doldur
+    df['domcom'] = df['domcom'].apply(lambda s: s + ['none', 'none'])
+    # Bileşenler
+    for ii in range(0,4):
+        df['dom_'+str(ii)] = df['domcom'].apply(lambda s: s[ii])
+```
+
+Birçok hedef sütun, cevabın belirli bir soru için ne kadar alakalı olduğuyla ilgilidir. Bu ilişkiyi nicelleştirmenin bir yolu, iki dize arasındaki ortak kelimeleri değerlendirmektir:
+
+```python
+# Ortak öğeler
+for df in [xtrain, xtest]:
+    df['q_words'] = df['question_body'].apply(lambda s: [f for f in s.split() if f not in eng_stopwords])
+    df['a_words'] = df['answer'].apply(lambda s: [f for f in s.split() if f not in eng_stopwords])
+    df['qa_word_overlap'] = df.apply(lambda s: len(np.intersect1d(s['q_words'], s['a_words'])), axis=1)
+    df['qa_word_overlap_norm1'] = df.apply(lambda s: s['qa_word_overlap'] / (1 + len(s['a_words'])), axis=1)
+    df['qa_word_overlap_norm2'] = df.apply(lambda s: s['qa_word_overlap'] / (1 + len(s['q_words'])), axis=1)
+    df.drop(['q_words', 'a_words'], axis=1, inplace=True)
+```
+
+Stopwords (durdurma kelimeleri) ve noktalama işaretlerinin sıklıklarını inceleyerek metnin stilini ve niyetini anlayabiliriz:
+
+```python
+for df in [xtrain, xtest]:
+    
+    ## Metindeki karakter sayısı ##
+    df["question_title_num_chars"] = df["question_title"].apply(lambda x: len(str(x)))
+    df["question_body_num_chars"] = df["question_body"].apply(lambda x: len(str(x)))
+    df["answer_num_chars"] = df["answer"].apply(lambda x: len(str(x)))
+    
+    ## Metindeki stopword sayısı ##
+    df["question_title_num_stopwords"] = df["question_title"].apply(lambda x: len([w for w in str(x).lower().split() if w in eng_stopwords]))
+    df["question_body_num_stopwords"] = df["question_body"].apply(lambda x: len([w for w in str(x).lower().split() if w in eng_stopwords]))
+    df["answer_num_stopwords"] = df["answer"].apply(lambda x: len([w for w in str(x).lower().split() if w in eng_stopwords]))
+    
+    ## Metindeki noktalama sayısı ##
+    df["question_title_num_punctuations"] = df['question_title'].apply(lambda x: len([c for c in str(x) if c in string.punctuation]))
+    df["question_body_num_punctuations"] = df['question_body'].apply(lambda x: len([c for c in str(x) if c in string.punctuation]))
+    df["answer_num_punctuations"] = df['answer'].apply(lambda x: len([c for c in str(x) if c in string.punctuation]))
+    
+    ## Başlıkta büyük harfli kelimelerin sayısı ##
+    df["question_title_num_words_upper"] = df["question_title"].apply(lambda x: len([w for w in str(x).split() if w.isupper()]))
+    df["question_body_num_words_upper"] = df["question_body"].apply(lambda x: len([w for w in str(x).split() if w.isupper()]))
+    df["answer_num_words_upper"] = df["answer"].apply(lambda x: len([w for w in str(x).split() if w.isupper()]))
+```
+
+**"Vintage" (Eski Tarz) özellikler hazırlandıktan sonra** – burada metnin semantik yapısına dikkat edilmeden sadece basit özet istatistiklere odaklanıyoruz – sorular ve cevaplar için gömme (embedding) oluşturma işlemine geçebiliriz. Teorik olarak, verimizde ayrı bir **word2vec** türü model eğitebiliriz (ya da mevcut bir modeli ince ayar yapabiliriz), ancak bu sunumda, eğitilmiş bir modeli olduğu gibi kullanacağız. Faydalı bir seçim, Google’ın **Universal Sentence Encoder** (Evrensel Cümle Kodlayıcı) modelidir ([https://tfhub.dev/google/universal-sentence-encoder/4](https://tfhub.dev/google/universal-sentence-encoder/4)). Bu model, çeşitli veri kaynakları üzerinde eğitilmiştir ve İngilizce bir metni alıp, 512 boyutlu bir vektör çıktısı verir.
+
+```python
+module_url = "../input/universalsentenceencoderlarge4/"
+embed = hub.load(module_url)
+```
+
+Metin alanlarını gömmelere dönüştürme kodu aşağıda sunulmuştur: Eğitim/test kümelerindeki girişlere, bellek verimliliği açısından her birini (batch olarak) döngüyle işleyerek gömme oluştururuz ve sonra bunları orijinal listeye ekleriz.
+
+**Son veri çerçeveleri**, her bir batch seviyesindeki gömmeleri dikey olarak birleştirerek oluşturulur:
+
+```python
+embeddings_train = {}
+embeddings_test = {}
+for text in ['question_title', 'question_body', 'answer']:
+    train_text = xtrain[text].str.replace('?', '.').str.replace('!', '.').tolist()
+    test_text = xtest[text].str.replace('?', '.').str.replace('!', '.').tolist()
+    curr_train_emb = []
+    curr_test_emb = []
+    batch_size = 4
+    ind = 0
+    while ind*batch_size < len(train_text):
+        curr_train_emb.append(embed(train_text[ind*batch_size: (ind + 1)*batch_size])["outputs"].numpy())
+        ind += 1
+    ind = 0
+    while ind*batch_size < len(test_text):
+        curr_test_emb.append(embed(test_text[ind*batch_size: (ind + 1)*batch_size])["outputs"].numpy())
+        ind += 1    
+    embeddings_train[text + '_embedding'] = np.vstack(curr_train_emb)
+    embeddings_test[text + '_embedding'] = np.vstack(curr_test_emb)
+    print(text)
+```
+
+**Hem soruların hem de cevapların vektörel temsilleri** verildiğinde, alanlar arasındaki semantik benzerliği hesaplamak için vektör çiftleri üzerinde farklı mesafe metrikleri kullanılabilir. Farklı metrikleri denemenin amacı, çeşitli türdeki özellikleri yakalamaktır; sınıflandırma bağlamında bir analoji yapacak olursak, durumu tam olarak görmek için hem doğruluk hem de entropiyi kullanmak gibi bir şeydir:
+
+```python
+l2_dist = lambda x, y: np.power(x - y, 2).sum(axis=1)
+cos_dist = lambda x, y: (x * y).sum(axis=1)
+```
+
+Mesafe özelliklerini hesaplayıp, bunları ayrı sütunlarda toplarız:
+
+```python
+dist_features_train = np.array([
+    l2_dist(embeddings_train['question_title_embedding'], embeddings_train['answer_embedding']),
+    l2_dist(embeddings_train['question_body_embedding'], embeddings_train['answer_embedding']),
+    l2_dist(embeddings_train['question_body_embedding'], embeddings_train['question_title_embedding']),
+    cos_dist(embeddings_train['question_title_embedding'], embeddings_train['answer_embedding']),
+    cos_dist(embeddings_train['question_body_embedding'], embeddings_train['answer_embedding']),
+    cos_dist(embeddings_train['question_body_embedding'], embeddings_train['question_title_embedding'])
+]).T
+
+dist_features_test = np.array([
+    l2_dist(embeddings_test['question_title_embedding'], embeddings_test['answer_embedding']),
+    l2_dist(embeddings_test['question_body_embedding'], embeddings_test['answer_embedding']),
+    l2_dist(embeddings_test['question_body_embedding'], embeddings_test['question_title_embedding']),
+    cos_dist(embeddings_test['question_title_embedding'], embeddings_test['answer_embedding']),
+    cos_dist(embeddings_test['question_body_embedding'], embeddings_test['answer_embedding']),
+    cos_dist(embeddings_test['question_body_embedding'], embeddings_test['question_title_embedding'])
+]).T
+```
+
+Mesafe özelliklerini ayrı sütunlarda toplarız:
+
+```python
+for ii in range(0, 6):
+    xtrain['dist' + str(ii)] = dist_features_train[:, ii]
+    xtest['dist' + str(ii)] = dist_features_test[:, ii]
+```
+
+Son olarak, metin alanlarının **TF-IDF temsillerini** de oluşturabiliriz; genel fikir, giriş metninin çeşitli dönüşümleri üzerinden birden fazla özellik yaratmak ve bunları nispeten basit bir modele beslemektir.
+
+Bu şekilde, karmaşık bir derin öğrenme modeli eğitmeye gerek kalmadan verinin özelliklerini yakalayabiliriz.
+
+Metni, hem kelime düzeyinde hem de karakter düzeyinde analiz ederek bunu başarabiliriz. Bellek tüketimini sınırlamak için her iki tür özelliğin maksimum sayısına üst sınır koyuyoruz (kendi belleğinizle orantılı olarak bu limitler artırılabilir):
+
+```python
+limit_char = 5000
+limit_word = 25000
+```
+
+**Karakter ve kelime düzeyinde vektörleştiricileri** başlatıyoruz. Problemimizin yapısı, Scikit-learn'den **Pipeline** fonksiyonunun kullanımına uygun olup, modelin eğitim prosedüründe birden fazla adımın birleşimini sağlar. Başlangıç olarak başlık sütunu için iki ayrı dönüştürücü oluşturuyoruz (kelime ve karakter düzeyinde):
+
+```python
+title_col = 'question_title'
+title_transformer = Pipeline([
+    ('tfidf', TfidfVectorizer(lowercase=False, max_df=0.3, min_df=1,
+                               binary=False, use_idf=True, smooth_idf=False,
+                               ngram_range=(1, 2), stop_words='english',
+                               token_pattern='(?u)\\b\\w+\\b', max_features=limit_word))
+])
+
+title_transformer2 = Pipeline([
+    ('tfidf2', TfidfVectorizer(sublinear_tf=True,
+                               strip_accents='unicode', analyzer='char',
+                               stop_words='english', ngram_range=(1, 4),
+                               max_features=limit_char))
+])
+```
+
+**Aynı mantığı (iki farklı pipeline dönüştürücüsü) soru metni için de kullanıyoruz:**
+
+```python
+body_col = 'question_body'
+body_transformer = Pipeline([
+    ('tfidf', TfidfVectorizer(lowercase=False, max_df=0.3, min_df=1,
+                              binary=False, use_idf=True, smooth_idf=False,
+                              ngram_range=(1, 2), stop_words='english',
+                              token_pattern='(?u)\\b\\w+\\b', max_features=limit_word))
+])
+body_transformer2 = Pipeline([
+    ('tfidf2', TfidfVectorizer(sublinear_tf=True,
+                               strip_accents='unicode', analyzer='char',
+                               stop_words='english', ngram_range=(1, 4), max_features=limit_char))
+])
+```
+
+**Ve son olarak cevap sütunu için:**
+
+```python
+answer_col = 'answer'
+answer_transformer = Pipeline([
+    ('tfidf', TfidfVectorizer(lowercase=False, max_df=0.3, min_df=1,
+                              binary=False, use_idf=True, smooth_idf=False,
+                              ngram_range=(1, 2), stop_words='english',
+                              token_pattern='(?u)\\b\\w+\\b', max_features=limit_word))
+])
+answer_transformer2 = Pipeline([
+    ('tfidf2', TfidfVectorizer(sublinear_tf=True,
+                               strip_accents='unicode', analyzer='char',
+                               stop_words='english', ngram_range=(1, 4), max_features=limit_char))
+])
+```
+
+**Özellik mühendisliği kısmını, sayısal özellikleri işleyerek tamamlıyoruz. Yalnızca basit yöntemler kullanıyoruz:** Eksik değerlerin doldurulması için eksik değer impute (tamamlama) işlemi ve dağılımı stabilize etmek ve daha Gauss dağılımına yakın hale getirmek için **power transformer** (güç dönüştürücü) kullanıyoruz (bu, sayısal bir özelliği sinir ağlarında kullanırken genellikle yardımcı olur):
+
+```python
+num_cols = [
+    'question_title_word_len', 'question_body_word_len',
+    'answer_word_len', 'answer_div',
+    'question_title_num_chars', 'question_body_num_chars',
+    'answer_num_chars',
+    'question_title_num_stopwords', 'question_body_num_stopwords',
+    'answer_num_stopwords',
+    'question_title_num_punctuations',
+    'question_body_num_punctuations', 'answer_num_punctuations',
+    'question_title_num_words_upper',
+    'question_body_num_words_upper', 'answer_num_words_upper',
+    'dist0', 'dist1', 'dist2', 'dist3', 'dist4', 'dist5'
+]
+num_transformer = Pipeline([
+    ('impute', SimpleImputer(strategy='constant', fill_value=0)),
+    ('scale', PowerTransformer(method='yeo-johnson'))
+])
+```
+
+**Pipelines'in faydalı bir özelliği, bunların birleştirilebilmesi ve iç içe kullanılabilmesidir.** Sonraki adımda, kategorik değişkenleri işleme işlevselliği ekliyoruz ve ardından tümünü birleştirerek **ColumnTransformer** nesnesine yerleştiriyoruz. Bu, veri ön işleme ve özellik mühendisliği mantığını daha verimli hale getirir. Girişin her parçası uygun şekilde kendi yöntemiyle işlenebilir:
+
+```python
+cat_cols = ['dom_0', 'dom_1', 'dom_2', 
+            'dom_3', 'category', 'is_question_no_name_user',
+            'is_answer_no_name_user', 'dom_cnt']
+cat_transformer = Pipeline([
+    ('impute', SimpleImputer(strategy='constant', fill_value='')),
+    ('encode', OneHotEncoder(handle_unknown='ignore'))
+])
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('title', title_transformer, title_col),
+        ('title2', title_transformer2, title_col),
+        ('body', body_transformer, body_col),
+        ('body2', body_transformer2, body_col),
+        ('answer', answer_transformer, answer_col),
+        ('answer2', answer_transformer2, answer_col),
+        ('num', num_transformer, num_cols),
+        ('cat', cat_transformer, cat_cols)
+    ]
+)
+```
+
+**Son olarak, veri ön işleme ve model eğitimi adımlarını birleştiren bir Pipeline nesnesi kullanmaya hazırız:**
+
+```python
+pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('estimator', Ridge(random_state=RANDOM_STATE))
+])
+```
+
+**Modelinizin performansını örnek dışı olarak değerlendirmek her zaman iyi bir fikirdir:** Bunu yapmanın pratik bir yolu, Bölüm 6'da tartıştığımız "out-of-fold" (OOF) tahminlerini oluşturmaktır. Bu prosedür şu adımları içerir:
+
+1. Veriyi katmanlara ayırın. Bizim durumumuzda, GroupKFold kullanıyoruz, çünkü bir sorunun birden fazla cevabı olabilir (veri çerçevesinde ayrı satırlarda). Bilgi sızmasını engellemek için her sorunun yalnızca bir katmanda yer almasını sağlamak istiyoruz.
+2. Her katman için, diğer katmanlardaki verilerle modeli eğitin ve seçilen katman için tahminler oluşturun, ayrıca test seti için de tahminler yapın.
+3. Test setindeki tahminlerin ortalamasını alın.
+
+İlk olarak, tahminleri saklayacağımız "depolama" matrislerini hazırlayalım. **mvalid** out-of-fold tahminlerini içerecek, **mfull** ise tüm test seti üzerindeki tahminlerin, katmanlar arasında ortalanmış halini saklayacaktır. Birkaç soru birden fazla aday cevaba sahip olduğundan, KFold bölmesini **question_body** üzerinde stratifike ederiz:
+
+```python
+nfolds = 5
+mvalid = np.zeros((xtrain.shape[0], len(target_cols)))
+mfull = np.zeros((xtest.shape[0], len(target_cols)))
+kf = GroupKFold(n_splits=nfolds).split(X=xtrain.question_body, 
+                                       groups=xtrain.question_body)
+```
+
+Katmanlar arasında döngüye gireriz ve ayrı modelleri inşa ederiz:
+
+```python
+for ind, (train_index, test_index) in enumerate(kf):
+    
+    # Veriyi eğitim ve doğrulama olarak ayır
+    x0, x1 = xtrain.loc[train_index], xtrain.loc[test_index]
+    y0, y1 = ytrain.loc[train_index], ytrain.loc[test_index]
+    
+    for ii in range(0, ytrain.shape[1]):
+        # Modeli eğit
+        be = clone(pipeline)
+        be.fit(x0, np.array(y0)[:, ii])
+        filename = 'ridge_f' + str(ind) + '_c' + str(ii) + '.pkl'
+        pickle.dump(be, open(filename, 'wb'))
+        
+        # OOF ve test tahminleri için depolama matrisleri
+        mvalid[test_index, ii] = be.predict(x1)
+        mfull[:, ii] += be.predict(xtest) / nfolds
+        
+    print('---')
+```
+
+Eğitim kısmı tamamlandıktan sonra, yarışmada belirtilen metrikle performansı değerlendirebiliriz:
+
+```python
+corvec = np.zeros((ytrain.shape[1], 1))
+for ii in range(0, ytrain.shape[1]):
+    mvalid[:, ii] = rankdata(mvalid[:, ii]) / mvalid.shape[0]
+    mfull[:, ii] = rankdata(mfull[:, ii]) / mfull.shape[0]
+    
+    corvec[ii] = stats.spearmanr(ytrain[ytrain.columns[ii]], mvalid[:, ii])
+    
+print(corvec.mean())
+```
+
+Sonuç olarak elde edilen **final score (sonuç skoru)** 0.34’tür, bu da başlangıç için oldukça kabul edilebilir bir sonuçtur.
+
+Bu bölümde, bir metin gövdesi üzerinde nasıl açıklayıcı özellikler oluşturulacağına dair bir örnek sunduk. Bu, bir NLP yarışması için kazandırıcı bir formül olmasa da (puan iyi, ancak madalya bölgesine ulaşmak için bir garanti sağlamaz), aracınızda tutmanız için faydalı bir araçtır. Bu bölümü, metin artırma tekniklerine genel bir bakış sağlayan bir bölümle sonlandırıyoruz.
+
+> **Shotaro Ishihara**
+> 
+> [https://www.kaggle.com/sishihara](https://www.kaggle.com/sishihara)
+> 
+> Bu bölümdeki ikinci röportajımız, **Shotaro Ishihara**, yani u++ ile. Kendisi, PetFinder.my Adoption Prediction yarışmasında kazanan takımın bir üyesi olan bir **Competitions ve Notebooks Master**. Şu anda Japonya'daki bir haber medya şirketinde **Veri Bilimci** ve **Araştırmacı** olarak çalışmakta, ayrıca Kaggle üzerine Japonca kitaplar yayımlamış, bunlar arasında **Abhishek Thakur**'ın kitabının çevirisi de bulunmaktadır. Kaggle ile ilgili haftalık bir bülteni ([https://www.getrevue.co/profile/upura](https://www.getrevue.co/profile/upura)) Japonca olarak hazırlamaktadır.
+> 
+> 
+> 
+> **Kaggle üzerine yazdığınız/çevirdiğiniz kitapları nerede bulabiliriz?**
+> 
+> 
+> 
+> * [https://www.kspub.co.jp/book/detail/5190067.html](https://www.kspub.co.jp/book/detail/5190067.html) – Titanic GettingStarted yarışmasına dayanan bir Kaggle başlangıç kitabı.
+> 
+> * [https://book.mynavi.jp/ec/products/detail/id=123641](https://book.mynavi.jp/ec/products/detail/id=123641) – Abhishek Thakur'ın **Approaching (Almost) Any Machine Learning Problem** adlı kitabının Japonca çevirisi.
+> 
+> 
+> 
+> **Favori yarışma türünüz nedir ve neden? Kaggle'da teknikler ve çözümleme yaklaşımları açısından uzmanlık alanınız nedir?**
+> 
+> Kaggle'da, tabular veya metin veri setleriyle yapılan yarışmalara katılmayı çok seviyorum. Bu tür veri setleri, haber medya şirketlerinde yaygın bir şekilde kullanıldıkları için bana oldukça tanıdık geliyor. Bu veri setlerini ele alma konusunda oldukça iyi bir bilgiye sahibim.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşırız? Bu yaklaşım günlük işinizden ne kadar farklıdır?**
+> 
+> İlk süreç aynıdır: sorunu keşifsel veri analizi (EDA) yoluyla ele almayı düşünmek. Kaggle, ileri düzey makine öğrenmesini kullanmayı varsayar, ancak bu iş dünyasında böyle değildir. Pratikte, makine öğrenmesini kullanmamaya çalışırım. Makine öğrenmesi kullansam bile, BERT gibi ileri düzey yöntemler yerine, **TF-IDF** ve **lineer regresyon** gibi klasik yöntemlerle çalışmayı tercih ederim.
+> 
+> 
+> 
+> **Makine öğrenmesi kullanmaktan kaçınma konusunda gerçek dünya problemleriyle ilgili daha fazla bilgi edinmek istiyoruz. Bize bazı örnekler verebilir misiniz?**
+> 
+> İş yerinde otomatik makale özetlemeleri yaparken, bir sinir ağı tabanlı yaklaşım ([https://www.jstage.jst.go.jp/article/pjsai/JSAI2021/0/JSAI2021_1D4OS3c02/_article/-char/en](https://www.jstage.jst.go.jp/article/pjsai/JSAI2021/0/JSAI2021_1D4OS3c02/_article/-char/en)) yerine daha basit bir çıkarımcı yaklaşım kullanıyoruz ([https://www.jstage.jst.go.jp/article/pjsai/JSAI2021/0/JSAI2021_1D2OS3a03/_article/-char/en](https://www.jstage.jst.go.jp/article/pjsai/JSAI2021/0/JSAI2021_1D2OS3a03/_article/-char/en)).
+> 
+> Makine öğrenmesi ile %100 performans garanti etmek zordur ve insanlar tarafından anlaşılması ve uygulanması kolay basit yöntemler bazen tercih edilir.
+> 
+> 
+> 
+> **Girdiğiniz özellikle zorlu bir yarışmayı anlatın ve bu görevi ele almak için hangi içgörüleri kullandınız?**
+> 
+> PetFinder.my Adoption Prediction yarışmasında çok modlu (multi-modal) bir veri seti sunulmuştu. Birçok katılımcı, tüm veri türlerini keşfetmeye ve kullanmaya çalıştı ve ana yaklaşım, resimlerden ve metinlerden özellik çıkarıp bunları birleştirip **LightGBM** eğitmekti. Ben de aynı yaklaşımı kullandım. Şaşırtıcı bir şekilde, takım arkadaşım **takuoko** ([https://www.kaggle.com/takuok](https://www.kaggle.com/takuok)), tüm veri setlerini uçtan uca işleyen harika bir sinir ağı geliştirdi. İyi tasarlanmış sinir ağları, çok modlu yarışmalarda **LightGBM**'yi geride bırakma potansiyeline sahip. Bu, 2019'da öğrendiğim bir ders.
+> 
+> 
+> 
+> **Bu ders bugün geçerli mi?**
+> 
+> Bence cevap evet. 2019'a kıyasla, sinir ağları çok modlu verileri daha iyi işleyebiliyor.
+> 
+> 
+> 
+> **Kaggle kariyerinizde size yardımcı oldu mu? Yardımcı olduysa, nasıl?**
+> 
+> Evet. Kaggle, bana veri analizi konusunda çok fazla deneyim kazandırdı. Kaggle'dan öğrendiğim makine öğrenmesi bilgisi, daha başarılı bir şekilde çalışmama büyük ölçüde yardımcı oldu. Kaggle'daki başarılarım ve işteki çalışmalarım, 2020'de **International News Media Association**'dan **30 Under 30** Ödülü ve **Grand Prize** almamın başlıca sebeplerinden biriydi. Kaggle ayrıca, birçok insanla tanışmama fırsat tanıdı. Bu ilişkiler kesinlikle kariyer gelişimime katkı sağladı.
+> 
+> 
+> 
+> **Kaggle sayesinde portföyünüzü nasıl oluşturdunuz?**
+> 
+> Öğrenilen beceriler, yarışma sonuçları, yayımlanan Notebooks, kitaplar, bültenler ve diğer içerikler.
+> 
+> 
+> 
+> **Yayımlarınızı nasıl tanıtıyorsunuz?**
+> 
+> Çeşitli iletişim kanallarım var ve tanıtım için uygun araçları kullanıyorum. Örneğin, **Twitter**, kişisel bloglar ve **YouTube**.
+> 
+> 
+> 
+> **Tecrübenize göre, deneyimsiz Kaggle kullanıcıları genellikle neyi gözden kaçırır? Şu anda bildiğiniz ama başta öğrenseydiniz iyi olurdu dediğiniz şey nedir?**
+> 
+> Keşifsel veri analizinin önemi. Makine öğrenmesi alanında **No Free Lunch** teoremi diye bir kavram vardır. Biz yalnızca algoritmaları öğrenmemeliyiz, aynı zamanda zorluklarla nasıl başa çıkılacağını da öğrenmeliyiz. **No Free Lunch** teoremi, tüm problemler üzerinde iyi performans gösteren evrensel bir modelin olmadığına dair bir ifadedir.
+> 
+> Makine öğrenmesi yarışmalarında, skoru artırmak için veri setinin ve görevin özelliklerine uygun bir model bulmak çok önemlidir.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda yaptığınız hangi hatalar oldu?**
+> 
+> **Public leaderboard**'a aşırı uyum sağlamak. **LANL Earthquake Prediction** yarışmasında, public leaderboard'da oldukça iyi bir sıralama yapmıştım ve yarışmayı 5. sırada bitirdim. Ancak nihai sıralamam 211. oldu, yani sınırlı bir veri setine çok fazla inandım. Aşırı uyum sağlama (overfitting), makine öğrenmesinde çok popüler bir kavramdır ve Kaggle sayesinde bunun önemini acı bir şekilde öğrendim.
+> 
+> 
+> 
+> **Aşırı uyumdan kaçınmak için önerdiğiniz özel bir yöntem var mı?**
+> 
+> Eğitim ve değerlendirme veri setlerinin nasıl bölündüğünü dikkatlice gözlemlemek önemlidir. Bu bölmeyi tekrar eden bir doğrulama seti oluşturmaya çalışırım.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenmesi için önerdiğiniz belirli araçlar veya kütüphaneler var mı?**
+> 
+> **Pandas**'ı çok seviyorum, çünkü tabular veri setlerini işlemede temel bir kütüphanedir. Keşifsel veri analizi yapmak için veriyi çıkarır, toplar ve görselleştiririm.
+> 
+> 
+> 
+> **Pandas’ı ustaca kullanmak için ne önerirsiniz?**
+> 
+> Bazı topluluk tutorial'larına göz atabilirsiniz. Kaggle ayrıca Pandas ve özellik mühendisliği üzerine bazı öğretici kurslar da sunuyor.
+> 
+> 
+> 
+> **Diğer yarışma platformlarını kullanıyor musunuz? Bunlar Kaggle ile nasıl karşılaştırılır?**
+> 
+> Zaman zaman Japon platformları olan **Signate**, **Nishika** gibi platformları kullanıyorum. ([https://upura.github.io/projects/data_science_competitions/](https://upura.github.io/projects/data_science_competitions/)). Bunlar işlevsellik ve kullanıcı deneyimi açısından kesinlikle Kaggle'dan daha zayıf, ancak **Japonca dil** gibi tanıdık konuları görmek ilginç.
+
 ### Text augmentation strategies *(Metin artırma stratejileri)*
 
 #### Basic techniques *(Temel teknikler)*
