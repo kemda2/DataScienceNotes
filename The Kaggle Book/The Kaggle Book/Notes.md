@@ -9973,7 +9973,109 @@ Bir sonraki bölümde, farklı yarışmalarda kullanılan **diğer yöntemlere d
 
 ### The name of the game *(Oyunun özü)*
 
+Yukarıda tartışılan nispeten basit oyunların ötesinde, simülasyon yarışmaları daha **karmaşık düzenekler** içerir. Bu bölümde bunları kısaca ele alacağız.
+
+İlk örnek, Halite oyunudur ve yarışma sayfasında ([https://www.kaggle.com/c/halite](https://www.kaggle.com/c/halite)) şu şekilde tanımlanmıştır:
+
+**Halite [...]**, küçük bir gemi filosu inşa edip kontrol ettiğiniz bir **kaynak yönetimi oyunudur**. Algoritmalarınız, ışıklı bir enerji kaynağı olan **halite** toplamak için gemilerin hareketlerini belirler. Maçın sonunda en fazla haliteye sahip olan kazanır, ancak etkili ve verimli hareketleri nasıl yapacağınızı çözmek size kalmıştır. Filonuzu kontrol eder, yeni gemiler inşa eder, tersaneler kurar ve oyun tahtasında yenilenen halite’yi çıkarırsınız.
+
+Oyun, görsel olarak şöyle görünmektedir:
+
+![](im/1089.png)
+
+Kaggle, oyun etrafında iki yarışma düzenledi: bir Playground sürümü ([https://www.kaggle.com/c/halite-iv-playground-edition](https://www.kaggle.com/c/halite-iv-playground-edition)) ve standart Featured sürümü ([https://www.kaggle.com/c/halite](https://www.kaggle.com/c/halite)). Klasik pekiştirmeli öğrenme yaklaşımı bu örnekte daha az faydalıydı; çünkü rastgele sayıda birim (gemiler/bazlar) ve dinamik bir rakip havuzu ile, kredi atama (credit assignment) problemi “normal” seviyedeki bilgisayar kaynaklarına sahip kişiler için çözülemez hale geliyordu.
+
+Kredi atama problemini tam genel biçimiyle açıklamak bu kitabın kapsamının ötesindedir, ancak ilgilenen okuyuculara öncelikle Wikipedia’daki ilgili maddeyi ([https://en.wikipedia.org/wiki/Assignment_problem](https://en.wikipedia.org/wiki/Assignment_problem)) incelemeleri ve ardından Mesnard ve arkadaşlarının mükemmel giriş makalesini okumaları önerilir: [https://proceedings.mlr.press/v139/mesnard21a.html](https://proceedings.mlr.press/v139/mesnard21a.html).
+
+Tom van de Wiele’nin kazanan çözümü ([https://www.kaggle.com/c/halite/discussion/183543](https://www.kaggle.com/c/halite/discussion/183543)) bu örnekte başarılı olan modifiye yaklaşımın (her bir birim için bağımsız kredi ataması ile derin pekiştirmeli öğrenme) mükemmel bir özetini sunar.
+
+Başka bir örnek, nispeten karmaşık bir oyun olan Lux AI yarışmasıdır ([https://www.kaggle.com/c/lux-ai-2021](https://www.kaggle.com/c/lux-ai-2021)). Bu yarışmada katılımcılar, kaynak toplama ve dağıtımını birleştiren çok değişkenli bir optimizasyon problemini çözmek için ajanlar tasarlamakla görevlendirilmişti ve diğer oyuncularla rekabet etmeliydiler. Ayrıca başarılı ajanlar, rakiplerinin hamlelerini analiz edip buna göre tepki vermek zorundaydı. Bu yarışmanın ilginç bir özelliği, “meta” bir yaklaşımın popülerliği oldu: taklit öğrenme (imitation learning) ([https://paperswithcode.com/task/imitation-learning](https://paperswithcode.com/task/imitation-learning)). Bu, pekiştirmeli öğrenmede oldukça yeni bir yaklaşımdır ve davranış politikasını gösterimlerden öğrenmeye odaklanır — durum-hareket çiftlerinin üretimini tanımlayan özel bir model olmadan. Bu fikrin rekabetçi bir uygulaması, Kaggle kullanıcısı Ironbar tarafından sunulmuştur ([https://www.kaggle.com/c/lux-ai-2021/discussion/293911](https://www.kaggle.com/c/lux-ai-2021/discussion/293911)).
+
+Son olarak, Kaggle’daki simülasyon yarışmaları tartışması, Google Research Football with Manchester City F.C. yarışması ([https://www.kaggle.com/c/google-football/overview](https://www.kaggle.com/c/google-football/overview)) olmadan tamamlanmış sayılmaz. Bu yarışmanın motivasyonu, araştırmacıların AI ajanlarının futbol gibi karmaşık ortamlarda oynayabilme yeteneğini keşfetmesiydi. Yarışmanın “Overview” bölümünde problem şöyle formüle edilmiştir:
+
+> Spor, kısa vadeli kontrol, pas gibi öğrenilmiş kavramlar ve yüksek seviyeli stratejinin bir dengesi gerektirir; bu da ajanlara öğretmek için zor olabilir. Ajanları eğitmek ve test etmek için mevcut bir ortam vardır, ancak diğer çözümler daha iyi sonuçlar sunabilir.
+
+Yukarıdaki bazı örneklerin aksine, bu yarışma pekiştirmeli öğrenme yaklaşımları ile domine edilmiştir:
+
+* **Team Raw Beast (3.)**: AlphaStar’dan esinlenen bir metodoloji izledi: [https://www.kaggle.com/c/google-football/discussion/200709](https://www.kaggle.com/c/google-football/discussion/200709)
+* **Salty Fish (2.)**: Bir tür self-play (kendi kendine oyun) yöntemi kullandı: [https://www.kaggle.com/c/google-football/discussion/202977](https://www.kaggle.com/c/google-football/discussion/202977)
+* **Kazananlar, WeKick**: Derin öğrenme tabanlı bir çözüm kullandı, yaratıcı özellik mühendisliği ve ödül yapısı ayarlamaları yaptı: [https://www.kaggle.com/c/google-football/discussion/202232](https://www.kaggle.com/c/google-football/discussion/202232)
+
+Yukarıda listelenen çözümleri incelemek, pekiştirmeli öğrenmenin bu tür problemleri çözmek için nasıl kullanılabileceğini öğrenmek için mükemmel bir başlangıç noktasıdır.
+
+> Fırat Gönen
+> 
+> [https://www.kaggle.com/frtgnn](https://www.kaggle.com/frtgnn)
+> 
+> 
+> 
+> Bu bölümdeki röportajımız için, Datasets, Notebooks ve Discussion alanlarında Triple Grandmaster olan ve HP Data Science Global Ambassador unvanına sahip Fırat Gönen ile konuştuk. Kaggle yaklaşımını ve zaman içinde tutumunun nasıl evrildiğini bizlerle paylaşıyor.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Kaggle’da teknik ve çözüm yaklaşımı açısından uzmanlık alanınız nedir?**
+> 
+> Favori yarışma türüm zamanla değişti. Önceden, sadece iyi bir dizüstü bilgisayar ve biraz sabırla trendleri çözebileceğiniz çok genel tabular veri yarışmalarını tercih ederdim. Eğitim ve test setleri arasındaki uç trendleri iyi görebildiğimi düşünürdüm. Zamanla, HP tarafından ambassadorship ödülü almam ve çalışma istasyonum sayesinde kendimi daha çok bilgisayarlı görme (computer vision) yarışmalarına yönlendirdim, ancak hâlâ öğrenecek çok şeyim var.
+> 
+> 
+> 
+> **Kaggle yarışmalarına nasıl yaklaşıyorsunuz? Bu yaklaşım günlük işinizden ne kadar farklı?**
+> 
+> Genellikle modelleme kısmını mümkün olduğunca geciktirmeyi tercih ediyorum. Bu zamanı EDA, aykırı değerleri inceleme, forumları okuma gibi işlere ayırmayı ve sabırlı olmayı seviyorum. Özellik mühendisliğiyle işimi bitirdiğimi hissettiğimde, farklı mimari sonuçları görmek için sadece benchmark modelleri oluşturuyorum. Profesyonel işimde de tekniklerim çok benzer. Büyük zaman harcayarak en iyisini yapmaya çalışmanın faydasız olduğunu düşünüyorum; zaman ile başarı arasında bir denge olmalı.
+> 
+> 
+> 
+> **Girdiğiniz özellikle zor bir yarışmadan ve bu görevi çözmek için kullandığınız yöntemlerden bahsedin.**
+> 
+> François Chollet tarafından düzenlenen yarışma inanılmaz zordu; bizi AGI’ye zorlayan ilk yarışmaydı. Bu yarışmada kendimi oldukça güçsüz hissettiğimi hatırlıyorum, ama birçok yeni teknik öğrendim. Herkesin öğrendiği şeylerden biri, veri biliminin sadece makine öğrenmesi olmadığını hatırlamaktı. Karma tam sayı programlama gibi birkaç teknik Kaggle’da tekrar ortaya çıktı.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Olumluysa, nasıl?**
+> 
+> Elbette: Kaggle sayesinde birçok yeni teknik öğrendim ve güncel kaldım. Kariyerimde ana sorumluluğum çoğunlukla yönetim ile ilgili. Bu yüzden Kaggle, birçok konuda güncel kalmam için benim için çok önemli.
+> 
+> 
+> 
+> **Kaggle sayesinde portföyünüzü nasıl geliştirdiniz?**
+> 
+> Bence avantaj daha dolaylı bir şekilde oldu; insanlar hem pratik becerilerimi (Kaggle sayesinde) hem de daha geleneksel eğitimde kazandığım teorik becerilerimi görebildi.
+> 
+> 
+> 
+> **Deneyimsiz Kaggle kullanıcılarının sıkça gözden kaçırdığı şeyler nelerdir? İlk başladığınızda bilmek isteyeceğiniz neydi?**
+> 
+> Yeni başlayanların iki hatası olduğunu düşünüyorum. Birincisi, yeni bir yarışmaya katılmaktan korkmak; kötü skor alacaklarını ve bunun kaydedileceğini düşünmek. Bu saçmalık. Herkes kötü skorlar alır; mesele yeni bir yarışmaya ne kadar zaman ayırdığınızdır. İkincisi, model kurma aşamasına mümkün olan en kısa sürede geçmek istemeleri, bu çok yanlış; önce benchmark skorlarını görmek istiyorlar ve sonra hayal kırıklığına uğruyorlar. Onlara, özellik oluşturma ve seçimde, ayrıca EDA aşamalarında acele etmemelerini tavsiye ederim.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda yaptığınız hatalar nelerdir?**
+> 
+> Maalesef hatalarım, yeni acemilere çok benzer. Birçok yarışmada erken aşamalara yeterince dikkat etmediğim için sabırsızlandım ve bir süre sonra geri dönmek için yeterli zamanım olmadığını hissettim.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenmesi için özellikle önereceğiniz araçlar veya kütüphaneler var mı?**
+> 
+> Hız kazanmak için benchmark oluşturmak adına PyCaret’i, model kurma framework’ü olarak ise PyTorch’u öneririm.
+> 
+> 
+> 
+> **Bir yarışmaya girerken insanların aklında tutması veya yapması gereken en önemli şey nedir?**
+> 
+> Keşifsel veri analizi (EDA) ve benzer önceki yarışma tartışmalarını incelemek.
+> 
+> 
+> 
+> **Başka yarışma platformları kullanıyor musunuz? Kaggle ile kıyaslandığında nasıl?**
+> 
+> Dürüst olmak gerekirse Kaggle dışında çok fazla denemedim, ama turist olarak deneyimim oldu. Diğer platformlara alışmak zaman alıyor.
+
 ### Summary *(Özet)*
+
+Bu bölümde, popülerliği giderek artan yeni bir yarışma türü olan simülasyon yarışmalarını ele aldık. Görüntü işleme veya NLP odaklı yarışmalarla karşılaştırıldığında, simülasyon yarışmaları çok daha geniş bir yöntem yelpazesi içerir (biraz daha yüksek matematiksel içerikle), bu da denetimli öğrenme ile pekiştirmeli öğrenme arasındaki farkı yansıtır.
+
+Bu bölüm, kitabın teknik kısmını sonlandırmaktadır. Geri kalan kısımda ise, Kaggle Notebooks’larınızı proje portföyüne dönüştürmek ve bunu yeni profesyonel fırsatlar yaratmak için nasıl değerlendirebileceğiniz üzerinde duracağız.
 
 ---
 
