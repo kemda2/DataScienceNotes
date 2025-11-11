@@ -4179,7 +4179,131 @@ Verilerinizin boyutunu azaltmanın (diğer şeylerin yanı sıra) başka bir yol
 
 ### Applying feature engineering *(Özellik mühendisliği uygulama)*
 
+Gerçek dünyadaki projelerde, başarılı bir makine öğrenimi modeliyle vasat bir model arasındaki farkı yaratan şey çoğu zaman **modelin kendisi değil, veridir**.
+Veriden bahsederken, kötü, iyi ve mükemmel veri arasındaki fark yalnızca **eksik değerlerin bulunmaması** veya **değerlerin güvenilirliği** (yani verinin “kalitesi”) ya da **mevcut örnek sayısı** (yani verinin “miktarı”) değildir. Deneyimlerimize göre, asıl farkı yaratan unsur, verinin içeriğinin **bilgi değeri**dir ve bu değer **özelliklerin (features)** türüyle temsil edilir.
+
+**Özellikler**, veri bilimi projelerinin şekil verilen gerçek “ham maddesidir”, çünkü modellerin sınıfları ayırmak veya değerleri tahmin etmek için kullandıkları bilgi onlarda bulunur. Her modelin bir ifade gücü ve özellikleri tahminlere dönüştürme yeteneği vardır. Ancak eğer özellikler açısından yetersizseniz, hiçbir model sizi kurtaramaz ve daha iyi tahminler sunamaz. Modeller yalnızca verideki değeri görünür hale getirir — kendileri başlı başına sihirli değildir.
+
+**Kaggle** üzerinde, nadir yarışmalar dışında tüm katılımcılar başlangıçta aynı veriye sahiptir. Bu noktada farkı yaratan, **veriyi nasıl işlediğinizdir**. Elinizdeki veriyi iyileştirebileceğinizi göz ardı etmek, birçok Kaggle katılımcısının yaptığı yaygın bir hatadır. **Özellik mühendisliği (feature engineering)**, veriyi modeller için daha yararlı bilgilere dönüştürmeye yönelik teknikler bütünüdür ve yarışmalarda daha iyi performans elde etmenin değişmez anahtarıdır. En güçlü modeller bile, verinin daha anlaşılır bir biçimde işlenmesini gerektirir.
+
+Özellik mühendisliği aynı zamanda, genellikle konuya özel uzmanlık bilgisi olan **ön bilgileri** veriye dahil etmenin bir yoludur. Mevcut özellikleri toplamak, çıkarmak veya bölmek gibi işlemlerle, üzerinde çalıştığınız problemi daha iyi açıklayan göstergeler veya tahminler elde edebilirsiniz.
+
+Özellik mühendisliğinin, Kaggle yarışmalarında o kadar önemli olmasa da, **gerçek dünya projelerinde değerli olabilecek başka amaçları** da vardır.
+Birincisi, eğitim verisinin boyutunu azaltmaktır (bu, özellikle bellek sınırlamaları olan Kaggle Notebook ortamlarında da faydalı olabilir).
+İkincisi ise, sonuç modelinin **yorumlanabilirliğini artırmaktır** — yani insanlar tarafından daha kolay anlaşılabilen özellikler kullanmak.
+
+Her alan, uzmanları tarafından bilinen fakat kendiliğinden fark edilmeyen belirli **değişken dönüşümlerine** sahip olabilir. Örneğin, finans alanında, piyasa ve şirket verilerini temsil eden farklı özellik kümelerinde sinyali gürültüden ayırmak için **Kalman filtreleri** veya **dalgacık dönüşümleri (wavelet transformations)** gibi özel dönüşümler uygulanır.
+
+Çok sayıda alan ve karmaşık özellik mühendisliği yöntemleri bulunduğundan, bu bölümde belirli alanlara özgü tekniklere girmeyeceğiz. Bunun yerine, **her türlü tablo (tabular) verisi yarışmasında uygulanabilecek en yaygın ve genel teknikleri** sunacağız.
+
 #### Easily derived features *(Kolay türetilen özellikler)*
+
+Dönüşümler yoluyla özellikler türetmek, **en basit ama genellikle en etkili** yaklaşımdır.
+Örneğin, **özellik oranlarını** (bir özelliği diğerine bölmek) hesaplamak oldukça etkili olabilir, çünkü birçok algoritma (örneğin *gradient boosting*) bu tür bölme işlemlerini doğrudan taklit edemez veya (örneğin derin sinir ağları gibi) bunu yapmakta zorlanabilir.
+Denemeye değer en yaygın dönüşümler aşağıda listelenmiştir:
+
+---
+
+* **Zaman Özelliklerinin İşlenmesi (Time Feature Processing):**
+
+Bir tarihi bileşenlerine (yıl, ay, gün) ayırmak; yılı haftalara veya haftanın günlerine dönüştürmek; tarihler arasındaki farkları hesaplamak; önemli olaylarla (örneğin tatillerle) olan farkları hesaplamak.
+
+Tarihler için başka bir yaygın dönüşüm, bir tarih veya saatten zamanla ilgili bileşenleri çıkarmaktır.
+Zamanın sürekliliğini temsil etmek ve **periyodik özellikler** oluşturmak için **sinüs (sine)** ve **kosinüs (cosine)** tabanlı döngüsel sürekli dönüşümler de oldukça kullanışlıdır:
+
+```python
+cycle = 7
+df['weekday_sin'] = np.sin(2 * np.pi * df['col1'].dt.dayofweek / cycle)
+df['weekday_cos'] = np.cos(2 * np.pi * df['col1'].dt.dayofweek / cycle)
+```
+
+---
+
+* **Sayısal Özellik Dönüşümleri (Numeric Feature Transformations):**
+
+Özelliklerin ölçeklenmesi (scaling), normalizasyon, logaritmik veya üstel dönüşümler; tam sayı ve ondalık kısımların ayrılması; iki sayısal özelliğin toplanması, çıkarılması, çarpılması veya bölünmesi gibi işlemler yapılabilir.
+
+Sayısal özelliklerin **standartlaştırma (z-score)** veya **normalizasyon (min-max scaling)** yoluyla ölçeklenmesi, özellikle **ölçek duyarlı algoritmalar** (örneğin sinir ağları) kullanıldığında mantıklı bir seçimdir.
+
+---
+
+* **Sayısal Özelliklerin Gruplandırılması (Binning):**
+
+Bu yöntem, sürekli değişkenleri belirli aralıklara (bin) ayırarak **ayrık** hale getirmek için kullanılır.
+Binning, verideki gürültü ve hataları azaltmaya yardımcı olur ve **binned** özellikler ile hedef değişken arasında doğrusal olmayan ilişkilerin kolayca modellenmesini sağlar. Özellikle one-hot encoding ile birlikte kullanıldığında etkilidir.
+Örnek olarak şu Scikit-learn uygulamasına bakılabilir:
+[https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.KBinsDiscretizer.html](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.KBinsDiscretizer.html)
+
+---
+
+* **Kategorik Özellik Kodlama (Categorical Feature Encoding):**
+
+One-hot encoding, iki veya üç kategorik özelliğin birleştirilmesi gibi işlemler ya da daha gelişmiş **target encoding** yöntemleri (ilerleyen bölümlerde anlatılacaktır) kullanılabilir.
+
+---
+
+* **Kategorik Özelliklerin Ayrıştırılması ve Birleştirilmesi:**
+
+Örneğin, [Titanic yarışmasında](https://www.kaggle.com/c/titanic), isimleri ve soyisimleri ayırmak veya baş harflerini (örneğin unvanları) çıkarmak yeni özellikler oluşturmak için kullanılabilir.
+
+---
+
+* **Polinomial Özellikler (Polynomial Features):**
+
+Mevcut özelliklerin üsse yükseltilmesiyle oluşturulan yeni özelliklerdir.
+Örneğin Scikit-learn’de şu fonksiyon kullanılabilir:
+[https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html)
+
+---
+
+* **Eksik Veriler ve Aykırı Değerlerin İşlenmesi (Missing Data & Outlier Treatment):**
+
+Bu işlemler teknik olarak doğrudan özellik mühendisliği olmasa da, verideki sinyalleri daha görünür hale getirdikleri için özellikleri dönüştürmenin bir parçası sayılabilir.
+
+* **Eksik Değerlerin Ele Alınması:**
+
+Eksik değerleri belirten **ikili (binary) özellikler** oluşturmak yararlıdır; çünkü eksikliğin kendisi rastgele olmayabilir ve önemli bir nedeni olabilir.
+Eksik veri, çoğu zaman verinin nasıl toplandığı hakkında bilgi verir ve başka bir değişkenin **dolaylı bir göstergesi (proxy)** gibi davranabilir.
+
+Örneğin, nüfus sayımı anketlerinde bir kişi gelirini bildirmiyorsa, bu genellikle ya çok düşük ya da çok yüksek gelire sahip olduğunu ima eder.
+
+Modelinizin gerektirmesi durumunda, eksik değerleri **ortalama (mean)**, **medyan (median)** veya **mod (mode)** ile doldurabilirsiniz.
+Daha karmaşık yöntemlere genellikle gerek yoktur.
+
+> Parul Pandey tarafından yazılmış olan bu kapsamlı rehbere başvurabilirsiniz ([https://www.kaggle.com/parulpandey](https://www.kaggle.com/parulpandey)):
+👉 [Eksik Değerlerle Baş Etme Rehberi – Python’da Eksik Verilerin İşlenmesi](https://www.kaggle.com/parulpandey/a-guide-to-handling-missing-values-in-python).
+
+Unutmayın ki bazı modeller, **eksik değerleri kendi başlarına işleyebilir** ve bunu birçok standart yaklaşımdan daha iyi yaparlar. Bunun nedeni, eksik değerlerin işlenmesinin bu modellerin **optimizasyon sürecinin bir parçası** olmasıdır.
+
+Eksik değerleri kendi içinde ele alabilen modellerin tamamı **gradient boosting** algoritmalarıdır:
+
+* **XGBoost:** [https://xgboost.readthedocs.io/en/latest/faq.html](https://xgboost.readthedocs.io/en/latest/faq.html)
+* **LightGBM:** [https://lightgbm.readthedocs.io/en/latest/Advanced-Topics.html](https://lightgbm.readthedocs.io/en/latest/Advanced-Topics.html)
+* **CatBoost:** [https://catboost.ai/docs/concepts/algorithm-missing-valuesprocessing.html](https://catboost.ai/docs/concepts/algorithm-missing-valuesprocessing.html)
+
+---
+
+* **Aykırı Değerlerin Sınırlandırılması veya Kaldırılması (Outlier Capping or Removal)**
+
+Aykırı değerleri (outlier) veriden tamamen çıkarmak, belirli bir **maksimum veya minimum değere sınırlandırmak**, ya da doğrudan **değerlerini değiştirmek** mümkündür.
+Bunu yapmak için, **Scikit-learn** kütüphanesinde yer alan çok değişkenli (multivariate) aykırı değer tespit modelleri gibi gelişmiş yöntemleri kullanabilirsiniz:
+🔗 [https://scikit-learn.org/stable/modules/outlier_detection.html](https://scikit-learn.org/stable/modules/outlier_detection.html)
+
+Daha basit bir yöntem olarak, **tek değişkenli (univariate)** yaklaşımlarla da aykırı değerleri bulabilirsiniz.
+Bunun için, değerlerin ortalamadan **kaç standart sapma** uzakta olduğuna veya **çeyrekler arası aralık (IQR)** sınırlarından ne kadar uzak olduğuna bakılır.
+
+Bu durumda şu kurallar uygulanabilir:
+
+* **Üst aykırı değerler (upper outliers):** Q3 + 1.5 × IQR değerinden büyük olan noktalar,
+* **Alt aykırı değerler (lower outliers):** Q1 – 1.5 × IQR değerinden küçük olan noktalar.
+
+Aykırı değerleri belirledikten sonra, bu gözlemleri belirtmek için **ikili (binary) bir değişken** de oluşturabilirsiniz.
+
+---
+
+Tüm bu veri dönüşümleri, modellerinizin **tahmin performansını artırabilir**, ancak yarışmalarda **tek başına belirleyici** olmazlar.
+Bu işlemler gerekli olsa da, yalnızca temel özellik mühendisliğine güvenemezsiniz.
+Bir sonraki bölümlerde, verinizden **daha fazla değer çıkarmak için** daha karmaşık yöntemler ele alınacaktır.
 
 #### Meta-features based on rows and columns *(Satır ve sütunlara dayalı meta-özellikler)*
 
