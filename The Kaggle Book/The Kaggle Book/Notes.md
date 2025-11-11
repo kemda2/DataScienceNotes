@@ -4473,6 +4473,22 @@ Bu dengeyi belirleyen şey **f parametresidir**, ve **k parametresi** (genellikl
 
 ![](im/1059.png)
 
+Grafikte görüldüğü gibi, x ekseni belirli bir kategorik seviyedeki örnek sayısını, y ekseni ise koşullu hedef değerinin ağırlığını temsil etmektedir. Küçük **f** değerleri, ortalama hedef değerini kullanmaktan koşullu değeri kullanmaya ani bir şekilde geçmeye eğilimlidir. Daha yüksek **f** değerleri ise, örnek sayısı büyük olmayan seviyeler dışında, koşullu değeri ortalama ile harmanlamaya meyillidir.
+
+Dolayısıyla, sabit bir **k** için, yüksek **f** değerleri gözlenen empirik frekansa daha az güvenmeyi ve tüm hücreler için empirik olasılığa daha fazla dayanmayı ifade eder. **f** için doğru değer genellikle deneme-yanılma yoluyla (cross-validation ile desteklenmiş) bulunur, çünkü **f** parametresi kendi başına bir hiperparametre olarak düşünülebilir.
+
+Tüm bu açıklamalardan sonra, sınıfın kullanımı aslında oldukça basittir. Target encoding uygulamak istediğiniz özelliklerin adlarını ve denemek istediğiniz parametreleri belirterek sınıfı başlatabilir ve eğitim verisine fit edebilirsiniz. Ardından, yalnızca fit edilen özellikleri target encoding uygulayarak başka herhangi bir veri üzerinde dönüşüm yapabilirsiniz:
+
+```python
+te = TargetEncode(categories='ROLE_TITLE')
+te.fit(train, train['ACTION'])
+te.transform(train[['ROLE_TITLE']])
+```
+
+Bu örnek, daha önce kullandığımız **Amazon Employee Access Challenge** verisi üzerinde çalışır ve yalnızca **ROLE_TITLE** özelliğini hedef kodlar.
+
+> Kendi kodunuzu yazmak yerine, [scikit-learn-contrib/category_encoders](https://github.com/scikit-learn-contrib/category_encoders) paketindeki **TargetEncoder**’ı da kullanabilirsiniz ([TargetEncoder dokümantasyonu](http://contrib.scikit-learn.org/category_encoders/targetencoder.html)). Bu paket, bu bölümdeki kodla aynı şekilde çalışır ve kutudan çıktığı haliyle kullanılabilir.
+
 ### Using feature importance to evaluate your work *(Özellik önemini kullanarak çalışmanı değerlendirme)*
 
 ### Pseudo-labeling *(Sahte etiketleme)*
