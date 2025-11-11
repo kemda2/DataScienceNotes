@@ -4569,6 +4569,49 @@ BorutaShap ile özellik seçiminin ne kadar basit ve hızlı kurulduğunu görme
 
 ### Pseudo-labeling *(Sahte etiketleme)*
 
+Eğitim için kullanılan örnek sayısının fark yaratabileceği yarışmalarda, **sahte etiketleme (pseudo-labeling)**, test setinden alınan ek örnekler sayesinde skorlarınızı artırabilir. Fikir, tahminlerinden emin olduğunuz test seti örneklerini eğitim setinize eklemektir.
+
+Kredi değerliliği (credit underwriting) çok zor bir veri bilimi problemidir ve çok akıllıca özellik mühendisliği ve güvenilir bir doğrulama şeması gerektirir. Benim kişisel içgörüm, özellik seçimi için basit lineer modellemeyi kullanmaktı ve bu genel modelimize yardımcı oldu. Ekibimiz bu yarışmayı kazandı ve bugün hâlâ bu zaferi Kaggle kariyerimin en önemli noktası olarak görüyorum.
+
+Kaggle kariyerinize yardımcı oldu mu? Eğer olduysa, nasıl?
+Kaggle, ML kariyerimin en büyük hızlandırıcısı oldu. Sahip olduğum dört ML işinden üçünün doğrudan Kaggle başarımın bir sonucu olduğunu söyleyebilirim. Kaggle başarısının bir kariyer için ne kadar önemli olabileceğini abartmak imkânsızdır.
+
+Deneyimsiz Kaggle katılımcıları genellikle neleri göz ardı ediyor? Başladığınızda bilmenizi istediğiniz şeyler nelerdi?
+Tüm ML problemlerinin, özellikle Kaggle yarışmalarının, uzun süre ya az değer verdiğim ya da yeterince önemsemediğim iki yönü vardır: **özellik mühendisliği** ve **sağlam bir doğrulama stratejisi**. ML kütüphanelerini ve algoritmalarını çok seviyorum ve genellikle mümkün olan en kısa sürede ML algoritmasını kurmaya başlıyorum. Ama model performansına en büyük etkiyi çok iyi özellikler sağlar. Ne yazık ki, özellik mühendisliği daha çok bir sanat ve daha az bir bilimdir ve genellikle modele ve veri setine bağlıdır. Daha ilginç özellik mühendisliği hilelerinin ve uygulamalarının çoğu standart ML kurslarında veya kaynaklarında nadiren öğretilir. Birçoğu öğretilmez ve özel problem bazlı içgörülere bağımlıdır. Ama özellik mühendisliğine varsayılan olarak odaklanma zihniyeti geliştirilebilir ve genellikle iyi hale gelmek yıllar alır.
+
+Kaggle için kullanmanızı önereceğiniz araç veya kütüphaneler var mı?
+**XGBoost her şey için yeter!**
+
+---
+
+Sahte etiketleme ilk olarak **Santander Customer Transaction Prediction** yarışmasında team Wizardry tarafından tanıtıldı (detaylar: [https://www.kaggle.com/c/santander-customer-transaction-prediction/discussion/89003](https://www.kaggle.com/c/santander-customer-transaction-prediction/discussion/89003)). Sahte etiketleme, modele daha fazla veri sağladığı için katsayılarını geliştirmesine yardımcı olur, ancak her zaman işe yaramayabilir. Öncelikle bazı yarışmalarda buna gerek yoktur; sahte etiketler eklemek sonucu değiştirmeyebilir ve eklenen gürültü varsa sonucu kötüleştirebilir.
+
+> Ne yazık ki, sahte etiketlemenin bir yarışmada işe yarayıp yaramayacağını önceden kesin olarak bilmek mümkün değildir (bunu deneysel olarak test etmeniz gerekir). Öğrenme eğrilerini çizmek, daha fazla verinin faydalı olup olmayacağına dair ipucu verebilir (örnek: [https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html](https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html)).
+
+İkinci olarak, test seti tahminlerinin hangi kısımlarını ekleyeceğinize veya tüm prosedürü en iyi sonuç için nasıl ayarlayacağınıza karar vermek kolay değildir. Genel prosedür şudur:
+
+1. Modelinizi eğitin
+2. Test setinde tahmin yapın
+3. Güven ölçüsü belirleyin
+4. Eklenecek test seti örneklerini seçin
+5. Birleştirilmiş veri ile yeni bir model oluşturun
+6. Bu modelle tahmin yapın ve gönderin
+
+Örnek bir sahte etiketleme prosedürü Chris Deotte tarafından **Instant Gratification** yarışmasında sunulmuştur: [https://www.kaggle.com/cdeotte/pseudo-labeling-qda-0-969](https://www.kaggle.com/cdeotte/pseudo-labeling-qda-0-969)
+
+Sahte etiketleme uygularken dikkate almanız gereken birkaç nokta:
+
+* Eğitilebilir ve iyi tahminler üreten bir modeliniz olmalı; aksi takdirde sadece gürültü eklemiş olursunuz.
+* Test setinde mükemmel tahminler mümkün olmadığından, iyi olanları kötü olanlardan ayırmanız gerekir. CV katlarıyla tahmin yapıyorsanız, tahminlerin standart sapmasını kontrol edin ve yalnızca standart sapması en düşük olan test örneklerini seçin. Olasılık tahmini yapıyorsanız, yalnızca yüksek veya düşük uç tahminleri kullanın (modelin daha emin olduğu durumlar).
+* İkinci aşamada, eğitim örneklerini test örnekleriyle birleştirirken, test örneklerinin %50’den fazla olmamasına dikkat edin. İdeal olarak, %70 orijinal eğitim ve %30 sahte etiketli örnek en iyisidir. Çok fazla sahte etiket eklerseniz, yeni modeliniz orijinal veriden çok test örneklerinden öğrenir ve performans düşer.
+
+> Sahte etiketlere tamamen güvenemeyeceğinizi unutmayın; test tahminlerini eğitim örnekleri olarak kullanmak verilerinizi kısmen bozmak demektir. Bu yöntem, sağladığı faydalar olumsuz etkilerden fazlaysa işe yarar.
+
+* Eğer doğrulama ile erken durdurma, hiperparametre ayarlama veya model değerlendirme yapıyorsanız, sahte etiketleri doğrulamada kullanmayın. Yanıltıcı olabilir. Her zaman orijinal eğitim verisini kullanın.
+* Mümkünse sahte etiketleri tahmin etmek için farklı bir model, final modeli eğitmek için ise orijinal ve sahte etiketlerle başka bir model kullanın. Böylece önceki modelden aynı bilgiyi tekrar etmeyip, sahte etiketlerden yeni bilgiler çıkarırsınız.
+
+Özetle, sahte etiketleme daha çok bir sanattır. Bazı yarışmalarda fark yaratabilir, ancak iyi uygulanması gerekir. Bir kaynak olarak düşünün ve her zaman en az bir sahte etiket tabanlı gönderim deneyin.
+
 ### Denoising with autoencoders *(Otoenkoderlerle gürültü giderme)*
 
 ### Neural networks for tabular competitions *(Tablo verisi yarışmaları için sinir ağları)*
