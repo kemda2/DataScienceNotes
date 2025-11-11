@@ -4614,6 +4614,54 @@ Sahte etiketleme uygularken dikkate almanız gereken birkaç nokta:
 
 ### Denoising with autoencoders *(Otoenkoderlerle gürültü giderme)*
 
+Otomatik kodlayıcılar (Autoencoders), başlangıçta doğrusal olmayan veri sıkıştırma (bir tür doğrusal olmayan PCA) ve görüntü gürültü giderme işlemleriyle daha çok tanınırken, Michael Jahrer’in ([https://www.kaggle.com/mjahrer](https://www.kaggle.com/mjahrer)) Porto Seguro’s Safe Driver Prediction yarışmasını ([https://www.kaggle.com/c/porto-seguro-safe-driver-prediction](https://www.kaggle.com/c/porto-seguro-safe-driver-prediction)) kazanmak için bunları başarılı bir şekilde kullanmasından sonra tabular veri yarışmalarında ilginç bir araç olarak tanınmaya başladı. Porto Seguro, özellikle gürültülü özelliklerle karakterize edilmiş, popüler bir sigorta tabanlı risk analiz yarışmasıydı ve 5.000’den fazla katılımcıya sahipti.
+
+Michael Jahrer, sayısal verilerin sonraki sinir ağı denetimli öğrenme için daha iyi bir temsilini nasıl bulduğunu, gürültü giderici otomatik kodlayıcılar (Denoising Autoencoders - DAE) kullanarak açıklamaktadır. Bir DAE, ağın ortasındaki gizli katmanların aktivasyonlarına ve bilgiyi kodlayan orta katman aktivasyonlarına dayanarak çok sayıda yeni özellik üreten bir veri seti oluşturabilir.
+
+Ünlü gönderisinde ([https://www.kaggle.com/c/porto-seguro-safe-driver-prediction/discussion/44629](https://www.kaggle.com/c/porto-seguro-safe-driver-prediction/discussion/44629)), Michael Jahrer, bir DAE’nin sadece gürültüyü kaldırmakla kalmayıp aynı zamanda otomatik olarak yeni özellikler oluşturabileceğini ve böylece özelliklerin temsilinin, görüntü yarışmalarında olduğu gibi öğrenildiğini anlatmaktadır. Gönderide, DAE yönteminin gizli sırrının sadece katmanlar değil, veriyi artırmak için eklenen gürültü olduğunu belirtmiştir. Ayrıca bu tekniğin, eğitim ve test verilerinin birleştirilmesini gerektirdiğini ve dolayısıyla yöntemin Kaggle yarışmasını kazanmanın ötesinde uygulamaları olmayacağını vurgulamıştır. Aslında, bu kazanma başarısından sonra teknik forumlardan ve çoğu yarışmadan kaybolmuş, ta ki Tabular Playground Series sırasında tekrar ortaya çıkana kadar.
+
+DAE’ler teknik olarak bir kodlayıcı (encoder) ve bir çözücüden (decoder) oluşur. Kodlayıcı kısmı, eğitim verilerini giriş olarak alır ve ardından birkaç yoğun katman (dense layer) gelir. İdeal olarak, tüm eğitim bilgisini kodlayan bir gizli orta katman bulunur. Bu orta katmandaki düğüm sayısı orijinal giriş boyutundan küçükse, bir sıkıştırma yapılmış olur ve istatistiksel olarak giriş verisinin üretim sürecinin arkasındaki gizli boyutları temsil edersiniz; aksi takdirde, sadece fazlalıkları ortadan kaldırır ve gürültüyü sinyalden ayırırsınız (bu da kötü bir sonuç değildir).
+
+Katmanın ikinci kısmı olan çözücü (decoder) kısmında ise katmanları tekrar genişleterek orijinal giriş boyutuna kavuşturursunuz. Çıktı, ağın geri yayılımı (backpropagation) için hata kaybını (error loss) hesaplamak üzere girişle karşılaştırılır.
+
+Bu çözümlerden, DAE’lerin iki türde olduğunu çıkarabiliriz:
+* **Bottleneck DAE’ler**: Görüntü işleme yöntemlerini taklit ederek, kodlayıcı kısmı çözücü kısımdan ayıran orta katmandaki aktivasyonları yeni özellik olarak alırsınız. Bu mimariler kum saati (hourglass) şekline sahiptir; önce katman katman nöron sayısını orta bottleneck katmanına kadar azaltır, ardından ikinci kısımda tekrar genişletirsiniz. Gizli katman sayısı her zaman tek sayıdır.
+
+![](im/1060.png)
+
+* **Derin yığın (deep stack) DAE’lerde**, kodlayıcı, çözücü veya orta katman ayrımı yapmadan tüm gizli katmanların aktivasyonları alınır. Bu mimarilerde katmanlar aynı boyuttadır. Gizli katman sayısı tek veya çift olabilir.
+
+![](im1061.png)
+
+Bahsettiğimiz gibi, sıkça tartışılan önemli bir konu, DAE’nize (Denoising Autoencoder) biraz rastgele gürültü eklemektir. Her türlü DAE’yi eğitmeye yardımcı olmak için, eğitim verilerini artıracak ve aşırı parametreli sinir ağının sadece girdileri ezberlemesini (başka bir deyişle overfitting’i) önleyecek gürültüyü eklemeniz gerekir. Porto Seguro yarışmasında Michael Jahrer, swap noise adı verilen bir teknik kullanarak gürültü eklemiştir ve bunu şöyle açıklamıştır:
+
+> Burada yukarıdaki tabloda “inputSwapNoise” olarak belirtilen belirli bir olasılık ile özellikten örnek alıyorum. 0.15, özelliklerin %15’inin başka bir satırdan alınan değerlerle değiştirilmesi anlamına geliyor.
+
+Burada anlatılan, temel olarak mixup adı verilen bir veri artırma (augmentation) tekniğidir (bu yöntem görüntü artırmada da kullanılır: [https://arxiv.org/abs/1710.09412](https://arxiv.org/abs/1710.09412)). Tablo verileri için mixup uygularken, karıştırma olasılığını belirlersiniz. Bu olasılığa bağlı olarak, bir örnekteki bazı orijinal değerleri, aynı eğitim verisinden daha az veya daha çok benzer bir örnekten alınan değerlerle değiştirirsiniz.
+
+Danzel, walkthrough’unda ([https://www.kaggle.com/springmanndaniel/1st-place-turn-your-data-into-daeta](https://www.kaggle.com/springmanndaniel/1st-place-turn-your-data-into-daeta)) bunun üç yaklaşımını açıklamaktadır: sütun bazlı, satır bazlı ve rastgele:
+
+* **Sütun bazlı gürültü değişimi (column-wise noise swapping)**: Belirli sayıda sütundaki değerleri değiştirirsiniz. Değiştirilecek sütun oranı, mixup olasılığına göre belirlenir.
+* **Satır bazlı gürültü değişimi (row-wise noise swapping)**: Her satırdaki belirli sayıda değeri değiştirirsiniz. Temelde, her satır aynı oranda değiştirilmiş değer içerir, ancak değiştirilen özellikler satırdan satıra farklılık gösterir.
+* **Rastgele gürültü değişimi (random noise swapping)**: Değiştirilecek değer sayısını mixup olasılığına göre belirler ve tüm veri setinden rastgele seçersiniz (etki olarak satır bazlı değişime benzerdir).
+
+Tıpkı pseudo-labeling’de olduğu gibi, DAE de bilimden çok bir sanattır; yani tamamen deneme-yanılma yöntemine dayanır. Her zaman işe yaramayabilir ve bir problemde işe yarayan detaylar başka bir problemde faydalı olmayabilir. Yarışmanız için iyi bir DAE elde etmek istiyorsanız, test edilmesi ve ayarlanması gereken bir dizi unsuru göz önünde bulundurmalısınız:
+
+* DAE’nin mimarisi (derin yığın genellikle daha iyi çalışır, ancak katman başına birim sayısı ve katman sayısını belirlemeniz gerekir)
+* Öğrenme oranı ve batch boyutu
+* Loss (sayısal ve kategorik özelliklerin loss’larını ayırmak da faydalıdır)
+* Durdurma noktası (en düşük loss her zaman en iyi sonuç değildir; mümkünse validation ve early stopping kullanın)
+
+Probleme bağlı olarak, doğru mimariyi kurmak ve düzgün çalışacak şekilde ayarlamakta zorluk yaşayabilirsiniz. Ancak çabalarınız, nihai özel leaderboard’da yüksek bir sonuçla ödüllendirilebilir. Aslında, son tablo yarışmalarında DAE teknikleri, birçok kazanan gönderinin tarifinin bir parçası olarak görülmüştür:
+
+* Danzel ([https://www.kaggle.com/springmanndaniel](https://www.kaggle.com/springmanndaniel)), [https://www.kaggle.com/c/tabular-playground-series-jan-2021/discussion/216037](https://www.kaggle.com/c/tabular-playground-series-jan-2021/discussion/216037) adresinde üç adet 1,500 nöronlu gizli katmanın ağırlıklarını kullanarak, orijinal 14 sütunu 4,500 sütuna genişlettiğini bildirmiştir. Bu yeni işlenmiş veri seti, diğer sinir ağları ve gradient boosting modelleri için girdi olarak kullanılmıştır.
+* Ren Zhang ([https://www.kaggle.com/ryanzhang](https://www.kaggle.com/ryanzhang)), çözümünü ([https://www.kaggle.com/c/tabular-playground-series-feb-2021/discussion/222745](https://www.kaggle.com/c/tabular-playground-series-feb-2021/discussion/222745)) paylaşmış ve kodunu ([https://github.com/ryancheunggit/Denoise-Transformer-AutoEncoder](https://github.com/ryancheunggit/Denoise-Transformer-AutoEncoder)) açıklamıştır. Tipik lineer ve ReLU aktivasyonlu gizli katmanlar yerine stacked transformer encoder kullandığını ve uygun bir DAE’yi eğitmenin 20 saate kadar sürebileceğini belirtmiştir. Bu yaklaşımda, veriye rastgele gürültü eklemeyi (gürültü maskesi kullanarak) ve loss’u yalnızca orijinal veriyi yeniden oluşturma hatasından değil, aynı zamanda gürültü maskesinden hesaplamayı önermiştir. Bu birleşik loss, ağın daha iyi yakınsamasına yardımcı olur.
+* JianTT ([https://www.kaggle.com/jiangtt](https://www.kaggle.com/jiangtt)), özellikle yeni gözlemler oluşturmak için gürültü eklemenin, eksiksiz bir DAE oluşturmadan daha iyi algoritmalar eğitmek için faydalı olabileceğini fark etmiştir: [https://www.kaggle.com/c/tabular-playground-series-apr-2021/discussion/235739](https://www.kaggle.com/c/tabular-playground-series-apr-2021/discussion/235739).
+
+> Kendi DAE’nizi kurmak için çok fazla zaman harcamak istemiyorsanız, ama yarışmada işe yarayıp yaramayacağını keşfetmek istiyorsanız, önceden hazırlanmış birkaç çözümü deneyebilirsiniz. Öncelikle Hung Khoi’nin PyTorch ağı için hazırladığı Notebook’a ([https://www.kaggle.com/hungkhoi/train-denoise-transformer-autoencoder](https://www.kaggle.com/hungkhoi/train-denoise-transformer-autoencoder)) bakabilir ve ihtiyacınıza göre uyarlayabilirsiniz. Ya da Jeong-Yoon Lee’nin Kaggler kütüphanesini ([https://www.kaggle.com/jeongyoonlee](https://www.kaggle.com/jeongyoonlee)) kullanabilirsiniz. Jeong-Yoon Lee Notebook’unda, bunun Tabular Playground yarışmalarından birinde nasıl çalıştığını göstermektedir: [https://www.kaggle.com/jeongyoonlee/dae-with-2-lines-of-code-with-kaggler](https://www.kaggle.com/jeongyoonlee/dae-with-2-lines-of-code-with-kaggler).
+
+
+
 ### Neural networks for tabular competitions *(Tablo verisi yarışmaları için sinir ağları)*
 
 ### Summary *(Özet)*
