@@ -10438,16 +10438,446 @@ Bir sonraki bölümde, Kaggle yarışmalarının sunduğu fırsatları tamamlaya
 
 ## Chapter 14: Finding New Professional Opportunities *(Bölüm 14: Yeni Profesyonel Fırsatlar Bulmak)*
 
+Önceki bölümde, yarışmalardaki çalışmalarınızı ve başarılarınızı nasıl daha iyi vurgulayabileceğinizi anlattıktan sonra, şimdi Kaggle’ın kariyerinize nasıl olumlu etkiler sağlayabileceğine dair genel bakışımızı tamamlayacağız. Bu son bölüm, tüm çabalarınızı yeni profesyonel fırsatlar bulmak için en iyi şekilde nasıl değerlendirebileceğinizi ele alıyor. Artık daha önce bahsedilen tüm araçlara sahip olduğunuzu varsayıyoruz (Kaggle Tartışmalarınız, Notebooks ve Datasets ile Kaggle’dan türetilmiş çeşitli projeleri sunan bir GitHub hesabı), bu yüzden bu bölüm daha yumuşak konulara odaklanacak: nasıl network kurulur ve Kaggle deneyiminizi işe alım yetkililerine ve şirketlere nasıl sunarsınız.
+
+Herkesin bildiği gibi network kurmak, yalnızca kamuya açık iş ilanlarında görünmeyen yeni iş fırsatları hakkında bilgi almakla kalmaz, aynı zamanda uzman olmadığınız veri bilimi sorunlarında güvenebileceğiniz kişilere ulaşmanızı da sağlar. Kaggle’da network kurma, esas olarak yarışmalar sırasında takım işbirliği ve Kagglers tarafından düzenlenen meetuplar ve diğer etkinliklerde kurulan bağlantılarla ilgilidir.
+
+İş fırsatlarına gelince, daha önce sıkça belirttiğimiz gibi, Kaggle insan kaynakları ve işe alım yöneticileri tarafından aday seçimi için yaygın olarak kullanılan bir kaynak değildir. Bazı şirketler Kaggle sıralamanızı ve başarılarınızı dikkate alabilir, ancak bu özel bir durumdur, genel kural değildir. Genellikle, Kaggle deneyiminizin göz ardı edilmesini veya bazen eleştirilmesini beklemelisiniz. Ancak deneyimlerimiz, Kaggle’da öğrendiklerinizin ve pratiğinizin son derece değerli olduğunu ve bunu kodlama ve modelleme çabalarınızı göstererek, ayrıca bireysel veya takım çalışmalarıyla ilgili deneyimlerinizden bahsederek tanıtabileceğinizi gösteriyor.
+
+Bu bölümde ele alacağımız konular:
+
+* Diğer yarışma veri bilimcileri ile bağlantılar kurmak
+* Kaggle Days ve diğer Kaggle meetuplarına katılmak
+* Görünür olmak ve diğer iş fırsatları yakalamak
+
 ### Building connections with other competition data scientists *(Diğer yarışmacı veri bilimcilerle bağlantı kurma)*
 
-### Participating in Kaggle Days and other Kaggle meetups *(Kaggle Days ve diğer Kaggle buluşmalarına katılma)*
+Bağlantılar, bir iş bulmak için çok önemlidir; çünkü bu bağlantılar, fırsat henüz kamuya açılmadan önce ve potansiyel aday arayışı başlamadan önce fırsatlardan haberdar olabilecek kişilerle iletişime geçmenizi sağlar. Son yıllarda Kaggle, diğer veri bilimcilerle bağlantı kurabileceğiniz, işbirliği yapabileceğiniz ve arkadaş edinebileceğiniz bir platform haline gelmiştir. Geçmişte, yarışmalar forumlarda çok fazla etkileşim yaratmazdı ve takımlar, yarışma puanları ekip üyeleri arasında eşit olarak bölündüğü için küresel sıralamalarda ciddi şekilde cezalandırılırdı. İyileştirilmiş sıralama sistemi (bkz. [https://www.kaggle.com/general/14196](https://www.kaggle.com/general/14196)) birçok Kaggle kullanıcısının ekip kurmayı daha olumlu görmesini sağladı.
 
-### Getting spotted and other job opportunities *(Fark edilmek ve diğer iş fırsatları)*
+Bir Kaggle yarışmasında ekip kurmak, eğer diğer ekip üyelerini zaten tanıyor ve görevleri atama ve uzaktan işbirliği yapma konusunda belirlenmiş bir yaklaşımınız varsa iyi çalışır. Bu durumlarda, her ekip üyesi zaten şu şekilde işbirliği yapmayı bilir:
 
-#### The STAR approach *(STAR yaklaşımı)*
+* Ekip üyeleri tarafından kararlaştırılan deneyin bir kısmını üstlenmek
+* Başka bir ekip üyesi ile çözüm geliştirmek için işbirliği yapmak
+* Kendi beceri ve deneyimlerine dayalı yeni çözümler keşfetmek
+* Modelleri ve gönderimleri, kolayca birleştirilebilir veya harmanlanabilir şekilde hazırlamak
 
-### Summary (and some parting words) *(Özet ve kapanış notları)*
+Ancak ekip kurmada yeniyseniz, bir ekibe katılmak veya kendiniz bir ekip organize etmek zor olabilir. Eğer bağlantılarınız yoksa, lider tablodaki diğer kişilerle iletişime geçmek zor olur. Öncelikle, hepsi ekip kurmak istemeyebilir çünkü yalnız yarışmayı tercih ederler. Ayrıca, bazı rakipler ekip kurmakla ilgilenebilir ama teklifinizi kabul etmeye çekinebilirler. Tanımadığınız Kaggle kullanıcılarıyla bir ekip kurarken bazı endişeler vardır:
+
+* Ekibe katılan kişi takıma herhangi bir değer katmaz
+* Ekibe katılan kişi gerçekten işbirliği yapmaz, sadece ücretsiz faydalanır
+* Ekibe katılan kişi Kaggle kurallarını ihlal etmiş (veya ihlal edecek) ve bu tüm ekibin diskalifiye olmasına yol açar
+* Ekibe katılan kişi aslında bilgi toplamak veya diğer takımlara sızdırmak niyetindedir
+
+Bu durumların çoğu yarışmada nadir görülür, ancak yeni bir Kaggle kullanıcısıyla ilk kez ekip kurarken insanların aklında bu tür kaygıların olabileceğini bilmek önemlidir. Bu potansiyel sorunların önüne geçmenin en iyi yolu, kendinizi Kaggle’da güçlü bir geçmişe sahip biri olarak göstermektir; yani bazı yarışmalara tek başına katılmış, özellikle Notebooks yayınlamış ve tartışmalara katılmış biri olarak. Bu, teklifinize büyük bir güvenilirlik katar ve ekibe kabul edilme olasılığınızı artırır.
+
+Bir ekibe katıldıktan sonra, ekip üyeleri arasında verimli ve düzenli iletişim kanalları oluşturmak önemlidir (örneğin Slack veya Discord üzerinde bir kanal kurmak). Ayrıca günlük operasyonlarda hem şu konularda anlaşmak gereklidir:
+
+* Deney çalışmalarınızı nasıl böleceğinize karar vermek
+* Günlük gönderimlerin nasıl kullanılacağına karar vermek (sayıları sınırlıdır ve genellikle ekip içinde çatışma nedeni olur). Sonuçta, yalnızca ekip lideri son iki gönderimi seçer, ancak bu noktaya gelme süreci doğal olarak tartışma ve fikir ayrılığı içerir. Hangi gönderimleri nihai olarak seçtiğinizi ekip arkadaşlarınıza, yerel çapraz doğrulama stratejinizi ve sonuçlarınızı göstererek açıklamaya hazır olun.
+
+Bir ekipte olumlu bir şekilde çalışmayı deneyimledikten sonra, diğer ekip üyelerinin saygısını ve güvenini kazanmış olacaksınız. Gelecek yarışmalarda, muhtemelen aynı kişilerle yeniden ekip kurmak veya onların dahil olduğu farklı bir ekibe katılmak daha kolay olacaktır.
+
+Kaggle’da tanışacağınız ve birlikte çalışacağınız kişiler arasında veri bilimciler, veri meraklıları, öğrenciler, alan uzmanları ve daha fazlası yer alır. Aşağıda, farklı Kaggle kullanıcılarının günlük işleri ve Kaggle’ın hayatlarındaki yeri hakkında görüşlerini bulabilirsiniz.
+
+> Yirun Zhang
+> 
+> [https://www.kaggle.com/gogo827jz](https://www.kaggle.com/gogo827jz)
+> 
+> 
+> 
+> Yirun Zhang, King’s College London’da son sınıf doktora öğrencisidir. Notebooks ve Discussion Grandmaster unvanına sahiptir ve Jane Street Market Prediction yarışmasında ([https://www.kaggle.com/c/jane-street-market-prediction](https://www.kaggle.com/c/jane-street-market-prediction)) kazanan ekibin bir üyesi olmuştur.
+> 
+> 
+> 
+> **Bize kendinizden bahseder misiniz?**
+> 
+> Araştırma alanım, modern kablosuz iletişim ağlarındaki zorlu problemleri çözmek için makine öğrenimi algoritmalarının uygulanması üzerine odaklanıyor; bunlar arasında zaman serisi tahmini, kaynak tahsisi ve optimizasyon yer alıyor. Ayrıca AI gizliliği, federated learning (dağıtık öğrenme) ve veri sıkıştırma ve iletimi üzerine çalışmalar yapan projelerde de yer aldım.
+> 
+> 
+> 
+> Günlük doktora araştırmalarımın yanı sıra, doktora programımın ikinci yılından beri neredeyse iki yıldır Kaggle’da aktifim. Kaggle’daki ilk katıldığım yarışma “Instant Gratification” idi; burada sklearn kütüphanesinden çeşitli makine öğrenimi ve istatistik yöntemlerini kullandım. Bu yarışma, Kaggle yarışmaları için genel bir makine öğrenimi modelleme süreci anlayışı geliştirmeme yardımcı oldu.
+> 
+> 
+> 
+> Kaggle topluluğuyla Notebooks ve tartışma gönderileri aracılığıyla aktif olarak bilgi paylaşımında bulundum ve şimdi Kaggle Notebooks ve Discussion Grandmaster unvanına sahibim. Forumda başkalarıyla paylaşım yapıp tartışarak değerli geri bildirimler ve yeni bilgiler edindim; bu da yakın zamanda bir Kaggle yarışmasını kazanmama yardımcı oldu.
+> 
+> 
+> 
+> **Kazandığınız yarışmadan biraz bahseder misiniz?**
+> 
+> Jane Street Market Prediction gerçekten zorlu bir yarışmaydı. Bunun nedeni, sağlam bir çapraz doğrulama (CV) stratejisi oluşturmanın zor olmasıydı; birçok kişi yalnızca public leaderboard’u doğrulama seti olarak kullanıyordu. İnsanlar, public leaderboard üzerinde overfit olmamak için bir doğrulama stratejisi kullanmadan yüzlerce epoch boyunca bir sinir ağı eğitiyorlardı. Ekibimiz kendi CV stratejimizi sürdürmek için çok çaba gösterdi ve dalgalanmalardan sağ salim çıkmayı başardık.
+> 
+> 
+> 
+> **Kaggle’a yaklaşımınız, günlük işinizden ne kadar farklı?**
+> 
+> Kaggle yarışmaları, günlük doktora araştırmalarımdan oldukça farklı. Kaggle çok yoğun ve anlık geri bildirim içerirken, doktora çalışmaları uzun vadeli bir süreçtir. Ancak Kaggle yarışmalarından öğrendiğim yeni bilgiler ve metodolojiler, doktora araştırmalarımda da oldukça faydalı oluyor.
+
+> Osamu Akiyama
+> 
+> [https://www.kaggle.com/osciiart](https://www.kaggle.com/osciiart)
+> 
+> 
+> 
+> Osamu Akiyama, nam-ı diğer OsciiArt, günlük işi veri bilimi olmayan bir Kaggler’dır. Osaka Üniversitesi Hastanesi’nde doktor olarak çalışmakta ve Competitions Master unvanına sahiptir.
+> 
+> 
+> 
+> **Bize kendinizden bahseder misiniz?**
+> 
+> Osaka Üniversitesi Hastanesi’nde ikinci sınıf asistan olarak çalışıyorum. Kyoto Üniversitesi’nden Yaşam Bilimleri alanında yüksek lisans derecesi aldım. Bir ilaç şirketinde AR-GE işinde çalıştıktan sonra Osaka Üniversitesi Tıp Fakültesi’ne geçtim ve Japonya’da tıp lisansı aldım.
+> 
+> 
+> 
+> AlphaGo’dan etkilenerek kendi başıma veri bilimi ve yapay zekayı öğrenmeye başladım. Veri bilimi ve yapay zeka becerilerimi öğrenmek ve test etmek için Kaggle’a katıldım. İlk yarışmam 2017 yılında NOAA Fisheries Steller Sea Lion Population Count yarışmasıydı. Sürekli olarak Kaggle yarışmalarına katılıyorum ve üç altın madalya kazandım.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu?**
+> 
+> Bilgisayar bilimi eğitimi almadığım için, Kaggle’daki sonuçlarımı AI şirketlerinde staj başvurularında ve AI laboratuvarlarına kısa dönem öğrenci başvurularında yeteneklerimi göstermek için kullandım. Sadece bir doktor olduğum için, veri bilimi becerilerimi ana işimde hiç kullanmadım. Ancak Kaggle sonuçlarım sayesinde bazen tıbbi veri araştırmalarına katılma fırsatım oluyor.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden?**
+> 
+> En sevdiğim yarışmalar tıbbi veri yarışmaları. Tıbbi bilgimi kullanarak veri üzerinden yeni içgörüler bulmayı çok seviyorum.
+> 
+> 
+> 
+> **Kaggle yarışmalarına yaklaşımınız nasıl?**
+> 
+> Çoğu rakibin farkında olmadığı gizli özellikleri bulmayı veya yarışma verisinin özelliklerine özel benzersiz bir yaklaşım denemeyi seviyorum. Aslında bu tür yaklaşımlar çoğu zaman başarılı olmuyor, ama denemek yine de eğlenceli oluyor.
+> 
+> 
+> 
+> **Özellikle zorlu bir yarışmadan ve bu görevi çözmek için kullandığınız yaklaşımlardan bahseder misiniz?**
+> 
+> Freesound Audio Tagging 2019 yarışmasını örnek vermek isterim; bu, ses verileri için çok etiketli bir sınıflandırma görevidir. Eğitim verisi, az miktarda güvenilir etiketlenmiş veri (temiz veri) ve daha büyük miktarda güvenilmez etiketli veri (gürültülü veri) içeriyordu. Ayrıca, temiz veri ile gürültülü veri arasında dağılım farkı vardı. Bu zorluğu aşmak için iki strateji kullandık:
+> 
+> 
+> 
+> 1. **Multitask learning (Çoklu görev öğrenmesi):** Gürültülü veriyle eğitim, temiz veriyle eğitime ayrı bir görev olarak ele alındı.
+> 
+> 2. **Pseudo-labeling (yarı denetimli öğrenme):** Gürültülü veriler, temiz veriyle eğitilmiş modelin tahmin ettiği etiketlerle yeniden etiketlendi.
+> 
+> 
+> 
+> **Başka yarışma platformlarını da kullanıyor musunuz? Kaggle ile kıyaslandığında nasıl?**
+> 
+> Signate ([https://signate.jp/](https://signate.jp/)) ve guruguru ([https://www.guruguru.science/](https://www.guruguru.science/)) platformlarını kullanıyorum. Bunlar Japonya merkezli veri bilimi yarışma platformları. Kaggle kadar büyük değiller; genellikle daha küçük veri setleri kullanıldığı için katılım daha kolay. Ayrıca, Kaggle’daki yarışmalardan farklı ve ilginç yarışmalar da olabiliyor.
+
+> Mikel Bober-Irizar
+> 
+> [https://www.kaggle.com/anokas](https://www.kaggle.com/anokas)
+> 
+> 
+> 
+> Mikel Bober-Irizar, nam-ı diğer Anokas, Competitions Grandmaster, Notebooks ve Discussion Master ve ForecomAI’de makine öğrenimi bilimcisidir. Aynı zamanda Cambridge Üniversitesi’nde Bilgisayar Bilimleri öğrencisidir ve Kaggle’daki en genç Grandmaster unvanına sahiptir.
+> 
+> 
+> 
+> **Bize kendinizden bahseder misiniz?**
+> 
+> Kaggle’a 2016 yılında, 14 yaşındayken katıldım. O zamanlar ne yaptığımı pek bilmiyordum; sadece internette makine öğrenimi hakkında okumuş ve bunun çok havalı olduğunu düşünmüştüm. İlk yarışmalarıma, forumlardaki diğer insanların paylaştığı açık kodları kopyalayarak ve küçük değişiklikler yaparak başladım. Birkaç yarışma boyunca, leaderboard’da yükselmeye çalışmak motivasyonuyla işleyişi yavaş yavaş anlamaya başladım ve aynı yıl Avito Duplicate Ads Competition’da ikinci olarak büyük ilerleme kaydettim.
+> 
+> 
+> 
+> O zamandan beri 75 yarışmaya katıldım, 2018’de en genç Competitions Grandmaster ve ilk Triple Master oldum. Surrey Üniversitesi’nde Visiting Research Fellow olarak çalıştım ve şu anda Cambridge Üniversitesi’nde Bilgisayar Bilimleri okuyor, makine öğrenimi ve güvenlik üzerine araştırmalar yapıyorum.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve Kaggle’daki uzmanlık alanınız nedir?**
+> 
+> Özellikle özellik mühendisliği (feature engineering) fırsatı çok olan ve farklı veri türlerinin bulunduğu yarışmaları çok seviyorum. Bu tür yarışmalar, çözüm yaklaşımında yaratıcı olmayı mümkün kılıyor – herkesin aynı yaklaşımı aldığı ve sadece son ondalık basamaklar için mücadele ettiği yarışmalardan çok daha eğlenceli.
+> 
+> 
+> 
+> Yaklaşım açısından özel bir uzmanlığım olduğunu söyleyemem, ama farklı şeyler denemeyi seviyorum.
+> 
+> 
+> 
+> **Zorlu bir yarışmadan ve bu görevi çözmek için kullandığınız yaklaşımdan bahseder misiniz?**
+> 
+> Birkaç yıl önce Google, görüntülerdeki nesneleri ve nesneler arasındaki ilişkileri (ör. “masa başındaki sandalye”) tespit etmek için bir yarışma düzenledi. Diğer takımlar klasik yöntemlerle büyük sinir ağları eğiterek görevleri çözmeye çalıştı, ancak ben buna yeterli bilgi ve hesaplama gücüne sahip değildim. Farklı bir açıdan yaklaşmayı seçtim ve bazı etkili sezgiler ve ağaç modelleri kullanarak sadece birkaç saatlik çalışmayla yedinci oldum.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu?**
+> 
+> Kaggle bana birçok fırsat sağladı ve harika bir toplulukla tanışmamı sağladı. Katıldığım tüm yarışmalarda çok insanla tanıştım ve çok şey öğrendim. Ayrıca Kaggle sayesinde makine öğrenimine başladım ve muhtemelen bu alana girmeseydim, burada olmazdım. Yani evet, çok yardımcı oldu.
+> 
+> 
+> 
+> **Yarışmalarda geçmişte yaptığınız hatalar nelerdir?**
+> 
+> Çoğu zaman karmaşık bir çözüm geliştirmek kolaydır; bu çözümü baştan tekrar üretmek zordur çünkü çeşitli kod ve ara veri setleri kullanmış olabilirsiniz. Şanslıysanız kazanırsınız ama çalışır kodu teslim etmek stresli olabilir. İyi bir çözüm yapıyorsanız, çözümünüzü netleştirmek ve kodunuzu temizlemek iyi bir fikir.
+> 
+> 
+> 
+> Ayrıca farklı modeller için farklı doğrulama setleri kullanmak ya da doğrulama tahminlerini saklamamak da yaygındır; bu, karşılaştırmayı veya yarışmada meta-öğrenmeyi zorlaştırır.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenimi için önerdiğiniz araçlar veya kütüphaneler var mı?**
+> 
+> XGBoost’u çok seviyorum; hâlâ tablo verilerinde sinir ağlarını yeniyor (ve yeni kuzeni LightGBM de öyle). SHAP, modelleri (karmaşık olanları bile) açıklamak için harika; bir sonraki adımda ne deneyeceğiniz konusunda fikir veriyor.
+> 
+> 
+> 
+> **Yarışmaya girerken akılda tutulması gereken en önemli şey nedir?**
+> 
+> Aşırı karmaşık çözümler geliştirmekle uğraşmamak ve bunun yerine adım adım ilerleyen çözümler yapmak önemli.
+> 
+> 
+> 
+> Yarışmalar artık benim başladığım zamana göre çok daha zor. Bu nedenle başkalarının kodlarını incelemek iyi bir fikir (birçok kişi yarışma sırasında kodunu paylaşır) ve onlardan öğrenmeye çalışmak faydalı olur. Diğer Kagglers ile bir takım kurmayı da düşünebilirsiniz: takım yarışmaları benim için en eğlenceli ve en öğretici yarışmalardı.
+> 
+> 
+> 
+> Ve son olarak: çoğu fikir işe yaramaz – bir yarışmayı kazanmak istiyorsanız sabırlı olmalı ve denemeye devam etmelisiniz!
+
+Kaggle, önceki üç röportaj yapılan kişinin zengin yaşamları ve kariyerlerinde kesinlikle etkili olmuş ve onlar henüz yolun başındalar. Aşağıda, kendi şirketlerinde artık üst düzey pozisyonlarda bulunan ve Kaggle sayesinde uzun ve verimli bir yolculuk geçirmiş iki Kaggler ile konuşuyoruz.
+
+Tabii! İşte metnin Türkçe çevirisi:
 
 ---
 
-## Other Books You May Enjoy *(Hoşunuza Gidebilecek Diğer Kitaplar)*
+> **Dan Becker**
+> 
+> [https://www.kaggle.com/dansbecker](https://www.kaggle.com/dansbecker)
+> 
+> 
+> 
+> İlk olarak, Notebooks Grandmaster unvanına sahip ve DataRobot’ta Decision Intelligence Ürün Başkan Yardımcısı olarak görev yapan Dan Becker ile başlıyoruz. Kaggle, Dan’in kariyerinde önemli bir rol oynamıştır.
+> 
+> 
+> 
+> **Kendinizden bahsedebilir misiniz?**
+> 
+> İlk olarak 2000 yılında, üç kişilik bir start-up’ta makine öğrenimini denedim. Amacımız, eBay’de ürünlerin rezerv fiyatlarını optimize etmelerine yardımcı olmak için sinir ağları kullanmaktı. Ne yaptığımız hakkında hiçbir fikrimiz yoktu ve feci bir şekilde başarısız olduk.
+> 
+> 
+> 
+> 2002’ye gelindiğinde, makine öğreniminin asla işe yaramayacağına emindim. Ekonomi doktorası yaptım ve ABD hükümetinde ekonomist olarak işe başladım. Colorado’ya taşınmak istiyordum ama orada ekonomi doktorası arayan çok iş yoktu. Bu yüzden daha az akademik bir yeterlilik arıyordum.
+> 
+> 
+> 
+> 2010 yılında Heritage Health Prize hakkında bir gazete haberi gördüm. Bu, 3 milyon dolar ödüllü erken bir Kaggle yarışmasıydı. Hala, bir ekonomist olarak kullandığım basit modellerin, karmaşık makine öğrenimi modellerinden daha iyi tahminler vereceğine inanıyordum. Bu yüzden yarışmaya katılmaya başladım, iyi bir skorun Colorado’da ilginç bir iş bulmak için ihtiyacım olan bir yetkinlik olacağını düşündüm. Bu yarışmaya yaptığım ilk gönderi sonuncu değildi ama neredeyse öyleydi. Modelimin skorlandığını gördüğümde kalbim sızladı ve diğer herkesin çok ileride olduğunu fark ettim. Yarışmada iyi olma umudumu kısa süreliğine kaybettim, ama ortalama bile olamayacağım için hayal kırıklığına uğradım.
+> 
+> 
+> 
+> Tüm gecelerimi ve hafta sonlarımı leaderboard’da yükselmek için bu yarışmaya çalışarak geçirdim. Makine öğrenimini yeniden öğrendim; çünkü ilk denememden bu yana geçen 10 yılda çok ilerlemişti. Her gün daha fazlasını öğreniyor ve yeni bir model yüklüyordum. Çok zaman aldı ama her gün leaderboard’da ilerlemek ödüllendiriciydi. Skorum leaderboard ortasına geldiğinde, devam eden çalışmaların beni ilk %10’a taşıyabileceğini düşündüm. Bu yüzden çalışmaya devam ettim. Kısa süre sonra ilk %10’a girdim ve ilk 10 yarışmacı arasında olabileceğimi düşündüm.
+> 
+> 
+> 
+> İlk 10’a girdiğimde, bir analiz danışmanlık şirketi bana ulaştı ve beni kendi şirket adları altında yarışmaya katılmak için işe almak istediklerini söyledi. Ben de Colorado’dan çalışabileceğim sürece kabul edeceğimi söyledim. Böylece Kaggle yarışması, orijinal hedefime ulaşmamı sağladı.
+> 
+> 
+> 
+> Yarışmayı 2. sırada bitirdik. İkinci sıra için bir ödül yoktu ama o zamandan beri kariyerimde yaptığım her şey bu tek Kaggle yarışması sayesinde mümkün oldu. Bekleyebileceğimden çok daha büyük bir başarıydı.
+> 
+> 
+> 
+> **Kaggle kariyerinize başka nasıl yardımcı oldu?**
+> 
+> Kaggle neredeyse tamamen kariyerimi şekillendirdi. İlk veri bilimi işimi, birisi beni leaderboard’dan işe aldığında buldum. Sonraki işim Kaggle’da çalışmaktı. Ardından, o dönemde işe alım stratejisi Kaggle yarışmalarında iyi performans göstermiş insanları işe almak olan DataRobot’ta çalıştım. Daha sonra Kaggle’a geri dönüp Kaggle Learn’i başlattım; bu Kaggle’ın veri bilimi eğitim platformudur. Liste uzayıp gidiyor. Son on yıldaki her işim, açıkça ilk Kaggle başarım sayesinde oldu.
+> 
+> 
+> 
+> Ekonomiden veri bilimine geçerken, Kaggle’daki başarılarım işe alınmamın temelinde yer aldı. Kariyerimde ilerledikçe artık portföy üzerinden düşünmüyorum ve şanslıyım ki iş aramaktan çok, işe alınıyorum.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Kaggle’da teknik ve çözüm yaklaşımları açısından uzmanlığınız nedir?**
+> 
+> Toplulukta uzun süredir bulunuyorum, ama son 7-8 yıldır bir yarışmaya yoğun şekilde odaklanmadım. Yeni yarışma türlerini seviyorum. Örneğin, 2013’te Kaggle’ın derin öğrenmenin rekabetçi olduğu ilk yarışmalarına katıldım. Bu, Keras, TensorFlow, PyTorch veya günümüzdeki derin öğrenme framework’leri olmadan önceydi. Topluluktaki kimse gerçekten derin öğrenmeyi bilmiyordu, herkes bir şeyi ilk kez öğreniyordu.
+> 
+> 
+> 
+> Kaggle ayrıca bazı modellerin diğer modelleri kandırmak için görüntüleri hafifçe manipüle etmeye çalıştığı bir adversarial (karşıt) modelleme yarışması da düzenledi. Bu çok deneysel bir yarışmaydı ve bir daha benzer bir şey yapıp yapmayacaklarını bilmiyorum. Ama deneysel işleri gerçekten seviyorum; forumlarda topluluk birlikte bir şeyler keşfederken çok eğlenceli oluyor.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşıyorsunuz? Bu yaklaşım, günlük işinizden nasıl farklı?**
+> 
+> Son birkaç yarışmada, “bu yarışma için hangi araçları geliştirebilirim ki projeler arasında işimi otomatikleştirsin?” üzerine odaklandım. Bu çok başarılı olmadı ama ilginç bir meydan okuma. Profesyonel olarak diğer her şeyden çok farklı bir yaklaşım.
+> 
+> 
+> 
+> Yarışmalar dışında, analitik ve ilginç konulardaki veri incelemeyi ÇOK seviyorum. Bazen veri bilimcisi olarak güçlü yönümün sadece veriye bakmak olduğunu söylüyorum (ML modelleriyle filtrelenmemiş şekilde).
+> 
+> 
+> 
+> Ayrıca bir ML modelinin tahmininden kararımıza nasıl geçeceğimizi çok düşünüyorum. Örneğin, bir makine öğrenimi modeli bir marketin bir sonraki sevkiyat gelmeden önce 1.000 mango satacağını tahmin ederse, bu market stokta kaç mango bulundurmalı? Bazıları 1.000 olduğunu varsayar… tam olarak satmayı öngördüğünüz kadar. Bu yanlış.
+> 
+> 
+> 
+> Çok fazla mango alırsanız bozulma maliyeti ile stokta kalmaması durumunda kayıp maliyeti arasında bir denge düşünmelisiniz. Raf ömrü nedir? Ekstra stok bir sonraki sevkiyat gelene kadar taşınabilir mi? Günlük işlerimde yapılacak çok optimizasyon var ve bu Kaggle yarışmalarında görünmüyor.
+> 
+> 
+> 
+> **Katıldığınız özellikle zorlu bir yarışmadan bahseder misiniz ve bu görevi çözmek için hangi içgörüleri kullandınız?**
+> 
+> Practice Fusion Diabetes Classification yarışması için join ve feature engineering yapan otomatik bir sistem kurmaya çalıştım. Öğrendiğim en önemli şey, birkaç dosyadan fazlası varsa, yine de veriyi inceleyecek bir kişiye ihtiyaç duyulması ve hangi feature engineering’in mantıklı olduğunu anlaması gerektiğiydi.
+> 
+> 
+> 
+> **Tecrübelerinize göre, deneyimsiz Kaggle katılımcıları neyi genellikle gözden kaçırır? Başladığınızda bilseydiniz iyi olurdu dediğiniz şey nedir?**
+> 
+> Yeni katılımcılar, Kaggle yarışmalarında iyi olmanın ne kadar yüksek bir seviye gerektirdiğini fark etmiyor. Basit bir yaklaşım ile ilk %50’ye girebileceklerini düşünüyorlar… ve bu genellikle doğru değil. En çok şaşırdığım şey, önceki gönderileri ensemble yaparken farklı modellerin leaderboard skorlarını kullanmanın değeri oldu.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda hangi hataları yaptınız?**
+> 
+> Çok aşamalı yarışmalarda son dakika gönderim detaylarını birkaç kez berbat ettim (ve sonuç olarak son sırada veya yakınında bitirdim).
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenimi için özellikle tavsiye ettiğiniz araçlar veya kütüphaneler var mı?**
+> 
+> Çoğunlukla standart araçlar.
+> 
+> Kaggle yarışmaları dışında, görselleştirme için Altair’i seviyorum ve çok SQL yazıyorum. SQL, karmaşık modeller oluşturmak yerine basit agregasyonlar veya trendleri görmek için tasarlanmıştır; bence bu bir hata değil, bir özellik.
+
+> **Jeong-Yoon Lee**
+> 
+> [https://www.kaggle.com/jeongyoonlee](https://www.kaggle.com/jeongyoonlee)
+> 
+> 
+> 
+> Son olarak, çok sayıda madalya kazanmış Competitions Master unvanına sahip ve Netflix Research’te Rankers ve Search Algorithm Engineering ekibinde Kıdemli Araştırma Bilimcisi olarak çalışan Jeong-Yoon Lee ile karşınızdayız.
+> 
+> 
+> 
+> **Kendinizden bahsedebilir misiniz?**
+> 
+> Benim adım Jeong. Netflix’te Kıdemli Araştırma Bilimcisi olarak çalışıyorum. Kaggle’a 2011 yılında, doktora eğitimimi tamamlayıp analitik danışmanlık start-up’ı olan Opera Solutions’a katıldığımda başladım. Orada Michael Jahrer dahil hevesli Kaggle yarışmacılarıyla tanıştım ve birlikte KDD Cup’lara ve Kaggle yarışmalarına katıldık. O zamandan beri, şirketten ayrıldıktan sonra bile yarışmalarda hem katılımcı hem de organizatör olarak çalışmaya devam ediyorum. Son zamanlarda önceki kadar çok zaman ayırmıyorum, ama yine de Kaggle’a ara sıra bakıyor ve ML’deki en yeni araçlar ve yaklaşımları öğreniyorum.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu?**
+> 
+> Kesinlikle. Öncelikle, ML’de bir yetkinlik belgesi sağlıyor. Birçok işe alım yöneticisi (ben adayken) ve aday (ben işe alım yaparken) Kaggle başarılarımın dikkatlerini çektiğini belirtti. İkincisi, ML’de en güncel yaklaşımları öğrenmeyi sağlıyor. Farklı alanlarda 100’den fazla yarışmada çalışarak, hemen her ML problemi için akranlarımdan daha fazla yaklaşımı biliyorum. Üçüncüsü, dünya çapında üst düzey veri bilimcilerden oluşan bir ağ sağlıyor. Kaggle’da çok yetenekli veri bilimcilerle tanıştım ve onlarla çalışmayı seviyorum. Abhishek Thakur’un kitabını çevirdim, KDD’de Mario, Giba ve Abhishek ile bir panel düzenledim ve Luca’nın kitabı için röportaj yapıyorum. 😉
+> 
+> 
+> 
+> 2012 yılında, KDD Cup 2012’de Steffen Rendle tarafından tanıtılan Factorization Machine’i kullandım ve yeni bir şirkete katıldıktan bir ay sonra mevcut bir SVM modeline göre tahmin performansını %30 geliştirdim. Kendi kurduğum bir start-up’ta, ana teklifimiz ensemble algoritmasıyla piyasa standardı olan lineer regresyonu geçmekti. Uber’de, makine öğrenimi pipeline’larındaki özelliklerdeki covariate shift sorununu çözmek için adversarial validation yöntemini tanıttım.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Kaggle’da teknik ve çözüm yaklaşımları açısından uzmanlığınız nedir?**
+> 
+> Küçük ve orta boyutlu veri setleri olan yarışmaları seviyorum; bunlar çoğunlukla tabular veri yarışmaları, çünkü farklı yaklaşımları hızlıca deneyip her yerde dizüstümde uygulayabiliyorum. 2015’te Kaggle’daki zirve dönemimde, çözümlerimi sık sık uçakta veya çocuk bakımı arasında geliştiriyordum. Üçüzlerim 2014 sonunda doğmuştu ve o dönemde birlikte kurduğum yeni bir start-up’ta çalışıyordum.
+> 
+> 
+> 
+> Özel bir modelleme tekniğim olduğunu düşünmüyorum, ama uzmanlığım daha çok yarışma yönetimi ile ilgili; ekip üyelerini işe almak, işbirliği çerçevesi kurmak (ör. Git, S3, Messenger, Wiki, internal leaderboard, cross-validation splits), ekibin yarışma boyunca verimli çalışmasına yardımcı olmak gibi. Yani kendim bir Grandmaster değilim ama diğer Grandmaster’lar benimle çalışmayı sevdiği için ilk 10’a ulaşabildim.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşıyorsunuz? Bu yaklaşım, günlük işinizden nasıl farklı?**
+> 
+> Hızlı iterasyonlar ve kademeli iyileştirmeler sağlayan bir pipeline kurmaya çalışıyorum. Ne kadar çok fikir denerseniz, yarışmada başarılı olma şansınız o kadar artar. Bu prensip günlük işlerimde de geçerli. Ancak kapsam farklı. İşte, sorunları tanımlayarak ve veriyi belirleyerek başlıyoruz; Kaggle’da ise ikisi de verilmiş durumda ve EDA’dan başlıyoruz.
+> 
+> 
+> 
+> **Tecrübelerinize göre, deneyimsiz Kaggle katılımcıları neyi genellikle gözden kaçırır? Başladığınızda bilseydiniz iyi olurdu dediğiniz şey nedir?**
+> 
+> Son zamanlarda fark ettim ki, birçok kullanıcı diğer kullanıcılar tarafından paylaşılan bir Notebook’u sadece kopyalayıp ince ayar yaparak daha iyi skorlar elde etmeye çalışıyor. Sonuçta önemli olan öğrenmek, Kaggle sıralaması veya puanlar değil. Yeni katılımcılara, kendi çözümlerini geliştirmeye daha fazla zaman ayırmalarını öneriyorum.
+> 
+> 
+> 
+> **Bir yarışmaya girerken en önemli dikkat edilmesi gereken şey nedir?**
+> 
+> Önemli olan kazanmak değil, öğrenmek.
+> 
+> 
+> 
+> **Başka yarışma platformları kullanıyor musunuz? Kaggle ile karşılaştırıldığında nasıl?**
+> 
+> Kore merkezli ML yarışma platformu Dacon AI’a danışmanlık yapıyorum. 2018’de başladı ve şu ana kadar 96 yarışma düzenledi. Kaggle’a kıyasla hâlâ erken bir aşamada, ama Koreli kullanıcılar için benzer deneyimler sunuyor.
+
+### Participating in Kaggle Days and other Kaggle meetups *(Kaggle Days ve diğer Kaggle buluşmalarına katılma)*
+
+Diğer Kaggle katılımcılarıyla bağlantı kurmanın (ve aynı zamanda bir takıma daha kolay kabul edilmenin) iyi bir yolu, onları tanımaktır. Meetup’lar ve konferanslar, Kaggle yarışmalarıyla doğrudan ilgili olmasalar bile her zaman iyi bir yoldur; çünkü konuşmacılar Kaggle’daki deneyimlerinden bahseder veya konular Kaggle yarışmalarında ele alınmıştır. Örneğin, birçok Araştırma yarışması, başarılı katılımcıların deneyimlerini anlattıkları makaleler yazmasını gerektirir ve bu makaleler bir konferans konuşmasında sunulabilir veya alıntılanabilir.
+
+2018 yılına kadar Kaggle ile doğrudan bağlantılı özel etkinlikler yoktu. Ancak Maria Parysz ve Paweł Jankiewicz tarafından kurulan LogicAI şirketi, Kaggle ile iş birliği içinde Polonya’nın Varşova şehrinde ilk Kaggle Days etkinliğini düzenledi. Etkinlikte 100’den fazla katılımcı ve 8 Kaggle Grandmaster konuşmacı olarak yer aldı.
+
+Bunu takiben daha fazla Kaggle Days etkinliği düzenlendi. İşte düzenlenen etkinlikler ve konuşma/materyal linkleri:
+
+* Varşova, Mayıs 2018 ([https://kaggledays.com/events/warsaw2018](https://kaggledays.com/events/warsaw2018))
+* Paris, Ocak 2019 ([https://kaggledays.com/events/paris2019](https://kaggledays.com/events/paris2019))
+* San Francisco, Nisan 2019 ([https://kaggledays.com/event/sanfrancisco2019](https://kaggledays.com/event/sanfrancisco2019))
+* Dubai, Nisan 2019 ([https://kaggledays.com/events/dubai2019](https://kaggledays.com/events/dubai2019))
+* Pekin, Ekim 2019 ([https://kaggledays.com/events/beijing2019](https://kaggledays.com/events/beijing2019))
+* Tokyo, Aralık 2019 ([https://kaggledays.com/events/tokyo2019](https://kaggledays.com/events/tokyo2019))
+
+İkinci etkinlik olan Paris’ten itibaren, çeşitli şehirlerde meetup şeklinde daha küçük etkinlikler düzenlendi (30 farklı yerde 50’den fazla meetup). Büyük bir etkinliğe veya meetup’a katılmak, diğer Kaggle katılımcılarıyla tanışmak ve arkadaş edinmek için çok iyi bir fırsattır; hem kariyer açısından hem de gelecekteki Kaggle yarışmalarında takım kurmak için faydalı olabilir.
+
+Aslında, yazarların bir tanesi bir sonraki işini tam da bu şekilde bulmuştur.
+
+### Getting spotted and other job opportunities *(Fark edilmek ve diğer iş fırsatları)*
+
+Bir süre boyunca Kaggle, işverenlerin veri analizi ve makine öğrenmesi modellemesi alanında nadir yetkinlikleri bulabileceği bir merkez olarak görülüyordu. Kaggle, tartışma forumları arasında bir iş ilanı panosu sunuyordu ve birçok işe alım uzmanı, iletişime geçmek için profilleri incelemek amacıyla lider tablosunda dolaşıyordu. Şirketler ise açıkça aday bulmak amacıyla yarışmalar düzenliyorlardı (Facebook, Intel ve Yelp bunu işe alım amaçlı yarışmalarla gerçekleştirdi) ya da belirli türdeki problemler üzerinde mükemmel performans gösteren en iyi yarışmacıları kolayca seçiyorlardı (örneğin sigorta şirketi AXA, telematik yarışmalarının ardından bunu yaptı). Tüm bunların zirvesi, Wired dergisi ile Gilberto Titericz’in yaptığı bir röportajda, “yüksek sıralamalı çözücüler iş teklifleriyle dolup taşıyor” ifadesiyle işaretlendi ([https://www.wired.com/story/solve-these-tough-data-problems-and-watch-job-offers-roll-in/](https://www.wired.com/story/solve-these-tough-data-problems-and-watch-job-offers-roll-in/)).
+
+Son zamanlarda durum biraz değişti ve birçok Kaggle katılımcısı, bir yarışmayı kazandığınızda veya iyi bir skor aldığınızda alabileceğiniz en iyi şeyin birkaç ay boyunca işe alım uzmanlarından gelen bazı temaslar olduğunu bildiriyor. Hadi, durumun nasıl değiştiğine ve nedenine bakalım.
+
+Günümüzde, iş ilanlarında Kaggle deneyimi genellikle nadiren isteniyor; çünkü şirketler çoğunlukla önceki alan deneyimi (tercihen aynı sektör veya bilgi alanında), matematik ağırlıklı disiplinlerde akademik geçmiş veya Google, Amazon ya da Microsoft sertifikaları talep ediyor. Ancak Kaggle’daki varlığınız hâlâ bazı etkiler yaratabilir; çünkü:
+
+* Kaggle sıralamalarını ve yarışmaları izleyen işe alım uzmanları tarafından fark edilmenizi sağlar.
+* Birçok yönetici ve insan kaynakları departmanı Kaggle profillerini takip ettiğinden, şirketler tarafından fark edilmenizi sağlar.
+* Kodlama ve makine öğrenmesi yeteneğinize dair bir kanıt sunarak, şirketlerin sizi seçmesine yardımcı olabilir; belki de ek testler yapmalarını gerektirmeden.
+* Belirli şirketler için yüksek derecede ilgili sorunlar üzerinde deneyim kazanmanızı sağlar; bu veriler herkese kolayca erişilebilir olmadığından (örneğin telematik, dolandırıcılık tespiti veya deepfake gibi Kaggle yarışmalarında ele alınmış konular).
+
+Ancak, sonuçlarınız ve sıralamanız genellikle olduğu gibi dikkate alınmaz; çünkü şirketler için daha az ilgi çekici olan faktörlerden kaynaklanan etkileri, sizin gerçek yeteneğinizden ayırmak zordur (örneğin yarışmalara ayırabileceğiniz zaman, donanım imkanları veya şans).
+
+Kaggle sıralamalarınız ve sonuçlarınız, aşağıdaki durumlarda daha fazla fark edilir:
+
+* Sorunu şirket için özellikle önemli olan bir yarışmada iyi puan aldığınızda.
+* Şirketin ilgisini çeken konularda birden fazla yarışmada sistematik olarak iyi puanlar aldığınızda; bu, gerçek yetkinlik göstergesidir ve sizi sadece “veri bilimci” veya “makine öğrenmesi mühendisi” olarak etiketlemekten öteye geçer.
+* Kaggle’a katılımınızla, boş zamanınızı ücretsiz olarak yatıracak kadar veri analizine gerçek bir tutku gösterdiğinizde. Bu olumlu bir durumdur, ancak değerinizin farkında olduğunuzu göstermediğiniz sürece maddi tekliflerin düşük olmasına da yol açabilir.
+
+Tek başına fark yaratmasa da, Kaggle sıralamalarınız ve sonuçlarınız bir farklılaştırıcı işlevi görebilir. İşe alım uzmanları ve şirketler, potansiyel aday listelerini oluşturmak için Kaggle sıralamalarını kullanabilir. En çok dikkat çeken sıralamalar, Competitions (Yarışmalar) ve Notebooks (Not Defterleri) alanlarındadır (bu nedenle dört sıralamalı alandan daha yoğun rekabet ve daha fazla Grandmaster bulunur); bazen belirli bir yarışma için sıralamalar da takip edilir. Belirli nadir yetkinlikler (örneğin NLP veya bilgisayarla görme) arandığında, bu yetkinlikleri başarıyla kullanmanız gereken yarışmalarda bulmak daha kolaydır.
+
+Bir diğer büyük farklılaştırıcı ise mülakat zamanında ortaya çıkar. Yarışmalarınızı, problemleri nasıl çözdüğünüzü, çözümleri nasıl kodladığınızı ve takım arkadaşlarınızla nasıl iş birliği yaptığınızı göstermek için kullanabilirsiniz. Bu tür durumlarda, Kaggle’dan aldığınız sıralama veya madalyadan çok, yarışmanın ayrıntılarını konuşmak önemlidir; örneğin ilgili sektör, çalıştığınız veri türü ve ilgilenme nedeniniz. Ayrıca, STAR yaklaşımını kullanarak yarışma sırasında yaptığınız eylemleri sunmak mülakatlarda sıklıkla tercih edilir.
+
+#### The STAR approach *(STAR yaklaşımı)*
+
+STAR yaklaşımında, bir yarışmada yaptıklarınızı **Durum (Situation), Görev (Task), Eylem (Action) ve Sonuç (Result)** çerçevesine göre yapılandırmalısınız. Bu yöntem, tekniklerden çok davranışlarınız hakkında konuşmanızı sağlar ve böylece seçtiğiniz algoritmanın yeteneklerinden ziyade **kendi kapasitenize** vurgu yapar; başkası aynı algoritmayı kullanabilirdi, ama onu bu kadar başarılı bir şekilde kullanmayı başaran siz oldunuz.
+
+Bu yöntem özellikle başarı hikayeleri için uygundur, ancak başarısız hikayelerde de uygulanabilir; özellikle başarısız olma nedenlerinizden önemli dersler çıkardığınız durumlarda, aynı hatayı tekrar etmenizi engellemişse faydalıdır.
+
+Bu yöntemi uygulamak için hikayenizi dört bileşene ayırırsınız:
+
+* **Durum (Situation):** Yarışmadaki bağlamı ve durumu detaylı şekilde açıklayın, böylece görüşmeci problemi ve fırsatları hızlıca anlayabilsin.
+* **Görev (Task):** Durumdaki spesifik rolünüzü ve sorumluluklarınızı açıklayın; böylece bireysel katkınız yetenekleriniz ve davranışlarınız üzerinden çerçevelenir.
+* **Eylem (Action):** Görevi yerine getirmek için hangi adımları attığınızı açıklayın.
+* **Sonuç (Result):** Eylemlerinizin sonuçlarını ve genel sonucu gösterin.
+
+Bazı şirketler STAR yaklaşımını açıkça ister (ya da buna benzer bir yöntem olan **Goal-Impact-Challenges-Finding**, yani Hedef-Etki-Zorluklar-Bulgular yöntemini tercih eder, burada sonuçlara daha fazla vurgu yapılır); diğerleri doğrudan istemese de benzer bir yapı bekler.
+
+En iyi yanıtlar, görüşme yaptığınız şirketin **değerleri ve hedefleri** ile uyumlu olanlardır.
+
+Sadece bir yarışmada aldığınız sıralama ve madalyaları raporlamak, görüşmeciyi etkilemek için yeterli olmayabilir; bu nedenle Kaggle deneyiminizi yeniden yapılandırmak çok önemlidir. STAR yaklaşımı, yarışmaya **tek başınıza veya bir takım halinde** katılmış olmanıza göre uygulanabilir; takım halinde ise, önemli bir nokta diğer takım üyeleriyle nasıl etkileşimde bulunduğunuzu ve onlara olumlu katkınızı anlatmaktır.
+
+Bunu yapmanın yolları şunlardır:
+
+1. **Durumu anlatın:** Yarışmada ortaya çıkan durumu açıklayın. Bu, başlangıç aşamasında, deneme-yanılma aşamasında veya finalde olabilir. Dinleyicinin davranışınızın duruma uygun olup olmadığını değerlendirebilmesi için bağlamı net bir şekilde sunmak önemlidir. Çok detaylı olun ve durumun neden dikkatinizi ve eyleminizi gerektirdiğini açıklayın.
+
+2. **Görevi açıklayın:** Üstlendiğiniz görevi anlatın. Örneğin veri temizliği yapmak, keşifsel analiz yapmak, bir temel model oluşturmak veya çözümünüzü sürekli geliştirmek gibi.
+
+3. **Eylemi anlatın:** Görevi nasıl yerine getirdiğinizi açıklayın. Burada, daha önceki bölümde tartıştığımız gibi, açıklamanızı desteklemek için bir Medium makalesi veya GitHub projesi sunmanız faydalı olur. Deneyiminizi sistematik olarak belgeler ve iyi kodlama ile sunmak, görüşmeci karşısında değer önerinizi güçlendirir.
+
+4. **Sonucu anlatın:** Elde edilen sonucu açıklayın. Bu **niteliksel** olabilir (örneğin Kaggle’da yarışan bir takımın çalışmalarını nasıl koordine ettiğiniz) veya **niceliksel** olabilir (örneğin katkınızın final sonucunu ne kadar etkilediği).
+
+### Summary (and some parting words) *(Özet ve kapanış notları)*
+
+Bu bölümde, Kaggle’da yarışmanın kariyer fırsatlarınızı nasıl geliştirebileceğini tartıştık. Hem yarışmalarda takım kurarak hem de geçmiş yarışmalarla ilgili etkinliklere katılarak bağlantılar kurmaktan, hem de Kaggle deneyiminizi yeni bir iş bulmak için nasıl kullanabileceğinizden bahsettik. Deneyimlerimize ve diğer Kagglers’ın deneyimlerine dayanarak, sadece Kaggle sonuçlarının bir pozisyon kazanmanızı garanti edemeyeceğini tartıştık. Ancak, sonuçlar sizi işe alım uzmanlarının ve insan kaynakları departmanlarının dikkatini çekmenize yardımcı olabilir ve ardından veri bilimi yetkinliklerinizi sunma şeklinizi güçlendirebilir (önceki bölümde anlattığımız gibi, dikkatle hazırlanmış bir portföyle destekleniyorsa).
+
+Bu bölüm aynı zamanda kitabın da sonunu işaret ediyor. On dört bölüm boyunca Kaggle yarışmalarını, Veri Setlerini, Notebooks ve tartışmaları ele aldık. Makine öğrenmesi ve derin öğrenme konularında teknik konuları kapsadık (değerlendirme metriklerinden simülasyon yarışmalarına kadar) ve amacımız, hem Kaggle’da hem de Kaggle sonrası dönemde daha fazla başarı elde etmenize yardımcı olmaktı.
+
+On yıldır Kaggle yarışmalarına katılmış biri olarak çok iyi biliyoruz ki, Kaggle’da ihtiyacınız olan her şeyi bulabilirsiniz – ancak her şey yüzlerce yarışma ve binlerce Notebook, tartışma ve Veri Seti arasında dağılmış durumda. İhtiyacınız olan şeyi, ihtiyacınız olduğu anda bulmak, Kaggle’a yeni başlayan biri için göz korkutucu olabilir. Biz, katılmak isteyebileceğiniz tüm yarışmalarda size rehberlik edecek temel ve vazgeçilmez bilgileri derledik. Bu nedenle, bu kitap veri bilimi üzerine sıkı bir anlamda bir kitap değil, özellikle Kaggle’daki veri bilimi üzerine bir kitaptır.
+
+Teknik ve pratik ipuçlarının yanı sıra, on yıldan fazla bir sürede Kaggle’daki deneyimlerimizi her zaman olumlu bir şekilde dönüştürmenin bir yolunu bulduğumuzu da aktarmak istedik. Bu çalışmayı, veri bilimi yarışmalarının dünyasındaki sonsuz yolculuğumuzu anlatan bir kitap olarak tekrar okuyabilirsiniz. Kaggle’daki yolculuk, tüm Grandmaster unvanlarını aldığınızda ve dünya genelinde birinci sıraya geldiğinizde sona ermez. Aslında asla sona ermez, çünkü yarışmalara katılım şeklinizi yeniden keşfedebilir ve deneyiminizi sonsuz şekilde kullanabilirsiniz. Bu kitap sona ererken, Kaggle’daki yolculuğunuz başlıyor ve sizlere uzun, zengin ve verimli bir deneyim diliyoruz – tıpkı bizim için olduğu gibi. Harika bir yolculuk dileriz!
