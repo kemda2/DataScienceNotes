@@ -6810,6 +6810,106 @@ Bu prosedürü çeşitli şekillerde daha sofistike hale getirebilirsiniz. Başl
 
 ### Stacking models together *(Modelleri yığınlama)*
 
+**Stacking**, ilk kez David Wolpert'in makalesinde (Wolpert, D. H. Stacked generalization. Neural Networks 5.2 – 1992) bahsedilmiştir, ancak bu fikir yıllarca yaygın olarak kabul edilmedi ve ancak 2019 Aralık ayında Scikit-learn sürüm 0.22 ile bir stacking sarmalayıcısı (wrapper) uygulanmıştır. Bunun başlıca nedeni önce Netflix yarışması, ardından Kaggle yarışmalarının etkisiyle bu yöntemlerin popülerleşmesidir.
+
+Stacking yönteminde her zaman bir meta-öğrenici vardır. Ancak bu sefer, model bir *holdout* üzerinde değil, tüm eğitim seti üzerinde eğitilir; bunu sağlayan strateji ise *out-of-fold (OOF)* tahmin stratejisidir. Bu stratejiyi, 6. Bölüm’de "İyi Bir Doğrulama Tasarımı" başlığında zaten tartışmıştık. OOF tahmininde, her bir model için geçerli bir k-fold çapraz doğrulama bölmesi (k-fold cross-validation split) yapılır. *Replicable* (yinelemeli) olması, her bir eğitim ve test setinin her bir doğrulama turunda kaydedilmesiyle, ya da rastgele tohum (random seed) kullanılarak doğrulama şemasının her model için yeniden oluşturulabilir olması anlamına gelir.
+
+Netflix yarışmasında, stacking ve blending terimleri genellikle birbirinin yerine kullanılıyordu, ancak Wolpert’in orijinal olarak geliştirdiği yöntem, *holdout seti* yerine *k-fold çapraz doğrulama* tabanlı bir şema kullanıyordu. Aslında stacking’in temel fikri, varyansı azaltmak değildir; daha çok **bias**’ı (yanlılık) azaltmaktır. Çünkü stacking’e dahil olan her modelin, verilerdeki bir kısmı öğrenmesi ve bu bilgilerin nihai meta-öğrenicide birleştirilmesi beklenir.
+
+Şimdi, eğitim verileri üzerinde OOF tahminlerinin nasıl çalıştığını hatırlayalım. Bir modeli test ederken, doğrulama turunun her bir aşamasında, eğitim verilerinin bir kısmı üzerinde eğitim yapar ve geri kalan kısımla doğrulama yaparsınız.
+
+Doğrulama tahminlerini kaydedip ardından bunları orijinal eğitim örneklerinin sırasına göre yeniden sıraladığınızda, modelinizin, kullandığınız aynı eğitim seti üzerinde bir tahmin elde edersiniz. Ancak, birden fazla model kullandığınız ve her bir modelin eğitimde kullanmadığı örnekler üzerinde tahmin yaptığı için, eğitim seti tahminlerinizde aşırı uyum (overfitting) etkisi olmamalıdır.
+
+Tüm modelleriniz için OOF tahminlerini elde ettikten sonra, ilk seviye tahminleri (first-level predictions) baz alarak bir meta-öğrenici oluşturabilir veya önceki OOF tahminlerinin üzerine daha fazla OOF tahminleri ekleyerek (ikinci veya daha yüksek seviyeli tahminler) birden fazla stacking katmanı oluşturabilirsiniz. Bu, Wolpert'in kendisinin sunduğu bir fikirle uyumludur: Birden fazla meta-öğrenici kullanarak, aslında geri yayılım (backpropagation) olmadan tamamen bağlantılı bir ileri beslemeli sinir ağının (feedforward neural network) yapısını taklit ediyorsunuz. Bu yapıda, ağırlıklar her katman için ayrı ayrı tahminsel performansı maksimize etmek amacıyla optimize edilir. Pratikte, birden fazla katmanın stacking yapılması, tek başına algoritmaların en iyi sonucu elde edemediği karmaşık problemlerde oldukça etkili ve iyi sonuçlar verir.
+
+Bunun yanı sıra, stacking'in ilginç bir yönü, ortalama alma ve genellikle blending gibi yöntemlere kıyasla, **karşılaştırılabilir tahmin gücüne sahip modellere** ihtiyaç duymamanızdır. Aslında, daha düşük performans gösteren modeller bile bir stacking ensemble (topluluk) içinde etkili olabilir. Örneğin, bir k-en yakın komşu (k-nearest neighbors) modeli, bir gradient boosting çözümüyle kıyaslanamaz olabilir; ancak OOF tahminlerini stacking için kullanırken, bu model topluluğun tahminsel performansını artırabilir.
+
+Tüm stacking katmanlarını eğittikten sonra, tahmin yapma zamanı gelmiştir. Çeşitli stacking aşamalarında kullanılan tahminlerin üretimi konusunda iki yolunuz vardır. Wolpert’in orijinal makalesi, tüm eğitim verileriniz üzerinde modellerinizi yeniden eğitmenizi ve ardından bu yeniden eğitilmiş modelleri test seti üzerinde tahmin yapmak için kullanmanızı önerir. Ancak pratikte, birçok Kaggle yarışmacısı, modelleri yeniden eğitmek yerine, her fold için oluşturulan modelleri doğrudan kullanır ve test seti üzerinde birden fazla tahmin yaparak bunları sonunda ortalamaktadır.
+
+Bizim deneyimimize göre, stacking genellikle tüm mevcut verilerle yeniden eğitim yaparak test seti üzerinde tahmin yapıldığında daha etkili olur, özellikle düşük sayıda k-fold kullanıldığında. Bu durum, örnek tutarlılığının tahmin kalitesi üzerinde gerçekten fark yaratabilir, çünkü daha az veriyle eğitim yapmak, tahminlerde daha fazla varyans anlamına gelir. 6. Bölüm'de tartıştığımız gibi, OOF tahminleri oluştururken yüksek sayıda fold kullanmak her zaman daha iyidir; 10 ile 20 arasında bir sayı önerilir. Bu, dışarıda bırakılan örnek sayısını sınırlar ve tüm veriler üzerinde yeniden eğitim yapmadan, çapraz doğrulama eğitilmiş modellerden elde edilen tahminlerin ortalamasını test seti tahmininizi elde etmek için kullanabilirsiniz.
+
+Bir sonraki örneğimizde, sadece beş CV fold’u kullanarak ve sonuçları iki kez stacking yaparak işlemi görsel olarak göstereceğiz. Aşağıdaki diyagramda, verilerin ve modellerin stacking sürecindeki farklı aşamalar arasında nasıl hareket ettiğini izleyebilirsiniz:
+
+![](im/1063.png)
+
+**Dikkat edilmesi gerekenler:**
+
+* Eğitim verisi, stacking'in her iki seviyesine de beslenir (stacking'in ikinci seviyesindeki OOF tahminleri eğitim verisiyle birleştirilir).
+* CV döngülerinden OOF tahminleri alındıktan sonra, modeller tüm eğitim verisi üzerinde yeniden eğitilir.
+* Son tahminler, tüm stacking tahminlerinin basit bir ortalamasıdır.
+
+Şimdi, bu diyagramın Python komutlarına nasıl dönüştüğünü anlamak için koda göz atalım, önce eğitim aşamasının birinci seviyesiyle başlayalım:
+
+```python
+from sklearn.model_selection import KFold
+kf = KFold(n_splits=5, shuffle=True, random_state=0)
+scores = list()
+first_lvl_oof = np.zeros((len(X_train), 3))
+first_lvl_preds = np.zeros((len(X_test), 3))
+
+for k, (train_index, val_index) in enumerate(kf.split(X_train)):
+    model_1.fit(X_train[train_index, :], y_train[train_index])
+    first_lvl_oof[val_index, 0] = model_1.predict_proba(X_train[val_index, :])[:, 1]
+    
+    model_2.fit(X_train[train_index, :], y_train[train_index])
+    first_lvl_oof[val_index, 1] = model_2.predict_proba(X_train[val_index, :])[:, 1]
+    
+    model_3.fit(X_train[train_index, :], y_train[train_index])
+    first_lvl_oof[val_index, 2] = model_3.predict_proba(X_train[val_index, :])[:, 1]
+```
+
+İlk katmandan sonra, tüm veri seti üzerinde yeniden eğitim yapıyoruz:
+
+```python
+model_1.fit(X_train, y_train)
+first_lvl_preds[:, 0] = model_1.predict_proba(X_test)[:, 1]
+model_2.fit(X_train, y_train)
+first_lvl_preds[:, 1] = model_2.predict_proba(X_test)[:, 1]
+model_3.fit(X_train, y_train)
+first_lvl_preds[:, 2] = model_3.predict_proba(X_test)[:, 1]
+```
+
+İkinci stacking katmanında, ilk katmandaki modelleri yeniden kullanacağız ve stacking OOF tahminlerini mevcut değişkenlere ekleyeceğiz:
+
+```python
+second_lvl_oof = np.zeros((len(X_train), 3))
+second_lvl_preds = np.zeros((len(X_test), 3))
+
+for k, (train_index, val_index) in enumerate(kf.split(X_train)):
+    skip_X_train = np.hstack([X_train, first_lvl_oof])
+    model_1.fit(skip_X_train[train_index, :], y_train[train_index])
+    second_lvl_oof[val_index, 0] = model_1.predict_proba(skip_X_train[val_index, :])[:, 1]
+    
+    model_2.fit(skip_X_train[train_index, :], y_train[train_index])
+    second_lvl_oof[val_index, 1] = model_2.predict_proba(skip_X_train[val_index, :])[:, 1]
+    
+    model_3.fit(skip_X_train[train_index, :], y_train[train_index])
+    second_lvl_oof[val_index, 2] = model_3.predict_proba(skip_X_train[val_index, :])[:, 1]
+```
+
+Tekrar, ikinci katman için tüm veriler üzerinde yeniden eğitim yapıyoruz:
+
+```python
+skip_X_test = np.hstack([X_test, first_lvl_preds])
+model_1.fit(skip_X_train, y_train)
+second_lvl_preds[:, 0] = model_1.predict_proba(skip_X_test)[:, 1]
+model_2.fit(skip_X_train, y_train)
+second_lvl_preds[:, 1] = model_2.predict_proba(skip_X_test)[:, 1]
+model_3.fit(skip_X_train, y_train)
+second_lvl_preds[:, 2] = model_3.predict_proba(skip_X_test)[:, 1]
+```
+
+Stacking, ikinci katmandan elde edilen tüm OOF sonuçlarının ortalamasını alarak tamamlanır:
+
+```python
+arithmetic = second_lvl_preds.mean(axis=1)
+ras = roc_auc_score(y_true=y_test, y_score=arithmetic)
+scores.append(ras)
+print(f"Stacking ROC-AUC: {ras:0.5f}")
+```
+
+Sonuç olarak elde edilen ROC-AUC skoru yaklaşık 0.90424’tür. Bu, aynı veri ve modellerle yapılan önceki blending ve averaging denemelerinden daha iyidir.
+
 #### Stacking variations *(Yığınlama varyasyonları)*
 
 ### Creating complex stacking and blending solutions *(Karmaşık karıştırma ve yığınlama çözümleri oluşturma)*
