@@ -5061,11 +5061,56 @@ Bu şekilde, halving yöntemi adayların seçimi yoluyla ardışık optimizasyon
 
 ### Key parameters and how to use them *(Temel parametreler ve nasıl kullanılacakları)*
 
+Bir sonraki sorun, kullandığınız her model türü için doğru hiperparametre setini kullanmaktır. Özellikle optimizasyonunuzu verimli yapmak için, her farklı algoritma için hangi hiperparametre değerlerini test etmenin gerçekten anlamlı olduğunu bilmeniz gerekir.
+
+Bu bölümde, Kaggle yarışmalarında, özellikle tablo verisi yarışmalarında, en yaygın olarak kullanılan modelleri inceleyecek ve en iyi sonuçları elde etmek için ayarlamanız gereken hiperparametreleri tartışacağız. Genel tablo verisi problemleri için klasik makine öğrenimi modelleri ile (parametre alanı açısından çok daha talepkar olan) gradient boosting modelleri arasında ayrım yapacağız.
+
+Sinir ağlarına gelince, standart modelleri tanıtırken ayarlanması gereken bazı özel parametreler hakkında fikir verebiliriz (örneğin, TabNet sinir modeli düzgün çalışması için bazı özel parametrelere ihtiyaç duyar). Ancak, Kaggle yarışmalarında derin sinir ağları optimizasyonunun çoğu standart modeller üzerinde değil, özel olarak geliştirilmiş modeller üzerinde yapılmaktadır. Dolayısıyla, öğrenme oranı ve batch boyutu gibi temel öğrenme parametreleri dışında, sinir ağlarında optimizasyon modelinizin sinir mimarisinin özel özelliklerine dayanmaktadır. Bu problemi ad hoc (duruma özel) bir şekilde ele almanız gerekir. Bölümün sonunda, KerasTuner kullanarak bir sinir mimarisi arama (NAS) örneğini tartışacağız ([https://keras.io/keras_tuner/](https://keras.io/keras_tuner/)).
+
 #### Linear models *(Doğrusal modeller)*
+
+Ayarlanması gereken lineer modeller genellikle düzenlemeli (regularized) lineer regresyon veya lojistik regresyon modelleridir:
+
+* **C**: Aramanız gereken değer aralığı `np.logspace(-4, 4, 10)`’dur; daha küçük değerler daha güçlü regularizasyon uygular.
+* **alpha**: Aramanız gereken değer aralığı `np.logspace(-2, 2, 10)`’dur; daha küçük değerler daha güçlü regularizasyon uygular, daha büyük değerler ise daha güçlü regularizasyon uygular. Ayrıca, Lasso kullanırken daha yüksek değerlerin işlenmesinin daha fazla zaman aldığını unutmayın.
+* **l1_ratio**: Seçebileceğiniz değerler `[.1, .5, .7, .9, .95, .99, 1]` listesindendir; yalnızca Elastic Net için geçerlidir.
+
+Scikit-learn’de, algoritmaya bağlı olarak, ya hiperparametre **C** (lojistik regresyon için) ya da **alpha** (Lasso, Ridge, Elastic Net için) bulunur.
 
 #### Support-vector machines *(Destek vektör makineleri)*
 
+SVM’ler, sınıflandırma ve regresyon için güçlü ve ileri düzey gözetimli öğrenme teknikleri ailesidir ve hem lineer hem de lineer olmayan modelleri otomatik olarak uyarlayabilir. Scikit-learn, SVM sınıflandırma ve regresyon uygulamalarının eksiksiz bir kütüphanesi olan **LIBSVM** ve özellikle büyük veri kümeleri, özellikle seyrek metin tabanlı veri kümeleri için uygun, ölçeklenebilir bir lineer sınıflandırma kütüphanesi olan **LIBLINEAR**’a dayalı bir uygulama sunar. SVM optimizasyonunda, sınıflandırma problemlerinde hedef sınıfları ayırmak için sınıflar arasındaki mümkün olan en geniş marj ile karakterize edilen bir karar sınırı kullanılır.
+
+Varsayılan parametrelerle SVM’ler iyi çalışsa da çoğu zaman optimal değildir ve en iyi değerleri bulmak için çeşitli değer kombinasyonlarını çapraz doğrulama ile test etmeniz gerekir. Öncelik sırasına göre ayarlanması gereken parametreler şunlardır:
+
+* **C**: Ceza değeri. Azaltılması sınıflar arasındaki marjı büyütür, böylece daha fazla gürültüyü görmezden gelir ancak modelin genellenebilirliğini artırır. Genellikle en iyi değer aralığı `np.logspace(-3, 3, 7)`’dir.
+* **kernel**: SVM’de doğrusal olmayan yapının nasıl uygulanacağını belirler ve `'linear'`, `'poly'`, `'rbf'`, `'sigmoid'` veya özel bir kernel olarak ayarlanabilir. En yaygın kullanılan değer kesinlikle `'rbf'`’dir.
+* **degree**: `kernel='poly'` ile çalışır ve polinom genişlemesinin boyutunu belirtir. Diğer kernel’ler tarafından göz ardı edilir. Genellikle 2 ile 5 arası değerler en iyi sonucu verir.
+* **gamma**: `'rbf'`, `'poly'` ve `'sigmoid'` için bir katsayıdır. Yüksek değerler veriye daha iyi uyum sağlar, ancak aşırı öğrenmeye (overfitting) yol açabilir. Gamma’yı, tek bir örneğin model üzerindeki etkisi olarak düşünebiliriz. Düşük değerler, her bir örneğin etkisinin daha geniş alana yayılmasını sağlar; bu da SVM eğri çizgisinin lokal noktalardan daha az etkilenmesine ve daha düzgün bir karar sınırı elde edilmesine yol açar. Yüksek gamma değerleri ise eğrinin lokal noktaların düzenini daha çok dikkate almasına sebep olur ve daha düzensiz, kıvrımlı bir karar eğrisi ortaya çıkar. Önerilen grid search aralığı `np.logspace(-3, 3, 7)`’dir.
+* **nu**: `nuSVR` ve `nuSVC` ile regresyon ve sınıflandırmada, marja yakın ve yanlış sınıflandırılmış eğitim noktaları için tolerans belirler. Yanlış sınıflandırılmış noktaları göz ardı etmeye yardımcı olur ve karar eğrisinin daha düzgün olmasını sağlar. [0,1] aralığında olmalıdır çünkü eğitim setine göre oransaldır. Temel olarak **C** gibi davranır; yüksek oranlar marjı büyütür.
+* **epsilon**: SVR’nin kabul edeceği hata miktarını belirler; algoritmanın eğitiminde bir örneğin yanlış tahmini için ceza uygulanmayan geniş bir epsilon aralığı tanımlar. Önerilen aralık `np.logspace(-4, 2, 7)`’dir.
+* **penalty, loss ve dual**: `LinearSVC` için bu parametreler `('l1', 'squared_hinge', False)`, `('l2', 'hinge', True)`, `('l2', 'squared_hinge', True)` ve `('l2', 'squared_hinge', False)` kombinasyonlarını alabilir. `('l2', 'hinge', True)` kombinasyonu, `SVC(kernel='linear')` ile eşdeğerdir.
+
+SVM’nin ayarlanacak çok fazla hiperparametresi var gibi görünebilir, ancak birçok ayar yalnızca belirli implementasyonlara veya kernel’lere özgüdür; bu nedenle yalnızca ilgili parametreleri seçmeniz yeterlidir.
+
 #### Random forests and extremely randomized trees *(Rastgele ormanlar ve aşırı rastgele ağaçlar)*
+
+Leo Breiman ve Adele Cutler, rastgele orman (random forest) algoritmasının temel fikrini ilk olarak geliştirmişlerdir ve algoritmanın adı bugün hâlâ onların tescilli markasıdır (algoritma açık kaynak olmasına rağmen). Scikit-learn’de rastgele ormanlar **RandomForestClassifier** veya **RandomForestRegressor** sınıfları ile uygulanır.
+
+Rastgele orman, Leo Breiman tarafından geliştirilen bagging yöntemine benzer şekilde çalışır, ancak yalnızca ikili bölünme karar ağaçlarını kullanır ve bu ağaçlar uçlarına kadar büyütülür. Ayrıca her modelde kullanılacak örnekleri **bootstrap** yöntemiyle seçer. Ağaç büyütülürken, her dalın bölünmesinde, bölünmede dikkate alınacak değişkenler de rastgele seçilir.
+
+İşte algoritmanın kalbindeki sır budur: Farklı örnekler ve farklı değişkenler nedeniyle birbirinden çok farklı ağaçları bir araya getirir. Bu ağaçlar farklı oldukları için aynı zamanda **korelasyonsuzdur**. Bu faydalıdır çünkü sonuçlar birleştirildiğinde, dağılımın uç değerleri birbirini dengeler ve varyans azalır. Başka bir deyişle, bagging algoritmaları tahminlerde belirli bir çeşitlilik düzeyi sağlar ve tek bir öğrenicinin (örneğin bir karar ağacının) keşfetmeyeceği kuralları geliştirmelerine olanak tanır. Bu çeşitlilik, bireysel ağaçların ortalamasının tahmin performansını artıran bir dağılım oluşturulmasına yardımcı olur.
+
+**Extra Trees** (aşırı rastgeleleştirilmiş ağaçlar), Scikit-learn’de **ExtraTreesClassifier/ExtraTreesRegressor** sınıflarıyla temsil edilir ve daha rastgele bir rastgele orman türüdür. Tahminlerde daha düşük varyans üretirken, estimatörlerde daha yüksek bias (sapma) ortaya çıkar. Ancak CPU verimliliği açısından Extra Trees, rastgele ormanlara kıyasla önemli bir hız kazanımı sağlayabilir; bu nedenle hem örnek sayısı hem de özellik sayısı açısından büyük veri kümeleriyle çalışırken ideal olabilir. Bu daha yüksek bias ama daha hızlı performansın nedeni, Extra Tree’da bölünmelerin rastgele oluşturulmasıdır. Rastgele ormanlarda, bir dalı bölmek için rastgele seçilen özellikler arasında en iyi değerleri bulmak için dikkatli bir arama yapılır. Buna karşılık, Extra Trees’da hem bölünmede kullanılacak özellikler hem de bölünme değeri tamamen rastgele seçilir. Bu nedenle hesaplama maliyeti düşüktür, ancak seçilen rastgele bölünme her zaman en etkili olan olmayabilir (işte bias burada ortaya çıkar).
+
+Her iki algoritma için de ayarlanması gereken temel hiperparametreler şunlardır:
+
+* **max_features**: Her bölünmede kullanılacak örneklenmiş özellik sayısıdır ve algoritmanın performansını belirleyebilir. Düşük değer daha hızlı çalışmayı sağlar, ancak bias artar.
+* **min_samples_leaf**: Ağaçların derinliğini belirler. Büyük değerler varyansı azaltır ve bias’ı artırır.
+* **bootstrap**: Bootstrapping uygulanıp uygulanmayacağını belirten Boolean parametredir.
+* **n_estimators**: Ağaç sayısıdır. Daha fazla ağaç genellikle daha iyidir, ancak veri problemine bağlı olarak belli bir noktadan sonra getiriler azalır. Ayrıca hesaplama maliyeti artar; bu, mevcut kaynaklarınızı göz önünde bulundurmayı gerektirir.
+
+Extra Trees, özellikle verileriniz oldukça gürültülü olduğunda rastgele ormanlara iyi bir alternatiftir. Bölünmelerin rastgele seçimi nedeniyle bazı varyans azalımı karşılığında daha yüksek bias verirler ve bu sayede rastgele ormanda baskın olabilecek önemli ancak gürültülü özelliklerde daha az aşırı öğrenme (overfitting) eğilimi gösterirler.
 
 #### Gradient tree boosting *(Gradyan ağaç güçlendirmesi)*
 
