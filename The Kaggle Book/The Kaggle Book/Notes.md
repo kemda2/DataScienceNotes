@@ -4660,11 +4660,177 @@ Probleme bağlı olarak, doğru mimariyi kurmak ve düzgün çalışacak şekild
 
 > Kendi DAE’nizi kurmak için çok fazla zaman harcamak istemiyorsanız, ama yarışmada işe yarayıp yaramayacağını keşfetmek istiyorsanız, önceden hazırlanmış birkaç çözümü deneyebilirsiniz. Öncelikle Hung Khoi’nin PyTorch ağı için hazırladığı Notebook’a ([https://www.kaggle.com/hungkhoi/train-denoise-transformer-autoencoder](https://www.kaggle.com/hungkhoi/train-denoise-transformer-autoencoder)) bakabilir ve ihtiyacınıza göre uyarlayabilirsiniz. Ya da Jeong-Yoon Lee’nin Kaggler kütüphanesini ([https://www.kaggle.com/jeongyoonlee](https://www.kaggle.com/jeongyoonlee)) kullanabilirsiniz. Jeong-Yoon Lee Notebook’unda, bunun Tabular Playground yarışmalarından birinde nasıl çalıştığını göstermektedir: [https://www.kaggle.com/jeongyoonlee/dae-with-2-lines-of-code-with-kaggler](https://www.kaggle.com/jeongyoonlee/dae-with-2-lines-of-code-with-kaggler).
 
-
-
 ### Neural networks for tabular competitions *(Tablo verisi yarışmaları için sinir ağları)*
 
+DAE’li sinir ağlarını tartıştıktan sonra, bu bölümü sinir ağlarının tablo yarışmalarında daha genel olarak nasıl yardımcı olabileceğini ele alarak tamamlamamız gerekiyor. Gradient boosting çözümleri hâlâ tablo yarışmalarında (ve gerçek dünya projelerinde) açık ara önde olsa da, bazen sinir ağları gradient boosting modellerinin yakalayamadığı sinyalleri yakalayabilir ve tek başına mükemmel modeller veya bir ensemble içinde öne çıkan modeller olabilir.
+
+> Geçmişin ve günümüzün birçok Grandmaster’ının sıkça belirttiği gibi, farklı modelleri (örneğin bir sinir ağı ve bir gradient boosting modeli) bir araya getirmek, tablo verisi problemlerinde tek başına kullanılan modellerden her zaman daha iyi sonuçlar verir. Kaggle’da daha önce birinci olan Owen Zhang, sinir ağları ve GBM’lerin bir yarışmada daha iyi sonuçlar için nasıl uyumlu bir şekilde birleştirilebileceğini şu röportajda ayrıntılı şekilde tartışıyor: [https://www.youtube.com/watch?v=LgLcfZjNF44](https://www.youtube.com/watch?v=LgLcfZjNF44)
+
+Bir tablo yarışması için hızlıca bir sinir ağı kurmak artık göz korkutucu bir zorluk değil. TensorFlow/Keras ve PyTorch gibi kütüphaneler işleri kolaylaştırıyor ve TabNet gibi önceden hazırlanmış ağların kütüphanelerde paketlenmiş olması işleri daha da kolaylaştırıyor.
+
+Kendi ağınızı hızlı bir şekilde oluşturmaya başlamak için çeşitli kaynakları kullanabilirsiniz. Özellikle, yayınladığımız **Machine Learning Using TensorFlow Cookbook** kitabına ([https://www.packtpub.com/product/machine-learning-using-tensorflow-cookbook/9781800208865](https://www.packtpub.com/product/machine-learning-using-tensorflow-cookbook/9781800208865)) başvurmanızı şiddetle öneririz; çünkü kitabın bir bölümü, tablo verileri için TensorFlow ile DNN (Derin Sinir Ağları) kurmayı kapsamlı şekilde ele alıyor (Bölüm 7, Predicting with Tabular Data). Kitapta ayrıca Kaggle’da TensorFlow kullanımıyla ilgili birçok öneri ve tarif de bulabilirsiniz.
+
+Bunun dışında, konuyu tanıtmak için bazı çevrimiçi kaynaklara da başvurabilirsiniz. 30 Days of ML yarışmasında önerilen kaynaklar şunlardır:
+
+* TensorFlow’u tablo verileri için nasıl kullanacağınızı anlatan videoyu izleyin: [https://www.youtube.com/watch?v=nQgUt_uADSE](https://www.youtube.com/watch?v=nQgUt_uADSE)
+* GitHub’daki eğitim kodunu kullanın: [https://github.com/lmassaron/deep_learning_for_tabular_data](https://github.com/lmassaron/deep_learning_for_tabular_data)
+* En önemlisi, yarışmada uygulanan eğitim Notebook’una göz atın: [https://www.kaggle.com/lucamassaron/tutorial-tensorflow-2-x-for-tabular-data](https://www.kaggle.com/lucamassaron/tutorial-tensorflow-2-x-for-tabular-data)
+
+Bu çözümleri kurarken göz önünde bulundurmanız gereken temel noktalar şunlardır:
+
+* ReLU yerine GeLU, SeLU veya Mish gibi aktivasyon fonksiyonlarını kullanın; birçok çalışmada tablo verilerini modellemek için daha uygun olduğu belirtilmiştir ve kendi deneyimlerimiz de genellikle daha iyi performans gösterdiklerini doğrulamaktadır.
+* Batch boyutu ile denemeler yapın.
+* Mixup ile veri artırmayı (augmentation) kullanın (autoencoder bölümünde tartışılmıştı).
+* Sayısal özelliklerde quantile dönüşümü kullanın ve bunun sonucunda uniform veya Gaussian dağılımları zorlayın.
+* Embedding katmanlarından faydalanın, ancak embeddinglerin her şeyi modellemediğini unutmayın. Aslında, embeddingler gömülü özelliğin diğer tüm özelliklerle etkileşimlerini kaçırır (bu yüzden bu etkileşimleri doğrudan feature engineering ile ağa dahil etmelisiniz).
+
+Özellikle, embedding katmanlarının yeniden kullanılabilir olduğunu unutmayın. Aslında, sadece giriş (yüksek kardinaliteli değişkenin seyrek one-hot kodlaması) ile düşük boyutlu yoğun bir vektör arasındaki matris çarpımından oluşur. Eğitilmiş bir sinir ağının embeddingini kaydederek, aynı özelliği dönüştürebilir ve ortaya çıkan embeddingleri gradient boosting’tan lineer modellere kadar birçok farklı algoritmada kullanabilirsiniz.
+
+24 seviyeli kategorik bir değişkeni içeren süreci daha iyi anlamak için Şekil 7.6’daki diyagrama bakın. Grafikte, bir kategorik özelliğin değerinin metin veya tamsayıdan, bir sinir ağının işleyebileceği bir değerler vektörüne nasıl dönüştürüldüğü gösterilmektedir.
+
+![](im/1062.png)
+
+Her şey, özelliğin kaç farklı değere sahip olduğunu bilmekle başlar. Bu, sözlük boyutunu oluşturur ve önemli bir bilgidir. Bu örnekte, 24 farklı değere sahip bir özellik ele alınmıştır. Bu bilgi, her olası özellik değerini temsil eden 24 boyutlu bir one-hot kodlamalı vektör oluşturmamızı sağlar. Elde edilen vektör, satır boyutu one-hot vektörünün boyutuna, sütun boyutu ise çıktı boyutlarına karşılık gelen bir matris ile çarpılır. Bu şekilde, vektör-matris çarpımıyla kategorik değişkenin girdisi çok boyutlu sayısal bir vektöre dönüştürülür. Çarpmanın etkinliği, sinir ağının geri yayılım (backpropagation) algoritması tarafından sağlanır; algoritma matrisin her değerini güncelleyerek çarpımdan en öngörücü sonucu elde eder.
+
+Eğer TensorFlow veya PyTorch ile kendi derin sinir ağınızı kurmak istemiyorsanız, birkaç hazır mimari çözümden faydalanabilirsiniz. Bu çözümlerin tümü “out-of-the-box” yani kutudan çıktığı gibi kullanılabilir; ya paketlenmişlerdir ya da diğer Kaggle kullanıcıları orijinal makalelere dayanarak kodlamışlardır. Tablo yarışmalarındaki başarılarına dayanarak, kendiniz bir tablo yarışmasına girerken deneyebileceğiniz başlıca çözümler şunlardır:
+
+* **TabNet**: Google araştırmacıları tarafından geliştirilmiş bir ağdır (Arık, S. O. ve Pfister, T. TabNet: Attentive interpretable tabular learning. arXiv 2020. [https://www.aaai.org/AAAI21Papers/AAAI-1063.ArikS.pdf](https://www.aaai.org/AAAI21Papers/AAAI-1063.ArikS.pdf)). İlgili özellikleri seçip işleme ve hem kategorik hem sayısal özelliklerle akıllıca başa çıkma sözü verir. Ayarlanacak çok hiperparametresi yoktur, ancak sonuçlar ayarlanmamış ve ayarlanmış bir ağ arasında büyük farklılık gösterebilir (bu yüzden en iyi performans için biraz zaman harcamak gerekir). Uygulamalar arasında mükemmel **pytorch-tabnet** paketi ([https://github.com/dreamquark-ai/tabnet](https://github.com/dreamquark-ai/tabnet)) veya Yirun Zhang tarafından kodlanmış uygulamalar ([https://www.kaggle.com/gogo827jz](https://www.kaggle.com/gogo827jz)) yer alır. Bu uygulamalar Mechanism of Action (MoA) Prediction yarışması için tasarlanmıştır.
+
+* **Neural Oblivious Decision Ensembles (NODE)**: Sinir ağında karar ağacının nasıl çalıştığını taklit etmeye çalışan bir mimaridir (Popov, S., Morozov, S., ve Babenko, A. Neural oblivious decision ensembles for deep learning on tabular data. arXiv preprint arXiv:1909.06312, 2019. [https://arxiv.org/abs/1909.06312](https://arxiv.org/abs/1909.06312)). TensorFlow için Yirun Zhang’ın sunduğu uygulamayı kullanabilirsiniz: [https://www.kaggle.com/gogo827jz/moa-neural-oblivious-decision-ensembles-tf-keras](https://www.kaggle.com/gogo827jz/moa-neural-oblivious-decision-ensembles-tf-keras) veya PyTorch için: [https://www.kaggle.com/gogo827jz/moa-public-pytorch-node](https://www.kaggle.com/gogo827jz/moa-public-pytorch-node)
+
+* **Diğer modeller**: Wide & Deep, DeepFM, xDeepFM, AutoInt gibi geniş bir model yelpazesi mevcuttur; bunların çoğu faktorizasyon makinelerine dayanır ve genellikle tıklama oranı tahmini için tasarlanmıştır. Tüm bu sinir ağlarını kendiniz kurmak zorunda değilsiniz; **DeepCTR** ([https://github.com/shenweichen/DeepCTR](https://github.com/shenweichen/DeepCTR)) veya **DeepTables** ([https://github.com/DataCanvasIO/deeptables](https://github.com/DataCanvasIO/deeptables)) gibi paketlere güvenebilirsiniz. Bu paketler, Categorical Feature Encoding Challenge II yarışmasında ikinci ve birinci olan Changhao Lee ([https://www.kaggle.com/leechh](https://www.kaggle.com/leechh)) ve Jian Yang ([https://www.kaggle.com/jackguagua](https://www.kaggle.com/jackguagua)) tarafından önerilmiştir.
+
+Sonuç olarak, kategorik özellikler için embedding katmanları ve sayısal özellikler için dense katmanları birleştirerek kendi tablo verisi sinir ağınızı oluşturabilirsiniz. Ancak bu işe yaramazsa, iyi yazılmış paketlerin sağladığı geniş çözümlere her zaman güvenebilirsiniz. Yeni bir paket çıktığında gözünüz açık olsun; hem Kaggle yarışmalarında hem de gerçek dünya projelerinde performansınızı artırabilir. Ayrıca deneyimlerimize dayanarak bir tavsiye: Bir tablo yarışmasında sinir ağının en iyi model olmasını beklemeyin; bu nadiren olur. Bunun yerine, klasik tablo veri modellerinden (gradient boosting modelleri ve sinir ağları gibi) çözümleri harmanlayın; çünkü bu modeller veriden farklı sinyalleri yakalar ve bir ensemble içinde birleştirilebilir.
+
+> Jean-François Puget
+> 
+> [https://www.kaggle.com/cpmpml](https://www.kaggle.com/cpmpml)
+> 
+> 
+> 
+> Jean-François Puget, namı diğer CPMP ile reproducibility (tekrarlanabilirlik) konusunun önemi, veri ile çalışma yöntemleri, en iyi yarışması ve daha fazlası hakkında konuştuk. Kaggle’da Competitions ve Discussions Grandmaster’ı ve NVIDIA RAPIDS’te Distinguished Engineer olarak birçok değerli görüş paylaştı. Editör özellikle onun bilimsel yöntemle ilgili söylediklerini çok beğendi.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Kaggle’da teknikler ve çözüm yaklaşımları açısından uzmanlık alanınız nedir?**
+> 
+> Bilimsel bir temele sahip yarışmaları ya da kendimle ilişki kurabileceğim bir temeli olan yarışmaları severim. Anonim veya sentetik verilerden hoşlanmam, ancak veri çok hassas bir fizik simülasyonu ile üretilmişse kabul edebilirim. Genel olarak, çok az bilgi sahibi olduğum alanlardaki Kaggle yarışmalarını severim; çünkü en çok öğrenme fırsatını burada buluyorum. Bu, sıralama puanı kazanmak için en etkili yol değil ama en çok eğlendiğim yol.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşılır? Bu yaklaşım, günlük işinizde yaptıklarınızdan ne kadar farklı?**
+> 
+> Veriye bakarak ve mümkün olduğunca iyi anlayarak başlarım. Özellikle öngörücü desenleri bulmaya çalışırım. Sıklıkla iki özelliği veya türetilmiş özellikleri x ve y eksenine, üçüncü bir özelliği ise renk kodlaması için kullanarak örnekleri çizerim. Üç özellikten biri hedef olabilir. Görselleştirme çok kullanırım; çünkü insan görselliğinin veri analizinde en iyi araç olduğuna inanıyorum.
+> 
+> 
+> 
+> İkinci olarak, model veya pipeline performansını değerlendirmeye zaman ayırırım. Model performansını olabildiğince doğru bir şekilde değerlendirebilmek son derece önemlidir. Değerlendirme genellikle k-fold cross-validation’ın bir çeşididir, ancak fold tanımı yarışma türüne göre uyarlanabilir (örneğin tahmin yarışmalarında zaman bazlı fold’lar, örnekler bir şekilde bağlantılıysa group k-fold, ör. aynı kullanıcı ID’sine sahip aksiyonlar).
+> 
+> 
+> 
+> Ardından, veri girişinden submission’a kadar giden bir baseline pipeline oluşturur ve test ederim. Kod yarışmalarında, pipeline’ın doğru çalıştığını test etmek kritik önemdedir.
+> 
+> 
+> 
+> Daha sonra daha karmaşık modelleri (derin öğrenme kullanıyorsam) veya daha fazla özelliği (XGBoost veya RAPIDS/sklearn modelleri kullanıyorsam) denerim. Bunları submit ederek lokal değerlendirme skorum ile public test skorunun korelasyonunu gözlemlerim. Korelasyon iyiyse submit sayısını azaltırım.
+> 
+> 
+> 
+> Birkaç hafta sonra hiperparametre ayarlaması yaparım, ama bunu yalnızca bir kez ya da belki yarışma sonuna yakın ikinci kez yaparım. Çünkü hiperparametre ayarlaması overfitting’e neden olabilecek en kolay yollardan biridir ve overfitting konusunda çok dikkatliyim.
+> 
+> 
+> 
+> **Girdiğiniz özellikle zor bir yarışmadan ve bu görevi çözmek için kullandığınız yöntemlerden bahseder misiniz?**
+> 
+> En gurur duyduğum yarışmalardan biri, TalkingData AdTracking Fraud Detection Challenge’dir. Çok büyük bir tıklama geçmişi vardı ve hangi tıklamaların uygulama indirmelerine yol açtığını tahmin etmemiz gerekiyordu. Özellikler çok az, satır sayısı çok fazlaydı (yaklaşık yarım milyar). O zamanlar yalnızca 64 GB makinam vardı ve yeni özellikler oluşturup değerlendirmek için çok verimli bir yöntem uygulamak zorundaydım.
+> 
+> 
+> 
+> Bazı çıkarımlarım oldu:
+> 
+> 
+> 
+> 1. Uygulama indirmeye yol açan tıklama, kullanıcının uygulama indirme sayfasındaki son tıklamaydı. Bu nedenle “aynı kullanıcı ve uygulama için bir sonraki tıklamaya kadar geçen süre” en önemli özellikti.
+> 
+> 2. Aynı kullanıcı ve uygulamadan aynı zaman damgasına sahip birçok tıklama vardı; indirme olan varsa, bunun son tıklama olduğunu varsaydım.
+> 
+> 3. Özellik değerlerinin eşzamanlılıklarını tahmin etmek için matris faktorizasyonu kullandım. O zaman Keras’ta bir libFM modeli uyguladım ve latent vektörleri özellik olarak eklemek faydalı oldu.
+> 
+> 
+> 
+> Bunu uygulayan tek diğer ekip, yarışmayı kazanan ekipti. Bununla, Grandmaster olmayan birisi olarak ekipler arasında 6. oldum.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Eğer evet ise, nasıl?**
+> 
+> Kaggle bana iki kez yardımcı oldu:
+> 
+> 
+> 
+> 1. IBM’de Kaggle, SOTA makine öğrenimi uygulamaları hakkında büyük bir bilgi kaynağıydı. Bu bilgiyi IBM’in makine öğrenimi araçlarını (Watson Studio ve Watson Machine Learning) geliştirmek için kullandım. Örneğin, 2016’da IBM’in Python paketlerini desteklemesini sağladım; o dönemde IBM tamamen Java/Scala ağırlıklıydı. Ben olmasaydım, IBM Spark ve Scala’ya yatırım yapacak ve Python dalgasını tamamen kaçıracaktı. Ayrıca IBM’in yalnızca Spark ML veya TensorFlow’u desteklemek istediği dönemde XGBoost’u erken desteklemeleri için zorladım.
+> 
+> 2. İkinci olarak, şu anki işimi elde etmemde Kaggle yardımcı oldu. NVIDIA, Kaggle yarışma Grandmaster’larını sosyal varlıkları güçlü olan kişileri arıyordu ve bu kişiler NVIDIA stack’ini ve RAPIDS GPU hızlandırmalı ML paketini tanıtmak için çalışıyordu.
+> 
+> 
+> 
+> **Deneyimsiz Kaggle kullanıcıları genellikle neyi gözden kaçırıyor? Başladığınızda bilmek istediğiniz bir şey var mıydı?**
+> 
+> Kagglers ile diğer veri bilimciler arasındaki fark, model performansını değerlendirme konusudur. Eğer bunu bilmezlerse, public leaderboard’da iyi görünen ancak private leaderboard’da kötü performans gösteren submission’lar seçerler. Private leaderboard’da iyi performans gösteren modelleri kurmayı bilen bir Kaggler, yeni veride de iyi performans gösteren, yani overfit olmayan modelleri kurmayı öğrenir.
+> 
+> 
+> 
+> Deneyimsiz Kagglers sık sık “X yöntemi/bu model bu yarışmada işe yarar mı?” diye sorar. Benim cevabım her zaman: “Deneyin ve işe yarayıp yaramadığını görün.” Makine öğrenimin deneysel bir bilim olduğunu çoğu kişi kaçırıyor. İyi modeller kurmak için bilimsel yöntem izlenmelidir:
+> 
+> 
+> 
+> * Hipotez oluşturun (örn. bu özellik veya bu NN katmanı pipeline performansını artıracak)
+> 
+> * Hipotezi test etmek için bir deney yürütün (değiştirilen pipeline’ı eğitin)
+> 
+> * Deney sonuçlarını analiz edin (CV skoru öncekinden daha iyi mi? Nerede daha iyi? Nerede kötü?)
+> 
+> 
+> 
+> Her deney, bir hipotezi doğrulamak veya reddetmek için yapılmalıdır ve her deney yalnızca bir değişkeni değiştirmelidir. Deneyimsiz kişiler genellikle birçok şeyi aynı anda değiştirir ve neyin işe yaradığını çıkaramaz.
+> 
+> 
+> 
+> **Veri analizi ve makine öğrenimi için önereceğiniz araçlar veya kütüphaneler var mı?**
+> 
+> 
+> 
+> * Veri keşfi için çoğunlukla **Matplotlib** kullanırım.
+> 
+> * Küçük veri setlerinde **Pandas**, büyük veri setlerinde **cuDF (RAPIDS)** ile veri işleme yaparım.
+> 
+> * Makine öğrenimi için **cuML (RAPIDS)**, GPU hızlandırmalı **XGBoost** ve **PyTorch** kullanırım.
+> 
+> * Mümkünse önceden eğitilmiş modelleri kullanırım; örneğin Hugging Face’den NLP modelleri veya **timm** paketinden görüntü sınıflandırma modelleri.
+> 
+> 
+> 
+> **Bir yarışmaya katılırken en önemli şey nedir?**
+> 
+> Yarışmaya yeterince zaman ayırabileceğinizden emin olun.
+
 ### Summary *(Özet)*
+
+Bu bölümde, Kaggle’daki tabular (tablo tabanlı) yarışmaları ele aldık. Tablo tabanlı bir yarışmada uygulanabilecek bilgilerin çoğu standart veri bilimi bilgi ve uygulamalarıyla örtüştüğü için, dikkatimiz daha çok Kaggle’a özgü tekniklere odaklandı.
+
+Yeni tanıtılan **Tabular Playground Series**’den başlayarak, reproducibility (tekrarlanabilirlik), EDA (Exploratory Data Analysis – Keşifsel Veri Analizi), feature engineering (özellik mühendisliği), feature selection (özellik seçimi), target encoding (hedef kodlama), pseudo-labeling (sahte etiketleme) ve tablo veri setlerine uygulanan neural network (sinir ağı) konularına değindik.
+
+**EDA**, bir yarışmayı kazanmak için içgörü elde etmek istiyorsanız kritik bir aşamadır. Ancak oldukça yapısızdır ve sahip olduğunuz veri türüne güçlü şekilde bağlıdır. Genel EDA önerilerinin yanı sıra, tüm veri setinizi bir bakışta özetleyebilecek **t-SNE** ve **UMAP** gibi tekniklere de dikkatinizi çektik.
+
+Bir sonraki aşama olan **feature engineering**, üzerinde çalıştığınız veri türüne güçlü bir şekilde bağlıdır. Bu nedenle, belirli durumunuza uygulayabileceğiniz bir dizi olası özellik mühendisliği fikri sunduk.
+
+**Feature selection** konusunda kısa bir genel bakışın ardından, hemen hemen her makine öğrenimi algoritmasına uygulanabilecek **özellik önemi** ve **rastgeleleştirme** temelli tekniklere dikkatinizi çektik.
+
+Otomatik olarak işlenemeyeceğini vurgulamak istediğimiz **target encoding**’i açıkladıktan sonra, muhtemelen gerçek dünya projelerinizde uygulamayacağınız ama Kaggle yarışmalarında çok iyi çalışabilecek özel tekniklere geçtik: **pseudo-labeling** ve tablo yarışmaları için **denoising autoencoder**.
+
+Son olarak, kategorik özelliklerin sinir ağlarında embedding katmanları kullanılarak nasıl işlenebileceğini tartıştıktan sonra, tablo verileri için kullanılabilecek hazır sinir ağı mimarilerinin kısa bir özetini verdik.
+
+Bir sonraki bölümde, tabular yarışmalara katılırken bilmeniz gereken tüm tekniklerin incelemesini **hyperparameter optimizasyonu** konusunu tartışarak tamamlayacağız.
 
 ---
 
