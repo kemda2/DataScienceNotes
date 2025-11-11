@@ -9171,9 +9171,338 @@ Bu bölümde, bir metin gövdesi üzerinde nasıl açıklayıcı özellikler olu
 
 #### Basic techniques *(Temel teknikler)*
 
+Her zamanki gibi, önce temel yaklaşımları incelemek faydalıdır, burada rastgele değişiklikler ve eşanlamlı kelime kullanımı üzerinde durulmuştur. Temel yaklaşımların sistematik bir incelemesi Wei ve Zou (2019) tarafından sağlanmıştır ve buradan erişilebilir: [https://arxiv.org/abs/1901.11196](https://arxiv.org/abs/1901.11196).
+
+Öncelikle eşanlamlı kelimeleri değiştirmeyle başlayalım. Bazı kelimeleri eşanlamlılarıyla değiştirmek, orijinaline anlam olarak yakın ancak biraz değiştirilmiş metinler üretir (eşanlamlıların nereden geldiğini daha fazla öğrenmek isterseniz proje sayfasına göz atabilirsiniz: [https://wordnet.princeton.edu/](https://wordnet.princeton.edu/)):
+
+```python
+def get_synonyms(word):
+    synonyms = set()
+    for syn in wordnet.synsets(word):
+        for l in syn.lemmas():
+            synonym = l.name().replace("_", " ").replace("-", " ").lower()
+            synonym = "".join([char for char in synonym if char in 'qwertyuiopasdfghjklzxcvbnm'])
+            synonyms.add(synonym) 
+    if word in synonyms:
+        synonyms.remove(word)
+    return list(synonyms)
+```
+
+Yukarıda tanımlanan temel işlevin etrafında basit bir sarmalayıcı oluşturuyoruz. Bu işlev, bir metin parçası (birden fazla kelime içeren bir dizi) alır ve en fazla `n` kelimeyi değiştirir:
+
+```python
+def synonym_replacement(words, n):    
+    words = words.split()    
+    new_words = words.copy()
+    random_word_list = list(set([word for word in words if word not in stop_words]))
+    random.shuffle(random_word_list)
+    num_replaced = 0
+    
+    for random_word in random_word_list:
+        synonyms = get_synonyms(random_word)
+        
+        if len(synonyms) >= 1:
+            synonym = random.choice(list(synonyms))
+            new_words = [synonym if word == random_word else word for word in new_words]
+            num_replaced += 1
+        
+        if num_replaced >= n: # Only replace up to n words
+            break
+    sentence = ' '.join(new_words)
+    return sentence
+```
+
+Fonksiyonun nasıl çalıştığını pratikte görelim:
+
+```python
+print(f"Example of Synonym Replacement: {synonym_replacement('The quick brown fox jumps over the lazy dog',4)}")
+```
+
+Çıktı:
+
+```
+Example of Synonym Replacement: The spry brown university fox jumpstart over the lazy detent
+```
+
+Tam olarak Shakespearevari olmasa da, aynı mesajı iletmekte ve stili belirgin şekilde değiştirmekte. Bu yaklaşımı, her tweet için birden fazla yeni cümle oluşturacak şekilde genişletebiliriz:
+
+```python
+trial_sent = data['text'][25]
+print(trial_sent)
+the free fillin' app on my ipod is fun, im addicted
+for n in range(3):
+    print(f"Example of Synonym Replacement: {synonym_replacement(trial_sent,n)}")
+```
+
+Çıktılar:
+
+```
+Example of Synonym Replacement: the free fillin' app on my ipod is fun, im addict
+Example of Synonym Replacement: the innocent fillin' app on my ipod is fun, im addicted
+Example of Synonym Replacement: the relinquish fillin' app on my ipod is fun, im addict
+```
+
+Görüldüğü gibi, eşanlamlılar kullanarak bir metin parçasının varyasyonlarını üretmek oldukça basittir.
+
+Sonraki adımda, kelimelerin yer değiştirilmesi (swapping) yöntemi basit ve verimli bir tekniktir; metindeki kelimelerin sırasını rastgele değiştirerek değiştirilmiş bir cümle oluştururuz. Dikkatlice uygulandığında, bu, LSTM gibi modellerin bağımlı olduğu verinin sıralı doğasını bozan potansiyel olarak faydalı bir düzenlileştirme biçimi olarak görülebilir. İlk adım, kelimeleri yer değiştiren bir işlev tanımlamaktır:
+
+```python
+def swap_word(new_words):    
+    random_idx_1 = random.randint(0, len(new_words)-1)
+    random_idx_2 = random_idx_1
+    counter = 0    
+    while random_idx_2 == random_idx_1:
+        random_idx_2 = random.randint(0, len(new_words)-1)
+        counter += 1        
+        if counter > 3:
+            return new_words
+    
+    new_words[random_idx_1], new_words[random_idx_2] = new_words[random_idx_2], new_words[random_idx_1] 
+    return new_words
+```
+
+Sonra, bu işlevin etrafında bir sarmalayıcı yazıyoruz:
+
+```python
+def random_swap(words, n):    
+    words = words.split()
+    new_words = words.copy()
+    
+    for _ in range(n):
+        new_words = swap_word(new_words)
+        
+    sentence = ' '.join(new_words)    
+    return sentence
+```
+
+Eşanlamlılar ve kelime yer değiştirme, değiştirdiğimiz cümlenin uzunluğunu etkilemez. Eğer belirli bir uygulamada, cümlenin uzunluğunu değiştirmek faydalıysa, cümleye kelime ekleyebiliriz ya da çıkarabiliriz.
+
+Kelime silmenin en yaygın yolu, kelimeleri rastgele silmektir:
+
+```python
+def random_deletion(words, p):
+    words = words.split()
+    
+    # Obviously, if there's only one word, don't delete it
+    if len(words) == 1:
+        return words
+    # Randomly delete words with probability p
+    new_words = []
+    for word in words:
+        r = random.uniform(0, 1)
+        if r > p:
+            new_words.append(word)
+    # If you end up deleting all words, just return a random word
+    if len(new_words) == 0:
+        rand_int = random.randint(0, len(words)-1)
+        return [words[rand_int]]
+    sentence = ' '.join(new_words)
+    
+    return sentence
+```
+
+Örnekler:
+
+```python
+print(random_deletion(trial_sent,0.2))
+print(random_deletion(trial_sent,0.3))
+print(random_deletion(trial_sent,0.4))
+```
+
+Çıktılar:
+
+```
+the free fillin' app on my is fun, addicted
+free fillin' app on my ipod is im addicted
+the free on my ipod is fun, im
+```
+
+Eğer kelimeleri silebiliyorsak, tabii ki ekleyebiliriz. Cümleye rastgele kelime eklemek, görüntülere gürültü veya bulanıklık eklemeye benzer şekilde, NLP'deki karşılık olarak görülebilir:
+
+```python
+def random_insertion(words, n):    
+    words = words.split()
+    new_words = words.copy()    
+    for _ in range(n):
+        add_word(new_words)        
+    sentence = ' '.join(new_words)
+    return sentence
+
+def add_word(new_words):    
+    synonyms = []
+    counter = 0
+    
+    while len(synonyms) < 1:
+        random_word = new_words[random.randint(0, len(new_words)-1)]
+        synonyms = get_synonyms(random_word)
+        counter += 1
+        if counter >= 10:
+            return        
+    random_synonym = synonyms[0]
+    random_idx = random.randint(0, len(new_words)-1)
+    new_words.insert(random_idx, random_synonym)
+```
+
+Fonksiyonun çalışmasını görelim:
+
+```python
+print(random_insertion(trial_sent,1))
+print(random_insertion(trial_sent,2))
+print(random_insertion(trial_sent,3))
+```
+
+Çıktılar:
+
+```
+the free fillin' app on my addict ipod is fun, im addicted
+the complimentary free fillin' app on my ipod along is fun, im addicted
+the free along fillin' app addict on my ipod along is fun, im addicted
+```
+
+Yukarıda tartışılan tüm dönüşümleri tek bir işlevde birleştirebiliriz, böylece aynı cümlenin dört varyasyonunu üretiriz:
+
+```python
+def aug(sent,n,p):
+    print(f"Original Sentence : {sent}")
+    print(f"SR Augmented Sentence : {synonym_replacement(sent,n)}")
+    print(f"RD Augmented Sentence : {random_deletion(sent,p)}")
+    print(f"RS Augmented Sentence : {random_swap(sent,n)}")
+    print(f"RI Augmented Sentence : {random_insertion(sent,n)}")
+aug(trial_sent,4,0.3)
+```
+
+Çıktı:
+
+```
+Original Sentence : the free fillin' app on my ipod is fun, im addicted
+SR Augmented Sentence : the disembarrass fillin' app on my ipod is fun, im hook
+RD Augmented Sentence : the free app on my ipod fun, im addicted
+RS Augmented Sentence : on free fillin' ipod is my the app fun, im addicted
+RI Augmented Sentence : the free fillin' app on gratis addict my ipod is complimentary make up fun, im addicted
+```
+
+Yukarıda tartışılan artırma yöntemleri, metin verisinin yapısını kullanmaz - örneğin, “kon
+
+
+uşma türü” gibi basit bir özelliği analiz etmek bile, orijinal metnin daha faydalı dönüşümlerini inşa etmemize yardımcı olabilir. Bu, şimdi odaklanacağımız yaklaşımdır.
+
 #### nlpaug *(nlpaug kütüphanesi)*
 
+Bu bölümü, nlpaug paketinin sunduğu özellikleri göstererek tamamlıyoruz ([https://github.com/makcedward/nlpaug](https://github.com/makcedward/nlpaug)). Bu paket, metin artırma için farklı yöntemleri birleştirir ve hafif yapısı ile iş akışlarına kolayca entegre edilebilecek şekilde tasarlanmıştır. Aşağıda, içeriğindeki bazı işlevselliğin örneklerini sunuyoruz.
+
+Öncelikle `nlpaug` paketini kuruyoruz:
+
+```bash
+! pip install nlpaug
+```
+
+Ardından, karakter ve kelime düzeyindeki artırıcıları içeri aktarıyoruz, bunları belirli yöntemleri eklemek için kullanacağız:
+
+```python
+import nlpaug.augmenter.char as nac
+import nlpaug.augmenter.word as naw
+```
+
+Bir test cümlesi tanımlıyoruz:
+
+```python
+test_sentence = "I genuinely have no idea what the output of this sequence of words will be - it will be interesting to find out what nlpaug can do with this!"
+```
+
+Simüle edilmiş bir yazım hatasını test cümlemize uyguladığımızda ne olur? Bu dönüşüm birçok şekilde parametrelendirilebilir; parametrelerin tam listesi ve açıklamaları için resmi dökümantasyona göz atmanız önerilir: [nlpaug dökümantasyonu](https://nlpaug.readthedocs.io/en/latest/augmenter/char/keyboard.html).
+
+```python
+aug = nac.KeyboardAug(name='Keyboard_Aug', aug_char_min=1,
+                      aug_char_max=10, aug_char_p=0.3, aug_word_p=0.3,
+                      aug_word_min=1, aug_word_max=10, stopwords=None,
+                      tokenizer=None, reverse_tokenizer=None,
+                      include_special_char=True, include_numeric=True,
+                      include_upper_case=True, lang='en', verbose=0,
+                      stopwords_regex=None, model_path=None, min_char=4)
+test_sentence_aug = aug.augment(test_sentence)
+print(test_sentence)
+print(test_sentence_aug)
+```
+
+Çıktı şu şekilde olur:
+
+```
+I genuinely have no idea what the output of this sequence of words will be - it will be interesting to find out what nlpaug can do with this!
+I geb&ine:y have no kdeZ qhQt the 8uYput of tTid sequsnDr of aorVs will be - it wi,k be jnterewtlHg to find out what nlpaug can do with this!
+```
+
+Metne bir OCR (optik karakter tanıma) hatası eklediğimizde ne olur?
+
+```python
+aug = nac.OcrAug(name='OCR_Aug', aug_char_min=1, aug_char_max=10,
+                 aug_char_p=0.3, aug_word_p=0.3, aug_word_min=1,
+                 aug_word_max=10, stopwords=None, tokenizer=None,
+                 reverse_tokenizer=None, verbose=0,
+                 stopwords_regex=None, min_char=1)
+test_sentence_aug = aug.augment(test_sentence)
+print(test_sentence)
+print(test_sentence_aug)
+```
+
+Çıktı şu şekilde olur:
+
+```
+I genuinely have no idea what the output of this sequence of words will be - it will be interesting to find out what nlpaug can do with this!
+I 9enoine1y have no idea what the ootpot of this sequence of wokd8 will be - it will be inteke8tin9 to find out what nlpaug can du with this!
+```
+
+Karakter düzeyindeki dönüşümler faydalı olsa da, verideki yaratıcı değişiklikler için sınırlı bir kapsam sunar. Şimdi, nlpaug'ın kelime düzeyindeki değişiklikler için sunduğu olasılıkları inceleyelim. İlk örneğimiz, belirli bir yüzdede kelimeyi karşıtlarıyla değiştirmeyi içeriyor:
+
+```python
+aug = naw.AntonymAug(name='Antonym_Aug', aug_min=1, aug_max=10, aug_p=0.3,
+                     lang='eng', stopwords=None, tokenizer=None,
+                     reverse_tokenizer=None, stopwords_regex=None,
+                     verbose=0)
+test_sentence_aug = aug.augment(test_sentence)
+print(test_sentence)
+print(test_sentence_aug)
+```
+
+Çıktı şu şekilde olur:
+
+```
+I genuinely have no idea what the output of this sequence of words will be - it will be interesting to find out what nlpaug can do with this!
+I genuinely lack no idea what the output of this sequence of words will differ - it will differ uninteresting to lose out what nlpaug can unmake with this!
+```
+
+nlpaug ayrıca eşanlamlıları değiştirme gibi başka olasılıklar da sunar; bu tür dönüşümler daha önce tartıştığımız temel tekniklerle de yapılabilir. Tamlık açısından, altında BERT mimarisi kullanan küçük bir örnek gösterelim:
+
+```python
+aug = naw.ContextualWordEmbsAug(model_path='bert-base-uncased',
+                                model_type='', action='substitute',
+                                top_k=100,
+                                name='ContextualWordEmbs_Aug', aug_min=1,
+                                aug_max=10, aug_p=0.3, 
+                                stopwords=None, device='cpu',
+                                force_reload=False,
+                                stopwords_regex=None,
+                                verbose=0, silence=True)
+test_sentence_aug = aug.augment(test_sentence)
+print(test_sentence)
+print(test_sentence_aug)
+```
+
+Çıktı şu şekilde olur:
+
+```
+I genuinely have no idea what the output of this sequence of words will be - it will be interesting to find out what nlpaug can do with this!
+i genuinely have no clue what his rest of this series of words will say - its will seemed impossible to find just what we can do with this!
+```
+
+Görüldüğü gibi, nlpaug metin girişinizi değiştirmek ve artırmak için geniş bir seçenek yelpazesi sunmaktadır. Hangilerinin seçileceği ise tamamen bağlama bağlıdır ve bu karar biraz alan bilgisi gerektirir; belirli bir uygulamaya uygun olmalıdır.
+
+> Daha fazla keşif yapabileceğiniz bazı yerler arasında, "Disaster Tweets ile Doğal Dil İşleme" gibi başlangıç düzeyindeki yarışmalar ([https://www.kaggle.com/c/nlp-getting-started](https://www.kaggle.com/c/nlp-getting-started)) yer alırken, orta seviye veya ileri düzey yarışmalar arasında "Jigsaw Toksik Yorumların Ciddiyetini Değerlendirme" ([https://www.kaggle.com/c/jigsaw-toxic-severity-rating](https://www.kaggle.com/c/jigsaw-toxic-severity-rating)) veya "Google QUEST Soru-Cevap Etiketleme" ([https://www.kaggle.com/c/google-quest-challenge](https://www.kaggle.com/c/google-quest-challenge)) gibi yarışmalar da bulunmaktadır. Bu yarışmalarda, nlpaug yaygın olarak kullanılmıştır – kazanan çözümler dahil.
+
 ### Summary *(Özet)*
+
+Bu bölümde, NLP yarışmaları için modelleme konusunu ele aldık. Kaggle yarışmalarında karşılaşılan çeşitli sorunlara uygulanabilir hem eski hem de en son yöntemleri gösterdik. Ayrıca, sıklıkla göz ardı edilen bir konu olan metin artırma üzerine de kısaca değindik.
+
+Bir sonraki bölümde, son birkaç yıldır popülerlik kazanan yeni bir yarışma türü olan simülasyon yarışmalarını tartışacağız.
 
 ---
 
