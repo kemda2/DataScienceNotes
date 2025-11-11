@@ -9843,6 +9843,134 @@ Bir sonraki bölümde, bu yaklaşımın bir **simülasyon yarışmasında** nas�
 
 ### Santa competition 2020 *(Santa yarışması 2020)*
 
+Son birkaç yılda Kaggle’da bir tür **gelenek** oluştu: Aralık ayının başlarında, her yıl **“Noel Baba (Santa)” temalı** bir yarışma düzenleniyor.
+Algoritmik yönü yıldan yıla değişiklik gösterse de, **2020 yarışması** bizim açımızdan ilginç bir örnek oluşturuyor: [https://www.kaggle.com/c/santa-2020](https://www.kaggle.com/c/santa-2020)
+
+Bu yarışmanın kurgusu, klasik bir **çok kollu bandit (multi-armed bandit – MAB)** problemiydi:
+Amaç, bir otomat (vending machine) üzerinde tekrar eden eylemlerle **ödülü en üst düzeye çıkarmaktı**, ancak buna iki ek unsur dâhildi:
+
+* **Ödül azalışı (reward decay):** Her adımda, bir makineden ödül kazanma olasılığı %3 oranında azalır.
+* **Rekabet (competition):** Yalnızca zamanla (sınırlı sayıda deneme hakkıyla) değil, aynı zamanda **aynı hedefe ulaşmaya çalışan başka bir oyuncuyla** da kısıtlanırsınız.
+  Bu ikinci kısıtı burada yalnızca **tamlık açısından** anıyoruz; çünkü gösterdiğimiz çözümde bunu açıkça dâhil etmek gerekli değildir.
+
+Genel **MAB problemine** yaklaşım yöntemleriyle ilgili iyi bir açıklama için şu kaynağa başvurulabilir:
+[https://lilianweng.github.io/lil-log/2018/01/23/the-multi-armed-bandit-problem-and-its-solutions.html](https://lilianweng.github.io/lil-log/2018/01/23/the-multi-armed-bandit-problem-and-its-solutions.html)
+
+Burada göstereceğimiz çözüm, **Ilia Larchenko**’nun ([https://www.kaggle.com/ilialar](https://www.kaggle.com/ilialar))
+[https://www.kaggle.com/ilialar/simple-multiarmed-bandit](https://www.kaggle.com/ilialar/simple-multiarmed-bandit)
+adresindeki kodundan uyarlanmıştır.
+
+Yaklaşımımız, **ödül dağılımının (reward distribution)** ardışık olarak güncellenmesine dayanır:
+Her adımda, **(a+1, b+1)** parametrelerine sahip bir **Beta dağılımından** rastgele bir sayı üretiriz. Burada:
+
+* **a**, ilgili kolun toplam ödülünü (kazanç sayısını),
+* **b** ise geçmiş kayıpların sayısını temsil eder.
+
+Hangi kolu çekeceğimize karar vermemiz gerektiğinde, **en yüksek rastgele değeri üreten kolu** seçeriz ve bu kolu bir sonraki adımda kullanırız.
+Böylece mevcut **ardıl (posterior)** dağılım, bir sonraki adım için **önsel (prior)** dağılım hâline gelir.
+
+Aşağıdaki grafik, farklı **(a, b)** değer çiftleri için **Beta dağılımının** şeklini göstermektedir:
+
+![](im/1087.png)
+
+Gördüğünüz gibi, başlangıçta dağılım **düz (uniform)** bir şekle sahiptir (Beta(0,0) uniform dağılımdır), ancak zamanla daha fazla bilgi topladıkça, **olasılık kütlesi tepe noktası (mode)** etrafında yoğunlaşır.
+Bu da belirsizliğin azaldığı ve kararımızdan daha emin olduğumuz anlamına gelir.
+
+Yarışmaya özgü olan **ödül azalışını (reward decay)** hesaba katmak için, her bir kol (arm) kullanıldığında **a** parametresini azaltarak bu etkiyi modele dâhil edebiliriz.
+
+---
+
+Ajanımızı oluşturma sürecine bir gönderim dosyası (submission file) yazarak başlıyoruz.
+Öncelikle gerekli **kütüphaneleri içe aktarıyor** ve değişkenleri başlatıyoruz:
+
+```python
+%%writefile submission.py
+import json
+import numpy as np
+import pandas as pd
+bandit_state = None
+total_reward = 0
+last_step = None
+```
+
+---
+
+Ardından, **çok kollu bandit (MAB)** ajanını tanımlayan sınıfı oluşturuyoruz.
+Okunabilirliği artırmak için, tüm kodu burada gösteriyor ve açıklamaları yorum satırları (comments) içinde ekliyoruz:
+
+```python
+def multi_armed_bandit_agent(observation, configuration):
+    global history, history_bandit
+    step = 1.0          # keşif / sömürü dengesini ayarlamak
+    decay_rate = 0.97   # her çağrıdan sonra kazanç sayısını ne kadar azaltacağımız
+    global bandit_state, total_reward, last_step
+
+    if observation.step == 0:
+        # başlangıç durumu
+        bandit_state = [[1,1] for i in range(configuration["banditCount"])]
+    else:
+        # bir önceki adımın sonucuna göre bandit_state'i güncelleme
+        last_reward = observation["reward"] - total_reward
+        total_reward = observation["reward"]
+
+        # hangi oyuncu olduğumuzu anlamamız gerekiyor (1. mi, 2. mi)
+        player = int(last_step == observation.lastActions[1])
+
+        if last_reward > 0:
+            bandit_state[observation.lastActions[player]][0] += last_reward * step
+        else:
+            bandit_state[observation.lastActions[player]][1] += step
+
+        bandit_state[observation.lastActions[0]][0] = \
+            (bandit_state[observation.lastActions[0]][0] - 1) * decay_rate + 1
+        bandit_state[observation.lastActions[1]][0] = \
+            (bandit_state[observation.lastActions[1]][0] - 1) * decay_rate + 1
+
+    # Her ajan için Beta dağılımından rastgele bir sayı üret ve en yüksek değeri seç
+    best_proba = -1
+    best_agent = None
+    for k in range(configuration["banditCount"]):
+        proba = np.random.beta(bandit_state[k][0], bandit_state[k][1])
+        if proba > best_proba:
+            best_proba = proba
+            best_agent = k
+
+    last_step = best_agent
+    return best_agent
+```
+
+---
+
+Gördüğünüz gibi, fonksiyonun **temel mantığı**, **çok kollu bandit algoritmasının** doğrudan bir uygulamasıdır.
+Yarışmaya özel uyarlama ise `bandit_state` değişkeninde görülür — burada **azalma katsayısı (decay multiplier)** uygulanır.
+
+---
+
+Önceki örneklerde olduğu gibi, şimdi de ajanımızın performansını **yarışma ortamında** değerlendirmeye hazırız.
+Aşağıdaki kod parçası bunun nasıl yapılabileceğini göstermektedir:
+
+```python
+%%writefile random_agent.py
+import random
+def random_agent(observation, configuration):
+    return random.randrange(configuration.banditCount)
+
+from kaggle_environments import make
+env = make("mab", debug=True)
+env.reset()
+env.run(["random_agent.py", "submission.py"])
+env.render(mode="ipython", width=800, height=700)
+```
+
+Bu kodu çalıştırdığımızda aşağıdakine benzer bir görüntü elde ederiz:
+
+![](im/1088.png)
+
+Bu bölümde, klasik (**vintage**) bir **çok kollu bandit (multi-armed bandit)** algoritmasının Kaggle’daki bir **simülasyon yarışmasında** nasıl kullanılabileceğini gösterdik.
+Başlangıç noktası olarak faydalı olsa da, bu yöntem **madalya sıralamasına** girmek için yeterli değildi; o seviyede **derin pekiştirmeli öğrenme (deep reinforcement learning)** yaklaşımları daha yaygındı.
+
+Bir sonraki bölümde, farklı yarışmalarda kullanılan **diğer yöntemlere dayalı yaklaşımları** tartışmaya devam edeceğiz.
+
 ### The name of the game *(Oyunun özü)*
 
 ### Summary *(Özet)*
