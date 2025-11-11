@@ -10083,7 +10083,118 @@ Bu bölüm, kitabın teknik kısmını sonlandırmaktadır. Geri kalan kısımda
 
 ## Chapter 13: Creating Your Portfolio of Projects and Ideas *(Bölüm 13: Proje ve Fikir Portföyü Oluşturma)*
 
+Kaggle’a katılmanın bazı avantajları vardır: dört alanda iyi puan almak ve dolayısıyla diğer Kaggle kullanıcılarının gözünde yüksek bir sıralamaya sahip olmak kesinlikle tatmin ve başarı duygusu sağlar. Ancak Kaggle’daki deneyiminiz yalnızca Kaggle ile sınırlı kalmaz; kariyerinizi ilerletmenize de yardımcı olabilir. Bu, yalnızca yarışmalara katılarak, daha önce çalışmadığınız veriler üzerinde denemeler yaparak veya yeni tekniklerle deneyleri tekrarlayarak kazandığınız deneyimle ilgili değildir; aynı zamanda diğer veri bilimcilerle kurduğunuz bağlantılar ve şirketlerden alabileceğiniz ilgiyi de kapsar.
+
+Kaggle, birçok şirket tarafından resmi bir nitelik olarak tam olarak tanınmasa da, yarışmalarda yaptığınız çalışmalar yetenekleriniz hakkında çok şey gösterebilir ve sizi kalabalıktan ayırabilir. Bu bölümde, Kaggle’daki çalışmalarınızı ve diğer platformlardaki varlığınızı uygun şekilde sergileyerek öne çıkmanın yollarını inceleyeceğiz. Ele alacağımız konular şunlardır:
+
+* Kaggle ile portföy oluşturmak
+* Kaggle dışındaki çevrimiçi varlığınızı düzenlemek
+* Yarışma güncellemelerini ve bültenleri takip etmek
+
+Bir sonraki bölümde, Kaggle’ın profesyonel ağınızı güçlendirerek ve size kariyer fırsatları sunarak kariyerinizi nasıl doğrudan etkileyebileceğini inceleyerek kitabı sonlandıracağız.
+
 ### Building your portfolio with Kaggle *(Kaggle ile portföy oluşturma)*
+
+Kaggle’ın kendisini “veri biliminin evi” olarak tanımlaması, doğru bir perspektifle değerlendirilmelidir. Daha önce ayrıntılı şekilde tartıştığımız gibi, Kaggle, verilen bir değerlendirme ölçütüne göre öngörücü görevlerde en iyi modelleri bulmak için yarışmak isteyen herkese açıktır.
+
+Dünya çapında nerede olduğunuz, eğitim durumunuz veya öngörücü modelleme konusundaki yeterliliğinizle ilgili herhangi bir kısıtlama yoktur. Bazen öngörücü nitelikte olmayan yarışmalar da vardır; örneğin, pekiştirmeli öğrenme yarışmaları, algoritmik zorluklar ve veri bilimciler dışında daha geniş bir kitleyi hedefleyen analitik yarışmalar. Ancak Kaggle yarışmalarının temel amacı, bir ölçüt doğrultusunda verilerden en iyi tahminleri yapmaktır.
+
+Gerçek dünyadaki veri bilimi ise çok daha fazla yön içerir. Önceliğiniz problemi çözmektir ve modelinizin puanını belirleyen ölçüt, problemin ne kadar iyi çözüldüğünün daha veya az doğru bir ölçüsüdür. Tek bir ölçütle sınırlı olmayabilir, birden fazla ölçütü dikkate almanız gerekebilir. Ayrıca problemler farklı şekillerde çözülebilir ve nasıl formüle edildiğiniz büyük önem taşır.
+
+Veriler açısından, kullanmanız gereken veri hakkında nadiren bir spesifikasyon verilir ve mevcut herhangi bir veri setini ihtiyaçlarınıza uyacak şekilde değiştirebilirsiniz. Gerekirse sıfırdan kendi veri setinizi bile oluşturabilirsiniz. Verileri bir araya getirme veya işleme konusunda bir rehber yoktur. Problemi çözerken ayrıca şunları da göz önünde bulundurmanız gerekir:
+
+* Teknik borç
+* Çözümün zaman içindeki sürdürülebilirliği
+* Çözümü çalıştırmanın zaman ve hesaplama maliyetleri
+* Modelin işleyişinin açıklanabilirliği
+* İşletme geliri üzerindeki etkisi (gerçek dünyadaki proje bir iş projesiyse, kârı artırmak ve/veya maliyetleri azaltmak ön plandadır)
+* Sonuçların farklı karmaşıklık ve soyutlama seviyelerinde iletişimi
+
+Çoğu zaman, bu unsurlar ham performanstan daha önemli hale gelir.
+
+> Teknik borç, veri biliminden çok yazılım geliştirmede daha yaygın kullanılan bir terimdir, ancak veri bilimi için de oldukça önemlidir. Teknik borç, projenizi daha hızlı teslim etmek için yaptığınız ancak daha sonra daha yüksek maliyetle yeniden yapmak zorunda kalacağınız işleri ifade eder. David Sculley ve diğer Google araştırmacıları tarafından yazılan “Hidden Technical Debt in Machine Learning Systems” adlı klasik makale, veri bilimi açısından bu problemin önemini anlamanızı sağlayacaktır: [Makale linki](https://proceedings.neurips.cc/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf).
+
+Tüm bu uzmanlık alanları Kaggle yarışmalarıyla tamamlanamaz. Bunların çoğu, doğrudan uygulama ve kurumsal ortamda deneyim kazanılarak elde edilmelidir. Ancak Kaggle yarışmalarıyla kazanılan bilgi ve beceriler, yukarıda tartıştığımız birçok husustan tamamen ayrı değildir ve kurumsal veri bilimi süreçlerine iyi bir tamamlayıcıdır. Kaggle’da yarışarak farklı veri türleri ve problemlerle karşılaşırsınız; kapsamlı özellik mühendisliği ve hızlı model deneme-yanılma süreçleri yürütmeniz gerekir; ayrıca yaygın açık kaynak paketlerini kullanarak en son çözümleri bir araya getirme yöntemleri geliştirmeniz gerekir. Bu değerli bir beceri setidir ve öne çıkarılmalıdır. Bunu yapmanın en iyi yolu, Kaggle yarışmaları ve diğer Kaggle kaynaklarına dayanan çözümlerinizden oluşan bir portföy oluşturmaktır.
+
+Kaggle yarışmalarından portföy oluşturmak için birden fazla yaklaşım vardır. En kolay yöntem, Kaggle’ın sunduğu olanaklardan, özellikle Datasets (Veri Setleri), Notebooks (Not Defterleri) ve Discussions (Tartışmalar) özelliklerinden yararlanmaktır.
+
+> Gilberto Titericz
+> 
+> [https://www.kaggle.com/titericz](https://www.kaggle.com/titericz)
+> 
+> 
+> 
+> İlerlemeden önce, Gilberto Titericz ile yaptığımız röportajda Kaggle’dan elde edilebilecek kariyer fırsatlarını ele alıyoruz. Kendisi Yarışmalar ve Tartışmalar alanında Grandmaster, eski sıralamalarda 1 numara ve şu anda Kaggle yarışmalarından toplam altın madalya sayısında 1 numara. Ayrıca NVIDIA’da Kıdemli Veri Bilimcisi olarak çalışıyor ve yakın zamanda Wired dergisinde bu konu hakkında bir makalede yer aldı ([https://www.wired.com/story/solve-these-tough-data-problems-and-watch-job-offers-roll-in/](https://www.wired.com/story/solve-these-tough-data-problems-and-watch-job-offers-roll-in/)).
+> 
+> 
+> 
+> **Favori yarışma türünüz nedir ve neden? Kaggle’daki teknikler ve çözüm yaklaşımları açısından uzmanlık alanınız nedir?**
+> 
+> 2011’de Kaggle’da yarışmaya başladığımdan beri tercih ettiğim yarışma türleri yapılandırılmış tabular veri içeren yarışmalardır. Kaggle’da en çok kullandığım teknikler ise kategorik özelliklerin hedef kodlaması (bunu yanlış yapmanın sonsuz yolu vardır) ve stacking ensemble yöntemleridir.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşırısınız? Bu yaklaşım günlük işinizde yaptıklarınızdan ne kadar farklıdır?**
+> 
+> Kaggle, makine öğrenimi için harika bir oyun alanıdır. Gerçek dünya projelerinden temel fark, Kaggle’da problemin çok iyi tanımlanmış ve formatlanmış olması, veri setinin oluşturulmuş olması, hedef değişkenin belirlenmiş olması ve ölçütün seçilmiş olmasıdır. Bu nedenle Kaggle yarışmalarına her zaman EDA (Keşifsel Veri Analizi) ile başlarım. Problemi anlamak ve veri setini tanımak, diğer katılımcılara karşı avantaj sağlamanın anahtarıdır.
+> 
+> 
+> 
+> Bundan sonra uygun bir doğrulama stratejisi tanımlamak için zaman harcarım. Bu, modelinizi doğru bir şekilde doğrulamak ve Kaggle’ın özel test setini puanlama yöntemine uygun hale getirmek için çok önemlidir. Stratified K-Fold çoğu ikili sınıflandırma problemi için işe yarayan bir yöntem olsa da, doğru doğrulama yapmak, aşırı öğrenmeyi önlemek ve özel test setini mümkün olduğunca taklit etmek için grouped K-Fold veya zaman tabanlı bölme kullanılması gerekebilir.
+> 
+> 
+> 
+> Bundan sonra özellik mühendisliği ve hiperparametre optimizasyonu üzerinde deneyler yapmak için zaman ayırmak önemlidir. Ayrıca, yarışmayı her zaman en az bir Gradient Boosted Tree modeli ve bir derin öğrenme tabanlı yaklaşımla bitiririm. Bu çeşitli yaklaşımların karışımı, tahminlerde çeşitliliği artırmak ve yarışma ölçütünü yükseltmek için çok önemlidir.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Nasıl?**
+> 
+> Evet, Kaggle kariyerimin yönünü değiştirmemdeki en büyük sebeptir. 2016’ya kadar elektronik mühendisi olarak çalışıyordum ve 2011’den beri yarışmalarda öğrendiklerim sayesinde veri bilimi alanına geçiş yapabildim. Kaggle, makine öğrenimi kavramlarını anlamamı ve teoriden öğrendiklerimi uygulamama yardımcı oldu. Ayrıca Kaggle, veri setlerini indirip üzerinde oynayarak maksimum bilgi çıkarmayı sağlayan mükemmel bir deneme ortamıdır. Bu, yarışma ortamıyla birleştiğinde kodlama ve makine öğrenimi öğrenmek için ideal bir platform sağlar ve aynı zamanda bağımlılık yaratır, daha fazla öğrenme isteği uyandırır.
+> 
+> 
+> 
+> Birkaç yarışmayı kazanmak, adınızı lider tablonun en üstüne taşır ve bu, kariyer açısından paha biçilemezdir. Dünyadaki işe alım uzmanları, pozisyonlarına uygun adayları bulmak için Kaggle’a bakar ve yarışmalardan elde edilen bilgi ve deneyim herhangi bir kariyeri güçlendirebilir.
+> 
+> 
+> 
+> **Kaggle sayesinde portföyünüzü nasıl oluşturduğunuz?**
+> 
+> Kaggle’a katıldıktan sonra birkaç yıl boyunca tüm teknikleri, algoritmaları ve veri üzerinden daha fazla bilgi çıkarıp ölçütleri artıracak püf noktaları öğrendim. Yüksek doğruluk çoğu yarışmanın temel hedefidir, ancak sadece şansa güvenerek bunu başarmak neredeyse imkansızdır; bilgi ve deneyim büyük rol oynar, özellikle kazanmak veya en azından altın madalya bölgesinde bitirmek hedefleniyorsa. Kaggle yarışmalarındaki madalya sayım benim portföyüm; şu ana kadar (11/2021) 58 altın ve 47 gümüş madalya, Kaggle’dan elde ettiğim ML deneyimini iyi özetliyor. Her yarışmanın en az 1 ay sürdüğünü dikkate alırsak, bu rekabetçi ML deneyiminde üst üste 105 aydan fazla deneyim anlamına geliyor.
+> 
+> 
+> 
+> **Deneyiminize göre, deneyimsiz Kaggle kullanıcıları genellikle neyi gözden kaçırıyor? Başladığınızda bilseydiniz iyi olurdu dediğiniz şey nedir?**
+> 
+> Yeni başlayanlar genellikle uygun bir doğrulama stratejisini gözden kaçırır. Bu sadece Kaggle’da olmaz; dünyanın dört bir yanındaki veri bilimcilerin modelleri inşa ederken deneysel teori açısından en önemli unsurlardan birini ihmal ettiğini gördüm. Doğru bir doğrulama stratejisi belirlemek için genel bir kural yoktur, ancak veri bilimcinin modelin gelecekte nasıl kullanılacağını dikkate alması ve doğrulamayı buna mümkün olduğunca yakın yapması gerekir.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda hangi hataları yaptınız?**
+> 
+> Birçok hata; hepsini listelemek imkansızdır. Muhtemelen tüm olası hata kombinasyonlarını yaptım. Hataların iyi yanı, onlardan öğrenebilmenizdir. Bir hata yaptığınızda ve bunu fark ettiğinizde, tekrar yapma olasılığınız çok düşüktür. Kaggle’da insanların yaptığı en büyük hata, yerel doğrulama skorlarına güvenmek yerine lider tablodaki skora güvenmeleridir. Lider tablosuna aşırı uyum sağlamak Kaggle’da sürekli karşılaşılan bir durumdur ve bu, gerçek dünyadan temel farktır. Gerçek bir projede güvenebileceğimiz sağlam bir doğrulama stratejisi oluşturmalıyız, çünkü gerçek dünyada modeller gerçek veriler üzerinde test edilir ve hedefi tutturmak için sadece bir şansınız vardır, gün içinde birden fazla gönderim hakkınız yoktur.
+> 
+> 
+> 
+> **Veri analizi ve makine öğrenimi için önerdiğiniz belirli araçlar veya kütüphaneler var mı?**
+> 
+> Birkaç yıl önce R önerirdim, ancak Python’un ML alanında hızla büyümesi ve üretimde kullanımı kolay ve genel bir dil olması nedeniyle, ML’ye başlayan herkese Python öğrenmelerini tavsiye ediyorum. Tabular veri için pandas öneririm, hızlı işlem istiyorsanız cuDF (pandas’ın RAPIDS.ai GPU sürümü) kullanabilirsiniz. EDA için DataFrame ile Seaborn veya Matplotlib kütüphanelerini, makine öğrenimi için Scikit-learn, SciPy, cuML (GPU), XGBoost, LightGBM, CatBoost ve PyTorch’u öneririm. Ham özelliklerle basit bir XGBoost modeli kurmak hızlıdır ve sonraki modellerle karşılaştırmak için iyi bir benchmark sağlar.
+> 
+> 
+> 
+> **Bir yarışmaya girerken akılda tutulması gereken en önemli şey nedir?**
+> 
+> Bir Kaggle yarışmasına girmek ve public Notebook göndermek kolaydır, ancak yarışmayı altın madalya bölgesinde bitirmek oldukça zor olabilir. Bu nedenle, en azından benim için, final sıralaması ne olursa olsun Kaggle’ı eğlenmek ve forumlardan, public Notebook’lardan, hatta deadline sonrası kazananların fikirlerini ve işe yarayan yöntemlerini paylaştığı yazılardan mümkün olduğunca öğrenmek için kullanmak önemlidir.
+> 
+> 
+> 
+> Ayrıca, bir yarışmayı kazanan kişinin sadece diğerlerinin yaptığı şeyleri tekrar etmekle değil, kutunun dışında düşünmek, yeni fikirler, stratejiler, mimariler ve yaklaşımlar geliştirmekle kazanacağını unutmayın.
+> 
+> 
+> 
+> **Diğer yarışma platformlarını kullanıyor musunuz? Kaggle ile nasıl karşılaştırılır?**
+> 
+> Diğer yarışma platformlarında birkaç yarışma kazandım, ancak Kaggle’a göre temel fark kullanıcı sayısıdır. Kasım 2021 itibarıyla Kaggle’da 171 bin aktif kullanıcı var; bu da forumlar, Notebook’lar ve veri seti etkileşimlerini içerik açısından çok zengin hale getiriyor. Ayrıca Kaggle benzersiz bir özellik sunuyor: Google sunucularını kullanarak kod yazıp çalıştırabileceğiniz Notebook’lar, iyi donanıma erişiminiz yoksa paha biçilemez olabilir.
 
 ### Leveraging Notebooks and discussions *(Defterler ve tartışmalardan yararlanma)*
 
@@ -10116,5 +10227,3 @@ Bu bölüm, kitabın teknik kısmını sonlandırmaktadır. Geri kalan kısımda
 ---
 
 ## Other Books You May Enjoy *(Hoşunuza Gidebilecek Diğer Kitaplar)*
-
-## Index *(Dizin)*
