@@ -6912,9 +6912,119 @@ Sonuç olarak elde edilen ROC-AUC skoru yaklaşık 0.90424’tür. Bu, aynı ver
 
 #### Stacking variations *(Yığınlama varyasyonları)*
 
+Stacking ile ilgili ana değişiklikler, test verilerinin katmanlar arasında nasıl işlendiği, sadece yığılan OOF tahminlerini mi yoksa tüm yığılma katmanlarında orijinal özellikleri de kullanmanın mı tercih edileceği, son modelin ne olacağı ve aşırı uyumdan kaçınmak için çeşitli hileler ile ilgilidir.
+
+Kişisel olarak denediğimiz ve en etkili bulduğumuz bazı çözümleri burada tartışacağız:
+* Optimizasyon kullanılabilir veya kullanılmayabilir. Bazı çözümler, tekil modelleri optimize etmeye fazla önem vermezken; diğerleri sadece son katmanları, bazıları ise ilk katmanları optimize eder. Deneyimlerimize dayanarak, tekil modellerin optimizasyonu önemlidir ve bunu yığılma ansamblında olabildiğince erken yapmayı tercih ederiz.
+* Modeller, farklı yığılma katmanlarında farklı olabilir veya aynı model sırası her yığılma katmanında tekrar edilebilir. Burada genel bir kural yoktur, çünkü bu gerçekten probleme bağlıdır. Daha etkili olan model türleri problemine göre değişebilir. Genel bir öneri olarak, gradyan arttırma çözümleri ve yapay sinir ağlarını birleştirmek bizleri hiçbir zaman hayal kırıklığına uğratmamıştır.
+* Yığılma prosedürünün ilk seviyesinde, mümkün olan her kadar model oluşturun. Örneğin, problem sınıflandırma ise bir regresyon modeli deneyebilirsiniz ve tersi de geçerlidir. Farklı hiperparametre ayarlarına sahip farklı modeller de kullanabilirsiniz, böylece yığılama sizin için karar vereceğinden fazla kapsamlı bir optimizasyon yapmaktan kaçınırsınız. Yapay sinir ağları kullanıyorsanız, rastgele başlatma tohumunu değiştirmek, çeşitlendirilmiş bir model yığını oluşturmak için yeterli olabilir. Ayrıca farklı özellik mühendislikleri kullanan modelleri de deneyebilir ve hatta denetimsiz öğrenme yöntemleri kullanabilirsiniz (örneğin, Mike Kim'in bir çözümünde t-SNE boyutlarını kullanması gibi: [https://www.kaggle.com/c/otto-group-product-classification](https://www.kaggle.com/c/otto-group-product-classification)
+challenge/discussion/14295). Buradaki fikir, bu tür katkıların tümünün yığılmanın ikinci seviyesinde seçilmesidir. Bu, o noktada daha fazla deney yapmanıza gerek olmadığı ve sadece daha iyi performans gösteren modellerin daha dar bir kümesine odaklanmanız gerektiği anlamına gelir. Yığılama uygulayarak, tüm deneylerinizi yeniden kullanabilir ve yığılamanın size ne kadarını modelleme hattınıza dahil etmeniz gerektiğine karar vermesini sağlayabilirsiniz.
+* Bazı yığılama uygulamaları, tüm özellikleri veya bunlardan bir seçkisini daha ileri aşamalara taşır; bu, sinir ağlarındaki atlama katmanlarına benzer bir durumdur. Yığılmada daha sonraki aşamalarda özellikleri dahil etmenin sonuçları iyileştirebileceğini fark ettik, ancak dikkatli olun: bu, daha fazla gürültü ve aşırı uyum riski de getirir.
+* İdeal olarak, OOF tahminleriniz, yüksek sayıda katlama içeren çapraz doğrulama şemalarından yapılmalıdır, yani 10 ile 20 arasında, ancak daha düşük sayılarla, örneğin 5 katlama ile çalışan çözümler de gördük.
+* Her bir katlama için, veriyi (tekrarlarla yeniden örnekleme) aynı model için birden fazla kez torbalama yapmak ve ardından modelin tüm sonuçlarını (OOF tahminleri ve test tahminleri) ortalamak, aşırı uyumdan kaçınmaya yardımcı olur ve sonunda daha iyi sonuçlar üretir.
+
+* Yığılmada erken durdurma konusunda dikkatli olun. Erken durdurmayı doğrudan doğrulama katlamasında kullanmak, belirli bir düzeyde aşırı uyuma neden olabilir ve bu, yığılama prosedürü tarafından sonunda hafifletilebilir veya hafifletilmeyebilir. Güvenli tarafta durmanızı öneririz ve her zaman erken durdurmayı eğitim katlamalarınızdan bir doğrulama örneği üzerine uygulayın, doğrulama katlamasına değil.
+
+Olasılıklar sonsuzdur. Bu yığılama tekniğinin temel konseptini kavradığınızda, yapmanız gereken tek şey yaratıcılığınızı soruna uygulamaktır. Bu anahtar konsepti, bu bölümün son kısmında, bir Kaggle yarışması için yığılama çözümüne bakarken tartışacağız.
+
 ### Creating complex stacking and blending solutions *(Karmaşık karıştırma ve yığınlama çözümleri oluşturma)*
 
+Bu bölümün bu noktasında, tartıştığımız teknikleri ne kadar uygulamanız gerektiğini merak ediyor olabilirsiniz. Teorik olarak, sunmuş olduğumuz tüm ansambl tekniklerini, sadece tabular değil, herhangi bir Kaggle yarışmasında kullanabilirsiniz, ancak dikkate almanız gereken birkaç sınırlayıcı faktör vardır:
+
+* Bazen veri setleri çok büyüktür ve tek bir model eğitmek uzun zaman alır.
+* Görüntü tanıma yarışmalarında, derin öğrenme yöntemlerini kullanmakla sınırlısınız.
+* Derin öğrenme yarışmalarında modelleri yığlamayı başarsanız bile, farklı modelleri yığmak için sınırlı bir seçeneğiniz vardır. Derin öğrenme çözümleriyle sınırlı olduğunuzdan, ağların yalnızca küçük tasarım yönlerini ve bazı hiperparametreleri (ya da bazen sadece başlatma tohumunu) değiştirerek performansı bozmazsınız. Sonuçta, aynı türdeki modeller ve mimarilerdeki daha fazla benzerlik ve az fark ile tahminler, olması gerektiğinden çok benzer ve daha yüksek korelasyona sahip olur, bu da ansambling'in etkinliğini sınırlar.
+
+Bu koşullar altında, karmaşık yığılama yöntemleri genellikle uygulanabilir değildir. Buna karşın, büyük veri setlerinde ortalama alma ve blending (karıştırma) genellikle mümkündür.
+
+Önceki yarışmalarda ve tüm son tabular yarışmalarda, karmaşık yığılama ve blending çözümleri hâkimdi. Bir yarışma için yığılama konusunda ne kadar karmaşıklık ve yaratıcılık gerektiğini anlamanız için, bu bölümün son kısmında, Gilberto Titericz ([https://www.kaggle.com/titericz](https://www.kaggle.com/titericz)) ve Stanislav Semenov'un ([https://www.kaggle.com/stasg7](https://www.kaggle.com/stasg7)) Otto Group Product Classification Challenge'a ([https://www.kaggle.com/c/otto-group-product-classification-challenge](https://www.kaggle.com/c/otto-group-product-classification-challenge)) sundukları çözümü tartışacağız. Yarışma 2015 yılında yapıldı ve görevi, 93 özellik temel alınarak 200.000'den fazla ürünü 9 farklı sınıfa ayırmaktı.
+
+Gilberto ve Stanislav'ın önerdiği çözüm üç seviyeden oluşuyordu:
+
+1. **İlk seviyede**, 33 model vardı. Tüm modeller oldukça farklı algoritmalar kullanıyordu, yalnızca k-en yakın komşular kümesinde sadece k parametresi değişiyordu. Ayrıca, denetimsiz t-SNE kullandılar. Ek olarak, boyutsallık manipülasyonu (en yakın komşulardan ve kümelerden alınan mesafelerle yapılan hesaplamalar) ve satır istatistikleri (her satırdaki sıfır olmayan eleman sayısı) temel alınarak sekiz özellik mühendisliği yaptılar. Tüm OOF tahminleri ve özellikler ikinci seviyeye aktarıldı.
+
+2. **İkinci seviyede**, hiperparametre optimizasyonuna başladılar, model seçimi ve bagging (aynı modelin birden fazla versiyonunu yeniden örnekleme yaparak oluşturdular ve her modelin sonuçlarını ortaladılar) gerçekleştirdiler. Sonuç olarak, sadece üç model kaldı ve bu modelleri tüm veriler üzerinde yeniden eğittiler: bir XGBoost, bir AdaBoost ve bir yapay sinir ağı.
+
+3. **Üçüncü seviyede**, sonuçların ağırlıklı ortalamasını hazırladılar; önce XGBoost ve yapay sinir ağının geometrik ortalamasını aldılar ve ardından bunu AdaBoost ile ortaladılar.
+
+Bu çözümden çok şey öğrenebiliriz, ve bu sadece bu yarışma ile sınırlı değildir. Karmaşıklığın yanı sıra (ikinci seviyede her model için yüzlerce kez yeniden örnekleme yaptılar), bu bölümde tartıştığımız yöntemlerin birçok farklı varyasyonunun bulunduğu dikkat çekicidir. Yaratıcılık ve deneme-yanılma yöntemi bu çözümde açıkça baskın bir rol oynamaktadır. Bu, birçok Kaggle yarışması için oldukça tipiktir; çünkü problemler bir yarışmadan diğerine nadiren aynıdır ve her çözüm benzersizdir ve kolayca tekrarlanabilir değildir.
+
+Birçok AutoML motoru, AutoGluon gibi, esasen bu tür prosedürlerden ilham alarak, yığılama ve blending yaparak size en iyi sonucu garantileyebilecek önceden tanımlanmış bir dizi otomatik adım sunmaya çalışmaktadır.
+AutoGluon'un yığılmış modellerini oluşturmak için kullandığı algoritmaların bir listesi için [https://arxiv.org/abs/2003.06505](https://arxiv.org/abs/2003.06505)'e bakabilirsiniz. Liste oldukça uzun ve kendi yığılama çözümleriniz için birçok fikir bulabilirsiniz.
+
+Ancak, bu yöntemlerin bazı en iyi uygulamalarını hayata geçirse de, sonuçları her zaman, iyi bir Kaggle ekibinin elde edebileceği sonuçlardan daha düşük kalmaktadır; çünkü ansamblinizi nasıl denediğiniz ve oluşturduğunuzda yaratıcılık başarı için anahtardır. Aynı şey bu bölüm için de geçerlidir. Size ansambl için en iyi uygulamaları gösterdik; bunları bir başlangıç noktası olarak alın ve fikirleri karıştırarak ve yenilik yaparak, katıldığınız Kaggle yarışması ya da çözmeye çalıştığınız gerçek dünya problemi üzerinde kendi çözümlerinizi yaratın.
+
+> **Xavier Conort**
+> 
+> [https://www.kaggle.com/xavierconort](https://www.kaggle.com/xavierconort)
+> 
+> 
+> 
+> Bu bölümü sonlandırırken, 2012-2013 yıllarında #1 sırada yer alan ve Kaggle tarihinin başlarında birçok Kaggle kullanıcısına ilham kaynağı olan *Competitions Grandmaster* Xavier Conort ile bir araya geldik. Şu anda kendi şirketi *Data Mapping and Engineering*'in kurucusu ve CEO'su olan Xavier, bize Kaggle ile ilgili deneyimlerini, kariyerini ve daha fazlasını anlattı.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Teknikler ve çözüm yaklaşımları açısından Kaggle'deki uzmanlığınız nedir?**
+> 
+> Çoklu tablolardan özellik mühendisliği yapmayı gerektiren yarışmalara bayılıyordum. Özellikle benim için yeni olan iş problemlerine yönelik iyi özellikler çıkarmayı çok seviyordum. Bu bana yeni problemleri çözme konusunda büyük bir güven kazandırdı. İyi özellik mühendisliği dışında, yığılama (stacking) bana iyi sonuçlar elde etme konusunda yardımcı oldu. Birkaç modeli harmanlamak ya da metin veya yüksek kategorik değişkenleri sayısal özelliklere dönüştürmek için kullandım. En sevdiğim algoritma GBM (Gradyan Artırma Makinesi) idi, ama karışımlarımı çeşitlendirmek için birçok farklı algoritma test ettim.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşırsınız? Bu yaklaşım, günlük işinizde yaptığınızdan ne kadar farklıdır?**
+> 
+> Birincil amacım her yarışmadan olabildiğince fazla şey öğrenmekti. Bir yarışmaya girmeden önce, hangi becerilerimi geliştireceğimi değerlendirmeye çalışıyordum. Konfor alanımın dışına çıkmaktan korkmazdım. Liderlik tablosundaki geri bildirimler sayesinde hatalarımdan hızlıca öğrenebileceğimi biliyordum. Günlük işlerde ise bu fırsatlar nadiren olur. Üzerinde çalıştığımız çözümün gerçek kalitesini değerlendirmek zordur. Bu yüzden güvenli oynamayı tercih ederiz ve genellikle geçmişteki tarifleri tekrar ederiz. Kaggle olmasaydı, bu kadar çok şey öğrenebileceğimi sanmıyorum.
+> 
+> 
+> 
+> **Katıldığınız özellikle zorlayıcı bir yarışma hakkında bize bilgi verin ve bu görevi ele alırken hangi içgörüleri kullandınız?**
+> 
+> En sevdiğim yarışma, GE Flight Quest’ti. GE tarafından düzenlenen bu yarışmada katılımcılar, ABD içindeki uçuşların varış saatlerini tahmin etmek zorundaydılar. Yarışmanın özel liderlik tablosunun tasarımını özellikle beğendim. Bu tasarım, gelecekteki olayları tahmin etme kapasitemizi test ediyordu, çünkü tahminlerimiz yarışma sonrasındaki uçuşlar üzerinden değerlendiriliyordu.
+> 
+> Veri setinde yalnızca birkaç aylık geçmiş (3-4 ay, doğru hatırlıyorsam) olduğundan, aşırı uyum (overfitting) riski olduğunu biliyordum. Bu riski azaltmak için, uçuş gecikmeleriyle açık bir nedensel ilişkiye sahip olan özellikler oluşturmaya karar verdim; örneğin hava durumu koşulları ve trafik gibi özellikler. Ayrıca, havaalanlarının adını ana özellik listemden çıkarmaya dikkat ettim. Çünkü bazı havaalanları, birkaç ay boyunca kötü hava koşulları yaşamamıştı. Bu yüzden, favori ML algoritmam olan GBM’nin havaalanı adını iyi hava koşulları için bir proxy olarak kullanıp, özel liderlik tablosunda o havaalanları için doğru tahminler yapamayacağını düşündüm. Bazı havaalanlarının daha iyi yönetildiğini göz önünde bulundurarak ve liderlik tablosundaki puanımı biraz iyileştirmek için, sonunda havaalanı adını sadece ikinci katmanlı modelimin bir özelliği olarak kullandım. Bu yaklaşım, bazı bilgileri ilk adımda sansürlediğiniz iki aşamalı bir boosting (artırma) olarak düşünülebilir. Bu yöntemi, sigorta alanında coğrafi kalıntı etkilerini yakalamak için uygulayan aktüerlerden öğrendim.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Yardımcı olduysa, nasıl?**
+> 
+> Kesinlikle, veri bilimi kariyerimde bana çok yardımcı oldu. Veri bilimine geçmeden önce sigorta sektöründe aktüer olarak çalışıyordum, makine öğrenmesi hakkında hiçbir şey bilmiyordum ve veri bilimcisi tanımıyordum. Kaggle’daki çeşitli yarışmalar sayesinde öğrenme eğrim hızla arttı. İyi sonuçlarım sayesinde, işverenlere 39 yaşında bir aktüerin kendi başına yeni beceriler geliştirebileceğini kanıtladım. Ve Kaggle’ın topluluğu sayesinde, dünya çapında birçok tutkulu veri bilimcisiyle tanıştım. Başlangıçta onlarla birlikte yarışmak gerçekten çok eğlenceliydi. Sonunda, bazılarıyla çalışma fırsatım oldu. DataRobot’un kurucuları Jeremy Achin ve Tom De Godoy, benim takım arkadaşlarımdı, sonra beni DataRobot’a katılmaya davet ettiler. Eğer Kaggle olmasaydı, muhtemelen hala sigorta sektöründe aktüer olarak çalışıyor olurdum.
+> 
+> 
+> 
+> **Kaggle yarışmalarında yaptığınız bir şeyi portföyünüzü oluşturmak için potansiyel işverenlere göstermek amacıyla kullandınız mı?**
+> 
+> İtiraf etmeliyim ki, bazı yarışmalara, işverenimi ya da potansiyel müşterilerimi etkileme amacıyla girdim. Bu iyi sonuç verdi, ama çok daha az eğlenceliydi ve çok daha fazla baskı vardı.
+> 
+> 
+> 
+> **Deneyiminize göre, deneyimsiz Kagglers genellikle neyi gözden kaçırır? Şu an bildiğiniz bir şeyi keşke ilk başladığınızda bilseydiniz?**
+> 
+> Deneyimsiz Kagglers’a, yarışma sırasında paylaşılan çözümleri incelememelerini, kendi başlarına iyi çözümler bulmaya çalışmaları gerektiğini tavsiye ederim. Kaggle’ın ilk yıllarında rakiplerin kod paylaşmadığı için çok mutluyum. Bu, beni zorlu bir şekilde öğrenmeye zorladı.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda yaptığınız hatalar nelerdi?**
+> 
+> Bir hata, kötü tasarlanmış ve veri sızıntısı (leak) içeren yarışmalara katılmak. Bu sadece zaman kaybıdır. Bu tür yarışmalardan çok şey öğrenemezsiniz.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenmesi için kullanmanızı tavsiye edeceğiniz belirli araçlar veya kütüphaneler var mı?**
+> 
+> Gradyan Artırma Makinesi (GBM) benim favori algoritmam. İlk olarak R’nin gbm kütüphanesini kullandım, ardından Scikit-learn GBM, sonra XGBoost ve son olarak LightGBM’i kullandım. Çoğu zaman, kazanan çözümümün ana bileşeni bu olmuştur. GBM’nin ne öğrendiğini daha iyi anlamak için SHAP paketini tavsiye ederim.
+> 
+> 
+> 
+> **Bir yarışmaya katılırken kişinin aklında tutması veya yapması gereken en önemli şey nedir?**
+> 
+> Öğrenmek için yarışın. Diğer tutkulu veri bilimcileriyle bağlantı kurmak için yarışın. Sadece kazanmak için yarışmayın.
+
 ### Summary *(Özet)*
+
+Bu bölümde, birden fazla çözümün nasıl birleştirildiğini (ensembling) ve kendi çözümlerinizi oluşturmak için kullanabileceğiniz bazı temel kod örneklerini tartıştık. Model birleşimlerini (ensemble) güçlendiren fikirlerden, örneğin rastgele ormanlar (random forests) ve gradyan artırma (gradient boosting) gibi yöntemlerden başladık. Ardından, test gönderilerinin basit bir şekilde ortalamasından, birden fazla katmanlı yığınlanmış modeller üzerinde meta-modelleme yöntemlerine kadar farklı birleşim yaklaşımlarını keşfettik.
+
+Bölümün sonunda tartıştığımız gibi, ensemblling daha çok bazı ortak uygulamalara dayanan bir sanat formudur. Kaggle yarışmasını kazanan başarılı bir karmaşık yığılama (stacking) düzenini incelediğimizde, kombinasyonların veri ve problemle nasıl özelleştirildiğine hayran kaldık. Bir yığılama modelini alıp başka bir probleme kopyalayarak en iyi çözümü bulmayı umamazsınız. Yalnızca yönergeleri takip edebilir ve çok sayıda deneme ve hesaplama çabasıyla kendiniz, farklı modellerin ortalamasını/yığılmasını/karıştırılmasını içeren en iyi çözümü bulabilirsiniz.
+
+Bir sonraki bölümde, derin öğrenme yarışmalarına, ilk olarak sınıflandırma ve segmentasyon görevleri için bilgisayarla görme (computer vision) yarışmalarıyla giriş yapacağız.
 
 ---
 
