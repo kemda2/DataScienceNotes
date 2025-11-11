@@ -7335,7 +7335,328 @@ plt.title('Augmentation examples')
 
 Görüntü artırmayı, bilgisayarla görme problemlerine yaklaşırken önemli bir ön işleme adımı olarak tartıştıktan sonra, bu bilgiyi aşağıdaki bölümlerde uygulamaya koymaya hazırız. İlk olarak çok yaygın bir görevle başlayacağız: görüntü sınıflandırma.
 
+> Chris Deotte
+> 
+> [https://www.kaggle.com/cdeotte](https://www.kaggle.com/cdeotte)
+> 
+> 
+> 
+> İlerlemeye geçmeden önce, bu kitapta (bu bölümde de dahil) sıkça bahsettiğimiz ve iyi bir sebepten dolayı bu kadar çok bahsettiğimiz Chris Deotte ile kısa bir röportaja göz atalım. Kendisi, dört kez Kaggle Grandmaster unvanına sahip ve NVIDIA'da kıdemli veri bilimcisi ve araştırmacıdır, ayrıca 2019 yılında Kaggle'a katılmıştır.
+> 
+> 
+> 
+> * Favori yarışma türünüz nedir ve neden? Kaggle'daki teknikleriniz ve çözüm yaklaşımlarınız açısından uzmanlığınız nedir?
+> 
+> 
+> 
+> Fascinating veriye sahip ve yaratıcı, yenilikçi modeller kurmayı gerektiren yarışmalarla ilgileniyorum. Uzmanlığım, eğitilmiş modelleri analiz ederek güçlü ve zayıf yönlerini belirlemektir. Sonrasında, bu modelleri iyileştirmeyi ve/veya model performansını artırmak için son işlem teknikleri geliştirmeyi severim.
+> 
+> 
+> 
+> * Bir Kaggle yarışmasına nasıl yaklaşıyorsunuz? Bu yaklaşımınız günlük işlerinizden nasıl farklı?
+> 
+> 
+> 
+> Her yarışmaya EDA (keşifsel veri analizi) yaparak, yerel bir doğrulama oluşturup, basit modeller inşa ederek başlarım ve ardından Kaggle'a gönderim yaparak liderlik sıralamalarını elde ederim. Bu, doğru ve rekabetçi bir model kurmak için ne yapılması gerektiğine dair bir sezgi geliştirir.
+> 
+> 
+> 
+> * Katıldığınız ve özellikle zorlayıcı bulduğunuz bir yarışmadan bahseder misiniz? Bu görevi nasıl ele aldığınızı anlatın.
+> 
+> 
+> 
+> Kaggle’ın Shopee – Price Match Guarantee yarışması, hem görsel modelleri hem de doğal dil işleme modelleri gerektiren zorlu bir yarışmaydı. Önemli bir keşif, her iki model türünden gömme (embedding) çıkarımı yapıp, görsel ve dil bilgilerini birlikte kullanarak ürün eşleşmelerini bulma yöntemiydi.
+> 
+> 
+> 
+> * Kaggle kariyerinizde size yardımcı oldu mu? Eğer olduysa, nasıl?
+> 
+> 
+> 
+> Evet. Kaggle, becerilerimi geliştirmem ve özgeçmişimin iş piyasasında daha çekici olmasını sağlamam sayesinde beni NVIDIA'da kıdemli veri bilimcisi yapmama yardımcı oldu.
+> 
+> 
+> 
+> Birçok işveren, Kaggle'daki çalışmaları gözden geçirerek, belirli projeleri çözmek için belirli becerilere sahip çalışanlar arar. Bu sayede bana birçok iş teklifi iletildi.
+> 
+> 
+> 
+> * Deneyimsiz Kaggle kullanıcılarının sıklıkla gözden kaçırdığı şey nedir? İlk başladığınızda bilmeniz gereken şeyleri şimdi ne olarak görüyorsunuz?
+> 
+> 
+> 
+> Bana göre, deneyimsiz Kagglers genellikle yerel doğrulamanın önemini göz ardı ederler. Liderlik sıralamasında isminizi görmek heyecan vericidir. Ve bazen, liderlik sıralamasını iyileştirmeye odaklanmak, çapraz doğrulama (cross-validation) skorlarımızdan daha fazla dikkatimizi çekebilir.
+> 
+> 
+> 
+> * Geçmişte yarışmalarda yaptığınız hatalar nelerdir?
+> 
+> 
+> 
+> Çok zaman, liderlik sıralamasındaki puanı çapraz doğrulama puanımdan daha önemli görüp yanlış son gönderimi seçme hatasına düştüm.
+> 
+> 
+> 
+> * Veri analizi veya makine öğrenmesi için önerdiğiniz belirli araçlar veya kütüphaneler var mı?
+> 
+> 
+> 
+> Kesinlikle. Özellik mühendisliği ve hızlı deneme yapma, tablolarla çalışırken çok önemlidir. Deney yapma ve doğrulama sürecini hızlandırmak için NVIDIA RAPIDS cuDF ve cuML'yi GPU üzerinde kullanmak çok önemlidir.
+> 
+> 
+> 
+> * Bir yarışmaya girerken akılda tutulması gereken en önemli şey nedir?
+> 
+> 
+> 
+> En önemli şey eğlenmek ve öğrenmektir. Sonuç sıralamanız hakkında endişelenmeyin. Eğer öğrenmeye ve eğlenmeye odaklanırsanız, zamanla sonuç sıralamanız daha iyi hale gelir.
+> 
+> 
+> 
+> * Başka yarışma platformlarını kullanıyor musunuz? Kaggle ile nasıl karşılaştırılır?
+> 
+> 
+> 
+> Evet, Kaggle dışında da yarışmalara katıldım. Booking.com veya Twitter.com gibi bazı bireysel şirketler zaman zaman yarışmalar düzenler. Bu yarışmalar eğlencelidir ve yüksek kaliteli, gerçek dünya verileri içerir.
+
 ### Classification *(Sınıflandırma)*
+
+Bu bölümde, görsel sınıflandırma problemlerini ele almak için şablon olarak kullanılabilecek uçtan uca bir pipeline'ı göstereceğiz. Veri hazırlığından model kurulumu ve tahmin yapmaya, sonuçların görselleştirilmesine kadar gerekli adımları adım adım inceleyeceğiz. Hem bilgilendirici (hem de havalı) olan bu son adım, kodunuzu derinlemesine incelemeniz gerektiğinde performansı daha iyi anlamanızı sağlamada çok faydalı olabilir.
+
+Cassava Leaf Disease Classification yarışmasından ([https://www.kaggle.com/c/cassava-leaf-disease-classification](https://www.kaggle.com/c/cassava-leaf-disease-classification)) aldığımız verileri kullanmaya devam edeceğiz.
+
+Her zamanki gibi, gerekli kütüphaneleri yükleyerek başlıyoruz:
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import datetime
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import tensorflow as tf
+```
+
+```python
+from tensorflow.keras import models, layers
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.applications import EfficientNetB0
+from tensorflow.keras.optimizers import Adam
+import os, cv2, json
+from PIL import Image
+```
+
+Genellikle birkaç yardımcı işlev tanımlamak iyi bir fikirdir; bu, hem kodu okumayı hem de hata ayıklamayı kolaylaştırır. Eğer genel bir görsel sınıflandırma problemiyle karşı karşıyaysanız, EfficientNet ailesinden bir model iyi bir başlangıç noktası olabilir. EfficientNet, 2019 yılında Google Research Brain Team tarafından tanıtılan bir modeldir ([https://arxiv.org/abs/1905.11946](https://arxiv.org/abs/1905.11946)). Temel fikir, ağın derinliğini, genişliğini ve çözünürlüğünü dengeleyerek tüm boyutlar üzerinde daha verimli ölçeklendirme ve sonrasında daha iyi performans elde etmektir.
+
+Çözümümüz için, ailenin en basit üyesi olan EfficientNet B0'ı kullanacağız. Bu, 11 milyon öğrenilebilir parametreye sahip, mobil boyutunda bir ağdır.
+
+**Sınıflandırma**
+
+EfficientNet ağlarının detaylı bir açıklaması için, başlangıç noktası olarak [bu makaleyi](https://ai.googleblog.com/2019/05/efficientnet-improving-accuracy-and.html) keşfetmenizi öneririz.
+
+Modelimizi B0'ı temel alarak oluşturuyoruz, ardından çeviri değişmezliğini geliştirmek için bir havuzlama katmanı ekliyoruz ve çok sınıflı sınıflandırma problemlerimize uygun bir aktivasyon fonksiyonu içeren bir yoğun katman ekliyoruz:
+
+```python
+class CFG:    
+    # yapılandırma
+    WORK_DIR = '../input/cassava-leaf-disease-classification'
+    BATCH_SIZE = 8
+    EPOCHS = 5
+    TARGET_SIZE = 512
+
+def create_model():
+    conv_base = EfficientNetB0(include_top=False, weights=None,
+                               input_shape=(CFG.TARGET_SIZE, CFG.TARGET_SIZE, 3))
+    model = conv_base.output
+    model = layers.GlobalAveragePooling2D()(model)
+    model = layers.Dense(5, activation="softmax")(model)
+    model = models.Model(conv_base.input, model)
+    model.compile(optimizer=Adam(lr=0.001),
+                  loss="sparse_categorical_crossentropy",
+                  metrics=["acc"])
+    return model
+```
+
+EfficientNetB0 fonksiyonuna geçirdiğimiz parametreler hakkında kısa açıklamalar:
+
+* **include_top** parametresi, son yoğun katmanları dahil edip etmeyeceğinize karar verir. Pre-trained modeli bir özellik çıkarıcı olarak kullanmak istediğimiz için, bu katmanları geçmek ve başlığı kendimiz tanımlamak yaygın bir stratejidir.
+* **weights** parametresi, modelin sıfırdan eğitilmesini istiyorsak `None` olarak ayarlanabilir ya da büyük görsel koleksiyonlar üzerinde önceden eğitilmiş ağırlıkları kullanmak istiyorsak `imagenet` ya da `noisy-student` olarak ayarlanabilir.
+
+Aşağıdaki yardımcı fonksiyon, aktivasyon katmanını görselleştirmemize olanak tanır, böylece ağı performansını görsel açıdan inceleyebiliriz. Bu, opaklığıyla bilinen bir alanda sezgi geliştirmekte sıklıkla faydalıdır:
+
+```python
+def activation_layer_vis(img, activation_layer=0, layers=10):
+    layer_outputs = [layer.output for layer in model.layers[:layers]]
+    activation_model = models.Model(inputs=model.input, outputs=layer_outputs)
+    activations = activation_model.predict(img)
+    
+    rows = int(activations[activation_layer].shape[3] / 3)
+    cols = int(activations[activation_layer].shape[3] / rows)
+    fig, axes = plt.subplots(rows, cols, figsize=(15, 15 * cols))
+    axes = axes.flatten()
+    
+    for i, ax in zip(range(activations[activation_layer].shape[3]), axes):
+        ax.matshow(activations[activation_layer][0, :, :, i], cmap='viridis')
+        ax.axis('off')
+    plt.tight_layout()
+    plt.show()
+```
+
+Aktivasyonları, belirli bir model için tahminler oluşturarak, başka bir deyişle mimarinin son katmanına kadar olan kısmı kullanarak elde ederiz; bu, kodun activations değişkenine kadar olan kısmıdır. Fonksiyonun geri kalan kısmı ise, uygun konvolüsyon katmanındaki filtrelerin şekline karşılık gelen doğru aktivasyonları uygun şekilde gösterir.
+
+Sonraki adımda, etiketleri işleriz ve doğrulama şeması oluştururuz. Verilerde (örneğin, zaman boyutu veya sınıflar arasında örtüşme gibi) özel bir yapı olmadığı için basit bir rastgele bölme yapabiliriz:
+
+```python
+train_labels = pd.read_csv(os.path.join(CFG.WORK_DIR, "train.csv"))
+STEPS_PER_EPOCH = len(train_labels) * 0.8 / CFG.BATCH_SIZE
+VALIDATION_STEPS = len(train_labels) * 0.2 / CFG.BATCH_SIZE
+```
+
+Daha ayrıntılı doğrulama şemaları hakkında bilgi almak için, **Bölüm 6, İyi Doğrulama Tasarımı**na bakabilirsiniz.
+
+Şimdi, TF tabanlı algoritmamızın resim verilerini döngüye sokabilmesi için gerekli olan veri jeneratörlerini ayarlayabiliriz.
+
+İlk olarak, iki adet `ImageDataGenerator` nesnesi oluşturuyoruz; burada resim artırmalarını dahil ediyoruz. Bu gösterim amacıyla, Keras'ın yerleşik artırmalarını kullanacağız. Ardından, `flow_from_dataframe()` metodunu kullanarak jeneratörü oluşturuyoruz, bu yöntem gerçek zamanlı veri artırması ile tensör resim verilerinin gruplarını oluşturmak için kullanılır:
+
+```python
+train_labels.label = train_labels.label.astype('str')
+train_datagen = ImageDataGenerator(
+    validation_split=0.2, preprocessing_function=None,
+    rotation_range=45, zoom_range=0.2,
+    horizontal_flip=True, vertical_flip=True,
+    fill_mode='nearest', shear_range=0.1,
+    height_shift_range=0.1, width_shift_range=0.1)
+
+train_generator = train_datagen.flow_from_dataframe(
+    train_labels,
+    directory=os.path.join(CFG.WORK_DIR, "train_images"),
+    subset="training",
+    x_col="image_id", y_col="label", 
+    target_size=(CFG.TARGET_SIZE, CFG.TARGET_SIZE),
+    batch_size=CFG.BATCH_SIZE,
+    class_mode="sparse")
+
+validation_datagen = ImageDataGenerator(validation_split=0.2)
+validation_generator = validation_datagen.flow_from_dataframe(
+    train_labels,
+    directory=os.path.join(CFG.WORK_DIR, "train_images"),
+    subset="validation",
+    x_col="image_id", y_col="label", 
+    target_size=(CFG.TARGET_SIZE, CFG.TARGET_SIZE),
+    batch_size=CFG.BATCH_SIZE, class_mode="sparse")
+```
+
+Belirtilen veri yapılarıyla modelimizi oluşturabiliriz:
+
+```python
+model = create_model()
+model.summary()
+```
+
+Model oluşturulduktan sonra, kısa bir özet göz atabiliriz. Bu genellikle kontrol amaçlı kullanılır, çünkü çok katmanlı bir modelin katman kompozisyonunu hatırlamak kolay değildir. Pratikte, özet bilgisi, çıktı filtrelerinin boyutlarının doğru olup olmadığını veya parametre sayılarının (eğitilebilir ve eğitilemeyen) beklentilere uygun olup olmadığını kontrol etmek için kullanılır. Kompaktlık adına, çıktının ilk birkaç satırını gösteriyoruz, ancak B0 için mimari diyagramını incelemek, tam çıktının ne kadar uzun olacağına dair bir fikir verebilir.
+
+Model: "functional_1"
+
+```
+__________________________________________________________________________
+Layer (type)                Output Shape        Param # Connected to
+==========================================================================
+input_1 (InputLayer)        [(None, 512, 512, 3)] 0
+__________________________________________________________________________
+rescaling (Rescaling)       (None, 512, 512, 3)  0       input_1[0][0]
+__________________________________________________________________________
+normalization (Normalization) (None, 512, 512, 3)  7       rescaling[0][0]
+__________________________________________________________________________
+stem_conv_pad (ZeroPadding2D) (None, 513, 513, 3)  0       normalization[0][0]
+...
+```
+
+Yukarıdaki adımlar tamamlandıktan sonra, modeli eğitmeye geçebiliriz. Bu adımda, ayrıca çok kullanışlı bir şekilde geri çağırmalar (callbacks) tanımlayabiliriz. İlk geri çağırma, ModelCheckpoint olacaktır:
+
+```python
+model_save = ModelCheckpoint('./EffNetB0_512_8_best_weights.h5', 
+                             save_best_only=True, 
+                             save_weights_only=True,
+                             monitor='val_loss', 
+                             mode='min', verbose=1)
+```
+
+Checkpoint, birkaç parametre içeriyor ve açıklanması gereken bazı detaylar var:
+
+* **save_best_only=True** ile en iyi model ağırlıklarını koruyabiliriz.
+* **save_weights_only=True** ile modelin sadece ağırlıklarını kaydediyoruz, böylece modelin tamamını değil, sadece ağırlıkları saklamış oluruz.
+* Modelin en iyi hali, doğrulama kaybını (val_loss) minimuma indirerek belirlenir.
+
+Bir diğer yaygın aşırı uyum önleme yöntemi erken durdurma (early stopping) olacaktır. Modelin performansını doğrulama verisi üzerinde izleriz ve metrik gelişmediğinde, bu durumda algoritmayı durdururuz. Burada 5 epoch sonra durdurma yapılacaktır:
+
+```python
+early_stop = EarlyStopping(monitor='val_loss', min_delta=0.001,
+                           patience=5, mode='min',
+                           verbose=1, restore_best_weights=True)
+```
+
+Son olarak, **ReduceLROnPlateau** geri çağırması, doğrulama kaybı üzerinde gelişme görülmediğinde, öğrenme oranını belirli bir faktörle (bu durumda 0.3) düşürür. Bu, genellikle yakınsama konusunda yardımcı olabilir:
+
+```python
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.3, 
+                              patience=2, min_delta=0.001, 
+                              mode='min
+```
+
+
+', verbose=1)
+
+````
+
+Şimdi modelimizi eğitmeye hazırız:
+
+```python
+history = model.fit(
+    train_generator,
+    steps_per_epoch=STEPS_PER_EPOCH,
+    epochs=CFG.EPOCHS,
+    validation_data=validation_generator,
+    validation_steps=VALIDATION_STEPS,
+    callbacks=[model_save, early_stop, reduce_lr]
+)
+````
+
+Eğitim sırasında çağrılan model.fit() fonksiyonu sonrası alınan bir örnek çıktı şu şekilde olabilir:
+
+```
+Epoch 00001: val_loss improved from inf to 0.57514, saving model to ./EffNetB0_512_8_best_weights.h5
+```
+
+Bir model eğitildikten sonra, başlangıçta yazdığımız yardımcı fonksiyonu kullanarak bir örnek resimdeki aktivasyonları inceleyebiliriz. Bu, modelin doğru şekilde çalışıp çalışmadığını anlamak için faydalı olabilir:
+
+```python
+activation_layer_vis(img_tensor, 0)
+```
+
+Bu işlem sonrası görüntülenen sonuç, modelimizin sınıflandırma katmanına geçmeden önce hangi tür özellikler çıkardığını görselleştirmemize yardımcı olacaktır.
+
+![](im/1072.png)
+
+Modelin tahminlerini **model.predict()** ile şu şekilde üretebiliriz:
+
+```python
+ss = pd.read_csv(os.path.join(CFG.WORK_DIR, "sample_submission.csv"))
+preds = []
+for image_id in ss.image_id:
+    image = Image.open(os.path.join(CFG.WORK_DIR, "test_images", image_id))
+    image = image.resize((CFG.TARGET_SIZE, CFG.TARGET_SIZE))
+    image = np.expand_dims(image, axis=0)
+    preds.append(np.argmax(model.predict(image)))
+ss['label'] = preds
+```
+
+Tahminleri, resimlerin listesi üzerinden iterasyon yaparak oluşturuyoruz. Her bir resim için, resmi gerekli boyutlara yeniden şekillendiriyor ve modelin tahmin ettiği sınıf olasılıkları arasından en güçlü sinyale sahip kanalı (en yüksek olasılıkla olan sınıfı) seçiyoruz. Bunun için **argmax** fonksiyonunu kullanıyoruz. Sonuç olarak elde edilen tahminler, yarışmada kullanılan metrikle uyumlu olacak şekilde sınıf numaralarıdır.
+
+Şimdi, görüntü sınıflandırma için minimal bir uçtan uca pipeline'ı (işlem hattı) göstermiş olduk. Elbette, birçok iyileştirme yapılabilir – örneğin daha fazla veri artırma, daha büyük bir mimari, geri çağırmaların özelleştirilmesi gibi – ancak temel şablon, gelecekte başlamak için iyi bir temel sağlayacaktır.
+
+Şimdi, bilgisayarla görme alanındaki bir diğer popüler probleme, **nesne tespiti** konusuna geçiyoruz.
 
 ### Object detection *(Nesne tespiti)*
 
