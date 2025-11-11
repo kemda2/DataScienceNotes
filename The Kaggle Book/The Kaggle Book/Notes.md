@@ -7660,6 +7660,13 @@ Tahminleri, resimlerin listesi üzerinden iterasyon yaparak oluşturuyoruz. Her 
 
 ### Object detection *(Nesne tespiti)*
 
+Nesne tespiti, bir bilgisayarla görme/görüntü işleme görevidir ve burada bir resimde veya videoda belirli bir sınıfa ait semantik nesnelerin örneklerini tanımlamamız gerekir. Önceki bölümde tartışılan sınıflandırma problemlerinde, her bir resme bir sınıf atamamız yeterliyken, nesne tespiti görevlerinde, ilgilenilen nesnenin etrafına bir sınırlayıcı kutu çizerek nesneyi resim içinde konumlandırmak isteriz.
+
+Bu bölümde, **Global Wheat Detection** yarışmasından ([https://www.kaggle.com/c/global-wheat-detection](https://www.kaggle.com/c/global-wheat-detection)) elde edilen verileri kullanacağız. Bu yarışmada, katılımcılar buğday başaklarını tespit etmek zorundaydılar. Buğday başakları, içinde tahıl bulunan bitkilerin tepe kısmındaki spike'lerdir. Bu bitki görüntülerinde bu başakların tespiti, buğday başaklarının boyutlarını ve yoğunluğunu tahmin etmek için kullanılır. Bu bölümde, nesne tespitinde yaygın olarak kullanılan ve 2021 sonlarına kadar en son teknoloji olarak kabul edilen **Yolov5** modelini kullanarak bu problemi nasıl çözebileceğimizi göstereceğiz. Yolov5, yarışmada son derece rekabetçi sonuçlar elde etmişti ve organizatörler tarafından lisanslama sorunları nedeniyle sonradan yasaklanmış olsa da, bu gösterim için oldukça uygun bir modeldir.
+
+![](im/1073.png)
+
+
 ### Semantic segmentation *(Anlamsal segmentasyon)*
 
 ### Summary *(Özet)*
