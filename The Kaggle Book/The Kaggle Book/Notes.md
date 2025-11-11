@@ -6378,7 +6378,157 @@ Daha karmaşık ve hesaplama açısından daha pahalı olan **stacking**, yarı�
 
 ### Averaging models into an ensemble *(Modelleri ortalama alarak birleştirme)*
 
+**Averaging Ansamblaj Tekniğini Tanıtmak İçin**
+
+Averaging ansamblaj tekniğini daha iyi tanıtabilmek için, Leo Breiman tarafından geliştirilen tüm stratejileri hızlıca gözden geçirelim. Breiman’ın çalışması, ansamblaj stratejileri için bir dönüm noktasıydı ve o zamanlar keşfettikleri, geniş bir problem yelpazesinde hala oldukça iyi işliyor.
+
+Breiman, güçlü modellerin hata varyansını azaltacak bir yol bulmak amacıyla bu olasılıkları araştırdı. Bu tür modeller, eğitim verisine aşırı uyum sağlama (overfitting) eğilimindeydi, örneğin karar ağaçları gibi.
+
+**Breiman'ın Keşfettiği Temel Öğeler**
+
+Konsept olarak, Breiman, ansamblajın etkinliğinin üç temel öğeye dayandığını keşfetti:
+
+1. Eğitim örneklerinin nasıl örneklenip seçildiği,
+2. Modellerin nasıl oluşturulduğu,
+3. Son olarak, elde edilen farklı modellerin nasıl birleştirildiği.
+
+**Örnekleme Yöntemleri**
+
+Örnekleme konusunda test edilen ve bulunan yaklaşımlar şunlardır:
+
+* **Pasting**: Bir dizi model, örneklerin alt örneklerinden (yerine koyma yapmadan) oluşturulur.
+* **Bagging**: Bir dizi model, bootstrapped örneklerinin rastgele seçimiyle (yerine koyma ile örnekleme) oluşturulur.
+* **Random Subspaces**: Bir dizi model, özelliklerin alt örneklerinden (yerine koyma yapmadan) oluşturulur.
+* **Random Patches**: Bagging'e benzer bir yaklaşım, ancak burada her model seçildiğinde özellikler de örneklenir, tıpkı random subspaces’te olduğu gibi.
+
+**Örnekleme Yöntemlerinin Amacı**
+
+Aynı bilgiyi kullanmak yerine örnekleme yapmamızın nedeni şudur: Alt örnekleme yaparak ve farklı özellikler seçerek, aynı probleme yönelik farklı fakat ilgili modeller oluşturmuş oluruz. Bu fark, her modelin aşırı uyum sağlama şekliyle de ilgilidir; tüm modeller, veriden genelleştirilebilen faydalı bilgiyi aynı şekilde yakalar ve tahmin yaparken kullanışsız olan gürültüyü farklı şekillerde ele alır. Bu nedenle modellemedeki varyasyon, tahminlerdeki varyasyonu azaltır çünkü hatalar birbirini dengeler.
+
+**Modellerin Çeşitlendirilmesi**
+
+Eğer varyasyon bu kadar faydalıysa, bir sonraki adım sadece veriyi değiştirmek değil, aynı zamanda modeli de değiştirmek olmalıdır. Modeller için iki ana yaklaşım vardır:
+
+* Aynı tip modellerin ansamblajı
+* Farklı modellerin ansamblajı
+
+İlginç bir şekilde, ansamblajı bir şekilde yapmak, modellerin tahmin gücü çok farklıysa pek işe yaramaz. Buradaki ana fikir şudur: Aynı türde tahminleri doğru tahmin edebilen modelleri birleştirerek, tahminlerini ortalama alırken hatalarını düzeltme avantajı elde edersiniz. Performansları çok farklı olan modelleri ansamblajlarsanız, bunun bir anlamı olmadığını göreceksiniz çünkü net etki negatif olacaktır: Yanlış tahminlerinizi düzeltmek yerine, doğru tahminlerinizi de kötüleştirmiş olursunuz.
+
+**Averaging’in Sınırlamaları**
+
+Bu, averaging’in önemli bir sınırıdır: Farklı modelleri (örneğin, farklı örnekler ve özellikler kullanılarak eğitilmiş modeller) ancak tahmin gücü açısından benzer olmaları durumunda kullanabilirsiniz. Bir örnek vermek gerekirse, **doğrusal regresyon** ve **k-en yakın komşu algoritması** (k-NN) problem çözme ve veriden sinyalleri yakalama açısından farklı yollar kullanır; bu algoritmalar, veri üzerindeki belirli tahmin görevlerinde daha iyi performans gösterebilir, ancak averaging kullanırken bunlardan faydalanamazsınız. Aksine, algoritmaların sinyalleri yakalamak için kullandıkları farklı yollar, stacking’de gerçekten faydalanabileceğiniz bir şeydir, çünkü stacking her algoritmanın en iyi sonuçlarını alabilir.
+
+**Averaging’in Etkili Olması İçin Gereksinimler**
+
+Buna dayanarak, bir averaging ansamblajının etkili olabilmesi için şunlar gereklidir:
+
+* Farklı örnekler üzerinde eğitilmiş modellerden oluşturulmalı,
+* Mevcut özelliklerden farklı alt örnekler kullanan modellerden oluşturulmalı,
+* Tahmin gücü açısından benzer olan modellerden oluşmalı.
+
+Bu, teknik olarak, modellerin tahminlerinin olabildiğince birbirinden bağımsız olmasını ve aynı doğruluk seviyesinde performans göstermelerini gerektirir.
+
+**Averaging Yöntemleri**
+
+Şimdi, birden fazla sınıflandırma veya regresyon modelini ortalamak için üç ana yöntem bulunmaktadır:
+
+* **Çoğunluk oylaması**: Birden fazla modelin en sık görülen sınıflandırması kullanılır (sadece sınıflandırma modelleri için).
+* **Değerlerin veya olasılıkların ortalaması**: Modellerin çıktılarının ortalaması alınır.
+* **Ağırlıklı ortalama**: Değerlerin veya olasılıkların ağırlıklı ortalaması alınır.
+
+**Sonraki Bölümlerde**
+Bu üç yaklaşımı detaylı bir şekilde, özellikle Kaggle yarışmaları bağlamında tartışacağız.
+
 #### Majority voting *(Çoğunluk oylaması)*
+
+**Averaging ve Ensembling ile İlgili Stratejiler**
+
+Farklı modeller oluşturmak, kullandığımız örnekler, özellikler ve modelleri değiştirerek (daha önce tartıştığımız gibi, bu modeller tahmin gücü açısından karşılaştırılabilir olmalı) belirli bir hesaplama çabası gerektirir, ancak bu, tek bir model kullandığınızda kuracağınız veri işleme hattından çok farklı bir şey kurmanızı gerektirmez.
+
+Bu işleme hattında, sadece farklı test tahminlerini toplamanız gerekir. Ayrıca, kullanılan modelleri, eğitim sırasında nasıl örnekleme yaptığınızı, kullandığınız hiperparametreleri ve sonuç olarak elde edilen çapraz doğrulama performansını takip etmeniz önemlidir.
+
+Eğer yarışma bir sınıf tahmin etmenizi gerektiriyorsa, **çoğunluk oylaması** (majority voting) yöntemini kullanabilirsiniz; yani, her tahmin için, modellerinizin en sık tahmin ettiği sınıfı alırsınız. Bu yöntem, hem ikili tahminlerde hem de çok sınıflı tahminlerde çalışır çünkü modellerinizin bazen hata yapabileceğini ancak çoğu zaman doğru tahminlerde bulunabileceğini varsayar. Çoğunluk oylaması, bir **"hata düzeltme prosedürü"** olarak kullanılır; gürültüyü atar ve anlamlı sinyalleri korur.
+
+**Averaging ve Çoğunluk Oylaması ile Çalışma**
+
+İlk basit örneğimizde, çoğunluk oylamasının nasıl çalıştığını gösterelim. Başlangıç olarak örnek veri setimizi oluşturacağız. **Scikit-learn**'ün `make_classification` fonksiyonunu kullanarak, **Madelon** benzeri bir veri seti oluşturacağız.
+
+Bu Madelon veri setinin bir rekreasyonunu, bu bölüm boyunca ansamblaj tekniklerini test etmek için temel alacağız:
+
+```python
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+X, y = make_classification(n_samples=5000, n_features=50, 
+                           n_informative=10,
+                           n_redundant=25, n_repeated=15, 
+                           n_clusters_per_class=5,
+                           flip_y=0.05, class_sep=0.5, 
+                           random_state=0)
+```
+
+> Orijinal Madelon, bazı boyutlu hiper küplerin köşe noktalarına yerleştirilmiş ve rastgele etiketlenmiş veri noktalarından oluşan yapay bir veri setiydi. Birkaç anlamlı özellik, alakasız ve tekrar eden özelliklerle karıştırılmıştır (özellikler arasında çoklu bağlantılılık yaratmak için) ve belli miktarda rastgele gürültü eklenmiştir. Isabelle Guyon (SVM algoritmasının yaratıcısı) tarafından **NIPS 2003 Feature Selection Challenge** için tasarlanmıştır. Madelon veri seti, yarışmalar için zorlu bir yapay veri seti örneği olarak kabul edilir. Hatta bazı Kaggle yarışmaları bu veri setinden esinlenmiştir: [https://www.kaggle.com/c/overfitting](https://www.kaggle.com/c/overfitting) ve daha yeni olan [https://www.kaggle.com/c/dont-overfit-ii](https://www.kaggle.com/c/dont-overfit-ii).
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=0)
+```
+
+Eğitim ve test verilerini ayırdıktan sonra, öğrenme algoritmalarımızı başlatıyoruz. Göstermek amacıyla sadece üç temel algoritma kullanacağız: **SVM** (Destek Vektör Makineleri), **random forests** ve **k-en yakın komşu sınıflandırıcıları**, varsayılan hiperparametrelerle. Hiperparametreleri değiştirmeyi ya da sayıyı artırmayı deneyebilirsiniz:
+
+```python
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import log_loss, roc_auc_score, accuracy_score
+
+model_1 = SVC(probability=True, random_state=0)
+model_2 = RandomForestClassifier(random_state=0)
+model_3 = KNeighborsClassifier()
+```
+
+Sonraki adım, her bir modeli eğitim verisiyle eğitmek olacak:
+
+```python
+model_1.fit(X_train, y_train)
+model_2.fit(X_train, y_train)
+model_3.fit(X_train, y_train)
+```
+
+Bu noktada, her model için test verisi üzerinde tahmin yapmamız ve bu tahminleri çoğunluk oylamasıyla ansamblajlamamız gerekiyor. Bunu yapmak için, **SciPy**'nin `mode` fonksiyonunu kullanacağız:
+
+```python
+import numpy as np
+from scipy.stats import mode
+
+preds = np.stack([model_1.predict(X_test),
+                  model_2.predict(X_test),
+                  model_3.predict(X_test)]).T
+max_voting = np.apply_along_axis(mode, 1, preds)[:, 0]
+```
+
+Öncelikle, her bir modelin doğruluğunu kontrol edelim:
+
+```python
+for i, model in enumerate(['SVC', 'RF ', 'KNN']):
+    acc = accuracy_score(y_true=y_test, y_pred=preds[:, i])
+    print(f"Accuracy for model {model} is: {acc:0.3f}")
+```
+
+Üç modelin de benzer performans gösterdiğini, doğruluklarının yaklaşık olarak 0.8 olduğunu görüyoruz. Şimdi, çoğunluk oylaması ansamblajını kontrol edelim:
+
+```python
+max_voting_accuracy = accuracy_score(y_true=y_test, y_pred=max_voting)
+print(f"Accuracy for majority voting is: {max_voting_accuracy:0.3f}")
+```
+
+Çoğunluk oylaması ansamblajı aslında daha doğru: 0.817, çünkü doğru sinyalleri çoğunluktan derlemeyi başarmıştır.
+
+**Çoklu Etiketli (Multilabel) Problemler**
+
+Çok etiketli problemlerde (birden fazla sınıf tahmin etmeniz gerektiğinde), sadece belirli bir sayıda tahmin edilen sınıfı seçebilirsiniz. Bu, bir sınıf için tahminin sinyal, değil gürültü olduğunu belirten bir alaka eşiği varsayarak yapılır. Örneğin, beş modeliniz varsa, bu eşiği 3 olarak belirleyebilirsiniz, yani bir sınıf en az üç model tarafından tahmin edilirse, tahmin doğru kabul edilir.
+
+**Regresyon Problemleri ve Olasılık Tahminleri**
+
+Regresyon problemlerinde ve olasılık tahminlerinde, çoğunluk oylaması kullanılamaz. Çoğunluk oylaması yalnızca sınıf sahipliği ile çalışır. Bunun yerine, sayılar tahmin etmeniz gerektiğinde, sonuçları sayısal olarak birleştirmeniz gerekir. Bu durumda, **ortalama** veya **ağırlıklı ortalama** kullanmak, tahminleri birleştirmenin doğru yolu olacaktır.
 
 #### Averaging of model predictions *(Model tahminlerinin ortalaması)*
 
