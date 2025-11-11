@@ -7161,9 +7161,87 @@ Aşağıdaki bölümlerde, bu referans resminden hem Keras'ın yerleşik işlevs
 
 #### Keras built-in augmentations *(Keras’ın yerleşik artırmaları)*
 
-#### ImageDataGenerator approach *(ImageDataGenerator yaklaşımı)*
+In the following sections, we will demonstrate how to generate augmented images from this reference image using both built-in Keras functionality and the albumentations library.
 
-#### Preprocessing layers *(Ön işleme katmanları)*
+##### ImageDataGenerator approach *(ImageDataGenerator yaklaşımı)*
+
+Aşağıdaki bölümlerde, bu referans resminden hem Keras'ın yerleşik işlevselliğini hem de albumentations kütüphanesini kullanarak nasıl artırılmış resimler oluşturulacağını göstereceğiz.
+
+Başlangıç olarak, aşağıdaki şekilde bir **ImageDataGenerator** nesnesi oluşturuyoruz:
+
+```python
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
+```
+
+```python
+datagen = ImageDataGenerator(
+        rotation_range=40, 
+        shear_range=0.2, 
+        zoom_range=0.2, 
+        horizontal_flip=True, 
+        brightness_range=(0.5, 1.5)
+) 
+```
+
+Sonra, mevcut resmi bir diziye dönüştürüp şekillendiriyoruz:
+
+```python
+curr_img_array = img_to_array(curr_img)
+curr_img_array = curr_img_array.reshape((1,) + curr_img_array.shape)
+```
+
+İstenilen artırma işlemlerini **ImageDataGenerator**'a argüman olarak tanımlıyoruz. Resmi belgelere göre, artırmaların sırasıyla uygulanması gerektiği belirtilmemiş olsa da, pratikte artırmaların tanımlandıkları sırayla uygulandığı gözlemlenmiştir.
+
+Sonra, **ImageDataGenerator** nesnesinin `.flow` metoduyla resimler üzerinde yineleme yapıyoruz. Bu sınıf, görsel veri setini belleğe yüklemek ve artırılmış veri kümesi oluşturmak için üç farklı fonksiyon sağlar:
+
+* flow
+* flow_from_directory
+* flow_from_dataframe
+
+Hepsi aynı amacı gerçekleştirir, ancak dosya konumlarının nasıl belirtildiği konusunda farklılık gösterir. Örneğimizde, resimler zaten bellekte olduğundan, en basit yöntemi kullanarak yineleme yapabiliriz:
+
+```python
+i = 0
+for batch in datagen.flow(
+    curr_img_array,
+    batch_size=1,
+    save_to_dir='.',
+    save_prefix='Augmented_image',
+    save_format='jpeg'):
+    i += 1
+    # Sabit kodlanmış durdurma - bununla, jeneratör sonsuz döngüye girmez
+    if i > 9: 
+        break
+```
+
+Yukarıdaki örnekte yalnızca sınırlı bir seçenek alt kümesi kullanıyoruz; tam liste için okuyuculara resmi belgelere başvurmaları önerilir: [https://keras.io/api/preprocessing/image/](https://keras.io/api/preprocessing/image/).
+
+Artırılmış resimleri daha önce tanımladığımız yardımcı fonksiyonlarla inceleyebiliriz:
+
+```python
+aug_images = []
+for img_path in glob.glob("*.jpeg"):
+    aug_images.append(mpimg.imread(img_path))
+plt.figure(figsize=(20,20))
+plt.axis('off')
+plt.imshow(gallery(np.array(aug_images[0:9]), ncols=3))
+plt.title('Augmentation examples')
+```
+
+İşte sonuç:
+
+![](im/1069.png)
+
+Veri artırma, çok faydalı bir araçtır, ancak bunları verimli bir şekilde kullanmak, bir değerlendirme yapmayı gerektirir. Öncelikle, etkilerini görmek için artırmaları görselleştirmek iyi bir fikir olacaktır. Bir yandan, modelimizin genelleme yeteneğini artırmak için veriye bazı değişiklikler eklemek istiyoruz; diğer yandan, resimleri çok radikal bir şekilde değiştirirsek, giriş verisi daha az bilgilendirici hale gelir ve model performansı muhtemelen olumsuz etkilenir. Ayrıca, hangi artırma yöntemlerinin kullanılacağı da problem spesifik olabilir; bunu farklı yarışmaları karşılaştırarak görebiliriz.
+
+Eğer yukarıdaki 10.6 numaralı görsele bakarsanız (Cassava Leaf Disease Classification yarışmasından referans görsel), hastalığı tanımlamamız gereken yapraklar farklı boyutlarda, farklı açılarda ve farklı şekillerde olabilir; bu durum, bitkilerin şekilleri ve görüntülerin nasıl çekildiğine bağlı olarak değişir. Bu, dikey veya yatay çevirmeler, kırpmalar ve döndürmeler gibi dönüşümlerin bu bağlamda mantıklı olduğu anlamına gelir.
+
+Buna karşılık, **Severstal: Steel Defect Detection** yarışmasından ([https://www.kaggle.com/c/severstal-steel-defect-detection](https://www.kaggle.com/c/severstal-steel-defect-detection)) bir örnek görsele bakabiliriz. Bu yarışmada katılımcıların, bir çelik levha üzerindeki kusurları yerelleştirip sınıflandırmaları gerekiyordu. Tüm resimler aynı boyutta ve aynı oryantasyona sahipti; bu da, döndürmeler veya kırpmaların gerçekçi olmayan görüntüler oluşturacağı ve bunun da gürültü ekleyip algoritmanın genelleme yeteneklerine olumsuz bir etkisi olacağı anlamına gelir.
+
+![](im/1070.png)
+
+##### Preprocessing layers *(Ön işleme katmanları)*
 
 #### albumentations *(Albumentations kütüphanesi)*
 
