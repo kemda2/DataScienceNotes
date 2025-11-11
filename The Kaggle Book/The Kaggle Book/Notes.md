@@ -9167,6 +9167,8 @@ Bu bölümde, bir metin gövdesi üzerinde nasıl açıklayıcı özellikler olu
 
 ### Text augmentation strategies *(Metin artırma stratejileri)*
 
+Önceki bölümde, bilgisayarla görme problemleri için geniş bir şekilde artırma (augmentation) stratejilerini tartıştık. Buna karşılık, metin verileri için benzer yaklaşımlar daha az incelenmiş bir konu (bunu, albumentations gibi tek bir paket bulunmaması da gösteriyor). Bu bölümde, bu problemi ele almak için bazı olası yaklaşımları gösteriyoruz.
+
 #### Basic techniques *(Temel teknikler)*
 
 #### nlpaug *(nlpaug kütüphanesi)*
