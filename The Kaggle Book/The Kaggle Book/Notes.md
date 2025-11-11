@@ -7666,8 +7666,571 @@ Bu bölümde, **Global Wheat Detection** yarışmasından ([https://www.kaggle.c
 
 ![](im/1073.png)
 
+Başlamadan önce bahsedilmesi gereken önemli bir nokta, sınırlayıcı kutu notasyonlarının farklı formatlarıdır; dikdörtgenin koordinatlarını tanımlamanın farklı (ancak matematiksel olarak eşdeğer) yolları vardır.
+
+En yaygın türler **coco**, **voc-pascal** ve **yolo**'dur. Aralarındaki farklar aşağıdaki şekilde net bir şekilde görülmektedir:
+
+![](im/1074.png)
+
+Tanımlamamız gereken bir diğer bölüm ise ızgara yapısıdır: Yolo, bir resmi üzerine bir ızgara yerleştirerek ve herhangi bir hücrede ilgi çeken bir nesnenin (bizim durumumuzda bu, buğday başağı) varlığını kontrol ederek nesneleri tespit eder. Sınırlayıcı kutular, resmin ilgili hücrelerinde yer değiştirecek şekilde yeniden şekillendirilir ve (x, y, w, h) parametreleri birim aralığa ölçeklendirilir:
+
+![](im/1075.png)
+
+Başlangıçta eğitim verilerimizin açıklamalarını (annotations) yüklüyoruz:
+
+```python
+df = pd.read_csv('../input/global-wheat-detection/train.csv')
+df.head(3)
+```
+
+Bir kaçını inceleyelim:
+
+Şekil 10.13: Eğitim verileri ile açıklamalar
+
+Sınırlayıcı kutuların (bounding boxes) gerçek koordinatlarını `bbox` sütunundan çıkarıyoruz:
+
+```python
+bboxs = np.stack(df['bbox'].apply(lambda x: np.fromstring(x[1:-1], sep=',')))
+bboxs
+```
+
+Diziyi gözden geçirelim:
+
+```python
+array([[834., 222.,  56.,  36.],
+       [226., 548., 130.,  58.],
+       [377., 504.,  74., 160.],
+       ...,
+       [134., 228., 141.,  71.],
+       [430.,  13., 184.,  79.],
+       [875., 740.,  94.,  61.]])
+```
+
+Bir sonraki adım, koordinatları Yolo formatında ayırıp ayrı sütunlara yazmaktır:
+
+```python
+for i, column in enumerate(['x', 'y', 'w', 'h']):
+    df[column] = bboxs[:, i]
+df.drop(columns=['bbox'], inplace=True)
+df['x_center'] = df['x'] + df['w']/2
+df['y_center'] = df['y'] + df['h']/2
+df['classes'] = 0
+df = df[['image_id', 'x', 'y', 'w', 'h', 'x_center', 'y_center', 'classes']]
+df.head(3)
+```
+
+Ultralytics'in uygulaması, veri setinin yapısı konusunda bazı gereksinimlere sahiptir, özellikle açıklamaların nerede depolandığı ve eğitim/doğrulama verilerinin hangi klasörlerde bulunduğu konusunda. Aşağıdaki kodda klasörlerin oluşturulması oldukça basittir, ancak daha meraklı bir okuyucu, resmi dokümantasyona ([https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data](https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data)) göz atmayı tercih edebilir:
+
+```python
+# kaynak üzerinde stratify işlemi
+source = 'train'
+# Gösterim amacıyla tek bir katman seçiyoruz
+fold = 0
+val_index = set(df[df['fold'] == fold]['image_id'])
+
+# Her görüntü için sınırlayıcı kutulara göz atıyoruz
+for name, mini in tqdm(df.groupby('image_id')):
+    # Dosyaların kaydedileceği yer
+    if name in val_index:
+        path2save = 'valid/'
+    else:
+        path2save = 'train/'
+
+    # Etiketlerin depolandığı yol
+    if not os.path.exists('convertor/fold{}/labels/'.format(fold) + path2save):
+        os.makedirs('convertor/fold{}/labels/'.format(fold) + path2save)
+
+    with open('convertor/fold{}/labels/'.format(fold) + path2save + name + ".txt", 'w+') as f:
+        # Yolo formatına uygun koordinatları normalize ediyoruz
+        row = mini[['classes', 'x_center', 'y_center', 'w', 'h']].astype(float).values
+        row = row / 1024
+        row = row.astype(str)
+        for j in range(len(row)):
+            text = ' '.join(row[j])
+            f.write(text)
+            f.write("\n")
+    
+    if not os.path.exists('convertor/fold{}/images/{}'.format(fold, path2save)):
+        os.makedirs('convertor/fold{}/images/{}'.format(fold, path2save))
+
+    # Görsellerde ön işleme yapılmadığı için, bunları bir batch olarak kopyalıyoruz
+    shutil.copy("../input/global-wheat-detection/{}/{}.jpg".format(source, name),
+                'convertor/fold{}/images/{}/{}.jpg'.format(fold, path2save, name))
+```
+
+Şimdi Yolo paketini kuruyoruz. Eğer bunu bir Kaggle Notebook'u veya Colab'da çalıştırıyorsanız, GPU'nun etkin olduğundan emin olun; Yolo kurulumu aslında GPU olmadan da çalışacaktır, ancak CPU ve GPU arasındaki performans farkları nedeniyle zaman aşımı ve bellek sorunlarıyla karşılaşabilirsiniz.
+
+```bash
+!git clone https://github.com/ultralytics/yolov5  && cd yolov5 &&
+pip install -r requirements.txt
+```
+
+Çıktıyı atlıyoruz çünkü oldukça uzun. Son olarak gerekli olan hazırlık, YAML yapılandırma dosyasını oluşturmaktır; burada eğitim ve doğrulama verilerinin konumlarını ve sınıf sayısını belirtiyoruz. Biz sadece buğday başaklarını tespit etmeye çalışıyoruz ve farklı türler arasında ayrım yapmıyoruz, dolayısıyla bir sınıfımız var (ismi yalnızca gösterim amacıyla sağlanmış olup, burada rastgele bir string olabilir):
+
+```yaml
+yaml_text = """train: /kaggle/working/convertor/fold0/images/train/
+val: /kaggle/working/convertor/fold0/images/valid/
+nc: 1
+names: ['wheat']"""
+with open("wheat.yaml", 'w') as f:
+    f.write(yaml_text)
+```
+
+Bu şekilde, modelimizi eğitmeye başlayabiliriz:
+
+```bash
+!python ./yolov5/train.py --img 512 --batch 2 --epochs 3 --workers 2 --data wheat.yaml --cfg "./yolov5/models/yolov5s.yaml" --name yolov5x_fold0 --cache
+```
+
+Komut satırından bir şeyler başlatmaya alışık değilseniz, yukarıdaki yazım gerçekten biraz gizemli olabilir, bu yüzden bileşenlerini biraz daha detaylı şekilde tartışalım:
+
+* `train.py`: YoloV5 modelini eğitmek için kullanılan ana betik, önceden eğitilmiş ağırlıklarla başlar.
+* `--img 512`: Orijinal görüntülerin (görüntüleri herhangi bir şekilde ön işlemden geçirmedik, görebilirsiniz) 512x512'ye yeniden boyutlandırılmasını istediğimizi belirtir.
+* `--batch`: Eğitim sürecinde kullanılan batch boyutunu belirtir.
+* `--epochs 3`: Modeli üç epoch boyunca eğitmek istediğimizi belirtir.
+* `--workers 2`: Veri yükleyicisi için çalışan sayısını belirtir.
+* `--data wheat.yaml`: Yukarıda tanımladığımız veri yapılandırma YAML dosyasına işaret eder.
+* `--cfg "./yolov5/models/yolov5s.yaml"`: Modelin mimarisini ve başlangıç için kullanılacak ağırlıkları belirtir.
+* `--name`: Sonuçta elde edilen modelin nereye kaydedileceğini belirtir.
+
+Bu eğitim komutunun çıktısının bir kısmını aşağıda detaylı şekilde inceliyoruz.
+
+Eğitim ve doğrulama aşamalarının sonuçları, `yolov5` klasöründe `./yolov5/runs/train/yolov5x_fold0` altında saklanır.
+
+![](im/1076.png)
+
+Modeli eğittikten sonra, en iyi performans gösteren modelin ağırlıklarını kullanarak (Yolov5, en iyi ve son epoch modellerini otomatik olarak saklama işlevine sahiptir, bunlar best.pt ve last.pt olarak saklanır) test verisi üzerinde tahminler yapabiliriz:
+
+```bash
+!python ./yolov5/detect.py --weights ./yolov5/runs/train/yolov5x_fold0/weights/best.pt --img 512 --conf 0.1 --source /kaggle/input/global-wheat-detection/test --save-txt --save-conf --exist-ok
+```
+
+Bu adımda, tahmin aşamasına özel parametreleri açıklayalım:
+
+* **--weights**: Eğittiğimiz modelin en iyi ağırlıklarının bulunduğu yeri gösterir.
+* **--conf 0.1**: Modelin ürettiği hangi aday sınır kutularının saklanacağını belirtir. Genellikle bu, doğruluk ve geri çağırma arasında bir dengeyi ifade eder (çok düşük bir eşik çok fazla yanlış pozitif üretebilirken, çok yüksek bir eşik hiçbir buğday başı bulamamanıza neden olabilir).
+* **--source**: Test verisinin bulunduğu konumdur.
+
+Oluşturulan etiketler yerel olarak incelenebilir:
+
+```bash
+!ls ./yolov5/runs/detect/exp/labels/
+```
+
+Şunu görebiliriz:
+
+```
+2fd875eaa.txt  53f253011.txt  aac893a91.txt  f5a1f0358.txt
+348a992bb.txt  796707dd7.txt  cc3532ff6.txt
+```
+
+Bir bireysel tahmine bakalım:
+
+```bash
+!cat 2fd875eaa.txt
+```
+
+Aşağıdaki formatta olduğunu görürüz:
+
+```
+0 0.527832 0.580566 0.202148 0.838867 0.101574
+0 0.894531 0.587891 0.210938 0.316406 0.113519
+```
+
+Bu, 2fd875eaa adlı görüntüde, eğitimli modelimizin iki sınır kutusu tespit ettiğini (bu kutuların koordinatları, satırdaki 2-5 numaralı girişlerde yer almaktadır), her birinin güven puanının ise satırın sonunda belirtilmiş olduğunu ifade eder.
+
+Tahminleri gereksinimlere uygun bir biçimde birleştirip gönderim dosyasına dönüştürmek için şu adımları izleriz:
+
+1. Yukarıda listelenen dosyalar üzerinde döngü kurarız.
+2. Her dosya için, tüm satırlar gereken formata uygun bir şekilde (bir satır, bir tespit edilen sınır kutusunu temsil eder) string olarak dönüştürülür.
+3. Satırlar, bu dosyaya karşılık gelen tek bir string olarak birleştirilir.
+
+Kod şu şekildedir:
+
+```python
+with open('submission.csv', 'w') as myfile:
+    # Submit için hazırlık
+    wfolder = './yolov5/runs/detect/exp/labels/'
+    for f in os.listdir(wfolder):
+        fname = wfolder + f
+        xdat = pd.read_csv(fname, sep=' ', header=None)
+        outline = f[:-4] + ' ' + ' '.join(list(xdat.apply(lambda s: convert(s), axis=1)))
+        myfile.write(outline + '\n')
+        
+myfile.close()
+```
+
+Dosyanın nasıl göründüğünü görelim:
+
+```bash
+!cat submission.csv
+```
+
+Örneğin, şu şekilde bir içerik görebiliriz:
+
+```
+53f253011 0.100472 61 669 961 57 0.106223 0 125 234 183 0.1082 96 696 928 126 0.108863 515 393 86 161 0.11459 31 0 167 209 0.120246 517 466 89 147
+aac893a91 0.108037 376 435 325 188
+796707dd7 0.235373 684 128 234 113
+cc3532ff6 0.100443 406 752 144 108 0.102479 405 87 4 89 0.107173 576 537 138 94 0.113459 256 498 179 211 0.114847 836 618 186 65 0.121121 154 544 248 115 0.125105 40 567 483 199
+2fd875eaa 0.101398 439 163 204 860 0.112546 807 440 216 323
+348a992bb 0.100572 0 10 440 298 0.101236 344 445 401 211
+f5a1f0358 0.102549 398 424 295 96
+```
+
+Oluşturulan `submission.csv` dosyası, pipeline'ımızı tamamlamaktadır.
+
+Bu bölümde, YoloV5 kullanarak nesne tespiti problemine nasıl yaklaşılacağını gösterdik: farklı formatlardaki etiketlerle nasıl çalışılacağını, belirli bir görev için bir modelin nasıl özelleştirileceğini, eğitileceğini ve sonuçların nasıl değerlendirileceğini açıkladık.
+
+Bu bilgilerle, nesne tespiti problemleriyle çalışmaya başlayabilirsiniz.
+
+Şimdi, bilgisayarla görme görevlerinin üçüncü popüler sınıfına, semantik segmentasyona geçiyoruz.
 
 ### Semantic segmentation *(Anlamsal segmentasyon)*
+
+Segmentasyon hakkında düşünmenin en kolay yolu, bir görüntüdeki her pikseli sınıflandırmak ve onu karşılık gelen bir sınıfa atamaktır; bu pikseller bir araya geldiğinde, örneğin tıbbi görüntülerde organlardaki hastalık bölgeleri gibi ilgi alanlarını oluştururlar. Buna karşın, nesne tespiti (önceki bölümde tartışılmıştır) görüntünün parçalarını farklı nesne sınıflarına ayırır ve etraflarına sınırlayıcı kutular çizer.
+
+Bu modeling yaklaşımını, Sartorius – Hücre Örneği Segmentasyonu yarışmasından ([https://www.kaggle.com/c/sartorius-cell-instance-segmentation](https://www.kaggle.com/c/sartorius-cell-instance-segmentation)) verilerle göstereceğiz. Bu yarışmada, katılımcılara, mikroskop görüntülerinden nöron hücrelerinin örnek segmentasyonunu eğitmek için modeller geliştirmeleri görevi verilmişti.
+
+Çözümümüz, bir dizi tespit ve segmentasyon algoritmasını destekleyen Facebook AI Research tarafından oluşturulan bir kütüphane olan **Detectron2** etrafında inşa edilecek.
+
+Detectron2, orijinal **Detectron** kütüphanesinin ([https://github.com/facebookresearch/Detectron/](https://github.com/facebookresearch/Detectron/)) ve **Mask R-CNN** projesinin ([https://github.com/facebookresearch/maskrcnn-benchmark/](https://github.com/facebookresearch/maskrcnn-benchmark/)) halefidir.
+
+İlk olarak, ekstra paketleri kurarak başlıyoruz:
+
+```bash
+!pip install pycocotools
+!pip install 'git+https://github.com/facebookresearch/detectron2.git'
+```
+
+**pycocotools**'u ([https://github.com/cocodataset/cocoapi/tree/master/PythonAPI/pycocotools](https://github.com/cocodataset/cocoapi/tree/master/PythonAPI/pycocotools)) kuruyoruz, çünkü etiketleri formatlamak için buna ihtiyacımız olacak ve **Detectron2**'yi ([https://github.com/facebookresearch/detectron2](https://github.com/facebookresearch/detectron2)) kuruyoruz; bu, bu görevdeki ana işlevimizi yerine getirecek kütüphanedir.
+
+Modelimizi eğitmeden önce biraz hazırlık yapmamız gerekiyor: Etiketler, organizatörler tarafından sağlanan **run-length encoding (RLE)** formatından **COCO** formatına dönüştürülmelidir. **RLE**'nin temel amacı, alan tasarrufu sağlamaktır: Bir segmentasyon, bir grup pikseli belirli bir şekilde işaretlemeyi içerir. Bir görüntü bir dizi olarak düşünülebileceğinden, bu alan bir dizi düz çizgi (satır veya sütun yönünde) ile tanımlanabilir.
+
+Bu çizgilerin her birini, indeksleri listeleyerek veya başlangıç pozisyonu ve sonrasındaki ardışık bloğun uzunluğunu belirterek kodlayabilirsiniz. Aşağıda görsel bir örnek verilmiştir:
+
+![](im/1077.png)
+
+Microsoft'un Common Objects in Context (COCO) formatı, bir görüntü veri kümesi için etiketlerin ve meta verilerin nasıl kaydedileceğini belirten özel bir JSON yapısıdır. Aşağıda, RLE'yi COCO formatına nasıl dönüştüreceğimizi ve bunu k-fold doğrulama bölmesiyle nasıl birleştireceğimizi gösteriyoruz, böylece her katman için gerekli olan eğitim/doğrulama JSON dosyalarını elde etmiş olacağız.
+
+Başlayalım:
+
+```python
+# from pycocotools.coco import COCO
+import skimage.io as io
+import matplotlib.pyplot as plt
+from pathlib import Path
+from PIL import Image
+import pandas as pd
+import numpy as np
+from tqdm.notebook import tqdm
+import json, itertools
+from sklearn.model_selection import GroupKFold
+```
+
+**Yapılandırma (Config):**
+
+```python
+class CFG:
+    data_path = '../input/sartorius-cell-instance-segmentation/'
+    nfolds = 5
+```
+
+RLE'den COCO'ya geçmek için üç fonksiyona ihtiyacımız var. İlk olarak, RLE'yi ikili bir maskeye dönüştürmemiz gerekiyor:
+
+```python
+# From https://www.kaggle.com/stainsby/fast-tested-rle
+def rle_decode(mask_rle, shape):
+    '''
+    mask_rle: run-length as string formatted (start length)
+    shape: (height, width) of array to return
+    Returns numpy array, 1 - mask, 0 - background
+    '''
+    s = mask_rle.split()
+    starts, lengths = [np.asarray(x, dtype=int)
+                       for x in (s[0:][::2], s[1:][::2])]
+    starts -= 1
+    ends = starts + lengths
+    img = np.zeros(shape[0]*shape[1], dtype=np.uint8)
+    for lo, hi in zip(starts, ends):
+        img[lo:hi] = 1
+    return img.reshape(shape)  # Needed to align to RLE direction
+```
+
+İkinci fonksiyon, ikili maskeyi RLE'ye dönüştürür:
+
+```python
+# From https://newbedev.com/encode-numpy-array-using-uncompressed-rle-for coco-dataset
+def binary_mask_to_rle(binary_mask):
+    rle = {'counts': [], 'size': list(binary_mask.shape)}
+    counts = rle.get('counts')
+    for i, (value, elements) in enumerate(
+            itertools.groupby(binary_mask.ravel(order='F'))):
+        if i == 0 and value == 1:
+            counts.append(0)
+        counts.append(len(list(elements)))
+    return rle
+```
+
+Son olarak, bu iki fonksiyonu birleştirerek COCO çıktısını üretiriz:
+
+```python
+def coco_structure(train_df):
+    cat_ids = {name: id+1 for id, name in enumerate(
+        train_df.cell_type.unique())}
+    cats = [{'name': name, 'id': id} for name, id in cat_ids.items()]
+    images = [{'id': id, 'width': row.width, 'height': row.height,
+               'file_name':f'train/{id}.png'} for id,
+               row in train_df.groupby('id').agg('first').iterrows()]
+    annotations = []
+    for idx, row in tqdm(train_df.iterrows()):
+        mk = rle_decode(row.annotation, (row.height, row.width))
+        ys, xs = np.where(mk)
+        x1, x2 = min(xs), max(xs)
+        y1, y2 = min(ys), max(ys)
+        enc = binary_mask_to_rle(mk)
+        seg = {
+            'segmentation': enc,
+            'bbox': [int(x1), int(y1), int(x2-x1+1), int(y2-y1+1)],
+            'area': int(np.sum(mk)),
+            'image_id': row.id,
+            'category_id': cat_ids[row.cell_type],
+            'iscrowd': 0,
+            'id': idx
+        }
+        annotations.append(seg)
+    return {'categories': cats, 'images': images, 'annotations': annotations}
+```
+
+Verilerimizi örtüşmeyen katmanlara ayırıyoruz:
+
+```python
+train_df = pd.read_csv(CFG.data_path + 'train.csv')
+gkf = GroupKFold(n_splits=CFG.nfolds)
+train_df["fold"] = -1
+y = train_df.width.values
+```
+
+Bunları döngüyle bölelim:
+
+```python
+all_ids = train_df.id.unique()
+# For fold in range(CFG.nfolds):
+for fold in range(4, 5):    
+    train_sample = train_df.loc[fold_id != fold]
+    root = coco_structure(train_sample)
+    with open('annotations_train_f' + str(fold) + 
+              '.json', 'w', encoding='utf-8') as f:
+        json.dump(root, f, ensure_ascii=True, indent=4)
+        
+    valid_sample = train_df.loc[fold_id == fold]
+    print('fold ' + str(fold) + ': produced')
+
+for fold in range(4, 5):    
+    train_sample = train_df.loc[fold_id == fold]
+    root = coco_structure(train_sample)
+    with open('annotations_valid_f' + str(fold) + 
+              '.json', 'w', encoding='utf-8') as f:
+        json.dump(root, f, ensure_ascii=True, indent=4)
+        
+    valid_sample = train_df.loc[fold_id == fold]
+    print('fold ' + str(fold) + ': produced')
+```
+
+Burada döngülerin parçalara ayrılmasının nedeni, Kaggle ortamındaki boyut sınırıdır: Notebook çıktısının maksimum boyutu 20 GB ile sınırlıdır ve her bir katman için 2 dosya (eğitim/doğrulama) toplamda 10 JSON dosyası anlamına gelir, bu da bu sınırı aşar.
+
+Bu tür pratik hususlar, özellikle "hazırlık" çalışmalarında önemli olabilir; çünkü bu tür işleri başka bir yerde de yapabilir ve sonra Kaggle Dataset'leri olarak yükleyebilirsiniz.
+
+Şimdi, verilerimizi bölümler halinde hazırladıktan sonra, Detectron2 modelini eğitimimize başlatabiliriz. Genelde, gerekli paketleri yükleyerek başlıyoruz:
+
+```python
+from datetime import datetime
+import os
+import pandas as pd
+import numpy as np
+import pycocotools.mask as mask_util
+import detectron2
+from pathlib import Path
+import random, cv2, os
+import matplotlib.pyplot as plt
+# Import some common detectron2 utilities
+from detectron2 import model_zoo
+from detectron2.engine import DefaultPredictor, DefaultTrainer
+from detectron2.config import get_cfg
+from detectron2.utils.visualizer import Visualizer, ColorMode
+from detectron2.data import MetadataCatalog, DatasetCatalog
+from detectron2.data.datasets import register_coco_instances
+from detectron2.utils.logger import setup_logger
+from detectron2.evaluation.evaluator import DatasetEvaluator
+from detectron2.engine import BestCheckpointer
+from detectron2.checkpoint import DetectionCheckpointer
+setup_logger()
+import torch
+```
+
+Detectron2'den alınan bu kütüphaneler ilk başta göz korkutucu olabilir, ancak görev tanımında ilerledikçe işlevleri daha açık hale gelecektir; öncelikle giriş verisi klasörü, etiket klasörü ve tercih edilen model mimarisini tanımlayan bir YAML dosyasına yolları belirtiriz:
+
+```python
+class CFG:
+    wfold = 4
+    data_folder = '../input/sartorius-cell-instance-segmentation/'
+    anno_folder = '../input/sartoriusannotations/'
+    model_arch = 'mask_rcnn_R_50_FPN_3x.yaml'
+    nof_iters = 10000
+    seed = 45
+```
+
+Burada önemli bir nokta, yineleme sayısı parametresidir (nof_iters). Genellikle model eğitimi, epoch sayısıyla parametrik hale gelir, yani eğitim verisinden geçen tam geçişler. Detectron2 farklı bir şekilde tasarlanmıştır: bir yineleme, bir mini-batch'ı ifade eder ve farklı mini-batch boyutları modelin farklı bölümlerinde kullanılır.
+
+Sonuçların tekrarlanabilir olmasını sağlamak için modelin farklı bileşenlerinde kullanılan rastgele tohumları sabitleriz:
+
+```python
+def seed_everything(seed):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+
+seed_everything(CFG.seed)
+```
+
+Yarışmanın metriği, farklı kesişim-birleşim oranı (IoU) eşiklerinde ortalama hassasiyetin hesaplanmasıydı. Hatırlatmak gerekirse, IoU, önerilen bir nesne piksel seti ile doğru nesne piksel seti arasındaki kesişimin hesaplanmasıyla elde edilir.
+
+```python
+# Taken from https://www.kaggle.com/theoviel/competition-metric-map-iou
+def precision_at(threshold, iou):
+    matches = iou > threshold
+    true_positives = np.sum(matches, axis=1) == 1  # Correct objects
+    false_positives = np.sum(matches, axis=0) == 0  # Missed objects
+false_negatives = np.sum(matches, axis=1) == 0  # Extra objects
+return np.sum(true_positives), np.sum(false_positives), np.sum(false_negatives)
+
+def score(pred, targ):
+pred_masks = pred['instances'].pred_masks.cpu().numpy()
+enc_preds = [mask_util.encode(np.asarray(p, order='F')) for p in pred_masks]
+enc_targs = list(map(lambda x:x, targ))
+ious = mask_util.iou(enc_preds, enc_targs, [0]*len(enc_targs))
+prec = []
+for t in np.arange(0.5, 1.0, 0.05):
+tp, fp, fn = precision_at(t, ious)
+p = tp / (tp + fp + fn)
+prec.append(p)
+return np.mean(prec)
+
+````
+
+Metriği tanımladıktan sonra, model içinde doğrudan hedef fonksiyon olarak kullanabiliriz:
+
+```python
+class MAPIOUEvaluator(DatasetEvaluator):
+    def __init__(self, dataset_name):
+        dataset_dicts = DatasetCatalog.get(dataset_name)
+        self.annotations_cache = {item['image_id']: item['annotations']
+                                  for item in dataset_dicts}
+
+    def reset(self):
+        self.scores = []
+
+    def process(self, inputs, outputs):
+        for inp, out in zip(inputs, outputs):
+            if len(out['instances']) == 0:
+                self.scores.append(0)    
+            else:
+                targ = self.annotations_cache[inp['image_id']]
+                self.scores.append(score(out, targ))
+
+    def evaluate(self):
+        return {"MaP IoU": np.mean(self.scores)}
+```
+
+Artık eğitim verileriyle ilgili her şey hazır olduğuna göre, modelin eğitilmesine geçebiliriz.
+
+![](im/1078.png)
+
+Model eğitildikten sonra, ağırlıkları kaydedebiliriz ve bunları çıkarım (inference) için kullanabiliriz (potansiyel olarak ayrı bir Notebook’ta – bu konuyu daha önceki bölümlerde tartışmıştık) ve teslimat hazırlığı için. İlk olarak, tahminleri düzenlememize izin verecek yeni parametreler ekleriz; güven eşiklerini ve minimal maske boyutlarını belirleriz:
+
+```python
+THRESHOLDS = [.18, .35, .58]
+MIN_PIXELS = [75, 150, 75]
+```
+
+Bir maskeyi RLE formatında kodlamak için bir yardımcı fonksiyona ihtiyacımız var:
+
+```python
+def rle_encode(img):
+    '''
+    img: numpy array, 1 - mask, 0 - background
+    Run length olarak string formatında döner
+    '''
+    pixels = img.flatten()
+    pixels = np.concatenate([[0], pixels, [0]])
+    runs = np.where(pixels[1:] != pixels[:-1])[0] + 1
+    runs[1::2] -= runs[::2]
+    return ' '.join(str(x) for x in runs)
+```
+
+Aşağıda, her resim için tüm maskeleri üreten ana fonksiyon yer almakta; şüpheli olanları (güven puanları **THRESHOLDS** değerinin altında olanları) ve küçük alanları (**MIN_PIXELS** değerinden az piksellere sahip olanları) filtreler:
+
+```python
+def get_masks(fn, predictor):
+    im = cv2.imread(str(fn))
+    pred = predictor(im)
+    pred_class = torch.mode(pred['instances'].pred_classes)[0]
+    take = pred['instances'].scores >= THRESHOLDS[pred_class]
+    pred_masks = pred['instances'].pred_masks[take]
+    pred_masks = pred_masks.cpu().numpy()
+    res = []
+    used = np.zeros(im.shape[:2], dtype=int) 
+    for mask in pred_masks:
+        mask = mask * (1-used)
+        # Küçük alanları atla
+        if mask.sum() >= MIN_PIXELS[pred_class]:
+            used += mask
+            res.append(rle_encode(mask))
+    return res
+```
+
+Sonrasında, resim ID'lerini ve maskeleri depolayacağımız listeleri hazırlarız:
+
+```python
+dataDir = Path(CFG.data_folder)
+ids, masks = [], []
+test_names = (dataDir/'test').ls()
+```
+
+Büyük resim setlerine sahip yarışmalar – bu bölümde tartışılanlar gibi – genellikle 9 saatten uzun süre eğitim yapılmasını gerektirir, bu da Code yarışmalarında belirlenen zaman sınırıdır ([https://www.kaggle.com/docs/competitions](https://www.kaggle.com/docs/competitions) adresinde görebilirsiniz). Bu, aynı Notebook içinde model eğitmek ve çıkarım yapmak imkansız hale gelir. Tipik bir çözüm, önce eğitim Notebook/script'ini bağımsız bir Notebook olarak Kaggle, Google Colab, GCP veya yerel ortamda çalıştırmaktır. Bu ilk Notebook'un çıktısı (eğitilmiş ağırlıklar), ikinci Notebook’a giriş olarak kullanılır, yani tahminler için kullanılan modeli tanımlarız.
+
+Bu şekilde ilerleyerek eğitilmiş modelin ağırlıklarını yükleriz:
+
+```python
+cfg = get_cfg()
+cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/" +
+                     CFG.arch + ".yaml"))
+cfg.INPUT.MASK_FORMAT = 'bitmask'
+cfg.MODEL.ROI_HEADS.NUM_CLASSES = 3 
+cfg.MODEL.WEIGHTS = CFG.model_folder + 'model_best_f' + 
+                    str(CFG.wfold) + '.pth' 
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
+cfg.TEST.DETECTIONS_PER_IMAGE = 1000
+predictor = DefaultPredictor(cfg)
+```
+
+Bazı tahminleri görselleştirebiliriz:
+
+```python
+encoded_masks = get_masks(test_names[0], predictor)
+_, axs = plt.subplots(1, 2, figsize=(40, 15))
+axs[1].imshow(cv2.imread(str(test_names[0])))
+for enc in encoded_masks:
+    dec = rle_decode(enc)
+axs[0].imshow(np.ma.masked_where(dec == 0, dec))
+```
+
+İşte bir örnek:
+
+![](im/1079.png)
 
 ### Summary *(Özet)*
 
