@@ -8250,8 +8250,101 @@ pd.read_csv('submission.csv').head()
 
 Bölümün sonuna geldik. Yukarıdaki pipeline (işlem hattı), nasıl bir semantik segmentasyon modeli kuracağınızı ve bunu nasıl eğiteceğinizi göstermektedir. Biz az sayıda iterasyon kullandık, ancak rekabetçi sonuçlar elde etmek için daha uzun süreli eğitimler gereklidir.
 
+> **Laura Fink**
+> 
+> [https://www.kaggle.com/allunia](https://www.kaggle.com/allunia)
+> 
+> 
+> 
+> Bu bölümü tamamlamadan önce, Kaggler Laura Fink'in platformdaki deneyimlerine dair söylediklerine göz atalım. Kendisi, Notebooks Grandmaster unvanına sahip olup, birçok başarılı Notebook üretmiştir. Ayrıca MicroMata'da Veri Bilimi Direktörü olarak görev yapmaktadır.
+> 
+> 
+> 
+> ---
+> 
+> 
+> 
+> **Favori yarışma türünüz nedir ve neden? Teknikler ve çözüm yaklaşımları açısından, Kaggle’daki uzmanlık alanınız nedir?**
+> 
+> Favori yarışmalarım, insana faydalı bir şeyler üretmeye yönelik olanlardır. Özellikle sağlıkla ilgili olan tüm zorlukları seviyorum. Yine de her yarışma, kendi çözülmesi gereken bulmacalarıyla bir macera gibi gelir. Yeni beceriler öğrenmek ve yeni türde veri setlerini ya da problemleri keşfetmek çok keyifli. Bu yüzden spesifik tekniklere odaklanmıyorum, daha çok yeni bir şeyler öğrenmeye çalışıyorum. Sanırım, keşifsel veri analizi (EDA) konusundaki güçlü yönlerimle tanınıyorum.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşırısınız? Bu yaklaşım, gündelik işinizden ne kadar farklıdır?**
+> 
+> Bir yarışmaya katıldığımda, ilk olarak problem açıklamasını ve veri tanımını okurum. Forumları ve kamuya açık Notebok’ları inceleyerek fikirler toplarım ve genellikle kendi çözümlerimi geliştirmeye başlarım. İlk aşamada, gizli grupları aramak ve bazı sezgiler edinmek için EDA'ya biraz zaman ayırırım. Bu, doğru bir doğrulama stratejisi oluşturmak için oldukça faydalıdır, ki ben bunun tüm sonraki adımların temeli olduğuna inanıyorum. Ardından, özellik mühendisliği veya ön işleme gibi makine öğrenmesi pipeline’larının farklı bölümlerinde iterasyon yaparak model mimarisini iyileştiririm, veri toplama hakkında sorular sorarım, veri sızıntıları ararım, daha fazla EDA yaparım ya da toplama modelleri oluştururum. Çözümümü açgözlü bir şekilde geliştirmeye çalışırım. Kaggle yarışmaları çok dinamik olduğundan, hayatta kalabilmek için farklı fikirleri ve çözümleri denemek gerekir.
+> 
+> 
+> 
+> Bu, gündelik işimden kesinlikle farklıdır çünkü işim daha çok veriden içgörü elde etmeye ve iş süreçlerini geliştirmek için basit ama etkili çözümler bulmaya odaklıdır. Burada çözülmesi gereken problem, kullanılan modellerden çok daha karmaşıktır. Çözülmesi gereken sorunun çok net bir şekilde tanımlanması gerekir, bu da farklı alanlardan uzmanlarla hangi hedeflere ulaşılması gerektiğini, hangi süreçlerin yer aldığını ve verilerin nasıl toplanması veya birleştirilmesi gerektiğini tartışmayı gerektirir. Kaggle yarışmalarına kıyasla, günlük işlerimde çok daha fazla iletişim gereklidir, makineli öğrenme becerilerinden çok.
+> 
+> 
+> 
+> **Katıldığınız özellikle zorlayıcı bir yarışmayı ve bu görevi nasıl ele aldığınızla ilgili içgörülerinizi bizimle paylaşın.**
+> 
+> G2Net Gravitational Wave Detection yarışması favorilerimden biriydi. Amaç, dedektör bileşenlerinden ve kara kuvvetlerden kaynaklanan gürültülerin içinde gizlenmiş simüle edilmiş kütleçekimsel dalga sinyallerini tespit etmekti. Bu yarışmada önemli bir içgörü, veriyi analiz etmenin standart yollarına eleştirel bir gözle bakmak ve kendi fikirlerinizi denemek gerektiğiydi. Okuduğum makalelerde, veriler genellikle Fourier veya Constant-Q dönüşümü kullanılarak hazırlanıyordu, veriler beyazlatıldıktan ve band geçiren bir filtre uygulandıktan sonra.
+> 
+> 
+> 
+> Çok geçmeden, beyazlatmanın yardımcı olmadığı ortaya çıktı, çünkü bu işlem Power Spectral Density'nin spline interpolasyonunu kullanıyordu ve bu çok gürültülüydü. Gürültülü verinin küçük alt kümelerine polinomlar uydurmak, aşırı uyum sağlamaktan dolayı başka bir hata kaynağı ekliyordu.
+> 
+> 
+> 
+> Beyazlatma işlemini çıkardıktan sonra, Constant-Q dönüşümünün farklı hiperparametrelerini denedim ve bu yöntem uzun bir süre boyunca forumda ve açık Notebok’larda önde giden yöntem oldu. Kütleçekimsel dalgaların iki kaynağı olduğundan ve bunların farklı Q-değerleri aralıklarıyla kapsanabildiğinden, bu hiperparametrelerde farklılıklar gösteren bir model topluluğu denedim. Bu, puanımı iyileştirmede faydalı oldu, ama sonra bir sınır noktasına geldim. Constant-Q dönüşümü, zaman serilerine bir dizi filtre uygular ve bunları frekans alanına dönüştürür. Kendime şunu sormaya başladım: Bu filtreleme görevlerini daha iyi ve esnek bir şekilde yapan bir yöntem var mıydı? Aynı zamanda, 1D CNN’lerin kullanılması fikri toplulukta ortaya çıktı ve bunu çok beğendim. Hepimiz biliyoruz ki, 2D CNN'lerin filtreleri, görüntü verileriyle kenarları, çizgileri ve dokuları tespit edebiliyor. Aynı şey, Laplace veya Sobel gibi "klasik" filtrelerle de yapılabiliyor. Bu yüzden kendime şunu sordum: 1D CNN’i, zaten sabit olan dönüşümleri uygulamak yerine, en önemli filtreleri kendi başına öğrenmesi için kullanamaz mıyız?
+> 
+> 
+> 
+> 1D CNN çözümüm çalışmadı ama birçok üst düzey takım bunu iyi başardı. G2Net yarışması, bir madalya kazanma hedefini kaçırmış olmama rağmen favorilerimden biriydi. Yolda kazandığım bilgi ve standart yaklaşımlar hakkında öğrendiğim ders çok değerliydi.
+> 
+> 
+> 
+> **Kaggle kariyerinizde size yardımcı oldu mu? Eğer öyleyse, nasıl?**
+> 
+> Üniversiteden sonra ilk işime Java yazılım geliştiricisi olarak başladım, ancak yüksek lisans tezimde makine öğrenmesiyle ilk tanışmamı yapmıştım. Veri analitiğiyle daha fazla ilgileniyordum ama o dönemde neredeyse hiç veri bilimi işi yoktu veya bu işler o şekilde adlandırılmıyordu. Kaggle’ı ilk kez duyduğumda, hemen hemen ilk andan itibaren içine girdim. O zamandan beri sık sık akşamları Kaggle’da vakit geçirirdim, eğlence amacıyla. O dönemde pozisyonumu değiştirmeyi düşünmüyordum ama sonra bir araştırma projesi ortaya çıktı ve makine öğrenmesi becerileri gerekiyordu. Kaggle’a katılarak edindiğim bilgilerle, bu proje için uygun bir aday olduğumu gösterdim. Bu, veri bilimi kariyerime giriş noktası oldu.
+> 
+> 
+> 
+> Kaggle, her zaman fikirlerimi denemek, yeni yöntemler ve araçlar öğrenmek, pratik deneyim kazanmak için harika bir yerdi. Bu şekilde elde ettiğim beceriler, işteki veri bilimi projelerinde çok faydalı oldu. Kaggle, size farklı fikirleri denemek ve yaratıcı olmak için risk olmadan bir oyun alanı sağlıyor. Bir yarışmada başarısız olmak, en azından öğrenilecek bir ders olduğunu gösterir, ama bir projede başarısız olmak, kendiniz ve diğer insanlar üzerinde büyük olumsuz etkiler yaratabilir.
+> 
+> 
+> 
+> Yarışmalara katılmanın yanı sıra, portföyünüzü oluşturmanın başka bir harika yolu da Notebok yazmaktır. Böylece dünyaya, sorunları nasıl ele aldığınızı ve içgörülerinizi, sonuçlarınızı nasıl ilettiğinizi gösterebilirsiniz. Bu, farklı geçmişlere sahip yönetim, müşteri ve uzmanlarla çalışırken çok önemlidir.
+> 
+> 
+> 
+> **Deneyiminize göre, deneyimsiz Kaggle kullanıcılarının genellikle göz ardı ettiği şeyler nedir? Başladığınızda bilmek istediğiniz ama o zamanlar bilmediğiniz şeyler nelerdir?**
+> 
+> Bence, yarışmalara katılan birçok yeni kullanıcı, kamu leaderboard’undan etkilenip iyi bir doğrulama stratejisi oluşturmadan modellerini geliştiriyor. Başarılarını leaderboard üzerinde ölçerken, genellikle kamu test verisine aşırı uyum sağlıyorlar. Yarışma sonunda, modelleri özel test verilerine genelleme yapamıyor ve genellikle yüzlerce sıra aşağıya düşüyorlar. Mercedes-Benz Greener Manufacturing yarışmasında, kamu leaderboard'unda yükselmeyi başaramadığım zamanları hatırlıyorum. Ama nihai sıralamalar açıklandığında, leaderboard’da birçok kişinin bir anda sıralamalarının değiştiğini görünce çok şaşırmıştım. O günden sonra, doğru bir doğrulama şemasının, aşırı uyum ve eksik uyum sorunlarıyla başa çıkabilmek için çok önemli olduğunu hep aklımda tutarım.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda yaptığınız hatalar nelerdir?**
+> 
+> Şu ana kadar yaptığım en büyük hata, bir yarışmanın başında çözümümün detaylarına fazla zaman ve enerji harcamaktı. Gerçekten de, iyi bir doğrulama stratejisi kurduktan sonra, farklı ve çeşitli fikirler üzerinde hızlıca iterasyon
+> 
+> 
+> 
+> 
+> 
+> yapmak çok daha iyi. Bu şekilde, geliştirme için umut verici yönleri bulmak daha kolay ve hızlı olur ve bir yerde takılma riski çok daha azdır.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenmesi için kullanmanızı önerdiğiniz belirli araçlar veya kütüphaneler var mı?**
+> 
+> Kaggle topluluğunda aktif olduğunuzda öğrenip pratik yapabileceğiniz birçok yaygın araç ve kütüphane var ve bunların hepsini tavsiye ederim. Esnek kalmak ve avantajlarını ve dezavantajlarını öğrenmek önemlidir. Bu şekilde, çözümleriniz araçlarınıza değil, fikirlerinize ve yaratıcılığınıza dayanır.
+> 
+> 
+> 
+> **Bir yarışmaya katılırken akılda tutulması gereken en önemli şey nedir?**
+> 
+> Veri bilimi, modeller kurmakla ilgili değildir, asıl mesele veriyi ve nasıl toplandığını anlamaktır. Katıldığım birçok yarışma, test verilerinde sızıntılar ya da gizli gruplar olduğunu ve bunları keşfetmek için keşifsel veri analizinin kullanılabileceğini gösterdi.
 
 ### Summary *(Özet)*
+
+Bu bölümde, size Kaggle yarışmaları açısından bilgisayarla görme ile ilgili en önemli konuların bir genel bakışını sunduk. Algoritmaların genelleme yeteneklerini artırmak için kullanılan önemli bir teknik sınıfı olan artırmalar (augmentations) konusunu tanıttık ve ardından en sık karşılaşılan üç problem için uçtan uca pipeline'lar (işlem hatları) gösterdik: görüntü sınıflandırması, nesne tespiti ve anlamsal segmentasyon.
+
+Bir sonraki bölümde, dikkatimizi başka bir son derece geniş ve popüler problem kategorisi olan doğal dil işleme (NLP) alanına kaydıracağız.
 
 ---
 
