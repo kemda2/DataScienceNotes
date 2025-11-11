@@ -4517,6 +4517,56 @@ Doğrusal model için özellik seçiyorsanız, Boruta aslında aşırıya kaçab
 
 BorutaShap ile özellik seçiminin ne kadar basit ve hızlı kurulduğunu görmek için, 30 Days of ML yarışmasında sunulan bu tutorial Notebook’a göz atabilirsiniz: [https://www.kaggle.com/lucamassaron/tutorial-feature-selection-with-boruta-shap](https://www.kaggle.com/lucamassaron/tutorial-feature-selection-with-boruta-shap).
 
+> Bojan Tunguz
+> 
+> [https://www.kaggle.com/tunguz](https://www.kaggle.com/tunguz)
+> 
+> 
+> 
+> Bojan Tunguz, kesinlikle özellik mühendisliğinin önemini iyi anlayan bir Kaggle yarışmacısıdır (ve ayrıca XGBoost’un büyük bir hayranıdır). NVIDIA’da Makine Öğrenimi Modelleyicisi olarak edindiği deneyimlerini ve etkileyici şekilde Kaggle’da Dört Kat Grandmaster unvanını konuşmak için kendisiyle sohbet etmek istedik.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Kaggle’da teknik ve çözüm yaklaşımları açısından uzmanlık alanınız nedir?**
+> 
+> Her türlü kodsuz yarışmayı seviyorum. Bu yıllar içinde çok değişti. Eskiden görüntü yarışmalarına çok ilgiliydim, ancak bu yarışmalarda rekabetçi olabilmek için gereken mühendislik yığını yıllar içinde inanılmaz derecede karmaşık hale geldi. Bir süre NLP yarışmalarına da ilgim vardı, ama bunlar Kaggle’da her zaman nadir olmuştur. Ancak yıllar boyunca değişmeyen tek şey, tablo (tabular) veri problemlerine olan ilgim oldu. Bu problemler eskiden tipik Kaggle yarışma problemleriydi ama ne yazık ki artık neredeyse yok oldular. Hâlâ bu alanla çok ilgileniyorum ve bu alanda bazı temel araştırmalar yapmaya başladım. ML/DL’nin diğer alanlarına kıyasla tablo verilerinde makine öğrenimini geliştirme konusunda çok az ilerleme kaydedildi ve burada büyük fırsatlar olduğuna inanıyorum.
+> 
+> 
+> 
+> **Kaggle yarışmalarına nasıl yaklaşırısınız? Bu yaklaşım, günlük işinizle ne kadar farklı?**
+> 
+> Kaggle’ın oyun yönünü her zaman ciddiye aldım. Bu benim için, yeni Kaggle yarışmalarına genellikle çok eğlenceli bir şekilde başlamam anlamına geliyor – basit çözümler, esprili çözümler, diğer oyunculardan modifiye edilmiş çözümler, karışımlar vb. Bu yöntemler, problemi anlamama, hangi tür çözümlerin işe yaradığını görmeme ve birkaç basit hile ile ne kadar ilerleyebileceğimi test etmeme yardımcı oluyor. Bunun bir kısmı günlük modelleme çalışmalarımda da geçerli, ama orada eksik olan önemli bir unsur var – o da topluluktan ve lider tablodan gelen destek ve geri bildirim. Kendi başınıza veya küçük bir ekiple çalışırken, oluşturduğunuz çözümün en iyi olup olmadığını veya daha iyi bir çözümün mümkün olup olmadığını asla bilemezsiniz.
+> 
+> 
+> 
+> **Katıldığınız özellikle zor bir yarışmadan ve bu görevi nasıl çözdüğünüzden bahseder misiniz?**
+> 
+> Kaggle kariyerimdeki en zor ve en önemli yarışma, Home Credit Default Risk yarışmasıydı. Tüm zamanların ikinci en büyük Kaggle yarışmasıydı ve hayatımda özellikle zor bir dönemde gerçekleşti.
+> 
+> 
+> 
+> Kredi değerliliği (credit underwriting) çok zor bir veri bilimi problemidir ve çok zeki bir özellik mühendisliği ile güvenilir bir doğrulama şeması gerektirir. Benim kişisel içgörüm, özellik seçimi için basit lineer modellemeyi kullanmaktı ve bu genel modelimize yardımcı oldu. Ekibimiz bu yarışmayı kazandı ve bugün hâlâ bu zaferi Kaggle kariyerimin en önemli noktası olarak görüyorum.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Nasıl?**
+> 
+> Kaggle, ML kariyerimin en büyük hızlandırıcısı oldu. Sahip olduğum dört ML işinden üçünün doğrudan Kaggle başarımın bir sonucu olduğunu söyleyebilirim. Kaggle başarısının bir kariyer için ne kadar önemli olabileceğini abartmak imkânsızdır.
+> 
+> 
+> 
+> **Deneyimsiz Kaggle katılımcıları genellikle neleri göz ardı ediyor? Başladığınızda bilmenizi istediğiniz şeyler nelerdi?**
+> 
+> Tüm ML problemlerinin, özellikle Kaggle yarışmalarının, uzun süre ya az değer verdiğim ya da yeterince önemsemediğim iki yönü vardır: özellik mühendisliği ve sağlam bir doğrulama stratejisi. ML kütüphanelerini ve algoritmalarını çok seviyorum ve genellikle mümkün olan en kısa sürede ML algoritmasını kurmaya başlıyorum. Ama model performansına en büyük etkiyi çok iyi özellikler sağlar. Ne yazık ki, özellik mühendisliği daha çok bir sanat ve daha az bir bilimdir ve genellikle modele ve veri setine bağlıdır. Daha ilginç özellik mühendisliği hilelerinin ve uygulamalarının çoğu standart ML kurslarında veya kaynaklarında nadiren öğretilir. Birçoğu öğretilmez ve özel problem bazlı içgörülere bağımlıdır. Ama özellik mühendisliğine varsayılan olarak odaklanma zihniyeti geliştirilebilir ve genellikle iyi hale gelmek yıllar alır.
+> 
+> 
+> 
+> **Kaggle için kullanmanızı önereceğiniz araç veya kütüphaneler var mı?**
+> 
+> XGBoost her şey için yeter!
+> 
+> 
+
 ### Pseudo-labeling *(Sahte etiketleme)*
 
 ### Denoising with autoencoders *(Otoenkoderlerle gürültü giderme)*
