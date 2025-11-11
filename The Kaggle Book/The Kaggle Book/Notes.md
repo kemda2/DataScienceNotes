@@ -8232,6 +8232,25 @@ axs[0].imshow(np.ma.masked_where(dec == 0, dec))
 
 ![](im/1079.png)
 
+Yukarıda tanımlanan yardımcı fonksiyonlarla, gönderim için RLE formatında maskeleri üretmek oldukça basittir:
+
+```python
+for fn in test_names:
+    encoded_masks = get_masks(fn, predictor)
+    for enc in encoded_masks:
+        ids.append(fn.stem)
+        masks.append(enc)
+pd.DataFrame({'id': ids, 'predicted': masks}).to_csv('submission.csv', index=False)
+pd.read_csv('submission.csv').head()
+```
+
+İşte son gönderimin ilk birkaç satırı:
+
+![](im/1080.png)
+
+Bölümün sonuna geldik. Yukarıdaki pipeline (işlem hattı), nasıl bir semantik segmentasyon modeli kuracağınızı ve bunu nasıl eğiteceğinizi göstermektedir. Biz az sayıda iterasyon kullandık, ancak rekabetçi sonuçlar elde etmek için daha uzun süreli eğitimler gereklidir.
+
+
 ### Summary *(Özet)*
 
 ---
