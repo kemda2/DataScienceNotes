@@ -10198,17 +10198,241 @@ Kaggle yarışmalarından portföy oluşturmak için birden fazla yaklaşım var
 
 ### Leveraging Notebooks and discussions *(Defterler ve tartışmalardan yararlanma)*
 
+Sıralamalar dışında, Kaggle’da fark edilmenin yolu Notebooks’tur çünkü bunlar aynı anda problemlere nasıl çözümler ürettiğinizi, fikirleri nasıl sunduğunuzu ve bunları nasıl kodladığınızı gösterir. Katılımcılar arasında çözümleri ve fikirleri açık ve kolay bir şekilde paylaşmanın bir yolu olarak tasarlanan Notebooks, yeteneklerinizi göstermek için (sıralamalardan sonra) en önemli araçtır ve bu yetenekler işverenler tarafından takdir edilir.
+
+Aslında, son yıllarda veri bilimi dünyasında meydana gelen en önemli değişikliklerden biri, bunun olağanüstü yeteneklerin (unicorn veri bilimciler) oyunu olmaktan çıkarak bir takım oyunu haline gelmesidir. Veri bilimciler artık birbirleriyle ve diğer departmanlarla iş birliği yaparak bir projenin başarısını garanti altına almak zorundadır. Sonuç olarak, işe alım süreçlerinde şirketler genellikle fikir ve sonuçları iletebilme yeteneğinizi ve temiz, etkili kod yazabilme becerinizi daha çok önemserler.
+
+Önceki bölümde, gerçek dünya projelerinin teknik borçla başa çıkmaktan maliyet etkin çözümler tasarlamaya kadar daha geniş bir beceri yelpazesi gerektirdiğini tartıştık. Bu becerileri Kaggle’da da gösterebilirsiniz, her ne kadar bunlar sizi bir yarışmada kazandıracak şeyler olmasa da. Notebooks, bunu yapmak için en iyi araçlardır.
+
+> Kaggle Notebooks’a giriş için Bölüm 3, *Working and Learning with Kaggle Notebooks* bölümüne bakabilirsiniz.
+
+Kaggle’da farklı türde Notebooks bulabilirsiniz. Yaklaşık bir sınıflandırma ile bunları dört kategoriye ayırabiliriz:
+
+* Yarışmalarda sıralama elde etmek için çözümler ve fikirler
+* Veriler üzerinde keşifsel veri analizi (EDA)
+* Makine öğrenimi modelleri veya veri bilimi prensiplerini açıklayan eğitimler
+* Makalelerden veya diğer özgün çözümlerden türetilmiş modellerin yeni uygulamaları
+
+Bu kategorilerin her biri, ilginç bir beceri seti aracılığıyla size avantaj sağlayabilir. Yarışmalar için çözümler ve fikirler, veri bilimi alanında karmaşık bir problemi nasıl ele alabileceğinizi göstermek için klasik bir yol iken, diğer üçü dünyaya şunları gösterebilir:
+
+* Verileri manipüle etme, görselleştirme ve hem görsel hem de görsel olmayan içgörüler çıkarma (EDA). Bu, bilimsel araştırmadan iş dünyasına kadar her ortamda çok önemli bir beceridir.
+* Veri bilimi eğitimi verme, bu da eğitim, mentorluk ve geliştirici savunuculuğu rollerine kapı açar.
+* Araştırmayı pratiğe dönüştürme, özellikle veri bilimi ve derin öğrenmede her gün yeni yeniliklerin ortaya çıktığı ve bunların hızlıca çalışır çözümlere dönüştürülmesi gerektiği bir dönemde kritik bir beceridir.
+
+Kaggle yarışmalarında yüksek sıralarda yer almıyor veya şaşırtıcı çözümler sunamıyor olsanız bile, diğer üç tür Notebook (EDA, eğitimler ve makale uygulamaları) gerçek dünyada fırsatlar sağlayabilir; yeter ki bunları en iyi şekilde tanıtmayı bilin. Bunu yapabilmek için okunabilir ve ilginç Notebooks yazmayı öğrenmeniz gerekir; bu, pratik ve deneyimle öğrenilen bir sanattır. Bu nedenle, özellikle Notebooks kullanıcı sıralamasında yüksek sıralarda yer alan Grandmaster’ların Notebooks’larından öğrenmeniz önerilir ([https://www.kaggle.com/rankings?group=notebooks&page=1&pageSize=20](https://www.kaggle.com/rankings?group=notebooks&page=1&pageSize=20)).
+
+Geliştirdikleri Notebooks türlerine, figürleri nasıl kullandıklarına, kodlarını nasıl yapılandırdıklarına bakın ve ardından kendi becerilerinize ve ilgi alanlarınıza göre bir Notebook’unu taklit etmeyi deneyin. Ayrıca başarı şansınızı yalnızca kod ve grafiklere değil, sunduğunuz anlatıya da bağlamanızı öneririz. Bir çözümü gösteriyor, öğretiyor veya TensorFlow’da bir sinir ağı mimarisi uyguluyor olun, Notebook hücrelerini sözlerle açıklamanız kalıcı bir olumlu izlenim bırakmak açısından çok önemlidir.
+
+Yüksek sıralardaki Notebooks’ları incelemenin yanı sıra, Kaggle’da yeni ortaya çıkan, ana akım olmayan ama özenle hazırlanmış Notebooks hakkında bildirim almanın bir yolu da vardır. Astrofizikçi ve tutkulu Kaggle kullanıcısı Heads or Tails, Martin Henze ([https://www.kaggle.com/headsortails](https://www.kaggle.com/headsortails)), tartışma forumlarında haftalık *Notebooks of the Week: Hidden Gems* yazısı yayınlar; bu, en ilginç Notebooks’un bir koleksiyonudur. Şu anda 100’den fazla cilt bulunmaktadır ve yazar ilginç olabilecek şeyleri bulmak için Kaggle’ı taramaya devam etmektedir. İlginç Notebooks’lardan haberdar olmak için Martin Henze’in Kaggle profilini takip edebilir veya tartışmalarında yeni bir yayın yapıp yapmadığını zaman zaman kontrol edebilirsiniz.
+
+Notebook’lar aracılığıyla fikirler aramak ve onlardan öğrenmekten hoşlanıyorsanız, başkalarının çalışmalarını düşüncesizce kopyalamamanız gerektiğini vurgulamaktan asla yorulmayız. Kaggle’da çok sayıda Notebook var ve çoğu zaman biri bir Notebook’u kopyalar, küçük değişiklikler yapar ve sanki kendi özgün fikriymiş gibi diğer Kaggle kullanıcılarına sunar. Ayrıca bir fonksiyonu veya kod parçasını seçip kendi Notebook’unuza eklemek de yaygındır. Her iki durumda da, her zaman kaynak ve yazarı belirtmeyi unutmayın. Eğer bir şeyi orijinal yazara kadar izleyemiyorsanız, kullandığınız kodu bulduğunuz son Notebook’a atıfta bulunmak bile yeterlidir. Bir portföyün ana amacı kendi çaba ve becerilerinizi sergilemek olsa da, kodunuzun bazı kısımları veya bazı fikirlerin başka yerden alındığını kabul etmek çok önemlidir. Bu, hem diğer Kaggle kullanıcılarına saygı göstermek hem de başkalarının çabalarını ve buluşlarını tanıyacak kadar bilgili olduğunuzu ve bunları kendi çalışmalarınızda kullanmayı bildiğinizi gösterir.
+
+Küçük ölçüde, Kaggle forumlarındaki tartışmalar, veri bilimi ve yazılım geliştirme için belirli rollerde fark edilmenize yardımcı olabilir. Başlangıçta, Kaggle’daki tartışmalar yalnızca organizatörlerle iletişim kurmak veya yarışma ile ilgili acil soruları sormak için kullanılıyordu. Yarışmaların sonunda, katılımcılar genellikle çözümlerini sunmak veya tartışmak zorunda hissetmiyordu. Ancak tartışmalar kendi kullanıcı sıralamalarını ve ustalık derecelerini elde ettikçe, forumlarda çok daha fazla bilgi bulabilirsiniz.
+
+> Kaggle tartışmalarına giriş için Bölüm 4, *Leveraging Discussion Forums* bölümüne bakabilirsiniz.
+
+Deneyimlerimize göre, Kaggle tartışmaları dört kategoriye ayrılabilir:
+
+* Bir ekibin özel sıralamada belirli bir pozisyona nasıl ulaştığını detaylı olarak açıklayan yarışma çözümleri (bazı durumlarda ilgili bir Notebook ile)
+* Yarışma sırasında gereksinimler hakkında yardım ve açıklama
+* Teşekkürler, övgüler ve sohbet
+* Diğer yarışmacılara yardımcı olan ve onlara açıklama yapan gönderiler
+
+Son türdeki gönderilerde başarılı olmak ve geniş çapta fark edilmek, özellikle diğer aktif kanallarınız varsa (ör. Twitch veya YouTube kanalı, Twitter hesabı, Medium blog) geliştirici savunucusu rolünü elde etmenize yardımcı olabilir.
+
+Büyük şirketlerde ve start-up’larda geliştirici savunucusu rollerinin artmasıyla, diğer veri bilimcileri ve geliştiricileri projelerinde destekleyebilecek uzmanlara talep yükselmiştir. Bu rol hakkında daha fazla bilgi için draft.dev sitesindeki makale oldukça açıklayıcıdır: [https://draft.dev/learn/what-is-a-developer-advocate](https://draft.dev/learn/what-is-a-developer-advocate)
+
 ### Leveraging Datasets *(Veri setlerinden yararlanma)*
+
+Kaggle yarışmaları sıklıkla, verilerin önceden temizlenmiş, iyi düzenlenmiş ve gerçek dünyada karşılaşılan verilere oldukça uzak olduğu gerekçesiyle eleştirilir. Bizim bakış açımız biraz farklı; Kaggle’ın yarışmalarda sunduğu verilerin de oldukça karışık veya gürültülü olabileceğini düşünüyoruz. Bazen sunulan veriler, kalite ve nicelik açısından en yüksek puanı almak için yeterli olmayabilir ve ek veri bulmak için internette araştırma yapmanız gerekebilir.
+
+Kaggle’ın veri bilimi projelerinde eksik bıraktığı nokta, verilerin düzenli depolama alanları ve dosyalar halinde toplanması sürecidir. Gerçek dünyada bu süreç standartlaştırılamaz çünkü şirketten şirkete ve problemden probleme değişir. Gerçek dünyada veri yönetimi çoğunlukla sahada öğrenilmelidir.
+
+Kaggle’a veri setlerinin eklenmesi, Kaggle’ın sadece modelleme problemlerine odaklandığı fikrini hafifletmek için yapılmıştır. Kaggle Veri Setleri bu açıdan çok faydalıdır çünkü kendi verilerinizi oluşturmanıza ve yüklemenize, özelliklerini ve değerlerini belgeleyebilmenize olanak sağlar; ayrıca verilerinizi zaman içinde güncelleme veya tamamen değiştirme sıklığını planlayarak yönetmenizi gerektirir.
+
+> Kaggle Veri Setlerine giriş için Bölüm 2, *Organizing Data with Datasets* bölümüne bakabilirsiniz.
+
+Daha ilginç olarak, Kaggle Veri Setlerinde, kendi verilerinizden veya bir yarışmadan yüklenen Kaggle Notebooks kullanılarak oluşturulmuş farklı analiz ve modellere de bağlantı verme fırsatınız vardır. Bu modeller, yarışma sırasında ortaya çıkardığınız çalışmalar olabilir veya yüklenen veriyi dikkatle incelediğiniz ve çözebileceğiniz ilginç problemler bulduğunuz için geliştirdiğiniz bir şey olabilir.
+
+Ayrıca, Kaggle Veri Setleri, verilerinizle birlikte gelen meta bilgilerin eksiksiz olup olmadığını kontrol etmeniz için bir şablon sunar. Açıklama, etiketler, lisans, kaynaklar ve güncelleme sıklığı; bunlar, kullanılabilirlik puanını hesaplamak için gereken bilgilerin yalnızca birkaçıdır ve verilerinizi kullanan herkesin onları nasıl kullanacağını anlamasına yardımcı olur. Hatta açıklamada veya tartışmalarda, veri seti ile ilgili ileride yapmak istediğiniz görevleri de belirtebilirsiniz. Bu, yüklediğiniz verinin potansiyel değerini tam olarak anladığınızı göstermenin iyi bir yoludur.
+
+> Önceden, Görevler (Tasks) Kaggle Veri Seti işlevselliğinin bir parçasıydı, ancak yakın zamanda kaldırılmıştır: [https://www.kaggle.com/product-feedback/292674](https://www.kaggle.com/product-feedback/292674). Yine de, veri açıklamalarını ve tartışmaları kullanarak verilerinizin ne için kullanılabileceğini belirtebilirsiniz.
+
+Tüm bu özellikler, Kaggle Veri Setlerini, Kaggle’daki problemlerle ilgili deneyiminizi ve genel olarak veri ve makine öğrenimi algoritmalarındaki yeteneğinizi göstermek için çok iyi bir yol haline getirir, çünkü şunları yapmanıza olanak sağlar:
+
+* Bir veri seti yayınlamak ve sürdürmek
+* Verinin değerini bir görev yol haritası ile anladığınızı göstermek
+* Kodlanmış ve tamamen çalışan çözümler göstermek (çünkü Kaggle Notebooks aynı veri üzerinde, herhangi bir hazırlık yapmadan hemen çalışabilir), veri hazırlamadan açıklayıcı veri analizine ve tahminsel modellemeye kadar
+
+Kaggle yarışmaları sırasında veya başka herhangi bir projede yaptığınız çalışmaları göstermek için Kaggle Veri Setlerini kullanmanızı şiddetle tavsiye ediyoruz. Çünkü bu, çalışmalarınızı başkalarından ayırır ve veriyi Notebooks ile bütünleştirir. Kısacası, Kaggle Veri Setleri, uyguladığınız çalışan bir çözümü herkesin görmesini sağlar. Ancak bir dezavantajı vardır: çoğunlukla Notebook ortamına bağlısınız (scripting kullansanız bile), bu ortamda paketin ve sürüm gereksinimlerinin şeffaf olmaması, kodu başka ortamda çalıştıracak biri için zorlayıcı olabilir.
+
+Aslında, Kaggle Notebooks bir Docker ortamına ([https://www.docker.com/](https://www.docker.com/)) bağlıdır ve hangi sürümlerin yüklü olduğunu belirleyen bir konfigürasyon dosyası olan Dockerfile ile çalışır. Bir Notebook’a göz atarken, kullanılan paket sürümlerinin ne olduğu hemen anlaşılmaz; bunu görmek için bu konfigürasyon dosyasını incelemeniz gerekir. Bu amaçla ve ayarları çoğaltmak için Dockerfile, Kaggle’ın GitHub deposunda bulunabilir ([https://github.com/Kaggle/docker-python/blob/main/Dockerfile.tmpl](https://github.com/Kaggle/docker-python/blob/main/Dockerfile.tmpl)), ancak zamanla değişebilir ve kendi çalışmanızda kullanılan sürümü takip etmeniz gerekebilir.
+
+Son olarak, bu duruma ek olarak, bir Veri Seti ve ilgili Notebooks’larına göz atabilmek için Kaggle topluluğuna erişiminizin olması gerektiğini unutmayın.
+
+> **Gabriel Preda**
+> 
+> [https://www.kaggle.com/gpreda](https://www.kaggle.com/gpreda)
+> 
+> 
+> 
+> Gabriel Preda ile ilham verici, kariyer odaklı bir sohbet gerçekleştirdik. Gabriel, Kaggle’da Veri Setleri, Notebooks ve Tartışmalar kategorilerinde Grandmaster ve Endava’da Baş Veri Bilimcisi olarak görev yapıyor. Gabriel’in Hesaplamalı Elektromanyetizma alanında bir doktorası bulunuyor ve veri bilimine tamamen odaklanmadan önce uzun yıllar yazılım geliştirme alanında çalıştı. Kaggle’ı keşfettiğinde platformda kendini evinde gibi hissetti ve çok zaman ve emek yatırdı; bu profesyonel olarak kendisine karşılığını verdi.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Nasıl?**
+> 
+> Kaggle, veri bilimi öğrenme eğrimi hızlandırmama yardımcı oldu. Kaggle öncesinde, çözmem gereken problemler veya bilgi kaynakları arıyordum, ama bu süreç çok metodik veya etkili değildi. Kaggle’da benimle aynı ilgi alanlarına sahip bir topluluk buldum. Alanın en iyi uzmanlarının çalışmalarını görebildim, yayımladıkları Notebooks’lardan analiz veya modeller üzerinden öğrenebildim, onlardan fikir alıp sorular sorabildim ve hatta onlarla yarışabildim. Kaggle’a katıldığımda çoğunlukla veri analizi yapıyordum, ama çok kısa sürede yarışmalara katılmaya başladım; bu, modelleri nasıl kuracağımı, doğrulayacağımı ve iteratif olarak geliştireceğimi öğrenmek anlamına geliyordu. Kaggle’da yaklaşık iki yıl sonra kariyerimi değiştirdim; yazılım projelerini yönetmekten tam zamanlı veri bilimi işine geçtim. Kaggle bana aynı zamanda görünürlük de sağladı; şu anki şirketimde adaylarla yapılan mülakatlarda, bazıları benim orada çalıştığımı gördükleri için katılmak istediklerini belirttiler.
+> 
+> 
+> 
+> **Kaggle’da yaptığınız bir şeyi portföyünüzün bir parçası olarak potansiyel işverenlere gösterdiniz mi?**
+> 
+> Kaggle portföyümü, potansiyel işverenler için ana bilgi kaynağı olarak kullanıyorum; LinkedIn profilim Kaggle profilime yönlendiriyor. Ayrıca son yıllarda işverenler Kaggle hakkında daha bilinçli hale geldi ve bazıları özellikle Kaggle profilinizi soruyor. Tabii, Kaggle’ı dikkate almayan işverenler de var. Ben bu görüşe katılmıyorum; kişisel olarak adayları mülakat öncesinde GitHub ve Kaggle profillerini incelerim ve bunları son derece önemli buluyorum. İyi bir Kaggle profili sadece teknik becerileri veya belirli diller, araçlar, teknikler ya da problem çözme becerilerini göstermekle kalmaz, aynı zamanda tartışmalar ve Notebooks aracılığıyla nasıl iletişim kurabildiğinizi de gösterir. Bu, bir veri bilimci için çok önemli bir niteliktir.
+> 
+> 
+> 
+> **Önce Notebooks (Kernels), sonra Tartışmalar, ardından da Veri Setleri Grandmaster seviyesine ulaştınız. Bu yolculuğunuzdan bahsedebilir misiniz?**
+> 
+> Yedinci Kernels Grandmaster oldum ve en yüksek üçüncü sıraya kadar yükseldim. Yaklaşık iki yıl boyunca Kernels sıralamasında ilk 10’daydım. Kernels yazmaya öncelikle R dili bilgimi geliştirmek için başladım ve ilgimi çeken veri setlerini analiz ediyordum. Ayrıca poligon kesitleri, Voronoi poligonlarının çift mesh’lerini oluşturma ve 2D Delaunay tesselasyonu gibi tekniklerle denemeler yaptım. Zamanla keşif amaçlı veri analizine, ardından veri setleri ve yarışmalar için modeller oluşturmaya odaklandım. Daha fazla yarışmaya katıldıkça Python kullanarak yarışmalara yönelik Kernels yazmaya başladım. Aynı dönemde bazı Kernels’lerimin Kaggle kullanıcılarının ilgisini çektiğini fark ettim; upvote ve fork’lar aldılar ve olumlu yorumlar aldılar. Aktif yarışmalardaki veri keşfi için yazdığım bazı Kernels, geniş bir kitleye ulaştı ve bana birçok altın madalya kazandırdı; böylece Master ve ardından Grandmaster seviyelerine ulaştım. Şu anda yarışmalarla ilgili çok fazla Kernel yayımlamıyorum; çoğunlukla yayımladığım veri setleriyle ilgili başlangıç Kernels’leri oluşturuyorum.
+> 
+> 
+> 
+> Sonra Tartışmalar Grandmaster seviyesine ulaştım. Tartışmalarda bu seviyeye ulaşacağımı hiç tahmin etmemiştim. Önce başkalarının Kernels’lerine yorum yapmaya başladım. Sonra yarışmalara daha fazla dahil oldukça, çoğu yorumum aktif yarışmaların tartışma bölümlerinde oldu; ya ilgi alanlarıyla ilgili sorular soruyordum ya da yeni konular başlatıyordum, örneğin bir yarışmadaki problemi çözmek için öneriler veya çeşitli açık konuları ele almak için kaynak koleksiyonları öneriyordum. Özel olarak vurgulamak istediğim bir yorum grubu var: Kaggle Kernels Grandmaster olarak (ilk Grandmaster’lardan biri), çok iyi içerik bulduğumda yeni Kagglers’ın Notebooks’lerine sıkça upvote verdim.
+> 
+> 
+> 
+> Bu durumlarda, birkaç dakikamı ayırıp yazarın başarısını övmeye çalışırım (özellikle içerik kaliteli ise). Başlangıç seviyesindekilere, sadece çalışmalarına upvote vermekle kalmayıp, katkıları hakkında olumlu geri bildirim de vermek, onların özgüvenini artırabilir ve Kaggle’a daha fazla yatırım yapmalarını teşvik edebilir. Bunu yapmayı seviyorum ve umarım yardımcı olur. Ayrıca bir keresinde Kaggle’da yorum yapma konusunda öneriler listesi hazırladım: kısa olun (ama çok kısa değil); spesifik olun; bilgi verin, görüş değil; fırsat bulduğunuzda başkalarının çalışmalarını övün; sakin olun ve yardımcı olmaya çalışın; yorumlarda kişileri etiketlemeyin (mantıklı olmadıkça, örneğin bir tartışmada birisi size hitap ettiyse).
+> 
+> 
+> 
+> Ulaştığım son Grandmaster seviyesi Veri Setleri oldu. Bu aynı zamanda en yüksek ikinci sıraya ulaştığım seviye. Sıralamalardaki ilerlemem yavaş oldu. Sevdiğim bir konuyla başladım. Veri Setlerinde yüksek profil elde etmek, veriyi derleyip temizlemeye ve belgelemeye yatırım yapmayı gerektirir. Eğer gerçekten sevmediğiniz bir şeyse muhtemelen devam etmeyeceksiniz. Ben hem kendim hem de daha geniş bir topluluk için önemli olan şeyleri takip ettim: ülkem, kıtam veya tüm dünya için. Ülkemdeki seçimlerle ilgili veri setleri ve Avrupa’daki çeşitli sosyal, demografik ve ekonomik konularla ilgili veri setleri yayımladım. Topluluk için hem güncel hem de yüksek öneme sahip konulara odaklandım. Örneğin pandemi sırasında, COVID-19 vakaları, aşılar, testler ve virüs varyantları ile ilgili veri setleri yayımladım; hem ülkemden hem de dünya genelinden. Sadece basit sayısal, tablolama değerlerinin ötesinde veriler topladım. İnsanların doğrudan katkılarından gelen metin verileri, birçok kişi için önemli içgörüler sağladı. En çok upvote alan veri setlerimden biri, Reddit gönderileri ve yorumları veya Twitter gönderilerinden (tweet) oluşan koleksiyonlardan oluşuyor; konular ise aşı mitleri, kriket, pandemiler, spor etkinlikleri ve politik kişilikler gibi çeşitli konuları kapsıyor.
+> 
+> 
+> 
+> Veri toplama, temizleme ve işleme betiklerine önemli ölçüde yatırım yaptım. Bu, bana değerli zaman kazandırdı (özellikle sık güncellenen veri setleri için – bazıları sürekli toplandı, betikler her saat tetiklendi) ve sürecin daha iyi kontrol edilmesini sağladı. Her yeni veri seti yayımladığımda, bir veya daha fazla başlangıç Kernels’i de yazıyorum. Bu Kernels’ler geniş bir kitleye ulaşmayı amaçlamıyor; veri setimi kullanacak potansiyel kullanıcılar için yardımcı Kernels olarak oluşturuyorum, böylece veriyi daha kolay kullanabiliyorlar. Çoğu durumda orijinal veriyi (topladığım veya alternatif bir kaynaktan indirdiğim gibi) koruyup, veri temizleme, dönüştürme ve ön analiz için bir Kernel ekliyorum; ayrıca bu sürecin sonucunu, daha erişilebilir bir formatta veriyi de ekliyorum. Böylece, veri setinde sadece veriyi değil; veri dönüştürme teknikleri hakkında bilgiyi de sağlamaya çalışıyorum.
 
 ### Arranging your online presence beyond Kaggle *(Kaggle dışında çevrimiçi varlığını düzenleme)*
 
+Kaggle Veri Setleri ve Notebooks kullanmak için bir Kaggle hesabı gerektiğinden, herkesin zaten bir hesabı olmayabileceğini veya sadece çalışmalarınızı incelemek için bir hesap oluşturmak istemeyebileceğini göz önünde bulundurmanız gerekir. Ayrıca, daha erişilebilir alternatifleri de düşünmelisiniz. Daha sık olarak, Kaggle kullanıcıları bir projeyi GitHub’da ([https://github.com/](https://github.com/)) paylaşmayı, Medium’da ([https://medium.com/](https://medium.com/)) veya diğer yayın platformlarında bir makale yazmayı ya da kendi bloglarında paylaşmayı tercih ediyor.
+
+Bunun dışında, çalışmalarınızı ve becerilerinizi tanıtmak için başka fırsatlar da mevcut, örneğin:
+
+* Kaggle yarışmalarıyla ilgili kodları tarayıcı üzerinden çalıştırılabilir şekilde [Deepnote](https://deepnote.com/) üzerinde yayımlamak.
+* Abhishek Thakur’un MLSpace’ine ([https://discord.com/invite/4RMwz64gdH](https://discord.com/invite/4RMwz64gdH)) benzer bir Discord topluluğu kurmak ya da bir YouTube kanalı yürütmek ([Abhishek Thakur’ın kanalı](https://www.youtube.com/channel/UCBPRJjIWfyNG4X-CRbnv78A)).
+* Rob Mulla gibi bir Twitch kanalı açmak ve Kaggle yarışmalarına uygun kodlama göstermek ([Twitch](https://www.twitch.tv/medallionstallion), [GitHub](https://github.com/RobMulla/twitch-stream-projects)).
+* Shotaro Ishihara gibi haftalık bir Kaggle haber bülteni yayımlamak ([https://www.getrevue.co/profile/upura](https://www.getrevue.co/profile/upura)).
+* Sanyam Bhutani’nin yaptığı gibi Kaggle kullanıcıları ve diğer veri bilimi uzmanlarıyla röportajlar yapmak ve bu röportajları videolar, podcastler veya blog yazıları ile yayımlamak ([https://chaitimedatascience.com/](https://chaitimedatascience.com/)). Ayrıca, şimdiye kadar yapılan röportajlarla ilgili tüm verileri içeren veri setine de göz atabilirsiniz (Rohan Rao tarafından hazırlanmıştır: [https://www.kaggle.com/rohanrao/chai-time-data-science](https://www.kaggle.com/rohanrao/chai-time-data-science)).
+
+Görüldüğü gibi, Kaggle’da çalışmalarınızı ve becerilerinizi yayımlamak için gerçekten birçok fırsat ve medya mevcut ve bunlar, neyi başarmak istediğinize bağlı olarak değişebilir. Bu bölümde odak noktamız sadece bloglar ve GitHub varlığıdır (en yaygın ve etkili seçenekler), ancak amacınıza uygun gördüğünüz herhangi başka bir yaklaşımı tercih etmekte özgürsünüz.
+
 #### Blogs and publications *(Bloglar ve yayınlar)*
+
+Elbette! İşte metnin Türkçeye çevirisi:
+
+---
+
+Yazmak, hem bilgilerinizi pekiştirmenin bir yolu olabilir – çünkü bir konu hakkında yazabilmek için önce araştırma yapmanız gerekir – hem de başkalarına kendinizi ve becerilerinizi gösterebilmenin bir yolu olabilir. Yazınızla tanınmak, işe alım uzmanları ve şirketler tarafından fark edilmekten, Kaggle yarışmalarında ve daha geniş profesyonel hayatınızda bağlantılar kurmaya kadar çeşitli şekillerde size fayda sağlar.
+
+Sosyal medya (LinkedIn, Twitter ve Facebook), fikirlerinizi ve kısa metinlerinizi paylaşmanıza olanak tanır ve bunu kullanmanızı öneririz. Ancak veri bilimi ve Kaggle yarışma konuları uzun tartışma ve mantık yürütme gerektirdiğinden, en iyi yaklaşım uzun makaleler yazmak ve bunları bir blog veya yazı yayımlayan bir web sitesi aracılığıyla paylaşmaktır. İdeal olarak, sosyal medya ile makaleleriniz arasındaki iletişimi koordine ederek onları tanıtabilirsiniz; örneğin makaleyi duyuran özel paylaşımlar yapabilir veya yazınızın ana noktalarını tartışabilirsiniz.
+
+Öncelikle makalelerinizi nasıl ve nerede yayımlayabileceğinizi ele alalım.
+
+Medium üzerinde bir makale, özellikle Towards Data Science ([https://towardsdatascience.com/](https://towardsdatascience.com/)) gibi Medium yayınlarında, çok fazla ilgi görebilir. Medium yayınları, genellikle birden fazla yazar tarafından ortak bir tema veya konu etrafında yazılan hikayeler için paylaşılan alanlardır. Medium, geniş bir okuyucu kitlesine ulaşabilir ve bazı yayınlar, veri bilimi topluluğunda makalelerinin kalitesiyle iyi bir üne sahiptir. Bir yayının, yazıları seçen ve içeriklerin yayın politikaları ve kalite seviyesiyle tutarlı olmasını sağlayan bir veya daha fazla editörü olabilir.
+
+Makalelerinizi yayımlayabileceğiniz Medium yayınları şunlardır:
+
+* Towards Data Science ([https://towardsdatascience.com/questions96667b06af5](https://towardsdatascience.com/questions96667b06af5))
+* Better Programming ([https://betterprogramming.pub/write-for-us-5c4bcba59397](https://betterprogramming.pub/write-for-us-5c4bcba59397))
+* Mlearning.ai ([https://medium.com/mlearning-ai/mlearning-ai-submission-suggestions-b51e2b130bfb](https://medium.com/mlearning-ai/mlearning-ai-submission-suggestions-b51e2b130bfb))
+* Becoming Human ([https://becominghuman.ai/write-for-us-48270209de63](https://becominghuman.ai/write-for-us-48270209de63))
+* Towards AI ([https://pub.towardsai.net/submit-your-medium-story-to-towards-ai-a4fa7e8b141d](https://pub.towardsai.net/submit-your-medium-story-to-towards-ai-a4fa7e8b141d))
+
+Bu yayınların her birinin büyük bir avantajı, zaten geniş bir okuyucu kitlesine sahip olmalarıdır; muhtemelen sosyal medyadaki takipçinizden daha fazla kişiye ulaşabilirsiniz. Böylece hem şirketlerden hem de diğer profesyonellerden daha fazla okuyucuya ulaşabilirsiniz.
+
+Medium dışında, makalelerinizi kabul edebilecek diğer web siteleri şunlardır:
+
+* Hacker Noon ([https://www.publish.hackernoon.com/](https://www.publish.hackernoon.com/)): Teknoloji blogları arasında oldukça popülerdir ve teknolojiyle ilgili her türlü içeriğe açıktır. Aylık dört milyon kişilik bir okuyucu kitlesine sahip olması, teknolojiyle ilgili içeriklerinizi geniş bir kitleye ulaştırmak için idealdir. Ancak ön sayfalarda yer almak zordur ve hem çok dikkat çeker hem de eleştirilirsiniz.
+* Dev.to ([https://dev.to/](https://dev.to/)): Daha çok geliştirici kitlesine sahiptir (yaklaşık 800.000 kişi) ve kodlama üzerine makale ve eğitimler sunar. Yazılarınızda kodun kalitesi ve etkinliği üzerine odaklanmalısınız (modelleme arka planda kalır).
+* FreeCodeCamp ([https://www.freecodecamp.org/news/developer-news-style-guide/](https://www.freecodecamp.org/news/developer-news-style-guide/)): Daha çok eğitim odaklıdır; insanlar kodlamayı öğrenmek için buraya gelir. Makine öğrenmesi kurslarını ve yeni paketleri tanıtmak için idealdir.
+* Analytics Vidhya ([https://www.analyticsvidhya.com/about/write/](https://www.analyticsvidhya.com/about/write/)): Hindistan’da oldukça popülerdir ve makine öğrenmesi ile derin öğrenme yapı taşlarını açıklayan makalelere odaklanır.
+* KDnuggets ([https://www.kdnuggets.com/news/submissions.html](https://www.kdnuggets.com/news/submissions.html)): Veri madenciliği alanındaki en eski yayınlardan biridir. Mart 2021 itibarıyla hâlâ yaklaşık bir milyon benzersiz ziyaretçisi vardır ve veri bilimciler ile akademisyenler arasında takip edilmektedir.
+
+Her yayın, güçlü ve zayıf yönlere sahip olup ulaştığı kitle açısından farklılık gösterir; bu nedenle içeriğinize en uygun olanı seçmelisiniz. Öncelikle sundukları yayınları göz atarak yazınızın nasıl uyum sağlayacağını anlamaya çalışın.
+
+Elbette isterseniz kendi blogunuzu da kullanabilirsiniz. Kendi blogunuzun avantajları arasında, yazdıklarınız üzerinde reklam veya editöryal kontrol olmaması vardır. Öte yandan, hazır bir kitleye sahip olamazsınız ve sosyal medyada makalelerinizi tanıtarak bir okuyucu kitlesi oluşturmanız gerekir. Kendi web sitenizi sıfırdan kurabilir veya GitHub üzerinde bir blog oluşturabilirsiniz.
+
+GitHub’ı kullanmaya karar verirseniz (ücretsizdir ve kodlarınız için zaten bir depo olarak kullanıyor olabilirsiniz), GitHub blog yazıları oluşturmak için hızlı bir rehber şudur: [http://jmcglone.com/guides/github-pages/](http://jmcglone.com/guides/github-pages/)
+
+Daha otomatik bir çözüm isterseniz, Jeremy Howard’ın fastpages platformu ([https://github.com/fastai/fastpages](https://github.com/fastai/fastpages)) yazı ve kod örnekleriyle uğraşmayı kolaylaştırır; çünkü notebook ve Word belgelerini otomatik olarak blog sayfalarına dönüştürür ve yayımlar.
+
+> Tamamen bağımsız olmak ve kendi web sitenizi kurmak isterseniz, bu daha fazla çaba ve bazı maliyetler gerektirir; alan adları ve web alanı ücretsiz değildir. Bu durumda içeriklerinizin kendi kendini tanıtması kritik hale gelir.
+
+Çözümleriniz hakkında yazı yazmanın en büyük avantajı, hikâye anlatımıdır; çünkü kod parçacıklarınızı açıklamalar ve betimlemelerle desteklemeniz gerekir ve Notebook’ta yapabileceğinizden daha ayrıntılı bir şekilde yazmanız gerekir. Bir anlamda, işinizi nasıl anlattığınız, yazdığınız kod kadar önemlidir. Yazınızın tonunu ayarlayarak farklı türdeki kitlelere ulaşabilirsiniz. Kavramları anlaşılır bir şekilde yazmak, okuyucu kitlenizi genişletir ve daha fazla profesyonelle bağlantı kurmanızı sağlar. Daha teknik bir dil kullanmak ise potansiyel olarak sizi işe alabilecek şirketleri etkileyebilir, ancak okuyucu sayınızı sınırlayabilir.
+
+Yazmak çok kişisel bir eylem olduğu için, ipuçlarımız ve önerilerimiz her senaryoya uymayabilir. Genel önerimiz, yazınızın amacını ve kimlere ulaşmak istediğinizi önceden belirlemenizdir.
 
 #### GitHub *(GitHub)*
 
+Makale yazmanın ve okuyucuları yönlendirebileceğiniz bir kod deposuna sahip olmanın yanı sıra, kodunuzu GitHub’da bulundurmak, girdiğiniz her yarışmada “tekerleği yeniden icat etmenizi” önlemeye de yardımcı olur. Yeniden kullanmak istediğiniz kodu bir projede veya Gists ([https://docs.github.com/en/github/writing-on-github/editing-and-sharing-content-with-gists](https://docs.github.com/en/github/writing-on-github/editing-and-sharing-content-with-gists)) içinde saklayabilirsiniz. Gists, ayrı ayrı erişilebilen küçük kod parçacıklarıdır.
+
+Tüm kodunuzu Kaggle’da bırakmak cazip gelse de, zamanla erişmenin zor olduğunu göreceksiniz ve hatta kodu tamamen bulmakta zorluk yaşayabilirsiniz. Bunun nedeni, Kaggle Notebook’larınızı ayrı projelere ayırma imkânınızın olmamasıdır; sadece uzun bir liste olarak sunulurlar ve bu listeyi birkaç özellik (oy sayısı veya Notebook’u en son ne zaman çalıştırdığınız gibi) ile sıralayabilirsiniz. GitHub, ihtiyacınız olan şeyi bulmayı ve yeniden kullanmayı çok daha kolay hale getirir. Örneğin, tüm kodunuzu içeren betikler oluşturabilir ve bunları Kaggle Notebook’una indirip içe aktarabilirsiniz; hiçbir şeyi kopyalamanıza gerek kalmaz.
+
+Aşağıdaki örnekte, tabular bir sinir ağı için yardımcı fonksiyonları indirip yeniden kullanıyoruz:
+
+```bash
+!wget https://raw.githubusercontent.com/lmassaron/deep_learning_for_tabular_data/master/tabular.py
+```
+
+```python
+# Tabular’dan içe aktarma
+from tabular import gelu, Mish, mish
+from tabular import TabularTransformer, DataGenerator
+```
+
+Bir `wget` komutu, GitHub’daki koda doğrudan erişir ve Notebook’un diskine indirir; ardından ihtiyaç duyduğunuz fonksiyon ve sınıfları buradan içe aktarabilirsiniz. Kodunuza doğrudan erişim sağlayan bağlantıyı almak için, GitHub deposunda dosyanızı bulun ve sayfanın üst kısmındaki **Raw** düğmesine tıklamanız yeterlidir.
+
+![](im/1090.png)
+
+**Raw** düğmesine tıkladıktan sonra, dosyanın GitHub’da bulunduğu web adresine yönlendirilirsiniz. Bu web adresini, dosyaya GitHub dışından da referans vermek için kullanabilirsiniz.
+
+GitHub, Kaggle tartışmalarında kullanabileceğiniz görselleri depolamak için de faydalıdır (çünkü artık Kaggle forumlarına görsel yükleyemezsiniz). Görseller söz konusu olduğunda, Raw düğmesi olmayacaktır; ancak görsele sağ tıklayıp dosyayı başka bir sekmede açabilirsiniz; bu da aynı etkiyi sağlar.
+
+GitHub, çalışmalarınızı sergilemek için harika bir yol olsa da, web sitesinin doğası (geliştiricilere yönelik olması) ve yükleyebileceğiniz içerik (kod içeren dosyalar) göz önüne alındığında, teknik bir izleyici kitlesi beklemelisiniz. Şirketlerde insan kaynakları muhtemelen GitHub hesabınızı derinlemesine incelemeyecek, genellikle README.md dosyasında duracaktır; bu nedenle README.md dosyanızın iyi yazılmış ve görsel olarak çekici olması gerekir. Öte yandan işe alım yöneticileri, projelerinizdeki kodla daha çok ilgilenecektir. Dosyalarınızda, prosedürlerinizde ve sınıflarınızda iyi yapılandırılmış kod bulundurmak, ayrıca sonuçların kurulumu ve tekrarlanması için gerekli talimatları eklemek için çaba göstermelisiniz.
+
+Kodunuzun çalışması için doğru paketlerin kurulu olduğundan emin olmak amacıyla **conda** ([https://docs.conda.io/en/latest/](https://docs.conda.io/en/latest/)) veya **poetry** ([https://python-poetry.org/](https://python-poetry.org/)) gibi araçları kullanmanız gerekecek. Projenize en iyi yapıyı kazandırmak için muhtemelen **CookieCutter** ([https://drivendata.github.io/cookiecutter-data-science/](https://drivendata.github.io/cookiecutter-data-science/)) gibi bir şablona ihtiyaç duyacaksınız. CookieCutter gibi şablonlar, kodunuzu belirli dizinlere kolayca düzenlemenizi sağlar ve kullanım ve anlaşılabilirlik için gerekli dosyaları sunar. Bir CookieCutter şablonu, projenizin okunmasını, anlaşılmasını ve bakımını kolaylaştırır.
+
+Deneylerinizi ve veri kaynaklarınızı yönetmek için, yalnızca kodunuz için değil, kullanılan veriler için de bir sürüm kontrol sistemi kullanmanız gerekecek; örneğin **Data Version Control (DVC: [https://dvc.org/](https://dvc.org/))** gibi. Tüm bu kaynaklar ve bunları düzgün çalıştırmak için gereken beceriler (ortam oluşturma, projeyi yapılandırma, veri ve modelleri versiyonlama), veri bilimi yetkinliklerinden daha çok yazılım mühendisliği becerilerine yakındır. Kaggle’da bu kadar kritik olmayabilir – ya da basit yollarla yapılabilir – fakat yine de çaba ve öğrenme gerektirir. Yine de bu beceriler, GitHub projelerinizle sunacağınız yetkinlikler arasında yer alacak ve iş görüşmelerinde iyi bir izlenim bırakma şansınızı artıracaktır.
+
+Modelinizi canlı olarak göstermek isterseniz birkaç seçeneğiniz vardır. En kolay yöntem, kodunuzu orijinal Notebook’larda çalışır halde tutmak (GitHub projenizin README.md dosyasına Kaggle Notebook bağlantısını koymak) veya Google Colab kullanmaktır. GitHub’da sakladığınız Notebook’un Google Colab’da otomatik çalışmasını sağlamak için, linkin domainini **github.com**’dan **githubtocolab.com**’a değiştirmeniz yeterlidir; bu link Notebook’unuzu Colab’da açacaktır.
+
+En etkileyici sunum yöntemi ise HuggingFace Spaces ([https://huggingface.co/spaces](https://huggingface.co/spaces)) kullanarak Kaggle modelinizi çevrimiçi bir uygulamada göstermek olabilir. Spaces, makine öğrenimi demoları barındırmak ve çalışmalarınızın çevrimiçi portföyünü oluşturmak için basit bir yoldur ([dokümantasyon](https://huggingface.co/docs/hub/spaces)). RAM limiti 16GB ve CPU çekirdeği 8 ile sınırlıdır, fakat ücretsizdir ve modelinizin özel bir uygulamada nasıl çalışacağını göstermek için yeterlidir. HuggingFace uzak makinesine bağımlılıklarınızı kurabilir, kod ve modellerinizi GitHub ile senkronize edebilir veya **Streamlit** ([https://streamlit.io/](https://streamlit.io/)) ya da **Gradio** ([https://gradio.app/](https://gradio.app/)) kullanarak bir uygulama geliştirebilirsiniz.
+
+Örneğin, Kaggle Uzmanı ve Harvard Üniversitesi Öğretim Görevlisi Rashmi Banthia ([https://www.kaggle.com/rashmibanthia](https://www.kaggle.com/rashmibanthia)), Sartorious Cell Instance Segmentation yarışmasından modelini şöyle göstermiştir: [https://huggingface.co/spaces/rashmi/Cell-Instance-Segmentation-MMDetection](https://huggingface.co/spaces/rashmi/Cell-Instance-Segmentation-MMDetection). Modelinizi birkaç örnekle birlikte gerçek zamanlı bir demo ile sunarak, makine öğrenimi bilmeyen bir izleyiciye bile etkinliğini hemen gösterebilirsiniz.
+
 ### Monitoring competition updates and newsletters *(Yarışma güncellemelerini ve bültenleri takip etme)*
 
+Artık görebileceğiniz gibi, Kaggle’da çalışmalarınızı sergilemek önemlidir; böylece belirli model türleri ve veri problemlerine olan ilginizi dünyaya gösterebilirsiniz. Bu açıdan, yarışmaların sunduğu fırsatların her zaman farkında olmanız önemlidir.
+
+Bunu yapmanın temel yolu, Kaggle web sitesini sık sık ziyaret etmek ve onlardan e-posta almayı kabul etmektir. Bu seçeneği profilinizden, **Bildirim ve e-posta ayarları** sayfasında ayarlayabilirsiniz; burada hem site içi bildirimleri hem de e-postaları almayı kabul edebilirsiniz. Ayrıca, Kaggle’daki yeni özellikler ve girişimler hakkında ipuçları ile birlikte yeni başlatılan yarışmaların haberlerini içeren e-postaları almayı da seçebilirsiniz.
+
+![](im/1091.png)
+
+Eğer Twitter kullanıcısıysanız, Kaggle’daki yeniliklerden haberdar olmak için birkaç profili takip etmeniz faydalı olacaktır. **Kagoole** ([https://twitter.com/kagoole](https://twitter.com/kagoole)), yeni yarışmalar hakkında sizi bilgilendirebilen bir web uygulamasıdır ve ayrıca Heroku uygulama formu üzerinden ([https://kagoole.herokuapp.com/](https://kagoole.herokuapp.com/)) geçmiş yarışmalar için çözümler sunar. Bu uygulama **Doarakko** ([https://github.com/Doarakko/](https://github.com/Doarakko/)) tarafından oluşturulmuştur.
+
+Takip edebileceğiniz bir diğer Twitter profili ise **Is he Kerneler?** ([https://twitter.com/HKerneler](https://twitter.com/HKerneler)), **Regonn** ([https://github.com/regonn/](https://github.com/regonn/)) tarafından oluşturulmuştur ve her aktif Kaggle yarışmasının kapanmasına ne kadar süre kaldığını size bildirir.
+
+Bildiğimiz gibi (Bkz. Bölüm 1), Kaggle veri bilimi yarışmaları düzenleyen tek organizasyon değildir. Kaggle ve diğer veri bilimi yarışma sitelerinde neler olup bittiğini daha iyi takip edebilmek için, **[https://mlcontests.com/](https://mlcontests.com/)** veya **[https://ods.ai/competitions](https://ods.ai/competitions)** gibi siteleri kullanmanızı öneriyoruz. Bu siteler, Kaggle’ın yanı sıra **AICrowd** ve **DrivenData** gibi platformlardaki tüm devam eden yarışmaları izler. Örneğin, mlcontests.com her yarışma için ödüller, son tarihler ve faydalı bağlantılar hakkında bilgi sağlar.
+
+Ayrıca, bulut GPU’larının performans, makine ve fiyat karşılaştırmalarını da sunar. E-posta adresinizi kaydederek, bu bilgilerin çoğunu doğrudan gelen kutunuza alabilirsiniz.
+
 ### Summary *(Özet)*
+
+Bu bölümde, çalışmalarınızı nasıl sergileyebileceğimizi ve bunun kariyerinizin ilerlemesi açısından nasıl değerli olabileceğini ele aldık. Bu, veri bilimi bilginizin ve deneyiminizin tamamını kapsamayacak olsa da, yine de büyük bir değer taşıyan yetkinliklerinizi göstermenize yardımcı olur.
+
+Çalışmalarınızı sergilemek için ya Kaggle kaynaklarını ya da harici kaynakları kullanabilirsiniz. Kaggle kaynakları, size entegre bir ortam sunar ve elinizde her şey hazırsa oldukça erişilebilir ve hızlı bir şekilde kurulabilir. Harici kaynaklar (Medium yayınları, GitHub, HuggingFace Spaces vb.) ise çoğu işe alım uzmanı, insan kaynakları görevlisi ve işe alım yöneticisi tarafından rutin olarak kullanıldığı için daha geniş bir bilinirliğe ve erişilebilirliğe sahiptir.
+
+Bir sonraki bölümde, Kaggle yarışmalarının sunduğu fırsatları tamamlayacak şekilde, ağ kurma (networking) konusunu ve Kaggle’daki çalışmalarınızı bir iş görüşmesine dönüştürmek için nasıl kullanabileceğinizi tartışacağız.
 
 ---
 
