@@ -4836,9 +4836,91 @@ Bir sonraki bölümde, tabular yarışmalara katılırken bilmeniz gereken tüm 
 
 ## Chapter 8: Hyperparameter Optimization *(Bölüm 8: Hiperparametre Optimizasyonu)*
 
+Bir Kaggle çözümünün performansı, yalnızca seçtiğiniz öğrenme algoritmasının türü ile belirlenmez. Verilerin ve kullandığınız özelliklerin yanı sıra, algoritmanın **hyperparameter**’ları (eğitim öncesinde sabitlenmesi gereken ve eğitim sırasında öğrenilemeyen algoritma parametreleri) da performansı güçlü bir şekilde etkiler. Tablo veri yarışmalarında doğru değişkenleri/verileri/özellikleri seçmek en etkili yöntemdir; ancak hyperparameter optimizasyonu, türü ne olursa olsun tüm yarışmalarda etkilidir. Aslında, veri ve algoritma sabit olduğunda, hyperparameter optimizasyonu algoritmanın tahmin performansını artırmanın ve leaderboard’da yükselmenin tek güvenilir yoludur. Ayrıca, hyperparameter optimizasyonu **ensemble** yöntemlerinde de faydalıdır; çünkü optimize edilmiş modellerin birleşiminden oluşan bir ensemble, optimize edilmemiş modellerin birleşiminden her zaman daha iyi performans gösterir.
+
+Hyperparameter’ları manuel olarak ayarlamanın mümkün olduğunu duyabilirsiniz; özellikle seçimlerinizin algoritma üzerindeki etkilerini biliyor ve anlıyorsanız. Birçok Kaggle Grandmaster ve Master, yarışmalarda modellerini doğrudan ayarlamaya sıklıkla güvendiklerini belirtmiştir. Bu kişiler, en önemli hyperparameter’lar üzerinde **bisection (ikiye bölme) yöntemi** tarzında çalışır, bir parametrenin değer aralığını gittikçe daraltarak en iyi sonucu üreten değeri bulurlar. Ardından diğer parametreye geçerler. Bu yöntem, her parametre için tek bir minimum varsa ve parametreler birbirinden bağımsızsa oldukça iyi çalışır. Bu durumda arama, çoğunlukla deneyim ve öğrenme algoritmalarına dair bilgi ile yönlendirilir.
+
+Ancak deneyimlerimize göre, Kaggle’da karşılaşacağınız çoğu görevde durum böyle değildir. Problemlerin ve kullanılan algoritmaların karmaşıklığı, yalnızca bir arama algoritmasının sağlayabileceği sistematik bir yaklaşım gerektirir. Bu nedenle, bu bölümü yazmaya karar verdik.
+
+Bu bölümde, **cross-validation** yaklaşımınızı test setine genellenebilecek en iyi hyperparameter’ları bulacak şekilde nasıl genişletebileceğinizi inceleyeceğiz. Amaç, yarışmalarda karşılaştığınız zaman ve kaynak kısıtlamalarını yönetmektir. Bu nedenle, sahip olduğunuz kaynaklara göre karmaşık modeller ve veri problemleri için optimize edilmiş **Bayesian optimizasyon** yöntemlerine odaklanacağız. Yalnızca önceden tanımlanmış hyperparameter’lar için en iyi değerleri aramakla sınırlı kalmayacak, aynı zamanda **sinir ağı mimarisi** sorununa da değineceğiz.
+
+Ele alacağımız konular şunlardır:
+
+* Temel optimizasyon teknikleri
+* Ana parametreler ve nasıl kullanılacağı
+* Bayesian optimizasyon
+
+Hadi başlayalım!
+
 ### Basic optimization techniques *(Temel optimizasyon teknikleri)*
 
+Hyperparameter optimizasyonunun temel algoritmaları, Scikit-learn paketinde bulunan **grid search** ve **random search**’tir. Son zamanlarda, Scikit-learn katkıcıları, hem grid search hem de random search stratejilerinin performansını artırmak için **halving algoritmasını** da eklemişlerdir.
+
+Bu bölümde, bu temel tekniklerin hepsini ele alacağız. Bunları öğrenerek, yalnızca bazı özel problemler için etkili optimizasyon araçlarına sahip olmakla kalmayacak (örneğin, SVM’ler genellikle grid search ile optimize edilir), aynı zamanda hyperparameter optimizasyonunun temel mantığını da kavrayacaksınız.
+
+Başlamak için, gerekli bileşenlerin neler olduğunu belirlemek çok önemlidir:
+
+* Hyperparameter’ları optimize edilmesi gereken bir model
+* Her hyperparameter için aranacak değerlerin sınırlarını içeren bir **arama alanı**
+* Bir **cross-validation** şeması
+* Bir **değerlendirme metriği** ve buna ait skor fonksiyonu
+
+Tüm bu öğeler, aradığınız çözümü belirlemek için **arama yöntemi** içinde bir araya gelir. Hadi nasıl çalıştığını inceleyelim.
+
 #### Grid search *(Izgara araması)*
+
+**Grid search**, hyperparameter’ları eksiksiz bir şekilde tarayan bir yöntemdir ve yüksek boyutlu uzaylarda uygulanabilirliği sınırlıdır. Her parametre için test etmek istediğiniz bir değer kümesi seçersiniz ve ardından bu kümedeki tüm olası kombinasyonları denersiniz. Bu nedenle “eksiksiz” (exhaustive) olarak adlandırılır: her şeyi denersiniz. Oldukça basit bir algoritmadır ve boyutsallık lanetine (curse of dimensionality) maruz kalır, ancak olumlu tarafı, **embarrassingly parallel** olmasıdır (bu bilgisayar bilimi teriminin tanımı için bkz. [link](https://www.cs.iusb.edu/~danav/teach/b424/b424_23_embpar.html)). Bu, yeterli sayıda işlemciniz varsa, optimal ayarlamayı çok hızlı bir şekilde elde edebileceğiniz anlamına gelir.
+
+Örnek olarak, bir sınıflandırma problemi ve **support-vector machine (SVM)** sınıflandırmasını ele alalım. SVM’ler, hem sınıflandırma hem de regresyon problemleri için, grid search’ün en çok kullanılacağı makine öğrenmesi algoritmalarından biridir. Scikit-learn’ün **make_classification** fonksiyonunu kullanarak hızlıca bir sınıflandırma veri seti oluşturabiliriz:
+
+```python
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+
+X, y = make_classification(n_samples=300, n_features=50,
+                           n_informative=10,
+                           n_redundant=25, n_repeated=15,
+                           n_clusters_per_class=5,
+                           flip_y=0.05, class_sep=0.5,
+                           random_state=0)
+```
+
+Sonraki adım olarak, temel bir SVC algoritması tanımlar ve arama alanını belirleriz. SVC’nin kernel fonksiyonu (SVM’de girdi verilerini dönüştüren iç fonksiyon) farklı hyperparameter’ları belirlediği için, kernel tipine bağlı olarak kullanılacak parametrelerin iki farklı sözlüğünü içeren bir liste sağlarız. Ayrıca değerlendirme metriğini de belirleriz (bu örnekte hedef dengeli olduğundan **accuracy** kullanıyoruz):
+
+```python
+from sklearn import svm
+svc = svm.SVC(probability=True, random_state=1)
+
+from sklearn import model_selection
+search_grid = [
+    {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
+    {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']}
+]
+
+scorer = 'accuracy'
+```
+
+Örneğimizde, lineer kernel gamma parametresinin ayarlanmasını gerektirmez, ancak radial basis function (RBF) kernel için bu parametre çok önemlidir. Bu nedenle iki sözlük sağlıyoruz: ilki lineer kernel için, ikincisi RBF kernel için. Her sözlük yalnızca ilgili kernel ve bu kernel için geçerli parametre aralıklarını içerir.
+
+Değerlendirme metriğinin, algoritmanın optimize ettiği **maliyet fonksiyonundan** farklı olabileceğini unutmamak önemlidir. Bölüm 5’te tartışıldığı gibi, bazı yarışmalarda değerlendirme metriği farklı olabilir, ancak algoritmanın maliyet fonksiyonu değiştirilemez. Bu durumlarda, hyperparameter’ları değerlendirme metriğine göre ayarlamak, iyi performans gösteren bir model elde etmeye yardımcı olabilir. Optimal hyperparameter seti, bu kısıtlar altında en iyi değerlendirme metriğini döndürecektir. Teorik olarak en iyi sonuç olmayabilir, ama genellikle ona yakın olur.
+
+Tüm bu bileşenler (model, arama alanı, değerlendirme metriği, cross-validation şeması) **GridSearchCV** örneğinde birleştirilir ve model veriye uyarlanır:
+
+```python
+search_func = model_selection.GridSearchCV(estimator=svc, 
+                                           param_grid=search_grid,
+                                           scoring=scorer, 
+                                           n_jobs=-1,
+                                           cv=5)
+
+search_func.fit(X, y)
+print(search_func.best_params_)
+print(search_func.best_score_)
+```
+
+Bir süre sonra, kullandığınız makineye bağlı olarak, **cross-validated** sonuçlara göre en iyi kombinasyonu elde edeceksiniz.
+
+Özetle, grid search çok basit bir optimizasyon algoritmasıdır ve çok çekirdekli bilgisayarların avantajını kullanabilir. Çok az ayarlama gerektiren algoritmalarla (SVM, ridge veya lasso regresyonları gibi) iyi çalışabilir, ancak diğer durumlarda uygulanabilirliği sınırlıdır. Öncelikle, yalnızca **diskret seçimler** ile hyperparameter optimizasyonunu sınırlıdır (yani sınırlı bir değer kümesi gerekir). Ayrıca, birden fazla hyperparameter’ın ayarlanması gereken algoritmalarda etkili olmasını bekleyemezsiniz. Bunun nedeni, arama alanının karmaşıklığının hızla artması ve çoğu parametre değerinin soruna uygun olmadan **kör bir şekilde** denenmesinden kaynaklanan hesaplama verimsizliğidir.
 
 #### Random search *(Rastgele arama)*
 
