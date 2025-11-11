@@ -4307,6 +4307,90 @@ Bir sonraki bölümlerde, verinizden **daha fazla değer çıkarmak için** daha
 
 #### Meta-features based on rows and columns *(Satır ve sütunlara dayalı meta-özellikler)*
 
+Rekabetçi bir performans elde edebilmek için, **daha karmaşık özellik mühendisliği (feature engineering)** tekniklerine ihtiyacınız vardır. Başlamak için iyi bir nokta, **her satırın (örneğin her örneğin) kendi başına incelendiği özellikleri** ele almaktır:
+
+* Sayısal değerlerin (veya bunların bir alt kümesinin) **ortalamasını, medyanını, toplamını, standart sapmasını, minimum veya maksimumunu** hesaplayın.
+* **Eksik değerlerin sayısını** belirleyin.
+* Satırlarda bulunan yaygın değerlerin **frekanslarını** hesaplayın (örneğin ikili (binary) özelliklerde pozitif değerlerin sayısını).
+* Her satırı, **k-means** gibi bir kümeleme (clustering) analizinden elde edilen bir kümeye atayın.
+
+Bu türden özelliklere **meta-özellikler (meta-features)** denir; çünkü bunlar, birden fazla özelliği temsil eden özet niteliklerdir. Meta-özellikler, algoritmanızın veri kümenizdeki farklı örnek türlerini daha kolay ayırt etmesini sağlar; çünkü belirli örnek gruplarını vurgular.
+
+---
+
+Meta-özellikler yalnızca satırlara değil, **sütunlara dayalı olarak** da oluşturulabilir.
+Tek bir özelliğin üzerinde yapılan **toplama (aggregation)** ve **özetleme (summarization)** işlemleri, sayısal veya kategorik değişkenlerin değeri hakkında ek bilgi sağlamayı amaçlar.
+Yani, “bu özellik değeri yaygın mı, yoksa nadir mi?” gibi sorulara yanıt verir.
+Bu tür bilgileri modeller doğrudan çıkaramaz; çünkü bir kategorik değişkende değerlerin kaç kez tekrarlandığını “sayma” yeteneğine sahip değildir.
+
+---
+
+Meta-özellikler olarak, sütunlara ilişkin herhangi bir istatistiksel ölçüyü kullanabilirsiniz.
+Bunlara örnek olarak: **mod, ortalama, medyan, toplam, standart sapma, minimum, maksimum, çarpıklık (skewness)** ve **basıklık (kurtosis)** sayılabilir.
+
+Sütun bazlı meta-özellikleri oluşturmak için birkaç farklı yöntem uygulanabilir:
+
+---
+
+* **Frekans Kodlama (Frequency Encoding):**
+
+Bir kategorik özelliğin değerlerinin veri setinde kaç kez tekrarlandığını sayın ve bu frekansla orijinal değeri değiştirerek yeni bir özellik oluşturun.
+Ayrıca, belirli sayısal değerlerin sıklıkla tekrarlandığı durumlarda **sayısal özelliklere** de frekans kodlama uygulanabilir.
+
+---
+
+* **Gruplara Göre Frekans ve Sütun İstatistikleri:**
+
+Bu yöntemde, verideki farklı **gruplar** dikkate alınarak yeni özellikler oluşturulur.
+Gruplar, kümeleme analiziyle (örneğin k-means) oluşturulabilir veya doğrudan bir özellik üzerinden tanımlanabilir (örneğin yaşa göre yaş grupları, konuma göre bölgeler vb.).
+
+Her grubun tanımlayıcı meta-özellikleri, o gruba ait örneklere atanır.
+Bunu yapmak için **Pandas `groupby`** fonksiyonu kullanılabilir:
+Bu fonksiyonla grup bazlı istatistikler hesaplanır ve daha sonra **gruplama değişkenine göre** orijinal veriye eklenir.
+
+Bu yöntemdeki en zor kısım, veride **anlamlı gruplar** bulmaktır.
+
+---
+
+* **Grupların Birleştirilmesiyle Ek Frekans ve İstatistikler:**
+
+Birden fazla grubu birleştirerek ek sütun istatistikleri veya frekanslar türetmek mümkündür.
+
+---
+
+Bu liste elbette tüm yöntemleri kapsamıyor; ancak size, **özellik düzeyinde** ve **satır düzeyinde** frekanslar ve istatistikler kullanarak yeni özellikler türetmenin yolları hakkında bir fikir verir.
+
+---
+
+* **Basit Bir Uygulama Örneği: Amazon Employee Access Challenge**
+
+Aşağıda, **ROLE_TITLE** özelliğine frekans kodlaması uygulanan bir örnek verilmiştir:
+
+```python
+import pandas as pd
+train = pd.read_csv("../input/amazon-employee-access-challenge/train.csv")
+
+# Bir özelliğin frekans sayımı
+feature_counts = train.groupby('ROLE_TITLE').size()
+print(train['ROLE_TITLE'].apply(lambda x: feature_counts[x]))
+```
+
+Bu işlemin sonucunda, **ROLE_TITLE** değişkenindeki sınıflar, veri setinde görülme sıklıklarıyla (frekanslarıyla) değiştirilmiş olur.
+
+Şimdi ise, **ROLE_TITLE** özelliğini **ROLE_DEPTNAME** (departman adı) değişkeniyle gruplayarak kodlayacağız; çünkü farklı unvanların bazı departmanlarda daha yaygın, bazılarında ise daha nadir olabileceğini varsayıyoruz.
+
+Sonuç olarak, her iki özelliği (departman ve unvan) birleştirerek yeni bir özellik oluşturuyoruz ve bu birleşik değerin frekansını hesaplıyoruz:
+
+```python
+feature_counts = train.groupby(['ROLE_DEPTNAME', 'ROLE_TITLE']).size()
+print(train[['ROLE_DEPTNAME', 'ROLE_TITLE']].apply(lambda x: feature_counts[x[0]][x[1]], axis=1))
+```
+
+Bu şekilde, verideki grupların ve kategorilerin birbiriyle ilişkisini yansıtan **daha bilgilendirici yeni özellikler** elde edilmiş olur.
+
+Tüm çalışan kodları ve sonuçları bu Kaggle Notebook’ta bulabilirsiniz:
+👉 [https://www.kaggle.com/lucamassaron/meta-features-and-target-encoding/](https://www.kaggle.com/lucamassaron/meta-features-and-target-encoding/)
+
 #### Target encoding *(Hedef kodlama)*
 
 ### Using feature importance to evaluate your work *(Özellik önemini kullanarak çalışmanı değerlendirme)*
