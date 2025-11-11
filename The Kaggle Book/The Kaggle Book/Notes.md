@@ -4393,6 +4393,86 @@ Tüm çalışan kodları ve sonuçları bu Kaggle Notebook’ta bulabilirsiniz:
 
 #### Target encoding *(Hedef kodlama)*
 
+Kategorik özelliklerle çalışmak genellikle zorlayıcı değildir, çünkü Scikit-learn tarafından sunulan bazı basit fonksiyonlar bu işlemi kolaylaştırır:
+
+* **LabelEncoder**
+* **OneHotEncoder**
+* **OrdinalEncoder**
+
+Bu fonksiyonlar, kategorileri sayısal özelliklere ve ardından ikili (binary) özelliklere dönüştürerek makine öğrenimi algoritmalarının bunları kolayca işlemesini sağlar.
+Ancak, eğer kategorilerin sayısı çok fazlaysa, **one-hot encoding** stratejisiyle oluşturulan veri kümesi seyrek (sparse) hale gelir (yani çoğu değer sıfır olur) ve bu durum bilgisayarınızın veya Notebook’un belleği ve işlemcisi açısından yönetilmesi zor bir hale gelir.
+Bu tür durumlarda, **yüksek kardinaliteli özellik (high-cardinality feature)** olarak adlandırılan bir özellikten bahsederiz ve bu tür veriler özel bir şekilde ele alınmalıdır.
+
+Kaggle yarışmalarının erken dönemlerinden beri, yüksek kardinaliteli değişkenler genellikle **Micci-Barreca (2001)** tarafından önerilen bir kodlama yöntemi kullanılarak işlenmiştir:
+
+> Micci-Barreca, D. *A preprocessing scheme for high-cardinality categorical attributes in classification and prediction problems.*
+> *ACM SIGKDD Explorations Newsletter 3.1 (2001): 27–32.*
+
+Bu yaklaşımın temel fikri, kategorik bir özelliğin sahip olduğu birçok kategoriyi, o kategoriye karşılık gelen beklenen hedef (target) değeriyle dönüştürmektir.
+
+* Regresyon durumunda, bu kategoriye ait **ortalama beklenen değer**,
+* İkili sınıflandırmada (binary classification), **koşullu olasılık (conditional probability)**,
+* Çok sınıflı sınıflandırmada (multiclass classification) ise **her olası sonuç için koşullu olasılık** kullanılır.
+
+Örneğin, **Titanic GettingStarted** yarışmasında ([https://www.kaggle.com/competitions/titanic](https://www.kaggle.com/competitions/titanic)), her yolcunun hayatta kalma olasılığını tahmin etmeniz gerekir.
+Bu durumda, **gender (cinsiyet)** gibi bir kategorik özelliğe hedef kodlama (target encoding) uygulamak, cinsiyet değerini o cinsiyetin ortalama hayatta kalma olasılığıyla değiştirmek anlamına gelir.
+
+Bu yöntemle, kategorik özellik, veriyi büyütmeden veya seyrekleştirmeden sayısal bir özelliğe dönüştürülmüş olur.
+Kısaca, **hedef kodlama (target encoding)** budur — ve birçok durumda oldukça etkilidir, çünkü yüksek kardinaliteli özelliklere dayalı bir “tahmin” mantığına benzer şekilde çalışır.
+
+Ancak, **stacked prediction** (yani başka bir modelin tahminini bir özellik olarak kullanma) yaklaşımına benzer şekilde, hedef kodlama da **aşırı öğrenme (overfitting)** riski taşır.
+Bazı kategoriler çok nadirse, hedef kodlama neredeyse hedef etiketin doğrudan verilmesiyle eşdeğer hale gelir.
+Bu riski önlemenin yolları vardır.
+
+Uygulamanıza doğrudan dahil edebileceğiniz implementasyonu görmeden önce, **hedef kodlama (target encoding)** için kullanılan gerçek bir örneğe bakalım.
+Aşağıdaki kod, **PetFinder.my Adoption Prediction** yarışmasında en yüksek puanlı gönderimlerden birinde kullanılmıştır:
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.base import BaseEstimator, TransformerMixin
+
+class TargetEncode(BaseEstimator, TransformerMixin):
+    
+    def __init__(self, categories='auto', k=1, f=1, noise_level=0, random_state=None):
+        if type(categories) == str and categories != 'auto':
+            self.categories = [categories]
+        else:
+            self.categories = categories
+        self.k = k
+        self.f = f
+        self.noise_level = noise_level
+        self.encodings = dict()
+        self.prior = None
+        self.random_state = random_state
+        
+    def add_noise(self, series, noise_level):
+        return series * (1 + noise_level * np.random.randn(len(series)))
+```
+
+Fonksiyonun **girdi parametreleri** şunlardır:
+
+* **categories:** Hedef kodlama (target encoding) uygulamak istediğiniz sütun adları. `'auto'` olarak bırakılırsa, sınıf otomatik olarak string tipindeki sütunları seçer.
+* **k (int):** Bir kategorinin ortalamasının dikkate alınabilmesi için gereken minimum örnek sayısı.
+* **f (int):** Kategori ortalaması ile genel ortalama (prior probability) arasındaki **dengelenme (smoothing)** miktarını belirler.
+* **noise_level:** Aşırı öğrenmeyi önlemek için hedef kodlamaya eklenecek **gürültü (noise)** miktarı. Küçük değerlerle başlamak gerekir.
+* **random_state:** Gürültü seviyesi sıfırdan büyük olduğunda aynı kodlamayı yeniden üretebilmek için rastgelelik tohumu (seed).
+
+Burada dikkat edilmesi gereken, **k** ve **f** parametrelerinin varlığıdır.
+Bir kategorik özelliğin bir seviyesi için (örneğin bir şehir, bir ürün türü vb.), hedefi tahmin etmede yardımcı olabilecek yaklaşık bir değer arıyoruz.
+Bu seviyeyi doğrudan gözlenen koşullu olasılıkla değiştirmek bir çözüm olabilir, ancak az gözlemli seviyelerde iyi çalışmaz.
+
+Çözüm, **empirik Bayes yaklaşımı (empirical Bayesian approach)** kullanmaktır — yani, o seviyedeki gözlenen koşullu olasılığı (posterior) tüm örnekler üzerindeki genel olasılıkla (prior) birleştiririz.
+Bu karışımı belirleyen faktör **lambda**’dır.
+
+Pratikte, her kategori seviyesi için şu soruya cevap veririz:
+
+> “Koşullu hedef değerini mi, genel ortalamayı mı, yoksa ikisinin karışımını mı kullanmalıyız?”
+
+Bu dengeyi belirleyen şey **f parametresidir**, ve **k parametresi** (genellikle 1 veya 2 gibi küçük değerler) minimum gözlem sayısını ifade eder.
+
+![](im/1059.png)
+
 ### Using feature importance to evaluate your work *(Özellik önemini kullanarak çalışmanı değerlendirme)*
 
 ### Pseudo-labeling *(Sahte etiketleme)*
