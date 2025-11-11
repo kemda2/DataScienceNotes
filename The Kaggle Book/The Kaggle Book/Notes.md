@@ -6532,15 +6532,281 @@ Regresyon problemlerinde ve olasılık tahminlerinde, çoğunluk oylaması kulla
 
 #### Averaging of model predictions *(Model tahminlerinin ortalaması)*
 
+Farklı modellerden aldığınız tahminleri bir yarışmada ortalama alırken, tüm tahminlerinizi potansiyel olarak aynı tahmin gücüne sahip kabul edebilir ve bir ortalama değer türetmek için aritmetik ortalamayı kullanabilirsiniz.
+Aritmetik ortalama dışında, şu yöntemlerin de oldukça etkili olduğunu gördük:
+* **Geometrik Ortalama:** Burada, n tahminini çarparsınız, sonra elde edilen çarpımın 1/n'inci kuvvetini alırsınız.
+* **Logaritmik Ortalama:** Geometrik ortalamaya benzer şekilde, tahminlerinizin logaritmasını alır, bunları ortalarsınız ve elde edilen ortalamanın üssünü alırsınız.
+* **Harmonik Ortalama:** Burada, tahminlerinizin karşıtlarının aritmetik ortalamasını alır, sonra elde edilen ortalamanın karşıtını alırsınız.
+* **Kuvvetlerin Ortalaması:** Burada, tahminlerin n'inci kuvvetinin ortalamasını alır, sonra elde edilen ortalamanın 1/n'inci kuvvetini alırsınız.
+Aritmetik ortalama genellikle oldukça etkili olup, beklenenden daha sık işe yarayan bir yöntemdir. Bazen, geometrik ortalama veya harmonik ortalama gibi varyantlar daha iyi sonuç verebilir.
+
+Önceki örneği devam ettirerek, şimdi ROC-AUC'yi değerlendirme metriği olarak kullandığımızda hangi ortalamanın en iyi sonucu vereceğini bulmaya çalışacağız. Başlangıç olarak, her bir modelin performansını değerlendireceğiz:
+
+```python
+proba = np.stack([model_1.predict_proba(X_test)[:, 1],
+                  model_2.predict_proba(X_test)[:, 1],
+                  model_3.predict_proba(X_test)[:, 1]]).T
+for i, model in enumerate(['SVC', 'RF', 'KNN']):
+    ras = roc_auc_score(y_true=y_test, y_score=proba[:, i])
+    print(f"ROC-AUC for model {model} is: {ras:0.5f}")
+```
+
+Sonuçlar bize 0.875 ile 0.881 arasında bir aralık veriyor.
+İlk testimizi aritmetik ortalama kullanarak yapıyoruz:
+
+```python
+arithmetic = proba.mean(axis=1)
+ras = roc_auc_score(y_true=y_test, y_score=arithmetic)
+print(f"Mean averaging ROC-AUC is: {ras:0.5f}")
+```
+
+Elde edilen ROC-AUC skoru, tekli performanslardan belirgin şekilde daha iyi: 0.90192. Ayrıca, geometrik, harmonik, logaritmik ortalama veya kuvvetlerin ortalamasının basit ortalamadan daha iyi performans gösterip göstermediğini test ediyoruz:
+
+```python
+geometric = proba.prod(axis=1)**(1/3)
+ras = roc_auc_score(y_true=y_test, y_score=geometric)
+print(f"Geometric averaging ROC-AUC is: {ras:0.5f}")
+harmonic = 1 / np.mean(1. / (proba + 0.00001), axis=1)
+ras = roc_auc_score(y_true=y_test, y_score=harmonic)
+print(f"Harmonic averaging ROC-AUC is: {ras:0.5f}")
+n = 3
+mean_of_powers = np.mean(proba**n, axis=1)**(1/n)
+ras = roc_auc_score(y_true=y_test, y_score=mean_of_powers)
+print(f"Mean of powers averaging ROC-AUC is: {ras:0.5f}")
+logarithmic = np.expm1(np.mean(np.log1p(proba), axis=1))
+ras = roc_auc_score(y_true=y_test, y_score=logarithmic)
+print(f"Logarithmic averaging ROC-AUC is: {ras:0.5f}")
+```
+
+Kodun çalıştırılması, hiçbiri basit ortalamanın daha iyi performans gösteremediğini gösteriyor. Bu durumda, aritmetik ortalama en iyi seçenek olarak öne çıkıyor. Gerçekten de, çoğu durumda basit ortalamadan daha iyi bir çözüm, sayıları birleştirirken bazı ön bilgilerinizi kullanmaktır. Bu, modellerinizi ortalama hesaplamasında ağırlıklandırdığınızda gerçekleşir.
+
 #### Weighted averages *(Ağırlıklı ortalamalar)*
+
+Modellerinizi ağırlıklandırırken, doğru ağırlıkları bulmak için ampirik bir yöntem geliştirmelisiniz. Yaygın bir yöntem, ancak adaptif aşırı uyum (overfitting) yapmaya çok yatkın bir yöntem, farklı kombinasyonları halka açık liderlik tablosunda test etmek ve en iyi skoru veren kombinasyonu bulmaktır. Tabii ki, bu durum, özel liderlik tablosunda aynı sonucu almanızı garanti etmez. Burada ilke, daha iyi çalışanları ağırlıklandırmaktır. Ancak daha önce uzun uzun tartıştığımız gibi, halka açık liderlik tablosundan alınan geribildirim genellikle özel test verileriyle önemli farklar olduğu için güvenilmez olabilir. Yine de, çapraz doğrulama (cross-validation) skorlarınızı veya kat dışı (out-of-fold) skorları kullanabilirsiniz (kat dışı skorlar, daha sonra yığınlama (stacking) ile birlikte tartışılacaktır). Aslında, başka bir uygulanabilir strateji, modellerin çapraz doğrulama performanslarına orantılı ağırlıklar kullanmaktır.
+
+Biraz ters bir mantık olsa da, başka çok etkili bir yöntem, tahminler arasındaki kovaryanslara ters orantılı olarak ağırlıklandırma yapmaktır. Aslında, hataları ortalamayla iptal etmeye çalıştığımız için, her bir tahminin benzersiz varyansına dayalı ortalama almak, daha az korele ve daha çeşitli tahminlere daha fazla ağırlık vermemizi sağlar ve bu da tahminlerin varyansını daha etkili bir şekilde azaltır.
+
+Bir sonraki örneğimizde, önce tahmin edilen olasılıkların korelasyon matrisini oluşturacağız ve sonra şu adımları izleyerek işlemi gerçekleştireceğiz:
+
+1. Diyagonal üzerindeki 1'leri kaldırıp, bunları sıfırlarla değiştireceğiz
+2. Korelasyon matrisini satırlara göre ortalayarak bir vektör elde edeceğiz
+3. Her satırın toplamının karşıtını alacağız
+4. Sonuçların toplamını 1.0 olacak şekilde normalize edeceğiz
+5. Elde edilen ağırlıklandırma vektörünü, tahmin edilen olasılıkların matris çarpımında kullanacağız
+
+İşte bunun için kullanılan kod:
+
+```python
+cormat = np.corrcoef(proba.T)  
+np.fill_diagonal(cormat, 0.0)  
+W = 1 / np.mean(cormat, axis=1)  
+W = W / sum(W)  # normalizing to sum==1.0  
+weighted = proba.dot(W)  
+ras = roc_auc_score(y_true=y_test, y_score=weighted)  
+print(f"Weighted averaging ROC-AUC is: {ras:0.5f}")
+```
+
+Elde edilen ROC-AUC skoru 0.90206, basit ortalamadan biraz daha iyi. Korelasyonu daha düşük olan tahminlere daha fazla ağırlık vermek, genellikle başarılı bir toplama (ensembling) stratejisidir. Bu sadece küçük iyileştirmeler sağlasa bile, bu tür bir strateji, rekabeti lehine çevirebilmek için yeterli olabilir.
 
 #### Averaging in your cross-validation strategy *(Çapraz doğrulama stratejinde ortalama alma)*
 
+Daha önce de bahsettiğimiz gibi, ortalama almak, herhangi bir özel karmaşık pipeline kurmanızı gerektirmez; yalnızca tahminlerinizi ortalamaya alacağınız modelleri oluşturan tipik veri pipeline'larından belli bir sayıda oluşturmanız yeterlidir. Bu modelleri ortalamak için, tüm tahminler için aynı ağırlıkları kullanabilir veya ampirik olarak bulunan bazı ağırlıkları kullanabilirsiniz. Bunu test etmenin tek yolu, halka açık liderlik tablosuna bir gönderi yapmaktır; böylece, değerlendirme yalnızca Kaggle'ın verdiği geri bildirime dayalı olacaktır ve bu da adaptif aşırı uyuma (adaptive fitting) yol açabilir.
+
+Ancak, doğrudan liderlik tablosunda test etmeden önce, eğitim aşamasında da doğrulama katmanında (modelinizi eğitmek için kullanmadığınız katman) ortalama alma işlemlerini çalıştırarak test edebilirsiniz. Bu, liderlik tablosundan alınan geri bildirime göre daha az yanlı sonuçlar elde etmenizi sağlar. Aşağıdaki kodda, çapraz doğrulama (cross-validation) tahmininin nasıl düzenlendiğine dair bir örnek bulabilirsiniz:
+
+```python
+from sklearn.model_selection import KFold  
+kf = KFold(n_splits=5, shuffle=True, random_state=0)  
+scores = list()  
+for k, (train_index, test_index) in enumerate(kf.split(X_train)):  
+    model_1.fit(X_train[train_index, :], y_train[train_index])  
+    model_2.fit(X_train[train_index, :], y_train[train_index])  
+    model_3.fit(X_train[train_index, :], y_train[train_index])  
+
+    proba = np.stack(  
+        [model_1.predict_proba(X_train[test_index, :])[:, 1],  
+         model_2.predict_proba(X_train[test_index, :])[:, 1],  
+         model_3.predict_proba(X_train[test_index, :])[:, 1]]).T  
+
+    arithmetic = proba.mean(axis=1)  
+    ras = roc_auc_score(y_true=y_train[test_index], y_score=arithmetic)  
+    scores.append(ras)  
+    print(f"FOLD {k} Mean averaging ROC-AUC is: {ras:0.5f}")  
+print(f"CV Mean averaging ROC-AUC is: {np.mean(scores):0.5f}")  
+```
+
+Yukarıdaki gibi bir çapraz doğrulama sonucuna güvenmek, hangi ortalama stratejisinin daha umut verici olduğunu, doğrudan halka açık liderlik tablosunda test yapmadan değerlendirmenize yardımcı olabilir.
+
 #### Correcting averaging for ROC-AUC evaluations *(ROC-AUC değerlendirmeleri için ortalamayı düzeltme)*
+
+Eğer göreviniz ROC-AUC skoru ile değerlendirilecekse, sadece sonuçlarınızı ortalamak yeterli olmayabilir. Bunun nedeni, farklı modellerin farklı optimizasyon stratejileri benimsemiş olması ve dolayısıyla çıktılarının oldukça farklı olabilmesidir. Bir çözüm, modelleri kalibre etmektir; bu, daha önce 5. Bölüm, Yarışma Görevleri ve Metrikleri'nde tartıştığımız bir tür son işlem (post-processing) yöntemidir, ancak bu açıkça daha fazla zaman ve hesaplama gücü gerektirir.
+
+Bu gibi durumlarda, basit çözüm, çıktı olasılıklarını sıralara dönüştürmek ve sadece sıraları ortalamaktır (ya da bunların ağırlıklı ortalamasını almak). Min-max ölçekleyici (scaler) yaklaşımını kullanarak, her bir modelin tahminlerini 0-1 aralığına dönüştürüp, ardından tahminleri ortalamaya alırsınız. Bu, modelinizin olasılık çıktısını karşılaştırılabilir sıralara dönüştürür:
+
+```python
+from sklearn.preprocessing import MinMaxScaler  
+proba = np.stack(  
+    [model_1.predict_proba(X_train)[:, 1],  
+     model_2.predict_proba(X_train)[:, 1],  
+     model_3.predict_proba(X_train)[:, 1]]).T  
+
+arithmetic = MinMaxScaler().fit_transform(proba).mean(axis=1)  
+ras = roc_auc_score(y_true=y_test, y_score=arithmetic)  
+print(f"Mean averaging ROC-AUC is: {ras:0.5f}")
+```
+
+Bu yaklaşım, doğrudan test tahminleri ile çalışırken mükemmel şekilde işler. Ancak, bunun yerine çapraz doğrulama (cross-validation) sırasında sonuçları ortalamaya çalışıyorsanız, eğitim verilerinizin tahmin aralığının, test tahminlerinizin aralığından farklı olması nedeniyle sorunlarla karşılaşabilirsiniz. Bu durumda, sorunu çözmek için bir kalibrasyon modeli eğitebilirsiniz (Scikit-learn'deki olasılık kalibrasyonu için [bu bağlantıya](https://scikit-learn.org/stable/modules/calibration.html) bakabilirsiniz ve 5. Bölüme de göz atabilirsiniz), böylece her bir modelinizin tahminlerini doğru ve karşılaştırılabilir olasılıklara dönüştürebilirsiniz.
 
 ### Blending models using a meta-model *(Meta-model kullanarak modelleri karıştırma)*
 
+Netflix yarışması (1. Bölümde ayrıntılı olarak tartıştığımız) yalnızca ortalama almanın veri bilimi yarışmalarındaki zor problemler için avantajlı olacağını göstermedi; aynı zamanda, bir modelin, modellerinizin sonuçlarını daha etkili bir şekilde ortalamak için kullanılabileceği fikrini de ortaya koydu. Yarışmayı kazanan BigChaos takımı, makalelerinde (Töscher, A., Jahrer, M., ve Bell, R.M. *The BigChaos Solution to the Netflix Grand Prize. Netflix prize documentation – 2009*) pek çok kez *blending* (karıştırma) konusuna değindi ve bunun etkinliği ve nasıl çalıştığı hakkında birçok ipucu verdi.
+
+Kısaca söylemek gerekirse, *blending*, tahminleri birleştirmek için kullanılan ağırlıkların, bir *holdout* seti ve bu set üzerinde eğitilmiş bir meta-model aracılığıyla tahmin edildiği bir tür ağırlıklı ortalama işlemidir. Meta-model, başka makine öğrenimi modellerinin çıktılarından öğrenen bir makine öğrenimi algoritmasıdır. Genellikle bir meta-öğrenici (meta-learner) doğrusal bir modeldir (ama bazen doğrusal olmayan bir model de olabilir; bu konuda daha fazla bilgi bir sonraki bölümde verilecektir), ancak aslında istediğiniz herhangi bir modeli kullanabilirsiniz, ancak bunun bazı riskleri vardır ki bunları daha sonra tartışacağız.
+
+Bir *blending* elde etme işlemi oldukça basittir:
+
+1. **Modelinizi inşa etmeye başlamadan önce**, eğitim verilerinden rastgele bir *holdout* örneği çıkarırsınız (bir takımda iseniz, herkesin aynı *holdout* örneğini kullanması gerekir). Genellikle *holdout*, mevcut verilerin %10'u civarındadır; ancak durumlara göre (örneğin, eğitim verilerinizdeki örnek sayısı, katmanlar) bu daha az veya daha fazla da olabilir. Her zamanki gibi, örnekleme işleminde temsiliyet sağlamak için *stratifikasyon* kullanabilir ve örnekleminizin eğitim setinin geri kalanıyla gerçekten uyumlu olup olmadığını test etmek için *adversarial validation* (düşman doğrulama) kullanabilirsiniz.
+2. Kalan eğitim verisi üzerinde tüm modellerinizi eğitirsiniz.
+3. *Holdout* ve test verisi üzerinde tahmin yaparsınız.
+4. *Holdout* tahminlerini bir meta-öğrenicide eğitim verisi olarak kullanırsınız ve meta-öğrenici modelini kullanarak, modellerinizin test tahminlerini kullanarak nihai test tahminlerini hesaplayabilirsiniz. Alternatif olarak, meta-öğreniciyi, ağırlıklı ortalamada kullanılacak tahmin edicilerin seçimini ve ağırlıklarını bulmak için kullanabilirsiniz.
+
+Bu tür bir prosedürün birçok avantajı ve dezavantajı vardır. Avantajlardan başlayalım. İlk olarak, uygulaması kolaydır; tek yapmanız gereken *holdout* örneğini belirlemektir. Ayrıca, bir meta-öğrenme algoritması kullanmak, kamu liderlik tablosunda test yapmadan en iyi ağırlıkları bulmanızı sağlar.
+
+Zayıf yönlere gelince, bazen örneklem büyüklüğü ve kullandığınız modellerin türüne bağlı olarak, eğitim örneklerinin sayısını azaltmak, tahminlerinizin varyansını artırabilir. Dahası, *holdout* örneğini nasıl örneklediğinize çok dikkat etseniz bile, hala adaptif aşırı uyum (adaptive overfitting) sorunuyla karşılaşabilirsiniz; yani *holdout*'a uygun ağırlıkları bulmak, ancak bu ağırlıklar genellenebilir olmayabilir, özellikle de çok karmaşık bir meta-öğrenici kullanıyorsanız. Son olarak, test amaçları için bir *holdout* kullanmanın, model doğrulama bölümünde tartıştığımız eğitim ve test verisi ayrımının aynı sınırlamaları vardır: Eğer *holdout* örneğinizin örneklem büyüklüğü çok küçükse veya bir sebepten ötürü örneklemeniz temsiliyet göstermiyorsa, güvenilir bir tahmin elde edemezsiniz.
+
 #### Best practices for blending *(Karıştırma için en iyi uygulamalar)*
+
+Blending (birleştirme) yönteminde kullanacağınız meta-öğrenici türü büyük bir fark yaratabilir. En yaygın seçenekler, lineer bir model veya lineer olmayan bir model kullanmaktır. Lineer modeller arasında, tercih edilenler lineer veya lojistik regresyonlardır. Düzenlenmiş (regularize edilmiş) bir model kullanmak, işe yaramayan modelleri elerken (L1 düzenlemesi) veya daha az faydalı olanların etkisini azaltırken (L2 düzenlemesi) yardımcı olur. Bu tür meta-öğrenicileri kullanmanın bir sınırlaması, bazı modellere negatif katkı atanabilmesidir; bunu modeldeki katsayı değerlerinden görebilirsiniz. Bu duruma rastladığınızda, model genellikle overfitting (aşırı uyum) yapıyor demektir; çünkü tüm modellerin topluluk (ensemble) oluştururken pozitif katkıda bulunması gerekir (veya en kötü ihtimalle hiç katkıda bulunmaması gerekir). Scikit-learn’ün en son sürümleri, yalnızca pozitif ağırlıklar uygulamanıza ve intercept’i kaldırmanıza olanak tanır. Bu kısıtlamalar bir düzenleyici (regularizer) gibi davranır ve aşırı uyumu önler.
+
+Lineer olmayan modellerin meta-öğrenici olarak kullanımı daha az yaygındır çünkü regresyon ve ikili sınıflandırma problemlerinde aşırı uyum eğilimi gösterirler. Ancak, sınıflar arası karmaşık ilişkileri modelleyebildikleri için çok sınıflı (multiclass) ve çok etiketli (multilabel) sınıflandırma problemlerinde genellikle iyi performans gösterirler. Ayrıca, yalnızca modellerin tahminlerini değil, orijinal özellikleri de sağlarsanız, faydalı etkileşimleri tespit ederek hangi modellere daha çok güvenileceğini doğru şekilde seçebilirler.
+
+Bir sonraki örneğimizde önce lineer bir model (lojistik regresyon) ile blending yapmayı, ardından lineer olmayan bir yaklaşım (random forest) kullanmayı deniyoruz. Önce eğitim setini, blend elemanları için bir eğitim parçası ve meta-öğrenici için bir holdout parçası olarak ayırıyoruz. Ardından modelleri eğitim parçasında fit ediyor ve holdout üzerinde tahmin yapıyoruz.
+
+```python
+from sklearn.preprocessing import StandardScaler
+X_blend, X_holdout, y_blend, y_holdout = train_test_split(X_train, y_train, test_size=0.25, random_state=0)
+
+model_1.fit(X_blend, y_blend)
+model_2.fit(X_blend, y_blend)
+model_3.fit(X_blend, y_blend)
+
+proba = np.stack([
+    model_1.predict_proba(X_holdout)[:, 1],
+    model_2.predict_proba(X_holdout)[:, 1],
+    model_3.predict_proba(X_holdout)[:, 1]
+]).T
+
+scaler = StandardScaler()
+proba = scaler.fit_transform(proba)
+```
+
+Artık holdout üzerinde tahmin edilen olasılıkları kullanarak lineer meta-öğrenicimizi eğitebiliriz:
+
+```python
+from sklearn.linear_model import LogisticRegression
+blender = LogisticRegression(solver='liblinear')
+blender.fit(proba, y_holdout)
+print(blender.coef_)
+```
+
+Elde edilen katsayılar:
+
+```
+[[0.78911314 0.47202077 0.75115854]]
+```
+
+Katsayılara bakarak hangi modelin meta-ensemble’a daha fazla katkı sağladığını anlayabiliriz. Ancak unutmayın, katsayılar ayrıca iyi kalibre edilmemiş olasılıkları yeniden ölçeklendirir; dolayısıyla bir model için daha büyük bir katsayı, onun en önemli model olduğu anlamına gelmeyebilir. Katsayıları kullanarak her modelin blend içindeki rolünü anlamak istiyorsanız, önce onları standartlaştırarak yeniden ölçeklendirmeniz gerekir (bizim örneğimizde Scikit-learn’ün `StandardScaler`’ı kullanıldı).
+
+Çıktımız, SVC ve k-en yakın komşu modellerinin blend içinde random forest modeline göre daha yüksek ağırlık aldığını gösteriyor; katsayıları birbirine yakın ve ikisi de random forest katsayısından büyük.
+
+Meta-model eğitildikten sonra, test verisi üzerinde tahmin yapabilir ve performansını kontrol edebiliriz:
+
+```python
+test_proba = np.stack([
+    model_1.predict_proba(X_test)[:, 1],
+    model_2.predict_proba(X_test)[:, 1],
+    model_3.predict_proba(X_test)[:, 1]
+]).T
+
+blending = blender.predict_proba(test_proba)[:, 1]
+ras = roc_auc_score(y_true=y_test, y_score=blending)
+print(f"ROC-AUC for linear blending {model} is: {ras:0.5f}")
+```
+
+Aynı işlemi, örneğin random forest gibi lineer olmayan bir meta-öğrenici ile de deneyebiliriz:
+
+```python
+blender = RandomForestClassifier()
+blender.fit(proba, y_holdout)
+
+test_proba = np.stack([
+    model_1.predict_proba(X_test)[:, 1],
+    model_2.predict_proba(X_test)[:, 1],
+    model_3.predict_proba(X_test)[:, 1]
+]).T
+
+blending = blender.predict_proba(test_proba)[:, 1]
+ras = roc_auc_score(y_true=y_test, y_score=blending)
+print(f"ROC-AUC for non-linear blending {model} is: {ras:0.5f}")
+```
+
+Lineer veya lineer olmayan bir meta-öğrenici kullanmaya alternatif olarak Caruana, Niculescu-Mizil, Crew ve Ksikes tarafından formüle edilen ensemble selection tekniği vardır.
+
+Ensemble selection aslında ağırlıklı bir ortalamadır, dolayısıyla basit bir lineer kombinasyon olarak düşünülebilir. Ancak bu, kısıtlı bir lineer kombinasyondur (çünkü bir hill-climbing optimizasyonunun parçasıdır) ve ayrıca modellerin seçimini yapar ve yalnızca pozitif ağırlıkları uygular. Bu, aşırı uyum riskini en aza indirir ve daha kompakt bir çözüm sağlar, çünkü çözüm bir model seçimini içerir. Bu açıdan ensemble selection, overfitting riskinin yüksek olduğu tüm problemler için ve gerçek dünya uygulamaları için önerilir.
+
+Meta-öğrenici kullanırken, kendi maliyet fonksiyonunun optimizasyonuna bağlısınız ve bu, yarışmada kullanılan metrikten farklı olabilir. Ensemble selection’ın bir diğer avantajı, herhangi bir değerlendirme fonksiyonuna göre optimize edilebilmesidir; dolayısıyla yarışma metrikleri tipik ML model optimizasyonundan farklı olduğunda önerilir.
+
+Daha fazla detay için şu makaleyi okuyabilirsiniz:
+*Caruana, R., Niculescu-Mizil, A., Crew, G., and Ksikes, A. “Ensemble selection from libraries of models” (Proceedings of the Twenty-First International Conference on Machine Learning, 2004).*
+
+Ensemble selection’ı uygulamak için adımlar şunlardır:
+
+1. Eğitilmiş modelleriniz ve bir holdout örneğinizle başlayın.
+2. Tüm modelleri holdout üzerinde test edin ve değerlendirme metriğine göre en etkili olanları seçin (ensemble selection).
+3. Ardından, seçilmiş modele eklenebilecek diğer modelleri test edin, böylece önerilen seçimin ortalaması önceki seçimden daha iyi olsun. Bunu, replacement (tekrar) ile veya tekrarsız yapabilirsiniz. Tekrarsızda, bir model seçime yalnızca bir kez eklenir; bu durumda prosedür, ileri seçim (forward selection) sonrası basit bir ortalama gibidir. Tekrar ile, bir modeli seçime birden fazla kez ekleyebilirsiniz, böylece ağırlıklı ortalamaya benzer.
+4. Daha fazla iyileştirme mümkün olmadığında durun ve ensemble selection’ı kullanın.
+
+Basit bir kod örneği:
+
+```python
+X_blend, X_holdout, y_blend, y_holdout = train_test_split(X_train, y_train, test_size=0.5, random_state=0)
+
+model_1.fit(X_blend, y_blend)
+model_2.fit(X_blend, y_blend)
+model_3.fit(X_blend, y_blend)
+
+proba = np.stack([
+    model_1.predict_proba(X_holdout)[:, 1],
+    model_2.predict_proba(X_holdout)[:, 1],
+    model_3.predict_proba(X_holdout)[:, 1]
+]).T
+
+iterations = 100
+baseline = 0.5
+models = []
+
+for i in range(iterations):
+    challengers = []
+    for j in range(proba.shape[1]):
+        new_proba = np.stack(proba[:, models + [j]])
+        score = roc_auc_score(y_true=y_holdout, y_score=np.mean(new_proba, axis=1))
+        challengers.append([score, j])
+    
+    challengers = sorted(challengers, key=lambda x: x[0], reverse=True)
+    best_score, best_model = challengers[0]
+    if best_score > baseline:
+        models.append(best_model)
+        baseline = best_score
+    else:
+        break
+
+from collections import Counter
+freqs = Counter(models)
+weights = {key: freq/len(models) for key, freq in freqs.items()}
+print(weights)
+```
+
+Bu prosedürü çeşitli şekillerde daha sofistike hale getirebilirsiniz. Başlangıçta overfitting riski yüksek olduğu için, rastgele başlatılmış bir ensemble seti ile başlayabilir veya yazarların önerdiği gibi, en iyi n performans gösteren modellerle başlayabilirsiniz. Diğer bir varyasyon, her iterasyonda seçime giren modeller üzerinde örnekleme uygulamak; yani bazı modelleri rastgele hariç tutmak. Bu, sürece rastgelelik ekler ve belirli modellerin seçim üzerinde baskın olmasını engeller.
 
 ### Stacking models together *(Modelleri yığınlama)*
 
