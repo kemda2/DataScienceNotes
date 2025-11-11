@@ -9508,9 +9508,338 @@ Bir sonraki bölümde, son birkaç yıldır popülerlik kazanan yeni bir yarış
 
 ## Chapter 12: Simulation and Optimization Competitions *(Bölüm 12: Simülasyon ve Optimizasyon Yarışmaları)*
 
+**Pekiştirmeli öğrenme (Reinforcement Learning – RL)**, makine öğrenmesinin farklı dalları arasında ilginç bir örnektir. Bir yandan, teknik açıdan oldukça zorludur: denetimli öğrenmeden (supervised learning) gelen çeşitli sezgiler burada geçerli değildir ve kullanılan matematiksel araçlar çok daha gelişmiştir. Öte yandan, konuyu bir dışarıya ya da konuya yabancı birine açıklamak en kolay olanıdır. Basit bir benzetme ile, evcil hayvanınıza (köpekler ve kediler tartışmasına özellikle girmemeye çalışıyorum) bazı numaralar öğretmek gibidir: numarayı doğru yaptığında ödül (bir ödül maması) verirsiniz, aksi halde vermezsiniz.
+
+Pekiştirmeli öğrenme, Kaggle’daki yarışmalar dünyasına görece geç katılmıştır; ancak son birkaç yılda simülasyon yarışmalarının tanıtılmasıyla durum değişmiştir. Bu bölümde, Kaggle evreninin bu yeni ve heyecan verici alanını tanımlayacağız. Şu ana kadar – bu satırların yazıldığı dönemde – dört “Featured” (öne çıkarılmış) yarışma ve iki “Playground” (oyun alanı) yarışması düzenlenmiştir; bu liste kapsamlı olmasa da bize genel bir bakış sunmaktadır.
+
+Bu bölümde, birkaç simülasyon yarışmasında sunulan problemlere getirilen çözümleri göstereceğiz:
+
+* Önce **Connect X** ile başlıyoruz.
+* Ardından, rekabetçi bir ajan oluşturmak için iki yönlü bir yaklaşımın gösterildiği **Taş, Kağıt, Makas** yarışmasıyla devam ediyoruz.
+* Sonra, **Santa** yarışmasına çok kollu banditler (multi-armed bandits) yaklaşımına dayalı bir çözüm sunuyoruz.
+* Son olarak, bu bölümün kapsamı dışında kalan diğer yarışmalara genel bir bakış yapıyoruz.
+
+---
+
+Eğer pekiştirmeli öğrenme senin için tamamen yeni bir kavramsa, önce temel bir anlayış edinmen iyi olur. RL macerasına başlamanın çok iyi bir yolu, **Kaggle Learning** platformundaki *Game AI bağlamında Pekiştirmeli Öğrenme’ye Giriş* adlı kurstur
+([https://www.kaggle.com/learn/intro-to-game-ai-and-reinforcement-learning](https://www.kaggle.com/learn/intro-to-game-ai-and-reinforcement-learning)).
+
+Bu kurs, ajanlar (agents) ve politikalar (policies) gibi temel kavramları tanıtır ve derin pekiştirmeli öğrenmeye (deep reinforcement learning) hızlı bir giriş sağlar. Kurstaki tüm örnekler, **Connect X** Playground yarışmasındaki verileri kullanır. Bu yarışmada amaç, dama taşlarını bir sıra hâlinde birleştirebilen bir ajan (oyuncu) eğitmektir ([https://www.kaggle.com/c/connectx/overview](https://www.kaggle.com/c/connectx/overview)).
+
+Daha genel bir düzeyde, simülasyon ve optimizasyon yarışmalarının önemli bir yönünün *ortam (environment)* olduğunu belirtmek gerekir: Problemin doğası gereği, çözümünüz yalnızca bir sayı kümesi göndermekten (örneğin “klasik” denetimli öğrenme yarışmalarında olduğu gibi) daha dinamik özellikler sergilemelidir.
+
+Simülasyon yarışmalarında kullanılan ortamın çok bilgilendirici ve detaylı bir açıklamasına şu adresten ulaşılabilir:
+[https://github.com/Kaggle/kaggle-environments/blob/master/README.md](https://github.com/Kaggle/kaggle-environments/blob/master/README.md).
+
 ### Connect X *(Connect X oyunu)*
 
+Bu bölümde, **sezgisel yöntemler (heuristics)** kullanarak dama oynamak gibi basit bir probleme nasıl yaklaşılacağını gösteriyoruz. Bu bir derin öğrenme çözümü olmasa da, bu sade anlatımın, RL (pekiştirmeli öğrenme) konusunda fazla deneyimi olmayan kişiler için çok daha faydalı olduğuna inanıyoruz.
+
+Eğer yapay zekânın tahta oyunlarında (board games) nasıl kullanıldığı kavramına yeniyseniz, **Tom van de Wiele**’in sunumu ([https://www.kaggle.com/tvdwiele](https://www.kaggle.com/tvdwiele)) kesinlikle incelemeye değer bir kaynaktır: [https://tinyurl.com/36rdv5sa](https://tinyurl.com/36rdv5sa).
+
+**Connect X** oyunundaki amaç, rakibinizden önce kendi pullarınızı (checkers) yatay, dikey veya çapraz olarak art arda **X adet** hizalamaktır. Oyuncular sırayla tahtanın üst kısmındaki sütunlardan birine pullarını bırakırlar. Bu nedenle, her hamlenin amacı ya kendi kazanma şansınızı artırmak ya da rakibinizin kazanmasını engellemektir.
+
+![](im/1084.png)
+
+**Connect X**, Kaggle’da **ajan (agent)** kavramını tanıtan ilk yarışmaydı: sabit bir tahmin dosyası (veya görünmeyen bir veri kümesine karşı değerlendirilen bir Notebook) göndermek yerine, katılımcıların diğerlerine karşı oynayabilen **oyun ajanları** göndermeleri gerekiyordu.
+Değerlendirme birkaç adımda ilerliyordu:
+
+1. Yükleme tamamlandıktan sonra, gönderim (submission) önce kendi kendine oynar ve doğru şekilde çalıştığı doğrulanır.
+2. Bu doğrulama bölümü başarılı olursa, bir **yetenek puanı (skill rating)** atanır ve gönderim yarışmacılar arasına katılır.
+3. Her gün, her gönderim için birkaç oyun (episode) oynanır ve buna göre sıralamalar güncellenir.
+
+Bu yapıyı aklımızda tutarak, şimdi **Connect X** yarışması için nasıl bir gönderim hazırlanacağını göstermeye geçelim.
+Burada sunulan kod **X = 4** içindir, ancak kolayca başka değerler veya değişken X için uyarlanabilir.
+
+---
+
+Öncelikle Kaggle ortam paketini kuruyoruz:
+
+```python
+!pip install kaggle-environments --upgrade
+```
+
+Sonra, ajanımızın değerlendirileceği ortamı tanımlıyoruz:
+
+```python
+from kaggle_environments import evaluate, make
+env = make("connectx", debug=True)
+env.render()
+```
+
+---
+
+Sofistike yöntemler denemek isteyebilirsiniz, ancak işe **basit** başlamak her zaman faydalıdır — biz de burada **basit sezgisel (heuristic)** kurallar kullanarak öyle yapacağız.
+Bu kurallar kodda tek bir fonksiyon içinde birleştirilmiştir, ancak açıklamanın kolaylığı açısından her birini ayrı ayrı ele alıyoruz.
+
+---
+
+** 1️⃣ Dikey bağlantı (vertical connect) olasılığını kontrol etme**
+
+İlk kural, oyunculardan birinin dikey olarak dört pulu birleştirme (connect four) şansına sahip olup olmadığını kontrol etmektir.
+Eğer varsa, bu hamlenin mümkün olduğu sütunu döndürürüz.
+Bunu, hangi oyuncunun (ben mi, rakip mi) fırsatlarının analiz edildiğini gösteren bir parametreyle gerçekleştirebiliriz:
+
+```python
+def my_agent(observation, configuration):
+    from random import choice
+    # me: me_or_enemy = 1, enemy: me_or_enemy = 2
+    def check_vertical_chance(me_or_enemy):
+        for i in range(0, 7):
+            if observation.board[i+7*5] == me_or_enemy \
+            and observation.board[i+7*4] == me_or_enemy \
+            and observation.board[i+7*3] == me_or_enemy \
+            and observation.board[i+7*2] == 0:
+                return i
+            elif observation.board[i+7*4] == me_or_enemy \
+            and observation.board[i+7*3] == me_or_enemy \
+            and observation.board[i+7*2] == me_or_enemy \
+            and observation.board[i+7*1] == 0:
+                return i
+            elif observation.board[i+7*3] == me_or_enemy \
+            and observation.board[i+7*2] == me_or_enemy \
+            and observation.board[i+7*1] == me_or_enemy \
+            and observation.board[i+7*0] == 0:
+                return i
+        # no chance
+        return -99
+```
+
+---
+
+**2️⃣ Yatay bağlantı (horizontal connect) olasılığını kontrol etme**
+
+Aynı mantığı yatay kombinasyonlar için de tanımlayabiliriz:
+
+```python
+def check_horizontal_chance(me_or_enemy):
+    chance_cell_num = -99
+    for i in [0,7,14,21,28,35]:
+        for j in range(0, 4):
+            val_1 = i+j+0
+            val_2 = i+j+1
+            val_3 = i+j+2
+            val_4 = i+j+3
+            if sum([observation.board[val_1] == me_or_enemy,
+                    observation.board[val_2] == me_or_enemy,
+                    observation.board[val_3] == me_or_enemy,
+                    observation.board[val_4] == me_or_enemy]) == 3:
+                for k in [val_1,val_2,val_3,val_4]:
+                    if observation.board[k] == 0:
+                        chance_cell_num = k
+    # alt satır
+    for l in range(35, 42):
+        if chance_cell_num == l:
+            return l - 35
+    # diğerleri
+    if observation.board[chance_cell_num+7] != 0:
+        return chance_cell_num % 7
+    # fırsat yok
+    return -99
+```
+
+---
+
+**3️⃣ Çapraz (diagonal) bağlantı olasılığını kontrol etme**
+
+Aynı yaklaşım çapraz kombinasyonlar için de uygulanabilir:
+
+```python
+def check_slanting_chance(me_or_enemy, lag, cell_list):
+    chance_cell_num = -99
+    for i in cell_list:
+        val_1 = i+lag*0
+        val_2 = i+lag*1
+        val_3 = i+lag*2
+        val_4 = i+lag*3
+        if sum([observation.board[val_1] == me_or_enemy,
+                observation.board[val_2] == me_or_enemy,
+                observation.board[val_3] == me_or_enemy,
+                observation.board[val_4] == me_or_enemy]) == 3:
+            for j in [val_1,val_2,val_3,val_4]:
+                if observation.board[j] == 0:
+                    chance_cell_num = j
+    # alt satır
+    for k in range(35, 42):
+        if chance_cell_num == k:
+            return k - 35
+    # diğerleri
+    if chance_cell_num != -99 and observation.board[chance_cell_num+7] != 0:
+        return chance_cell_num % 7
+    # fırsat yok
+    return -99
+```
+
+---
+
+**4️⃣ Fırsatları kontrol eden genel fonksiyon**
+
+Bu kuralları birleştirerek rakibe karşı oynarken fırsatları kontrol eden bir fonksiyon tanımlayabiliriz:
+
+```python
+def check_my_chances():
+    # dikey fırsat
+    result = check_vertical_chance(my_num)
+    if result != -99:
+        return result
+    # yatay fırsat
+    result = check_horizontal_chance(my_num)
+    if result != -99:
+        return result
+    # çapraz fırsat 1 (sağ yukarıdan sol aşağı)
+    result = check_slanting_chance(my_num, 6, [3,4,5,6,10,11,12,13,17,18,19,20])
+    if result != -99:
+        return result
+    # çapraz fırsat 2 (sol yukarıdan sağ aşağı)
+    result = check_slanting_chance(my_num, 8, [0,1,2,3,7,8,9,10,14,15,16,17])
+    if result != -99:
+        return result
+    # fırsat yok
+    return -99
+```
+
+---
+
+Bu bloklar, mantığın temelini oluşturur. Biçimlendirmesi biraz zahmetli olsa da, bu alıştırma sezgilerinizi bir ajan tarafından kullanılabilir **sezgisel kurallara (heuristics)** dönüştürmenin güzel bir örneğidir.
+
+Bu örnekteki ajanın tam tanımı için lütfen depodaki (repository) tamamlayıcı koda bakın.
+
+---
+
+Yeni tanımladığımız ajanı önceden tanımlı (örneğin rastgele) bir ajanla karşılaştırarak performansını değerlendirebiliriz:
+
+```python
+env.reset()
+env.run([my_agent, "random"])
+env.render(mode="ipython", width=500, height=450)
+```
+
+---
+
+Yukarıdaki kod, sıfırdan bir çözümü nasıl kurabileceğinizi gösterir — nispeten basit bir problem için.
+(Connect X’in neden bir “Playground” yarışması olup “Featured” yarışma olmadığını açıklayan şey de budur.)
+
+İlginç bir şekilde, bu basit problem bile **AlphaZero** gibi (neredeyse) son teknoloji yöntemlerle çözülebilir:
+[https://www.kaggle.com/connect4alphazero/alphazero-baseline-connectx](https://www.kaggle.com/connect4alphazero/alphazero-baseline-connectx).
+
+Bu giriş niteliğindeki örneği tamamladıktan sonra, artık daha karmaşık (ve “oyuncak” olmayan) yarışmalara dalmaya hazırsınız.
+
 ### Rock-paper-scissors *(Taş-kağıt-makas)*
+
+Simülasyon yarışmalarındaki birçok problemin oyun oynamaya dayanması tesadüf değildir: Farklı karmaşıklık seviyelerinde oyunlar, açıkça tanımlanmış kurallara sahip bir ortam sunar ve bu da doğal olarak **ajan-eylem-ödül (agent-action-reward)** çerçevesine uygundur.
+
+**Tic-Tac-Toe (X-O oyunu)** dışında, pulları birleştirme oyunu (**Connect X**) rekabetçi oyunların en basit örneklerinden biridir.
+Şimdi zorluk seviyesini biraz artırarak **Taş-Kâğıt-Makas** oyununa bakalım ve bu oyuna dayalı bir **Kaggle yarışmasının** nasıl ele alınabileceğini inceleyelim.
+
+**Rock, Paper, Scissors** yarışmasının ([https://www.kaggle.com/c/rock-paperscissors/code](https://www.kaggle.com/c/rock-paperscissors/code)) temel fikri, klasik taş-kâğıt-makas oyununun (dünyanın bazı bölgelerinde “roshambo” olarak bilinir) genişletilmiş bir versiyonuydu:
+Alışılagelmiş “3’te en iyisi” (best of 3) yerine, burada “1000’de en iyisi” (best of 1,000) formatı kullanılıyordu.
+
+Bu problem için iki olası yaklaşımı açıklayacağız:
+
+* biri **oyun teorisi** temelli,
+* diğeri ise **algoritmik yaklaşıma** daha fazla odaklanmış.
+
+Öncelikle **Nash dengesi (Nash equilibrium)** kavramıyla başlıyoruz.
+Wikipedia, bunu şu şekilde tanımlar:
+
+> “İki veya daha fazla oyuncudan oluşan işbirliği olmayan bir oyunun çözümüdür; her oyuncunun diğerlerinin denge stratejilerini bildiği varsayılır ve hiçbir oyuncu yalnızca kendi stratejisini değiştirerek daha avantajlı bir duruma geçemez.”
+
+Oyun teorisi çerçevesinde **taş-kâğıt-makas** üzerine mükemmel bir giriş videosuna şu bağlantıdan ulaşabilirsiniz:
+[https://www.youtube.com/watch?v=-1GDMXoMdaY](https://www.youtube.com/watch?v=-1GDMXoMdaY).
+
+Oyuncularımızı **kırmızı (red)** ve **mavi (blue)** olarak adlandırırsak, sonuç matrisindeki her hücre belirli bir hamle kombinasyonunun sonucunu gösterir.
+
+![](im/1085.png)
+
+Örneğin, her iki oyuncu da **Taş** oynarsa (matrisin sol üst hücresi), her ikisi de **0 puan** kazanır.
+Eğer **mavi** oyuncu Taş, **kırmızı** oyuncu ise **Kâğıt** oynarsa (birinci satırın ikinci sütunundaki hücre), **kırmızı** kazanır – yani kırmızı **+1 puan** alırken, mavi **-1 puan** kaybeder.
+
+Her bir hamleyi **1/3 olasılıkla** oynarsak, rakibimizin de aynı şekilde oynaması gerekir; aksi hâlde, eğer rakip **her zaman Taş** oynarsa, o zaman:
+
+* Taş’a karşı berabere kalır,
+* Kâğıt’a karşı kaybeder,
+* Makas’a karşı kazanır — her biri %33 olasılıkla gerçekleşir.
+
+Bu durumda **beklenen ödül (expected reward)** sıfır olur. Böyle bir durumda stratejimizi değiştirip **Kâğıt** oynarsak, her zaman kazanabiliriz.
+Aynı mantık **Kâğıt’a karşı Makas** ve **Makas’a karşı Taş** durumları için de geçerlidir; bu tekrarlar gereksiz olacağından, sonuç matrisini burada göstermiyoruz.
+
+---
+
+Dengede (equilibrium) kalmanın tek yolu, her iki oyuncunun da **rastgele strateji** oynamasıdır — işte bu, **Nash dengesi (Nash equilibrium)** olarak adlandırılır.
+Bu fikre dayalı basit bir ajan oluşturabiliriz:
+
+```python
+%%writefile submission.py
+import random
+def nash_equilibrium_agent(observation, configuration):
+    return random.randint(0, 2)
+```
+
+Başlangıçta gördüğünüz “sihirli” satır (Notebook’tan doğrudan bir dosyaya yazma işlemi), bu yarışmanın gönderim kurallarını yerine getirmek için gereklidir.
+
+---
+
+Peki Nash ajanımız diğerlerine karşı nasıl performans gösterir?
+Bunu test etmek için performansını değerlendirebiliriz:
+
+```bash
+!pip install -q -U kaggle_environments
+from kaggle_environments import make
+```
+
+Öncelikle **taş-kâğıt-makas ortamını** oluşturuyoruz ve her simülasyon için **1.000 bölüm (episode)** sınırı belirliyoruz:
+
+```python
+env = make(
+    "rps", 
+    configuration={"episodeSteps": 1000}
+)
+```
+
+Bu yarışma kapsamında hazırlanmış, **deterministik sezgisel ajanlara (deterministic heuristic agents)** dayalı birçok ajanı uygulayan bir Notebook’tan faydalanacağız
+([https://www.kaggle.com/ilialar/multi-armed-bandit-vs-deterministic-agents](https://www.kaggle.com/ilialar/multi-armed-bandit-vs-deterministic-agents))
+ve oradaki ajan kodlarını alacağız:
+
+```python
+%%writefile submission_copy_opponent.py
+def copy_opponent_agent(observation, configuration):
+    if observation.step > 0:
+        return observation.lastOpponentAction
+    else:
+        return 0
+```
+
+(Yine burada Notebook’tan doğrudan dosyaya yazma adımı, yarışma gönderim gereksinimlerini karşılamak için gereklidir.)
+
+Bu kodu içe aktardıktan sonra şu hatanın göründüğü bilinmektedir:
+
+> “Failure to load a module named ‘gfootball’.”
+> Kaggle’ın resmi önerisi bu hatayı **yok saymaktır**. Pratikte, bu hata kodun çalışmasını etkilememektedir.
+
+---
+
+Şimdi iki ajanı birbirine karşı çalıştırıyoruz:
+
+```python
+# nash_equilibrium_agent vs copy_opponent_agent
+env.run(
+    ["submission.py", "submission_copy_opponent.py"]
+)
+env.render(mode="ipython", width=500, height=400)
+```
+
+Bu kod bloğunu çalıştırdığımızda, 1.000 tur boyunca oynanan oyunun **animasyonlu tahtasını (board)** izleyebiliriz.
+Bu oyundan alınmış bir anlık görüntü (snapshot) aşağıdaki gibidir:
+
+![](im/1086.png)
+
+Denetimli öğrenmede — ister sınıflandırma ister regresyon olsun — bir problemi ele alırken **basit bir kıyaslama modeli (benchmark)** ile başlamak genellikle faydalıdır. Bu genellikle **doğrusal (linear)** bir modeldir.
+En gelişmiş yöntem olmasa da, performans hakkında **beklenti oluşturmak** ve **karşılaştırma ölçütü** sağlamak açısından yararlıdır.
+
+Pekiştirmeli öğrenmede (reinforcement learning) de benzer bir fikir geçerlidir.
+Bu bağlamda denenmeye değer bir yaklaşım, **çok kollu bandit (multi-armed bandit)** yöntemidir — dürüstçe “RL algoritması” olarak adlandırabileceğimiz en basit yöntemdir.
+
+Bir sonraki bölümde, bu yaklaşımın bir **simülasyon yarışmasında** nasıl kullanılabileceğini göstereceğiz.
 
 ### Santa competition 2020 *(Santa yarışması 2020)*
 
