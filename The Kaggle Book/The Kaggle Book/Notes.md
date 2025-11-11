@@ -4924,7 +4924,140 @@ Bir süre sonra, kullandığınız makineye bağlı olarak, **cross-validated** 
 
 #### Random search *(Rastgele arama)*
 
+**Random search**, arama alanını rastgele örnekleyen bir yöntemdir ve yüksek boyutlu uzaylarda uygulanabilirliği vardır; bu nedenle pratikte yaygın olarak kullanılır. Ancak random search’ün dezavantajı, bir önceki denemelerden elde edilen bilgiyi bir sonraki ayarı seçmek için kullanmamasıdır (bu sorun, grid search için de geçerlidir). Ayrıca, en iyi çözümü mümkün olan en hızlı şekilde bulmak için yapabileceğiniz tek şey, doğru hyperparameter’ları yakalayabilmeyi ummaktır.
+
+Random search inanılmaz derecede iyi çalışır ve anlaşılması oldukça basittir. Rastgeleliğe dayanmasına rağmen, yalnızca şansa bağlı değildir; başlangıçta öyle görünse de istatistikteki rastgele örnekleme gibi çalışır. Teknikteki ana nokta şudur: yeterince rastgele test yaparsanız, benzer performans gösteren kombinasyonların hafifçe farklı varyasyonlarını denemekle enerji harcamadan doğru parametreleri bulma olasılığınız yüksektir.
+
+Birçok AutoML sistemi, ayarlanacak çok fazla parametre olduğunda random search’e dayanır (bkz. Golovin, D. ve ark., *Google Vizier: A Service for Black-Box Optimization*, 2017). Genel bir kural olarak, hyperparameter optimizasyon probleminizin boyutu yeterince yüksekse (örneğin 16’nın üzerinde), random search’e bakmayı düşünebilirsiniz.
+
+Aşağıda, önceki örneği random search kullanarak çalıştırıyoruz:
+
+```python
+import scipy.stats as stats
+from sklearn.utils.fixes import loguniform
+
+search_dict = {
+    'kernel': ['linear', 'rbf'], 
+    'C': loguniform(1, 1000),
+    'gamma': loguniform(0.0001, 0.1)
+}
+
+scorer = 'accuracy'
+
+search_func = model_selection.RandomizedSearchCV(
+    estimator=svc,
+    param_distributions=search_dict,
+    n_iter=6,
+    scoring=scorer,
+    n_jobs=-1,
+    cv=5
+)
+
+search_func.fit(X, y)
+print(search_func.best_params_)
+print(search_func.best_score_)
+```
+
+Dikkat edin, artık farklı kernel’ler için ayrı arama alanlarında çalıştırmaya gerek yok. Grid search’ün aksine, burada her parametre, etkisiz olanlar dahil, sistematik olarak test edilmez; bu da hesaplama süresi gerektirir. Burada aramanın verimliliği, test edilen hyperparameter kümesinden etkilenmez. Arama, ilgisiz parametrelere bağlı değildir; şansa dayalıdır. Seçilen kernel için birçok parametre arasından yalnızca bir geçerli parametreyi test etseniz bile her deneme faydalıdır.
+
 #### Halving search *(Yarıya indirme araması)*
+
+Dediğimiz gibi, hem grid search hem de random search bilgiye dayalı olmayan bir şekilde çalışır: bazı testler belirli hyperparameter’ların sonucu etkilemediğini veya belirli değer aralıklarının etkisiz olduğunu ortaya çıkarsa bile, bu bilgi sonraki aramalara aktarılmaz.
+
+Bu nedenle, Scikit-learn yakın zamanda **HalvingGridSearchCV** ve **HalvingRandomSearchCV** tahmin edicilerini tanıttı. Bunlar, grid search ve random search stratejilerini ardışık yarıya indirme (successive halving) yöntemiyle parametre arama için kullanılabilir.
+
+**Halving** yönteminde, başlangıç turunda çok sayıda hyperparameter kombinasyonu değerlendirilir, ancak küçük miktarda hesaplama kaynağı kullanılır. Bu, testleri eğitim verinizden seçilen küçük bir alt örnek üzerinde çalıştırarak gerçekleştirilir. Daha küçük bir eğitim seti, test edilmesi için daha az hesaplama gerektirir; böylece daha az kaynak (özellikle zaman) kullanılır, ancak performans tahminleri daha az hassas olur. Bu başlangıç turu, problem üzerinde daha iyi performans gösteren bir hyperparameter alt kümesinin seçilmesini sağlar ve ikinci turda eğitim seti boyutu artırılır.
+
+Sonraki turlar benzer şekilde ilerler: test edilen değer aralığı daraltıldıkça, aranan eğitim seti alt kümeleri giderek büyütülür (bu, testin çalıştırılması için daha fazla zaman gerektirir, ancak daha hassas performans tahmini sağlar) ve aday sayısı yarıya indirilmeye devam eder.
+
+Önceki probleme uygulanan bir örnek şöyle:
+
+```python
+from sklearn.experimental import enable_halving_search_cv
+from sklearn.model_selection import HalvingRandomSearchCV
+
+search_func = HalvingRandomSearchCV(
+    estimator=svc,
+    param_distributions=search_dict,
+    resource='n_samples',
+    max_resources=100,
+    aggressive_elimination=True,
+    scoring=scorer,
+    n_jobs=-1,
+    cv=5,
+    random_state=0
+)
+
+search_func.fit(X, y)
+print(search_func.best_params_)
+print(search_func.best_score_)
+```
+
+Bu şekilde, halving yöntemi adayların seçimi yoluyla ardışık optimizasyon adımlarına bilgi sağlar. Sonraki bölümlerde, hyperparameter uzayında daha hassas ve verimli bir arama yapmak için daha akıllı yöntemleri tartışacağız.
+
+> Kazuki Onodera
+> 
+> [https://www.kaggle.com/onodera](https://www.kaggle.com/onodera)
+> 
+> 
+> 
+> Başka bir Kaggler ile kısa bir röportaj yapalım. Kazuki Onodera, **Competitions Grandmaster** ve **Discussions Master** unvanlarına sahip, yaklaşık 7 yıllık yarışma deneyimi olan bir Kaggle kullanıcısıdır. Ayrıca NVIDIA’da Kıdemli Derin Öğrenme Veri Bilimcisi olarak çalışmakta ve NVIDIA KGMON (Kaggle Grandmasters of NVIDIA) ekibinin bir üyesidir.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Teknikler ve çözüm yaklaşımları açısından Kaggle’daki uzmanlık alanınız nedir?**
+> 
+> Instacart Market Basket Analysis. Bu yarışma, Kaggle topluluğu için oldukça zorluydu çünkü kullanıcıların önceki siparişlerine dayanarak bir sonraki siparişlerinde hangi ürünlerin olacağını tahmin etmek için anonimleştirilmiş veriler kullanılıyordu. Bu yarışmayı sevme sebebim, özellik mühendisliğini çok seviyor olmam ve diğerlerinin aklına gelmeyen ilginç ve iyi özellikler geliştirebilmem. Bu sayede yarışmada ikinci olabildim.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşıyorsunuz? Bu yaklaşım, günlük işinizde yaptıklarınızdan ne kadar farklı?**
+> 
+> Bir modelin nasıl çalıştığını hayal etmeye çalışıyorum ve yanlış negatifler ile yanlış pozitiflere derinlemesine bakıyorum. Günlük işimde yaptıklarımla aynı.
+> 
+> 
+> 
+> **Girdiğiniz özellikle zorlu bir yarışmadan bahseder misiniz ve görevi çözmek için hangi içgörüleri kullandınız?**
+> 
+> Human Protein Atlas - Single Cell Classification. Bu yarışma aslında bir tür instance segmentation yarışmasıydı, fakat maskeler sağlanmamıştı. Bu yüzden zayıf denetimli çok etiketli bir sınıflandırma problemine dönüştü. Etiket gürültüsünü temizlemek için iki aşamalı bir pipeline oluşturdum.
+> 
+> 
+> 
+> **Kaggle kariyerinize katkıda bulundu mu? Eğer öyleyse, nasıl?**
+> 
+> Evet. Şu anda NVIDIA KGMON ekibinde çalışıyorum. Kaggle, tablo verisi, görsel, doğal dil ve sinyal verisi gibi farklı veri türlerinde, ayrıca sektör ve alan açısından farklı yarışmalar (sanayi, finans, astronomi, patoloji, spor, perakende vb.) düzenliyor. Bu tür verilere erişim ve deneyim edinmek için en uygun yer kesinlikle Kaggle.
+> 
+> 
+> 
+> **Deneyimsiz Kaggle kullanıcıları genellikle neyi gözden kaçırıyor? Başladığınızda bilseydiniz iyi olurdu dediğiniz şey nedir?**
+> 
+> Hedef analizi. Ayrıca seed averaging de oldukça göz ardı ediliyor: her zaman basit ama güçlü.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda yaptığınız hatalar nelerdi?**
+> 
+> Hedef analizi. En iyi takımlar her zaman hedefi diğerlerinden daha iyi analiz eder, bu yüzden bir yarışmada daha iyi bir yerde olamıyorsam, en iyi çözümleri okuyorum; çünkü bu çözümler bana yarışma sırasında kaçırdığım veri bilgilerini açıklıyor.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenimi için önerdiğiniz özel araçlar veya kütüphaneler var mı?**
+> 
+> Sadece Python ve Jupyter Notebook.
+> 
+> 
+> 
+> **Bir yarışmaya katılırken insanların akılda tutması gereken en önemli şey nedir?**
+> 
+> Bir yenilgiden öğrenebiliyorsanız, aslında kaybetmemişsiniz demektir.
+> 
+> 
+> 
+> **Başka yarışma platformlarını kullanıyor musunuz? Kaggle ile nasıl karşılaştırılırlar?**
+> 
+> KDD Cup ve RecSys. Her ikisi de ilginç ve zorlu olma açısından minimum gereksinimleri karşılıyor.
+> 
+> 
 
 ### Key parameters and how to use them *(Temel parametreler ve nasıl kullanılacakları)*
 
