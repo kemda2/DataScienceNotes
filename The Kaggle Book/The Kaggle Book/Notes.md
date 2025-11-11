@@ -8635,6 +8635,87 @@ Yukarıda listelenen iyileştirmeler kesinlikle modelin performansını artırac
 
 ### Open domain Q&A *(Açık alan soru-cevap)*
 
+Bu bölümde, Google QUEST Soru-Cevap Etiketleme yarışmasına bakacağız ([Google QUEST Challenge](https://www.kaggle.com/c/google-quest-challenge/overview/description)). Bu yarışmada, soru-cevap çiftleri, “soru konuşma dili mi?”, “soru bilgi arayışı mı?” veya “cevap yardımcı mı?” gibi çeşitli kriterlere göre insan değerlendirciler tarafından puanlandı. Görev, her bir hedef sütun için sayısal bir değer tahmin etmekti (bu sütunlar kriterlere karşılık geliyordu); etiketler birden fazla değerlendiricinin oylarıyla birleştirildiği için, amaç temelde çok değişkenli bir regresyon çıktısıydı ve hedef sütunlar birim aralığına normalize edilmişti.
+
+Günlük işlerde bazen çok fazla benzerlik bulunur. Çoğu zaman bir benchmark (karşılaştırma ölçütü) vardır ve ardından o benchmark'ı aşacak teknikler, özellikler ve modeller geliştirmek gerekir.
+
+İleri düzey tekniklerle modelleme yapmadan önce (örneğin, NLP için transformer tabanlı modeller kullanmak gibi), genellikle daha basit yöntemlerle bir temel oluşturmak iyi bir fikirdir. Önceki bölümde olduğu gibi, kısalık açısından import’ları atlıyoruz, ancak bunları GitHub deposundaki Notebook'ta bulabilirsiniz.
+
+Başlangıç olarak, metnin farklı yönlerini çıkarmamıza yardımcı olabilecek birkaç yardımcı fonksiyon tanımlayacağız. İlk olarak, bir dizi metinden kelime sayısını döndüren bir fonksiyon tanımlıyoruz:
+
+```python
+def word_count(xstring):
+    return xstring.split().str.len()
+```
+
+Yarışmada kullanılan metrik, Spearman korelasyonuydu (sıralamalar üzerinden hesaplanan lineer korelasyon: [Spearman Rank Correlation](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient)).
+Biz Scikit-learn pipeline’ı oluşturmayı amaçladığımız için, metrikleri bir scorer olarak tanımlamak faydalı olacaktır (make_scorer metodu, Scikit-learn'de bir puanlama fonksiyonu alıp, estimator çıktısını puanlayan bir callable döndürür).
+
+```python
+def spearman_corr(y_true, y_pred):
+    if np.ndim(y_pred) == 2:
+        corr = np.mean([stats.spearmanr(y_true[:, i], y_pred[:, i])[0] for i in range(y_true.shape[1])])
+    else:
+        corr = stats.spearmanr(y_true, y_pred)[0]
+    return corr
+
+custom_scorer = make_scorer(spearman_corr, greater_is_better=True)
+```
+
+Sonraki adımda, metinlerimizin parçalar halinde işlenmesini sağlayacak küçük bir yardımcı fonksiyon tanımlıyoruz. Bu fonksiyon, hafıza sorunları yaşamadan gövdeyi parçalara ayırarak gömme (embedding) oluşturmanıza yardımcı olacaktır:
+
+```python
+def chunks(l, n):
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
+```
+
+Kullanacağımız özellik setinin bir kısmı, önceden eğitilmiş modellerden alınan gömmelerden oluşacaktır. Bu bölümde amacımız, karmaşık modeller eğitmeden bir temel oluşturmak olduğundan, mevcut modelleri kullanmamızda bir sakınca yoktur.
+
+Modeli eğitmeden önce, önce tokenizer ve modeli içeri aktaracağız ve sonra metni parçalar halinde işleyerek her bir soru/cevap çiftini sabit boyutlu bir gömmeye (embedding) dönüştüreceğiz:
+
+```python
+def fetch_vectors(string_list, batch_size=64):
+    DEVICE = torch.device("cuda")
+    tokenizer = transformers.DistilBertTokenizer.from_pretrained("../input/distilbertbaseuncased/")
+    model = transformers.DistilBertModel.from_pretrained("../input/distilbertbaseuncased/")
+    model.to(DEVICE)
+    fin_features = []
+
+    for data in chunks(string_list, batch_size):
+        tokenized = []
+        for x in data:
+            x = " ".join(x.strip().split()[:300])
+            tok = tokenizer.encode(x, add_special_tokens=True)
+            tokenized.append(tok[:512])
+
+        max_len = 512
+        padded = np.array([i + [0] * (max_len - len(i)) for i in tokenized])
+        attention_mask = np.where(padded != 0, 1, 0)
+        input_ids = torch.tensor(padded).to(DEVICE)
+        attention_mask = torch.tensor(attention_mask).to(DEVICE)
+
+        with torch.no_grad():
+            last_hidden_states = model(input_ids, attention_mask=attention_mask)
+        features = last_hidden_states[0][:, 0, :].cpu().numpy()
+        fin_features.append(features)
+
+    fin_features = np.vstack(fin_features)
+    return fin_features
+```
+
+Şimdi, verileri yüklemeye geçebiliriz:
+
+```python
+xtrain = pd.read_csv(data_dir + 'train.csv')
+xtest = pd.read_csv(data_dir + 'test.csv')
+xtrain.head(4)
+```
+
+İlk birkaç satır şöyle görünecektir:
+
+![](im/1083.png)
+
 ### Text augmentation strategies *(Metin artırma stratejileri)*
 
 #### Basic techniques *(Temel teknikler)*
