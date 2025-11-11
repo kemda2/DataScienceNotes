@@ -7279,6 +7279,62 @@ model = tf.keras.Sequential([
 
 #### albumentations *(Albumentations kütüphanesi)*
 
+Albumentations paketi, başka kütüphanelerin etrafında bir tür sarmalayıcı olarak inşa edilmiş hızlı bir görüntü artırma kütüphanesidir.
+
+Bu paket, birkaç Kaggle yarışmasında yoğun bir şekilde kodlama yaparak geliştirilmiştir ([https://medium.com/@iglovikov/the-birth-of-albumentationsfe38c1411cb3](https://medium.com/@iglovikov/the-birth-of-albumentationsfe38c1411cb3) adresinden daha fazla bilgiye ulaşabilirsiniz) ve temel geliştiricileri ve katkıcıları arasında, birçok önemli Kaggle kullanıcısını içerir. Bunlar arasında Eugene Khvedchenya ([https://www.kaggle.com/bloodaxe](https://www.kaggle.com/bloodaxe)), Vladimir Iglovikov ([https://www.kaggle.com/iglovikov](https://www.kaggle.com/iglovikov)), Alex Parinov ([https://www.kaggle.com/creafz](https://www.kaggle.com/creafz)) ve ZFTurbo ([https://www.kaggle.com/zfturbo](https://www.kaggle.com/zfturbo)) yer almaktadır.
+
+Tam dökümantasyona şu bağlantıdan ulaşılabilir: [https://albumentations.readthedocs.io/en/latest/](https://albumentations.readthedocs.io/en/latest/).
+
+Aşağıda önemli özellikler listelenmiştir:
+
+* Farklı veri türleri için birleştirilmiş API
+* Tüm yaygın bilgisayarla görme görevlerini destekler
+* Hem TensorFlow hem de PyTorch ile entegrasyon
+
+Albumentations işlevselliğini kullanarak bir resmi dönüştürmek oldukça basittir. Gerekli dönüşümleri başlatarak başlarız:
+
+```python
+import albumentations as A
+horizontal_flip = A.HorizontalFlip(p=1)
+rotate = A.ShiftScaleRotate(p=1)
+gaus_noise = A.GaussNoise()
+bright_contrast = A.RandomBrightnessContrast(p=1)
+gamma = A.RandomGamma(p=1)
+blur = A.Blur()
+```
+
+Sonrasında, bu dönüşümleri referans resmimize uygularız:
+
+```python
+img_flip = horizontal_flip(image=curr_img)
+img_gaus = gaus_noise(image=curr_img)
+img_rotate = rotate(image=curr_img)
+img_bc = bright_contrast(image=curr_img)
+img_gamma = gamma(image=curr_img)
+img_blur = blur(image=curr_img)
+```
+
+Paketin geliştirilmesi, birkaç Kaggle yarışmasında yoğun bir şekilde kodlama yapılarak gerçekleştirilmiştir ([https://medium.com/@iglovikov/the-birth-of-albumentationsfe38c1411cb3](https://medium.com/@iglovikov/the-birth-of-albumentationsfe38c1411cb3) adresinden daha fazla bilgi alabilirsiniz). Temel geliştiriciler ve katkıcılar arasında, çok sayıda önemli Kaggle kullanıcısı bulunmaktadır: Eugene Khvedchenya ([https://www.kaggle.com/bloodaxe](https://www.kaggle.com/bloodaxe)), Vladimir Iglovikov ([https://www.kaggle.com/iglovikov](https://www.kaggle.com/iglovikov)), Alex Parinov ([https://www.kaggle.com/creafz](https://www.kaggle.com/creafz)) ve ZFTurbo ([https://www.kaggle.com/zfturbo](https://www.kaggle.com/zfturbo)).
+
+Tam dökümantasyona [buradan ulaşılabilir](https://albumentations.readthedocs.io/en/latest/).
+
+Artırılmış resimleri 'image' anahtarıyla erişebiliriz ve sonuçları görselleştirebiliriz:
+
+```python
+img_list = [img_flip['image'], img_gaus['image'], img_rotate['image'],
+            img_bc['image'], img_gamma['image'], img_blur['image']]
+plt.figure(figsize=(20, 20))
+plt.axis('off')
+plt.imshow(gallery(np.array(img_list), ncols=3))
+plt.title('Augmentation examples')
+```
+
+İşte sonuçlarımız:
+
+![](im/1071.png)
+
+Görüntü artırmayı, bilgisayarla görme problemlerine yaklaşırken önemli bir ön işleme adımı olarak tartıştıktan sonra, bu bilgiyi aşağıdaki bölümlerde uygulamaya koymaya hazırız. İlk olarak çok yaygın bir görevle başlayacağız: görüntü sınıflandırma.
+
 ### Classification *(Sınıflandırma)*
 
 ### Object detection *(Nesne tespiti)*
