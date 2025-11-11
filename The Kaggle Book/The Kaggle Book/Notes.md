@@ -5114,17 +5114,350 @@ Extra Trees, özellikle verileriniz oldukça gürültülü olduğunda rastgele o
 
 #### Gradient tree boosting *(Gradyan ağaç güçlendirmesi)*
 
+Gradyan ağaç güçlendirme (Gradient Tree Boosting) veya gradyan artırmalı karar ağaçları (GBDT), **boosting** yönteminin geliştirilmiş bir versiyonudur (boosting, zayıf öğreniciler dizisini verilerin yeniden ağırlıklandırılmış versiyonlarına uygulayarak çalışır). AdaBoost gibi, GBDT de bir **gradyan iniş fonksiyonuna** dayanır. Algoritma, topluluk (ensemble) tabanlı modeller ailesinin en yetkinlerinden biri olduğunu kanıtlamıştır; ancak **tahminlerde artan varyans**, **verideki gürültüye karşı daha yüksek hassasiyet** (her iki sorun da alt örnekleme, subsampling, ile hafifletilebilir) ve **paralel olmayan işlemler nedeniyle yüksek hesaplama maliyetleri** ile karakterizedir.
+
+Derin öğrenme dışında, gradyan güçlendirme en gelişmiş makine öğrenimi algoritmalarından biridir. Jerome Friedman tarafından geliştirilen AdaBoost ve ilk gradyan güçlendirme uygulamasından bu yana, algoritmanın çeşitli başka sürümleri ortaya çıkmıştır; en güncel olanlar **XGBoost**, **LightGBM** ve **CatBoost**’tur.
+
 #### LightGBM *(LightGBM algoritması)*
+
+Yüksek performanslı **LightGBM** algoritması ([https://github.com/Microsoft/LightGBM](https://github.com/Microsoft/LightGBM)), birden fazla bilgisayarda dağıtık olarak çalışabilir ve büyük veri setlerini hızlı bir şekilde işleyebilir. Microsoft’taki bir ekip tarafından GitHub’da açık kaynak proje olarak geliştirilmiştir (ayrıca akademik bir makale de mevcuttur: [https://papers.nips.cc/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html](https://papers.nips.cc/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html)).
+
+LightGBM, XGBoost gibi karar ağaçlarına dayanır, ancak farklı bir strateji izler. XGBoost, bir değişkene göre dallanma yapar ve o değişkende farklı ağaç dallanmalarını keşfeder (**seviye-odaklı ağaç büyüme stratejisi**), LightGBM ise tek bir dallanmaya odaklanır ve oradan dallanmayı sürdürerek daha iyi bir uyum sağlar (**yaprak-odaklı ağaç büyüme stratejisi**). Bu sayede LightGBM, veriye hızlıca iyi bir uyum sağlar ve XGBoost’a kıyasla alternatif çözümler üretebilir (bu, tahminlerin varyansını azaltmak için iki çözümü birleştirmeyi planlıyorsanız avantajlıdır). Algoritmik olarak düşünürsek, bir karar ağacının dallanma yapısını bir grafik olarak hayal edersek, **XGBoost genişlik öncelikli arama (BFS)**, **LightGBM derinlik öncelikli arama (DFS)** uygular.
+
+LightGBM’i ayarlamak başlangıçta göz korkutucu görünebilir; ayarlanabilecek **yüzden fazla parametre** vardır. Bu parametreleri buradan inceleyebilirsiniz:
+
+* GitHub: [https://github.com/Microsoft/LightGBM/blob/master/docs/Parameters.rst](https://github.com/Microsoft/LightGBM/blob/master/docs/Parameters.rst)
+* Dokümantasyon: [https://lightgbm.readthedocs.io/en/latest/Parameters.html](https://lightgbm.readthedocs.io/en/latest/Parameters.html)
+
+Genel olarak, sonuçları en çok etkileyen ve odaklanmanız gereken başlıca hiperparametreler şunlardır:
+
+* **n_estimators**: 10–10.000 arasında bir tamsayı; yineleme sayısını belirler.
+* **learning_rate**: 0.01–1.0 arasında bir gerçek sayı, genellikle log-uniform dağılımdan örneklenir. Algoritmanın tüm iterasyonlarının ağırlıklarını hesaplayan gradyan iniş adım boyutunu temsil eder.
+* **max_depth**: 1–16 arasında bir tamsayı; özelliklerdeki maksimum dallanma sayısını belirler. 0’dan küçük değer verilirse maksimum olası dallanma sağlanır, bu genellikle aşırı uyum (overfitting) riskini artırır.
+* **num_leaves**: 2–2^max_depth arasında bir tamsayı; her ağacın alacağı maksimum yaprak sayısını belirler.
+* **min_data_in_leaf**: 0–300 arasında bir tamsayı; bir yapraktaki minimum veri sayısını belirler.
+* **min_gain_to_split**: 0–15 arasında bir float; ağacın dallanma yapması için gereken minimum kazancı ayarlar. Gereksiz dallanmaları önleyerek overfitting’i azaltır (XGBoost’ta gamma parametresine karşılık gelir).
+* **max_bin**: 32–512 arasında bir tamsayı; özellik değerlerinin kaç binde gruplanacağını belirler. 255’in üstünde değerler overfitting riskini artırır.
+* **subsample**: 0.01–1.0 arasında bir gerçek sayı; eğitimde kullanılacak örnek oranını temsil eder.
+* **subsample_freq**: 0–10 arasında bir tamsayı; algoritmanın örnekleri kaç iterasyonda bir alt örnekleyeceğini belirler. 0 ise subsample parametresi göz ardı edilir (varsayılan 0’dır).
+* **feature_fraction**: 0.1–1.0 arasında bir gerçek sayı; alt örnekleme ile kullanılacak özelliklerin oranını belirler. Bu, eğitimde rastgeleliği artırarak gürültü ve multicollinearity ile mücadele eder.
+* **subsample_for_bin**: 30’dan örnek sayısına kadar bir tamsayı; histogram binleri için örnek alınacak veri sayısını belirler.
+* **reg_lambda**: 0–100 arasında bir gerçek sayı; L2 düzenlileştirmeyi belirler. Parametre ölçeğe duyarlıdır, genellikle log-uniform dağılımdan örneklenir.
+* **reg_alpha**: 0–100 arasında bir gerçek sayı; L1 düzenlileştirmeyi belirler, genellikle log-uniform dağılımdan örneklenir.
+* **scale_pos_weight**: 1e-6–500 arasında bir gerçek sayı; pozitif örnekleri ağırlıklandırır (dolayısıyla etkili olarak upsampling veya downsampling yapar), negatif örnekler 1 değeri ile tutulur.
+
+LightGBM’de çok sayıda hiperparametre bulunmasına rağmen, aslında yalnızca birkaç tanesi büyük etkiye sahiptir. Sabit iterasyon ve öğrenme hızı için en etkili olanlar: **feature_fraction, num_leaves, subsample, reg_lambda, reg_alpha, min_data_in_leaf**. Bu konu hakkında Kaggle Grandmaster **Kohei Ozaki** tarafından yazılmış blog yazısı: [https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258](https://medium.com/optuna/lightgbm-tuner-new-optuna-integration-for-hyperparameter-optimization-8b7095e99258). Ozaki, Optuna için hızlı bir hiperparametre ayarlama prosedürü oluştururken bu bilgiden faydalanır.
 
 #### XGBoost *(XGBoost algoritması)*
 
+**XGBoost** ([https://github.com/dmlc/XGBoost](https://github.com/dmlc/XGBoost)), eXtreme Gradient Boosting’in kısaltmasıdır. Açık kaynaklı bir projedir ve Scikit-learn’ün bir parçası değildir; ancak son zamanlarda bir Scikit-learn sarmalayıcı (wrapper) arayüzü eklenmiştir, bu sayede XGBoost’u Scikit-learn tarzı veri pipeline’larına entegre etmek kolaylaşmıştır.
+
+XGBoost algoritması, 2015 yılında Kaggle ve KDD Cup 2015 gibi veri bilimi yarışmalarında popülerlik kazanmıştır. Algoritmanın yaratıcısı Tianqi Chen, Tong He ve Carlos Guestrin’in makalelerinde belirttiği gibi, 2015’te Kaggle’da düzenlenen 29 yarışmadan 17’sinin kazanan çözümü XGBoost’u ya tek başına ya da birden fazla modelden oluşan bir ensemble içinde kullanmıştır. O tarihten sonra algoritma veri bilimi topluluğu arasında popülaritesini korumuş, ancak LightGBM ve CatBoost gibi diğer GBM uygulamalarının getirdiği yeniliklerle yarışmakta zaman zaman zorlanmıştır.
+
+XGBoost, hem doğruluk hem de hesaplama verimliliği açısından iyi performans göstermesinin yanı sıra, çok çekirdekli işlemciler ve dağıtık makineler kullanarak ölçeklenebilir bir çözümdür.
+
+XGBoost, ilk tree-boost GBM algoritmasına yapılan önemli iyileştirmeler sayesinde GBM algoritmalarının yeni neslini temsil eder:
+
+* **Sparsity-awareness (seyreklik farkındalığı)**: Seyrek matrislerden faydalanabilir, böylece hem bellek tasarrufu sağlar (yoğun matris gerekmez) hem de işlem süresini kısaltır (sıfır değerler özel olarak işlenir).
+* **Yaklaşık ağaç öğrenimi (weighted quantile sketch)**: Klasik dallanma kesitlerinin tüm olası kombinasyonlarını araştırmaya göre benzer sonuçları çok daha kısa sürede üretir.
+* **Tek makinada paralel hesaplama**: En iyi bölünmeyi ararken çoklu iş parçacığı kullanır; benzer şekilde, birden fazla makinede dağıtık hesaplamalar yapılabilir.
+* **Out-of-core hesaplama**: Tek bir makinede, sütun blokları olarak adlandırılan veri depolama çözümü kullanır. Bu yöntem, veriyi diskte sütunlar halinde düzenleyerek optimizasyon algoritmasının (sütun vektörleri üzerinde çalışır) beklediği şekilde hızlı veri çekimi sağlar.
+
+XGBoost ayrıca eksik verilerle etkili bir şekilde başa çıkabilir. Standart karar ağaçlarına dayalı diğer ağaç ensemble’ları, eksik verileri işlemden önce örneğin negatif bir değer gibi özel bir değerle doldurmak zorundadır; XGBoost bunu gereksiz kılarak uygun dallanmayı doğrudan oluşturabilir.
+
+XGBoost parametreleri ([https://xgboost.readthedocs.io/en/latest/parameter.html](https://xgboost.readthedocs.io/en/latest/parameter.html)) arasında, yarışmalarda ve projelerde sıkça kullanılan başlıca parametreler şunlardır:
+
+* **n_estimators**: Genellikle 10–5.000 arası bir tamsayı.
+* **learning_rate**: 0.01–1.0 arası bir gerçek sayı, log-uniform dağılımdan örneklenmesi önerilir.
+* **min_child_weight**: Genellikle 1–10 arası bir tamsayı.
+* **max_depth**: Genellikle 1–50 arası bir tamsayı.
+* **max_delta_step**: Genellikle 0–20 arası bir tamsayı; her yaprak çıktısı için izin verilen maksimum delta adımını temsil eder.
+* **subsample**: 0.1–1.0 arası bir gerçek sayı; örneklerin alt örneklenme oranını belirtir.
+* **colsample_bytree**: 0.1–1.0 arası bir gerçek sayı; ağaç başına sütun alt örnekleme oranını belirtir.
+* **colsample_bylevel**: 0.1–1.0 arası bir gerçek sayı; ağaçtaki her seviyede sütun alt örnekleme oranını belirtir.
+* **reg_lambda**: 1e-9–100 arası bir gerçek sayı, L2 düzenlileştirmeyi kontrol eder; log-uniform dağılımdan örneklenmesi tercih edilir.
+* **reg_alpha**: 1e-9–100 arası bir gerçek sayı, L1 düzenlileştirmeyi kontrol eder; log-uniform dağılımdan örneklenmesi tercih edilir.
+* **gamma**: Ağacın dallanması için gereken minimum kayıp azaltımını belirtir; 1e-9–0.5 arası bir gerçek sayı olmalı, log-uniform dağılımdan örneklenmesi önerilir.
+* **scale_pos_weight**: 1e-6–500 arası bir gerçek sayı; pozitif sınıf için ağırlığı temsil eder, log-uniform dağılımdan örneklenmesi önerilir.
+
+LightGBM’de olduğu gibi, XGBoost’un da ayarlanması gereken birçok benzer hiperparametresi vardır. Dolayısıyla LightGBM için yapılan tüm değerlendirmeler XGBoost için de geçerlidir.
+
 #### CatBoost *(CatBoost algoritması)*
+
+2017 Temmuz’unda, Rus arama motoru Yandex, başka bir ilginç GBM algoritmasını kamuya açtı: **CatBoost** ([https://catboost.ai/](https://catboost.ai/)). Adı, “Category” ve “Boosting” kelimelerinin birleştirilmesinden gelir. Aslında güçlü yönü, çoğu ilişkisel veritabanında yer alan bilgilerin büyük kısmını oluşturan kategorik değişkenleri işleyebilme yeteneğidir. Bunu, **one-hot encoding** ve **target encoding** yöntemlerini harmanlayarak gerçekleştirir. Target encoding, kategorik seviyeleri, üzerinde çalışılan probleme uygun sayısal bir değer atayarak ifade etme yöntemidir; bunun detayları **Bölüm 7, Tabular Competitions için Modelleme** kısmında bulunabilir.
+
+CatBoost’un kategorik değişkenleri kodlamak için kullandığı fikir yeni değildir; aslında bu, daha önce özellikle veri bilimi yarışmalarında kullanılan bir tür **feature engineering** (özellik mühendisliği) yöntemidir. **Target encoding**, aynı zamanda **likelihood encoding**, **impact coding** veya **mean encoding** olarak da bilinir ve temel olarak etiketlerinizi hedef değişkenle olan ilişkilerine göre sayıya dönüştürmenin bir yoludur. Eğer regresyon problemi varsa, etiketler tipik hedef değerinin ortalamasına göre dönüştürülebilir; sınıflandırmada ise, bir etiket için hedef sınıfın olasılığıdır (her kategori değeri için hedefin koşullu olasılığı). Basit ve akıllıca bir özellik mühendisliği hilesi gibi görünse de, çoğunlukla **overfitting (aşırı öğrenme)** riski taşır çünkü hedeften alınan bilgi tahminleyicilere dahil edilir.
+
+CatBoost’un oldukça fazla parametresi vardır ([https://catboost.ai/en/docs/references/training-parameters/](https://catboost.ai/en/docs/references/training-parameters/)). Biz tartışmamızı en önemli sekiz parametre ile sınırladık:
+
+* **iterations**: Genellikle 10–1.000 arası bir tamsayı; problem durumuna göre artabilir.
+* **depth**: 1–8 arası bir tamsayı; genellikle daha yüksek değerler daha uzun eğitim süresi gerektirir ve daha iyi sonuçlar üretmez.
+* **learning_rate**: 0.01–1.0 arası bir gerçek sayı; log-uniform dağılımdan örneklenmesi önerilir.
+* **random_strength**: 1e-9–10.0 arası log-lineer örneklenen bir gerçek sayı; dallanma puanlamasında rastgelelik seviyesini belirtir.
+* **bagging_temperature**: 0.0–1.0 arası bir gerçek sayı; Bayesian bootstrap’u ayarlar.
+* **border_count**: 1–255 arası bir tamsayı; sayısal özellikler için bölünmeleri belirtir.
+* **l2_leaf_reg**: 2–30 arası bir tamsayı; L2 düzenlileştirme için değeri belirtir.
+* **scale_pos_weight**: 0.01–10.0 arası bir gerçek sayı; pozitif sınıfın ağırlığını temsil eder.
+
+CatBoost, sadece başka bir GBM uygulaması gibi görünse de, kullanılan farklı parametrelerle de görülebileceği üzere, yarışmalarda hem **tek model çözümü** hem de **daha büyük bir ensemble içinde** büyük avantaj sağlayabilecek birçok farklılığa sahiptir.
 
 #### HistGradientBoosting *(Histogram tabanlı gradyan güçlendirme)*
 
+Son zamanlarda, Scikit-learn, LightGBM’in **binned data** ve histogramlarından esinlenerek yeni bir gradient boosting sürümü tanıttı (EuroPython’daki Olivier Grisel sunumuna bakabilirsiniz: [https://www.youtube.com/watch?v=urVUlKbQfQ4](https://www.youtube.com/watch?v=urVUlKbQfQ4)). Bu algoritma, sınıflandırıcı (**HistGradientBoostingClassifier**) veya regresör (**HistGradientBoostingRegressor**) olarak kullanılabilir. Farklı modellerle ensemble oluşturmak için uygundur ve ayarlanması gereken hiperparametreler çok daha kısa ve temel bir aralıkta sunulmuştur:
+
+* **learning_rate**: 0.01–1.0 arası bir gerçek sayı; genellikle log-uniform dağılımdan örneklenir.
+* **max_iter**: 10–10.000 arası bir tamsayı.
+* **max_leaf_nodes**: 2–500 arası bir tamsayı; **max_depth** ile etkileşimlidir. Tavsiye edilen, iki parametreden yalnızca birini ayarlamak ve diğerini **None** bırakmaktır.
+* **max_depth**: 2–12 arası bir tamsayı.
+* **min_samples_leaf**: 2–300 arası bir tamsayı.
+* **l2_regularization**: 0.0–100.0 arası bir gerçek sayı.
+* **max_bins**: 32–512 arası bir tamsayı.
+
+Scikit-learn’ün **HistGradientBoosting** algoritması, LightGBM veya XGBoost’tan çok farklı olmasa da, bir yarışmada GBM’leri uygulamak için farklı bir yol sunar. HistGradientBoosting ile oluşturulan modeller, **blending** ve **stacking** gibi birden fazla tahminin ensemble edilmesinde katkı sağlayabilir.
+
+Bu bölümün sonunda, en yaygın makine öğrenimi algoritmalarına (sadece derin öğrenme çözümleri hariç) ve ayarlanması gereken en önemli hiperparametrelere daha aşina olmalısınız. Bu bilgiler, Kaggle yarışmalarında etkileyici çözümler oluşturmanızda yardımcı olacaktır. Temel optimizasyon stratejilerini, kullanılabilir algoritmaları ve bunların anahtar hiperparametrelerini bilmek yalnızca bir başlangıçtır. Bir sonraki bölümde, **Bayesian optimizasyon** kullanarak hiperparametreleri daha optimal şekilde ayarlamayı derinlemesine ele alacağız.
+
+> Alberto Danese
+> 
+> [https://www.kaggle.com/albedan](https://www.kaggle.com/albedan)
+> 
+> 
+> 
+> Bu bölümün ikinci röportajı, İtalyan kredi kartı ve dijital ödeme şirketi Nexi’de Veri Bilimi Müdürü olan Alberto Danese ile. 2015 yılında Kaggle’a katılmış bir **Competitions Grandmaster** olan Danese, çoğu altın madalyasını bireysel olarak kazanmıştır.
+> 
+> 
+> 
+> **Favori yarışma türünüz hangisi ve neden? Kaggle’da teknik ve çözüm yaklaşımı açısından uzmanlık alanınız nedir?**
+> 
+> Finans sektöründe çalıştım ve çoğunlukla yapılandırılmış verilerle ilgilendim, bu nedenle bu kategoriye ait yarışmaları tercih ediyorum. Verinin ne hakkında olduğunu pratik olarak anlamak ve veriden her bir bilgiyi çıkarmak için akıllıca özellik mühendisliği yapmaktan keyif alıyorum.
+> 
+> Teknik açıdan, klasik ML kütüphaneleri ve özellikle **Gradient Boosting Decision Trees** konusunda deneyimim var: en yaygın kütüphaneler (**XGBoost, LightGBM, CatBoost**) her zaman ilk tercihimdir.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşıyorsunuz? Bu yaklaşım, günlük işinizde yaptıklarınızdan ne kadar farklı?**
+> 
+> Veriyi keşfetmeye ve sponsorun makine öğrenimi ile gerçekten çözmek istediği problemi anlamaya çok zaman harcarım. Yeni başlayanların düşündüğünün aksine, ML algoritmasının spesifik “ayarlamaları”na fazla zaman harcamam – ve görünüşe göre bu yaklaşım işe yarıyor!
+> 
+> Günlük işimde veri anlayışı da çok önemli, ancak Kaggle yarışmalarında tamamen eksik olan bazı ek aşamalar var:
+> 
+> 
+> 
+> * ML ile çözülmesi gereken bir iş problemi tanımlamak (iş birimindeki meslektaşlarla birlikte)
+> 
+> * Veriyi bulmak, bazen harici veri sağlayıcılardan da
+> 
+> * ML kısmı tamamlandığında, bunu üretime almak ve gelişimlerini yönetmek
+> 
+> 
+> 
+> **Katıldığınız özellikle zor bir yarışmayı ve bu görevi çözmek için kullandığınız içgörüleri anlatır mısınız?**
+> 
+> Grandmaster olduğum **TalkingData AdTracking Fraud Detection Challenge** yarışmasını çok sevdim. Konu oldukça ilginçti (click-farm dolandırıcılığıyla mücadele) ve büyük hacimler (100M’den fazla etiketli satır) nedeniyle verimli özellik mühendisliği yapmamı zorunlu kıldı. Ayrıca, farklı yaklaşımları test etmek için hesaplama sürelerini azaltmak ve lag/lead özellikleri ile diğer pencere fonksiyonlarını en iyi şekilde kullanarak klasik bir ML problemine zaman serisi benzeri bir yapı kazandırmak zorundaydım.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Nasıl?**
+> 
+> Kesinlikle! Büyük ve doğrulanabilir sonuçlar elde edebilmek, özgeçmişte öne çıkmanızı sağlar. 2016’da Cerved (bir pazarlama istihbarat şirketi) tarafından işe alındığımda, işe alım yöneticisi Kaggle’ın ne olduğunu çok iyi biliyordu – ve görüşmede gerçek dünya projelerinden bahsedebilmek çok değerliydi. Kesinlikle Kaggle, kariyerimin gelişiminde önemli bir rol oynadı.
+> 
+> 
+> 
+> **Deneyiminize göre, acemi Kagglers genellikle neyi gözden kaçırıyor? İlk başladığınızda bilseydiniz iyi olurdu dediğiniz şey nedir?**
+> 
+> Herkesin genellikle kodlamaya başladığını, bir public kernel’i forkladığını ve birkaç satır veya parametre değiştirdiğini düşünüyorum. Başlangıçta bu tamamen normal! Ancak kodlamadan önce veriyi incelemeye ve problemi anlamaya ciddi zaman ayırmak gerekir.
+> 
+> 
+> 
+> **Geçmişte yarışmalarda yaptığınız hatalar nelerdir?**
+> 
+> Belki hata sayılmaz ama genellikle solo yarışmayı tercih ettim: bir yandan her yönüyle ilgilenmek zorunda olduğunuz için iyi, zamanınızı istediğiniz gibi yönetebilirsiniz. Ancak birkaç yarışmada takım arkadaşlarıyla çalışmak da çok keyifliydi; muhtemelen daha sık takım kurmayı düşünmeliyim, çünkü iş birliği çok şey öğretiyor.
+> 
+> 
+> 
+> **Veri analizi veya makine öğrenimi için önerdiğiniz özel araç veya kütüphaneler var mı?**
+> 
+> Alışılmışların dışında, her zaman **data.table** (R versiyonundan itibaren) hayranı oldum: yeterince takdir edilmiyor bence! Büyük veriyle yerel bir makinede çalışmak için gerçekten harika bir paket.
+> 
+> 
+> 
+> **Bir yarışmaya katılırken akılda tutulması gereken en önemli şey nedir?**
+> 
+> Önce problemi ve veriyi anlayın: hemen kodlamaya başlamayın!
+
 ### Bayesian optimization *(Bayesyen optimizasyon)*
 
+Grid search’ü geride bıraktığımızda (ki bu yalnızca deney alanı sınırlı olduğunda uygulanabilir), uygulayıcıların genellikle tercih ettiği yöntem **random search optimizasyonu** uygulamak veya daha karmaşık bir kurulum gerektiren **Bayesian optimizasyon (BO)** tekniğini denemektir.
+
+Bayesian optimizasyon kavramı, Snoek, J., Larochelle, H. ve Adams, R. P. tarafından **“Practical Bayesian Optimization of Machine Learning Algorithms”** ([http://export.arxiv.org/pdf/1206.2944](http://export.arxiv.org/pdf/1206.2944)) adlı makalede tanıtılmıştır. Temel fikir şudur: **Gerçek amaç fonksiyonu yerine bir vekil fonksiyon (surrogate function) optimize edilir**. Grid search ve random search ise doğrudan gerçek amaç fonksiyonunu optimize eder. Bu yaklaşım, gradyanlar yoksa, gerçek amaç fonksiyonunu test etmek maliyetliyse (aksi takdirde random search tercih edilir) veya arama alanı karmaşık ve gürültülü ise kullanılır.
+
+Bayesian arama, **keşif (exploration)** ile **sömürü (exploitation)** arasında bir denge kurar. Başlangıçta rastgele keşif yaparak vekil fonksiyonu eğitir. Bu vekil fonksiyon temel alınarak, arama, tahminleyicinin nasıl çalıştığına dair ilk yaklaşık bilgiyi kullanarak daha faydalı örnekler seçer ve maliyet fonksiyonunu minimize eder. Bayesian yaklaşımı adında belirtildiği gibi, optimizasyon sırasında daha akıllıca kararlar almak için **öncül bilgiler (priors)** kullanılır. Böylece, gerekli değerlendirme sayısını sınırlayarak minimizasyon daha hızlı gerçekleştirilir.
+
+Bayesian optimizasyon, bir gözlemin ne kadar faydalı olacağını belirlemek için bir **acquisition function (edinim fonksiyonu)** kullanır. Keşif ve sömürü arasındaki dengeyi yönetmek için algoritma, herhangi bir noktanın denenmesinin ne kadar faydalı olacağını tek bir ölçü ile sağlar.
+
+Genellikle Bayesian optimizasyon **Gaussian süreçleri (Gaussian processes)** ile desteklenir. Gaussian süreçleri, arama alanı düzgün ve tahmin edilebilir bir yanıt verdiğinde daha iyi performans gösterir. Arama alanı daha karmaşıksa, alternatif olarak **ağaç algoritmaları** (ör. random forests) veya tamamen farklı bir yaklaşım olan **Tree Parzen Estimators (TPE)** / **Tree-structured Parzen Estimators** kullanılabilir.
+
+TPE’ler, parametrelerin başarısını tahmin eden bir model kurmak yerine, deneylerden elde edilen ardışık yaklaşımlara dayanarak **en iyi performans gösteren parametrelerin çok değişkenli dağılımını tahmin eder**. Böylece TPE’ler, parametreleri doğrudan bir ML modeli üzerinden (Gaussian süreçleri gibi) almak yerine, olasılıksal bir dağılımdan örnekleyerek en iyi parametre setini elde eder.
+
+Bu yaklaşımları inceleyeceğiz: önce **Gaussian süreçlerine dayalı** Scikit-optimize ve KerasTuner (Scikit-optimize ayrıca random forests, KerasTuner ise multi-armed bandits kullanabilir), ardından esas olarak **TPE tabanlı Optuna** (farklı stratejiler de sunar: [https://optuna.readthedocs.io/en/stable/reference/samplers.html](https://optuna.readthedocs.io/en/stable/reference/samplers.html)) ele alınacak.
+
+> Bayesian optimizasyon, hiperparametre ayarlamada **en gelişmiş yöntem** olarak kabul edilse de, daha karmaşık parametre alanlarında zaman ve hesaplama açısından **random search ile bulunan bir çözüme göre avantaj sağlamayabileceğini** unutmamak gerekir. Örneğin Google Cloud Machine Learning Engine hizmetlerinde Bayesian optimizasyon, en fazla 16 parametreli problemlerle sınırlıdır; daha fazla parametre olduğunda **random sampling** kullanılır.
+
 #### Using Scikit-optimize *(Scikit-optimize kullanımı)*
+
+Scikit-optimize (skopt), **Scikit-learn ile aynı API kullanılarak geliştirilmiş** ve **NumPy ile SciPy fonksiyonlarından yoğun şekilde yararlanılmıştır**. Ayrıca, Scikit-learn projesine katkıda bulunan bazı kişiler (ör. Gilles Louppe) tarafından oluşturulmuştur.
+
+Gaussian süreç algoritmalarına dayalı bu paket, iyi bir şekilde bakım yapılmaktadır; ancak bazen Scikit-learn, NumPy veya SciPy tarafındaki güncellemeleri yakalamak için geri kalması gerekebilir. Örneğin yazım sırasında, Kaggle Notebooks üzerinde düzgün çalıştırmak için bu paketlerin eski sürümlerine dönmek gerekebilir (detaylar GitHub’da: [https://github.com/scikit-optimize/scikit-optimize/issues/981](https://github.com/scikit-optimize/scikit-optimize/issues/981)).
+
+Paket **sezgisel bir API’ye sahiptir** ve işlevlerini kendi optimizasyon stratejilerinizde kullanmak oldukça kolaydır. Skopt ayrıca **grafiksel görselleştirmeleriyle** de tanınır. Örneğin, optimizasyon sürecinin sonuçlarını görselleştirerek (`plot_objective` fonksiyonu ile) arama alanını yeniden tanımlayıp, optimizasyonun problem için nasıl çalıştığını açıklayabilirsiniz.
+
+Örnekler için başvurulan Kaggle Notebooks:
+
+* [https://www.kaggle.com/lucamassaron/tutorial-bayesian-optimization-with-lightgbm](https://www.kaggle.com/lucamassaron/tutorial-bayesian-optimization-with-lightgbm)
+* [https://www.kaggle.com/lucamassaron/scikit-optimize-for-lightgbm](https://www.kaggle.com/lucamassaron/scikit-optimize-for-lightgbm)
+
+Bu örnekte, **30 Days of ML** yarışması üzerinden bir optimizasyon problemini nasıl hızlıca çözebileceğimizi göstereceğiz. Bu yarışma, katılımcılara yeni beceriler kazandırmayı ve 30 gün süren bir yarışmada uygulamayı amaçlamaktadır. Yarışma, bir sigorta talebinin değerini tahmin etmeyi hedeflediği için **regresyon problemi** olarak sınıflandırılır. Daha fazla bilgi ve veri indirmek için: [https://www.kaggle.com/thirty-days-of-ml](https://www.kaggle.com/thirty-days-of-ml)
+
+---
+
+* Adım 1: Kütüphaneleri yüklemek
+
+```python
+# Temel kütüphaneler
+import numpy as np
+import pandas as pd
+from time import time
+import pprint
+import joblib
+from functools import partial
+
+# Uyarıları gizlemek
+import warnings
+warnings.filterwarnings("ignore")
+
+# Sınıflandırıcılar
+import lightgbm as lgb
+
+# Model seçimi
+from sklearn.model_selection import KFold
+
+# Metrikler
+from sklearn.metrics import mean_squared_error, make_scorer
+
+# Skopt fonksiyonları
+from skopt import BayesSearchCV
+from skopt.callbacks import DeadlineStopper, DeltaYStopper
+from skopt.space import Real, Categorical, Integer
+```
+
+* Adım 2: Veriyi yüklemek ve hazırlamak
+
+```python
+# Veriyi yükleme
+X = pd.read_csv("../input/30-days-of-ml/train.csv")
+X_test = pd.read_csv("../input/30-days-of-ml/test.csv")
+
+# Hedef ve indeks ayarlama
+y = X.target
+X = X.set_index('id').drop('target', axis='columns')
+X_test = X_test.set_index('id')
+
+# Kategorik verileri sayısal hale getirme
+categoricals = [item for item in X.columns if 'cat' in item]
+cat_values = np.unique(X[categoricals].values)
+cat_dict = dict(zip(cat_values, range(len(cat_values))))
+X[categoricals] = X[categoricals].replace(cat_dict).astype('category')
+X_test[categoricals] = X_test[categoricals].replace(cat_dict).astype('category')
+```
+
+* Adım 3: Raporlama fonksiyonunu tanımlamak
+
+```python
+def report_perf(optimizer, X, y, title="model", callbacks=None):
+    """
+    Optimizer performansını ve süreyi raporlamak için bir wrapper
+    """
+    start = time()
+    if callbacks is not None:
+        optimizer.fit(X, y, callback=callbacks)
+    else:
+        optimizer.fit(X, y)
+    
+    d = pd.DataFrame(optimizer.cv_results_)
+    best_score = optimizer.best_score_
+    best_score_std = d.iloc[optimizer.best_index_].std_test_score
+    best_params = optimizer.best_params_
+    
+    print((title + " took %.2f seconds, candidates checked: %d, best CV score: %.3f ± %.3f") %
+          (time() - start, len(optimizer.cv_results_['params']), best_score, best_score_std))
+    print('Best parameters:')
+    pprint.pprint(best_params)
+    print()
+    
+    return best_params
+```
+
+* Adım 4: Değerlendirme metriği, doğrulama stratejisi ve model
+
+```python
+scoring = make_scorer(partial(mean_squared_error, squared=False), greater_is_better=False)
+kf = KFold(n_splits=5, shuffle=True, random_state=0)
+
+reg = lgb.LGBMRegressor(
+    boosting_type='gbdt',
+    metric='rmse',
+    objective='regression',
+    n_jobs=1,
+    verbose=-1,
+    random_state=0
+)
+```
+
+* Adım 5: Hiperparametre arama alanını tanımlamak
+
+```python
+search_spaces = {
+    'learning_rate': Real(0.01, 1.0, 'log-uniform'),
+    'n_estimators': Integer(30, 5000),
+    'num_leaves': Integer(2, 512),
+    'max_depth': Integer(-1, 256),
+    'min_child_samples': Integer(1, 256),
+    'max_bin': Integer(100, 1000),
+    'subsample': Real(0.01, 1.0, 'uniform'),
+    'subsample_freq': Integer(0, 10),
+    'colsample_bytree': Real(0.01, 1.0, 'uniform'),
+    'min_child_weight': Real(0.01, 10.0, 'uniform'),
+    'reg_lambda': Real(1e-9, 100.0, 'log-uniform'),
+    'reg_alpha': Real(1e-9, 100.0, 'log-uniform'),
+}
+```
+
+* Adım 6: Bayesian optimizasyonunu başlatmak
+
+```python
+opt = BayesSearchCV(
+    estimator=reg,
+    search_spaces=search_spaces,
+    scoring=scoring,
+    cv=kf,
+    n_iter=60,           # Maksimum deneme sayısı
+    n_jobs=-1,           # İşlem sayısı
+    iid=False,           # CV skoruna göre optimize et
+    return_train_score=False,
+    refit=False,
+    optimizer_kwargs={'base_estimator': 'GP'},  # Gaussian Processes
+    random_state=0
+)
+
+# Kontroller
+overdone_control = DeltaYStopper(delta=0.0001)   # Kazanç çok az ise dur
+time_limit_control = DeadlineStopper(total_time=60*60*6)  # 6 saat limit
+
+best_params = report_perf(opt, X, y, 'LightGBM_regression',
+                          callbacks=[overdone_control, time_limit_control])
+```
+
+Bu örnekte, **Bayesian optimizasyon** keşif ve sömürü stratejilerini birleştirdiği için, herhangi bir zamanda durdurulsa bile o ana kadar bulunan **en iyi çözümü** döndürür. Ancak bu, mutlaka **en iyi teorik çözüm** olduğu anlamına gelmez; çünkü acquisition function, vekil fonksiyon ve belirsizlik aralıklarına göre **en umut verici bölgeleri önceliklendirir**.
 
 #### Customizing a Bayesian optimization search *(Bayesyen aramayı özelleştirme)*
 
