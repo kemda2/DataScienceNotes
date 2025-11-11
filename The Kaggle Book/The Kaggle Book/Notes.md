@@ -5817,7 +5817,379 @@ Optimizasyon sürecini zaman ve kaynaklarımıza uygun hale getirmek için (`n_c
 
 #### Creating lighter and faster models with KerasTuner *(KerasTuner ile daha hafif ve hızlı modeller oluşturma)*
 
+Önceki bölüm karmaşıklığı nedeniyle sizi şaşırtmış olabilir; KerasTuner, optimizasyonu zahmetsiz bir şekilde kurmanız için hızlı bir çözüm sunabilir. Her ne kadar varsayılan olarak Bayes optimizasyonu ve Gauss süreçlerini kullansa da, KerasTuner’ın yeni fikri **Hyperband optimizasyonu**dur. Hyperband optimizasyonu, en iyi parametreleri bulmak için **bandit yaklaşımını** kullanır (bkz. [http://web.eecs.umich.edu/~mosharaf/Readings/HyperBand.pdf](http://web.eecs.umich.edu/~mosharaf/Readings/HyperBand.pdf)). Bu yöntem, optimizasyon yüzeyi oldukça düzensiz ve kesintili olan sinir ağlarında oldukça iyi çalışır; dolayısıyla her zaman Gauss süreçleri için uygun değildir.
+
+Unutmayın ki, özel bir ağ oluşturan fonksiyonu yazmaktan kaçınamazsınız; KerasTuner sadece bunu yönetmeyi çok daha kolay hale getirir.
+
+Başlangıçtan başlayalım. KerasTuner ([https://keras.io/keras_tuner/](https://keras.io/keras_tuner/)) François Chollet tarafından “Keras modelleri için esnek ve verimli hiperparametre ayarlama” olarak duyurulmuştur.
+
+Chollet’in önerdiği KerasTuner çalışma tarifi, mevcut Keras modelinizden başlamak üzere basit adımlardan oluşur:
+
+1. Modelinizi **hp** parametresi ile bir fonksiyon içine sarın.
+2. Fonksiyonun başında hiperparametreleri tanımlayın.
+3. DNN’deki statik değerleri hiperparametrelerle değiştirin.
+4. Verilen hiperparametrelerden karmaşık bir sinir ağı modelleyen kodu yazın.
+5. Gerekirse, ağı inşa ederken hiperparametreleri dinamik olarak tanımlayın.
+
+Şimdi bu adımların bir Kaggle yarışmasında nasıl çalışabileceğini bir örnek üzerinden inceleyeceğiz. Şu anda KerasTuner, herhangi bir Kaggle Notebook’un sunduğu yığın içinde yer alır; dolayısıyla kurulum yapmanız gerekmez. Ayrıca, TensorFlow eklentileri de Notebook’larda önceden yüklüdür.
+
+---
+
+Eğer Kaggle Notebook kullanmıyorsanız ve KerasTuner’ı denemek istiyorsanız, her ikisini de şu komutlarla kolayca yükleyebilirsiniz:
+
+```bash
+!pip install -U keras-tuner
+!pip install -U tensorflow-addons
+```
+
+Örneğin önceden hazırlanmış Kaggle Notebook versiyonunu burada bulabilirsiniz: [https://www.kaggle.com/lucamassaron/kerastuner-for-imdb/](https://www.kaggle.com/lucamassaron/kerastuner-for-imdb/).
+
+İlk adım olarak gerekli paketleri içe aktaralım ve Keras’tan kullanacağımız veriyi yükleyelim:
+
+```python
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from tensorflow import keras
+import tensorflow_addons as tfa
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LeakyReLU, Activation
+from tensorflow.keras.optimizers import SGD, Adam
+from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
+pad_sequences = keras.preprocessing.sequence.pad_sequences
+
+imdb = keras.datasets.imdb
+(train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=10000)
+
+train_data, val_data, train_labels, val_labels = train_test_split(
+    train_data, train_labels, test_size=0.30, shuffle=True, random_state=0
+)
+```
+
+---
+
+Bu örnekte **IMDb veri setini** kullanıyoruz; Keras paketinde mevcuttur ([https://keras.io/api/datasets/imdb/](https://keras.io/api/datasets/imdb/)). Veri setinin bazı ilginç özellikleri şunlardır:
+
+* 25.000 IMDb film yorumundan oluşur.
+* Yorumlar duygu etiketine sahiptir (pozitif/negatif).
+* Hedef sınıflar dengelidir (dolayısıyla doğruluk iyi bir ölçüt olarak kullanılabilir).
+* Her yorum, kelime indeksleri listesi (tamsayılar) olarak kodlanmıştır.
+* Kolaylık için kelimeler, genel frekanslarına göre indekslenmiştir.
+
+Ayrıca bu veri seti, popüler bir Kaggle yarışmasında da kullanılmıştır: [https://www.kaggle.com/c/word2vec-nlp-tutorial/overview](https://www.kaggle.com/c/word2vec-nlp-tutorial/overview).
+
+Bu örnek **doğal dil işleme (NLP)** içerir. Bu tür problemler genellikle LSTM veya GRU katmanlarına dayalı **tekrarlayan sinir ağları (RNN)** ile çözülür. BERT, RoBERTa gibi transformer tabanlı modeller genellikle daha iyi sonuç verir; çünkü büyük dil korpusları üzerinde önceden eğitilmiştir. Ancak her problemde RNN’ler güçlü bir temel oluşturabilir veya modellerin ensemble’ına katkıda bulunabilir.
+
+---
+
+Tüm kelimeler zaten sayısal olarak indekslenmiş olduğundan, cümleleri normalleştirmek için **padding, start, unknown ve unused** kodlarını ekliyoruz:
+
+```python
+word_index = imdb.get_word_index()
+word_index = {k:(v+3) for k,v in word_index.items()}
+word_index["<PAD>"] = 0
+word_index["<START>"] = 1
+word_index["<UNK>"] = 2
+word_index["<UNUSED>"] = 3
+reverse_word_index = dict([(value, key) for (key, value) in word_index.items()])
+
+def decode_review(text):
+    return ' '.join([reverse_word_index.get(i, '?') for i in text])
+```
+
+---
+
+Sonraki adım, **attention katmanı** oluşturmaktır. Attention, transformer modellerinin temelini oluşturur ve NLP’de son yılların en yenilikçi fikirlerinden biridir.
+
+* LSTM ve GRU katmanları işlenmiş diziler üretir; ancak dizilerin tüm öğeleri tahminler için önemli değildir.
+* Dizi öğelerini ortalamak yerine, ağırlıklı ortalama alabilir ve doğru ağırlıkları öğrenmek için eğitim sırasında optimize edebilirsiniz.
+* Bu, model performansını artırır. Çoklu attention katmanları (multi-head attention) kullanılabilir; ancak bu örnekte tek katman yeterlidir.
+
+```python
+from tensorflow.keras.layers import Dense, Dropout, Flatten, RepeatVector, dot, multiply, Permute, Lambda
+K = keras.backend
+
+def attention(layer):
+    _,_,units = layer.shape.as_list()
+    attention = Dense(1, activation='tanh')(layer)
+    attention = Flatten()(attention)
+    attention = Activation('softmax')(attention)
+    attention = RepeatVector(units)(attention)
+    attention = Permute([2, 1])(attention)
+    representation = multiply([layer, attention])
+    representation = Lambda(lambda x: K.sum(x, axis=-2), output_shape=(units,))(representation)
+    return representation
+```
+
+Detaylar için: Vaswani, A. ve ark., *Attention is All You Need*, NeurIPS 2017: [https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf](https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf)
+
+---
+
+Ayrıca farklı optimizasyon yöntemlerini de test etmek isteriz:
+
+* **Rectified Adam (RAdam)**: Adaptif öğrenme oranına sahip Adam türevi
+* **SWA (Stochastic Weight Averaging)**: Ağırlıkların ortalamasını alarak aşırı uyum veya aşırı sapmayı azaltır
+
+```python
+def get_optimizer(option=0, learning_rate=0.001):
+    if option==0:
+        return tf.keras.optimizers.Adam(learning_rate)
+    elif option==1:
+        return tf.keras.optimizers.SGD(learning_rate, momentum=0.9, nesterov=True)
+    elif option==2:
+        return tfa.optimizers.RectifiedAdam(learning_rate)
+    elif option==3:
+        return tfa.optimizers.Lookahead(tf.optimizers.Adam(learning_rate), sync_period=3)
+    elif option==4:
+        return tfa.optimizers.SWA(tf.optimizers.Adam(learning_rate))
+    elif option==5:
+        return tfa.optimizers.SWA(tf.keras.optimizers.SGD(learning_rate, momentum=0.9, nesterov=True))
+    else:
+        return tf.keras.optimizers.Adam(learning_rate)
+```
+
+---
+
+En önemli fonksiyon: Hiperparametreler üzerinden farklı ağ mimarileri üreten fonksiyon:
+
+```python
+layers = keras.layers
+models = keras.models
+
+def create_tunable_model(hp, vocab_size=10000, pad_length=256):
+    # Hiperparametreleri tanımla
+    embedding_size = hp.Int('embedding_size', 8, 512, 8)
+    spatial_dropout = hp.Float('spatial_dropout', 0, 0.5, 0.05)
+    conv_layers = hp.Int('conv_layers', 1, 5, 1)
+    rnn_layers = hp.Int('rnn_layers', 1, 5, 1)
+    dense_layers = hp.Int('dense_layers', 1, 3, 1)
+    conv_filters = hp.Int('conv_filters', 32, 512, 32)
+    conv_kernel = hp.Int('conv_kernel', 1, 8, 1)
+    concat_dropout = hp.Float('concat_dropout', 0, 0.5, 0.05)
+    dense_dropout = hp.Float('dense_dropout', 0, 0.5, 0.05)
+
+    # Input ve embedding
+    inputs = layers.Input(name='inputs',shape=[pad_length])
+    layer  = layers.Embedding(vocab_size, embedding_size, input_length=pad_length)(inputs)
+    layer  = layers.SpatialDropout1D(spatial_dropout)(layer)
+
+    # Conv katmanları
+    for l in range(conv_layers):
+        if l==0:
+            conv = layers.Conv1D(filters=conv_filters, kernel_size=conv_kernel, padding='valid', kernel_initializer='he_uniform')(layer)
+        else:
+            conv = layers.Conv1D(filters=conv_filters, kernel_size=conv_kernel, padding='valid', kernel_initializer='he_uniform')(conv)
+    avg_pool_conv = layers.GlobalAveragePooling1D()(conv)
+    max_pool_conv = layers.GlobalMaxPooling1D()(conv)
+
+    # RNN ve attention
+    representations = list()
+    for l in range(rnn_layers):
+        use_bidirectional = hp.Choice(f'use_bidirectional_{l}', values=[0, 1])
+        use_lstm = hp.Choice(f'use_lstm_{l}', values=[0, 1])
+        units = hp.Int(f'units_{l}', 8, 512, 8)
+        rnl = layers.LSTM if use_lstm==1 else layers.GRU
+        if use_bidirectional==1:
+            layer = layers.Bidirectional(rnl(units, return_sequences=True))(layer)
+        else:
+            layer = rnl(units, return_sequences=True)(layer)
+        representations.append(attention(layer))
+
+    layer = layers.concatenate(representations + [avg_pool_conv, max_pool_conv])
+    layer = layers.Dropout(concat_dropout)(layer)
+
+    # Dense katmanları
+    for l in range(dense_layers):
+        dense_units = hp.Int(f'dense_units_{l}', 8, 512, 8)
+        layer = layers.Dense(dense_units)(layer)
+        layer = layers.LeakyReLU()(layer)
+        layer = layers.Dropout(dense_dropout)(layer)
+
+    layer = layers.Dense(1, name='out_layer')(layer)
+    outputs = layers.Activation('sigmoid')(layer)
+    model = models.Model(inputs=inputs, outputs=outputs)
+
+    # Öğrenme oranı ve optimizer
+    hp_learning_rate = hp.Choice('learning_rate', [0.002, 0.001, 0.0005])
+    optimizer_type = hp.Choice('optimizer', list(range(6)))
+    optimizer = get_optimizer(option=optimizer_type, learning_rate=hp_learning_rate)
+
+    model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['acc'])
+    return model
+```
+
+---
+
+Fonksiyonel API kullanılarak model oluşturuldu. Sequential API önerilmez; esnekliği sınırlıdır.
+
+KerasTuner ile hiperparametre optimizasyonu şöyle yapılır:
+
+```python
+import keras_tuner as kt
+
+tuner = kt.BayesianOptimization(
+    hypermodel=create_tunable_model,
+    objective='val_acc',
+    max_trials=100,
+    num_initial_points=3,
+    directory='storage',
+    project_name='imdb',
+    seed=42
+)
+
+tuner.search(
+    train_data, train_labels, 
+    epochs=30,
+    batch_size=64, 
+    validation_data=(val_data, val_labels),
+    shuffle=True,
+    verbose=2,
+    callbacks=[EarlyStopping('val_acc', patience=3, restore_best_weights=True)]
+)
+```
+
+* Bayes optimizasyonu kullanıldı; isterseniz Hyperband da deneyebilirsiniz.
+* `hypermodel` parametresine model fonksiyonunu veriyoruz.
+* `objective` ile hedefi belirliyoruz.
+* `max_trials` maksimum deneme sayısıdır; daha önce bir çözüm yoksa durur.
+* `num_initial_points` başlangıç rastgele deneme sayısıdır.
+
+Optimizasyon tamamlandıktan sonra en iyi hiperparametreleri ve modeli alabilirsiniz:
+
+```python
+best_hps = tuner.get_best_hyperparameters()[0]
+model = tuner.hypermodel.build(best_hps)
+print(best_hps.values)
+model.summary()
+model.save("best_model.h5")
+```
+
+Bu örnekte KerasTuner şunları bulur:
+
+* Daha büyük embedding katmanı
+* Sadece düz GRU ve LSTM katmanları (bidirectional yok)
+* Çoklu Conv1D katmanları
+* Daha büyük ve daha fazla dense katman
+
+Chollet, KerasTuner’ın DNN performansını artırmak için değil, aynı zamanda **daha yönetilebilir ve hızlı modeller** elde etmek için de kullanılmasını öneriyor. Bu, yarışmalarda birden fazla modelin sınırlı sürede çalışmasını sağlamak açısından önemlidir.
+
 #### The TPE approach in Optuna *(Optuna’daki TPE yaklaşımı)*
+
+Bayes optimizasyonu ile ilgili genel bakışımızı, bu konuya dair başka ilginç bir araç ve yaklaşımı inceleyerek tamamlıyoruz. Daha önce de tartıştığımız gibi, Scikit-optimize Gaussian süreçlerini (ve ayrıca ağaç algoritmalarını) kullanır ve doğrudan vekil fonksiyon (surrogate function) ve edinim fonksiyonunu (acquisition function) modellemektedir.
+
+KerasTuner kullanımına dair daha fazla örnek incelemek isterseniz, François Chollet, optimizer’ının çalışma ve fonksiyonlarını göstermek amacıyla Kaggle yarışmaları için bir dizi Notebook da hazırlamıştır:
+
+* [Digit Recognizer veri seti için en iyi uygulamalar](https://www.kaggle.com/fchollet/keras-kerastuner-best)
+* [Titanic veri seti için en iyi uygulamalar](https://www.kaggle.com/fchollet/titanic-keras-kerastuner)
+* [Mechanisms of Action (MoA) Prediction yarışması için en iyi uygulamalar](https://www.kaggle.com/fchollet/moa-keras-kerastuner-best)
+
+Hatırlatmak gerekirse, vekil fonksiyon, belirli bir hiperparametre seti denendiğinde olası performans sonucunu modelleyerek optimizasyon sürecine yardımcı olur. Vekil fonksiyon, önceki deneyler ve sonuçları kullanılarak oluşturulur; bu, belirli bir makine öğrenimi algoritmasının belirli bir problem üzerindeki davranışını tahmin etmek için uygulanan bir öngörü modelidir. Vekil fonksiyona verilen her parametre girişi için beklenen bir performans çıktısı elde edilir. Bu sezgisel ve aynı zamanda oldukça esnek bir yöntemdir, gördüğümüz gibi.
+
+Edinim fonksiyonu ise, vekil fonksiyonun makine öğrenimi algoritmasının performanslarını tahmin etme yeteneğini artırmak için hangi hiperparametre setlerinin test edilebileceğini gösterir. Ayrıca, vekil fonksiyonun tahminlerine dayanarak en yüksek performanslı sonuca ulaşıp ulaşamayacağımızı gerçekten test etmek için faydalıdır. Bu iki amaç, Bayes optimizasyon sürecinin keşfetme kısmını (deneyler yaptığınız bölüm) ve kullanma kısmını (performansı test ettiğiniz bölüm) temsil eder.
+
+---
+
+TPE tabanlı optimizasyon araçları ise, parametre değerlerinin başarı olasılığını tahmin ederek problemi çözmeye çalışır. Başka bir deyişle, parametrelerin başarı dağılımını ardışık iyileştirmelerle modelleyerek, daha başarılı değer kombinasyonlarına daha yüksek olasılık atar.
+
+Bu yaklaşımda, hiperparametre seti iyi ve kötü olarak bu dağılımlar aracılığıyla ayrılır. Bu dağılımlar, Bayes optimizasyondaki vekil ve edinim fonksiyonlarının rolünü üstlenir çünkü dağılımlar, daha iyi performans elde etmek için nereden örnek alınacağını veya belirsizlik olan alanları keşfetmeyi söyler.
+
+TPE’nin teknik detaylarını keşfetmek için şu kaynağı okumanızı öneririz:
+Bergstra, J. ve ark., *Algorithms for hyper-parameter optimization*, Advances in Neural Information Processing Systems 24, 2011 ([PDF](https://proceedings.neurips.cc/paper/2011/file/86e8f7ab32cfd12577bc2619bc635690-Paper.pdf)).
+
+Bu nedenle TPE, arama alanını modelleyebilir ve aynı zamanda algoritmanın bir sonraki adımda denemesi gereken değerleri önerebilir; parametrelerin ayarlanmış olasılık dağılımından örnekleme yaparak bunu gerçekleştirir.
+
+Uzun süre Hyperopt, TPE kullanmayı tercih edenler için bir seçenekti. Ancak Ekim 2018’de Optuna açık kaynak olarak yayımlandı ve Kaggle kullanıcıları için esnekliği (sinir ağları ve toplu modeller dahil kutudan çıktığı gibi çalışır), hızı ve önceki optimizatörlere göre daha iyi çözümler bulmadaki verimliliği nedeniyle tercih edilen araç haline geldi.
+
+Bu bölümde, Optuna terminolojisine göre “study” olarak adlandırılan bir arama (search) kurmanın ne kadar kolay olduğunu göstereceğiz. Yapmanız gereken tek şey, Optuna tarafından test edilecek parametreleri alan ve bir değerlendirme döndüren bir hedef fonksiyon (objective function) yazmaktır. Doğrulama ve diğer algoritmik detaylar, hedef fonksiyon içinde doğrudan yönetilebilir; ayrıca fonksiyon dışındaki değişkenlere (hem global hem de lokal) referans verebilirsiniz.
+
+Optuna ayrıca budama (pruning) özelliği sunar; bu, belirli bir deneyin iyi gitmediğini işaret eder ve Optuna’nın bu deneyi durdurup unutmasını sağlar. Optuna, bu geri çağrıyı (callback) etkinleştiren fonksiyonlar listesi sağlar ([kaynak](https://optuna.readthedocs.io/en/stable/reference/integration.html)); algoritma bundan sonra her şeyi verimli bir şekilde çalıştırır, böylece optimizasyon için gereken süre önemli ölçüde azalır.
+
+---
+
+Örnek olarak, 30 Days of ML yarışması için optimizasyonu tekrar ele alıyoruz. Bu sefer, XGBoost algoritmasını bu yarışma için çalıştıracak parametreleri bulmaya çalışıyoruz.
+
+İlk adım olarak kütüphaneleri ve veriyi yükleyelim:
+
+```python
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OrdinalEncoder
+from xgboost import XGBRegressor
+import optuna
+from optuna.integration import XGBoostPruningCallback
+
+# Veriyi yükleme
+X_train = pd.read_csv("../input/30-days-of-ml/train.csv").iloc[:100_000, :]
+X_test = pd.read_csv("../input/30-days-of-ml/test.csv")
+
+# Veriyi tabular matris olarak hazırlama
+y_train = X_train.target
+X_train = X_train.set_index('id').drop('target', axis='columns')
+X_test = X_test.set_index('id')
+
+# Kategorik özellikleri belirleme
+categoricals = [item for item in X_train.columns if 'cat' in item]
+
+# Kategorik verilerle OrdinalEncoder kullanımı
+ordinal_encoder = OrdinalEncoder()
+X_train[categoricals] = ordinal_encoder.fit_transform(X_train[categoricals])
+X_test[categoricals] = ordinal_encoder.transform(X_test[categoricals])
+```
+
+Optuna kullanırken, hedef fonksiyonun içinde model, çapraz doğrulama mantığı, değerlendirme ölçütü ve arama alanını tanımlamanız yeterlidir. Bu örnek için Notebook’a [buradan](https://www.kaggle.com/lucamassaron/optuna-bayesian-optimization) ulaşabilirsiniz.
+
+Fonksiyonun içinde, veriyi dışarıdan referans alarak fonksiyonun oluşturulmasını kolaylaştırabilirsiniz. KerasTuner’daki gibi, burada da özel bir giriş parametresi kullanmanız gerekir:
+
+```python
+def objective(trial):
+    params = {
+        'learning_rate': trial.suggest_float("learning_rate", 0.01, 1.0, log=True),
+        'reg_lambda': trial.suggest_loguniform("reg_lambda", 1e-9, 100.0),
+        'reg_alpha': trial.suggest_loguniform("reg_alpha", 1e-9, 100.0),
+        'subsample': trial.suggest_float("subsample", 0.1, 1.0),
+        'colsample_bytree': trial.suggest_float("colsample_bytree", 0.1, 1.0),
+        'max_depth': trial.suggest_int("max_depth", 1, 7),
+        'min_child_weight': trial.suggest_int("min_child_weight", 1, 7),
+        'gamma': trial.suggest_float("gamma", 0.1, 1.0, step=0.1)
+    }
+    model = XGBRegressor(
+        random_state=0,
+        tree_method="gpu_hist",
+        predictor="gpu_predictor",
+        n_estimators=10_000,
+        **params
+    )
+    model.fit(x, y, early_stopping_rounds=300,
+              eval_set=[(x_val, y_val)], verbose=1000,
+              callbacks=[XGBoostPruningCallback(trial, 'validation_0-rmse')])
+    preds = model.predict(x_test)
+    rmse = mean_squared_error(y_test, preds, squared=False)
+    return rmse
+```
+
+Performans nedenleriyle, bu örnekte çapraz doğrulama yapmayacağız; bir veri seti eğitim, bir veri seti doğrulama (early stopping) ve bir veri seti test için kullanılacak. GPU kullanıyoruz ve 60 denemeyi makul süre içinde çalıştırabilmek için veriyi alt kümeledik. GPU kullanmak istemezseniz, XGBRegressor tanımlamasındaki `tree_method` ve `predictor` parametrelerini kaldırabilirsiniz. Ayrıca `fit` yönteminde bir callback belirleyerek Optuna’ya model performansı hakkında bilgi sağlıyoruz; böylece optimizer düşük performanslı deneyleri erken durdurup diğer denemelere yer açabilir.
+
+```python
+x, x_val, y, y_val = train_test_split(X_train, y_train, random_state=0, test_size=0.2)
+x, x_test, y, y_test = train_test_split(x, y, random_state=0, test_size=0.25)
+study = optuna.create_study(direction="minimize")
+study.optimize(objective, n_trials=100)
+```
+
+Bir diğer önemli nokta, optimizasyonu problem türüne göre minimuma veya maksimuma göre ayarlayabilmenizdir (Scikit-optimize yalnızca minimizasyon problemlerinde çalışır).
+
+```python
+print(study.best_value)
+print(study.best_params)
+```
+
+Optimizasyon tamamlandığında, en iyi test performansını ve optimizasyon tarafından bulunan en iyi parametreleri yazdırabilir veya dışa aktarabilirsiniz.
 
 ### Summary *(Özet)*
 
