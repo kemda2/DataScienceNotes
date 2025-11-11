@@ -7030,7 +7030,30 @@ Bir sonraki bölümde, derin öğrenme yarışmalarına, ilk olarak sınıfland�
 
 ## Chapter 10: Modeling for Computer Vision *(Bölüm 10: Bilgisayarlı Görü (Computer Vision) için Modellemede Yaklaşımlar)*
 
+Bilgisayarla görme (computer vision) görevleri, makine öğrenmesinin pratik uygulamalarında en popüler problemlerden biridir; bu alan, birçok Kaggle kullanıcısı için derin öğrenmeye giriş kapısı olmuştur, bunlardan biri de benim (yani Konrad). Son birkaç yıl içinde bu alanda muazzam bir ilerleme kaydedildi ve yeni SOTA (State of the Art) kütüphaneleri sürekli olarak yayımlanmaktadır. Bu bölümde, bilgisayarla görme alanındaki en popüler yarışma türlerine genel bir bakış sunacağız:
+
+* Görüntü sınıflandırması (Image classification)
+* Nesne tespiti (Object detection)
+* Görüntü segmentasyonu (Image segmentation)
+
+Başlangıç olarak, farklı problemlere uygulanabilen ve modellerimizin genelleme yeteneğini artırmaya yardımcı olan görevden bağımsız teknikler grubundan olan görüntü artırma (image augmentation) konusuna kısa bir bölümle başlayacağız.
+
 ### Augmentation strategies *(Veri artırma stratejileri)*
+
+Derin öğrenme teknikleri, görüntü tanıma, segmentasyon veya nesne tespiti gibi bilgisayarla görme görevlerinde son derece başarılı olmuştur. Ancak, bu tekniklerin temel algoritmaları genellikle son derece veri yoğun olup, aşırı öğrenmeyi (overfitting) önlemek için büyük miktarda veriye ihtiyaç duyar. Ancak, tüm ilgi alanları bu gereksinimi karşılamaz, işte burada veri artırma (data augmentation devreye girer). Veri artırma, görüntü işleme teknikleri grubudur ve bu teknikler, görüntülerin modifiye edilmiş versiyonlarını oluşturarak, eğitim veri setlerinin boyutunu ve kalitesini artırır, bu da derin öğrenme modellerinin daha iyi performans göstermesini sağlar. Artırılmış veri, genellikle daha kapsamlı bir veri noktaları kümesini temsil eder, böylece eğitim ve doğrulama setleri arasındaki mesafeyi, ayrıca gelecekteki test setlerini minimize eder.
+
+Bu bölümde, daha yaygın kullanılan bazı artırma tekniklerini ve bunların yazılım implementasyonları için seçenekleri gözden geçireceğiz. En sık kullanılan dönüşümler şunlardır:
+
+* **Yansıtma (Flipping):** Görüntünün yatay veya dikey eksende ters çevrilmesi
+* **Dönme (Rotation):** Görüntünün belirli bir açıyla döndürülmesi (saat yönünde veya ters yönde)
+* **Kırpma (Cropping):** Görüntünün rastgele bir alt kısmının seçilmesi
+* **Parlaklık (Brightness):** Görüntünün parlaklık seviyesinin değiştirilmesi
+* **Ölçekleme (Scaling):** Görüntünün daha büyük (dışa doğru) veya daha küçük (içe doğru) bir boyuta artırılması veya küçültülmesi
+
+Aşağıda, bu dönüşümlerin pratikte nasıl çalıştığını, Amerikalı oyuncu ve komedyen Betty White’ın bir görüntüsünü kullanarak gösteriyoruz:
+
+![](im/1064.png)
+
 
 #### Keras built-in augmentations *(Keras’ın yerleşik artırmaları)*
 
