@@ -5661,6 +5661,160 @@ Bu parametreler ile modelimizi yeniden eğitip yarışmada kullanabiliriz. Ayrı
 
 #### Extending Bayesian optimization to neural architecture search *(Bayesyen optimizasyonu sinir ağı mimarisi aramasına genişletme)*
 
+Derin öğrenmeye geçerken, sinir ağlarının da sabitlenmesi gereken oldukça fazla hiperparametreye sahip olduğunu görebiliyoruz:
+
+* Batch boyutu
+* Öğrenme oranı
+* Kullanılacak optimizer türü ve onun iç parametreleri
+
+Tüm bu parametreler, ağın nasıl öğrendiğini etkiler ve büyük bir fark yaratabilir; batch boyutu veya öğrenme oranındaki küçük bir değişiklik, bir ağın hatasını belirli bir eşikten daha fazla azaltıp azaltamayacağını belirleyebilir.
+
+Bununla birlikte, bu öğrenme parametreleri derin sinir ağları (DNN’ler) ile çalışırken optimize edebileceğiniz tek şey değildir. Ağın katmanlar halinde nasıl organize edildiği ve mimarisinin detayları çok daha büyük bir fark yaratabilir.
+
+Aslında teknik olarak, bir mimari, derin sinir ağının temsil kapasitesini ifade eder; yani kullandığınız katmanlara bağlı olarak, ağ verilerde mevcut olan tüm bilgileri okuyup işleyebilir ya da bunu yapamayabilir. Diğer makine öğrenmesi algoritmalarında sınırlı bir seçim yelpazeniz varken, DNN’lerde seçenekleriniz neredeyse sınırsızdır, çünkü tek sınırlama, sinir ağlarının parçalarını kullanma ve bir araya getirme konusundaki bilgi ve deneyiminizdir.
+
+Başarılı derin öğrenme uygulayıcılarının iyi performans gösteren DNN’ler oluştururken izlediği bazı yaygın en iyi uygulamalar şunlardır:
+
+* Önceden eğitilmiş modellere güvenmek (böylece Hugging Face ([https://huggingface.co/models](https://huggingface.co/models)) veya GitHub’da mevcut çözümler hakkında çok bilgi sahibi olmalısınız)
+* Güncel araştırma makalelerini okumak
+* Aynı veya önceki yarışmalardan en iyi Kaggle Notebooks’u kopyalamak
+* Deneme yanılma yöntemi
+* Yaratıcılık ve şans
+
+Ünlü Profesör Geoffrey Hinton’ın verdiği bir derste belirttiği gibi, Bayes optimizasyonu gibi otomatik yöntemleri kullanarak benzer ve çoğu zaman daha iyi sonuçlar elde edebilirsiniz. Bayes optimizasyonu ayrıca, çok sayıda hiperparametrenin olası en iyi kombinasyonlarını bulmakta zorlandığınızda sıkışmanızı önler.
+
+Prof. Geoffrey Hinton’ın ders kaydı için: [https://www.youtube.com/watch?v=i0cKa0di_lo](https://www.youtube.com/watch?v=i0cKa0di_lo)
+Slaytlar için: [https://www.cs.toronto.edu/~hinton/coursera/lecture16/lec16.pdf](https://www.cs.toronto.edu/~hinton/coursera/lecture16/lec16.pdf)
+
+Daha önce bahsettiğimiz gibi, en sofistike AutoML sistemlerinde bile, hiperparametre sayısı çok fazla olduğunda rastgele optimizasyon, Bayes optimizasyonu ile aynı süre içinde daha iyi veya aynı sonuçları üretebilir. Ayrıca, bu durumda keskin dönüşlere ve yüzeylere sahip bir optimizasyon manzarasıyla mücadele etmeniz gerekir; DNN optimizasyonunda parametrelerinizin çoğu sürekli değil, Boolean olabilir ve sadece bir değişiklik, ağın performansını beklenmedik şekilde artırabilir veya düşürebilir.
+
+Rastgele optimizasyon, Kaggle yarışması için genellikle uygun değildir çünkü:
+
+* Zamanınız ve kaynaklarınız sınırlıdır
+* Daha iyi çözümler bulmak için önceki optimizasyon sonuçlarınızı kullanabilirsiniz
+
+Bu senaryoda Bayes optimizasyonu idealdir: Sahip olduğunuz zaman ve hesaplama kaynaklarına göre çalışacak şekilde ayarlayabilirsiniz ve bunu aşamalı olarak yapabilir, ayarlarınızı birden fazla oturumda rafine edebilirsiniz. Ayrıca, güçlü birden fazla makineniz olmadıkça DNN’leri optimize etmek için paralelliği kolayca kullanamazsınız. Bayes optimizasyonu ise yalnızca bir iyi makine ile çalışabilir. Ayrıca, optimizasyon manzarası nedeniyle optimal mimarileri bulmak zor olsa da, özellikle başlangıçta önceki deneylerden bilgi edinirsiniz ve çalışmayacak parametre kombinasyonlarını tamamen önlersiniz. Rastgele optimizasyonda ise, arama alanını değiştirmediğiniz sürece, tüm kombinasyonlar her zaman test edilmeye açıktır.
+
+Bunun da bazı dezavantajları vardır. Bayes optimizasyonu, hiperparametre alanını önceki denemelerden oluşturulan bir surrogate fonksiyon ile modellemektedir ve bu süreç hatasız değildir. Sürecin sadece arama alanının bir kısmına yoğunlaşması ve diğer kısımları (ki bunlar minimumu içerebilir) görmezden gelmesi olasıdır. Çözüm, güvenli olmak için çok sayıda deney yapmak veya rastgele arama ile Bayes optimizasyonunu alternatif olarak kullanmak ve rastgele denemelerle Bayes modelini daha optimal bir şekilde yeniden şekillendirmeye zorlamaktır.
+
+Örneğimizde, tekrar Kaggle’ın 30 Günlük ML girişiminden aldığımız verileri kullanıyoruz; bu bir regresyon görevi. Örneğimiz TensorFlow’a dayanıyor, ama küçük değişikliklerle PyTorch veya MXNet gibi diğer derin öğrenme çerçevelerinde de çalışabilir.
+
+Öncelikle:
+
+```python
+import tensorflow as tf
+```
+
+TensorFlow paketini içe aktardıktan sonra, Dataset fonksiyonunu kullanarak sinir ağımıza veri besleyen iterable bir yapı oluşturuyoruz:
+
+```python
+def df_to_dataset(dataframe, shuffle=True, batch_size=32):
+    dataframe = dataframe.copy()
+    labels = dataframe.pop('target')
+    ds = tf.data.Dataset.from_tensor_slices((dict(dataframe), labels))
+    if shuffle:
+        ds = ds.shuffle(buffer_size=len(dataframe))
+    ds = ds.batch(batch_size)
+    return ds
+```
+
+Ayrıca, leaky ReLU aktivasyonunu modelimiz için özel bir nesne olarak tanımladık; bu sayede string olarak çağırabilir ve doğrudan fonksiyonu kullanmanıza gerek kalmaz:
+
+```python
+tf.keras.utils.get_custom_objects().update(
+    {'leaky-relu': tf.keras.layers.Activation(tf.keras.layers.LeakyReLU(alpha=0.2))}
+)
+```
+
+Ardından, hiperparametrelere bağlı olarak derin sinir ağımızı oluşturan bir fonksiyon yazıyoruz:
+
+```python
+def create_model(cat0_dim, cat1_dim, ..., layers, layer_1, ..., layer_5,
+                 activation, dropout, batch_normalization, learning_rate, **others):
+    dims = {'cat0': cat0_dim, 'cat1': cat1_dim, ..., 'cat9': cat9_dim}
+    vocab = {h:X_train['cat4'].unique().astype(int) for h in ['cat0', ..., 'cat9']}
+    layers = [layer_1, layer_2, layer_3, layer_4, layer_5][:layers]
+    feature_columns = list()
+    for header in ['cont1', ..., 'cont13']:
+        feature_columns.append(tf.feature_column.numeric_column(header))
+    for header in ['cat0', ..., 'cat9']:
+        feature_columns.append(tf.feature_column.embedding_column(
+            tf.feature_column.categorical_column_with_vocabulary_list(
+                header, vocabulary_list=vocab[header]), dimension=dims[header]))
+    feature_layer = tf.keras.layers.DenseFeatures(feature_columns)
+    network_struct = [feature_layer]
+    for nodes in layers:
+        network_struct.append(tf.keras.layers.Dense(nodes, activation=activation))
+    if batch_normalization:
+        network_struct.append(tf.keras.layers.BatchNormalization())
+    if dropout > 0:
+        network_struct.append(tf.keras.layers.Dropout(dropout))
+    model = tf.keras.Sequential(network_struct + [tf.keras.layers.Dense(1)])
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+                  loss=tf.keras.losses.MeanSquaredError(),
+                  metrics=['mean_squared_error'])
+    return model
+```
+
+`create_model` fonksiyonu, iç parametreler aracılığıyla ağ mimarisini özelleştirir. Örneğin, her kategorik değişkenin embedding boyutunu veya ağdaki dense katman sayısını tanımlayabilirsiniz. Tüm bu parametreler Bayes optimizasyonu tarafından keşfedilecek parametre alanıyla ilgilidir.
+
+Ardından, bu parametreleri bir listeye yerleştiriyoruz ve `create_model` fonksiyonunun beklediği sıraya uygun hale getiriyoruz:
+
+```python
+space = [Integer(1, 2, name='cat0_dim'),
+         Integer(1, 2, name='cat1_dim'),
+         ...,
+         Categorical([0.01, 0.005, 0.002, 0.001], name='learning_rate'),
+         Integer(256, 1024, name='batch_size')]
+```
+
+Sonraki adım, tüm arama ile ilgili unsurları objective fonksiyonunda birleştirmektir:
+
+```python
+def make_objective(model_fn, X, space, cv, scoring, validation=0.2):
+    @use_named_args(space) 
+    def objective(**params):
+        print("\nTesting: ", params)
+        validation_scores = list()
+        for k, (train_index, test_index) in enumerate(kf.split(X)):
+            val_index = list()
+            train_examples = int(len(train_index) * (1 - validation))
+            train_index, val_index = train_index[:train_examples], train_index[train_examples:]
+            start_time = time()
+            model = model_fn(**params)
+            early_stopping = tf.keras.callbacks.EarlyStopping(
+                monitor='val_mean_squared_error', mode='min', patience=5, verbose=0)
+            model_checkpoint = tf.keras.callbacks.ModelCheckpoint(
+                'best.model', monitor='val_mean_squared_error', mode='min', save_best_only=True, verbose=0)
+            run = model.fit(df_to_dataset(X_train.iloc[train_index, :], batch_size=params['batch_size']),
+                            validation_data=df_to_dataset(X_train.iloc[val_index, :], batch_size=1024),
+                            epochs=1_000,
+                            callbacks=[model_checkpoint, early_stopping],
+                            verbose=0)
+            end_time = time()
+            rounds = np.argmin(run.history['val_mean_squared_error']) + 1
+            model = tf.keras.models.load_model('best.model')
+            shutil.rmtree('best.model')
+            test_preds = model.predict(df_to_dataset(X.iloc[test_index, :], shuffle=False, batch_size=1024)).flatten()
+            test_score = scoring(X.iloc[test_index, :]['target'], test_preds)
+            print(f"CV Fold {k+1} rmse:{test_score:0.5f} - {rounds} rounds - it took {end_time-start_time:0.0f} secs")
+            validation_scores.append(test_score)
+        return np.mean(validation_scores)
+    return objective
+```
+
+İlk olarak rastgele arama ile bazı sonuçlar toplarız, ardından Bayes optimizasyonunu başlatırız ve `forest_minimize` kullanırız:
+
+```python
+gp_round = dummy_minimize(func=objective, dimensions=space, n_calls=10, callback=[onstep], random_state=0)
+x0, y0 = joblib.load('checkpoint.pkl')
+gp_round = gp_minimize(func=objective, x0=x0, y0=y0, dimensions=space, n_calls=30, n_initial_points=0, callback=[onstep], random_state=0)
+```
+
+İlk on tur rastgele aramadan sonra, rastgele orman algoritmasını surrogate fonksiyon olarak kullanıyoruz; bu, Gaussian süreç kullanımına kıyasla daha iyi ve hızlı sonuç sağlar.
+
+Optimizasyon sürecini zaman ve kaynaklarımıza uygun hale getirmek için (`n_calls` değerini düşük tutmak gibi) arama iterasyonlarını partiler halinde yürütebilir, optimizasyonun durumunu kaydedebilir ve elde edilen sonuçları kontrol ederek devam veya sonlandırma kararı alabiliriz.
+
 #### Creating lighter and faster models with KerasTuner *(KerasTuner ile daha hafif ve hızlı modeller oluşturma)*
 
 #### The TPE approach in Optuna *(Optuna’daki TPE yaklaşımı)*
