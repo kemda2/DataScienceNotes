@@ -7243,6 +7243,40 @@ Buna karşılık, **Severstal: Steel Defect Detection** yarışmasından ([https
 
 ##### Preprocessing layers *(Ön işleme katmanları)*
 
+Veri artırma için bir alternatif yaklaşım, yerel Keras yöntemiyle bir ön işleme adımı olarak, **preprocessing layers API** kullanmaktır. Bu işlevsellik son derece esnektir: Bu pipeline'lar, ya Keras modelleriyle kombinasyon halinde ya da ImageDataGenerator'a benzer şekilde bağımsız olarak kullanılabilir.
+
+Aşağıda, bir ön işleme katmanının nasıl kurulacağını kısaca gösteriyoruz. İlk olarak, gerekli import'lar:
+
+```python
+from tensorflow.keras.layers.experimental import preprocessing
+from tensorflow.keras import layers
+```
+
+Standard Keras yöntemiyle önceden eğitilmiş bir model yüklüyoruz:
+
+```python
+pretrained_base = tf.keras.models.load_model(
+    '../input/cv-course-models/cv-course-models/vgg16-pretrained-base',
+)
+pretrained_base.trainable = False
+```
+
+Ön işleme katmanları, diğer katmanlar gibi **Sequential** yapıcısının içinde kullanılabilir; tek gereklilik, model tanımının başında, diğer katmanlardan önce belirtilmeleridir:
+
+```python
+model = tf.keras.Sequential([
+    # Preprocessing katmanları
+    preprocessing.RandomFlip('horizontal'),  # Sol-sağa çevirme
+    preprocessing.RandomContrast(0.5),  # Kontrastı %50'ye kadar değiştirme
+    # Temel model
+    pretrained_base,
+    # Model başı tanımı
+    layers.Flatten(),
+    layers.Dense(6, activation='relu'),
+    layers.Dense(1, activation='sigmoid'),
+])
+```
+
 #### albumentations *(Albumentations kütüphanesi)*
 
 ### Classification *(Sınıflandırma)*
