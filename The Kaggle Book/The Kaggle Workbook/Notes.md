@@ -1086,7 +1086,74 @@ Bir sonraki bölümde, bu kez **zaman serileriyle** ilgili karmaşık bir tahmin
 
 # Bölüm 2: Makridakis Yarışmaları – Doğruluk ve Belirsizlik İçin Kaggle'daki M5 *(Chapter 2: The Makridakis Competitions – M5 on Kaggle for Accuracy and Uncertainty)*
 
+Elbette, metninizi Türkçeye çevirdim:
+
+---
+
+## 📅 M Yarışmaları ve M5 Kaggle Yarışması
+
+1982'den beri, **Spyros Makridakis** ([https://mofc.unic.ac.cy/dr-spyros-makridakis/](https://mofc.unic.ac.cy/dr-spyros-makridakis/)) mevcut ve yeni tahmin yöntemlerinin farklı tahmin problemlerine karşı etkinliğini karşılaştırmak amacıyla **M Yarışmaları** adı verilen tahmin meydan okumalarına dünyanın her yerinden araştırmacı gruplarını dahil etmiştir. Bu nedenle, M Yarışmaları her zaman hem akademisyenlere hem de uygulayıcılara tamamen açık olmuştur.
+
+Bu yarışmalar muhtemelen **tahmin topluluğunda en çok alıntı yapılan ve atıfta bulunulan** etkinliklerdir ve tahmin yöntemlerindeki sürekli değişen teknoloji haritasını her zaman öne çıkarmışlardır. Önceki her M Yarışması, hem araştırmacılara hem de uygulayıcılara tahmin araçlarını eğitmek ve test etmek için faydalı veriler sağlamanın yanı sıra, tahmin yapılış biçiminde devrim yaratan bir dizi keşif ve yaklaşım sunmuştur.
+
+En sonuncusu olan **M5 Yarışması** (bu bölüm yazılırken M6 devam etmektedir) Kaggle'da düzenlenmiştir ve perakende ürünlerinin bir dizi hacim tahminini çözmeye çalışırken **gradyan artırma (gradient-boosting) yöntemlerinin kullanışlılığını** vurgulamada özellikle önemli olduğunu kanıtlamıştır. Bu bölümde, doğruluk parkuruna (accuracy track) odaklanarak, Kaggle yarışmalarından bir zaman serisi problemiyle ilgileniyoruz ve en üst sıralarda yer alan, ancak en basit ve en anlaşılır çözümlerden birini çoğaltarak, okuyucularımıza Kaggle'da ortaya çıkabilecek gelecekteki herhangi bir tahmin yarışmasını başarıyla ele almak için kod ve fikirler sunmayı amaçlıyoruz.
+
+> Yarışma sayfaları dışında, yarışma ve dinamikleri hakkında Uluslararası Tahmin Dergisi'nden aşağıdaki makalelerde çok sayıda bilgi bulduk:
+>
+> * Makridakis, Spyros, Evangelos Spiliotis ve Vassilios Assimakopoulos. M5 yarışması: Arka plan, organizasyon ve uygulama. International Journal of Forecasting (2021).
+> * Makridakis, Spyros, Evangelos Spiliotis ve Vassilios Assimakopoulos. M5 doğruluk yarışması: Sonuçlar, bulgular ve çıkarımlar. International Journal of Forecasting (2022).
+> * Makridakis, Spyros, vd. M5 Belirsizlik yarışması: Sonuçlar, bulgular ve çıkarımlar. International Journal of Forecasting (2021).
+
+Bu bölümde şunları öğreneceksiniz:
+
+* Yarışmanın zaman serisi verileri ve değerlendirme metriği
+* Belirli tarihler ve zaman ufukları (time horizons) için tahminlerin hesaplanması
+* Farklı zaman pencerelerinden gelen tahminlerin birleştirilmesi (Assembling)
+
+> Bu bölümdeki tüm kod dosyalarını [https://packt.link/kwbchp2](https://packt.link/kwbchp2) adresinde bulabilirsiniz.
+
 ## Yarışmayı ve veriyi anlama *(Understanding the competition and the data)*
+
+Yarışma ([https://www.kaggle.com/competitions/m5-forecasting-accuracy](https://www.kaggle.com/competitions/m5-forecasting-accuracy)) Mart'tan Haziran 2020'ye kadar sürdü ve Kaggle'da 7.000'den fazla katılımcı yer aldı. Organizatörler, yarışmayı iki ayrı parkur halinde düzenledi: biri noktasal tahmin (doğruluk parkuru) ve diğeri farklı güven aralıklarında güvenilir değerleri tahmin etmek için (belirsizlik parkuru). Bu bölümde odak noktamız, doğruluk parkuru için en iyi gönderimlerden birini çoğaltmaya çalışmak ve aynı zamanda belirsizlik parkurunun da önünü açmak olacak (çünkü o da doğruluk tahminlerine dayanıyor).
+
+Walmart verileri sağladı. Veriler, üç ABD eyaletine yayılmış (zaman serileri birbiriyle bir miktar ilişkilidir) departmanlara, kategorilere ve mağazalara göre hiyerarşik olarak düzenlenmiş 42.840 günlük satış zaman serisinden oluşuyordu. Satışlarla birlikte Walmart, kalemlerin fiyatları, bazı takvim bilgileri, ilgili promosyonlar veya satışları etkileyen diğer olayların varlığı gibi eşlik eden bilgileri (tahmin problemlerinde genellikle sık sağlanmayan dışsal değişkenler) de sağladı.
+
+Kaggle dışında, veriler önceki M Yarışmasından veri setleriyle birlikte şu adreste mevcuttur: [https://forecasters.org/resources/time-series-data/](https://forecasters.org/resources/time-series-data/).
+
+Yarışmanın ilginç bir yönü, hem hızlı hareket eden hem de yavaş hareket eden tüketim malları satışlarıyla ilgilenmesiydi; özellikle yavaş hareket eden mallar, aralıklı satışların (intermittent sales) birçok örneğini sunuyordu (satışlar çoğu zaman sıfırdır, ancak nadir durumlar dışında). Aralıklı seriler, birçok sektörde yaygın olmasına rağmen, birçok uygulayıcı için tahmin etmede hala zorlu bir durumdur.
+
+Yarışma takvimi iki bölüm halinde düzenlenmiştir. İlk bölümde, Mart 2020 başından 1 Haziran'a kadar, yarışmacılar 1.913. güne kadar olan günler aralığında modeller eğitebilir ve herkese açık test setinde (1.914. günden 1.941. güne kadar) gönderimlerini puanlayabilirlerdi. Bu tarihten sonra, 1 Temmuz'daki yarışmanın sonuna kadar, herkese açık test seti eğitim setinin bir parçası olarak kullanıma sunuldu ve katılımcıların 1.942. günden 1.969. güne kadar tahmin yapmak için modellerini ayarlamalarına olanak sağlandı (28 günlük, yani dört haftalık bir zaman penceresi). O dönemde, gönderimler liderlik tablosunda puanlanmadı.
+
+Yarışmanın böyle bir düzenlemesinin ardındaki mantık, ekiplerin başlangıçta modellerini liderlik tablosunda test etmelerine ve en iyi performans gösteren yöntemlerini not defterlerinde ve tartışmalarda paylaşmaları için zemin oluşturmaktı. İlk aşamadan sonra, organizatörler, liderlik tablosunun aşırı öğrenme (overfitting) amaçları veya modellerin hiperparametre ayarı için kullanılmasını engellemek istediler ve gerçek dünyada olacağı gibi bir tahmin durumunu taklit etmek istediler. Ek olarak, nihai olarak yalnızca tek bir gönderimi seçme gerekliliği, aynı gerçekçilik ihtiyacını yansıtıyordu. Gerçek dünyada, bir MLOps şampiyon/meydan okuyucu stratejisi benimseseniz bile (bkz. [https://www.datarobot.com/blog/introducing-mlops-champion-challenger-models/](https://www.datarobot.com/blog/introducing-mlops-champion-challenger-models/)), belli bir noktada, kararlarınız için hangi modele güveneceğinize karar vermeniz gerekir ve seçimin sonucunu ancak ondan sonra alırsınız.
+
+Verilere gelince, verilerin Walmart tarafından sağlandığını ve ABD pazarını temsil ettiğini belirtmiştik: Kaliforniya, Wisconsin ve Teksas'taki 10 mağazadan kaynaklanmıştır. Spesifik olarak, veriler 3.049 ürünün satışlarından oluşuyordu; bu ürünler 3 kategoriye (hobiler, yiyecek ve ev eşyaları) ayrılmıştı ve bu kategoriler de her biri 7 departmana daha fazla bölünebiliyordu. Böyle bir hiyerarşik yapı kesinlikle bir meydan okumadır çünkü satış dinamiklerini ABD pazarı, eyalet pazarı, tek bir mağaza, ürün kategorisi, kategori departmanı ve son olarak belirli bir ürün düzeyinde modelleyebilirsiniz. Tüm bu seviyeler, ikinci parkurda, belirsizlik parkurunda tahmin edilmesi gereken farklı toplamlar (aggregates) olarak da birleşebilir:
+
+| Seviye ID | Seviye Açıklaması | Toplama Seviyesi | Seri Sayısı |
+| :---: | :--- | :--- | :---: |
+| 1 | Tüm ürünler, tüm mağazalar ve eyaletler için toplanmış | Toplam | 1 |
+| 2 | Tüm ürünler, her eyalet için toplanmış | Eyalet | 3 |
+| 3 | Tüm ürünler, her mağaza için toplanmış | Mağaza | 10 |
+| 4 | Tüm ürünler, her kategori için toplanmış | Kategori | 3 |
+| 5 | Tüm ürünler, her departman için toplanmış | Departman | 7 |
+| 6 | Tüm ürünler, her eyalet ve kategori için toplanmış | Eyalet-Kategori | 9 |
+| 7 | Tüm ürünler, her mağaza ve kategori için toplanmış | Mağaza-Kategori | 30 |
+| 8 | Tüm ürünler, her eyalet ve departman için toplanmış | Eyalet-Departman | 21 |
+| 9 | Tüm ürünler, her mağaza ve departman için toplanmış | Mağaza-Departman | 70 |
+| 10 | Her ürün, tüm mağazalar/eyaletler için toplanmış | Ürün | 3,049 |
+| 11 | Her ürün, her eyalet için toplanmış | Ürün-Eyalet | 9,147 |
+| 12 | Her ürün, her mağaza için toplanmış | Ürün-Mağaza | 30,490 |
+| **Toplam** | | | **42,840** |
+
+Zaman açısından bakıldığında, ayrıntı düzeyi günlük satış kaydıdır ve **29 Ocak 2011'den 19 Haziran 2016'ya kadar** olan dönemi kapsar, bu da toplamda 1.969 güne eşittir: 1.913 gün eğitim için, 28 gün doğrulama için (herkese açık liderlik tablosu) ve 28 gün test için (özel liderlik tablosu). **28 günlük bir tahmin ufku**, perakende sektöründe çoğu mal için stokları ve yeniden sipariş işlemlerini yönetmek için uygun ufuk olarak kabul edilmektedir.
+
+Yarışma için aldığınız farklı verileri inceleyelim. `sales_train_evaluation.csv`, `sell_prices.csv` ve `calendar.csv` dosyalarını alırsınız. Zaman serilerini tutan dosya `sales_train_evaluation.csv`'dir. Tanımlayıcı görevi gören alanlardan (`item_id`, `dept_id`, `cat_id`, `store_id` ve `state_id`) ve bu günlerin satışlarını temsil eden `d_1`'den `d_1941`'e kadar olan sütunlardan oluşur:
+
+![](im/1001.png)
+
+`sell_prices.csv` dosyası ise **kalemlerin fiyatları** hakkındaki bilgileri içerir. Buradaki zorluk, `wm_yr_wk`'yi (haftanın kimliği) eğitim verilerindeki sütunlarla **birleştirmektir (join)**:
+
+![](im/1002.png)
+
 
 ## Değerlendirme Metriğini Anlama *(Understanding the Evaluation Metric)*
 
