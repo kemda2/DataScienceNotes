@@ -1298,9 +1298,871 @@ Monsaraida'nın çözümünü, gerçek dünya tahmin projesinde olduğu gibi, ba
 
 ## Belirli tarihler ve zaman ufukları (time horizons) için tahminleri hesaplama *(Computing predictions for specific dates and time horizons)*
 
+Monsaraida'nın çözümünü çoğaltma planı, eğitim ve test veri setleri için gerekli işlenmiş verileri ve tahminler için LightGBM modellerini üretmek üzere girdi parametreleriyle özelleştirilebilir bir not defteri oluşturmaktır. Modeller, geçmişteki veriler verildiğinde, gelecekteki belirli bir gün sayısındaki değerleri tahmin etmeyi öğrenmek üzere eğitilecektir. En iyi sonuçlar, her modelin gelecekteki belirli bir hafta aralığındaki değerleri tahmin etmeyi öğrenmesiyle elde edilebilir. 28 gün sonrasına kadar tahmin etmemiz gerektiğinden, gelecekteki **+1. günden +7. güne** kadar tahmin eden bir modele, ardından **+8. günden +14. güne** kadar tahmin edebilen başka bir modele, **+15. günden +21. güne** kadar bir başkasına ve son olarak **+22. günden +28. güne** kadar olan tahminleri ele alabilecek bir diğerine ihtiyacımız var. Bu zaman aralıklarının her biri için bir Kaggle not defterine ihtiyacımız olacak, yani **dört not defterine** ihtiyacımız var. Bu not defterlerinin her biri, yarışmanın parçası olan **10 mağazanın her biri için** gelecekteki zaman aralığını tahmin etmek üzere eğitilecektir. Toplamda, her not defteri on model üretecektir. Hep birlikte, not defterleri tüm gelecek aralıklarını ve tüm mağazaları kapsayan **40 model** üretecektir.
+
+Hem herkese açık liderlik tablosu hem de özel liderlik tablosu için tahmin yapmamız gerektiğinden, bu süreci iki kez tekrarlamak gereklidir; herkese açık test seti gönderimi için eğitimi **1.913. günde** durdurmak (1.914'ten 1.941'e kadar olan günleri tahmin etmek) ve özel gönderim için **1.941. günde** durdurmak (1.942'den 1.969'a kadar olan günleri tahmin etmek).
+
+CPU tabanlı Kaggle not defterlerini çalıştırmaya yönelik mevcut sınırlamalar göz önüne alındığında, bu sekiz not defterinin tamamı paralel olarak çalıştırılabilir (tüm süreç yaklaşık 6 buçuk saat sürer). Her not defteri, adında son eğitim gününe ve ileriye dönük ufuk gün sayısına ilişkin parametre değerlerini içererek diğerlerinden ayırt edilebilir. Bu not defterlerinden birine örnek olarak [https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-7](https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-7) adresinden ulaşılabilir.
+
+Şimdi, kodun nasıl düzenlendiğini ve Monsaraida'nın çözümünden neler öğrenebileceğimizi birlikte inceleyelim.
+
+Sadece gerekli paketleri içe aktararak başlıyoruz. NumPy ve pandas dışında, tek veri bilimi uzmanlık paketi olarak LightGBM'i fark edebilirsiniz. Ayrıca `gc` (çöp toplama) kullanacağımızı da fark edebilirsiniz: bunun nedeni, betik tarafından kullanılan bellek miktarını sınırlamamız gerekmesi ve kullanılmayan belleği sık sık toplamamız ve geri dönüştürmemizdir. Bu stratejinin bir parçası olarak, modelleri ve veri yapılarını bellekte tutmak yerine sık sık diske kaydederiz:
+
+```python
+import numpy as np
+import pandas as pd
+import os
+import random
+import math
+from decimal import Decimal as dec
+import datetime
+import time
+import gc
+import lightgbm as lgb
+import pickle
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+```
+
+Bellek kullanımını sınırlama stratejisinin bir parçası olarak, Kaggle kitabında açıklanan ve başlangıçta Arjan Groen tarafından Zillow yarışması sırasında geliştirilen pandas DataFrame bellek ayak izini azaltma fonksiyonuna başvuruyoruz (tartışmayı okuyun: [https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291844](https://www.google.com/search?q=https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291844)):
+
+```python
+def reduce_mem_usage(df, verbose=True):
+    numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+    start_mem = df.memory_usage().sum() / 1024**2    
+    for col in df.columns:
+        col_type = df[col].dtypes
+        if col_type in numerics:
+            c_min = df[col].min()
+            c_max = df[col].max()
+            if str(col_type)[:3] == 'int':
+                if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
+                    df[col] = df[col].astype(np.int8)
+                elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                    df[col] = df[col].astype(np.int16)
+                elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                    df[col] = df[col].astype(np.int32)
+                elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
+                    df[col] = df[col].astype(np.int64)  
+            else:
+                if c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                    df[col] = df[col].astype(np.float32)
+                else:
+                    df[col] = df[col].astype(np.float64)    
+    end_mem = df.memory_usage().sum() / 1024**2
+    if verbose: print('Mem. usage decreased to {:5.2f} Mb ({:.1f}% reduction)'.format(end_mem, 100 * (start_mem - end_mem) / start_mem))
+    return df
+```
+
+Bu çözüm için fonksiyonları tanımlamaya devam ediyoruz, çünkü çözümü daha küçük parçalara ayırmak yardımcı olur ve bir fonksiyondan döndüğünüzde kullanılan tüm değişkenleri temizlemek daha kolaydır (yalnızca diske kaydettiklerinizi tutarsınız). Bir sonraki fonksiyonumuz, mevcut tüm verileri yüklememize ve sıkıştırmamıza yardımcı olur:
+
+```python
+def load_data():
+    train_df = reduce_mem_usage(pd.read_csv("../input/m5-forecasting-accuracy/sales_train_evaluation.csv"))
+    prices_df = reduce_mem_usage(pd.read_csv("../input/m5-forecasting-accuracy/sell_prices.csv"))
+    calendar_df = reduce_mem_usage(pd.read_csv("../input/m5-forecasting-accuracy/calendar.csv"))
+    submission_df = reduce_mem_usage(pd.read_csv("../input/m5-forecasting-accuracy/sample_submission.csv"))
+    return train_df, prices_df, calendar_df, submission_df
+```
+
+Fonksiyon tanımlandıktan sonra, onu çalıştırıyoruz:
+
+```python
+train_df, prices_df, calendar_df, submission_df = load_data()
+```
+
+Fiyatlar, hacimler ve takvim bilgileriyle ilgili verileri almak için kodu hazırladıktan sonra, `item_id`, `dept_id`, `cat_id`, `state_id` ve `store_id`'ye satır anahtarı, bir gün sütunu ve hacimleri içeren bir değerler sütunu olarak sahip olacak temel bir bilgi tablosu oluşturma rolüne sahip olacak ilk işleme fonksiyonunu hazırlamaya geçiyoruz. Bu, tüm günlerin veri sütunlarına sahip satırlardan başlayarak pandas'ın `melt` komutu ([https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.melt.html](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.melt.html)) kullanılarak gerçekleştirilir.
+
+Komut, DataFrame'in indeksini referans olarak alır ve ardından kalan tüm özellikleri seçer, adlarını bir sütuna ve değerlerini başka bir sütuna yerleştirir (`var_name` ve `value_name` parametreleri bu yeni sütunların adını tanımlamanıza yardımcı olur). Bu şekilde, belirli bir ürüne ait belirli bir mağazadaki satış serisini temsil eden bir satırı, her biri tek bir günü temsil eden birden çok satıra açabilirsiniz. Açılmış sütunların konum sırasının korunması, zaman serinizin artık dikey eksende uzanmasını garanti eder (bu nedenle üzerine hareketli ortalamalar gibi daha fazla dönüşüm uygulayabilirsiniz).
+
+Ne olduğunu size fikir vermek için, `pd.melt` dönüşümünden önceki `train_df`'yi burada görebilirsiniz. Farklı günlerin hacimlerinin nasıl sütun özellikleri olduğuna dikkat edin:
+
+![](im/1005.png)
+
+Dönüşümden sonra, sütunların satırlara dönüştürüldüğü ve günlerin artık yeni bir sütunda bulunduğu bir `grid_df` elde edersiniz:
+
+![](im/1006.png)
+
+Elbette, metninizi Türkçeye çevirdim:
+
+-----
+
+`d` özelliği, indekste yer almayan sütunlara, esasen `d_1`'den `d_1935`'e kadar olan tüm özelliklere referansı içerir. Bu, veri setindeki satır sayısının 1.935 kat artması anlamına gelir. Değerlerinden basitçe `d_` önekini kaldırıp bunları tam sayıya dönüştürerek artık bir **gün özelliğine** sahip olursunuz.
+
+Bunun dışında, kod parçacığı satırların bir tutma kümesini (holdout) de ayırır. Bu tutma kümesi sizin **doğrulama setinizdir**. Doğrulama stratejisi, eğitim verilerinin bir kısmını zamana dayalı olarak ayırmaya dayanır. Eğitim kısmına, sağladığınız tahmin ufkuna (gelecekte tahmin etmek istediğiniz gün sayısı) göre tahminleriniz için gerekli satırları da ekleyecektir.
+
+İşte temel özellik şablonumuzu oluşturan fonksiyon. Giriş olarak `train_df` DataFrame'ini, eğitimin bittiği günün sayısını ve tahmin ufkunu alır:
+
+```python
+def generate_base_grid(train_df, end_train_day_x, predict_horizon):
+    index_columns = ['id', 'item_id', 'dept_id', 'cat_id', 'store_id', 'state_id']
+    
+    # Veri setini uzun formata dönüştür (melt)
+    grid_df = pd.melt(train_df, id_vars=index_columns, var_name='d', value_name='sales')
+    grid_df = reduce_mem_usage(grid_df, verbose=False)
+    
+    # Orijinal gün sütununu sakla ve sayıya dönüştür
+    grid_df['d_org'] = grid_df['d']
+    grid_df['d'] = grid_df['d'].apply(lambda x: x[2:]).astype(np.int16)
+    
+    # Doğrulama (holdout) setini ayır
+    time_mask = (grid_df['d'] > end_train_day_x) &  (grid_df['d'] <= end_train_day_x + predict_horizon)
+    holdout_df = grid_df.loc[time_mask, ["id", "d", "sales"]].reset_index(drop=True)
+    holdout_df.to_feather(f"holdout_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    del(holdout_df)
+    gc.collect()
+    
+    # Eğitim verilerini son eğitim gününe kadar filtrele
+    grid_df = grid_df[grid_df['d'] <= end_train_day_x]
+    
+    # d sütununu orijinal 'd_xxx' formatına geri çevir
+    grid_df['d'] = grid_df['d_org']
+    grid_df = grid_df.drop('d_org', axis=1)
+    
+    # Tahmin ufku için boş satırları ekle (NaN satışlarla)
+    add_grid = pd.DataFrame()
+    for i in range(predict_horizon):
+        temp_df = train_df[index_columns]
+        temp_df = temp_df.drop_duplicates()
+        temp_df['d'] = 'd_' + str(end_train_day_x + i + 1)
+        temp_df['sales'] = np.nan
+        add_grid = pd.concat([add_grid, temp_df])
+    
+    grid_df = pd.concat([grid_df, add_grid])
+    grid_df = grid_df.reset_index(drop=True)
+    
+    # İndeks sütunlarını kategori tipine dönüştür
+    for col in index_columns:
+        grid_df[col] = grid_df[col].astype('category')
+    
+    grid_df = reduce_mem_usage(grid_df, verbose=False)
+    # Sonuç DataFrame'i diske kaydet
+    grid_df.to_feather(f"grid_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    del(grid_df)
+    gc.collect()
+```
+
+Temel özellik şablonunu oluşturma fonksiyonunu hallettikten sonra, pandas DataFrame'leri için bellek alanından tasarruf etmeye ve büyük veri setlerini işlerken bellek hatalarını önlemeye yardımcı olacak bir birleştirme (merge) fonksiyonu hazırlıyoruz. İki DataFrame (`df1` ve `df2`) ve birleştirilmesi gereken yabancı anahtarlar kümesi verildiğinde, fonksiyon yeni bir birleştirilmiş nesne oluşturmadan sadece mevcut `df1` DataFrame'ini genişleterek `df1` ve `df2` arasında bir sol dış birleştirme (left outer join) uygular.
+
+Fonksiyon ilk olarak `df1`'den yabancı anahtarları çıkararak çalışır, ardından çıkarılan anahtarları `df2` ile birleştirir. Bu şekilde, fonksiyon `df1` ile aynı sırada olan `merged_gf` adlı yeni bir DataFrame oluşturur. Bu noktada, `merged_gf` sütunlarını `df1`'e atarız. Dahili olarak, `df1` dahili veri yapılarına referansı `merged_gf`'den alacaktır. Böyle bir yaklaşım, yalnızca gerekli kullanılan veriler her an oluşturulduğu için bellek kullanımını en aza indirmeye yardımcı olur (belleği doldurabilecek kopyalar yoktur). Fonksiyon `df1`'i döndürdüğünde, `merged_gf` artık `df1` tarafından kullanılan veriler hariç iptal edilir.
+
+İşte bu yardımcı fonksiyonun kodu:
+
+```python
+def merge_by_concat(df1, df2, merge_on):
+    merged_gf = df1[merge_on]
+    merged_gf = merged_gf.merge(df2, on=merge_on, how='left')
+    new_columns = [col for col in list(merged_gf) 
+                   if col not in merge_on]
+    df1[new_columns] = merged_gf[new_columns]
+    return df1
+```
+
+Bu gerekli adımdan sonra, verileri işlemek için yeni bir fonksiyon programlamaya devam ediyoruz. Bu sefer fiyat verilerini, yani her ürünün her mağaza için tüm haftalardaki fiyatlarını içeren bir veri kümesini ele alıyoruz. Bir mağazada yeni bir ürünün görünüp görünmediğini anlamak önemli olduğundan, fonksiyon fiyat mevcudiyetinin ilk tarihini (fiyat tablosundaki haftanın kimliğini temsil eden `wm_yr_wk` özelliğini kullanarak) alır ve bunu özellik şablonumuza kopyalar.
+
+İşte yayın tarihlerini işleme kodu:
+
+```python
+def calc_release_week(prices_df, end_train_day_x, predict_horizon):
+    index_columns = ['id', 'item_id', 'dept_id', 'cat_id', 'store_id', 'state_id']
+    
+    grid_df = pd.read_feather(f"grid_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    
+    # Mağaza ve ürün bazında ilk (minimum) fiyatın görüldüğü haftayı bul
+    release_df = prices_df.groupby(['store_id', 'item_id'])['wm_yr_wk'].agg(['min']).reset_index()
+    release_df.columns = ['store_id', 'item_id', 'release']
+    
+    # grid_df'ye bu "yayınlanma" haftasını ekle
+    grid_df = merge_by_concat(grid_df, release_df, ['store_id', 'item_id'])
+    
+    del release_df
+    grid_df = reduce_mem_usage(grid_df, verbose=False)
+    gc.collect()
+    
+    # Takvim verilerini (wm_yr_wk ve d sütunlarını) grid_df'ye ekle
+    grid_df = merge_by_concat(grid_df, calendar_df[['wm_yr_wk', 'd']], ['d'])
+ 
+    grid_df = grid_df.reset_index(drop=True)
+    # Haftaları normalize et (ilk haftadan itibaren kaç hafta geçtiğini bul)
+    grid_df['release'] = grid_df['release'] - grid_df['release'].min()
+    grid_df['release'] = grid_df['release'].astype(np.int16)
+    grid_df = reduce_mem_usage(grid_df, verbose=False)
+    
+    # Güncellenmiş DataFrame'i diske kaydet
+    grid_df.to_feather(f"grid_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    
+    del(grid_df)
+    gc.collect()
+```
+
+Ürünün bir mağazada görünme gününü hallettikten sonra, fiyatlarla ilgilenmeye devam ediyoruz. Her mağazadaki her bir ürün için temel fiyat özelliklerini hazırlıyoruz, bunlar:
+
+  * Gerçek fiyat (maksimuma göre normalize edilmiş)
+  * Maksimum fiyat
+  * Minimum fiyat
+  * Ortalama fiyat
+  * Fiyatın standart sapması
+  * Ürünün aldığı farklı fiyat sayısı
+  * Mağazada aynı fiyata sahip ürün sayısı
+
+Fiyatların bu temel tanımlayıcı istatistiklerinin yanı sıra, bir mağazadaki her ürün için farklı zaman ayrıntılarına dayalı olarak fiyat dinamiklerini tanımlayan bazı özellikler de ekliyoruz:
+
+  * **Gün momentumu**, yani gerçek fiyatın bir önceki günkü fiyatına oranı
+  * **Ay momentumu**, yani gerçek fiyatın aynı aydaki ortalama fiyatına oranı
+  * **Yıl momentumu**, yani gerçek fiyatın aynı yıldaki ortalama fiyatına oranı
+
+> 📝 Alıştırma 1
+> 
+> 
+> 
+> Daha fazla fiyata dayalı özellik oluşturabilir misiniz? Örneğin, ortalama ve varyans dışındaki diğer tanımlayıcı istatistikleri kullanarak veya başka zaman ayrıntılarını (örneğin, hafta veya üç aylık dönem bazlı) işleyerek?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
+Burada zaman serisi özellik işleme için iki ilginç ve temel pandas metodu kullanıyoruz:
+
+  * **`shift`**: Bu, indeksi $n$ adım ileri veya geri hareket ettirebilir ([https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.shift.html](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.shift.html))
+  * **`transform`**: Bu, her gruba uygulandığında, aynı indeksli bir özelliği dönüştürülmüş değerlerle doldurur ([https://pandas.pydata.org/docs/reference/api/pandas.core.groupby.DataFrameGroupBy.transform.html](https://pandas.pydata.org/docs/reference/api/pandas.core.groupby.DataFrameGroupBy.transform.html))
+
+Ayrıca, ürünün **psikolojik fiyat eşiklerinde** satıldığı bir durumu ortaya çıkarmak amacıyla fiyatın ondalık kısmı bir özellik olarak işlenir (örneğin, $19.99 veya $2.98 - şu tartışmaya bakınız: [https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/145011](https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/145011)). `math.modf` fonksiyonu ([https://docs.python.org/3.8/library/math.html\#math.modf](https://docs.python.org/3.8/library/math.html#math.modf)) herhangi bir kayan noktalı sayıyı kesirli ve tam sayı kısımlarına (iki öğeli bir demet) ayırdığı için bunu yapmaya yardımcı olur.
+
+Son olarak, ortaya çıkan tablo diske kaydedilir.
+
+İşte fiyatlar üzerindeki tüm özellik mühendisliğini yapan fonksiyon:
+
+```python
+def generate_grid_price(prices_df, calendar_df, end_train_day_x, predict_horizon):
+    grid_df = pd.read_feather(f"grid_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    
+    # Fiyat tanımlayıcı istatistiklerini hesapla (transform kullanarak)
+    prices_df['price_max'] = prices_df.groupby(['store_id', 'item_id'])['sell_price'].transform('max')
+    prices_df['price_min'] = prices_df.groupby(['store_id', 'item_id'])['sell_price'].transform('min')
+    prices_df['price_std'] = prices_df.groupby(['store_id', 'item_id'])['sell_price'].transform('std')
+    prices_df['price_mean'] = prices_df.groupby(['store_id', 'item_id'])['sell_price'].transform('mean')
+    prices_df['price_norm'] = prices_df['sell_price'] / prices_df['price_max']
+    prices_df['price_nunique'] = prices_df.groupby(['store_id', 'item_id'])['sell_price'].transform('nunique')
+    prices_df['item_nunique'] = prices_df.groupby(['store_id', 'sell_price'])['item_id'].transform('nunique')
+    
+    calendar_prices = calendar_df[['wm_yr_wk', 'month', 'year']]
+    calendar_prices = calendar_prices.drop_duplicates(subset=['wm_yr_wk'])
+    prices_df = prices_df.merge(calendar_prices[['wm_yr_wk', 'month', 'year']], on=['wm_yr_wk'], how='left')
+    del calendar_prices
+    gc.collect()
+    
+    # Fiyat momentumu özelliklerini hesapla (shift ve transform kullanarak)
+    prices_df['price_momentum'] = prices_df['sell_price'] / prices_df.groupby(['store_id', 'item_id'])['sell_price'].transform(lambda x: x.shift(1))
+    prices_df['price_momentum_m'] = prices_df['sell_price'] / prices_df.groupby(['store_id', 'item_id', 'month'])['sell_price'].transform('mean')
+    prices_df['price_momentum_y'] = prices_df['sell_price'] / prices_df.groupby(['store_id', 'item_id', 'year'])['sell_price'].transform('mean')
+    
+    # Ondalık (kuruş) fiyat özelliklerini oluştur
+    prices_df['sell_price_cent'] = [math.modf(p)[0] for p in prices_df['sell_price']]
+    prices_df['price_max_cent'] = [math.modf(p)[0] for p in prices_df['price_max']]
+    prices_df['price_min_cent'] = [math.modf(p)[0] for p in prices_df['price_min']]
+    
+    del prices_df['month'], prices_df['year']
+    prices_df = reduce_mem_usage(prices_df, verbose=False)
+    gc.collect()
+    
+    # Ana tabloya birleştir
+    original_columns = list(grid_df)
+    grid_df = grid_df.merge(prices_df, on=['store_id', 'item_id', 'wm_yr_wk'], how='left')
+    del(prices_df)
+    gc.collect()
+    
+    # Yeni sütunları seç ve kaydet
+    keep_columns = [col for col in list(grid_df) if col not in original_columns]
+    grid_df = grid_df[['id', 'd'] + keep_columns]
+    grid_df = reduce_mem_usage(grid_df, verbose=False)
+    grid_df.to_feather(f"grid_price_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    del(grid_df)
+    gc.collect()
+```
+
+Bir sonraki fonksiyon, bunun yerine ayın evresini hesaplar ve sekiz evresinden birini döndürür (yeni aydan hilale kadar). Ay evreleri satışları doğrudan etkilemese de (hava koşulları etkiler, ancak verilerde hava bilgisi yok), periyodik alışveriş davranışlarına iyi uyum sağlayabilecek **29 buçuk günlük periyodik bir döngüyü** temsil ederler.
+
+Ay evrelerinin neden bir tahmin edici olarak işe yarayabileceğine dair farklı hipotezlerin yer aldığı ilginç bir tartışma, bu yarışma gönderisinde bulunmaktadır: [https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/154776](https://www.google.com/search?q=https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/154776):
+
+```python
+def get_moon_phase(d):  # 0=new, 4=full; 4 days/phase
+    diff = datetime.datetime.strptime(d, '%Y-%m-%d') - datetime.datetime(2001, 1, 1)
+    days = dec(diff.days) + (dec(diff.seconds) / dec(86400))
+    lunations = dec("0.20439731") + (days * dec("0.03386319269"))
+    phase_index = math.floor((lunations % dec(1) * dec(8)) + dec('0.5'))
+    return int(phase_index) & 7
+```
+
+Ay evresi fonksiyonu, zamana dayalı özellikler oluşturmak için genel bir fonksiyonun parçasıdır. Fonksiyon, takvim veri seti bilgilerini alır ve özellikler arasına yerleştirir. Bu bilgiler, olayları ve bunların türünü, ayrıca temel malların satışlarını daha da artırabilecek **SNAP** (Ek Beslenme Yardımı Programı) dönemlerinin bir göstergesini içerir. Fonksiyon ayrıca gün, ay, yıl, haftanın günü, ayın haftası ve hafta sonu olup olmadığı gibi sayısal özellikler de üretir. İşte kod:
+
+```python
+def generate_grid_calendar(calendar_df, end_train_day_x, predict_horizon):
+    
+    grid_df = pd.read_feather(
+                f"grid_df_{end_train_day_x}_to_{end_train_day_x +      
+                predict_horizon}.feather")
+    grid_df = grid_df[['id', 'd']]
+    gc.collect()
+
+    # Ay evresini hesapla ve takvim verisine ekle
+    calendar_df['moon'] = calendar_df.date.apply(get_moon_phase)
+    
+    # Takvimi kısmen birleştir
+    icols = ['date',
+ 'd',
+ 'event_name_1',
+ 'event_type_1',
+ 'event_name_2',
+ 'event_type_2',
+ 'snap_CA',
+ 'snap_TX',
+ 'snap_WI',
+ 'moon',
+             ]
+    grid_df = grid_df.merge(calendar_df[icols], on=['d'], how='left')
+    
+    # Olay ve SNAP sütunlarını kategori tipine dönüştür
+    icols = ['event_name_1',
+ 'event_type_1',
+ 'event_name_2',
+ 'event_type_2',
+ 'snap_CA',
+ 'snap_TX',
+ 'snap_WI']
+    for col in icols:
+        grid_df[col] = grid_df[col].astype('category')
+        
+    # Tarih bazlı sayısal özellikleri oluştur
+    grid_df['date'] = pd.to_datetime(grid_df['date'])
+    grid_df['tm_d'] = grid_df['date'].dt.day.astype(np.int8)
+    grid_df['tm_w'] = grid_df['date'].dt.isocalendar().week.astype(np.int8)
+    grid_df['tm_m'] = grid_df['date'].dt.month.astype(np.int8)
+    grid_df['tm_y'] = grid_df['date'].dt.year
+    grid_df['tm_y'] = (grid_df['tm_y'] - grid_df['tm_y'].min()).astype(np.int8)
+    grid_df['tm_wm'] = grid_df['tm_d'].apply(lambda x: math.ceil(x / 7)).astype(np.int8)
+    grid_df['tm_dw'] = grid_df['date'].dt.dayofweek.astype(np.int8)
+    grid_df['tm_w_end'] = (grid_df['tm_dw'] >= 5).astype(np.int8)
+    
+    del(grid_df['date'])
+    grid_df = reduce_mem_usage(grid_df, verbose=False)
+    
+    # Sonucu kaydet
+    grid_df.to_feather(f"grid_calendar_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    
+    del(grid_df)
+    del(calendar_df)
+    gc.collect()
+```
+
+Aşağıdaki fonksiyon bunun yerine sadece `wm_yr_wk` özelliğini kaldırır ve `d` (gün) özelliğini sayısal bir özelliğe dönüştürür. Bu, sonraki özellik dönüşüm fonksiyonları için gerekli bir adımdır:
+
+```python
+def modify_grid_base(end_train_day_x, predict_horizon):
+    grid_df = pd.read_feather(f"grid_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    grid_df['d'] = grid_df['d'].apply(lambda x: x[2:]).astype(np.int16)
+    del grid_df['wm_yr_wk']
+    grid_df = reduce_mem_usage(grid_df, verbose=False)
+    grid_df.to_feather(f"grid_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    del(grid_df)
+    gc.collect()
+```
+
+Son iki özellik oluşturma fonksiyonumuz, zaman serileri için daha gelişmiş özellik mühendisliği üretecektir. İlk fonksiyon hem **gecikmeli satışları (lagged sales)** hem de **hareketli ortalamalarını** üretecektir. İlk olarak, `shift` metodu kullanılarak geçmişe dönük 15 güne kadar bir gecikmeli satış aralığı oluşturulacaktır. Daha sonra, `shift`, `rolling` ([https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html)) ile birlikte kullanılarak 7, 14, 30, 60 ve 180 günlük pencerelerle hareketli ortalamalar oluşturulacaktır.
+
+`shift` komutu gereklidir çünkü indeksi hareket ettirerek hesaplamalarınız için her zaman **mevcut verileri** dikkate almanızı sağlar. Dolayısıyla, tahmin ufkunuz yedi güne kadar çıkıyorsa, hesaplamalar sadece yedi gün önceki mevcut verileri dikkate alacaktır. Ardından, `rolling` komutu, özetlenebilecek (bu durumda ortalama ile) bir hareketli gözlem penceresi oluşturacaktır. Bir dönem üzerindeki ortalamaya (hareketli pencere) sahip olmak ve bunun evrimlerini takip etmek, eğilimlerdeki herhangi bir değişikliği daha iyi tespit etmenize yardımcı olacaktır, çünkü zaman pencereleri boyunca tekrarlanmayan modeller dengelenecektir. Bu, gürültüyü ve ilgi çekmeyen modelleri kaldırmak için zaman serisi analizinde yaygın bir stratejidir. Örneğin, yedi günlük hareketli ortalama ile tüm günlük modelleri iptal edecek ve sadece satışlarınızın haftalık bazda neler olduğunu göstereceksiniz.
+
+> 📝 Alıştırma 2
+> 
+> 
+> 
+> Farklı hareketli ortalama pencereleriyle denemeler yapabilir misiniz? Ayrıca farklı stratejiler denemek de yardımcı olabilir. Örneğin, zaman serilerine adanmış olan Tabular Playground Ocak 2022'yi ([https://www.kaggle.com/competitions/tabular-playground-series-jan-2022](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022)) keşfederek daha fazla fikir bulabilirsiniz, çünkü çözümlerin çoğu gradyan artırma kullanılarak oluşturulmuştur.
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
+İşte **gecikme (lag) ve hareketli ortalama** özelliklerini oluşturan kod:
+
+```python
+def generate_lag_feature(end_train_day_x, predict_horizon):
+    grid_df = pd.read_feather(f"grid_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    grid_df = grid_df[['id', 'd', 'sales']]
+    num_lag_day_list = []
+    num_lag_day = 15
+    
+    # Gecikme (lag) günleri listesini oluştur (tahmin ufkundan başlayarak 15 gün öncesine kadar)
+    for col in range(predict_horizon, predict_horizon + num_lag_day):
+        num_lag_day_list.append(col)
+        
+    # Gecikmeli satış özelliklerini oluştur
+    grid_df = grid_df.assign(**{
+        '{}_lag_{}'.format('sales', l): grid_df.groupby(['id'])['sales'].transform(lambda x: x.shift(l))
+        for l in num_lag_day_list
+    })
+    
+    # Bellek kullanımını optimize et
+    for col in list(grid_df):
+        if 'lag' in col:
+            grid_df[col] = grid_df[col].astype(np.float16)
+            
+    # Hareketli ortalama pencerelerini tanımla
+    num_rolling_day_list = [7, 14, 30, 60, 180]
+    
+    # Hareketli ortalama ve standart sapma özelliklerini oluştur
+    for num_rolling_day in num_rolling_day_list:
+        grid_df['rolling_mean_' + str(num_rolling_day)] = grid_df.groupby(['id'])['sales'].transform(
+            lambda x: x.shift(predict_horizon).rolling(num_rolling_day).mean()).astype(np.float16)
+        grid_df['rolling_std_' + str(num_rolling_day)] = grid_df.groupby(['id'])['sales'].transform(
+            lambda x: x.shift(predict_horizon).rolling(num_rolling_day).std()).astype(np.float16)
+            
+    grid_df = reduce_mem_usage(grid_df, verbose=False)
+    
+    # Sonucu diske kaydet
+    grid_df.to_feather(f"lag_feature_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    del(grid_df)
+    gc.collect()
+```
+
+İkinci gelişmiş özellik mühendisliği fonksiyonu ise, eyalet, mağaza, kategori, departman ve satılan ürün arasındaki belirli değişken gruplarını alıp bunların **ortalama (mean)** ve **standart sapmasını (standard deviation)** temsil eden bir **kodlama fonksiyonudur**. Bu gömülmeler (embeddings) **zamandan bağımsızdır** (zaman, gruplandırmanın bir parçası değildir) ve eğitim algoritmasının ürünlerin, kategorilerin ve mağazaların (ve bunların kombinasyonlarının) kendi aralarında nasıl farklılaştığını ayırt etmesine yardımcı olma rolüne sahiptir.
+
+> 📝 Alıştırma 3
+> 
+> 
+> 
+> Önerilen gömülmeler (embeddings), **Kaggle Kitabı'nın 216. sayfasında** açıklandığı gibi **hedef kodlama (target encoding)** kullanılarak da hesaplanabilir. Hedef kodlama gömülmelerini uygulayabilir ve daha iyi sonuçları nasıl elde edeceğinizi bulabilir misiniz?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
+Kod, özellikleri gruplayarak, tanımlayıcı istatistiklerini (bizim durumumuzda ortalama veya standart sapma) hesaplayarak ve ardından sonuçları daha önce tartıştığımız **`transform`** metodunu kullanarak veri setine uygulayarak çalışır:
+
+```python
+def generate_target_encoding_feature(end_train_day_x, predict_horizon):
+    grid_df = pd.read_feather(f"grid_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    
+    # İleriye dönük tahmin yapılacak günlerdeki 'sales' değerlerini NaN yap (hedef sızıntısını önlemek için)
+    grid_df.loc[grid_df['d'] > (end_train_day_x - predict_horizon), 'sales'] = np.nan
+    base_cols = list(grid_df)
+    
+    # Gruplandırma kombinasyonları
+    icols = [
+        ['state_id'],
+        ['store_id'],
+        ['cat_id'],
+        ['dept_id'],
+        ['state_id', 'cat_id'],
+        ['state_id', 'dept_id'],
+        ['store_id', 'cat_id'],
+        ['store_id', 'dept_id'],
+        ['item_id'],
+        ['item_id', 'state_id'],
+        ['item_id', 'store_id']
+    ]
+    
+    # Her bir gruplandırma için ortalama ve standart sapma (hedef kodlama) hesapla
+    for col in icols:
+        col_name = '_' + '_'.join(col) + '_'
+        grid_df['enc' + col_name + 'mean'] = grid_df.groupby(col)['sales'].transform('mean').astype(np.float16)
+        grid_df['enc' + col_name + 'std'] = grid_df.groupby(col)['sales'].transform('std').astype(np.float16)
+        
+    # Yeni oluşturulan özellikleri seç
+    keep_cols = [col for col in list(grid_df) if col not in base_cols]
+    grid_df = grid_df[['id', 'd'] + keep_cols]
+    
+    grid_df = reduce_mem_usage(grid_df, verbose=False)
+    
+    # Sonucu diske kaydet
+    grid_df.to_feather(f"target_encoding_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    del(grid_df)
+    gc.collect()
+```
+
+Özellik mühendisliği bölümünü tamamladıktan sonra, şimdi özellikleri oluştururken diskte sakladığımız tüm dosyaları bir araya getirmeye geçiyoruz. Aşağıdaki fonksiyon sadece temel özellikler, fiyat özellikleri, takvim özellikleri, gecikme/hareketli ve gömülü özelliklerin farklı veri setlerini yükler ve hepsini birleştirir. Kod daha sonra yalnızca belirli bir mağazaya ait satırları filtreler ve ayrı bir veri seti olarak kaydeder.
+
+Böyle bir yaklaşım, **belirli bir zaman aralığı için tahmin yapmayı amaçlayan belirli bir mağaza üzerinde eğitilmiş bir modele sahip olma** stratejisiyle eşleşir:
+
+```python
+def assemble_grid_by_store(train_df, end_train_day_x, predict_horizon):
+    # Temel, fiyat ve takvim özelliklerini birleştir
+    grid_df = pd.concat([pd.read_feather(f"grid_df_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather"),
+                         pd.read_feather(f"grid_price_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather").iloc[:, 2:],
+                         pd.read_feather(f"grid_calendar_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather").iloc[:, 2:]],
+                         axis=1)
+    gc.collect()
+    
+    store_id_set_list = list(train_df['store_id'].unique())
+    index_store = dict()
+    
+    # Her mağaza için veriyi ayır ve kaydet
+    for store_id in store_id_set_list:
+        extract = grid_df[grid_df['store_id'] == store_id]
+        index_store[store_id] = extract.index.to_numpy() # Orijinal indeksi sakla
+        extract = extract.reset_index(drop=True)
+        extract.to_feather(f"grid_full_store_{store_id}_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+        
+    del(grid_df)
+    gc.collect()
+    
+    # Hedef kodlama özelliklerini birleştir
+    mean_features = [
+ 'enc_cat_id_mean', 'enc_cat_id_std',
+ 'enc_dept_id_mean', 'enc_dept_id_std',
+ 'enc_item_id_mean', 'enc_item_id_std'
+        ]
+    df2 = pd.read_feather(f"target_encoding_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")[mean_features]
+    
+    for store_id in store_id_set_list:
+        df = pd.read_feather(f"grid_full_store_{store_id}_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+        # Yalnızca ilgili satırları (saklanan indekslere göre) df2'den al ve birleştir
+        df = pd.concat([df, df2[df2.index.isin(index_store[store_id])].reset_index(drop=True)], axis=1)
+        df.to_feather(f"grid_full_store_{store_id}_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+        
+    del(df2)
+    gc.collect()
+    
+    # Gecikme özelliklerini birleştir
+    df3 = pd.read_feather(f"lag_feature_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather").iloc[:, 3:]
+    
+    for store_id in store_id_set_list:
+        df = pd.read_feather(f"grid_full_store_{store_id}_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+        # Yalnızca ilgili satırları (saklanan indekslere göre) df3'ten al ve birleştir
+        df = pd.concat([df, df3[df3.index.isin(index_store[store_id])].reset_index(drop=True)], axis=1)
+        df.to_feather(f"grid_full_store_{store_id}_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+        
+    del(df3)
+    del(store_id_set_list)
+    gc.collect()
+```
+
+Aşağıdaki fonksiyon ise, bir öncekinden yapılan seçimi daha fazla işleyerek kullanılmayan özellikleri kaldırır ve sütunları yeniden sıralar, eğitilecek bir model için verileri döndürür:
+
+```python
+def load_grid_by_store(end_train_day_x, predict_horizon, store_id):
+    df = pd.read_feather(f"grid_full_store_{store_id}_{end_train_day_x}_to_{end_train_day_x + predict_horizon}.feather")
+    
+    # Kaldırılacak ve etkinleştirilecek özellikleri belirle
+    remove_features = ['id', 'state_id', 'store_id', 'date', 'wm_yr_wk', 'd', 'sales']
+    enable_features = [col for col in list(df) if col not in remove_features]
+    
+    # Gerekli sütunları yeniden sırala
+    df = df[['id', 'd', 'sales'] + enable_features]
+    
+    df = reduce_mem_usage(df, verbose=False)
+    gc.collect()
+    return df, enable_features
+```
+
+Son olarak, artık **eğitim aşamasıyla** ilgilenebiliriz. Aşağıdaki kod parçacığı, Monsaraida'nın problem üzerinde en etkili olduğunu açıkladığı eğitim parametrelerini tanımlayarak başlar. Eğitim süresi nedenleriyle, artırma türünü değiştirerek **Gradyan Artırma Karar Ağacı (GBDT)** yerine **Gradyan Tabanlı Tek Taraflı Örnekleme (GOSS)** kullanmayı seçtik, çünkü bu, performanstan çok fazla kayıp olmadan eğitimi gerçekten hızlandırabilir. Modele iyi bir hız artışı, ayrıca `subsample` parametresi ve `feature fraction` ile de sağlanır: gradyan artırmanın her öğrenme adımında, örneklerin sadece yarısı ve özelliklerin sadece yarısı dikkate alınacaktır.
+
+> LightGBM'i doğru derleme seçenekleriyle makinenizde derlemek de hızınızı artırabilir, bu ilginç yarışma tartışmasında açıklandığı gibi: [https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/148273](https://www.google.com/search?q=https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/148273).
+
+Güç değeri 1.1 olan **Tweedie kaybı** (dolayısıyla Poisson'a daha yakın bir temel dağılıma sahip), **aralıklı serileri** (sıfır satışların baskın olduğu yerlerde) modellemede özellikle etkili görünmektedir. Kullanılan metrik sadece **karekök ortalama karesel hatadır (root mean squared error)** (yarışma metriğini temsil etmek için özel bir metrik kullanmaya gerek yoktur). Ayrıca Kaggle not defterinde bellekten tasarruf etmek için `force_row_wise` parametresini kullanıyoruz. Diğer tüm parametreler, Monsaraida'nın çözümünde sunduklarıyla tamamen aynıdır (ancak `goss` artırma türüyle uyumsuzluğu nedeniyle devre dışı bırakılan alt örnekleme parametresi hariç).
+
+> 📝 Alıştırma 4
+> 
+> 
+> 
+> Tweedie kaybı başka hangi Kaggle yarışmasında faydalı olmuştur? Meta Kaggle veri setindeki ([https://www.kaggle.com/datasets/kaggle/meta-kaggle](https://www.kaggle.com/datasets/kaggle/meta-kaggle)) **ForumTopics** ve **ForumMessages** CSV tablolarını keşfederek bu kayıp (loss) ve kullanımına dair faydalı tartışmalar bulabilir misiniz?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
+Eğitim parametrelerini tanımladıktan sonra, sadece mağazalar üzerinde döngü kuruyoruz, her seferinde tek bir mağazanın eğitim verilerini yüklüyor ve LightGBM modelini eğitiyoruz. Her model daha sonra **pickle dump** ile kaydedilir. Ayrıca, her bir modelden **özellik önemini (feature importance)** çıkarıyoruz, bu bilgiyi bir dosyada birleştirmek ve ardından toplamak amacıyla, böylece o tahmin ufku için her özellik bazında **tüm mağazalardaki ortalama önemi** elde ediyoruz.
+
+> 📝 Alıştırma 5
+> 
+> 
+> 
+> Her modelden gelen farklı **özellik önem raporlarını** analiz edin. Bunları çizdirip **ortak örüntüler** arayabilir misiniz? Modelin, zamanda gittikçe **daha uzak tahminlerle** uğraşmak zorunda kaldıkça gösterdiği davranış hakkında ne anlayabilirsiniz?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
+İşte belirli bir tahmin ufku için tüm modelleri eğitmek üzere hazırlanmış **tam fonksiyon**:
+
+```python
+def train(train_df, seed, end_train_day_x, predict_horizon):
+    lgb_params = {
+        'boosting_type': 'goss', # Gradyan Tabanlı Tek Taraflı Örnekleme (daha hızlı)
+        'objective': 'tweedie',
+        'tweedie_variance_power': 1.1, # Poisson'a yakın
+        'metric': 'rmse',
+        #'subsample': 0.5, # GOSS ile uyumsuz olduğu için devre dışı
+        #'subsample_freq': 1,
+        'learning_rate': 0.03,
+        'num_leaves': 2 ** 11 - 1,
+        'min_data_in_leaf': 2 ** 12 - 1,
+        'feature_fraction': 0.5, # Özelliklerin %50'si kullanılır
+        'max_bin': 100,
+        'boost_from_average': False,
+        'num_boost_round': 1400,
+        'verbose': -1,
+        'num_threads': os.cpu_count(),
+        'force_row_wise': True, # Bellek tasarrufu için
+    }
+    
+    # Rastgelelik tohumlarını ayarla
+    random.seed(seed)
+    np.random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    lgb_params['seed'] = seed
+    
+    store_id_set_list = list(train_df['store_id'].unique())
+    print(f"training stores: {store_id_set_list}")
+    feature_importance_all_df = pd.DataFrame()
+    
+    for store_index, store_id in enumerate(store_id_set_list):
+        print(f'now training {store_id} store')
+        
+        # Mağazaya göre veriyi yükle
+        grid_df, enable_features = load_grid_by_store(end_train_day_x, predict_horizon, store_id)
+        
+        # Eğitim ve doğrulama maskelerini oluştur
+        train_mask = grid_df['d'] <= end_train_day_x
+        valid_mask = train_mask & (grid_df['d'] > (end_train_day_x - predict_horizon))
+        preds_mask = grid_df['d'] > (end_train_day_x - 100) # Tahminler için son 100 günü al
+        
+        # LightGBM veri setlerini oluştur
+        train_data = lgb.Dataset(grid_df[train_mask][enable_features],
+                                 label=grid_df[train_mask]['sales'])
+        valid_data = lgb.Dataset(grid_df[valid_mask][enable_features],
+                                 label=grid_df[valid_mask]['sales'])
+                                 
+        # İlerideki tahminler için veri setinin bir kısmını kaydet
+        grid_df = grid_df[preds_mask].reset_index(drop=True)
+        grid_df.to_feather(f'test_{store_id}_{predict_horizon}.feather')
+        del(grid_df)
+        gc.collect()
+        
+        # LightGBM modelini eğit
+        estimator = lgb.train(lgb_params,
+                              train_data,
+                              valid_sets=[valid_data],
+                              callbacks=[lgb.log_evaluation(period=100, show_stdv=False)],
+                              )
+                              
+        # Özellik önemini çıkar ve kaydet
+        model_name = str(f'lgb_model_{store_id}_{predict_horizon}.bin')
+        feature_importance_store_df = pd.DataFrame(sorted(zip(enable_features, estimator.feature_importance())),
+                                                   columns=['feature_name', 'importance'])
+        feature_importance_store_df = feature_importance_store_df.sort_values('importance', ascending=False)
+        feature_importance_store_df['store_id'] = store_id
+        feature_importance_store_df.to_csv(f'feature_importance_{store_id}_{predict_horizon}.csv', index=False)
+        
+        # Tüm mağazaların özellik önemini birleştir
+        feature_importance_all_df = pd.concat([feature_importance_all_df, feature_importance_store_df])
+        
+        # Modeli kaydet (pickle)
+        pickle.dump(estimator, open(model_name, 'wb'))
+        
+        del([train_data, valid_data, estimator])
+        gc.collect()
+        
+    # Tüm mağazaların birleştirilmiş özellik önemini kaydet
+    feature_importance_all_df.to_csv(f'feature_importance_all_{predict_horizon}.csv', index=False)
+    
+    # Ortalama özellik önemini hesapla ve kaydet
+    feature_importance_agg_df = feature_importance_all_df.groupby('feature_name')['importance'].agg(['mean', 'std']).reset_index()
+    feature_importance_agg_df.columns = ['feature_name', 'importance_mean', 'importance_std']
+    feature_importance_agg_df = feature_importance_agg_df.sort_values('importance_mean', ascending=False)
+    feature_importance_agg_df.to_csv(f'feature_importance_agg_{predict_horizon}.csv', index=False)
+```
+
+Son fonksiyon da hazırlandığına göre, tüm gerekli kodlar işlem hattımız için hazır demektir. Tüm operasyonları bir araya getiren fonksiyon için, girdi veri setlerine (zaman serisi veri seti, fiyat veri seti ve takvim bilgileri) son eğitim günü (herkese açık liderlik tablosunda tahmin için 1.913, özel liderlik tablosu için 1.941) ve tahmin ufku (7, 14, 21 veya 28 gün olabilir) ile birlikte ihtiyacımız var:
+
+```python
+def train_pipeline(train_df, prices_df, calendar_df,  
+                   end_train_day_x_list, prediction_horizon_list):
+    for end_train_day_x in end_train_day_x_list:
+        for predict_horizon in prediction_horizon_list:
+            print(f"end training point day: {end_train_day_x} - prediction horizon: {predict_horizon} days")
+            
+            # Veri hazırlama
+            generate_base_grid(train_df, end_train_day_x, predict_horizon)
+            calc_release_week(prices_df, end_train_day_x, predict_horizon)
+            generate_grid_price(prices_df, calendar_df, end_train_day_x, predict_horizon)
+            generate_grid_calendar(calendar_df, end_train_day_x, predict_horizon)
+            modify_grid_base(end_train_day_x, predict_horizon)
+            generate_lag_feature(end_train_day_x, predict_horizon)
+            generate_target_encoding_feature(end_train_day_x, predict_horizon)
+            assemble_grid_by_store(train_df, end_train_day_x, predict_horizon)
+            
+            # Modelleme
+            train(train_df, seed, end_train_day_x, predict_horizon)
+```
+
+Kaggle not defterlerinin sınırlı bir çalışma süresi ve sınırlı miktarda hem bellek hem de disk alanı olduğundan, önerilen stratejimiz, burada sunulan kodla dört not defterini çoğaltmak ve bunları farklı tahmin ufku parametreleriyle eğitmektir. Not defterleri için aynı adı kullanmak, ancak tahmin parametresinin değerini içeren bir kısmı eklemek, modelleri daha sonra başka bir not defterinde harici veri setleri olarak toplama ve işleme konusunda yardımcı olacaktır. Bu not defterlerinin her birinin standart bir Kaggle not defterinde çalışması yaklaşık **6 buçuk saat** sürecektir.
+
+İşte ilk not defteri, **m5-train-day-1941-horizon-7** ([https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-7](https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-7)):
+
+```python
+end_train_day_x_list = [1941]
+prediction_horizon_list = [7]
+seed = 42
+train_pipeline(train_df, prices_df, calendar_df, end_train_day_x_list, prediction_horizon_list)
+```
+
+İkinci not defteri, **m5-train-day-1941-horizon-14** ([https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-14](https://www.google.com/search?q=https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-14)):
+
+```python
+end_train_day_x_list = [1941]
+prediction_horizon_list = [14]
+seed = 42
+train_pipeline(train_df, prices_df, calendar_df, end_train_day_x_list, prediction_horizon_list)
+```
+
+Üçüncü not defteri, **m5-train-day-1941-horizon-21** ([https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-21](https://www.google.com/search?q=https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-21)):
+
+```python
+end_train_day_x_list = [1941]
+prediction_horizon_list = [21]
+seed = 42
+train_pipeline(train_df, prices_df, calendar_df, end_train_day_x_list, prediction_horizon_list)
+```
+
+Ve nihayet sonuncusu, **m5-train-day-1941-horizon-28** ([https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-28](https://www.google.com/search?q=https://www.kaggle.com/code/lucamassaron/m5-train-day-1941-horizon-28)):
+
+```python
+end_train_day_x_list = [1941]
+prediction_horizon_list = [28]
+seed = 42
+train_pipeline(train_df, prices_df, calendar_df, end_train_day_x_list, prediction_horizon_list)
+```
+
+Eğer yeterli disk alanı ve bellek kaynaklarına sahip yerel bir bilgisayarda çalışıyorsanız, tüm dört tahmin ufkunu içeren listeyi, yani `[7, 14, 21, 28]`'i girdi olarak kullanarak hepsini birlikte çalıştırabilirsiniz. Şimdi, tahminimizi gönderebilmemizden önceki son adım, tahminleri bir araya getirmektir.
+
 ## Herkese açık (public) ve özel (private) tahminleri bir araya getirme *(Assembling public and private predictions)*
 
+Hem herkese açık hem de özel liderlik tabloları için tahminleri nasıl bir araya getirdiğimize dair bir örneği burada görebilirsiniz:
+
+  * **Herkese açık liderlik tablosu örneği**: [https://www.kaggle.com/lucamassaron/m5-predict-public-leaderboard](https://www.google.com/search?q=https://www.kaggle.com/lucamassaron/m5-predict-public-leaderboard)
+  * **Özel liderlik tablosu örneği**: [https://www.kaggle.com/code/lucamassaron/m5-predict-private-leaderboard](https://www.kaggle.com/code/lucamassaron/m5-predict-private-leaderboard)
+
+Herkese açık ve özel gönderimler arasında değişen tek şey, **farklı son eğitim günüdür**: bu, hangi günleri tahmin edeceğimizi belirler. Herkese açık liderlik tablosu not defterinde son eğitim günü **1.913** olarak ayarlanmıştır ve özel olanda **1.941** olarak ayarlanmıştır.
+
+Aslında, sadece doğrulama amaçları için, geçmiş tutma (holdout) doğrulama setleri oluşturmak üzere şu tarihleri kullanarak herkese açık sürüm not defterinin başka versiyonlarını oluşturabilirsiniz: **[1885, 1857, 1829, 1577]**. Böylece not defteri, modelin tahmin yeteneğini doğrulamak için yerel olarak test edebileceğiniz tahminler üretecektir.
+
+> 📝 Alıştırma 6
+> 
+> 
+> 
+> Lütfen **farklı tutma (holdout) sürelerini** deneyin ve doğrulama skorlarını kaydedin. Model nasıl davranıyor? Geçmişte de iyi çalıştığı (sağlam bir çözüm olduğu) **doğrulandı mı**?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
+Bu sonuç kodu parçacığında, LightGBM gibi gerekli paketleri yükledikten sonra, her bir **eğitim bitiş günü** ve her bir **tahmin ufku** için doğru not defterini verileriyle birlikte kurtarıyoruz. Ardından, tüm mağazalar üzerinde döngü kuruyor ve önceki tahmin ufkundan şimdiki tahmin ufkuna kadar olan zaman aralığındaki tüm ürünler için satışları tahmin ediyoruz. Bu şekilde, her model sadece eğitildiği tek bir hafta için tahmin yapacaktır:
+
+```python
+import numpy as np
+import pandas as pd
+import os
+import random
+import math
+from decimal import Decimal as dec
+import datetime
+import time
+import gc
+import lightgbm as lgb
+import pickle
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
+store_id_set_list = ['CA_1', 'CA_2', 'CA_3', 'CA_4', 'TX_1', 'TX_2', 
+'TX_3', 'WI_1', 'WI_2', 'WI_3']
+end_train_day_x_list = [1913, 1941]
+prediction_horizon_list = [7, 14, 21, 28]
+pred_v_all_df = list()
+
+for end_train_day_x in end_train_day_x_list:
+    previous_prediction_horizon = 0
+    for prediction_horizon in prediction_horizon_list:
+        notebook_name = f"../input/m5-train-day-{end_train_day_x}-horizon-{prediction_horizon}"
+        pred_v_df = pd.DataFrame()
+        
+        for store_index, store_id in enumerate(store_id_set_list):
+            
+            # Modeli yükle
+            model_path = str(f'{notebook_name}/lgb_model_{store_id}_{prediction_horizon}.bin')
+            print(f'loading {model_path}')
+            estimator = pickle.load(open(model_path, 'rb'))
+            
+            # Test verisini yükle
+            base_test = pd.read_feather(f"{notebook_name}/test_{store_id}_{prediction_horizon}.feather")
+            enable_features = [col for col in base_test.columns if col not in ['id', 'd', 'sales']]
+            
+            # Her gün için tahmin yap
+            for predict_day in range(previous_prediction_horizon + 1, prediction_horizon + 1):
+                print('[{3} -> {4}] predict {0}/{1} {2} day {5}'.format(
+                    store_index + 1, len(store_id_set_list), store_id,
+                    previous_prediction_horizon + 1, prediction_horizon, 
+predict_day))
+                    
+                mask = base_test['d'] == (end_train_day_x + predict_day)
+                # Tahmin yap ve sonucu 'sales' sütununa yerleştir (Özyinelemeli tahmin)
+                base_test.loc[mask, 'sales'] = estimator.predict(base_test[mask][enable_features])
+                
+            # İlgili tahmin ufkundaki sonuçları al
+            temp_v_df = base_test[
+                (base_test['d'] >= end_train_day_x + previous_prediction_horizon + 1) &
+                (base_test['d'] < end_train_day_x + prediction_horizon + 1)
+                ][['id', 'd', 'sales']]
+                
+            if len(pred_v_df)!=0:
+                pred_v_df = pd.concat([pred_v_df, temp_v_df])
+            else:
+                pred_v_df = temp_v_df.copy()
+            del(temp_v_df)
+            gc.collect()
+            
+        previous_prediction_horizon = prediction_horizon
+        pred_v_all_df.append(pred_v_df)
+
+pred_v_all_df = pd.concat(pred_v_all_df)
+```
+
+Tüm tahminler toplandıktan sonra, hem gerekli satırlar hem de sütun formatı için (Kaggle, ilerleyen sütunlarda günlük satışlarla doğrulama veya test dönemlerindeki ürünler için ayrı satırlar bekler) **örnek gönderim dosyasını** referans alarak bunları birleştiriyoruz:
+
+```python
+submission = pd.read_csv("../input/m5-forecasting-accuracy/sample_submission.csv")
+
+# Gün numarasını başlangıç noktasına göre ayarla (Örn: 1914 -> 1)
+pred_v_all_df.d = pred_v_all_df.d - end_train_day_x_list[0] # Burada 1913 kullanılırsa F1-F28, 1941 kullanılırsa F29-F56
+
+# Uzun formattan geniş formata dönüştür (pivot)
+pred_h_all_df = pred_v_all_df.pivot(index='id', columns='d', values='sales')
+pred_h_all_df = pred_h_all_df.reset_index()
+
+# Sütun adlarını gönderim formatıyla eşleştir
+pred_h_all_df.columns = submission.columns
+
+# Tahminleri örnek gönderim dosyasıyla birleştir ve NaN'ları 0 ile doldur
+submission = submission[['id']].merge(pred_h_all_df, on=['id'], how='left').fillna(0)
+
+submission.to_csv("m5_predictions.csv", index=False)
+```
+
+Bu çözüm, özel liderlik tablosunda yaklaşık **0.54907** puana ulaşarak **12. sıra** almıştır, bu da final sıralamasında altın madalya alanına girdiği anlamına gelir. Monsaraida'nın LightGBM parametrelerine geri dönmek (örneğin, artırma parametresi için `goss` yerine `gbdt` kullanmak) daha da yüksek performanslar sağlayabilir (ancak kodu yerel bir bilgisayarda veya Google Cloud Platform'da çalıştırmanız gerekir).
+
+> 📝 Alıştırma 7
+> 
+> 
+> 
+> Eğer yerel bir makineniz veya bulut bilişim kaynağınız varsa ve 12 saati aşabilecek bir eğitimi bekleyebilirseniz, bir alıştırma olarak, aynı iterasyon sayısıyla LightGBM eğitimini **`goss`** yerine **`gbdt`** olarak ayarlanmış `boosting` parametresiyle karşılaştırmayı deneyin. Performans ve eğitim süresi arasındaki fark ne kadardır?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
 ## Özet *(Summary)*
+
+Bu ikinci bölümde, oldukça karmaşık bir zaman serisi yarışmasını ele aldık; bu nedenle denediğimiz en kolay üst çözüm bile aslında oldukça karmaşık ve oldukça fazla işleme fonksiyonu kodlamayı gerektiriyor. Bu bölümü tamamladıktan sonra, zaman serilerinin nasıl işleneceği ve gradyan artırma (gradient boosting) kullanılarak nasıl tahmin edileceği konusunda daha iyi bir fikre sahip olmalısınız. Elinizde yeterli veri olduğunda, bu problemde olduğu gibi, geleneksel yöntemler yerine **gradyan artırma çözümlerini tercih etmek**; hiyerarşik korelasyonlar, aralıklı seriler ve olaylar, fiyatlar veya piyasa koşulları gibi ortak değişkenlerin (covariates) mevcudiyeti gibi karmaşık sorunlar için güçlü çözümler oluşturmanıza yardımcı olacaktır.
+
+İlerleyen bölümlerde, görüntüler ve metinlerle ilgili daha da karmaşık Kaggle yarışmalarıyla mücadele edeceksiniz. En yüksek puan alan çözümleri yeniden oluşturarak ve iç işleyişlerini anlayarak ne kadar çok şey öğrenebileceğinize şaşıracaksınız.
 
 ---
 
