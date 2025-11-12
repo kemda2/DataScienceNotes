@@ -1078,6 +1078,10 @@ Burada sonuçlar, **0.28502'lik herkese açık skor** ve **0.29192'lik özel sko
 
 ## Özet *(Summary)*
 
+Bu ilk bölümde, klasik bir tablo (tabular) yarışmasıyla ilgilendiniz. Yarışmanın not defterlerini ve tartışmalarını okuyarak, kolayca harmanlanabilen sadece iki modeli içeren basit bir çözüm ortaya çıkardık. Özellikle, tablo verileri için sinir ağlarıyla çalışırken özellikle yararlı olan **alternatif veri işleme** üretmek amacıyla bir **gürültü giderici otomatik kodlayıcının (denoising autoencoder)** nasıl kullanılacağına dair bir örnek sunduk. Geçmiş yarışmalardaki çözümleri anlayıp çoğaltarak, Kaggle yarışmalarındaki temel yetkinliklerinizi hızla geliştirebilir ve daha yeni yarışma ve meydan okumalarda sürekli olarak daha yüksek performans gösterme yeteneği kazanabilirsiniz.
+
+Bir sonraki bölümde, bu kez **zaman serileriyle** ilgili karmaşık bir tahmin problemine odaklanan Kaggle'dan başka bir tablo yarışmasını inceleyeceğiz.
+
 ---
 
 # Bölüm 2: Makridakis Yarışmaları – Doğruluk ve Belirsizlik İçin Kaggle'daki M5 *(Chapter 2: The Makridakis Competitions – M5 on Kaggle for Accuracy and Uncertainty)*
