@@ -2168,30 +2168,1298 @@ Bu ikinci bölümde, oldukça karmaşık bir zaman serisi yarışmasını ele al
 
 # Bölüm 3: Görsel Yarışma: Manyok Yaprağı Hastalığı Yarışması *(Chapter 3: Vision Competition: Cassava Leaf Disease Competition)*
 
+Bu bölümde, **tablo verileri alanından ayrılıp görüntü işleme** üzerine odaklanacağız. Sınıflandırma yarışmalarında başarılı olmak için gerekli adımları göstermek amacıyla, **Manyok Yaprağı Hastalığı (Cassava Leaf Disease)** yarışmasının verilerini kullanacağız: [https://www.kaggle.com/competitions/cassava-leaf-disease-classification](https://www.kaggle.com/competitions/cassava-leaf-disease-classification).
+
+Bir Kaggle yarışmasına başlarken yapılması gereken ilk şey, açıklamayı düzgünce okumaktır:
+
+> "Afrika'daki en büyük ikinci karbonhidrat kaynağı olan manyok, zorlu koşullara dayanabildiği için **küçük çiftçiler tarafından yetiştirilen kilit bir gıda güvenliği mahsulüdür**. Sahra Altı Afrika'daki hane halkı çiftliklerinin en az %80'i bu nişastalı kökü yetiştiriyor, ancak **viral hastalıklar kötü verimin başlıca kaynağıdır**. Veri biliminin yardımıyla, yaygın hastalıkların tanımlanması ve böylece tedavi edilebilmesi mümkün olabilir."
+
+Görüldüğü gibi, bu yarışma önemli bir gerçek hayat sorunuyla ilgilidir:
+
+> "Mevcut hastalık tespit yöntemleri, çiftçilerin bitkileri görsel olarak incelemesi ve teşhis etmesi için hükümet tarafından finanse edilen ziraat uzmanlarından yardım istemesini gerektiriyor. Bu durum, **emek yoğun, arzı düşük ve maliyetli** olmasından muzdariptir. Ek bir zorluk olarak, Afrikalı çiftçilerin yalnızca **düşük bant genişliğine sahip mobil kalitede kameralara** erişimi olabileceğinden, çiftçiler için etkili çözümlerin önemli kısıtlamalar altında iyi performans göstermesi gerekir."
+
+Bu paragraf – özellikle son cümle – beklentileri belirliyor: veriler çeşitli kaynaklardan geldiği için, görüntü kalitesi ve (muhtemelen) **dağılım kayması (distribution shift)** ile ilgili bazı zorluklarla karşılaşmamız muhtemeldir.
+
+> "Göreviniz, her manyok görüntüsünü **dört hastalık kategorisinden birine veya sağlıklı bir yaprağı** gösteren beşinci bir kategoriye göre sınıflandırmaktır. Sizin yardımınızla çiftçiler hastalıklı bitkileri hızla tespit edebilir, potansiyel olarak telafisi mümkün olmayan hasara yol açmadan mahsullerini kurtarabilirler."
+
+Bu kısım oldukça önemlidir: bunun bir **sınıflandırma yarışması** olduğunu ve sınıf sayısının az olduğunu (bu durumda 5) belirtir.
+
+Bu bölümde şunları öğreneceksiniz:
+
+* Yarışma verileri ve metrikleri
+* Bir **temel modelin (baseline model)** nasıl oluşturulacağı
+* En iyi çözümlerden elde edilen içgörüler
+
+Giriş aşamasını tamamladığımıza göre, şimdi verilere bir göz atalım.
+
+> Bu bölümün kod dosyaları [https://packt.link/kwbchp3](https://packt.link/kwbchp3) adresinde bulunabilir.
+
 ## Veriyi ve metrikleri anlama *(Understanding the data and metrics)*
+
+Bu yarışmanın **Veri (Data)** sekmesine girdiğimizde, sağlanan verilerin özetini görüyoruz:
+
+![](im/1007.png)
+
+Bundan ne anlayabiliriz?
+
+* Veriler oldukça **basit bir formattadır** ve organizatörler hastalık adları ile sayısal kodlar arasındaki **eşleştirmeyi** bile sağlamıştır.
+* Verilere **TFRecord** formatında sahibiz, bu da bir **TPU** kullanmak isteyen herkes için iyi bir haberdir.
+* Sağlanan test seti, değerlendirme için kullanılan asıl test setinin yalnızca küçük bir alt kümesidir ve gönderim değerlendirme zamanında ilki ikincisiyle değiştirilir. Bu, değerlendirme sırasında **önceden eğitilmiş bir modelin yüklenmesi ve çıkarım (inference) için kullanılması** stratejisinin tercih edildiğini gösterir.
+
+**🎯 Değerlendirme Metriği ve Zorluklar**
+
+**Kategorizasyon doğruluğu (accuracy)** ([https://developers.google.com/machine-learning/crash-course/classification/accuracy](https://developers.google.com/machine-learning/crash-course/classification/accuracy)) değerlendirme metriği olarak seçilmiştir:
+
+$$\text{doğruluk} = \frac{\text{doğru tahmin sayısı}}{\text{toplam tahmin sayısı}}$$
+
+Bu metrik, girdi olarak **ayrık (discrete) değerler** alır, bu da potansiyel **topluluk oluşturma (ensembling) stratejilerinin** biraz daha karmaşık hale geldiği anlamına gelir. Topluluk oluşturma, daha doğru bir tahmin oluşturmak için birden fazla modelin tahminlerini birleştirme sürecidir.
+
+Sınıflandırma etiketleri gibi ayrık değerlere sahip metrikleri topluluk oluşturma, gerçek değerli sayılar gibi sürekli (continuous) değerlere sahip metrikleri topluluk oluşturmaktan daha zor olabilir. Bunun nedeni, birleştirilen modellerin çıktısının birleştirilebilmesi için aynı tipte olması gerektiğidir ve ayrık değerleri birleştirmek, sürekli değerleri birleştirmekten daha zordur.
+
+Örneğin, sınıflandırma modellerini topluluk oluştururken, bireysel modellerin çıktıları, sınıflandırma etiketlerinin ayrık doğasını koruyacak şekilde birleştirilmelidir. Bu zor olabilir, çünkü birden fazla modelin çıktılarının hem doğru hem de sınıflandırma etiketlerinin ayrık doğasını koruyacak şekilde nasıl birleştirileceği her zaman net değildir. Buna karşılık, regresyon modellerini topluluk oluştururken, bireysel modellerin çıktıları basitçe tahminlerin **ortalaması alınarak** birleştirilebilir, bu da çıktının sürekli doğasını koruyan basit bir işlemdir.
+
+**📉 Kayıp Fonksiyonu ve Metrik Farkı**
+
+**Kayıp fonksiyonu (loss function)**, eğitim sırasında öğrenme fonksiyonunu optimize etmek için uygulanır ve **gradyan iniş (gradient descent)** tabanlı yöntemleri kullanmak istediğimiz sürece, bunun **sürekli** olması gerekir. Öte yandan, **değerlendirme metriği** eğitimden sonra genel performansı ölçmek için kullanılır ve bu nedenle **ayrık** olabilir.
+
+### 📉 Kayıp Fonksiyonu ve Metrik Farkı
+
+**Kayıp fonksiyonu (loss function)**, eğitim sırasında öğrenme fonksiyonunu optimize etmek için uygulanır ve **gradyan iniş (gradient descent)** tabanlı yöntemleri kullanmak istediğimiz sürece, bunun **sürekli** olması gerekir. Öte yandan, **değerlendirme metriği** eğitimden sonra genel performansı ölçmek için kullanılır ve bu nedenle **ayrık** olabilir.
+
+> 📝 Alıştırma 1
+> 
+> 
+> 
+> Bir model oluşturmadan, **temel bir Keşifçi Veri Analizi (EDA)** yapmak için bir kod yazın.
+> 
+> 
+> 
+> Sınıflandırma problemimizdeki sınıfların **kardinalitesini** (sayısal dağılımını) karşılaştırın.
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
+Normalde, bu aynı zamanda **dağılım kaymasını (distribution shift)** kontrol etme anı olacaktır: bu, bir makine öğrenimi modeli için eğitim ve test verilerinin altında yatan dağılımındaki farktır. Görüntü sınıflandırması bağlamında, bu durum çeşitli şekillerde ortaya çıkabilir: eğitim verileri belirli bir türde veya belirli bir konumdan alınan görüntüler içerebilirken, test verileri bir şekilde farklı olan görüntüler içerebilir. Bu, modelin eğitim verilerinde iyi performans gösterdiği, ancak test verilerinde kötü performans gösterdiği bir duruma yol açabilir, çünkü model test setinde bulunan görüntü türlerinin örneklerini görmemiştir.
+
+Bu sorunu çözmek için, eğitim ve test verilerinin, model dağıtıldığında karşılaşacağı verilerin gerçek dünya dağılımını temsil ettiğinden emin olmak önemlidir. Uygulamada **kavram kaymasının (concept drift)** etkisini azaltmaya yönelik üç ana yaklaşım vardır:
+
+* **Düzenlileştirme (Regularization)**: Verilerdeki dağılımsal değişikliklerin etkisini azaltmaya yardımcı olur.
+* **Dağılımdaki değişiklikleri taklit etmek için tasarlanmış artırmalar (Augmentations)**: Örneğin, test verilerinin daha düşük kaliteli kameralarla çekilmiş görüntüler içerebileceğinden şüpheleniyorsak, orijinal fotoğraflara gürültü ekleyebiliriz.
+* **Çekişmeli doğrulama (Adversarial validation)**: Veri kümeleri arasındaki kavram kaymasını tespit etmek için popüler bir teknik olan çekişmeli doğrulama tartışması için lütfen The Kaggle Book'un 6. Bölümüne bakınız.
+
+Ancak, bu durumda veri setinin tamamına erişimimiz olmadığı için, bu adım atlanmış ve esas olarak açıklamanın eksiksizliği için bahsedilmiştir.
 
 ## Bir temel model (baseline model) oluşturma *(Building a baseline model)*
 
+Yaklaşımımıza bir **temel çözüm (baseline solution)** oluşturarak başlıyoruz. Uçtan uca çözümü çalıştıran not defteri şurada mevcuttur: [https://www.kaggle.com/code/konradb/ch3-end-to-end-image-classification](https://www.google.com/search?q=https://www.kaggle.com/code/konradb/ch3-end-to-end-image-classification).
+
+Diğer yarışmalar için bir başlangıç noktası olarak faydalı olsa da, bu bölümde açıklanan akışı takip etmek, yani kodu hücre hücre kopyalamak daha öğreticidir, böylece daha iyi anlayabilir (ve tabii ki geliştirebilirsiniz – sonuçta buna bir nedeni var: temel çözüm deniyor):
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import datetime
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import tensorflow as tf
+from tensorflow.keras import models, layers
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.applications import EfficientNetB0
+from tensorflow.keras.optimizers import Adam
+# ignoring warnings
+import warnings
+warnings.simplefilter("ignore")
+import os, cv2, json
+from PIL import Image
+```
+
+Gerekli paketleri içe aktararak başlıyoruz – tarzda kişisel farklılıklar doğal olsa da, bizim görüşümüz, içe aktarmaları tek bir yerde toplamanın, yarışma ilerledikçe ve daha ayrıntılı çözümlere doğru ilerledikçe kodun bakımını kolaylaştırdığı yönündedir.
+
+Ayrıca, öğrenme sürecimizi karakterize eden tüm parametreler için bir yer tutucu olan bir **yapılandırma sınıfı (configuration class)** oluşturuyoruz:
+
+```python
+class CFG:    
+    # config
+    WORK_DIR = '../input/cassava-leaf-disease-classification'
+    BATCH_SIZE = 8
+    EPOCHS = 5
+    TARGET_SIZE = 256
+    NCLASSES = 5
+```
+
+Bileşenler şunları içerir:
+
+  * **`WORK_DIR`** (Veri Klasörü): Çoğunlukla modelleri bazen Kaggle dışında (örneğin Google Colab'de veya yerel makinenizde) eğitiyorsanız kullanışlıdır.
+  * **`BATCH_SIZE`**: Eğitim sürecinizi optimize etmek (veya kısıtlı bellek ortamında büyük görüntüler için mümkün kılmak) istiyorsanız bazen ayarlanması gereken bir parametredir.
+  * **`EPOCHS`**: Hata ayıklama (debugging) için faydalıdır: çözümünüzün baştan sona sorunsuz çalıştığını doğrulamak için az sayıda epoch ile başlayın ve uygun bir çözüme doğru ilerledikçe artırın.
+  * **`TARGET_SIZE`**: Görüntülerinizi yeniden boyutlandırmak istediğiniz boyutu tanımlar.
+  * **`NCLASSES`**: Sınıflandırma probleminizdeki olası sınıf sayısına karşılık gelir.
+
+Bir çözüm kodlamak için iyi bir uygulama, önemli parçaları fonksiyonlar içine kapsüllemektir – ve eğitilebilir modelimizi oluşturmak kesinlikle önemli olarak nitelendirilir:
+
+```python
+def create_model():
+    conv_base = EfficientNetB0(include_top = False, weights = None,
+                               input_shape = (CFG.TARGET_SIZE, CFG.TARGET_SIZE, 3))
+    model = conv_base.output
+    model = layers.GlobalAveragePooling2D()(model)
+    model = layers.Dense(CFG.NCLASSES, activation = "softmax")(model)
+    model = models.Model(conv_base.input, model)
+    model.compile(optimizer = Adam(lr = 0.001),
+                  loss = "sparse_categorical_crossentropy",
+                  metrics = ["acc"])
+    return model
+```
+
+Bu adımla ilgili birkaç not:
+
+* Daha etkileyici seçenekler mevcut olsa da, **hızla üzerinde tekrar yapılabilen (iterated upon)** hızlı bir modelle başlamak pratiktir. **EfficientNet** ([https://paperswithcode.com/method/efficientnet](https://paperswithcode.com/method/efficientnet)) mimarisi bu gereksinime oldukça iyi uyar.
+* **Düzenlileştirme (regularization)** amaçları için bir **havuzlama katmanı (pooling layer)** ekliyoruz.
+* Bir **sınıflandırma başlığı (classification head)** ekleyin – sınıflandırıcı için olası sonuç sayısını belirten `CFG.NCLASSES` ile bir **Dense** katmanı.
+* Son olarak, bu yarışmanın gereksinimlerine karşılık gelen **kayıp (loss)** ve **metrikler** ile modeli derliyoruz.
+
+> 📝 Alıştırma 2
+> 
+> 
+> 
+> Kayıp (loss) ve metrik için olası seçimleri inceleyin – faydalı bir rehber şurada bulunmaktadır: [https://keras.io/api/losses/](https://keras.io/api/losses/).
+> 
+> 
+> 
+> Diğer makul seçenekler neler olurdu?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
+Sıradaki adım **veri** aşamasıdır:
+
+```python
+train_labels = pd.read_csv(os.path.join(CFG.WORK_DIR, "train.csv"))
+STEPS_PER_EPOCH = len(train_labels)*0.8 / CFG.BATCH_SIZE
+VALIDATION_STEPS = len(train_labels)*0.2 / CFG.BATCH_SIZE
+
+# Sınıf etiketini string (dize) türüne dönüştür
+train_labels.label = train_labels.label.astype('str')
+
+# Eğitim için veri artırma (Data Augmentation) tanımla
+train_datagen = ImageDataGenerator(validation_split = 0.2, preprocessing_function = None,
+                                     rotation_range = 45, zoom_range = 0.2,
+                                     horizontal_flip = True, vertical_flip = True,
+                                     fill_mode = 'nearest', shear_range = 0.1,
+                                     height_shift_range = 0.1, width_shift_range = 0.1)
+                                     
+# Eğitim veri üreteci (generator)
+train_generator = train_datagen.flow_from_dataframe(train_labels, 
+                         directory = os.path.join(CFG.WORK_DIR, "train_images"),
+                         subset = "training", x_col = "image_id",
+                         y_col = "label", target_size = (CFG.TARGET_SIZE, CFG.TARGET_SIZE),
+                         batch_size = CFG.BATCH_SIZE, class_mode = "sparse")
+
+# Doğrulama için veri üreteci tanımla (Artırma olmadan)
+validation_datagen = ImageDataGenerator(validation_split = 0.2)
+validation_generator = validation_datagen.flow_from_dataframe(train_labels,
+                         directory = os.path.join(CFG.WORK_DIR, "train_images"),
+                         subset = "validation", x_col = "image_id",
+                         y_col = "label", target_size = (CFG.TARGET_SIZE, CFG.TARGET_SIZE),
+                         batch_size = CFG.BATCH_SIZE, class_mode = "sparse")
+```
+
+Ardından, modeli kuruyoruz – yukarıda tanımladığımız fonksiyon sayesinde bu oldukça basittir:
+
+```python
+model = create_model()
+model.summary()
+```
+
+**🧠 Callbacks (Geri Çağırmalar) Kurulumu**
+
+Modele eğitim vermeye geçmeden önce, **geri çağırmalara (callbacks)** biraz dikkat ayırmalıyız:
+
+```python
+model_save = ModelCheckpoint('./EffNetB0_512_8_best_weights.h5', 
+                             save_best_only = True, 
+                             save_weights_only = True,
+                             monitor = 'val_loss', 
+                             mode = 'min', verbose = 1)
+
+early_stop = EarlyStopping(monitor = 'val_loss', min_delta = 0.001, 
+                           patience = 5, mode = 'min', verbose = 1,
+                           restore_best_weights = True)
+                           
+reduce_lr = ReduceLROnPlateau(monitor = 'val_loss', factor = 0.3, 
+                              patience = 2, min_delta = 0.001, 
+                              mode = 'min', verbose = 1)
+```
+
+Bahsetmeye değer bazı noktalar:
+
+* **`ModelCheckpoint`**: Yalnızca en iyi modelin ağırlıklarını tuttuğumuzdan emin olmak için kullanılır; bu durumda en iyi olma durumu izlenecek metrik (bu örnekte doğrulama kaybı - **`val_loss`**) tarafından belirlenir.
+
+* **`EarlyStopping`** (Erken Durdurma): Keras'ta, bir derin öğrenme modelinin doğrulama kümesindeki performansı iyileşmeyi bıraktığında eğitimi otomatik olarak durdurmak için kullanılan bir yöntemdir. Bu, eğitim sürecinin modelin eğitim verilerine aşırı uyum sağlamasından (overfitting) önce sonlandırılmasına olanak tanıdığı için faydalı olabilir, aksi takdirde yeni, görülmemiş verilerde düşük performansa yol açabilir. `EarlyStopping` geri çağırması, genellikle bir derin öğrenme modelinin performansını artırmak için düzenlileştirme ve öğrenme oranı çizelgeleri gibi diğer tekniklerle birlikte kullanılır.
+
+* **`ReduceLROnPlateau`** (Platoda Öğrenme Oranını Azaltma): Keras'ta, modelin doğrulama kümesindeki performansı **platoya ulaştığında** öğrenme oranını azaltan bir öğrenme oranı çizelgesidir. Bu, modelin performansının belirli bir epoch sayısından sonra iyileşmeyi durdurduğu anlamına gelir. Bu olduğunda, `ReduceLROnPlateau` şeması, öğrenme oranını belirtilen bir faktör kadar azaltır, modelin öğrenmeye devam etmesine ancak daha yavaş bir tempoda izin verir. Bu, modelin aşırı uyum sağlamasını önlemeye yardımcı olabilir ve ayrıca modelin bir çözüme daha hızlı yakınsamasına da yardımcı olabilir.
+
+> 📝 Alıştırma 3
+> 
+> 
+> 
+> Yukarıdaki kurulumda hangi parametreleri değiştirmek **mantıklı** olur ve hangileri varsayılan değerlerinde bırakılabilir?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
+Hiperparametre ayarlaması (hyperparameter tuning) için TensorFlow ile mükemmel bir başlangıç noktası resmi dokümantasyonda bulunabilir:
+
+[https://www.tensorflow.org/tutorials/keras/keras\_tuner](https://www.tensorflow.org/tutorials/keras/keras_tuner)
+
+Bu kurulumla, modeli eğitebiliriz:
+
+```python
+history = model.fit(
+    train_generator,
+    steps_per_epoch = STEPS_PER_EPOCH,
+    epochs = CFG.EPOCHS,
+    validation_data = validation_generator,
+    validation_steps = VALIDATION_STEPS,
+    callbacks = [model_save, early_stop, reduce_lr]
+)
+```
+
+Eğitim tamamlandıktan sonra, test setindeki her bir görüntü için görüntü sınıfı tahminini oluşturmak üzere modeli kullanabiliriz. Hatırlayın ki, bu yarışmada, herkese açık (görünür) test seti tek bir görüntüden oluşuyordu ve tam olanın boyutu bilinmiyordu – bu nedenle gönderim DataFrame'ini oluşturmak için biraz dolambaçlı bir yönteme ihtiyaç duyuluyordu:
+
+```python
+submit_df = pd.read_csv(os.path.join(CFG.WORK_DIR, "sample_submission.csv"))
+preds = []
+
+# Gönderim dosyasındaki her bir image_id için döngü
+for image_id in submit_df.image_id:
+    # Görüntüyü yükle ve yeniden boyutlandır
+    image = Image.open(os.path.join(CFG.WORK_DIR, "test_images", image_id))
+    image = image.resize((CFG.TARGET_SIZE, CFG.TARGET_SIZE))
+    
+    # Modele beslemek için boyutu genişlet (batch boyutu ekle)
+    image = np.expand_dims(image, axis = 0)
+    
+    # Tahmin yap ve en yüksek olasılığa sahip sınıf indeksini kaydet
+    preds.append(np.argmax(model.predict(image)))
+
+submit_df ['label'] = preds
+submit_df.to_csv('submission.csv', index = False)
+```
+
+Bu bölümde, görüntü sınıflandırmasına odaklanan bir yarışmada nasıl rekabet etmeye başlanacağını gösterdik – bu yaklaşımı, temel Keşifçi Veri Analizinden (EDA) işlevsel bir gönderime hızlıca geçmek için kullanabilirsiniz. Ancak, bunun gibi basit bir yaklaşımın çok rekabetçi sonuçlar üretmesi olası değildir.
+
+Bu nedenle, bir sonraki bölümde, en yüksek puan alan çözümlerde kullanılan daha özelleşmiş teknikleri tartışıyoruz.
+
 ## En iyi çözümlerden ders alma *(Learning from top solutions)*
+
+Bu bölümde, temel çözüm seviyesinin üzerine çıkmamızı sağlayacak **en iyi çözümlerin** yönlerini bir araya getiriyoruz. Bu yarışmadaki liderlik tablolarının (hem herkese açık hem de özel) oldukça yakın olduğunu unutmayın; bu durum, birkaç faktörün birleşiminden kaynaklanıyordu:
+
+* **Gürültülü veri (Noisy data)**: Eğitim verisinin büyük bir kısmını doğru bir şekilde tanımlayarak %0.89 doğruluğa ulaşmak kolaydı ve ardından gelen her yeni doğru tahmin, yalnızca küçük bir yukarı hareket sağlıyordu.
+* **Veri boyutunun sınırlı olması**.
 
 ### Ön eğitim *(Pretraining)*
 
+**📈 Sınırlı Veri Boyutuna Çözüm: Ön Eğitim**
+
+Sınırlı veri boyutu sorununa ilk ve en belirgin çözüm, daha fazla veri kullanarak **ön eğitim (pretraining)** yapmaktı. Bir derin öğrenme modelini daha fazla veri üzerinde ön eğitmek  faydalı olabilir, çünkü bu, modelin verinin **daha iyi temsillerini** öğrenmesine yardımcı olabilir, bu da modelin sonraki görevlerdeki performansını artırabilir. Bir derin öğrenme modeli büyük bir veri kümesi üzerinde eğitildiğinde, o görevle ilgili **faydalı özellikleri** veriden çıkarmayı öğrenebilir. Bu, model için güçlü bir temel sağlayarak, daha küçük ve spesifik bir veri kümesi üzerinde **ince ayar (fine-tuning)** yapıldığında daha etkili öğrenmesine olanak tanır.
+
+Ek olarak, büyük bir veri kümesi üzerinde ön eğitim, modelin yeni, görülmemiş verilere **daha iyi genelleme** yapmasına yardımcı olabilir. Model, ön eğitim sırasında geniş bir örnek yelpazesi gördüğü için, bazı açılardan eğitim verilerinden farklı olabilecek yeni verilere daha iyi uyum sağlayabilir. Bu, özellikle çok sayıda parametreye sahip olabilen ve sıfırdan etkili bir şekilde eğitilmesi zor olabilen derin öğrenme modelleriyle çalışırken önemli olabilir.
+
+**📅 Önceki Yarışma Verilerinden Yararlanma**
+
+Manyok yarışması bir yıl önce de düzenlenmişti: [https://www.kaggle.com/competitions/cassava-disease/overview](https://www.kaggle.com/competitions/cassava-disease/overview).
+
+Minimum ayarlamalarla, **2019 sürümünden** elde edilen veriler mevcut yarışma bağlamında kullanılabilirdi. Birkaç yarışmacı bu konuya değinmiştir:
+
+* **TFRecords** formatında birleştirilmiş bir **2019 + 2020 veri kümesi** Kaggle forumunda yayınlandı: [https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/199131](https://www.google.com/search?q=https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/199131)
+* 2019 sürümünün **kazanan çözümü** yararlı bir başlangıç noktası olarak hizmet etti: [https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/216985](https://www.google.com/search?q=https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/216985)
+* 2019 verileri üzerinde tahminler oluşturmak ve veri kümesini büyütmek için **sözde etiketler (pseudo-labels)** kullanmanın bazı (küçük) iyileştirmeler sağladığı bildirildi: [https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/203594](https://www.google.com/search?q=https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/203594)
+
 ### Test zamanı artırımı *(Test time augmentation)*
+
+**Test Zamanı Artırımı (TTA)** arkasındaki fikir, test görüntüsüne farklı dönüşümler uygulamaktır: döndürmeler, çevirmeler ve ötelemeler. Bu, test görüntüsünün birkaç farklı versiyonunu oluşturur ve bunların her biri için bir tahmin üretiriz. Ortaya çıkan sınıf olasılıkları, daha güvenilir bir yanıt elde etmek için daha sonra **ortalaması alınır**.  Bu tekniğin mükemmel bir gösterimi Andrew Khael'in bir not defterinde verilmiştir: [https://www.kaggle.com/code/andrewkh/test-time-augmentation-tta-worth-it](https://www.kaggle.com/code/andrewkh/test-time-augmentation-tta-worth-it).
+
+TTA, Manyok yarışmasındaki en iyi çözümler tarafından yaygın olarak kullanılmıştır. En iyi üç özel liderlik tablosu sonucu buna mükemmel bir örnektir: [https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/221150](https://www.google.com/search?q=https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/221150).
 
 ### Dönüştürücüler *(Transformers)*
 
+Yarışma boyunca **ResNeXt** ve **EfficientNet** gibi daha yaygın bilinen mimariler çokça kullanılmış olsa da, sıkışık bir liderlik tablosunda ilerleme arayışındaki birçok yarışmacıya ekstra avantaj sağlayan şey, daha yeni olanların eklenmesiydi.
+
+**Transformer'lar**, 2017'de Doğal Dil İşleme (NLP) için devrim niteliğinde bir mimari olarak ortaya çıktı (eğer bir şekilde her şeyi başlatan makaleyi kaçırdıysanız, işte burada: [https://arxiv.org/abs/1706.03762](https://arxiv.org/abs/1706.03762)) ve öyle muazzam bir başarı elde ettiler ki, kaçınılmaz olarak birçok kişi bunların başka modalitelere de uygulanıp uygulanamayacağını merak etmeye başladı – **görüntü (vision)** bariz bir adaydı.
+
+Uygun bir şekilde adlandırılan **Vision Transformer (ViT)**, ilk ortaya çıkışlarından birini Manyok yarışmasında bir Kaggle yarışmasında yaptı. 
+
+ViT için mükemmel bir eğitim (tutorial) kamuya açıklandı: [https://www.kaggle.com/code/abhinand05/vision-transformer-vit-tutorial-baseline](https://www.kaggle.com/code/abhinand05/vision-transformer-vit-tutorial-baseline).
+
 ### Birleştirme *(Ensembling)*
+
+**🤝 Topluluk Oluşturma (Ensembling)**
+
+Topluluk oluşturma (Ensembling), Kaggle'da çok popülerdir (daha ayrıntılı bir açıklama için The Kaggle Book'un 9. Bölümüne bakınız) ve Manyok yarışması da bir istisna değildi. Anlaşıldığı üzere, **çeşitli mimarileri** birleştirmek (sınıf olasılıklarının ortalamasını alarak) çok faydalı oldu: **EfficientNet, ResNext ve ViT** birbirinden yeterince farklıdır, bu nedenle tahminleri birbirini tamamlar.
+
+Bir makine öğrenimi topluluğu oluştururken, birbirinden farklı modelleri birleştirmek faydalıdır, çünkü bu, topluluğun genel performansını iyileştirmeye yardımcı olabilir.
+
+Topluluk oluşturma, daha doğru bir tahmin oluşturmak için birden fazla modelin tahminlerini birleştirme sürecidir. Farklı güçlü ve zayıf yönlere sahip modelleri birleştirerek, topluluk daha doğru tahminler yapmak için her bir bireysel modelin güçlü yönlerinden yararlanabilir.
+
+Örneğin, bir topluluktaki bireysel modellerin tümü aynı algoritma türüne dayanıyorsa, belirli veri türlerinde hepsi benzer hatalar yapabilir. Farklı algoritmalar kullanan modelleri birleştirerek, topluluk potansiyel olarak her bir bireysel modelin yaptığı hataları düzeltebilir ve bu da daha iyi genel performansa yol açar. Ek olarak, farklı veriler üzerinde veya farklı parametreler kullanılarak eğitilmiş modelleri birleştirerek, topluluk potansiyel olarak verideki temel varyasyonun daha fazlasını yakalayabilir ve bu da daha doğru tahminlere yol açar.
+
+**🧱 Yığınlama (Stacking)**
+
+Başka bir önemli yaklaşım da **yığınlamaydı (stacking)**, yani modelleri iki aşamada kullanmaktı. İlk olarak, çeşitli modellerden çok sayıda tahmin oluşturulur ve bunlar daha sonra ikinci seviye bir model için girdi olarak kullanılır: [https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/220751](https://www.google.com/search?q=https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/220751).
+
+Kazanan çözüm farklı bir yaklaşım içeriyordu (nihai karıştırmada daha az modelle), ancak aynı temel mantığa dayanıyordu: [https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/221957](https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/221957).
 
 ## Kapsamlı bir çözüm *(A complete solution)*
 
+Bu bölümün daha önceki kısımlarında, bir görüntü sınıflandırma yarışması için temel bir çözümle nasıl başlanacağını açıklamıştık. Bu bölümde, **Abhishek** ([https://www.kaggle.com/abhishek](https://www.kaggle.com/abhishek)) ve **Tanul** ([https://www.kaggle.com/tanulsingh077](https://www.kaggle.com/tanulsingh077)) gibi rockstar'ların yer aldığı bir topluluk ekibinin, yukarıda tartıştığımız bileşenlerin zekice yapılandırılmış bir uygulamasıyla nasıl bir **gümüş madalya bölgesi çözümüne** (36. sıra) ulaştığını gösteriyoruz. Çözümlerini özetleyen gönderiye buradan ulaşılabilir: [https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/220628](https://www.google.com/search?q=https://www.kaggle.com/competitions/cassava-leaf-disease-classification/discussion/220628).
+
+Onların nihai çözümü üç modelin birleşimiydi: **EfficientNet-B7, EfficientNet-B3a ve SE-ResNext50**. Modeller, şu not defterinde açıklanan işlem hattını takip etti: [https://www.kaggle.com/code/abhishek/tez-faster-and-easier-training-for-leaf-detection/](https://www.google.com/search?q=https://www.kaggle.com/code/abhishek/tez-faster-and-easier-training-for-leaf-detection/). Bu not defterinde dikkat çekici olan bir şey, **tez**'i kullanmasıdır: Abhishek tarafından geliştirilen bir PyTorch eğiticisi (trainer) ([https://github.com/abhishekkrthakur/tez](https://github.com/abhishekkrthakur/tez)). Tez'in ardındaki fikir, **yineleyici (boilerplate) koda** olan ihtiyacı ortadan kaldırarak PyTorch modellerinin oluşturulmasını ve dağıtılmasını basitleştirmektir. Bu amaç, işlem hattının temel bileşenlerinin standartlaştırılmasıyla, öncelikle model sınıfı ile, elde edilir.
+
+Aşağıda, [https://www.kaggle.com/code/abhishek/tez-faster-and-easier-training-for-leaf-detection/](https://www.google.com/search?q=https://www.kaggle.com/code/abhishek/tez-faster-and-easier-training-for-leaf-detection/) adresinde gösterilen çözümün bazı kısımlarını tartışıyoruz:
+
+```python
+class LeafModel(tez.Model):
+    def __init__(self, num_classes):
+        super().__init__()
+        self.effnet = EfficientNet.from_pretrained("efficientnet-b4")
+        self.dropout = nn.Dropout(0.1)
+        self.out = nn.Linear(1792, num_classes)
+        self.step_scheduler_after = "epoch"
+
+    def monitor_metrics(self, outputs, targets):
+        if targets is None:
+            return {}
+        outputs = torch.argmax(outputs, dim=1).cpu().detach().numpy()
+        targets = targets.cpu().detach().numpy()
+        accuracy = metrics.accuracy_score(targets, outputs)
+        return {"accuracy": accuracy}
+
+    def fetch_optimizer(self):
+        opt = torch.optim.Adam(self.parameters(), lr=3e-4)
+        return opt
+
+    def fetch_scheduler(self):
+        sch = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
+            self.optimizer, T_0=10, T_mult=1, eta_min=1e-6, last_epoch=-1
+        )
+        return sch
+
+    def forward(self, image, targets=None):
+        batch_size, _, _, _ = image.shape
+        x = self.effnet.extract_features(image)
+        x = F.adaptive_avg_pool2d(x, 1).reshape(batch_size, -1)
+        outputs = self.out(self.dropout(x))
+
+        if targets is not None:
+            loss = nn.CrossEntropyLoss()(outputs, targets)
+            metrics = self.monitor_metrics(outputs, targets)
+            return outputs, loss, metrics
+        return outputs, None, None
+```
+
+Bu kod ne yapıyor? Bileşenlere göz atalım:
+
+1.  İlk blok, modeli PyTorch tarzında tanımlar: **önceden eğitilmiş gövde**, ardından **dropout düzenlileştirmesi** ve görevimize uygun bir **sınıflandırma başlığı**.
+2.  Bunu, bizim durumumuzda modelin doğruluğunu döndüren **`monitor_metrics`** metodu takip eder.
+3.  Bundan sonraki iki metot isteğe bağlıdır (varsayılan iyileştirici (optimizer) değerleri genellikle kabul edilebilir; ayarlanması gereken en önemli parametre **öğrenme oranıdır**).
+4.  Son olarak, modelimizin girdiden çıktıya nasıl çalışacağını tanımlayan **`forward`** metodu bulunur.
+
+Tez gibi bir çatının avantajı, modellerde tekrarlanabilir bir yapıyı zorunlu kılması ve böylece **yineleyici koddan kurtulmamızı** sağlamasıdır.
+
+**🖼️ `ImageDataset` Kullanımı**
+
+Bu çözümde gösterilen Tez'in bir diğer kullanışlı özelliği de **`ImageDataset`** işlevselliğidir – bu, scikit-learn tarzına alışkın yeni başlayanlar için zaman zaman bunaltıcı olabilen veri yapısı oluşturma sürecini basitleştirir:
+
+```python
+image_path = "../input/cassava-leaf-disease-classification/train_images/"
+train_image_paths = [os.path.join(image_path, x) for x in df_train.image_id.values]
+valid_image_paths = [os.path.join(image_path, x) for x in df_valid.image_id.values]
+train_targets = df_train.label.values
+valid_targets = df_valid.label.values
+
+# train_aug ve valid_aug'un daha önce tanımlandığını varsayıyoruz
+train_dataset = ImageDataset(
+    image_paths=train_image_paths,
+    targets=train_targets,
+    resize=None,
+    augmentations=train_aug,
+)
+
+valid_dataset = ImageDataset(
+    image_paths=valid_image_paths,
+    targets=valid_targets,
+    resize=None,
+    augmentations=valid_aug,
+)
+```
+
+Veri setini katlamalara (folds) göre böldükten sonra, sadece **`ImageDataset`** sınıfının iki örneğini oluştururuz ve veri işleme, kullanıcının minimum katılımıyla perde arkasında halledilir. Bu, PyTorch hata ayıklaması yerine asıl modelleme görevine konsantre olmamızı sağlar.
+
+**🚀 Model Eğitimi**
+
+Model eğitimi çok basittir ve esnektir – özellikle, erken durdurma gibi geri çağırmaları (callbacks) dahil etmek, daha önce Keras/TensorFlow modelleme yaklaşımını denemiş olan herkes için tanıdık gelecektir:
+
+```python
+model = LeafModel(num_classes=dfx.label.nunique())
+es = EarlyStopping(
+    monitor="valid_loss", model_path="model.bin", patience=3, mode="min"
+)
+model.fit(
+    train_dataset,
+    valid_dataset=valid_dataset,
+    train_bs=32,
+    valid_bs=64,
+    device="cuda",
+    epochs=10,
+    callbacks=[es],
+    fp16=True,
+)
+model.save("model.bin")
+```
+
+Bu bölümde, temel çözümümüzde tanıttığımız temel fikirleri alan, bir PyTorch eğiticisi kullanan ve **daha yüksek çözünürlüklü görüntüler üzerinde eğitilmiş farklı mimarileri topluluk oluşturan** ve olağanüstü iyi performans gösteren bir gümüş madalya bölgesi çözümünün parçalarını gösterdik.
+
+> 📝 Alıştırma 4
+> 
+> 
+> 
+> Üç farklı model (mimari) eğittiğinizi varsayalım. **Çoğunluk oyu (majority vote)** yönteminin, **sınıf olasılık vektörlerini birleştirmeye** göre daha düşük performans verebileceği durumlar düşünebilir misiniz? Sınıf ilişkisini gösteren olasılık vektörlerini birleştirmenin farklı yolları nelerdir?
+> 
+> 
+> 
+> **İpucu**: Çoğunluk oyu yönteminin, noktasal ortalama (pointwise mean), medyan veya diğer konum ölçülerinden neden farklı bir performansa yol açabileceğini karşılaştırarak başlayın.
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak tüm notları veya çalışmaları buraya yazınız):
+
 ## Özet *(Summary)*
+
+Bu bölümde, bir görüntü sınıflandırma yarışması için temel bir çözümle nasıl başlanacağını açıkladık ve rekabetçi (madalya) bölgesine geçmek için bir dizi olası uzantıyı tartıştık. Bir sonraki bölümde, metin sınıflandırma yarışmasında doğru bir yolculuğa nasıl başlanacağını göstererek, **Doğal Dil İşleme (NLP)** ile benzer bir yolculuğa çıkacağız.
 
 ---
 
 # Bölüm 4: NLP Yarışması – Google Quest Soru-Cevap Etiketleme *(Chapter 4: NLP Competition – Google Quest Q&A Labeling)*
 
+Bu bölümde, **Doğal Dil İşleme (NLP)** uygulamaları, özellikle de **metin sınıflandırması** hakkında konuşacağız. Yaklaşımımızı göstermek amacıyla, **Google Quest Soru-Cevap Etiketleme** yarışmasının verilerini kullanacağız: [https://www.kaggle.com/competitions/google-quest-challenge](https://www.kaggle.com/competitions/google-quest-challenge).
+
+Bu yarışma ne hakkındaydı? İşte resmi açıklama:
+
+> Bilgisayarlar, tek ve doğrulanabilir cevapları olan soruları yanıtlama konusunda gerçekten iyidir. Ancak insanlar, genellikle görüş, tavsiye veya kişisel deneyimlerle ilgili soruları yanıtlama konusunda hala daha iyidir.
+>
+> İnsanlar, derin, çok boyutlu bir bağlam anlayışı gerektiren **öznel sorulara** yanıt vermede daha iyidir – bilgisayarların henüz iyi yapması için eğitilmediği bir şey... Sorular birçok biçimde olabilir; bazılarının çok cümleli açıklamaları varken, diğerleri basit bir merak veya tam olarak geliştirilmiş bir problem olabilir. Birden fazla amacı olabilir veya tavsiye ve görüş arayabilirler. Bazıları yararlı, bazıları ilginç olabilir. Bazıları ise basitçe doğru veya yanlıştır.
+>
+> Ne yazık ki, veri ve tahmine dayalı modellerin eksikliği nedeniyle daha iyi öznel soru-cevap algoritmaları oluşturmak zordur. Bu nedenle, kitlesel kaynak (crowdsourcing) yoluyla NLP ve diğer ML bilimi türlerini ilerletmeye adanmış bir grup olan Google Research'teki **CrowdSource ekibi**, bu kalite puanlama yönlerinin birçoğu hakkında veri toplamıştır.
+>
+> Bu yarışmada, **soru-cevabın farklı öznel yönleri için tahmine dayalı algoritmalar oluşturmak** üzere bu yeni veri setini kullanmaya davet ediliyorsunuz. Soru-cevap çiftleri, "sağduyulu" bir yaklaşımla yaklaşık 70 farklı web sitesinden toplandı. Derecelendirmecilerimiz minimum rehberlik ve eğitim aldı ve büyük ölçüde istemlerin öznel yorumlarına güvendiler. Bu nedenle, her istem, derecelendirmecilerin görevi tamamlamak için sadece sağduyularını kullanabilmeleri için en sezgisel şekilde hazırlandı. Karmaşık ve anlaşılması zor derecelendirme yönergelerine olan bağımlılığımızı azaltarak, bu veri setinin yeniden kullanım değerini artırmayı umuyoruz. Ne görüyorsanız, onu alırsınız!
+>
+> Bu öznel etiketlerin güvenilir bir şekilde tahmin edilebileceğini göstermek, bu araştırma alanına yeni bir ışık tutabilir. Bu yarışmanın sonuçları, gelecekteki akıllı Soru-Cevap sistemlerinin nasıl inşa edileceğini bilgilendirecek ve umarız bu sistemlerin daha insana benzer hale gelmesine katkıda bulunacaktır.
+
+Bu girişten ne çıkarabiliriz? Birincisi, burada oluşturacağımız algoritmaların, insan değerlendiricinin verdiği geri bildirimi taklit etmesi gerekiyor; bu geri bildirim temel doğruluk (ground truth) verimizi oluşturduğundan, etiketlerde bir miktar **gürültü (noise)** bekleyebiliriz. İkincisi, tahmin edilecek her cevabın **birden çok yönü** var ve bunlar değerlendiriciler arasında **ortalaması alınmış** durumda; bu da problemimizin **çok değişkenli regresyon (multivariate regression)** ile iyi temsil edilme olasılığının yüksek olduğu anlamına geliyor.
+
+Bu bölümü, önceki bilgisayarla görme problemleri hakkındaki bölüme benzer şekilde yapılandırdık:
+
+* **Temel bir çözümün (baseline solution)** nasıl oluşturulacağına dair tartışma.
+* Ardından **en iyi performans gösteren çözümleri** inceleme.
+
+Bu bölümün kodu [https://packt.link/kwbchp4](https://packt.link/kwbchp4) adresinde bulunabilir.
+
 ## Temel çözüm *(The baseline solution)*
+
+Elbette, metninizi çevirdim:
+
+-----
+
+Yıl 2023, yani NLP'deki hemen hemen her şey bir **Transformer** mimarisiyle başlıyor – ve uygulama söz konusu olduğunda, **Hugging Face (HF)** alana hakim. HF'nin **Transformers** kütüphanesi, en son teknoloji NLP modellerini uygulamak için popüler bir açık kaynak kütüphanesidir. PyTorch kütüphanesinin üzerine inşa edilmiştir ve dil çevirisi, metin sınıflandırması ve dil üretimi gibi çeşitli NLP görevleriyle çalışmak için yüksek seviyeli bir arayüz sağlar.
+
+Transformers kütüphanesinin ana özelliklerinden biri, büyük **önceden eğitilmiş dil modellerinde** belirli görevlere göre **ince ayar (fine-tune)** yapma yeteneği sağlamasıdır. BERT'in birden fazla varyantı ile GPT'yi içeren bu modeller, devasa veri kümeleri üzerinde eğitilmiştir ve doğal dilin kalıplarını ve yapısını yüksek doğrulukla yakalayabilirler. Bu modellerde belirli bir göreve göre ince ayar yaparak, kullanıcılar nispeten az eğitim verisiyle güçlü sonuçlar elde etmek için modelin önceden eğitilmiş bilgisinden yararlanabilirler. Kütüphane ayrıca, metin verilerini ön işleme ve son işleme için geniş bir araç yelpazesi ile modelleri eğitmek ve değerlendirmek için yardımcı programları içerir.
+
+Kodumuz, Transformers kütüphanesinin en son sürümünü kurarak ve içe aktararak başlar:
+
+```bash
+!pip install transformers
+import transformer
+```
+
+Gerekli içe aktarmaları takip ediyoruz:
+
+```python
+import sys, glob, torch, random
+import os, re, gc, pickle, string
+import numpy as np
+import pandas as pd
+from scipy import stats
+from transformers import DistilBertTokenizer, DistilBertModel
+import math
+from scipy.stats import spearmanr, rankdata
+from os.path import join as path_join
+from numpy.random import seed
+from urllib.parse import urlparse
+from sklearn.preprocessing import OneHotEncoder
+
+seed(42)
+random.seed(42)
+```
+
+Sırada, scikit-learn'den farklı işlevleri bir araya getiren içe aktarmalar grubu geliyor. Bunlar, **özellik çıkarma (feature extraction)** ve **normalleştirme** için kullanılacaktır:
+
+```python
+import nltk
+from nltk.corpus import stopwords
+from sklearn.base import clone
+from sklearn.pipeline import Pipeline, FeatureUnion
+from sklearn.preprocessing import StandardScaler, PowerTransformer, RobustScaler, KBinsDiscretizer, QuantileTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.compose import ColumnTransformer
+from sklearn.model_selection import StratifiedKFold, GridSearchCV, KFold, GroupKFold
+from sklearn.multioutput import MultiOutputRegressor
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import make_scorer
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.linear_model import LinearRegression, Ridge
+from sklearn.svm import LinearSVR, SVR
+eng_stopwords = set(stopwords.words("english"))
+import tensorflow as tf
+import tensorflow_hub as hub
+```
+
+Bazı genel ayarları belirtiyoruz:
+
+```python
+# settings
+data_dir = '../input/google-quest-challenge/'
+RANDOM_STATE = 42
+import datetime
+```
+
+Temel bir çözüm oluşturma stratejimiz, veriyi özetleyen geniş bir **özellik alanı** oluşturmaktır – bu nedenle, öncelikle veri setini incelemek iyi bir başlangıç adımıdır. Şekil 4.1, veri setinin ilk birkaç satırını bir örnek olarak göstermektedir:
+
+![](im/1008.png)
+
+Her satır için, **soru başlığı**, **soru gövdesi** ve **cevaba** – ardından insan değerlendiriciler tarafından ifade edilen görüşleri özetleyen (aşağıda bildirilen) hedef sütunlar yer almaktadır.
+
+İlgilendiğimiz hedef sütunları belirtiyoruz:
+
+```
+target_cols = ['question_asker_intent_understanding', 'question_body_critical', 
+'question_conversational', 'question_expect_short_answer', 
+'question_fact_seeking', 'question_has_commonly_accepted_answer', 
+'question_interestingness_others', 'question_interestingness_self', 
+'question_multi_intent', 'question_not_really_a_question', 
+'question_opinion_seeking', 'question_type_choice', 
+'question_type_compare', 'question_type_consequence', 
+'question_type_definition', 'question_type_entity', 
+'question_type_instructions', 'question_type_procedure', 
+'question_type_reason_explanation', 'question_type_spelling', 
+'question_well_written', 'answer_helpful', 
+'answer_level_of_information', 'answer_plausible', 
+'answer_relevance', 'answer_satisfaction', 
+'answer_type_instructions', 'answer_type_procedure', 
+'answer_type_reason_explanation', 'answer_well_written']
+```
+
+Bu hedeflerin anlamı ve yorumlanmasının tam açıklaması için, yarışmanın Veri bölümüne göz atın: `https://www.kaggle.com/c/google-quest-challenge/data`
+
+Daha önce belirtildiği gibi, soru bileşenlerinden öznitelikleri (feature) çıkarmaya odaklanacağız ve bunu yapmak için bazı yardımcı fonksiyonlara ihtiyacımız var. Bir metin parçasında yapabileceğiniz en basit şeylerden biriyle başlıyoruz, yani kelimeleri saymak:
+
+```python
+def word_count(xstring):
+    return xstring.split().str.len()
+```
+
+Ardından, dikkatimizi yarışma metriğine çeviriyoruz: **Spearman korelasyonu**, iki değişken arasındaki istatistiksel ilişkinin bir ölçüsüdür. İki değişken arasındaki ilişkinin gücünü ve yönünü belirlemek için kullanılan parametrik olmayan bir testtir. Özellikle, iki değişkenin ne ölçüde ilişkili olduğunu ve aralarındaki ilişkinin pozitif (yani, bir değişken arttıkça diğer değişken de artar) mı yoksa negatif (yani, bir değişken arttıkça diğer değişken azalır) mi olduğunu ölçer. Spearman korelasyon katsayısı, **Yunanca rho (${\rho}$) harfiyle gösterilir**, her bir veri noktası için iki değişkenin sıralamaları arasındaki fark alınarak, farkların karesi alınarak ve toplanarak hesaplanır. Katsayı -1 ile 1 arasında değişebilir; 0 değişkenler arasında ilişki olmadığını, 1 mükemmel pozitif korelasyonu ve -1 mükemmel negatif korelasyonu gösterir. 1'e veya -1'e yakın bir Spearman korelasyon katsayısı, değişkenler arasında güçlü bir ilişki olduğunu, 0'a daha yakın bir katsayı ise daha zayıf bir ilişki olduğunu gösterir. Spearman korelasyon katsayısı formülü aşağıdaki gibidir:
+
+$$\rho(X, Y) = \frac{cov(R(X), R(Y))}{\sigma(R(X))\sigma(R(Y))}$$
+
+burada:
+
+* **$R(X)$ ve $R(Y)$** ilgili $X$ ve $Y$ değişkenlerinin sıralamalara dönüştürülmüş halleridir: [https://en.wikipedia.org/wiki/Ranking](https://en.wikipedia.org/wiki/Ranking)
+* **$cov$** sıralama değişkenlerinin **kovaryansıdır**.
+* **$\sigma(R(X))$ ve $\sigma(R(Y))$** sıralama değişkenlerinin **standart sapmalarıdır**.
+
+Spearman korelasyonu, veriler normal dağılmadığında veya değişkenler arasındaki ilişki **doğrusal olmadığında** sıklıkla kullanılır – ki bu durum, birim aralığına normalize edilmiş ve neredeyse kesin olarak metnin özellikleriyle doğrusal olmayan bir şekilde ilişkili olan hedeflerimiz için geçerlidir. Ayrıca, **sıralı verilerle** (ordinal data) veya sürekli bir ölçekte ölçülmek yerine **sıralanmış** veya düzenlenmiş verilerle çalışırken de faydalıdır:
+
+```python
+def spearman_corr(y_true, y_pred):
+    if np.ndim(y_pred) == 2:
+        corr = np.mean([stats.spearmanr(y_true[:, i], y_pred[:, i])[0] 
+for i in range(y_true.shape[1])])
+    else:
+        corr = stats.spearmanr(y_true, y_pred)[0]
+    return corr
+```
+
+```python
+custom_scorer = make_scorer(spearman_corr, greater_is_better=True)
+```
+
+Son kısım, yani fonksiyonumuzu bir **puanlayıcıya (scorer)** dönüştürme, Spearman korelasyonunu bir **scikit-learn** hattı (pipeline) içinde kullanmak istersek gereklidir; `make_scorer` bir puanlama fonksiyonu alır ve tahmin edicinin (estimator) bir çıktısını değerlendiren çağrılabilir bir nesne (callable) döndürür.
+
+> Alıştırma 1
+> 
+> 
+> 
+> Yarışma metriği, bu yarışmadaki birçok katılımcı için yeniydi; bu nedenle, diğer metriklerden farkına dair çok sayıda tartışma ve araştırma yarattı. Yarışma forumunda **Spearman korelasyonuna** odaklanan tartışmaları keşfedin.
+> 
+> 
+> 
+> **Alıştırma Notları (size yardımcı olacak notları veya çalışmaları yazın):**
+
+Daha sonra, $l$'den $n$ boyutunda ardışık parçalar çıkarmak için küçük bir yardımcı fonksiyon oluşturuyoruz. Bu, daha sonra **bellek sorunlarına yol açmadan** metin gövdemiz için gömülü vektörler (embeddings) oluşturmamıza yardımcı olacaktır:
+
+```python
+def chunks(l, n):
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
+```
+
+Kullanacağımız öznitelik setinin bir kısmı, önceden eğitilmiş modellerden elde edilen gömülü vektörlerdir (embeddings). Amacımızın bir başlangıç çözümü (**baseline**) oluşturmak olduğunu hatırlayın – ancak son yıllarda büyük dil modellerinin kullanılabilirliği, NLP'de bir başlangıç çözümünün anlamını yeniden tanımladı. İlk çözümümüzü **BERT benzeri bir model** üzerine kurabilir miyiz?
+
+Gömülü vektörler oluşturmak için bir fonksiyon tanımlayarak, jetonlaştırıcıyı (tokenizer) ve modeli içe aktararak başlıyor ve ardından külliyatı (corpus) parçalar halinde işliyor, her bir soru/cevabı sabit boyutlu bir gömülü vektöre kodluyoruz.
+
+Bir NLP modelinde, **jetonlaştırıcı (tokenizer)**, girdi metnini modele beslenebilecek bireysel jetonlara (**kelimeler veya alt kelimeler**) ayırmaktan sorumludur. Jetonlaştırıcı, önce girdi metnini ayırıcı olarak boşluk ve noktalama işaretlerini kullanarak kelimelere ayırır ve ardından **BERT modelinin kelime dağarcığını** kullanarak her kelimeyi karşılık gelen jetonuna dönüştürür. Bu sürece **jetonlaştırma (tokenization)** denir ve metin verilerini bir BERT modeline girdi olarak hazırlamada kritik bir adımdır. Jetonlaştırıcı ayrıca her cümlenin sonuna özel jetonlar ekleyerek girdi metninin yapısını belirtir. Jetonlaştırıcının çıktısı, cümleyi doğrudan BERT modeline beslenebilecek bir jeton dizisi olarak temsil eder:
+
+```python
+def fetch_vectors(string_list, batch_size=64):
+    DEVICE = torch.device("cuda")
+    tokenizer = transformers.DistilBertTokenizer.from_pretrained("../input/distilbertbaseuncased/")
+    model = transformers.DistilBertModel.from_pretrained("../input/distilbertbaseuncased/")
+    model.to(DEVICE)
+    fin_features = []
+    for data in chunks(string_list, batch_size):
+        tokenized = []
+        for x in data:
+            x = " ".join(x.strip().split()[:300])
+            tok = tokenizer.encode(x, add_special_tokens=True)
+            tokenized.append(tok[:512])
+        max_len = 512
+        padded = np.array([i + [0] * (max_len - len(i)) for i in tokenized])
+        attention_mask = np.where(padded != 0, 1, 0)
+        input_ids = torch.tensor(padded).to(DEVICE)
+        attention_mask = torch.tensor(attention_mask).to(DEVICE)
+        with torch.no_grad():
+            last_hidden_states = model(input_ids, attention_mask=attention_mask)
+        features = last_hidden_states[0][:, 0, :].cpu().numpy()
+        fin_features.append(features)
+    fin_features = np.vstack(fin_features)
+    return fin_features
+```
+
+> Alıştırma 2
+> 
+> 
+> 
+> Transformers kütüphanesinde kullanılan farklı jetonlaştırıcılar (Tokenizers) arasındaki farkları inceleyin: **Byte-Pair (BPE)**, **WordPiece** ve **SentencePiece**. Burada başka bir seçim daha iyi olabilir miydi? İpucu: Hugging Face dokümantasyonu ile başlayın.
+> 
+> 
+> 
+> **Alıştırma Notları (size yardımcı olacak notları veya çalışmaları yazın):**
+
+Fonksiyonun anlaşılması zor olabilir, bu yüzden **akıştaki ana adımların** bir açıklaması aşağıdadır:
+
+1.  Belirteçleyiciyi (**tokenizer**) ve modeli bir **kontrol noktasından (checkpoint)** yükleyin.
+2.  Girdi dizileri (**input strings**) arasında, küçük **yığınlar (batch)** halinde döngü yapın (bu, `batch_size` argümanı tarafından belirlenir).
+3.  Girdi verilerini kelimelere ayırın ve elde edilen koleksiyonu **300 öğede kesin (truncate)**.
+4.  Girdi verilerini **belirteçlere ayırın (tokenize)**.
+5.  Belirteçlere ayrılmış girdi verilerini **doldurun (pad)**, böylece tüm diziler, dizilerin maksimum uzunluğuyla aynı uzunluğa sahip olur.
+6.  Doldurulmuş veri için **maskeyi oluşturun**.
+7.  Girdi kimliklerini (**input IDs**) ve **dikkat maskesini (attention mask)** tensörlere dönüştürün.
+
+Fonksiyon hakkında daha fazla bilgi için, yarışma sırasında bu fonksiyonun oluşturulmasına ilham veren gönderi en iyi tavsiyemdir: [https://jalammar.github.io/a-visual-guide-to-using-bert-for-the-first-time/](https://jalammar.github.io/a-visual-guide-to-using-bert-for-the-first-time/).
+
+-----
+
+**Veri İşleme ve Özellik Oluşturma**
+
+Dosyaları okuduktan sonra, şimdi verileri işlemeye ve **özellikleri (features)** oluşturmaya geçebiliriz:
+
+```python
+xtrain = pd.read_csv(data_dir + 'train.csv')
+xtest = pd.read_csv(data_dir + 'test.csv')
+```
+
+Üç girdi bileşenindeki (**başlık, gövde ve cevap**) kelimeleri sayarak başlıyoruz – bu, basit ama çok kullanışlı ve sıkça kullanılan bir özelliktir:
+
+```python
+for colname in ['question_title', 'question_body', 'answer']:
+    newname = colname + '_word_len'
+    xtrain[newname] = xtrain[colname].str.split().str.len()
+    xtest[newname] = xtest[colname].str.split().str.len()
+del newname, colname
+```
+
+> **Alıştırma 3**
+> 
+> 
+> 
+> Önceki kodu hızlandırmanın bir yolunu düşünebilir misiniz?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak notları veya çalışmaları buraya yazın):
+
+Bir diğer faydalı özellik de **sözcüksel çeşitliliktir (lexical diversity)**: bir metinde kullanılan kelime dağarcığının zenginliğini ölçen bir ölçüttür. Tipik olarak, bir metindeki **benzersiz kelime sayısının** o metindeki **toplam kelime sayısına** bölünmesiyle hesaplanır. Doğrudan NLP'de metin sınıflandırmasıyla ilgili olmasa da, belirli durumlarda çok önemli bir faktör olabilir. Örneğin, bir metin çok sınırlı bir kelime dağarcığı içeriyorsa, duygu sınıflandırması yapmak veya insan değerlendiriciler tarafından atanan özellikleri tahmin etmek zor olabilir. İyi bir sınıflandırma modelinin, geniş bir sözcüksel çeşitliliğe sahip girdiyi işleyebilmesi gerekir, ancak bazı durumlarda yüksek sözcüksel çeşitlilik faydalı olabilir:
+
+```python
+colname = 'answer'
+xtrain[colname+'_div'] = xtrain[colname].apply(lambda s: len(set(s.split())) / len(s.split()))
+xtest[colname+'_div'] = xtest[colname].apply(lambda s: len(set(s.split())) / len(s.split()))
+```
+
+Tamamen **tanımlayıcı istatistiklerden** başka birçok özellik biçimi çıkarmak mümkündür ve bunların çoğu oldukça açıklayıcı olduğundan, bunları en az yorumla sunuyoruz:
+
+**Alan Bileşenleri (Domain Components)**
+
+```python
+for df in [xtrain, xtest]:
+    
+    df['domcom'] = df['question_user_page'].apply(lambda s: s.split('://')[1].split('/')[0].split('.'))
+    # bileşenleri say
+    df['dom_cnt'] = df['domcom'].apply(lambda s: len(s))
+    # bazı alan adlarının isimlerinde daha az bileşen olması durumunda uzunluğu doldur
+    df['domcom'] = df['domcom'].apply(lambda s: s + ['none', 'none'])
+    # bileşenler
+    for ii in range(0,4):
+        df['dom_'+str(ii)] = df['domcom'].apply(lambda s: s[ii])
+    
+# temizlik
+xtrain.drop('domcom', axis = 1, inplace = True)
+xtest.drop('domcom', axis = 1, inplace = True)
+```
+
+**Paylaşılan Öğeler: Soru ve Cevap Kaç Kelime Paylaşıyor?**
+
+```python
+for df in [xtrain, xtest]:
+    df['q_words'] = df['question_body'].apply(lambda s: [f for f in s.split() if f not in eng_stopwords] )
+    df['a_words'] = df['answer'].apply(lambda s: [f for f in s.split() if f not in eng_stopwords] )
+    df['qa_word_overlap'] = df.apply(lambda s: len(np.intersect1d(s['q_words'], s['a_words'])), axis = 1)
+    df['qa_word_overlap_norm1'] = df.apply(lambda s: s['qa_word_overlap']/(1 + len(s['a_words'])), axis = 1)
+    df['qa_word_overlap_norm2'] = df.apply(lambda s: s['qa_word_overlap']/(1 + len(s['q_words'])), axis = 1)
+    df.drop(['q_words', 'a_words'], axis = 1, inplace = True)
+```
+
+**Metindeki Karakter, Duraklama Kelimesi, Noktalama ve Büyük Harf Sayıları**
+
+```python
+for df in [xtrain, xtest]:
+ ## Metindeki Karakter Sayısı ##
+    df["question_title_num_chars"] = df["question_title"].apply(lambda x: len(str(x)))
+    df["question_body_num_chars"] = df["question_body"].apply(lambda x: len(str(x)))
+    df["answer_num_chars"] = df["answer"].apply(lambda x: len(str(x)))
+ ## Metindeki Duraklama Kelimesi (Stopword) Sayısı ##
+    df["question_title_num_stopwords"] = df["question_title"].apply(lambda x: len([w for w in str(x).lower().split() if w in eng_stopwords]))
+    df["question_body_num_stopwords"] = df["question_body"].apply(lambda x: len([w for w in str(x).lower().split() if w in eng_stopwords]))
+    df["answer_num_stopwords"] = df["answer"].apply(lambda x: len([w for w in str(x).lower().split() if w in eng_stopwords]))
+ ## Metindeki Noktalama İşareti Sayısı ##
+    df["question_title_num_punctuations"] =df['question_title'].apply(lambda x: len([c for c in str(x) if c in string.punctuation]) )
+    df["question_body_num_punctuations"] =df['question_body'].apply(lambda x: len([c for c in str(x) if c in string.punctuation]) )
+    df["answer_num_punctuations"] =df['answer'].apply(lambda x: len([c for c in str(x) if c in string.punctuation]) )
+ ## Metindeki Tamamı Büyük Harfli Kelime Sayısı ##
+    df["question_title_num_words_upper"] = df["question_title"].apply(lambda x: len([w for w in str(x).split() if w.isupper()]))
+    df["question_body_num_words_upper"] = df["question_body"].apply(lambda x: len([w for w in str(x).split() if w.isupper()]))
+    df["answer_num_words_upper"] = df["answer"].apply(lambda x: len([w for w in str(x).split() if w.isupper()]))
+```
+
+Bu şekilde çıkarılan özelliklerin tam listesi için, kitabın deposunda bulunan ilgili not defterine bakınız: [https://github.com/PacktPublishing/The-Kaggle-Workbook](https://github.com/PacktPublishing/The-Kaggle-Workbook).
+
+-----
+
+**Gömülü Uzayda (Embedding Space) Mesafeler**
+
+Şimdi, girdi bileşenleri arasındaki **gömülü uzaydaki mesafelere** dayanan başka bir özellik grubu oluşturmaya geçiyoruz. Metin parçaları için hızlı ve kaliteli gömülmeler (embeddings) oluşturmanın bir yolu, bir **cümle kodlayıcı (sentence encoder)** kullanmaktır.
+
+**Evrensel Cümle Kodlayıcı (Universal Sentence Encoder - USE)**, doğal dil cümlelerini yüksek boyutlu bir uzaya eşleyen, **semantik olarak benzer cümlelerin birbirine yakın** olduğu bir Google tarafından geliştirilmiş makine öğrenimi modelidir. Çeşitli doğal dil metinlerinden oluşan büyük bir veri kümesi üzerinde eğitilmiştir ve belge sınıflandırması, dil çevirisi ve bilgi erişimi gibi çeşitli NLP görevleri için kullanılabilir.
+
+USE, değişken uzunluktaki bir girdi dizisini sabit uzunlukta bir vektör temsiline kodlamak için dikkat mekanizmalarını kullanan bir **kodlayıcı-kod çözücü (encoder-decoder)** model türüdür ve bu vektör daha sonra değişken uzunlukta bir çıktı dizisine geri çözülür. Kodlayıcı, girdi cümlesini işler ve anlamının bir temsilini oluşturur, bu da daha sonra kod çözücü tarafından çıktı dizisini oluşturmak için kullanılır.
+
+USE, geniş bir doğal dil cümlesi yelpazesini kompakt ve anlamlı bir vektör temsiline eşlemek üzere eğitilmiştir ve çeşitli dilleri ve cümle yapılarını ele alabilecek şekilde tasarlanmıştır. Dil çevirisi, metin sınıflandırması ve bilgi erişimi dahil olmak üzere çeşitli uygulamalarda kullanılabilir. USE hakkında daha fazla bilgi için resmi proje sayfasına göz atın: [https://tfhub.dev/google/universal-sentence-encoder-large/5](https://tfhub.dev/google/universal-sentence-encoder-large/5):
+
+```python
+module_url = "../input/universalsentenceencoderlarge4/"
+embed = hub.load(module_url)
+embeddings_train = {}
+embeddings_test = {}
+for text in ['question_title', 'question_body', 'answer']:
+    train_text = xtrain[text].str.replace('?', '.').str.replace('!', '.').tolist()
+    test_text = xtest[text].str.replace('?', '.').str.replace('!', '.').tolist()
+    curr_train_emb = []
+    curr_test_emb = []
+    batch_size = 4
+    ind = 0
+    while ind*batch_size < len(train_text):
+        curr_train_emb.append(embed(train_text[ind*batch_size: (ind + 1)*batch_size])["outputs"].numpy())
+        ind += 1
+    ind = 0
+    while ind*batch_size < len(test_text):
+        curr_test_emb.append(embed(test_text[ind*batch_size: (ind + 1)*batch_size])["outputs"].numpy())
+        ind += 1    
+    embeddings_train[text + '_embedding'] = np.vstack(curr_train_emb)
+    embeddings_test[text + '_embedding'] = np.vstack(curr_test_emb)
+    print(text)
+del embed
+```
+
+Başlık, soru ve cevap bileşenleri için gömülmeleri oluşturduktan sonra, gömülü uzaydaki aralarındaki mesafeleri hesaplayabiliriz:
+
+```python
+l2_dist = lambda x, y: np.power(x - y, 2).sum(axis=1)
+cos_dist = lambda x, y: (x*y).sum(axis=1)
+
+dist_features_train = np.array([
+    l2_dist(embeddings_train['question_title_embedding'], embeddings_train['answer_embedding']),
+    l2_dist(embeddings_train['question_body_embedding'], embeddings_train['answer_embedding']),
+    l2_dist(embeddings_train['question_body_embedding'], embeddings_train['question_title_embedding']),
+    cos_dist(embeddings_train['question_title_embedding'], embeddings_train['answer_embedding']),
+    cos_dist(embeddings_train['question_body_embedding'], embeddings_train['answer_embedding']),
+    cos_dist(embeddings_train['question_body_embedding'], embeddings_train['question_title_embedding'])
+ ]).T
+
+dist_features_test = np.array([
+    l2_dist(embeddings_test['question_title_embedding'], embeddings_test['answer_embedding']),
+    l2_dist(embeddings_test['question_body_embedding'], embeddings_test['answer_embedding']),
+    l2_dist(embeddings_test['question_body_embedding'], embeddings_test['question_title_embedding']),
+    cos_dist(embeddings_test['question_title_embedding'], embeddings_test['answer_embedding']),
+    cos_dist(embeddings_test['question_body_embedding'], embeddings_test['answer_embedding']),
+    cos_dist(embeddings_test['question_body_embedding'], embeddings_test['question_title_embedding'])
+ ]).T
+
+del embeddings_train, embeddings_test
+
+for ii in range(0,6):
+    xtrain['dist'+str(ii)] = dist_features_train[:,ii]
+    xtest['dist'+str(ii)] = dist_features_test[:,ii]
+```
+
+> **Alıştırma 4**
+> 
+> 
+> 
+> Önceki kodu hızlandırma yollarını inceleyin. İpucu: **liste içerme (list comprehension)**.
+> 
+> 
+> 
+> Ayrıca, önceki koddaki vektör çiftleri arasında hesaplanabilecek **başka hangi uzaklık metrikleri (distance metrics)** vardır?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak notları veya çalışmaları buraya yazın):
+
+Özellik hazırlama kısmını tamamladıktan sonra, **modelleme ardışık düzenimizi (modeling pipeline)** oluşturmaya geçebiliriz. **Scikit-learn**'de, ardışık düzenler (`pipelines`), `fit` ve `transform` üye işlevlerini uygulayan nesnelere bir dizi işlemi sıralı olarak uygulamak için kullanılır. Bu, birden çok adımı tek bir scikit-learn tahmincisine (`estimator`) dönüştürmek için çok kullanışlıdır, böylece her adımı ayrı ayrı eğitmek yerine, birden çok adımı içeren bir modeli **tek bir çağrıda** eğitebilirsiniz. Biz de bu yaklaşımı, metin verilerini ön işlemek, özellik çıkarmak ve tahmine dayalı bir model tahmin etmek için kullanacağız.
+
+-----
+
+**TfidfVectorizer ile Metin Vektörleştirme**
+
+Özellik çıkarma ardışık düzenimizin önemli bir bileşeni **TfidfVectorizer**'dır: **Terim Sıklığı-Ters Belge Sıklığı (Term Frequency-Inverse Document Frequency - TF-IDF)**, NLP'de yaygın olarak kullanılan bir metin verilerini vektörleştirme yöntemidir.
+
+**TF-IDF vektörleyici**, girdi metnini tek tek kelimelere (veya alt kelimelere) ayırarak (**tokenize** ederek) çalışır ve ardından puanı hesaplar – bu puan, bir kelimenin belgede kaç kez göründüğünü ölçen **Terim Sıklığı (Term Frequency - TF)** ile kelimenin külliyattaki (**corpus**) nadirliğini ölçen **Ters Belge Sıklığı'nın (Inverse Document Frequency - IDF)** bir çarpımıdır. Metindeki her kelime için bunları birleştirerek, daha sonra bir makine öğrenimi modeline girdi olarak kullanılabilecek metnin bir **vektör temsilini** oluşturabiliriz.
+
+Aşağıda, (başlık, soru ve cevap) kümesinden farklı alanlar için sayısız ardışık düzeni tanımlıyoruz – yalnızca girdinin **metinsel temsilinin** ele alınmasına odaklanarak.
+
+-----
+
+**Ardışık Düzenlerin Tanımlanması**
+
+Başlık alanı için iki dönüşüm oluşturarak başlıyoruz: biri **kelime düzeyinde** ve diğeri **karakter düzeyinde**. Ortaya çıkan vektörlerin boyutunu kontrol etmek için, kelime düzeyindeki dönüşümü 25.000, karakter düzeyindeki dönüşümü ise 5.000 özellikle sınırlandırıyoruz. `max_features` parametresi, **TfidfVectorizer**'ın daha önce açıklanan TF-IDF matrisini oluştururken yalnızca en sık kullanılan ilk `max_features` kelimeyi/karakteri dikkate alacağı anlamına gelir:
+
+```python
+limit_word = 25000
+limit_char = 5000
+
+# Başlık Alanı (Question Title)
+title_col = 'question_title'
+title_transformer = Pipeline([
+    ('tfidf', TfidfVectorizer(lowercase = False, 
+max_df = 0.3, min_df = 1,  
+binary = False, use_idf = True, 
+smooth_idf = False,
+           ngram_range = (1,2), stop_words = 'english', 
+           token_pattern = '(?u)\\b\\w+\\b' , 
+max_features = limit_word ))
+])
+title_transformer2 = Pipeline([
+    ('tfidf2',  TfidfVectorizer( sublinear_tf=True,
+    strip_accents='unicode', analyzer='char',
+    stop_words='english', ngram_range=(1, 4), 
+max_features= limit_char))   
+])
+
+# Soru Gövdesi Alanı (Question Body)
+body_col = 'question_body'
+body_transformer = Pipeline([
+    ('tfidf',TfidfVectorizer(lowercase = False, max_df = 0.3, min_df = 1,
+                             binary = False, use_idf = True, smooth_idf = False,
+                             ngram_range = (1,2), stop_words = 'english', 
+                             token_pattern = '(?u)\\b\\w+\\b' , max_features = limit_word ))
+])
+body_transformer2 = Pipeline([
+    ('tfidf2',  TfidfVectorizer( sublinear_tf=True,
+    strip_accents='unicode', analyzer='char',
+    stop_words='english', ngram_range=(1, 4), max_features= limit_char))   
+])
+
+# Cevap Alanı (Answer)
+answer_col = 'answer'
+answer_transformer = Pipeline([
+    ('tfidf', TfidfVectorizer(lowercase = False, max_df = 0.3, min_df = 1,
+                             binary = False, use_idf = True, smooth_idf = False,
+                             ngram_range = (1,2), stop_words = 'english', 
+                             token_pattern = '(?u)\\b\\w+\\b' , max_features = limit_word ))
+])
+answer_transformer2 = Pipeline([
+    ('tfidf2',  TfidfVectorizer( sublinear_tf=True,
+    strip_accents='unicode', analyzer='char',
+    stop_words='english', ngram_range=(1, 4), max_features= limit_char))   
+])
+```
+
+> **Alıştırma 5**
+> 
+> 
+> 
+> **TfidfVectorizer** için farklı argümanların model performansı üzerindeki etkisini araştırın.
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak notları veya çalışmaları buraya yazın):
+
+Oluşturduğumuz özellik uzayımız, daha önce yarattığımız **tanımlayıcı istatistikler** ve **gömülmeler (embeddings) arasındaki mesafeler** gibi birden fazla sayısal özellik içerir ve bunların, aşikâr nedenlerle, metin alanlarından biraz daha farklı bir şekilde işlenmesi gerekir:
+
+```python
+num_cols = [
+    'question_title_word_len', 'question_body_word_len', 'answer_word_len',
+    'answer_div', 'question_title_num_chars', 'question_body_num_chars',
+    'answer_num_chars', 'question_title_num_stopwords', 'question_body_num_stopwords',
+    'answer_num_stopwords', 'question_title_num_punctuations', 'question_body_num_punctuations',
+    'answer_num_punctuations', 'question_title_num_words_upper', 'question_body_num_words_upper',
+    'answer_num_words_upper', 'dist0', 'dist1', 'dist2', 'dist3', 'dist4', 'dist5'
+]
+```
+
+Sayısal sütunlara hafif bir işleme uyguluyoruz:
+
+* **SimpleImputer**: Bir veri setindeki eksik değerleri atamak için kullanılan bir scikit-learn sınıfıdır. Eksik değerleri sabit bir değer, ortalama veya medyan değerini kullanarak atama gibi temel stratejiler sunar.
+* **PowerTransformer**: Veri üzerinde bir kuvvet dönüşümü gerçekleştirir, bu da **varyansı stabilize etme** ve veri dağılımını **Gauss'a (normale) yakınlaştırma** amacına hizmet eder (bu özelliklere doğrusal bir model uygulamak istersek faydalıdır).
+
+```python
+num_transformer = Pipeline([
+    ('impute', SimpleImputer(strategy='constant', fill_value=0)),
+    ('scale', PowerTransformer(method='yeo-johnson'))
+])
+```
+
+-----
+
+Son olarak, daha önce oluşturulan **kategorik sütunlarımız** var:
+
+```python
+cat_cols = [
+    'dom_0', 'dom_1', 'dom_2', 
+    'dom_3', 'category', 
+    'is_question_no_name_user',
+    'is_answer_no_name_user',
+    'dom_cnt'
+]
+cat_transformer = Pipeline([
+    ('impute', SimpleImputer(strategy='constant', fill_value='')),
+    ('encode', OneHotEncoder(handle_unknown='ignore'))
+])
+```
+
+-----
+
+**Tüm Özellikleri Birleştirme: ColumnTransformer**
+
+Yukarıdaki tüm öğeleri, özellik uzayımızın tüm içeriğini işleyen tek bir dönüştürücüde birleştirebiliriz:
+
+```python
+preprocessor = ColumnTransformer(
+    transformers = [
+        ('title', title_transformer, title_col),
+        ('title2', title_transformer2, title_col),
+        ('body', body_transformer, body_col),
+        ('body2', body_transformer2, body_col),
+        ('answer', answer_transformer, answer_col),
+        ('answer2', answer_transformer2, answer_col),
+        ('num', num_transformer, num_cols),
+        ('cat', cat_transformer, cat_cols)
+    ]
+)
+```
+
+-----
+
+**Modelleme Ardışık Düzeni**
+
+Son olarak, tüm bu özellikleri kullanmak için gerçek bir regresyon modeline ihtiyacımız var. Bu basit bir temel çizgi (**baseline**) olduğu için, **ridge regresyonunu** seçiyoruz: hatırlatmak gerekirse, **L2 düzenlileştirmesi (L2 regularization)** kullanarak modelin genellemesini iyileştiren ve **aşırı uydurmayı (overfitting) önleyen** bir doğrusal regresyon modelidir. L2 düzenlileştirmesi, modelin kayıp fonksiyonuna, **karelenmiş ağırlıkların toplamıyla orantılı** bir ceza terimi ekler. Sonuç olarak, model "daha küçük ağırlıklar" kullanmaya teşvik edilir, bu da yorumlanabilirliği de artırabilir.
+
+$$\text{Kayıp} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \alpha \sum_{j=1}^{p} w_j^2$$
+
+```python
+pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('estimator',Ridge(random_state=RANDOM_STATE))
+])
+```
+
+> **Alıştırma 6**
+> 
+> 
+> 
+> Doğrusal bir modeli düzenlileştirmek (**regularize**) için **ridge** regresyonu dışında hangi olasılıklara sahibiz?
+> 
+> 
+> 
+> **Alıştırma Notları** (Size yardımcı olacak notları veya çalışmaları buraya yazın):
+
+Modeli uydurmak için, kimlik sütununu veya hedefleri ayırmak gibi temel hazırlıkları yapıyoruz:
+
+```python
+# hazırlık
+id_train = xtrain['qa_id']
+ytrain = xtrain[target_cols]
+xtrain.drop(target_cols + ['qa_id'], axis = 1, inplace = True)
+id_test = xtest['qa_id'] 
+xtest.drop('qa_id', axis = 1, inplace = True)
+
+dropcols = ['question_user_name', 'question_user_page',
+ 'answer_user_name', 'answer_user_page','url','host']
+xtrain.drop(dropcols, axis = 1, inplace = True)
+xtest.drop(dropcols, axis = 1, inplace = True)
+```
+
+**Model Performansının Değerlendirilmesi**
+
+Temel modelimizin performansını **Kıvrım Dışı (Out-of-Fold - OOF) çapraz doğrulama** kullanarak değerlendireceğiz. OOF, bir makine öğrenimi modelinin performansını, mevcut verinin bir kısmında modeli eğiterek ve kalan kısmında değerlendirerek tahmin etmek için kullanılan bir yöntemdir. Bu, modelin **genelleme performansının**, yani modelin yeni, görülmeyen verilerde ne kadar iyi performans göstereceğinin bir tahminini elde etmenin bir yoludur.
+
+OOF çapraz doğrulama, mevcut veriyi, tipik olarak 5 veya 10 gibi bir dizi kıvrıma (**fold**) bölmeyi ve her seferinde verinin farklı bir alt kümesinde modeli eğitmeyi, bir kıvrımı doğrulama kümesi olarak bırakmayı ve diğer kıvrımları eğitim için kullanmayı içerir. Bu süreç, her kıvrım bir kez doğrulama kümesi olarak kullanılana kadar tekrarlanır ve tüm kıvrımlardaki ortalama performans, **OOF performansı** olarak alınır.
+
+Veriyi kıvrımlara ayırmak birden fazla şekilde yapılabilir – bu örnekte, soruların benzersiz olmadığı gerçeğini hesaba katmamız gerekir, yani birden çok kayıt farklı cevaplarla aynı soruya karşılık gelebilir (ve dolayısıyla insan değerlendiriciler tarafından farklı şekilde değerlendirilebilir). Bu, her sorunun yalnızca bir kıvrımda göründüğünden emin olmamız gerektiği anlamına gelir ve bu amaçla **GroupKFold** kullanıyoruz. Bu doğrulama kıvrımlarını hesaplama şekli, veri gruplara ayrıldığında kullanılan bir k-katlı çapraz doğrulama varyasyonudur (örneğin, her örnek belirli bir sınıfa ait olduğunda):
+
+```python
+nfolds = 5
+mvalid = np.zeros((xtrain.shape[0], len(target_cols)))
+mfull = np.zeros((xtest.shape[0], len(target_cols)))
+kf = GroupKFold(n_splits= nfolds).split(X=xtrain.question_body, 
+groups=xtrain.question_body)
+```
+
+Bu kod ilk olarak veriyi scikit-learn'den `KFold` sınıfını kullanarak beş kıvrıma ayırır, ardından her adımda (1'den `nfolds`'a kadar) döngü yapar, veriyi eğitim ve doğrulama kümelerine ayırır ve modeli eğitim verisine uydurur. Model daha sonra doğrulama verisi üzerinde değerlendirilir ve skor, skor listesine eklenir. Son olarak, tüm kıvrımların ortalama skoru hesaplanır ve `mean_score` değişkeninde saklanır. Bu ortalama skor, modelin OOF performansının bir tahmini olarak kullanılabilir.
+
+**OOF Model Performansını Hesaplama Prosedürü**
+
+OOF model performansını hesaplamak için standart bir prosedür izliyoruz:
+
+1.  Her kıvrım için, eğitim/doğrulama kümelerini oluşturun.
+2.  Bu ayırımda, hedef sütunların her biri için bir ridge regresyon modeli tahmin edin.
+3.  Tahminleri depolayın.
+4.  Daha sonra yeniden kullanmak için modeli bir **pickle** dosyasına kaydedin.
+
+Bu son nokta için birkaç söz söylemek gerekir: **pickle formatı**, Python'da nesneleri seri hale getirmenin yaygın bir yoludur ve tekrarlayan iş akışınızı hızlandırmanın mükemmel derecede makul bir yoludur (böylece ardışık düzeni her seferinde yeniden uydurmak zorunda kalmazsınız). Pickle'ı işbirlikçi bir ortamda kullanmaya başladığınız anda, dikkate alınması gereken iki husus vardır:
+
+  * Pickle insan tarafından okunabilir değildir ve farklı Python sürümleri veya pickle nesnelerini oluşturmak için kullanılan kütüphaneler arasında geriye dönük uyumluluğu garanti edilmez.
+  * Pickle formatı, kötü niyetli saldırılara karşı savunmasızdır, çünkü kötü amaçlı olarak hazırlanmış bir pickle dosyası, dosya açıldığında yürütülen rastgele kod içerebilir.
+
+Aşağıdaki kod parçası, model performansının kıvrım dışı tahminler üzerinde nasıl hesaplandığını gösterir:
+
+  * Her kıvrım için, veriyi eğitim ve test veri kümelerine ayırırız: ilki modeli uydurmak, ikincisi ise performans değerlendirmesi için kullanılır.
+  * Her sütun için ayrı bir ardışık düzen (ön işleme + ridge regresyon modeli) uydururuz.
+  * Bu kıvrım için eğitilmiş model uygun bir pickle dosyasına kaydedilir.
+  * Tahminler, sırasıyla skoru hesaplamak ve bir gönderi hazırlamak için daha sonra kullanılmak üzere `mvalid`/`mfull` dizilerinde depolanır.
+
+```python
+for ind, (train_index, test_index) in enumerate(kf):
+ # ayır
+    x0, x1 = xtrain.loc[train_index], xtrain.loc[test_index]
+    y0, y1 = ytrain.loc[train_index], ytrain.loc[test_index]
+    for ii in range(0, ytrain.shape[1]):
+        # modeli uydur
+        be = clone(pipeline)
+        be.fit(x0, np.array(y0)[:,ii])
+        filename = 'ridge_f' + str(ind) + '_c' + str(ii) + '.pkl'
+        pickle.dump(be, open(filename, 'wb'))
+        # tahmini park et
+        mvalid[test_index, ii] = be.predict(x1)
+        mfull[:,ii] += be.predict(xtest)/nfolds
+    print('---')
+```
+
+**Performansın Raporlanması**
+
+Modelimizin performansını, OOF tahminlerinin her sütunu için **Spearman korelasyonunu** (yarışma metriğimiz) hesaplayarak ve ardından tüm sütunlarda ortalama alarak değerlendirebiliriz:
+
+```python
+corvec = np.zeros((ytrain.shape[1],1))
+for ii in range(0, ytrain.shape[1]):
+    mvalid[:,ii] = rankdata(mvalid[:,ii])/mvalid.shape[0]
+    mfull[:,ii] = rankdata(mfull[:,ii])/mfull.shape[0]
+    corvec[ii] = stats.spearmanr(ytrain[ytrain.columns[ii]], mvalid[:,ii])[0]
+print(corvec.mean())
+# 0.3041
+```
+
+Yarışma metriği için elde edilen sonuç **0.3041**'dir.
+
+> **Alıştırma 7**
+> 
+> 
+> 
+> Farklı kat sayısı için model performansı nasıl değişir? Düşük bir kat sayısı (örneğin, **3**) ve yüksek bir kat sayısı (örneğin, **10**) kullanarak inceleyin.
+> 
+> 
+> 
+> **Alıştırma Notları (size yardımcı olacak notları veya çalışmaları yazın):**
+
+Bu bölümde, nispeten basit yöntemler kullanarak bir **temel çözüm (baseline solution)** oluşturmayı gösterdik: metin alanları üzerindeki **tanımlayıcı istatistikler** ve ilgili göreve ayarlanmamış, **önceden eğitilmiş bir modelden** elde edilen gömülü gösterimlerin (embedding) birleşimi. Bir madalya bölgesine ulaşmak için yeterli olmasa da, bu yaklaşım, bir sonraki bölüm için yararlı bir temel teşkil etmektedir: **en iyi çözümleri** ve bu çözümlerin problemimiz hakkında verdiği **içgörüleri** analiz etmek.
 
 ## En iyi çözümlerden ders alma *(Learning from top solutions)*
 
+Yukarıda açıklanan temel yaklaşım iyi bir başlangıç noktasıdır, peki yarışmanın kendisinde nasıl bir performans sergilemiştir? Görünüşe göre oldukça iyi: Chris Deotte ([https://www.kaggle.com/cdeotte](https://www.kaggle.com/cdeotte)) **meta özelliklerle** başladı ve bir ara **LightGBM** modeli kurarak, model oluşturma sürecindeki sonraki adımlarına ışık tutan bazı ilginç ilişkileri keşfedebildi: [https://www.kaggle.com/competitions/google-quest-challenge/discussion/130041](https://www.kaggle.com/competitions/google-quest-challenge/discussion/130041).
+
+-----
+
+Chris tarafından önerilen çözümden (özel liderlik tablosunda gümüş madalya bölgesinin bir sıra altında yer aldı) elde edilen ikinci ilginç içgörü, **işlem sonrası (post-processing)** idi: Kapsamlı çapraz doğrulama (cross-validation) ile, farklı sütunlar için tahminleri **kırpma (clipping)** için uygun aralıkları belirledi. Bu strateji, yarışma metriğini önemli ölçüde iyileştirdi:
+
+```
+clippings = {
+ 'question_has_commonly_accepted_answer':[0,0.6],
+ 'question_conversational':[0.15,1],
+ 'question_multi_intent':[0.1,1],
+ 'question_type_choice':[0.1,1],
+ 'question_type_compare':[0.1,1],
+ 'question_type_consequence':[0.08,1],
+ 'question_type_definition':[0.1,1],
+ 'question_type_entity':[0.13,1]
+}
+```
+
+-----
+
+Bu yarışmadaki tüm yüksek performanslı çözümler, bir **BERT-tipi model** eğitmeyi içeriyordu; bu yaklaşımı keşfedenler için mükemmel bir not defteri, **akensert** ([https://www.kaggle.com/akensert](https://www.kaggle.com/akensert)) tarafından yayımlanan çözümdür. Kendisi, **TensorFlow'da** sıfırdan eksiksiz bir **BERT ardışık düzeni (pipeline)** oluşturmayı göstermiştir: [https://www.kaggle.com/code/akensert/quest-bert-base-tf20?scriptVersionId=39570432](https://www.google.com/search?q=https://www.kaggle.com/code/akensert/quest-bert-base-tf20%3FscriptVersionId%3D39570432).
+
+-----
+
+Son olarak, bu bölümü mutlaka okunması gereken bir yazıyla kapatıyoruz: **Dmytro Danevskyi** ([https://www.kaggle.com/ddanevskyi](https://www.kaggle.com/ddanevskyi)), **Yury Kashnitsky** ([https://www.kaggle.com/kashnitsky](https://www.kaggle.com/kashnitsky)), **Oleg Yaroshevskiy** ([https://www.kaggle.com/yaroshevskiy](https://www.kaggle.com/yaroshevskiy)) ve **Dmitry Abulkhanov** ([https://www.kaggle.com/dmitriyab)'dan](https://www.kaggle.com/dmitriyab)'dan) oluşan kazanan takım **"bibimorph"** ile yapılan bir röportaj. Röportaj, Medium'da yayımlanmıştır: [https://medium.com/kaggle-blog/the-3-ingredients-to-our-success-winners-dish-on-their-solution-to-googles-quest-q-a-labeling-c1a63014b88](https://medium.com/kaggle-blog/the-3-ingredients-to-our-success-winners-dish-on-their-solution-to-googles-quest-q-a-labeling-c1a63014b88) ve detaylı incelenmeye kesinlikle değerdir.
+
+-----
+
+**🥇 Kazananların En Önemli Tespitleri**
+
+Kazananlar tarafından paylaşılan en önemli noktaları ve bulguları özetleyelim.
+
+**1\. Dil Modeli Ön Eğitimi**
+
+  * **Transfer öğrenimi**, takım performansı için kilit noktaydı; yarışmada mevcut olan **küçük veri seti**, etiketsiz verilerden yararlanmanın çok önemli olduğu anlamına geliyordu.
+  * Özellikle, ekip, bir BERT modelini **Maskeli Dil Modeli (MLM)** görevi aracılığıyla ince ayar yapmak için bir **Stack Overflow külliyatı (corpus)** kullandı. MLM hakkında daha fazla bilgiyi BERT makalesinde bulabilirsiniz: [https://arxiv.org/abs/1810.04805](https://arxiv.org/abs/1810.04805).
+  * Harici külliyat üzerinde özel olarak tasarladıkları **yardımcı hedefler (auxiliary targets)** eklediler.
+  * **Transfer öğrenimi** ve **alan uyarlamasının (domain adaptation)** birleşimi, başarılarında etkili oldu.
+
+-----
+
+**2\. Sözde Etiketleme (Pseudo-labeling)**
+
+Bir sonraki önemli bileşen, şu adımları takip eden **sözde etiketleme** idi:
+
+1.  Modeli etiketli verilerle eğitin.
+2.  Etiketsiz veriler için etiketleri tahmin edin; bu tahminlere **sözde etiketler (pseudo-labels)** denir.
+3.  Modeli mevcut tüm verileri kullanarak yeniden eğitin ve orijinal verileri sözde etiketlerle birleştirin.
+
+> **Alıştırma 8**
+> 
+> 
+> 
+> **Sözde etiketlemeyi (pseudo-labeling)** araştırın ve **işe yaramayabileceği**, yani sözde etiketleme uygulamasının bir sonucu olarak performansın **kötüleşebileceği** bir durumu düşünün.
+> 
+> 
+> 
+> **Alıştırma Notları (size yardımcı olacak notları veya çalışmaları yazın):**
+
+Son olarak, tahminleri **işlem sonrası aşamaya (post-process)** tabi tutun. Yarışma metriği (**Spearman korelasyonu**) sıralamalar cinsinden tanımlandığı için, örneklemdeki gözlemlerin eşit olmasına (yani **beraberliklerin** bulunmasına) karşı duyarlıdır. Takım, bu sorunun üstesinden, modelden gelen tahminleri verinin dağılımını taklit edecek şekilde **gruplara ayırarak (bucketing)** gelmiştir:
+
+```python
+# Nihai karışıma işlem sonrası uygulama
+def postprocess_single(target, ref):
+    """
+    Buradaki fikir, belirli bir tahmin edilen sütunun dağılımını, 
+    eğitim veri setindeki karşılık gelen sütunun (burada ref olarak adlandırılır) 
+    dağılımıyla eşleştirmektir.
+    """
+    ids = np.argsort(target)
+    counts = sorted(Counter(ref).items(), key=lambda s: s[0])
+    scores = np.zeros_like(target)
+    last_pos = 0
+    v = 0
+    for value, count in counts:
+        next_pos = last_pos + int(round(count / len(ref) * len(target)))
+        if next_pos == last_pos:
+            next_pos += 1
+        cond = ids[last_pos:next_pos]
+        scores[cond] = v
+        last_pos = next_pos
+        v += 1
+    return scores / scores.max()
+```
+
+-----
+
+Yukarıdaki işlev, katılımcılardan birinin GitHub deposundan alınmıştır: [https://github.com/oleg-yaroshevskiy/quest\_qa\_labeling/blob/yorko/step11\_final/blending\_n\_postprocessing.py\#L48](https://www.google.com/search?q=https://github.com/oleg-yaroshevskiy/quest_qa_labeling/blob/yorko/step11_final/blending_n_postprocessing.py%23L48):
+
+1.  Hedef sütunu dizinine göre sıralayarak başlar ve benzersiz değerlerin sayılarının, değerlerin kendilerine göre sıralanmış bir listesini oluşturur.
+2.  İşlev, sayımlar listesi boyunca yineleme yapar ve her sayım için, değiştirilmesi gereken hedefin içindeki bir sonraki konumu hesaplar.
+3.  Daha sonra, mevcut değeri hedef sütunun dilimine atar ve değeri, son değiştirilen konumla birlikte artırır.
+4.  Ortaya çıkan dizi, maksimum değeri **1 olacak şekilde normalize edilir**.
+
+-----
+
+Röportajı okumak ve verilen bağlantıları takip etmek, gerçek çözümü kodla incelemek için gerekli bilgiyle sizi donatır; kazanan çözümü yarışma forumunda özetleyen gönderi buradadır: [https://www.kaggle.com/competitions/google-quest-challenge/discussion/129840](https://www.google.com/search?q=https://www.kaggle.com/competitions/google-quest-challenge/discussion/129840).
+
+Temel ardışık düzen (pipeline) ise [https://www.kaggle.com/code/phoenix9032/pytorch-bert-plain/notebook](https://www.google.com/search?q=https://www.kaggle.com/code/phoenix9032/pytorch-bert-plain/notebook) adresinde bulunabilir.
+
+-----
+
+**🧪 Deney Yapılandırması**
+
+Dikkate değer bir unsur, deneyime yönelik yapılandırılmış yaklaşımdır: ardışık düzen (pipeline) yapılandırması için bir sınıf tanımlanması:
+
+```python
+class PipeLineConfig:
+    def __init__(self, lr, warmup,accum_steps, epochs, seed, expname,head_
+                 tail,freeze,question_weight,answer_weight,fold,train):
+        self.lr = lr
+        self.warmup = warmup
+        self.accum_steps = accum_steps
+        self.epochs = epochs
+        self.seed = seed
+        self.expname = expname
+        self.head_tail = head_tail
+        self.freeze = freeze
+        self.question_weight = question_weight
+        self.answer_weight =answer_weight
+        self.fold = fold
+        self.train = train
+```
+
+Bu tanımlandıktan sonra, hem deneyin **tekrarlanabilirliğini** hem de farklı modeller arasında hızlı **yinelemeleri** sağlayabiliriz.
+
+> **Alıştırma 9**
+> 
+> 
+> 
+> Yukarıda bağlantısı verilen not defterini kendi çözümünüz için bir temel olarak kullanın. Temel mekanikleri anladığınızdan emin olarak, **blok blok çalıştırın**.
+> 
+> 
+> 
+> **Alıştırma Notları (size yardımcı olacak notları veya çalışmaları yazın):**
+
 ## Özet *(Summary)*
+
+Bu bölümde, NLP yarışmalarına, özellikle **Google Quest Soru-Cevap Etiketleme** yarışmasına yönelik bir yaklaşımı inceledik. İşe, eski yöntemleri (metin alanlarının özet/tanımlayıcı özellikleri) önceden eğitilmiş bir modelden gelen gömülü gösterimlerle (embedding) birleştiren bir **temel çözüm (baseline)** ile başladık. Bu, ilgili zorluklara dair temel bir anlayış sağladı ve ardından yarışmada iyi performans gösteren daha **gelişmiş çözümleri** tartıştık. Bu bölüm size NLP sınıflandırma yarışmalarına nasıl yaklaşılacağına dair bir anlayış sunmalıdır; alana yeni başlayanlar temel çözümlerden faydalanırken, daha deneyimli Kaggle kullanıcıları yayımlanan madalyalı yaklaşımların sağladığı rehberlikten yararlanabilirler.
