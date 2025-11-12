@@ -1154,10 +1154,147 @@ Yarışma için aldığınız farklı verileri inceleyelim. `sales_train_evaluat
 
 ![](im/1002.png)
 
+Son dosya olan **`calendar.csv`**, satışları etkilemiş olabilecek olaylarla ilgili verileri içerir:
+
+![](im/1003.png)
+
+Yine, temel zorluk verileri eğitim tablosundaki sütunlarla birleştirmek gibi görünüyor. Ancak, burada sütunları (`d` alanı) `wm_yr_wk` ile bağlamak için kolay bir anahtar bulabilirsiniz. Ek olarak, tabloda belirli günlerde meydana gelebilecek farklı olayların yanı sıra, düşük gelirli ailelere yardımcı olmak için beslenme yardımı avantajlarının kullanılabileceği özel günler olan **Ek Beslenme Yardımı Programı (SNAP) günleri** de temsil edilmiştir.
 
 ## Değerlendirme Metriğini Anlama *(Understanding the Evaluation Metric)*
 
+Doğruluk yarışması yeni bir değerlendirme metriği tanıttı: **Ağırlıklı Ortalama Karekök Ölçekli Hata (Weighted Root Mean Squared Scaled Error - WRMSSE)**. İlk olarak, incelenen bireysel zaman serilerinin **RMSSE'si (Root Mean Squared Scaled Error)** ile başlarsınız. Bu metrik, nokta tahminlerinin, tahmin edilen serinin gerçekleşen değerlerinin ortalaması etrafındaki sapmasını değerlendirir:
+
+$$RMSSE = \sqrt{\frac{1}{h}\frac{\sum_{t=n+1}^{n+h} (Y_t - \hat{Y}_t)^2}{\frac{1}{n-1} \sum_{t=2}^{n} (Y_t - Y_{t-1})^2}}$$
+
+Burada:
+
+* $n$ eğitim örneğinin uzunluğudur
+* $h$ tahmin ufkudur (bizim durumumuzda, $h = 28$)
+* $Y_t$ $t$ anındaki satış değeridir; $\hat{Y}_{t}$ $t$ anındaki tahmin edilen değerdir.
+
+Yarışmadaki tüm 42.840 zaman serisi için RMSSE tahmin edildikten sonra, Ağırlıklı RMSSE (Weighted RMSSE) şu şekilde hesaplanacaktır:
+
+$$
+WRMSSE = \sum_{i=1}^{42,840} w_i * RMSSE
+$$
+
+Burada $w_i$, yarışmadaki $i$. serinin ağırlığıdır.
+
+Yarışma kılavuzlarında ([https://mofc.unic.ac.cy/m5-competition/](https://mofc.unic.ac.cy/m5-competition/)), RMSSE ve WRMSSE ile ilgili olarak şunlar belirtilmiştir:
+
+  * RMSSE'nin paydası, yalnızca incelenen ürün(ler)in aktif olarak satıldığı zaman dilimleri için, yani değerlendirilen seri için gözlemlenen ilk **sıfır olmayan talebi** takip eden dönemler için hesaplanır.
+  * Ölçü **ölçekten bağımsızdır**, yani farklı ölçeklere sahip seriler arasındaki tahminleri karşılaştırmak için etkili bir şekilde kullanılabilir, böylece modelin etkinliğini farklı satış miktarlarına sahip ürünler arasında karşılaştırabilirsiniz.
+  * Diğer ölçülerin aksine, sıfıra eşit veya sıfıra yakın olabilecek değerlere bölme işlemlerine dayanmadığı için güvenle hesaplanabilir (örneğin, $Y_t = 0$ olduğunda yüzde hatalarında veya ölçeklendirme için kullanılan karşılaştırma ölçütünün hatası sıfır olduğunda göreceli hatalarda olduğu gibi).
+  * Ölçü, pozitif ve negatif tahmin hatalarını, ayrıca büyük ve küçük tahminleri **eşit olarak cezalandırır**, bu nedenle simetriktir.
+  * Her serinin ağırlığı, veri setinin eğitim örneğinin **son 28 gözlemine** göre, yani her serinin o belirli dönemde sergilediği **kümülatif fiili dolar satışlarına** göre hesaplanacaktır (satılan birimlerin ilgili fiyatlarıyla çarpımının toplamı).
+  * **Daha düşük bir WRMSSE daha iyidir.**
+
+Bunun altında yatan işleyişe dair iyi bir açıklama Alexander Soare'un şu gönderisinde ([https://www.kaggle.com/alexandersoare](https://www.kaggle.com/alexandersoare)) sunulmuştur: [https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/137019](https://www.google.com/search?q=https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/137019). Değerlendirme metriğini dönüştürdükten sonra, Alexandre daha iyi performansları, **tahminlerdeki hata ile satış değerlerinin günden güne değişimi arasındaki oranın iyileştirilmesine** bağlamaktadır.
+
+Hata, günlük varyasyonlarla aynıysa (**oran=1**), modelin geçmişteki varyasyonlara dayalı rastgele bir tahminden çok daha iyi olmadığı muhtemeldir. Oranınız rastgele bir tahminden daha iyiyse, **kuadratik bir şekilde** WRMSSE'ye dönüştürülür (formüldeki karekök nedeniyle). Sonuç olarak, 0.7'lik bir oran, 0.5'lik bir WRMSSE'ye karşılık gelir ve 0.5'lik bir oran, 0.25'lik bir WRMSSE'ye karşılık gelir.
+
+Yarışma sırasında, Kaggle katılımcıları modellerini doğrudan liderlik tablosunda değerlendirdiler, ancak metriği doğrudan bir amaç fonksiyonu olarak kullanmak için de birçok girişimde bulunuldu. Öncelikle, **Tweedie kaybı** (hem XGBoost hem de LightGBM'de uygulanan), çoğu ürün için çarpık satış dağılımlarını (birçoğu aralıklı satışlara da sahipti ve bu da Tweedie kaybı tarafından güzelce ele alınır) ele alabildiği için problem için oldukça iyi çalıştı. İşte Tweedie kaybı formülü:
+
+$$
+\text{Loss} = - \sum_{i} \left( x_i * \frac{\tilde{x}_i^{1-p}}{1-p} + \frac{\tilde{x}_i^{2-p}}{2-p} \right)
+$$
+
+Formülde, $x_i$ gerçek hedefi; $\tilde{x}_i$ ise tahmin edilen değeri temsil eder. Formül ve uygulanması hakkında daha fazla bilgiyi şu makalede bulabilirsiniz: [https://towardsdatascience.com/tweedie-loss-function-for-right-skewed-data-2c5ca470678f](https://www.google.com/search?q=https://towardsdatascience.com/tweedie-loss-function-for-right-skewed-data-2c5ca470678f).
+
+Poisson ve Gamma dağılımları, Tweedie dağılımının uç durumları olarak kabul edilebilir: güç parametresi $p$'ye bağlı olarak, $p = 1$ olduğunda bir **Poisson dağılımı** ve $p = 2$ olduğunda bir **Gamma dağılımı** elde edersiniz. Bu güç parametresi, dağılımın ortalamasını ve varyansını şu formülle birbirine bağlayan yapıştırıcıdır:
+
+$$
+Var(x) = \Phi \mu^p
+$$
+
+Burada $\Phi$ dağılım parametresi ve $\mu$ ortalamadır.
+
+1 ile 2 arasında bir güç değeri ($p$) kullanarak, aslında **Poisson ve Gamma dağılımlarının bir karışımını** elde edersiniz, ki bu da yarışma problemine çok iyi uyum sağlayabilir. GBM çözümü kullanan yarışmaya katılan Kaggle katılımcılarının çoğu aslında **Tweedie kaybına** başvurdu.
+
+Tweedie'nin başarısına rağmen, bazı diğer Kaggle katılımcıları, modelleri için WRMSSE'ye daha çok benzeyen bir amaç kaybı (objective loss) uygulamak için ilginç yollar buldular:
+
+* Martin Kovacevic Buvinic, **asimetrik kaybı** ile: [https://www.kaggle.com/code/ragnar123/simple-lgbm-groupkfold-cv/notebook](https://www.google.com/search?q=https://www.kaggle.com/code/ragnar123/simple-lgbm-groupkfold-cv/notebook)
+* Timetraveller, LightGBM'de uygulanacak herhangi bir türevlenebilir sürekli kayıp fonksiyonu için gradyan ve Hessian elde etmek üzere **PyTorch Autograd** kullanarak: [https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/152837](https://www.google.com/search?q=https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/152837)
+
 ## Monsaraida'nın 4. sıradaki çözüm fikirlerini inceleme *(Examining the 4th place solution’s ideas from Monsaraida)*
+
+Elbette, metninizi Türkçeye çevirdim:
+
+-----
+
+Yarışma için mevcut birçok çözüm bulunmaktadır ve bunların çoğu yarışmanın Kaggle tartışma sayfalarında bulunabilir. Her iki zorluğun (accuracy ve uncertainty) ilk beş yöntemi de yarışma organizatörleri tarafından (biri özel mülkiyet hakları nedeniyle hariç) toplanmış ve yayınlanmıştır: [https://github.com/Mcompetitions/M5-methods](https://github.com/Mcompetitions/M5-methods) (bu arada, kazanan gönderimlerin sonuçlarını yeniden üretmek, bir yarışma ödülünün toplanması için bir ön koşuldu).
+
+Dikkat çekici bir şekilde, yarışmaların üst sıralarında yer alan tüm Kaggle katılımcıları, işlenecek ve tahmin edilecek çok sayıdaki zaman serisi nedeniyle yarışmada avantaj sağlayan daha az bellek kullanımı ve hesaplama hızı nedeniyle, tek model türleri olarak veya harmanlanmış/yığınlanmış (blended/stacked) topluluklarda **LightGBM'i** kullanmışlardır. Ancak başarısının başka nedenleri de vardır. ARIMA'ya dayalı klasik yöntemlerin aksine, otokorelasyon analizine güvenmeyi ve problemdeki her bir seri için spesifik olarak parametreleri bulmayı gerektirmez. Ek olarak, derin öğrenmeye dayalı yöntemlerden farklı olarak, karmaşık sinir mimarilerini iyileştirmeye veya çok sayıda hiperparametreyi ayarlamaya çalışmayı gerektirmez. Zaman serisi problemlerinde gradyan artırma yöntemlerinin (yalnızca LightGBM değil, örneğin XGBoost da) gücü, **özellik mühendisliğine** (zaman gecikmeleri, hareketli ortalamalar ve serinin niteliklerinin gruplandırılmasından elde edilen ortalamalara dayanarak), doğru amaç fonksiyonunu seçmeye ve hiperparametre ayarlamaya dayanır. Bu yöntemler, yeterince uzun zaman serileri söz konusu olduğunda klasik yöntemlerden daha etkilidir. Daha kısa seriler için, daha karmaşık yöntemler aşırı öğrenmeye (overfitting) eğilimli olduğu için, otoregresif (AR), hareketli ortalamalar (MA) ve ARMA/ARIMA gibi klasik standart ve doğrusal istatistiksel yöntemler hala önerilen tercihtir.
+
+LightGBM ve XGBoost'un yarışmadaki derin öğrenme çözümlerine göre bir diğer avantajı da **Tweedie kaybının hazır bulunmasıydı**. Ek olarak, DNN'lere göre diğer avantajlar arasında, herhangi bir özellik ölçeklendirmesi gerektirmemesi (derin öğrenme ağları kullandığınız ölçeklendirmeye özellikle duyarlıdır) ve özellik mühendisliğini test ederken daha hızlı yinelemelere izin veren **eğitim hızları** yer almaktadır.
+
+> Mevcut tüm bu çözümler arasında, Japon bilgisayar bilimcisi **Monsaraida (Masanori Miyahara)** tarafından önerilen çözümü en ilginç bulduk. Kendisi, özel liderlik tablosunda **0.53583'lük bir skorla dördüncü sırada** yer alan basit ve anlaşılır bir çözüm önerdi. Çözüm, önceden seçim yapılmaksızın sadece genel özellikleri (satış istatistikleri, takvimler, fiyatlar ve tanımlayıcılar gibi) kullanmaktadır.
+
+Ayrıca, aynı türden sınırlı sayıda model kullanarak, **LightGBM gradyan artırmayı** kullanmaktadır; herhangi bir harmanlama, tahminlerin hiyerarşik olarak ilişkili diğer tahminleri beslediği özyinelemeli modelleme veya test setine daha iyi uyması için sabitler seçen çarpanlar gibi yöntemlere başvurmamıştır.
+
+İşte M Tahmin Yarışmalarına sunduğu çözüm sunumundan ([https://github.com/Mcompetitions/M5-methods/tree/master/Code%20of%20Winning%20Methods/A4](https://www.google.com/search?q=https://github.com/Mcompetitions/M5-methods/tree/master/Code%2520of%2520Winning%2520Methods/A4)) alınmış bir şema; burada, **ileriye bakılacak dört haftanın her biri için on mağazanın her birini ele aldığını** not edebiliriz, bu da sonuçta **40 model** üretmeye karşılık gelir:
+
+![](im/1004.png)
+
+> 👨‍💻 Masanori Miyahara (Monsaraida)
+> 
+> 
+> 
+> **[https://www.kaggle.com/monsaraida](https://www.kaggle.com/monsaraida)**
+> 
+> 
+> 
+> İncelikle hazırlanmış çözümü ve Kaggle geçmişi hakkında meraklanarak Masanori Miyahara (Monsaraida) ile iletişime geçtik. Kendisi bize nazikçe yanıt verdi ve bilgisayar bilimleri diplomasına sahip olduğunu, şimdiye kadar bir Japon şirketi için yazılım geliştirme ve veri analizi projelerinde proje lideri olarak çalıştığını anlattı. Başlangıçta, işinde sıkça kullanmadığı çeşitli veri tekniklerini denemesine olanak tanıyacağı için Kaggle ile ilgilenmişti.
+> 
+> 
+> 
+> **En sevdiğiniz yarışma türü nedir ve neden? Teknikler ve çözüm yaklaşımları açısından Kaggle'daki uzmanlık alanınız nedir?**
+> 
+> 
+> 
+> Birkaç görüntü verisi ve doğal dil işleme yarışmasına katıldım, ancak en sık tablo verileri yarışmalarına katılıyorum. Bence tablo verileri yarışmaları, bilgi işlem kaynaklarına sahip olmasanız bile katılmanın kolay olması, bir deneyi hızlıca bitirip bol bol deneme yanılma yapabilmeniz nedeniyle, kısa bir süre yoğunlaşmak için uygun. (Genellikle çocuk bakımı ve iş nedeniyle meşgulüm, bu yüzden tatillerde veya hafta sonlarında yarışmalarla toplu olarak ilgilenme eğilimindeyim.) Ayrıca, verileri dikkatlice keşfederek ve alan bilginize dayalı orijinal fikirler deneyerek sıralamanızı kademeli olarak yükseltebileceğiniz için, ileri düzey makine öğrenimi bilginiz olmasa bile tablo verileri yarışmaları eğlenceli olabilir.
+> 
+> 
+> 
+> **Bir Kaggle yarışmasına nasıl yaklaşırsınız? Eğer veri biliminde çalışıyorsanız, bu yaklaşım günlük işinizde yaptıklarınızdan ne kadar farklıdır?**
+> 
+> 
+> 
+> Benim için bir Kaggle yarışmasına katılmak, bir video oyunu alıp oynamaya veya bir geziye çıkmaya benzer; bu tamamen bir hobidir. Bir veri seti veya problemle ilgilenirsem, tatilde veya hafta sonlarında yarışma üzerinde çalışmak için kendime yalnız zaman yaratırım. Genellikle yarışmalara tek başıma katılırım. Bunun nedeni, çocuk bakımı veya iş nedeniyle yarışmalara zaman ayıramadığım için ekip üyelerimi zor durumda bırakmak istemememdir. Öte yandan, iş hayatında, müşterilerin sorunlarını anlamak ve çözmek için sistematik olarak bir ekip olarak çalışırız. En önemli şey müşteriye değer sağlamaktır ve bir tahmin modelinin doğruluğunu aşırıya taşıyacak az fırsat vardır. İş hayatında tekrarlanabilirlik, istikrar, sürdürülebilirlik ve maliyet performansı da gereklidir. Kaggle'da ise, doğruluğu sadece %0.1 bile olsa artırmak için her şey yapılmalıdır ve doğruluk dışındaki faktörler genellikle daha az kritiktir.
+> 
+> 
+> 
+> **Kaggle kariyerinize yardımcı oldu mu? Eğer öyleyse, nasıl?**
+> 
+> 
+> 
+> Kaggle benim için bir hobi, bu yüzden kariyerime yardımcı olacağını düşündüğüm için üzerinde çalışmıyorum. Ancak, sonuç olarak kariyerim için faydalı oluyor. Son zamanlarda Kaggle, Japonya'da çok popüler hale geldi ve birçok kişi ilgileniyor. İnsanlara Kaggle'da yarışmalarla çalıştığımı söylediğimde bana güveniyorlar ve sık sık veri analizi konusunda benden tavsiye istiyorlar. Ayrıca, aşırı öğrenmeyi önleyen ve gerçek dünya ortamında doğruluğu garanti eden doğrulama stratejileri hakkında Kaggle'dan çok şey öğrendim ve bu, işimde çok faydalı oldu. İş hayatında yanlış bir doğrulama stratejisi çok zarar verici olabilir, ancak Kaggle'da sadece bir madalyayı kaçırabilirim. Dahası, Kaggle deneyimi, verileri kısa bir kontrol ettikten sonra bile doğruluğu artırmak için ne kadar zaman harcamam gerektiğini tahmin etmemi sağladı.
+> 
+> 
+> 
+> **Deneyimlerinize göre, deneyimsiz Kaggle katılımcıları genellikle neyi gözden kaçırır? Şimdi bildiğiniz ama ilk başladığınızda bilmek istediğiniz şey nedir?**
+> 
+> 
+> 
+> Bu benim kişisel görüşüm, ama bir şey öğrenirken, sevdiğiniz, zamanın nasıl geçtiğini unutup tutkuyla bağlanabileceğiniz bir şey üzerinde çalışmanın çok daha verimli olduğuna inanıyorum. Bazen bana şu soru sorulur: "Kaggle yarışmasına başlamadan önce yeterli bilgi edinmek için Python mı çalışmalıyım yoksa bir makine öğrenimi ders kitabı mı okumalıyım?" Bence mevcut yarışmaya yine de katılmalısınız. Bir yarışmaya katıldığınızda ve tahminlerinizi gönderdiğinizde, nerede sıralandığınızı bilecek ve sıralamanızı yükseltmek isteyeceksiniz. Sıralamanızı yükseltmek için kodlama becerilerine ve makine öğrenimi ve veri analizi bilgisine ihtiyacınız olacak ve bunun için gerekli bilgileri öğrenmeye başlamalısınız. Net bir hedefiniz olduğu için verimli bir şekilde öğrenebilirsiniz ve öğrendiklerinizin sonuçları hemen sıralamanıza yansıyacak, bu da sizi motive edecektir.
+> 
+> 
+> 
+> **Veri analizi/makine öğrenimi için kullanmayı önereceğiniz belirli araçlar veya kütüphaneler var mı?**
+> 
+> 
+> 
+> Elbette, pandas/scikit-learn/LightGBM/XGBoost gibi veri analizi ve makine öğrenimi kütüphaneleri önerilir, ancak MLflow gibi deney yönetimi araçlarının da verimli deneyler için gerekli olduğunu düşünüyorum. Bir deney yönetimi aracı olmadan tekrar tekrar deneme-yanılma deneyleri yaparsanız, deneysel koşulların ve ayarların izini kaybedersiniz. Özellikle yarışmanın ikinci yarısında, bir deney yönetimi aracıyla tekrarlanabilirliği sağlayarak deneyleri verimli bir şekilde yürütebilirsiniz.
+> 
+> 
+> 
+> **Bir yarışmaya girerken akılda tutulması/yapılması gereken en önemli şey nedir?**
+> 
+> 
+> 
+> Bence en önemli şey **Kaggle'dan keyif almaktır**. Kaggle'dan keyif almanın birçok yolu vardır: yarışmadan keyif almak, yeni verilerden ve alan bilgisinden keyif almak, en son tekniklerden ve araçlardan keyif almak, başkalarıyla yapılan tartışmalardan keyif almak vb. Sonuç ne olursa olsun, eğlenerek harcanan zaman ve edinilen bilgi çok değerlidir.
+
+Monsaraida'nın çözümünü, gerçek dünya tahmin projesinde olduğu gibi, basit ve pratik tuttuğu göz önüne alındığında, bu bölümde onun örneğini, Kaggle not defterlerinde çalışacak şekilde kodunu yeniden düzenleyerek çoğaltmaya çalışacağız (kodu birden fazla not defterine bölerek bellek ve çalışma süresi sınırlamalarını aşacağız). Bu şekilde, okuyuculara tahmin problemlerine yaklaşmak için **gradyan artırmaya dayalı basit ve etkili bir yol** sunmayı amaçlıyoruz.
 
 ## Belirli tarihler ve zaman ufukları (time horizons) için tahminleri hesaplama *(Computing predictions for specific dates and time horizons)*
 
