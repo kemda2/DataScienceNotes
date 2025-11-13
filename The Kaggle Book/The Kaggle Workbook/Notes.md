@@ -68,10 +68,6 @@ Benzer fikirler, Andy Harless ([https://www.kaggle.com/competitions/porto-seguro
 ## Değerlendirme metriğini anlama
 *(Understanding the evaluation metric)*
 
-Elbette, metninizi Türkçeye çevirdim:
-
------
-
 Yarışmada kullanılan metrik, **normalleştirilmiş Gini katsayısıdır** (ekonomide kullanılan benzer Gini katsayısı/endeksinden almıştır) ve daha önce başka bir yarışmada, Allstate Claim Prediction Challenge'da ([https://www.kaggle.com/competitions/ClaimPredictionChallenge](https://www.google.com/search?q=https://www.kaggle.com/competitions/ClaimPredictionChallenge)) kullanılmıştır. Bu yarışmadan, metriğin ne hakkında olduğuna dair çok net bir açıklama alabiliriz:
 
 > Bir giriş gönderdiğinizde, gözlemler "en büyük tahminden" "en küçük tahmine" doğru sıralanır. Tahminlerinizin devreye girdiği tek adım budur, bu nedenle yalnızca tahminlerinizin belirlediği sıra önemlidir. Gözlemleri soldan sağa, en büyük tahminler solda olacak şekilde düzenlenmiş olarak görselleştirin. Ardından soldan sağa hareket ederek şunu sorarız: "**Verinin en soldaki %x'lik kısmında, gerçekten gözlemlenen kaybın ne kadarını biriktirdiniz?**" Bir model olmadan, tahminlerin %10'unda kaybın %10'unu biriktirmeyi beklersiniz, bu nedenle model olmaması (veya bir "sıfır" modeli) düz bir çizgiye ulaşır. **Sizin eğriniz ile bu düz çizgi arasındaki alana Gini katsayısı diyoruz.**
@@ -1086,10 +1082,6 @@ Bir sonraki bölümde, bu kez **zaman serileriyle** ilgili karmaşık bir tahmin
 
 # Bölüm 2: Makridakis Yarışmaları – Doğruluk ve Belirsizlik İçin Kaggle'daki M5 *(Chapter 2: The Makridakis Competitions – M5 on Kaggle for Accuracy and Uncertainty)*
 
-Elbette, metninizi Türkçeye çevirdim:
-
----
-
 ## 📅 M Yarışmaları ve M5 Kaggle Yarışması
 
 1982'den beri, **Spyros Makridakis** ([https://mofc.unic.ac.cy/dr-spyros-makridakis/](https://mofc.unic.ac.cy/dr-spyros-makridakis/)) mevcut ve yeni tahmin yöntemlerinin farklı tahmin problemlerine karşı etkinliğini karşılaştırmak amacıyla **M Yarışmaları** adı verilen tahmin meydan okumalarına dünyanın her yerinden araştırmacı gruplarını dahil etmiştir. Bu nedenle, M Yarışmaları her zaman hem akademisyenlere hem de uygulayıcılara tamamen açık olmuştur.
@@ -1217,10 +1209,6 @@ Tweedie'nin başarısına rağmen, bazı diğer Kaggle katılımcıları, modell
 * Timetraveller, LightGBM'de uygulanacak herhangi bir türevlenebilir sürekli kayıp fonksiyonu için gradyan ve Hessian elde etmek üzere **PyTorch Autograd** kullanarak: [https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/152837](https://www.google.com/search?q=https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/152837)
 
 ## Monsaraida'nın 4. sıradaki çözüm fikirlerini inceleme *(Examining the 4th place solution’s ideas from Monsaraida)*
-
-Elbette, metninizi Türkçeye çevirdim:
-
------
 
 Yarışma için mevcut birçok çözüm bulunmaktadır ve bunların çoğu yarışmanın Kaggle tartışma sayfalarında bulunabilir. Her iki zorluğun (accuracy ve uncertainty) ilk beş yöntemi de yarışma organizatörleri tarafından (biri özel mülkiyet hakları nedeniyle hariç) toplanmış ve yayınlanmıştır: [https://github.com/Mcompetitions/M5-methods](https://github.com/Mcompetitions/M5-methods) (bu arada, kazanan gönderimlerin sonuçlarını yeniden üretmek, bir yarışma ödülünün toplanması için bir ön koşuldu).
 
@@ -1382,10 +1370,6 @@ Ne olduğunu size fikir vermek için, `pd.melt` dönüşümünden önceki `train
 Dönüşümden sonra, sütunların satırlara dönüştürüldüğü ve günlerin artık yeni bir sütunda bulunduğu bir `grid_df` elde edersiniz:
 
 ![](im/1006.png)
-
-Elbette, metninizi Türkçeye çevirdim:
-
------
 
 `d` özelliği, indekste yer almayan sütunlara, esasen `d_1`'den `d_1935`'e kadar olan tüm özelliklere referansı içerir. Bu, veri setindeki satır sayısının 1.935 kat artması anlamına gelir. Değerlerinden basitçe `d_` önekini kaldırıp bunları tam sayıya dönüştürerek artık bir **gün özelliğine** sahip olursunuz.
 
@@ -3461,5 +3445,6 @@ Bu tanımlandıktan sonra, hem deneyin **tekrarlanabilirliğini** hem de farklı
 > **Alıştırma Notları (size yardımcı olacak notları veya çalışmaları yazın):**
 
 ## Özet *(Summary)*
+
 
 Bu bölümde, NLP yarışmalarına, özellikle **Google Quest Soru-Cevap Etiketleme** yarışmasına yönelik bir yaklaşımı inceledik. İşe, eski yöntemleri (metin alanlarının özet/tanımlayıcı özellikleri) önceden eğitilmiş bir modelden gelen gömülü gösterimlerle (embedding) birleştiren bir **temel çözüm (baseline)** ile başladık. Bu, ilgili zorluklara dair temel bir anlayış sağladı ve ardından yarışmada iyi performans gösteren daha **gelişmiş çözümleri** tartıştık. Bu bölüm size NLP sınıflandırma yarışmalarına nasıl yaklaşılacağına dair bir anlayış sunmalıdır; alana yeni başlayanlar temel çözümlerden faydalanırken, daha deneyimli Kaggle kullanıcıları yayımlanan madalyalı yaklaşımların sağladığı rehberlikten yararlanabilirler.
