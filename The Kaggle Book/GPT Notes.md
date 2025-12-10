@@ -744,6 +744,385 @@ print("Stacked CV RMSE:", np.sqrt(mean_squared_error(y, meta_oof)))
 
 ---
 
-Eğer istersen:
-- Bu betiği **senin dosyalarına göre** (sütun isimlerini otomatik algılayıp) daha da özelleştirip, **sınıflandırma/regresyon ayrımını otomatik** yapacak ve Optuna ile HPO’yu etkinleştirecek hâle getirebilirim.  
-- Ya da betiği çalıştırıp çıkan `submission.csv` ve CV skorlarını paylaşırsan, sonuçlara göre hangi adımları (daha fazla FE, farklı validation, stacking değişiklikleri) önceliklendireceğini adım adım söylerim.
+# Otomatik, Optuna destekli ve görev tipini (sınıflandırma/regresyon) algılayan tam pipeline (çalıştırılabilir Python)
+
+Aşağıdaki betik **senin `train.csv` ve `test.csv` dosyalarını** alıp sütunları otomatik algılar, hedefin türüne göre (sürekli → regresyon; ayrık/etiket → sınıflandırma) uygun metrik ve model ayarlarını seçer, Optuna ile LightGBM hiperparametre optimizasyonunu etkinleştirir, CV ile OOF tahminleri üretir, XGBoost ile karşılaştırma yapar ve basit stacking uygular. Betik Kaggle Notebook veya yerel Jupyter ortamında çalıştırılmak üzere tasarlanmıştır.
+
+> **Kullanım:** Betiği çalıştırmadan önce gerekli paketleri yükleyin (`lightgbm`, `xgboost`, `optuna`, `scikit-learn`, `pandas`, `numpy`). Betik veri dosyalarını aynı çalışma dizininde `train.csv` ve `test.csv` olarak bekler. Çıktı olarak `submission_df` adlı DataFrame oluşturulur; isterseniz bunu pandas ile kaydedebilirsiniz.
+
+---
+
+### Önemli özellikler
+- **Otomatik hedef ve ID tespiti** (heuristikler kullanır).  
+- **Görev tipi otomatik algılama** (regresyon / sınıflandırma; ikili/multi sınıf ayrımı).  
+- **Doğrulama stratejisi otomatik seçimi** (zaman serisi, grup, stratify veya KFold).  
+- **Optuna ile LightGBM HPO** (isteğe bağlı, parametre ile aç/kapa).  
+- **XGBoost karşılaştırması** ve **basit Ridge meta-model stacking**.  
+- **Pseudo‑labeling** isteğe bağlı (varsayılan kapalı; dikkatle kullanın).
+
+---
+
+### Tam betik
+
+```python
+# Otomatik Kaggle-style tabular pipeline
+# Gerekli paketler: pandas, numpy, scikit-learn, lightgbm, xgboost, optuna (isteğe bağlı), joblib
+import os
+import random
+import warnings
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import KFold, StratifiedKFold, GroupKFold, TimeSeriesSplit
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import mean_squared_error, roc_auc_score, log_loss, accuracy_score
+from sklearn.linear_model import Ridge
+import lightgbm as lgb
+import xgboost as xgb
+
+warnings.filterwarnings('ignore')
+RANDOM_SEED = 42
+np.random.seed(RANDOM_SEED)
+random.seed(RANDOM_SEED)
+
+# ---------- Kullanıcı ayarları ----------
+TRAIN_PATH = 'train.csv'   # çalışma dizininde olmalı
+TEST_PATH = 'test.csv'
+USE_OPTUNA = True          # Optuna ile HPO yapmak istersen True
+OPTUNA_TRIALS = 40         # kaynaklara göre ayarla
+USE_PSEUDO = False         # pseudo-labeling kullanmak istersen True (dikkatli kullan)
+N_FOLDS = 5
+VERBOSE = 100
+# ----------------------------------------
+
+# 1) Veri yükleme ve otomatik ID/target tespiti
+train = pd.read_csv(TRAIN_PATH)
+test = pd.read_csv(TEST_PATH)
+print("Train shape:", train.shape, "Test shape:", test.shape)
+
+def infer_id_target(df_train, df_test):
+    id_col = None
+    target_col = None
+    # ID heuristiği
+    for c in df_train.columns:
+        if c.lower() == 'id' or c.lower().endswith('_id'):
+            id_col = c
+            break
+    # target heuristiği
+    for c in df_train.columns:
+        if c.lower() in ['target','y','label','outcome']:
+            target_col = c
+            break
+    if target_col is None:
+        train_num = df_train.select_dtypes(include=['int64','float64']).columns.tolist()
+        test_cols = set(df_test.columns)
+        candidates = [c for c in train_num if c not in test_cols]
+        if len(candidates) == 1:
+            target_col = candidates[0]
+    # fallback: son sütun hedef olabilir
+    if target_col is None:
+        target_col = df_train.columns[-1]
+    # id fallback
+    if id_col is None:
+        common = set(df_train.columns).intersection(set(df_test.columns))
+        for c in df_test.columns:
+            if c not in common:
+                id_col = c
+                break
+    return id_col, target_col
+
+ID_COL, TARGET_COL = infer_id_target(train, test)
+print("Inferred ID_COL:", ID_COL, "TARGET_COL:", TARGET_COL)
+
+# Ayırma
+if ID_COL and ID_COL in train.columns:
+    train_ids = train[ID_COL].copy()
+    test_ids = test[ID_COL].copy()
+    train = train.drop(columns=[ID_COL])
+    test = test.drop(columns=[ID_COL])
+else:
+    train_ids = pd.Series(np.arange(len(train)))
+    test_ids = pd.Series(np.arange(len(test)))
+
+y = train[TARGET_COL].copy()
+train = train.drop(columns=[TARGET_COL])
+
+# 2) Görev tipi algılama (regresyon / sınıflandırma)
+def detect_task(y):
+    if y.dtype.kind in 'f':  # float hedef → regresyon
+        return 'regression'
+    if y.dtype.kind in 'i':
+        # eğer çok az benzersiz değer varsa sınıflandırma
+        if y.nunique() <= 20:
+            # ikili mi çok sınıflı mı kontrolü
+            if y.nunique() == 2:
+                return 'binary'
+            else:
+                return 'multiclass'
+        else:
+            return 'regression'
+    # string etiketler -> sınıflandırma
+    return 'binary' if y.nunique() == 2 else 'multiclass'
+
+TASK = detect_task(y)
+print("Detected task:", TASK)
+
+# 3) Hızlı EDA ve feature engineering (otomatik)
+def quick_report(df, name='df'):
+    print(f"{name} shape: {df.shape}")
+    print("Missing top 10:")
+    print(df.isnull().sum().sort_values(ascending=False).head(10))
+
+quick_report(train, 'train_features')
+quick_report(test, 'test_features')
+
+def auto_fe(df):
+    df = df.copy()
+    # kategorik tespit
+    cat_cols = df.select_dtypes(include=['object','category']).columns.tolist()
+    # düşük kardinaliteli sayısalları kategorik say
+    for c in df.select_dtypes(include=['int64','float64']).columns:
+        if df[c].nunique() <= 20 and df[c].nunique() > 2:
+            cat_cols.append(c)
+    cat_cols = list(dict.fromkeys(cat_cols))
+    num_cols = [c for c in df.columns if c not in cat_cols]
+    # label encode kategorikler
+    for c in cat_cols:
+        df[c] = df[c].fillna('NA').astype(str)
+        le = LabelEncoder()
+        try:
+            df[c] = le.fit_transform(df[c])
+        except:
+            df[c] = df[c].astype('category').cat.codes
+    # basit sayısal dönüşümler
+    for c in num_cols:
+        if df[c].dtype.kind in 'fi':
+            df[f'{c}_log1p'] = np.log1p(df[c].fillna(0))
+    # basit etkileşim
+    num_cols2 = [c for c in num_cols if df[c].dtype.kind in 'fi']
+    if len(num_cols2) >= 2:
+        a, b = num_cols2[0], num_cols2[1]
+        df[f'{a}_plus_{b}'] = df[a].fillna(0) + df[b].fillna(0)
+    return df
+
+X = auto_fe(train)
+X_test = auto_fe(test)
+print("After FE shapes:", X.shape, X_test.shape)
+
+# 4) CV stratejisi otomatik seçimi
+def choose_cv(X, y, n_folds=5):
+    date_cols = [c for c in X.columns if 'date' in c.lower() or 'time' in c.lower()]
+    if len(date_cols) > 0:
+        print("Using TimeSeriesSplit")
+        return TimeSeriesSplit(n_splits=n_folds)
+    group_cols = [c for c in X.columns if 'group' in c.lower()]
+    if len(group_cols) > 0:
+        print("Using GroupKFold")
+        return GroupKFold(n_splits=n_folds)
+    if TASK in ['binary','multiclass']:
+        # stratify için hedefın çok sınıflı olup olmadığına bak
+        if y.nunique() > 1:
+            print("Using StratifiedKFold")
+            return StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=RANDOM_SEED)
+    print("Using KFold")
+    return KFold(n_splits=n_folds, shuffle=True, random_state=RANDOM_SEED)
+
+cv = choose_cv(X, y, n_folds=N_FOLDS)
+
+# 5) Metriği seç
+if TASK == 'regression':
+    def score_fn(y_true, y_pred): return np.sqrt(mean_squared_error(y_true, y_pred))
+    LGB_OBJECTIVE = 'regression'
+    LGB_METRIC = 'rmse'
+elif TASK == 'binary':
+    def score_fn(y_true, y_pred): return roc_auc_score(y_true, y_pred)
+    LGB_OBJECTIVE = 'binary'
+    LGB_METRIC = 'auc'
+else:  # multiclass
+    def score_fn(y_true, y_pred): return accuracy_score(y_true, np.argmax(y_pred, axis=1))
+    LGB_OBJECTIVE = 'multiclass'
+    LGB_METRIC = 'multi_logloss'
+
+print("Using metric for evaluation:", LGB_METRIC)
+
+# 6) Optuna ile LightGBM HPO (isteğe bağlı)
+best_params = None
+if USE_OPTUNA:
+    try:
+        import optuna
+        def optuna_objective(trial):
+            param = {
+                'objective': LGB_OBJECTIVE,
+                'metric': LGB_METRIC,
+                'boosting_type': 'gbdt',
+                'learning_rate': trial.suggest_loguniform('learning_rate', 0.01, 0.2),
+                'num_leaves': trial.suggest_int('num_leaves', 16, 256),
+                'feature_fraction': trial.suggest_uniform('feature_fraction', 0.4, 1.0),
+                'bagging_fraction': trial.suggest_uniform('bagging_fraction', 0.4, 1.0),
+                'bagging_freq': trial.suggest_int('bagging_freq', 1, 10),
+                'min_data_in_leaf': trial.suggest_int('min_data_in_leaf', 5, 200),
+                'lambda_l1': trial.suggest_loguniform('lambda_l1', 1e-8, 10.0),
+                'lambda_l2': trial.suggest_loguniform('lambda_l2', 1e-8, 10.0),
+                'seed': RANDOM_SEED,
+                'verbosity': -1
+            }
+            cv_scores = []
+            for tr_idx, val_idx in cv.split(X, y):
+                X_tr, X_val = X.iloc[tr_idx], X.iloc[val_idx]
+                y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
+                dtrain = lgb.Dataset(X_tr, label=y_tr)
+                dval = lgb.Dataset(X_val, label=y_val)
+                model = lgb.train(param, dtrain, num_boost_round=2000, valid_sets=[dval],
+                                  early_stopping_rounds=50, verbose_eval=False)
+                if TASK == 'regression':
+                    preds = model.predict(X_val, num_iteration=model.best_iteration)
+                    cv_scores.append(np.sqrt(mean_squared_error(y_val, preds)))
+                elif TASK == 'binary':
+                    preds = model.predict(X_val, num_iteration=model.best_iteration)
+                    cv_scores.append(roc_auc_score(y_val, preds))
+                else:
+                    preds = model.predict(X_val, num_iteration=model.best_iteration)
+                    cv_scores.append(log_loss(y_val, preds))
+            # Optuna minimize by default; for auc we want maximize -> return negative
+            if TASK == 'binary':
+                return -np.mean(cv_scores)
+            return np.mean(cv_scores)
+        study = optuna.create_study(direction='minimize' if TASK!='binary' else 'maximize')
+        # For binary we created objective returning negative; adjust direction accordingly
+        if TASK == 'binary':
+            # make objective return negative AUC, but set direction='minimize' for simplicity
+            study = optuna.create_study(direction='minimize')
+            def wrapped_obj(trial):
+                return -optuna_objective(trial)
+            study.optimize(wrapped_obj, n_trials=OPTUNA_TRIALS)
+        else:
+            study.optimize(optuna_objective, n_trials=OPTUNA_TRIALS)
+        best_params = study.best_params
+        # ensure required keys
+        best_params.update({'objective': LGB_OBJECTIVE, 'metric': LGB_METRIC, 'seed': RANDOM_SEED, 'verbosity': -1})
+        print("Optuna best params:", best_params)
+    except Exception as e:
+        print("Optuna kurulumu veya çalıştırma hatası:", e)
+        USE_OPTUNA = False
+
+# 7) CV ile LightGBM eğitimi (OOF + test)
+def run_lgb_cv(X, y, X_test, cv, params=None, num_boost_round=2000, early_stopping=100):
+    if params is None:
+        params = {
+            'objective': LGB_OBJECTIVE,
+            'metric': LGB_METRIC,
+            'boosting_type': 'gbdt',
+            'learning_rate': 0.05,
+            'num_leaves': 31,
+            'feature_fraction': 0.8,
+            'bagging_fraction': 0.8,
+            'bagging_freq': 5,
+            'seed': RANDOM_SEED,
+            'verbosity': -1
+        }
+    oof = np.zeros(X.shape[0]) if TASK!='multiclass' else np.zeros((X.shape[0], len(np.unique(y))))
+    preds = np.zeros(X_test.shape[0]) if TASK!='multiclass' else np.zeros((X_test.shape[0], len(np.unique(y))))
+    for fold, (tr_idx, val_idx) in enumerate(cv.split(X, y)):
+        X_tr, X_val = X.iloc[tr_idx], X.iloc[val_idx]
+        y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
+        dtrain = lgb.Dataset(X_tr, label=y_tr)
+        dval = lgb.Dataset(X_val, label=y_val)
+        model = lgb.train(params, dtrain, num_boost_round=num_boost_round, valid_sets=[dval],
+                          early_stopping_rounds=early_stopping, verbose_eval=VERBOSE if VERBOSE else False)
+        if TASK == 'multiclass':
+            oof[val_idx, :] = model.predict(X_val, num_iteration=model.best_iteration)
+            preds += model.predict(X_test, num_iteration=model.best_iteration) / N_FOLDS
+        else:
+            oof[val_idx] = model.predict(X_val, num_iteration=model.best_iteration)
+            preds += model.predict(X_test, num_iteration=model.best_iteration) / N_FOLDS
+    return oof, preds
+
+lgb_params = best_params if best_params is not None else None
+lgb_oof, lgb_test = run_lgb_cv(X, y, X_test, cv, params=lgb_params)
+
+# 8) XGBoost kısa karşılaştırma (aynı CV)
+def run_xgb_cv(X, y, X_test, cv):
+    oof = np.zeros(X.shape[0])
+    preds = np.zeros(X_test.shape[0])
+    params = {'objective':'reg:squarederror','eval_metric':'rmse','seed':RANDOM_SEED}
+    for fold, (tr_idx, val_idx) in enumerate(cv.split(X, y)):
+        X_tr, X_val = X.iloc[tr_idx], X.iloc[val_idx]
+        y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
+        dtrain = xgb.DMatrix(X_tr, label=y_tr)
+        dval = xgb.DMatrix(X_val, label=y_val)
+        bst = xgb.train(params, dtrain, num_boost_round=1000, evals=[(dval,'val')],
+                        early_stopping_rounds=50, verbose_eval=False)
+        oof[val_idx] = bst.predict(dval, ntree_limit=bst.best_ntree_limit)
+        preds += bst.predict(xgb.DMatrix(X_test), ntree_limit=bst.best_ntree_limit) / N_FOLDS
+    return oof, preds
+
+xgb_oof, xgb_test = run_xgb_cv(X, y, X_test, cv)
+
+# 9) Basit stacking (Ridge meta-model)
+if TASK == 'multiclass':
+    # multiclass stacking için argmax veya soft stacking gerekebilir; burada basitçe argmax kullanıyoruz
+    level0_oof = np.column_stack([np.argmax(lgb_oof, axis=1), np.argmax(xgb_oof.reshape(-1,1), axis=1)])
+    level0_test = np.column_stack([np.argmax(lgb_test, axis=1), np.argmax(xgb_test.reshape(-1,1), axis=1)])
+else:
+    level0_oof = np.column_stack([lgb_oof, xgb_oof])
+    level0_test = np.column_stack([lgb_test, xgb_test])
+
+meta = Ridge(alpha=1.0, random_state=RANDOM_SEED)
+meta_oof = np.zeros(level0_oof.shape[0])
+for tr_idx, val_idx in cv.split(level0_oof, y):
+    meta.fit(level0_oof[tr_idx], y.iloc[tr_idx])
+    meta_oof[val_idx] = meta.predict(level0_oof[val_idx])
+meta_test = meta.predict(level0_test)
+
+# 10) İsteğe bağlı pseudo-labeling (çok dikkatli)
+if USE_PSEUDO:
+    # regresyon için uç tahminleri, sınıflandırma için yüksek güvenli sınıfları seçme mantığı
+    if TASK == 'regression':
+        low, high = np.percentile(meta_test, [5,95])
+        mask = (meta_test <= low) | (meta_test >= high)
+        if mask.sum() > 0:
+            X_pl = pd.concat([X, X_test[mask]], axis=0).reset_index(drop=True)
+            y_pl = pd.concat([y, pd.Series(meta_test[mask])], axis=0).reset_index(drop=True)
+            # hızlı yeniden eğitim LightGBM (tüm veri)
+            dtrain_pl = lgb.Dataset(X_pl, label=y_pl)
+            final_params = lgb_params if lgb_params is not None else {'objective':LGB_OBJECTIVE,'metric':LGB_METRIC,'seed':RANDOM_SEED,'verbosity':-1}
+            final_model = lgb.train(final_params, dtrain_pl, num_boost_round=1000, verbose_eval=False)
+            final_preds = final_model.predict(X_test)
+        else:
+            final_preds = meta_test.copy()
+    else:
+        # sınıflandırmada pseudo-labeling daha karmaşık; burada kapalı bırakıyoruz
+        final_preds = meta_test.copy()
+else:
+    final_preds = meta_test.copy()
+
+# 11) Son ensemble (basit ağırlıklı)
+final_ensemble = 0.5 * final_preds + 0.25 * lgb_test + 0.25 * xgb_test
+
+# 12) Değerlendirme (CV skorları)
+if TASK == 'regression':
+    print("LightGBM OOF RMSE:", np.sqrt(mean_squared_error(y, lgb_oof)))
+    print("XGBoost OOF RMSE:", np.sqrt(mean_squared_error(y, xgb_oof)))
+    print("Stacked OOF RMSE:", np.sqrt(mean_squared_error(y, meta_oof)))
+else:
+    if TASK == 'binary':
+        print("LightGBM OOF AUC:", roc_auc_score(y, lgb_oof))
+        print("XGBoost OOF AUC:", roc_auc_score(y, xgb_oof))
+        print("Stacked OOF AUC:", roc_auc_score(y, meta_oof))
+    else:
+        print("Multiclass stacked accuracy (approx):", accuracy_score(y, np.round(meta_oof)))
+
+# 13) Submission DataFrame hazır
+submission_df = pd.DataFrame({ 'id': test_ids, 'prediction': final_ensemble })
+
+# submission_df hazır; kaydetmek isterseniz pandas.to_csv kullanabilirsiniz.
+print("Pipeline tamamlandı. 'submission_df' değişkeni hazır.")
+```
+
+---
+
+### Son notlar ve öneriler
+- **Optuna** etkinleştirildiğinde kaynak tüketimi artar; `OPTUNA_TRIALS` değerini makinenize göre ayarlayın.  
+- **Sınıflandırma için** LightGBM parametreleri ve değerlendirme mantığı (özellikle çok sınıflı) daha ince ayar gerektirir; yukarıdaki kod temel bir otomasyon sağlar.  
+- **Pseudo‑labeling** risklidir: doğrulama stratejinizi bozmadan küçük adımlarla deneyin.  
+- **Feature engineering** kitapta çok daha geniş anlatılır; bu betik temel, güvenli dönüşümler uygular. Veri setine özel hedef-encoding, tarih parçalama, etkileşimler, outlier işlemleri eklemek genelde büyük fark yaratır.  
+- Betiği çalıştırıp `submission_df` ve CV skorlarını paylaşırsanız, sonuçlara göre hangi adımları (daha fazla FE, farklı CV, Optuna parametreleri, stacking stratejileri) önceliklendireceğinizi adım adım düzenleyebilirim.
