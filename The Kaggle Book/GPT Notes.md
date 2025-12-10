@@ -1,3 +1,5 @@
+# Genel Bilgi
+
 **Özet:** Kitaba göre tabular veri için en etkili yol **(1) sağlam EDA ve veri hazırlığı**, **(2) doğru doğrulama (validation) stratejisi**, **(3) güçlü temel modeller + HPO**, ve **(4) dikkatli ensembling / final retrain** adımlarını sırayla uygulamaktır. Aşağıda her tekniğin *nerede, ne zaman ve nasıl* kullanılacağıyla birlikte kısa, çalışır kod örnekleri verilmiştir.
 
 ### Karar noktaları ve öncelikler
@@ -76,7 +78,7 @@ meta_model.fit(meta_X, y)
 ---
 
 
-### Tabular Modeling Pipeline (Kaggle-style)
+# Tabular Modeling Pipeline (Kaggle-style)
 
 Aşağıda **kitaptaki tüm ana strateji ve teknikleri** tek bir Kaggle tarzı yarışma akışında kapsayan, çalıştırılabilir ve adım adım açıklamalı bir Python kodu bulacaksınız. Kod **tek bir veri seti** (standart `train.csv` / `test.csv`) varsayımıyla yazıldı ve şu adımları içerir: **EDA & veri hazırlığı → sağlam doğrulama → güçlü baz modeller → Hiperparametre optimizasyonu → stacking/ensemble → pseudo‑labeling → final retrain & submission**. Her bölümün başında **nerede, ne zaman, ne için** kısa açıklama vardır.
 
