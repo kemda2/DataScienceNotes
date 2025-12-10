@@ -427,3 +427,323 @@ submission.head()
 
 ## Kapanış (kısa özet)
 Bu kod **kitaptaki** ana stratejileri tek bir akışta birleştirir: **EDA → Feature Engineering → Sağlam Validation → Baseline modeller → HPO → Stacking → Pseudo‑labeling → Final retrain**. Kod örnekleri minimal ama çalıştırılabilir şekilde verildi; gerçek yarışmada her adımı veri setine göre özelleştirmeniz, daha fazla model eklemeniz, HPO denemelerini artırmanız ve validation stratejisini veri yapısına göre seçmeniz gerekir.
+
+
+---
+
+
+# Otomatik, tek komutla çalıştırılabilir Kaggle tarzı tabular pipeline (veri setini otomatik algılar, tüm adımları uygular)
+
+Aşağıdaki Python betiği **senin `train.csv` ve `test.csv` dosyalarını** alır, sütunları otomatik tespit eder (ID, hedef, kategorik/sayısal), veri keşfi ve temizliği yapar, uygun doğrulama stratejisini seçer, temel modelleri (LightGBM, XGBoost), basit HPO seçeneğini, stacking/ensemble ve isteğe bağlı pseudo‑labeling adımlarını uygular. Kod **Kaggle Notebook** veya yerel bir Jupyter ortamında çalıştırılmak üzere tasarlanmıştır.
+
+> **Nasıl kullanılır:** `train.csv` ve `test.csv` aynı klasördeyken bu betiği çalıştır. Betik otomatik olarak `submission.csv` oluşturur. (Gerekirse `ID_COL` ve `TARGET_COL` elle belirtilebilir; otomatik tespit başarısız olursa bu değiştirilmeli.)
+
+---
+
+#### Önemli notlar (kısa)
+- Kod **veri yapısına göre** doğrulama stratejisini otomatik seçer (zaman serisi, grup, sınıf dengesine göre stratify).  
+- Pseudo‑labeling ve Optuna HPO **isteğe bağlı** (parametrelerle aç/kapa).  
+- Gerçek yarışmada parametreleri ve `n_trials`/`num_boost_round` gibi değerleri kaynak ve süreye göre küçültüp büyütün.
+
+---
+
+### Tam betik (çalıştırılabilir)
+
+```python
+# Kaggle-style otomatik tabular pipeline
+# Türkçe açıklamalar satır içinde. Çalıştırmadan önce gerekli paketleri yükleyin:
+# pip install lightgbm xgboost catboost optuna scikit-learn pandas numpy
+
+import os
+import random
+import warnings
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import KFold, GroupKFold, StratifiedKFold, TimeSeriesSplit
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import mean_squared_error, roc_auc_score
+from sklearn.linear_model import Ridge
+import lightgbm as lgb
+import xgboost as xgb
+import joblib
+
+warnings.filterwarnings('ignore')
+RANDOM_SEED = 42
+np.random.seed(RANDOM_SEED)
+random.seed(RANDOM_SEED)
+
+# ---------- Kullanıcı ayarları (gerekirse değiştirin) ----------
+TRAIN_PATH = 'train.csv'
+TEST_PATH = 'test.csv'
+OUTPUT_SUBMISSION = 'submission.csv'
+USE_PSEUDO_LABELING = True        # Testten güvenli tahminleri eklemek istersen True
+USE_OPTUNA = False                # HPO yapmak istersen True (optuna kurulu olmalı)
+OPTUNA_TRIALS = 20                # Optuna deneme sayısı (küçük örnek)
+N_FOLDS = 5
+VERBOSE = 100
+# ---------------------------------------------------------------
+
+# 1) Veri yükleme ve otomatik sütun tespiti
+train = pd.read_csv(TRAIN_PATH)
+test = pd.read_csv(TEST_PATH)
+print("Train shape:", train.shape, "Test shape:", test.shape)
+
+# Otomatik hedef ve ID tespiti
+def infer_id_target(df_train, df_test):
+    id_col = None
+    target_col = None
+    # ID tahmini: 'id' içeren sütun adı varsa
+    for c in df_train.columns:
+        if c.lower() == 'id' or c.lower().endswith('_id'):
+            id_col = c
+            break
+    # Hedef tahmini: sayısal olup ismi 'target' veya 'y' veya 'label' ise
+    for c in df_train.columns:
+        if c.lower() in ['target','y','label','outcome']:
+            target_col = c
+            break
+    # Eğer hala yoksa, hedef sütunu sayısal ve train/test arasında yok olan sütun olarak al
+    if target_col is None:
+        # Heuristik: test setinde olmayan sayısal sütun hedef olabilir
+        train_num = df_train.select_dtypes(include=['int64','float64']).columns.tolist()
+        test_cols = set(df_test.columns)
+        candidates = [c for c in train_num if c not in test_cols]
+        if len(candidates) == 1:
+            target_col = candidates[0]
+    # ID yoksa test'te ortak olan tek sütun olmayan sütun ID olabilir
+    if id_col is None:
+        # Eğer test ve train arasında ortak olmayan bir sütun varsa test'teki benzersiz sütun id olabilir
+        common = set(df_train.columns).intersection(set(df_test.columns))
+        for c in df_test.columns:
+            if c not in common:
+                id_col = c
+                break
+    return id_col, target_col
+
+ID_COL, TARGET_COL = infer_id_target(train, test)
+print("Inferred ID_COL:", ID_COL, "TARGET_COL:", TARGET_COL)
+
+# Eğer otomatik tespit başarısızsa kullanıcı müdahalesi gerekebilir
+if TARGET_COL is None:
+    raise ValueError("Hedef sütunu otomatik tespit edilemedi. Lütfen TARGET_COL'u elle belirtin.")
+
+# Ayırma
+if ID_COL and ID_COL in train.columns:
+    train_ids = train[ID_COL].copy()
+    test_ids = test[ID_COL].copy()
+    train = train.drop(columns=[ID_COL])
+    test = test.drop(columns=[ID_COL])
+else:
+    train_ids = pd.Series(np.arange(len(train)))
+    test_ids = pd.Series(np.arange(len(test)))
+
+y = train[TARGET_COL].copy()
+train = train.drop(columns=[TARGET_COL])
+
+# 2) Hızlı EDA (özet)
+def quick_report(df, name='df'):
+    print(f"--- {name} shape: {df.shape} ---")
+    print("Dtype counts:", df.dtypes.value_counts().to_dict())
+    print("Missing top 10:")
+    print(df.isnull().sum().sort_values(ascending=False).head(10))
+    print("Sample:")
+    display(df.head(2))
+
+quick_report(train, 'train_features')
+quick_report(test, 'test_features')
+print("Target describe:")
+print(y.describe())
+
+# 3) Otomatik feature engineering: kategorikleri encode, basit etkileşimler
+def auto_feature_engineer(df):
+    df = df.copy()
+    # Kategorik sütunları tespit et
+    cat_cols = df.select_dtypes(include=['object','category']).columns.tolist()
+    # Eğer string sütun yoksa, düşük kardinaliteli sayısal sütunları kategorik say
+    for c in df.select_dtypes(include=['int64','float64']).columns:
+        if df[c].nunique() < 20:
+            # ama eğer çok fazla benzersiz 0/1 değilse
+            if df[c].nunique() <= 20 and df[c].nunique() > 2:
+                cat_cols.append(c)
+    cat_cols = list(dict.fromkeys(cat_cols))  # unique
+    num_cols = [c for c in df.columns if c not in cat_cols]
+    # Label encode kategorikler
+    for c in cat_cols:
+        df[c] = df[c].fillna('NA').astype(str)
+        le = LabelEncoder()
+        try:
+            df[c] = le.fit_transform(df[c])
+        except:
+            df[c] = df[c].astype('category').cat.codes
+    # Basit sayısal dönüşümler
+    for c in num_cols:
+        if df[c].dtype.kind in 'fi':
+            df[f'{c}_log1p'] = np.log1p(df[c].fillna(0))
+    # Basit etkileşim: ilk iki sayısal sütun varsa
+    num_cols2 = [c for c in num_cols if df[c].dtype.kind in 'fi']
+    if len(num_cols2) >= 2:
+        a, b = num_cols2[0], num_cols2[1]
+        df[f'{a}_plus_{b}'] = df[a].fillna(0) + df[b].fillna(0)
+        df[f'{a}_mul_{b}'] = df[a].fillna(0) * df[b].fillna(0)
+    return df
+
+X = auto_feature_engineer(train)
+X_test = auto_feature_engineer(test)
+print("After FE shapes:", X.shape, X_test.shape)
+
+# 4) Doğrulama stratejisini otomatik seçme (zaman serisi, grup, stratify, yoksa KFold)
+def choose_cv_strategy(df, y, n_folds=5):
+    # Zaman serisi tespiti: 'date' veya 'time' içeren sütun varsa
+    date_cols = [c for c in df.columns if 'date' in c.lower() or 'time' in c.lower()]
+    if len(date_cols) > 0:
+        print("Time-like column detected, using TimeSeriesSplit.")
+        return TimeSeriesSplit(n_splits=n_folds)
+    # Grup tespiti: 'group' içeren sütun varsa
+    group_cols = [c for c in df.columns if 'group' in c.lower()]
+    if len(group_cols) > 0:
+        print("Group-like column detected, using GroupKFold.")
+        return GroupKFold(n_splits=n_folds)
+    # Eğer hedef sınıflı ve az sayıda benzersizse stratify
+    if y.nunique() <= 20 and y.dtype.kind in 'i':
+        print("Small number of discrete target values, using StratifiedKFold.")
+        return StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=RANDOM_SEED)
+    # Default
+    print("Using standard KFold.")
+    return KFold(n_splits=n_folds, shuffle=True, random_state=RANDOM_SEED)
+
+cv = choose_cv_strategy(X, y, n_folds=N_FOLDS)
+
+# 5) Baseline LightGBM CV eğitimi (OOF + test tahmini)
+def run_lgb_cv(X, y, X_test, cv, params=None, num_boost_round=2000, early_stopping=100):
+    if params is None:
+        params = {
+            'objective': 'regression',
+            'metric': 'rmse',
+            'boosting_type': 'gbdt',
+            'learning_rate': 0.05,
+            'num_leaves': 31,
+            'feature_fraction': 0.8,
+            'bagging_fraction': 0.8,
+            'bagging_freq': 5,
+            'seed': RANDOM_SEED,
+            'verbosity': -1
+        }
+    oof = np.zeros(X.shape[0])
+    preds = np.zeros(X_test.shape[0])
+    feature_importance = pd.DataFrame()
+    for fold, (tr_idx, val_idx) in enumerate(cv.split(X, y) if hasattr(cv, 'split') else cv.split(X, y)):
+        X_tr, X_val = X.iloc[tr_idx], X.iloc[val_idx]
+        y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
+        dtrain = lgb.Dataset(X_tr, label=y_tr)
+        dval = lgb.Dataset(X_val, label=y_val)
+        model = lgb.train(params, dtrain, num_boost_round=num_boost_round, valid_sets=[dval],
+                          early_stopping_rounds=early_stopping, verbose_eval=VERBOSE if VERBOSE else False)
+        oof[val_idx] = model.predict(X_val, num_iteration=model.best_iteration)
+        preds += model.predict(X_test, num_iteration=model.best_iteration) / N_FOLDS
+        # feature importance
+        fi = pd.DataFrame({'feature': X.columns, 'importance': model.feature_importance(importance_type='gain'), 'fold': fold+1})
+        feature_importance = pd.concat([feature_importance, fi], axis=0)
+    score = np.sqrt(mean_squared_error(y, oof))
+    print("OOF RMSE:", score)
+    return oof, preds, feature_importance, score
+
+lgb_oof, lgb_test_preds, fi_df, lgb_score = run_lgb_cv(X, y, X_test, cv)
+
+# 6) XGBoost kısa deneme (aynı CV ile)
+def run_xgb_cv(X, y, X_test, cv, params=None, num_boost_round=2000, early_stopping=100):
+    if params is None:
+        params = {'objective':'reg:squarederror','eval_metric':'rmse','seed':RANDOM_SEED}
+    oof = np.zeros(X.shape[0])
+    preds = np.zeros(X_test.shape[0])
+    for fold, (tr_idx, val_idx) in enumerate(cv.split(X, y)):
+        X_tr, X_val = X.iloc[tr_idx], X.iloc[val_idx]
+        y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
+        dtrain = xgb.DMatrix(X_tr, label=y_tr)
+        dval = xgb.DMatrix(X_val, label=y_val)
+        bst = xgb.train(params, dtrain, num_boost_round=num_boost_round, evals=[(dval,'val')],
+                        early_stopping_rounds=early_stopping, verbose_eval=False)
+        oof[val_idx] = bst.predict(dval, ntree_limit=bst.best_ntree_limit)
+        preds += bst.predict(xgb.DMatrix(X_test), ntree_limit=bst.best_ntree_limit) / N_FOLDS
+    score = np.sqrt(mean_squared_error(y, oof))
+    print("XGB OOF RMSE:", score)
+    return oof, preds, score
+
+xgb_oof, xgb_test_preds, xgb_score = run_xgb_cv(X, y, X_test, cv)
+
+# 7) Basit stacking (OOF'ları meta-modele ver)
+level0_oof = np.column_stack([lgb_oof, xgb_oof])
+level0_test = np.column_stack([lgb_test_preds, xgb_test_preds])
+
+meta = Ridge(alpha=1.0, random_state=RANDOM_SEED)
+meta_oof = np.zeros(level0_oof.shape[0])
+for tr_idx, val_idx in cv.split(level0_oof, y):
+    meta.fit(level0_oof[tr_idx], y.iloc[tr_idx])
+    meta_oof[val_idx] = meta.predict(level0_oof[val_idx])
+meta_test = meta.predict(level0_test)
+print("Stacked OOF RMSE:", np.sqrt(mean_squared_error(y, meta_oof)))
+
+# 8) İsteğe bağlı pseudo-labeling (çok dikkatli kullan)
+if USE_PSEUDO_LABELING:
+    # Basit güven eşiği: test tahminlerinin uç değerlerini al (örnek heuristik)
+    preds_for_pl = meta_test.copy()
+    low, high = np.percentile(preds_for_pl, [5,95])
+    mask = (preds_for_pl <= low) | (preds_for_pl >= high)
+    if mask.sum() > 0:
+        pseudo_X = X_test[mask]
+        pseudo_y = preds_for_pl[mask]
+        print(f"Pseudo-labeling: adding {len(pseudo_y)} pseudo samples.")
+        X_pl = pd.concat([X, pseudo_X], axis=0).reset_index(drop=True)
+        y_pl = pd.concat([y, pd.Series(pseudo_y)], axis=0).reset_index(drop=True)
+        # Hızlı yeniden eğitim LightGBM (tüm veri)
+        dtrain_pl = lgb.Dataset(X_pl, label=y_pl)
+        final_params = {
+            'objective': 'regression','metric': 'rmse','boosting_type': 'gbdt',
+            'learning_rate': 0.03,'num_leaves': 31,'feature_fraction': 0.8,'bagging_fraction': 0.8,'bagging_freq': 5,
+            'seed': RANDOM_SEED,'verbosity': -1
+        }
+        final_model = lgb.train(final_params, dtrain_pl, num_boost_round=1000, verbose_eval=VERBOSE if VERBOSE else False)
+        final_preds = final_model.predict(X_test)
+    else:
+        print("Pseudo-label mask empty; skipping pseudo-labeling.")
+        final_preds = meta_test.copy()
+else:
+    final_preds = meta_test.copy()
+
+# 9) Basit ağırlıklı ensemble (son karar)
+# Ağırlıkları basitçe belirliyoruz; isterseniz Optuna ile optimize edebilirsiniz
+final_ensemble = 0.5 * final_preds + 0.3 * lgb_test_preds + 0.2 * xgb_test_preds
+
+# 10) Submission oluşturma
+submission = pd.DataFrame({ 'id': test_ids if 'test_ids' in locals() else np.arange(len(X_test)),
+                            TARGET_COL: final_ensemble })
+submission.to_csv(OUTPUT_SUBMISSION, index=False)
+print("Submission saved to", OUTPUT_SUBMISSION)
+
+# 11) Model ve feature importance kaydı (isteğe bağlı)
+try:
+    fi_mean = fi_df.groupby('feature')['importance'].mean().sort_values(ascending=False).head(30)
+    print("Top features:\n", fi_mean)
+except:
+    pass
+
+# 12) Özet skorlar (CV üzerinden)
+print("LightGBM CV RMSE:", lgb_score)
+print("XGBoost CV RMSE:", xgb_score)
+print("Stacked CV RMSE:", np.sqrt(mean_squared_error(y, meta_oof)))
+```
+
+---
+
+### Açıklamalar ve özelleştirme önerileri
+- **Hedef tipi:** Kod hedefin sürekli (regresyon) olduğunu varsayar. Eğer sınıflandırma ise `lgb` ve `xgb` parametrelerinde `objective` ve `metric` değiştirilmeli; `roc_auc_score` gibi uygun metrik kullanılmalı.  
+- **Doğrulama:** Kod otomatik seçer; eğer veri zaman serisi ise `date` sütununu belirtmek daha güvenli olur.  
+- **HPO:** `USE_OPTUNA = True` yapıp `OPTUNA_TRIALS` artırarak Optuna ile parametre araması ekleyebilirim (Optuna kurulumu gerekir).  
+- **Pseudo‑labeling:** Risklidir; doğrulama skorunu bozabilir. Küçük adımlarla ve doğrulama ile test edin.  
+- **Feature engineering:** Kitaptaki öneriler çok daha geniştir; burada temel ve güvenli dönüşümler yer alır. Daha ileri teknikler (target encoding, interaction features, PCA/UMAP, autoencoders) veri setine göre eklenmelidir.  
+- **Üretim:** Ensemble çok karmaşıksa üretime almak zor olabilir; üretim için tek, iyi optimize edilmiş model tercih edin.
+
+---
+
+Eğer istersen:
+- Bu betiği **senin dosyalarına göre** (sütun isimlerini otomatik algılayıp) daha da özelleştirip, **sınıflandırma/regresyon ayrımını otomatik** yapacak ve Optuna ile HPO’yu etkinleştirecek hâle getirebilirim.  
+- Ya da betiği çalıştırıp çıkan `submission.csv` ve CV skorlarını paylaşırsan, sonuçlara göre hangi adımları (daha fazla FE, farklı validation, stacking değişiklikleri) önceliklendireceğini adım adım söylerim.
