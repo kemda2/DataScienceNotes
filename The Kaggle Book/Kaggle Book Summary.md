@@ -66,7 +66,11 @@ print(table)
 print(counts.sum()[counts.sum().comps == 1].index.values)
 ```
 
+### Bazı Kaggle kullanıcılarının kendi metriklerini kullanma örnekleri:
 
+* **Carlo Lepelaars** ile Spearman’s Rho: [Link](https://www.kaggle.com/carlolepelaars/understanding-the-metric-spearman-s-rho)
+* **Carlo Lepelaars** ile Quadratic Weighted Kappa: [Link](https://www.kaggle.com/carlolepelaars/understanding-the-metric-quadratic-weighted-kappa)
+* **Rohan Rao** ile Laplace Log Likelihood: [Link](https://www.kaggle.com/rohanrao/osic-understanding-laplace-log-likelihood)
 
 
 
@@ -76,4 +80,4 @@ print(counts.sum()[counts.sum().comps == 1].index.values)
 
 ```
 
-2090
+2142
