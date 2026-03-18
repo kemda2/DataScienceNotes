@@ -162,4 +162,4 @@ Beklendiği gibi, model sapması ve varyans genellikle birbirine karşıt olabil
 Şekil 1.5 (a), tek bir öngörücü ve sonuç içeren ve doğrusal olmayan ilişkiyi gösteren bir örnek sunar. Sağ panel (b), iki model uyumunu gösterir. Yeşil çizgi, üç noktalı basit hareketli ortalama ile çizilen eğriyi gösterir. Bu trend çizgisi düzensizdir ancak verideki doğrusal olmayan trendi iyi takip eder. Mor çizgi ise öngörücü değeri ve öngörücü karesini içeren standart bir lineer regresyon modelinin sonuçlarını gösterir. Lineer regresyon model parametrelerinde lineerdir ve polinom terimleri eklemek, modelin doğrusal olmayan desenleri tanımlamasına olanak sağlar. Veri noktaları y ekseninde düşükten başlasa, 0.3 değerine yaklaşsa ve ardından düşse, kuadratik regresyon modeli bu verileri modellemek için makul bir ilk denemedir. Bu model oldukça düzgün (düşük varyans gösterir) ancak veri trendine uymakta çok iyi değildir (yüksek sapma gösterir).
 
 ![](./img/005.png)
-
+Şekil 1.5: Simüle edilmiş bir veri seti ve üç noktalı hareketli ortalama (yeşil) ile kuadratik regresyon (mor) için model uyumları.
