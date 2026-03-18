@@ -163,3 +163,10 @@ Beklendiği gibi, model sapması ve varyans genellikle birbirine karşıt olabil
 
 ![](./img/005.png)
 Şekil 1.5: Simüle edilmiş bir veri seti ve üç noktalı hareketli ortalama (yeşil) ile kuadratik regresyon (mor) için model uyumları.
+
+Bu noktayı daha da vurgulamak için, orijinal verilere değerlerine küçük miktarlarda rastgele gürültü eklenerek (“jitter” yapılmış) birkaç kez değiştirilmiştir. Bu işlem yirmi kez tekrarlanmış ve her bir veri versiyonu için aynı iki model jitter uygulanmış verilere uydurulmuştur. Uydurulan eğriler Şekil 1.6’da gösterilmiştir. Hareketli ortalama, regresyon tahminlerinde belirgin bir gürültü seviyesi gösterse de, ortalama olarak veri desenlerini iyi bir şekilde takip etmeyi başarır. Kuadratik model ise ekstra gürültüden etkilenmemiş ve çok benzer (her ne kadar tam doğru olmasa da) model uyumları üretmiştir.
+
+Model yanlılığı (bias) ve varyansı (variance) kavramları bu metindeki fikirlerin merkezindedir. Daha önce de belirtildiği gibi, sadelik bir modelin önemli bir özelliğidir. Düşük varyanslı, düşük yanlılıkta bir model oluşturmanın bir yöntemi, düşük varyanslı bir modeli uygun veri temsilleri ile artırarak yanlılığı azaltmaktır. Bölüm 1.1’deki önceki örnek, bu sürecin basit bir örneğidir; yüksek yanlılık ve düşük varyans gösteren bir lojistik regresyon, öngörücü değişkenler üzerinde yapılan değişikliklerle geliştirilmiş ve düşük yanlılığa sahip bir sinir ağı modeli ile karşılaştırılabilir sonuçlar göstermiştir. Başka bir örnek olarak, Şekil 1.5(a)’daki veriler aşağıdaki denklem kullanılarak üretilmiştir.
+
+$y = x^3 + [\beta_1 \exp(\beta_2 (x - \beta_3)^2)] + \epsilon$
+
