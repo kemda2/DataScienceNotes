@@ -57,6 +57,8 @@ Bununla birlikte, doğruluk ciddi şekilde basitlik uğruna feda edilmemelidir. 
 Terminoloji açısından, modellenen veya tahmin edilen nicelik, **çıktı (outcome), yanıt (response) veya bağımlı değişken (dependent variable)** olarak adlandırılır. Çıktıyı modellemek için kullanılan değişkenler ise bağlama bağlı olarak **öngörücüler (predictors), özellikler (features) veya bağımsız değişkenler (independent variables)** olarak adlandırılır. Örneğin, bir evin satış fiyatını (çıktı) modellediğimizde, mülkün özellikleri (örneğin metrekare, yatak odası ve banyo sayısı) öngörücü olarak kullanılabilir (özellikler terimi de uygun olur). Ancak, birden fazla değişkeden türetilmiş yapay model terimlerini düşünelim; örneğin, her banyoya düşen yatak odası sayısı. Bu tür bir değişken daha uygun olarak bir **özellik (feature)** veya **türetilmiş özellik (derived feature)** olarak adlandırılabilir. Her durumda, özellikler ve öngörücüler, bir modelde çıktıyı açıklamak için kullanılır.
 
 ![](./img/001.png)
+Şekil 1.1: Ames, Iowa’daki satılık evler, mahallelere göre renklendirilmiş. Leaflet © OpenStreetMap © CartoDB
+
 
 Beklendiği gibi, bir modele değişken (predictor) eklemenin iyi ve kötü yolları vardır. Birçok durumda, temel bir bilginin birden fazla şekilde temsil edilmesi veya kodlanması mümkündür. Örneğin, bir mülkün satış fiyatını tahmin eden bir modeli ele alalım. Konum büyük olasılıkla çok önemlidir ve farklı şekillerde temsil edilebilir. Şekil 1.1, 2006 ile 2010 yılları arasında Ames, Iowa ve çevresinde satılan mülklerin konumlarını göstermektedir. Bu görselde renkler, bildirilen mahalleleri temsil etmektedir. Toplamda 29 mahalle yer almakta olup, mahalle başına düşen mülk sayısı Landmark’da bir adetken, North Ames’te 443’e kadar çıkmaktadır. Veride konumu temsil etmenin ikinci bir yolu ise boylam ve enlemdir. Bir emlakçı, okul bölgesinin önemli olabileceği düşünüldüğünde, modelde tahmin edici olarak posta kodunun (ZIP code) kullanılmasını önerebilir. Ancak bilgi kuramı açısından bakıldığında, boylam ve enlem fiziksel konumu ölçmek için en fazla özgüllüğü sağlar ve bu temsili bilgilerin daha yüksek içerikli olduğunu savunmak mümkün olabilir (tabii bu bilginin öngörücü olduğunu varsayarsak).
 
@@ -83,6 +85,8 @@ $\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 A + \beta_2 B$
 Burada (p), bir örneğin "PS" sınıfına ait olma olasılığıdır ve değerler, verilerden tahmin edilmesi gereken model parametreleridir.
 
 ![](./img/002.png)
+Şekil 1.2: (a) Bir örnek veri seti ve (b) basit bir lojistik regresyon modelinden ROC eğrisi.
+
 
 Standart bir yöntem (maksimum olabilirlik tahmini), verilerden üç regresyon parametresini tahmin etmek için kullanılır. Yazarlar, parametreleri tahmin etmek için 1009 veri noktası (yani bir eğitim seti) kullanmış ve performansı değerlendirmek için 1010 örneği kesinlikle ayırmışlardır (bir test seti). Eğitim seti kullanılarak parametreler sırasıyla şu şekilde tahmin edilmiştir:
 $\hat{\beta}_0 = 1.73$, $\hat{\beta}_1 = 0.00262$ ve $\hat{\beta}_2 = -0.0644$.
@@ -92,3 +96,70 @@ Modeli değerlendirmek için tahminler test seti üzerinde yapılır. Lojistik r
 Bu iki tahmin değişkeni göz önüne alındığında, ROC eğrisi altındaki alanı artırmak amacıyla farklı dönüşümler ve kodlamalar denemek mantıklı olacaktır. Tahmin değişkenlerinin her ikisi de sıfırdan büyük ve sağa çarpık dağılımlar sergilediğinden, A/B oranını alıp sadece bu terimi modele sokmak tercih edilebilir. Alternatif olarak, her bir tahmin değişkenine uygulanacak basit dönüşümlerin faydalı olup olmadığını da değerlendirebiliriz. Bunlardan biri Box-Cox dönüşümüdür; bu dönüşüm lojistik regresyon modelinden önce ayrı bir tahmin yöntemi kullanarak tahmin değişkenlerini yeni bir ölçeğe taşıyabilir. Bu yöntemi kullanarak yapılan Box-Cox tahmini, her iki tahmin değişkeninin ters ölçek (yani A yerine 1/A) kullanılması gerektiğini önermiştir. Bu verilerin dönüşmüş hali Şekil 1.3 (a)’da gösterilmiştir. Bu dönüşmüş değerler orijinal değerlerin yerine lojistik regresyon modeline girildiğinde, ROC eğrisi altındaki alan 0.794’ten 0.848’e yükselmiş ve bu önemli bir artıştır. Şekil 1.3 (b) her iki eğriyi göstermektedir. Bu durumda, dönüşmüş tahmin değişkenlerine karşılık gelen ROC eğrisi orijinal sonuçtan kesinlikle daha iyidir.
 
 ![](./img/003.png)
+Şekil 1.3: (a) Dönüştürülmüş değişkenler ve (b) her iki lojistik regresyon modeline ait ROC eğrisi.
+
+Bu örnek, değişkenlerde yapılan bir değişikliğin — bu durumda basit bir dönüşümün — modelin etkinliğini nasıl artırabileceğini göstermektedir. Şekil 1.2 (a) ve Şekil 1.3 (a)’daki veriler karşılaştırıldığında, iki veri grubunu görsel olarak ayırt etmek daha kolaydır. Veriler bireysel olarak dönüştürüldüğünde, lojistik regresyon modelinin sınıfları daha iyi ayırabilmesi sağlanmıştır. Ancak, değişkenlerin doğasına bağlı olarak, orijinal verilerin tersini kullanmak çıkarımsal analizleri zorlaştırabilir.
+
+Fakat farklı modellerin veriden farklı beklentileri vardır. Eğer orijinal değişkenlerin çarpıklığı lojistik regresyon modelini etkileyen sorun ise, bu özelliğe aynı şekilde duyarlı olmayan başka modeller de vardır. Örneğin, sinir ağları bu verileri değişkenlerin ters dönüşümünü kullanmadan da uyarlayabilir. Bu model, ROC eğrisi altındaki alanı 0.848 olarak elde etmiş ve bu da geliştirilmiş lojistik model sonuçlarına yaklaşık olarak eşdeğerdir. Buradan sinir ağlarının lojistik regresyondan her zaman daha iyi olduğu sonucu çıkarılmamalıdır; çünkü “Ücretsiz Yemek Yok” teoremi (bkz. Bölüm 1.2.3) bu tür genellemelere karşı uyarır. Ayrıca sinir ağlarının kendi dezavantajları vardır: tamamen yorumlanamazdır ve iyi sonuçlar için yoğun parametre ayarlaması gerektirir. Modelin nasıl kullanılacağına bağlı olarak, bu iki modelden biri veriler için diğerine göre daha avantajlı olabilir.
+
+Farklı özelliklerin modelleri nasıl farklı şekillerde etkileyebileceğine dair daha kapsamlı bir özet, Bölüm 1.3’te verilecektir. Bu örneğin öncesinde, bir sonraki bölümde bu metin boyunca kullanılacak birkaç temel kavram ele alınmıştır.
+
+---
+
+### 1.2 Önemli Kavramlar
+
+Belirli strateji ve yöntemlere geçmeden önce tartışılması gereken bazı temel kavramlar vardır. Bu kavramlar hem modellemenin teorik yönlerini hem de model oluşturma uygulamasını içerir. Burada bazıları ele alınacak, detaylar sonraki bölümlerde ve kaynaklarda verilecektir.
+
+#### 1.2.1 Aşırı Öğrenme (Overfitting)
+
+Aşırı öğrenme, bir modelin mevcut verilere çok iyi uyum sağlarken yeni örneklerde başarısız olması durumudur. Genellikle modelin mevcut veri setindeki belirli örüntü ve trendlere aşırı bağımlı hale gelmesiyle ortaya çıkar. Model sadece mevcut veri setine erişebildiğinden, bu örüntülerin anormal olduğunu anlayamaz. Örneğin, Şekil 1.1’deki konut verisinde, belirli bir metrekare aralığında ve üç yatak odalı evlerin satış fiyatlarının gerçeğe çok yakın tahmin edildiği görülebilir; ancak bu koşulları sağlayan başka evlerde model başarısız olabilir. Bu, yeni verilere genellenemeyen bir eğilimin örneğidir.
+
+Çok esnek modeller (Bölüm 1.2.5’te “düşük yanlı” modeller olarak adlandırılanlar) aşırı öğrenmeye daha yatkındır. Bu modeller mevcut veri setinde mükemmel sonuçlar verebilir ancak önlem alınmazsa yeni verilere genelleme yapamayabilir. İlerleyen bölümlerde, özellikle Bölüm 3.5’te, aşırı öğrenmenin modellemede temel risklerden biri olduğu vurgulanacaktır.
+
+Model aşırı öğrenebildiği gibi, değişken seçimi teknikleri de tahmin edicilere aşırı öğrenme yapabilir. Bu, bir değişkenin mevcut veri setinde ilgili görünmesi ancak yeni verilerle ilişkisinin kaybolması durumunda olur. Bu durum özellikle veri sayısı (n) az ve potansiyel değişken sayısı (p) çok fazla olduğunda risklidir. Bu sorun, oluştuğunda uyarı veren metodolojilerle azaltılabilir.
+
+#### 1.2.2 Denetimli ve Denetimsiz Yöntemler
+
+Denetimli analiz, tahmin ediciler ile modellenmesi ya da tahmin edilmesi gereken belirlenmiş sonuç arasındaki ilişkilerin bulunmasını amaçlarken, denetimsiz teknikler yalnızca tahmin ediciler arasındaki örüntüleri bulmaya odaklanır.
+
+Her iki analiz türü de keşifsel veri analizi (EDA) içerir. EDA, değişkenlerin ve sonuçların temel özelliklerini anlamak, korelasyon yapıları, eksik veri örüntüleri ve anormal motifleri keşfetmek için kullanılır.
+
+Tahmin modelleri kesinlikle denetimlidir çünkü doğrudan tahmin edici ve sonuç ilişkisi aranır. Denetimsiz analizler ise kümeleme, temel bileşen analizi gibi yöntemleri kapsar.
+
+Her iki tür analiz de aşırı öğrenmeye açıktır ancak denetimli analizler özellikle sonuç tahmini için yanlış örüntüler bulmaya eğilimlidir. Bu teknikler bazen kendini gerçekleştiren kehanet yaratabilir. Örneğin, bir analist önemli tahmin edicileri tespit etmek için denetimli analiz yapar ve aynı veriyle bu önemli tahmin edicilerin görselleştirmesini yaparsa, görselleştirme güçlü ilişkiler gösterir ancak bu ilişkiler sadece mevcut veriye özgüdür ve yeni veriye genellenmeyebilir (bkz. Bölüm 3.8).
+
+#### 1.2.3 Ücretsiz Yemek Yok (No Free Lunch) Teoremi
+
+“Ücretsiz Yemek Yok” Teoremi (Wolpert 1996), problem ya da veri hakkında özel bir bilgi olmadan en iyi tahmin modelinin olmadığı fikridir. Bazı modeller belirli veri özelliklerine (eksik değerler, çoklu bağlantı gibi) optimize edilmiş olabilir. Ancak genel olarak en iyi modelin önceden bilinmesi zordur.
+
+Demsar (2006) ve Fernandez-Delgado vd. (2014) gibi çalışmalar, bazı modellerin daha iyi sonuç verme eğiliminde olduğunu gösterse de, bir modelin her zaman en iyi olduğu söylenemez.
+
+Pratikte, farklı model türlerini denemek ve veri setinize en uygun olanı bulmak akıllıca olur.
+
+#### 1.2.4 Model ve Modelleme Süreci
+
+Etkili model geliştirme süreci hem yinelemeli hem sezgiseldir. Veri setinin ihtiyaçlarını önceden bilmek zordur ve model nihai hale gelmeden önce birçok yaklaşım denenip değiştirilir. Çoğu kaynak sadece modelleme tekniğine odaklanırken, bu etkinlik genellikle tüm sürecin küçük bir parçasıdır. Şekil 1.4, tipik bir problem için model oluşturma sürecinin genel bir şemasını göstermektedir.
+
+![](./img/004.png)
+Şekil 1.4: Tipik bir modelleme sürecinin şeması.
+
+Başlangıç etkinliği, (a) işaretinde başlar; burada keşifsel veri analizi (Exploratory Data Analysis, EDA) kullanılarak veriler incelenir. İlk keşiflerden sonra, (b) işareti erken veri analizinin yapılabileceği noktayı gösterir. Bu, basit özet ölçümleri değerlendirmek veya sonuçla güçlü korelasyona sahip öngörücüleri (predictor) belirlemek gibi işlemleri içerebilir. Süreç, modelleyici verilerin iyi anlaşıldığını hissedene kadar görselleştirme ve analiz arasında yinelenebilir. (c) işaretinde, önceki analizler temel alınarak öngörücülerin modelde nasıl temsil edileceğine dair ilk taslak oluşturulur.
+
+Bu noktada, ilk özellik setiyle çeşitli modelleme yöntemleri değerlendirilebilir. Ancak birçok model, ayarlanması gereken hiperparametreler içerebilir (d). Dört model kümesi, kırmızı ince işaretlerle gösterilmiştir ve her biri, aday hiperparametre değerleri üzerinde birden çok kez değerlendirilir. Bu model ayarlama süreci Bölüm 3.6’da ele alınmış ve sonraki bölümlerde birkaç kez gösterilmiştir. Dört model ayarlandıktan sonra, performans özelliklerini anlamak için sayısal olarak değerlendirilir (e). Her modelin doğruluk gibi özet ölçümleri, problemin zorluk seviyesini anlamak ve hangi modellerin veriye en uygun olduğunu belirlemek için kullanılır. Bu sonuçlara dayanarak, model sonuçları üzerinde daha fazla EDA yapılabilir (f), örneğin artık analizi (residual analysis). Önceki ev satış fiyatlarını tahmin etme örneğinde, kötü tahmin edilen mülkler incelenerek modelde sistematik bir sorun olup olmadığı anlaşılabilir. Örneğin, belirli posta kodları doğru tahmin edilemeyebilir. Bu nedenle, bu engelleri telafi etmek için başka bir özellik mühendisliği turu (g) uygulanabilir. Bu noktada, hangi modellerin probleme daha uygun olduğunu anlamak mümkün olabilir ve daha az sayıda model üzerinde daha kapsamlı bir ayarlama turu yapılabilir (h). Daha fazla ayarlama ve öngörücü temsilinin modifikasyonundan sonra, iki aday model (#2 ve #4) finalize edilir. Bu modeller, nihai “test” için dış bir test setinde değerlendirilebilir (i). Son model seçildikten sonra (j), bu uyarlanmış model, yeni örnekleri tahmin etmek veya çıkarım yapmak için kullanılacaktır.
+
+Bu şemanın amacı, sürecin yalnızca tek bir matematiksel modelin uydurulmasından ibaret olmadığını göstermektir. Çoğu problemde, herhangi bir model/özellik seti kombinasyonunun performansını değerlendiren ve yeniden değerlendiren geri besleme döngüleri bulunur.
+
+#### 1.2.5 Model Sapması ve Varyansı
+
+Varyans (variance), iyi bilinen bir kavramdır. Veri bağlamında kullanıldığında, değerlerin ne ölçüde değişebileceğini açıklar. Aynı nesne birden fazla ölçüldüğünde, gözlemlenen değerler bir dereceye kadar farklı olacaktır. İstatistikte, sapma (bias) genellikle bir şeyin gerçek temel değerinden ne ölçüde sapmış olduğunu ifade eder. Örneğin, bir konu hakkında kamuoyu tahmini yapmak isteyen bir anket, belirli bir demografiyi aşırı temsil ediyorsa sistematik olarak yanlı olabilir ve sapma oluşur.
+
+Modeller, varyans ve sapma açısından da değerlendirilebilir (Geman, Bienenstock ve Doursat 1992). Eğer küçük veri değişiklikleri model parametrelerinde büyük değişiklikler yaratıyorsa, model yüksek varyansa sahiptir. Örneğin, bir veri setinin örnek ortalaması, örnek medyanına göre daha yüksek varyansa sahiptir. Düşük varyanslı modeller, lineer regresyon, lojistik regresyon ve kısmi en küçük kareler (PLS) gibi yöntemleri içerir. Yüksek varyanslı modeller ise, parametrelerini belirlemek için tek tek veri noktalarına aşırı bağımlı olan sınıflandırma veya regresyon ağaçları, en yakın komşu ve sinir ağı modellerini içerir. Örneğin, lineer regresyon ve en yakın komşu modelleri karşılaştırılabilir: lineer regresyon, tüm verileri kullanarak eğim parametrelerini tahmin eder ve uç değerlere karşı hassas olmasına rağmen, en yakın komşu model kadar hassas değildir.
+
+Model sapması, bir modelin verinin temel teorik yapısına ne kadar uyum sağlayabildiğini gösterir. Düşük sapmalı bir model, yüksek esneklik sağlayabilir ve farklı şekil ve desenleri uydurabilir. Yüksek sapmalı bir model, değerleri gerçek teorik karşılıklarına yakın tahmin edemez. Lineer yöntemler genellikle yüksek sapmaya sahiptir çünkü öngörücü değişkenlerdeki doğrusal olmayan desenleri açıklayamazlar. Ağaç tabanlı modeller, destek vektör makineleri ve sinir ağları gibi yöntemler veriye oldukça uyum sağlayabilir ve düşük sapmaya sahiptir.
+
+Beklendiği gibi, model sapması ve varyans genellikle birbirine karşıt olabilir; düşük sapma elde etmek için modeller yüksek varyans gösterme eğilimindedir ve bunun tersi de geçerlidir. Varyans-sapma (variance-bias) takası, istatistikte sıkça karşılaşılan bir konudur. Çoğu model, modelin esnekliğini kontrol eden parametrelere sahiptir ve bu parametreler sonuçların varyans ve sapma özelliklerini etkiler. Örneğin, günlük bir hisse senedi fiyatı veri dizisini ele alalım. Hareketli ortalama modeli, belirli bir günün fiyatını, gün içindeki veri noktalarının ortalaması ile tahmin eder. Pencere boyutu, varyans ve sapmayı etkiler: küçük pencere, verilere daha duyarlıdır ve temel trendle eşleşme olasılığı yüksektir, fakat aynı zamanda pencere içi verilere yüksek duyarlılık kazandırır ve varyansı artırır. Pencereyi genişletmek, daha fazla nokta ortalaması alarak varyansı azaltır ancak veri düzleştirme nedeniyle sapmayı artırabilir.
+
+Şekil 1.5 (a), tek bir öngörücü ve sonuç içeren ve doğrusal olmayan ilişkiyi gösteren bir örnek sunar. Sağ panel (b), iki model uyumunu gösterir. Yeşil çizgi, üç noktalı basit hareketli ortalama ile çizilen eğriyi gösterir. Bu trend çizgisi düzensizdir ancak verideki doğrusal olmayan trendi iyi takip eder. Mor çizgi ise öngörücü değeri ve öngörücü karesini içeren standart bir lineer regresyon modelinin sonuçlarını gösterir. Lineer regresyon model parametrelerinde lineerdir ve polinom terimleri eklemek, modelin doğrusal olmayan desenleri tanımlamasına olanak sağlar. Veri noktaları y ekseninde düşükten başlasa, 0.3 değerine yaklaşsa ve ardından düşse, kuadratik regresyon modeli bu verileri modellemek için makul bir ilk denemedir. Bu model oldukça düzgün (düşük varyans gösterir) ancak veri trendine uymakta çok iyi değildir (yüksek sapma gösterir).
+
+![](./img/005.png)
+
