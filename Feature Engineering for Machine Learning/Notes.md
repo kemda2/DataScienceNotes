@@ -1146,6 +1146,45 @@ plt.show()
 
 ![](.\i\021.png)
 
+**"Sayılar arasında oldukça fazla örtüşme olduğu için, projeksiyonlu uzayda bunları ayırt etmek, doğrusal bir sınıflayıcı kullanarak zor olacaktır. Bu nedenle, görev elle yazılmış rakamları sınıflandırmak ve seçilen model doğrusal bir sınıflayıcıysa, ilk üç temel bileşen özellik olarak yeterli olmayacaktır. Bununla birlikte, sadece 3 boyutta 64 boyutlu bir veri setinin ne kadarının yakalanabileceğini görmek ilginçtir."**
+
+**Beyazlatma ve ZCA**
+
+**Doğrusal olmayan optimizasyon kısıtlaması nedeniyle PCA dönüşümü güzel bir yan etki üretir: dönüşmüş özellikler artık birbirleriyle ilişkili değildir. Başka bir deyişle, özellik vektörleri arasındaki iç çarpımlar sıfırdır. Bu, tekil vektörlerinin ortogonalite özelliğini kullanarak kolayca kanıtlanabilir:**
+
+$$
+[
+Z^T Z = \Sigma_k U_k^T U_k \Sigma_k = \Sigma_k^2
+]
+$$
+
+**Sonuç, her özellik vektörünün kendisiyle olan korelasyonunu temsil eden, tekil değerlerin karelerini içeren bir diagonal matristir; bu da onun ℓ2 normu olarak bilinir.**
+
+**Bazen, özelliklerin ölçeğini 1'e normalize etmek de faydalı olabilir. İşaret işleme terimleriyle bu işlem "beyazlatma" (whitening) olarak bilinir. Bu, kendisiyle birim korelasyona ve birbirleriyle sıfır korelasyona sahip bir özellik seti üretir. Matematiksel olarak, beyazlatma, PCA dönüşümünü ters tekil değerler ile çarparak yapılabilir (Bkz. Denklem 6-11).**
+
+**Denklem 6-11. PCA + beyazlatma**
+
+$[W_{\text{white}} = V_k \Sigma_k^{-1}]$
+
+$[Z_{\text{white}} = X V_k \Sigma_k^{-1} = U \Sigma V^T V_k \Sigma_k^{-1} = U_k]$
+
+**Beyazlatma, boyut indirgemeden bağımsızdır; biri yapılırken diğerini yapmayabilirsiniz. Örneğin, sıfır faz bileşeni analizi (ZCA) (Bell ve Sejnowski, 1996) bir beyazlatma dönüşümüdür ve PCA ile yakından ilişkilidir, ancak özellik sayısını azaltmaz. ZCA beyazlatması, azaltma olmadan tüm temel bileşenler seti **V**'yi kullanır ve ekstra bir çarpan olarak **V^T**'ye çarpmayı içerir (Bkz. Denklem 6-12).**
+
+**Denklem 6-12. ZCA beyazlatma**
+
+$$
+[
+W_{\text{ZCA}} = V \Sigma^{-1} V^T
+]
+$$
+$$
+[
+Z_{\text{zca}} = X V \Sigma^{-1} V^T = U \Sigma V^T V \Sigma^{-1} = U
+]
+$$
+
+**Basit PCA projeksiyonu (Denklem 6-10), temel bileşenlerin bir temel olarak hizmet ettiği yeni özellik uzayında koordinatlar üretir. Bu koordinatlar yalnızca projeksiyon vektörünün uzunluğunu temsil eder, yönünü değil. Temel bileşenlerle çarpma, bize hem uzunluğu hem de yönü verir. Başka bir geçerli yorum, ekstra çarpmanın koordinatları orijinal özellik uzayına geri döndürmesidir. (V, ortogonal bir matristir ve ortogonal matrisler, girişlerini germe veya sıkıştırma yapmadan döndürür.) Bu nedenle, ZCA, orijinal verilere mümkün olan en yakın şekilde (Öklidyen mesafede) beyazlatılmış veriler üretir."**
+
 
 
 
