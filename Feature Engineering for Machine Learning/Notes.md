@@ -274,7 +274,20 @@ Farklı λ Değerleri İçin Box-Cox Dönüşümleri
 ![](.\i\009.png)
 
 ```py
+from scipy import stats
 
+# Önceki örnekten devam edelim, varsayalım ki biz_df, Yelp işletme yorumları verisini içeriyor.
+# Box-Cox dönüşümü, girdi verisinin pozitif olduğunu varsayar.
+# En düşük değeri kontrol edelim, emin olalım.
+biz_df['review_count'].min()
+# 3
+
+# Girdi parametresi lmbda'yı 0 olarak ayarlamak, log dönüşümünü (sabit offset olmadan) verir.
+rc_log = stats.boxcox(biz_df['review_count'], lmbda=0)
+# SciPy'nin Box-Cox dönüşümü implementasyonu, çıktıyı normal dağılıma en yakın hale getirecek λ parametresini otomatik olarak bulur.
+rc_bc, bc_params = stats.boxcox(biz_df['review_count'])
+bc_params
+# -0.4106510862321085
 ```
 
 ---
