@@ -362,7 +362,7 @@ $$[
 
 ℓ2 normalizasyonunu görselleştiren bir örnek;
 
-![](.\i\01.png)
+![](.\i\012.png)
 
 
 
