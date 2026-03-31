@@ -107,6 +107,32 @@ ax.set_ylabel('Frekans', fontsize=14)
 
 ![](.\i\002.png)
 
+# Sayımları Kuantilere Göre Binlemek
+
+```py
+import pandas as pd
+
+# Sayımları çeyreklere (quartiles) ayıralım
+pd.qcut(large_counts, 4, labels=False)
+# array([1, 2, 3, 0, 0, 1, 1, 2, 2, 3, 3, 0, 0, 2, 1, 0, 3], dtype=int64)
+
+# Kuantilleri hesaplayalım
+large_counts_series = pd.Series(large_counts)
+large_counts_series.quantile([0.25, 0.5, 0.75])
+
+# 0.25    122.0
+# 0.50    926.0
+# 0.75    8286.0
+# dtype: float64
+```
+
+
+
+
+
+
+
+
 
 
 
