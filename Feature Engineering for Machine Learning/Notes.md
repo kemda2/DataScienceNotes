@@ -290,6 +290,47 @@ bc_params
 # -0.4106510862321085
 ```
 
+**Orijinal, Logaritma Dönüşümü Uygulanmış ve Box-Cox Dönüşümü Uygulanmış Yorum Sayılarının Histogramlarını Görselleştirme**
+
+```python
+fig, (ax1, ax2, ax3) = plt.subplots(3,1)
+# Orijinal yorum sayısı histogramı
+biz_df['review_count'].hist(ax=ax1, bins=100)
+ax1.set_yscale('log')
+ax1.tick_params(labelsize=14)
+ax1.set_title('Yorum Sayıları Histogramı', fontsize=14)
+ax1.set_xlabel('')
+ax1.set_ylabel('Frekans', fontsize=14)
+
+# Log dönüşümü uygulanmış yorum sayısı histogramı
+biz_df['rc_log'].hist(ax=ax2, bins=100)
+ax2.set_yscale('log')
+ax2.tick_params(labelsize=14)
+ax2.set_title('Log Dönüşümü Uygulanmış Yorum Sayıları Histogramı', fontsize=14)
+ax2.set_xlabel('')
+ax2.set_ylabel('Frekans', fontsize=14)
+
+# Box-Cox dönüşümü uygulanmış yorum sayısı histogramı
+biz_df['rc_bc'].hist(ax=ax3, bins=100)
+ax3.set_yscale('log')
+ax3.tick_params(labelsize=14)
+ax3.set_title('Box-Cox Dönüşümü Uygulanmış Yorum Sayıları Histogramı', fontsize=14)
+ax3.set_xlabel('')
+ax3.set_ylabel('Frekans', fontsize=14)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 ---
 ---
