@@ -887,6 +887,16 @@ Kısacası, **bin sayma**, bir kategorik değişkeni, değeriyle ilgili istatist
 
 ![](.\i\015.png)
 
+Uygulama açısından, bin sayma, her kategoriyi ve buna bağlı sayıları arasında bir harita depolamayı gerektirir. (Diğer istatistikler, ham sayılardan anlık olarak türetilebilir.) Bu nedenle, kategorik değişkenin benzersiz değerlerinin sayısı olan k'ya bağlı olarak O(k) bellek alanı gerektirir.
+
+Bin saymayı pratikte göstermek için, Avazu tarafından düzenlenen bir Kaggle yarışmasından verileri kullanacağız. İşte veri seti hakkında bazı önemli istatistikler:
+
+24 değişken vardır, bunlar arasında click (tıklama/tıklamama sayacı) ve device_id (bir reklamın hangi cihazda gösterildiğini takip eden bir değişken) bulunmaktadır.
+Tam veri seti 40.428.967 gözlem içerir ve 2.686.408 benzersiz cihaz bulunmaktadır.
+
+Avazu yarışmasının amacı, reklam verilerini kullanarak tıklama oranını tahmin etmekti, ancak biz bu veri setini, bin sayma tekniğinin, büyük miktarda akış verisi için özellik alanını nasıl büyük ölçüde azaltabileceğini göstermek için kullanacağız (Bkz. Örnek 5-6).
+
+
 
 ---
 ---
