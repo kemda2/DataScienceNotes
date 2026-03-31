@@ -1,6 +1,9 @@
 # Dinleme Sayısını Binleme
 
-![](image.png)
+
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
 ```py
 import pandas as pd
 listen_count = pd.read_csv('millionsong/train_triplets.txt.zip', header=None, delimiter='\t')
