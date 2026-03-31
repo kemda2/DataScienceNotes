@@ -419,13 +419,250 @@ ax4.set_ylabel('Makale Sayısı', fontsize=14)
 
 ![](.\i\013.png)
 
+# İnteraksiyon Özellikleri
 
+Basit bir çiftli etkileşim özelliği, iki özelliğin çarpımıdır. Bu, **mantıksal AND** ile benzer bir analojidir. Çiftli etkileşim, bir dizi koşul açısından sonucu ifade eder: "satın alma 98121 posta kodundan geliyor" **VE** "kullanıcının yaşı 18 ile 35 arasında". **Karar ağacı tabanlı modeller** bunu otomatik olarak alır, ancak genelleştirilmiş doğrusal modeller genellikle etkileşim özelliklerinden çok faydalanır.
 
+Bir basit doğrusal model, bireysel girdi özelliklerinin **x1, x2, ... xn** doğrusal birleşimini kullanarak sonucu **y** tahmin eder:
 
+$$
+[
+y = w_1 x_1 + w_2 x_2 + ... + w_n x_n
+]
+$$
 
+Doğrusal modeli kolayca genişletmenin bir yolu, girdi özelliklerinin çiftlerinin kombinasyonlarını dahil etmektir:
 
+$$
+[
+y = w_1 x_1 + w_2 x_2 + ... + w_n x_n + w_{1,1} x_1 x_1 + w_{1,2} x_1 x_2 + w_{1,3} x_1 x_3 + ...
+]
+$$
 
+Bu, özellikler arasındaki etkileşimleri yakalamamıza olanak tanır ve bu çiftler **etkileşim özellikleri** olarak adlandırılır. Eğer **x1** ve **x2** ikili (binary) ise, o zaman **x1 x2** çarpımı, **x1 VE x2** mantıksal fonksiyonunu temsil eder. Örneğin, müşteri tercihini **yaş** ve **lokasyon** bilgisi üzerinden tahmin etmeye çalışalım. Bu örnekte, yalnızca kullanıcının yaşı ya da lokasyonu üzerinden tahmin yapmak yerine, etkileşim özellikleri, modelin kullanıcının belirli bir yaşta **VE** belirli bir lokasyonda olduğunu göz önünde bulundurarak tahmin yapmasına olanak tanır.
 
+**Örnek 2-17**, **UCI Online News Popularity** veri kümesindeki çiftli etkileşim özelliklerini kullanarak her haber makalesi için **paylaşım sayısını** tahmin eder. Sonuçlar, etkileşim özelliklerinin, yalnızca tekil özelliklere kıyasla doğruluğu biraz artırdığını göstermektedir. Her iki yöntem, **Örnek 2-9**'da kullanılan tek bir özellik olan makalenin **kelime sayısının** (log dönüşümü uygulanmış veya uygulanmamış) tahmin olarak kullanıldığı modelden daha iyi performans göstermektedir.
+
+**Örnek 2-17. Tahminde Etkileşim Özelliklerinin Kullanımı**
+
+```python 
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
+import sklearn.preprocessing as preproc
+
+# Varsayalım ki df, UCI Online News Popularity veri kümesini içeren bir Pandas DataFrame'dir
+df.columns
+Index(['url', 'timedelta', 'n_tokens_title', 'n_tokens_content', 
+'n_unique_tokens', 'n_non_stop_words', 'n_non_stop_unique_tokens', 
+'num_hrefs', 'num_self_hrefs', 'num_imgs', 'num_videos', 
+'average_token_length', 'num_keywords', 'data_channel_is_lifestyle', 
+'data_channel_is_entertainment', 'data_channel_is_bus', 
+'data_channel_is_socmed', 'data_channel_is_tech', 'data_channel_is_world', 
+'kw_min_min', 'kw_max_min', 'kw_avg_min', 'kw_min_max', 'kw_max_max', 
+'kw_avg_max', 'kw_min_avg', 'kw_max_avg', 'kw_avg_avg', 
+'self_reference_min_shares', 'self_reference_max_shares', 
+'self_reference_avg_sharess', 'weekday_is_monday', 'weekday_is_tuesday', 
+'weekday_is_wednesday', 'weekday_is_thursday', 'weekday_is_friday', 
+'weekday_is_saturday', 'weekday_is_sunday', 'is_weekend', 'LDA_00', 
+'LDA_01', 'LDA_02', 'LDA_03', 'LDA_04', 'global_subjectivity', 
+'global_sentiment_polarity', 'global_rate_positive_words', 
+'global_rate_negative_words', 'rate_positive_words', 'rate_negative_words', 
+'avg_positive_polarity', 'min_positive_polarity', 'max_positive_polarity', 
+'avg_negative_polarity', 'min_negative_polarity', 'max_negative_polarity', 
+'title_subjectivity', 'title_sentiment_polarity', 'abs_title_subjectivity', 
+'abs_title_sentiment_polarity', 'shares'], dtype='object')
+
+# Modelde özellikleri tekil özellikler olarak seçin, türetilmiş özellikleri geçin
+features = ['n_tokens_title', 'n_tokens_content', 
+'n_unique_tokens', 'n_non_stop_words', 'n_non_stop_unique_tokens', 
+'num_hrefs', 'num_self_hrefs', 'num_imgs', 'num_videos', 
+'average_token_length', 'num_keywords', 'data_channel_is_lifestyle', 
+'data_channel_is_entertainment', 'data_channel_is_bus', 
+'data_channel_is_socmed', 'data_channel_is_tech', 'data_channel_is_world']
+X = df[features]
+y = df[['shares']]
+
+# Çiftli etkileşim özelliklerini oluşturun, sabit bias terimini atlayın
+X2 = preproc.PolynomialFeatures(include_bias=False).fit_transform(X)
+X2.shape
+(39644, 170)
+
+# Hem özellik setleri için eğitim/test setlerini oluşturun
+X1_train, X1_test, X2_train, X2_test, y_train, y_test = \
+train_test_split(X, X2, y, test_size=0.3, random_state=123)
+
+def evaluate_feature(X_train, X_test, y_train, y_test):
+    """Eğitim setinde doğrusal regresyon modelini eğitin ve 
+    test setinde skor yapın"""
+    model = linear_model.LinearRegression().fit(X_train, y_train)
+    r_score = model.score(X_test, y_test)
+    return (model, r_score)
+
+# Modelleri eğitin ve iki özellik setiyle karşılaştırma yapın
+(m1, r1) = evaluate_feature(X1_train, X1_test, y_train, y_test)
+(m2, r2) = evaluate_feature(X2_train, X2_test, y_train, y_test)
+print("Tekil özelliklerle R-kare skoru: %0.5f" % r1)
+print("Çiftli özelliklerle R-kare skoru: %0.10f" % r2)
+# Tekil özelliklerle R-kare skoru: 0.00924
+# Çiftli özelliklerle R-kare skoru: 0.0113276523
+```
+
+**Etkileşim Özelliklerinin Avantajları ve Zorlukları**
+
+Etkileşim özellikleri çok basit bir şekilde formüle edilebilir, ancak bunları kullanmak maliyetli olabilir. Çiftli etkileşim özellikleri içeren bir doğrusal modelin eğitim ve skorlama süresi, **O(n)**'den **O(n²)**'ye çıkar, burada **n** tekil özelliklerin sayısını ifade eder.
+
+Daha yüksek dereceli etkileşim özelliklerinin **hesaplama maliyetinden kaçınmak** için birkaç yol vardır. Biri, tüm etkileşim özellikleri üzerinde **özellik seçimi** yapmaktır. Alternatif olarak, daha küçük sayıda karmaşık özellik tasarlayarak bu durumu aşabilirsiniz. Her iki stratejinin de avantajları ve dezavantajları vardır. **Özellik seçimi**, bir problemin en iyi özelliklerini seçmek için hesaplama yöntemleri kullanır (bu teknik yalnızca etkileşim özellikleriyle sınırlı değildir). Ancak, bazı özellik seçimi teknikleri hâlâ **çok sayıda özellik** ile birden fazla model eğitmeyi gerektirir.
+
+**El yapımı karmaşık özellikler**, yalnızca küçük bir sayıda kullanıldığında yeterince ifade edici olabilir, bu da modelin eğitim süresini kısaltır, ancak özelliklerin kendisi **hesaplama maliyetini** artırabilir ve modelin skorlama aşamasını zorlaştırabilir. El yapımı (veya makineyle öğrenilen) karmaşık özelliklerin iyi örneklerine **Bölüm 8**'de göz atabilirsiniz. Şimdi, bazı **özellik seçimi tekniklerine** göz atalım.
+
+**Özellik Seçimi**
+
+Özellik seçimi teknikleri, son modelin karmaşıklığını azaltmak için faydasız özellikleri **keser**. Nihai hedef, tahmin doğruluğunda fazla bir kayıp olmadan daha hızlı hesaplanabilen **basit bir model** elde etmektir. Böyle bir modele ulaşmak için, bazı özellik seçimi teknikleri birden fazla aday modelin eğitilmesini gerektirir. Diğer bir deyişle, özellik seçimi **eğitim süresini azaltmak** ile ilgili değildir—bazı teknikler genel eğitim süresini artırsa da, **modelin skorlama süresini azaltmak** ile ilgilidir.
+
+Genel olarak, özellik seçimi teknikleri üç ana sınıfa ayrılır:
+
+**Filtreleme (Filtering)**
+
+Filtreleme teknikleri, özellikleri önceden işleyerek model için faydalı olmayacak olanları **ayıklar**. Örneğin, her bir özellik ile hedef değişken arasındaki **korelasyonu** veya **karşılıklı bilgi**yi hesaplayabilir ve eşiğin altında kalan özellikleri filtreleyebilirsiniz. **Bölüm 3**, metin özellikleri için bu tekniklere örnekler sunmaktadır. Filtreleme teknikleri, aşağıda açıklanan **sarma (wrapper)** yöntemlerinden çok daha ucuzdur, ancak kullanılan modelin dikkate alınmaması nedeniyle **doğru özellikleri seçemeyebilirler**. Bu yüzden, özellikleri **model eğitim adımına geçmeden** önce yanlışlıkla faydalı özellikleri elememek için **filtrelemeyi dikkatli yapmak** en iyisidir.
+
+**Sarma Yöntemleri (Wrapper Methods)**
+
+Bu yöntemler pahalıdır, ancak **özelliklerin alt kümelerini** denemenize olanak tanır, yani yalnızca kendileri faydalı olmayan ancak bir arada kullanıldığında faydalı olan özellikleri **yanlışlıkla elemek**ten kaçınırsınız. Sarma yöntemi, modeli **kara kutu** olarak kabul eder ve önerilen özellik alt kümesinin **kalite skorunu** sağlar. Bu süreçte, alt küme kademeli olarak iyileştirilir.
+
+**Gömülü Yöntemler (Embedded Methods)**
+
+Bu yöntemler, **özellik seçimini** model eğitim sürecinin bir parçası olarak gerçekleştirir. Örneğin, **karar ağaçları**, her eğitim adımında ağacı bölecek bir özellik seçtiği için doğal olarak **özellik seçimi** yapar. Bir diğer örnek, herhangi bir **doğrusal modelin eğitim hedefine** eklenebilecek **ℓ1 düzenleyicisidir**. ℓ1 düzenleyicisi, **az sayıda özellik** kullanan modelleri teşvik eder, bu nedenle **modelde seyreklik kısıtlaması** olarak da bilinir. Gömülü yöntemler, model eğitim sürecinin bir parçası olarak özellik seçimi gerçekleştirir. Sarma yöntemlerinden daha güçlü değillerdir, ancak çok da pahalı değildirler. Filtrelemeyle karşılaştırıldığında, gömülü yöntemler, modele özgü özellikleri seçer. Bu açıdan bakıldığında, gömülü yöntemler **hesaplama maliyeti** ile **sonuç kalitesi** arasında bir denge kurar.
+
+Özellik seçimi hakkında kapsamlı bir inceleme, bu kitabın kapsamı dışındadır. İlgilenen okurlar, **Guyon ve Elisseeff (2003)** tarafından yapılan anket makalesine başvurabilirler.
+
+# Text Data: Flattening, Filtering and Chunking (Geçtim 2 bölümü)
+
+# One-Hot Kodlama
+
+Daha iyi bir yöntem, bir grup **bit** kullanmaktır. Her bit, olası bir kategoriyi temsil eder. Eğer değişken aynı anda birden fazla kategoriye ait olamazsa, o zaman gruptaki yalnızca bir bit "açık" olabilir. Bu yönteme **one-hot encoding** (tek sıcak kodlama) denir ve **scikit-learn**'de **sklearn.preprocessing.OneHotEncoder** olarak uygulanmıştır. Her bir bit, bir özelliktir. Bu nedenle, **k** olası kategorisi olan bir kategorik değişken, **k uzunluğunda** bir özellik vektörü olarak kodlanır. **Tablo 5-1**'de bir örnek gösterilmektedir.
+
+**Tablo 5-1: Üç Şehir İçin One-Hot Kodlaması**
+
+| Şehir    | One-Hot Kodlama |
+| -------- | --------------- |
+| Paris    | [1, 0, 0]       |
+| New York | [0, 1, 0]       |
+| Londra   | [0, 0, 1]       |
+
+Bu tabloda, her şehir için bir **bit dizisi** yer alır. Paris, **[1, 0, 0]** ile temsil edilir, New York **[0, 1, 0]** ve Londra ise **[0, 0, 1]** ile temsil edilir. Bu şekilde her kategoriye karşılık gelen bir vektör oluşturulur ve bu, metni sayısal bir formata dönüştürmek için yaygın bir yöntemdir.
+
+# Dummy Kodlama
+
+**One-hot encoding**'in problemi, **k** serbestlik derecesi sağlamasıdır, ancak değişkenin kendisi yalnızca **k-1** serbestlik derecesine ihtiyaç duyar. **Dummy kodlama**, temsil için yalnızca **k-1** özellik kullanarak fazla serbestlik derecesini ortadan kaldırır (bkz. Tablo 5-2). Bir özellik "atılır" ve **tüm sıfırlardan oluşan vektörle** temsil edilir. Buna **referans kategori** denir. **Dummy kodlama** ve **one-hot encoding**, Pandas'ta **pandas.get_dummies** olarak uygulanır.
+
+**Tablo 5-2. Üç şehir için Dummy kodlama**
+
+|               | e1 | e2 |
+| ------------- | -- | -- |
+| San Francisco | 1  | 0  |
+| New York      | 0  | 1  |
+| Seattle       | 0  | 0  |
+
+Dummy kodlama ile yapılan modellemenin çıktısı, **one-hot encoding**'e kıyasla daha **yorumlanabilir**dir. Bu, basit bir **doğrusal regresyon problemi** ile kolayca görülebilir. Diyelim ki, üç şehirdeki daire kiralama fiyatları hakkında bazı verilerimiz var: **San Francisco**, **New York** ve **Seattle** (bkz. Tablo 5-3).
+
+**Tablo 5-3. Üç şehirdeki daire fiyatlarına ait toy veri kümesi**
+
+| Şehir   | Kira |
+| ------- | ---- |
+| SF      | 3999 |
+| SF      | 4000 |
+| SF      | 4001 |
+| NYC     | 3499 |
+| NYC     | 3500 |
+| NYC     | 3501 |
+| Seattle | 2499 |
+| Seattle | 2500 |
+| Seattle | 2501 |
+
+**Bir Kategorik Değişken Üzerinde Doğrusal Regresyon Kullanmak**
+
+Sadece şehrin kimliğine dayalı olarak kira fiyatını tahmin etmek için bir **doğrusal regresyon** modeli eğitebiliriz (Örnek 5-1'e bakınız).
+Doğrusal regresyon modeli şu şekilde yazılabilir:
+$$
+( y = w_1x_1 + ... + w_nx_n )
+$$
+Bir ekstra sabit terim olan **intercept** (kesme) teriminin eklenmesi yaygındır, böylece ( y ) sıfır olmayan bir değeri alabilir, özellikle de ( x )'lar sıfır olduğunda:
+$$
+( y = w_1x_1 + ... + w_nx_n + b )
+$$
+
+**Örnek 5-1. Kategorik Değişken Üzerinde One-Hot ve Dummy Kodları Kullanarak Doğrusal Regresyon**
+
+```python
+import pandas
+from sklearn import linear_model
+
+# New York, San Francisco ve Seattle'daki daire kira fiyatlarına ait toy veri kümesi tanımlıyoruz
+df = pd.DataFrame({
+    'City': ['SF', 'SF', 'SF', 'NYC', 'NYC', 'NYC',
+    'Seattle', 'Seattle', 'Seattle'],
+    'Rent': [3999, 4000, 4001, 3499, 3500, 3501, 2499, 2500, 2501]
+    })
+df['Rent'].mean()
+# 3333.3333333333335
+
+# DataFrame'deki kategorik değişkenleri one-hot encoding kullanarak dönüştürün ve bir doğrusal regresyon modeli eğitin
+one_hot_df = pd.get_dummies(df, prefix=['city'])
+one_hot_df
+   Rent  city_NYC  city_SF  city_Seattle
+0  3999       0.0      1.0           0.0
+1  4000       0.0      1.0           0.0
+2  4001       0.0      1.0           0.0
+3  3499       1.0      0.0           0.0
+4  3500       1.0      0.0           0.0
+5  3501       1.0      0.0           0.0
+6  2499       0.0      0.0           1.0
+7  2500       0.0      0.0           1.0
+8  2501       0.0      0.0           1.0
+
+model = linear_model.LinearRegression()
+model.fit(one_hot_df[['city_NYC', 'city_SF', 'city_Seattle']],
+    one_hot_df['Rent'])
+
+model.coef_
+# array([ 166.66666667,  666.66666667, -833.33333333])
+
+model.intercept_
+# 3333.3333333333335
+
+# Dummy kodlamada bir doğrusal regresyon modeli eğitin
+# 'drop_first' bayrağını belirleyin, böylece dummy kodlama elde edelim
+dummy_df = pd.get_dummies(df, prefix=['city'], drop_first=True)
+dummy_df
+#    Rent  city_SF  city_Seattle
+# 0  3999      1.0           0.0
+# 1  4000      1.0           0.0
+# 2  4001      1.0           0.0
+# 3  3499      0.0           0.0
+# 4  3500      0.0           0.0
+# 5  3501      0.0           0.0
+# 6  2499      0.0           1.0
+# 7  2500      0.0           1.0
+# 8  2501      0.0           1.0
+
+model.fit(dummy_df[['city_SF', 'city_Seattle']], dummy_df['Rent'])
+model.coef_
+# array([ 500., -1000.])
+
+model.intercept_
+# 3500.0
+```
+
+**One-hot encoding** ile, intercept terimi hedef değişken **Rent**'in global ortalamasını temsil eder ve her bir doğrusal katsayı, o şehrin ortalama kirasının global ortalamadan ne kadar farklı olduğunu gösterir.
+
+**Dummy kodlama** ile ise, bias (sapma) katsayısı, referans kategori için yanıt değişkeni ( y )'nin ortalama değerini temsil eder. Bu örnekte referans kategori **NYC**'dir. ( i )'inci özellik için katsayı, o şehirdeki yanıt değeri ile referans kategorinin yanıt değeri arasındaki farktır.
+
+Tablo 5-4'te, bu yöntemlerin doğrusal modeller için nasıl çok farklı katsayılar ürettiğini net bir şekilde görebilirsiniz.
+
+|                  | x1     | x2     | x3      | b       |
+| ---------------- | ------ | ------ | ------- | ------- |
+| One-hot encoding | 166.67 | 666.67 | –833.33 | 3333.33 |
+| Dummy coding     | 0      | 500    | –1000   | 3500    |
 
 
 
