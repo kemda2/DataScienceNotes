@@ -1,6 +1,6 @@
 # Dinleme Sayısını Binleme
 
-![Million Song Dataset'in Taste Profile Alt Kümesindeki Dinleme Sayılarının Histogramı — y Ekseni Logaritmik Ölçektedir](image.png)
+![](.\i\00.png)
 ```py
 import pandas as pd
 listen_count = pd.read_csv('millionsong/train_triplets.txt.zip', header=None, delimiter='\t')
