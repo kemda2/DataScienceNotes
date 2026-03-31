@@ -664,6 +664,77 @@ Tablo 5-4'te, bu yöntemlerin doğrusal modeller için nasıl çok farklı katsa
 | One-hot encoding | 166.67 | 666.67 | –833.33 | 3333.33 |
 | Dummy coding     | 0      | 500    | –1000   | 3500    |
 
+# Etkileşim Kodlama (Effect Coding)
+
+Kategorik değişken kodlamasının bir başka varyantı **etkileşim kodlama**dır. Etkileşim kodlama, **dummy kodlama**ya çok benzer, ancak farkı, referans kategorisinin artık **tüm –1’lerden oluşan vektörle** temsil edilmesidir.
+
+**Tablo 5-5. Üç şehri temsil eden kategorik değişkenin etkileşim kodlaması**
+
+| e1            | e2 |    |
+| ------------- | -- | -- |
+| San Francisco | 1  | 0  |
+| New York      | 0  | 1  |
+| Seattle       | -1 | -1 |
+
+Etkileşim kodlama, dummy kodlamaya çok benzer, ancak doğrusal regresyon modelleri **çok daha basit** bir şekilde yorumlanabilir. **Örnek 5-2**, etkileşim kodlama ile verilen girdilerle ne olduğunu gösterir. **Intercept** terimi hedef değişkenin global ortalamasını temsil eder ve bireysel katsayılar, her bir kategorinin ortalamasının global ortalamadan ne kadar farklı olduğunu gösterir. (Bu, kategorinin **ana etkisi** olarak adlandırılır, bu yüzden **"etkileşim kodlama"** adı verilmiştir.) **One-hot encoding** aslında aynı intercept ve katsayıları elde eder, ancak bu durumda her şehir için doğrusal katsayılar vardır. Etkileşim kodlamada ise, referans kategoriyi temsil eden tek bir özellik yoktur, bu nedenle referans kategorisinin etkisi, diğer tüm kategorilerin katsayılarının negatif toplamı olarak ayrı ayrı hesaplanmalıdır. (Daha fazla bilgi için UCLA IDRE web sitesindeki **“FAQ: What is effect coding?”** başlığına bakınız.)
+
+**Örnek 5-2. Etkileşim Kodlama ile Doğrusal Regresyon**
+
+```python
+>>> effect_df = dummy_df.copy()
+>>> effect_df.ix[3:5, ['city_SF', 'city_Seattle']] = -1.0
+>>> effect_df
+   Rent  city_SF  city_Seattle
+0  3999      1.0           0.0
+1  4000      1.0           0.0
+2  4001      1.0           0.0
+3  3499     -1.0          -1.0
+4  3500     -1.0          -1.0
+5  3501     -1.0          -1.0
+6  2499      0.0           1.0
+7  2500      0.0           1.0
+8  2501      0.0           1.0
+>>> model.fit(effect_df[['city_SF', 'city_Seattle']], effect_df['Rent'])
+
+>>> model.coef_
+array([ 666.66666667, -833.33333333])
+
+>>> model.intercept_
+3333.3333333333335
+```
+
+# Kategorik Değişken Kodlamalarının Avantajları ve Dezavantajları
+
+**One-hot**, **dummy** ve **effect kodlama** birbirine çok benzer. Her birinin avantajları ve dezavantajları vardır. **One-hot encoding** tekrarcıdır, bu da aynı problem için birden fazla geçerli modelin olmasını sağlar. Bu çokluk bazen yorumlama için problem yaratabilir, ancak avantajı, her bir özelliğin açıkça bir kategoriye karşılık gelmesidir. Ayrıca, eksik veriler **tüm sıfırlar vektörü** olarak kodlanabilir ve çıktı, hedef değişkenin genel ortalaması olmalıdır.
+
+**Dummy coding** ve **effect coding** tekrarcı değildir. Bunlar benzersiz ve yorumlanabilir modeller oluşturur. **Dummy coding**'in dezavantajı, eksik verilerle kolayca başa çıkamamasıdır, çünkü tüm sıfırlar vektörü zaten referans kategoriye eşlenmiştir. Ayrıca, her kategorinin etkisini referans kategoriye göre kodlar, bu da garip görünebilir.
+
+**Effect coding**, referans kategorisi için farklı bir kod kullanarak bu sorunu çözer, ancak **tüm -1'ler vektörü** yoğun bir vektördür, bu da hem depolama hem de hesaplama açısından pahalıdır. Bu nedenle, popüler makine öğrenimi yazılım paketleri (örneğin Pandas ve scikit-learn), **effect coding** yerine **dummy coding** veya **one-hot encoding** kullanmayı tercih etmektedir.
+
+Üç kodlama tekniği de kategorilerin sayısı çok büyük olduğunda verimsiz hale gelir. **Aşırı büyük kategorik değişkenleri** ele almak için farklı stratejiler gereklidir.
+
+---
+
+**Büyük Kategorik Değişkenlerle Baş Etme**
+
+İnternette otomatik veri toplama, büyük kategorik değişkenler üretebilir. Bu, hedefli reklamcılık ve dolandırıcılık tespiti gibi uygulamalarda yaygındır.
+
+* **Hedefli reklamcılık** uygulamasında, bir kullanıcıya reklamları eşleştirmek amaçlanır. Özellikler arasında kullanıcı kimliği, reklamın web sitesi alan adı, arama sorgusu, mevcut sayfa ve bu özelliklerin tüm çiftli birleşimleri bulunur. Bu her biri büyük kategorik bir değişkendir.
+
+Bu büyük kategorik değişkenlerle başa çıkmanın iki çözümü vardır:
+
+1. **Kodlama ile uğraşmamak**: Eğitim için ucuz olan basit bir model kullanmak. One-hot encoding’i çok sayıda makinede bir doğrusal modele (lojistik regresyon veya doğrusal destek vektör makineleri) beslemek.
+
+2. **Özellikleri sıkıştırmak**: İki seçenek vardır:
+
+   * Özellik hash'leme, doğrusal modellerde yaygındır.
+   * Bin sayma, doğrusal modeller ve ağaçlar için de popülerdir.
+
+**Feature Hashing (Özellik Hash'leme)**, potansiyel olarak sınırsız bir tam sayıyı, [1, m] aralığında sonlu bir tam sayıya eşleyen deterministik bir fonksiyondur. Bu, verilerin sayısal olarak temsil edilebilen her türü için oluşturulabilir (örneğin, sayılar, dizeler, karmaşık yapılar vb.). Hash fonksiyonu ile aynı numaraya sahip olan toplar (anahtarlar) her zaman aynı kutuya yönlendirilir. Bu, özellik alanını korurken makine öğrenimi eğitim ve değerlendirme döngülerinde depolama ve işleme zamanını azaltır.
+
+![](.\i\014.png)
+
+
 
 
 
