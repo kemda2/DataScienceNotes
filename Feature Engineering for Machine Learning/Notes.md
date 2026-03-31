@@ -32,7 +32,7 @@ ax.set_xlabel('Review Count', fontsize=14)
 ax.set_ylabel('Occurrence', fontsize=14)
 ```
 
-![](.)
+![](.\i\001.png)
 
 # Sabit Genişlikte Binleme ve Üssel Genişlikte Binleme
 
