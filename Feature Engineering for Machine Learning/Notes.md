@@ -1056,7 +1056,7 @@ Bu bölüm, model tabanlı özellik mühendisliği tekniklerine bir giriş nitel
 
 Öte yandan, model tabanlı teknikler veriden bilgi gerektirir. Örneğin, PCA, verinin temel eksenlerine dayanır. Önceki bölümlerde, veri, özellikler ve modeller arasında her zaman belirgin bir çizgi vardı. Ancak, bu noktadan sonra fark giderek daha belirsizleşir. Bu, özellik öğrenme üzerine yapılan mevcut araştırmalarda heyecan verici olan tam noktadır.
 
-### **Sezgi**
+**Sezgi**
 
 Boyut indirgeme, "bilgi içermeyen veriyi" ortadan kaldırırken kritik bilgileri korumakla ilgilidir. "Bilgi içermeyen" kavramını tanımlamanın birçok yolu vardır. PCA, doğrusal bağımlılık kavramına odaklanır. "Bir Matrisin Anatomisi" başlığında, bir veri matrisinin sütun uzayını, tüm özellik vektörlerinin oluşturduğu bir alan olarak tanımlarız. Eğer sütun uzayı, toplam özellik sayısına kıyasla küçükse, o zaman çoğu özellik, birkaç anahtar özelliğin doğrusal kombinasyonlarıdır. Doğrusal bağımlı özellikler, bilgi aslında çok daha az özellikte kodlanabileceğinden, yer ve hesaplama gücü israfıdır. Bu durumu önlemek için, temel bileşen analizi (PCA), veriyi çok daha düşük boyutlu doğrusal bir alt uzaya sıkıştırarak böyle "gereksiz" kısımları ortadan kaldırmaya çalışır.
 
@@ -1185,6 +1185,61 @@ $$
 
 **Basit PCA projeksiyonu (Denklem 6-10), temel bileşenlerin bir temel olarak hizmet ettiği yeni özellik uzayında koordinatlar üretir. Bu koordinatlar yalnızca projeksiyon vektörünün uzunluğunu temsil eder, yönünü değil. Temel bileşenlerle çarpma, bize hem uzunluğu hem de yönü verir. Başka bir geçerli yorum, ekstra çarpmanın koordinatları orijinal özellik uzayına geri döndürmesidir. (V, ortogonal bir matristir ve ortogonal matrisler, girişlerini germe veya sıkıştırma yapmadan döndürür.) Bu nedenle, ZCA, orijinal verilere mümkün olan en yakın şekilde (Öklidyen mesafede) beyazlatılmış veriler üretir."**
 
+**PCA'nın Dikkate Alınması Gerekenler ve Sınırlamaları**
+
+PCA'yı boyut indirgeme için kullanırken, kaç tane temel bileşen (**k**) kullanılacağı sorusu ele alınmalıdır. Diğer tüm hiperparametreler gibi, bu sayı, sonuç modelinin kalitesine göre ayarlanabilir. Ancak pahalı hesaplama yöntemleri içermeyen bazı sezgiler de vardır.
+
+Bir olasılık, **k**'yı toplam varyansın istenen bir oranını açıklayacak şekilde seçmektir. (Bu seçenek, scikit-learn paketindeki PCA'da mevcuttur.) **k**'cı bileşene yapılan projeksiyonun varyansı şudur:
+
+$$
+[
+║Xv_k║^2 = ║u_k σ_k║^2 = σ_k^2
+]
+$$
+
+Bu, **X**'in **k**'cı en büyük tekil değerinin karesidir. Bir matrisin sıralı tekil değerleri listesine **spektrum** denir. Dolayısıyla, hangi bileşenlerin kullanılacağını belirlemek için, veri matrisinin basit bir spektral analizini yapabilir ve yeterli varyansı koruyan eşik değeri seçebilirsiniz.
+
+**Varyans Hesaplamasına Dayalı k Seçimi**
+
+Veride toplam varyansın %80'ini açıklayacak kadar bileşen tutmak için **k**'yı şöyle seçebilirsiniz:
+
+[
+\frac{\sum_{i=1}^k σ_i^2}{\sum_{i=1}^d σ_i^2} \geq 0.8
+]
+
+Başka bir **k** seçme yöntemi, bir veri setinin içsel boyutuyla ilgilidir. Bu daha belirsiz bir kavramdır, ancak yine de spektrumdan belirlenebilir. Temelde, eğer spektrum birkaç büyük tekil değeri ve birkaç küçük tekil değeri içeriyorsa, büyük tekil değerlerini alıp geri kalanları atabilirsiniz. Bazen spektrumun geri kalanı küçük olmayabilir, ancak baş ve kuyruk değerleri arasında büyük bir boşluk vardır. Bu da mantıklı bir kesme noktası olacaktır. Bu yöntem, spektrumun görsel olarak incelenmesini gerektirir ve bu nedenle otomatik bir işlem hattı parçası olarak yapılamaz.
+
+**PCA'nın Temel Eleştirisi**
+
+PCA'nın temel eleştirisi, dönüşümünün oldukça karmaşık olmasıdır ve bu nedenle sonuçların yorumlanması zordur. Temel bileşenler ve projeksiyon vektörleri reel sayılardır ve pozitif veya negatif olabilir. Temel bileşenler, esasen (merkezlenmiş) satırların doğrusal kombinasyonlarıdır ve projeksiyon değerleri sütunların doğrusal kombinasyonlarıdır. Örneğin, bir hisse senedi getirisi uygulamasında, her faktör, hisse senedi getirilerinin zaman dilimlerinin doğrusal bir kombinasyonudur. Bu ne anlama geliyor? Öğrenilen faktörler için insan tarafından anlaşılabilir bir açıklama yapmak zordur. Bu nedenle, analistlerin sonuçlara güvenmesi zordur. Eğer milyonlarca insanın parasını belirli hisse senetlerine yatırmanın nedenini açıklayamıyorsanız, muhtemelen o modeli kullanmaya karar vermezsiniz.
+
+**PCA Hesaplama Maliyeti**
+
+PCA hesaplaması pahalıdır. SVD'ye dayanır, bu da pahalı bir prosedürdür. Bir matrisin tam SVD'sini hesaplamak, **O(nd² + d³)** işlemi gerektirir (Golub ve Van Loan, 2012), burada **n ≥ d**'dir—yani, veri noktalarından daha fazla özellik vardır. Sadece **k** temel bileşenleri istesek bile, kırpılmış SVD'yi (k en büyük tekil değeri ve vektörleri) hesaplamak hala **O((n+d)²k) = O(n²k)** işlemi gerektirir. Bu, çok sayıda veri noktası veya özellik olduğunda yasaklayıcıdır.
+
+**PCA'nın Akışkan İşlemde Zorlukları**
+
+PCA'yı akışkan şekilde, toplu güncellemelerde veya tam verinin bir örneğinden gerçekleştirmek zordur. SVD'nin akışkan hesaplanması, SVD'nin güncellenmesi ve bir alt örnekten SVD hesaplanması gibi işlemler, zorlu araştırma problemleridir. Algoritmalar mevcut olsa da, doğrulukta azalma pahasına yapılır. Bir sonuç, test verisini eğitim setinde bulunan temel bileşenlere projeksiyon yaparken daha düşük temsili doğruluk beklemeniz gerektiğidir. Verinin dağılımı değiştikçe, mevcut veri setindeki temel bileşenleri yeniden hesaplamak gerekir.
+
+**Ham Sayımlar Üzerinde PCA Uygulamak**
+
+Son olarak, PCA'yı ham sayımlar (kelime sayımları, müzik dinleme sayıları, film izleme sayıları vb.) üzerinde uygulamak genellikle en iyi seçenek değildir. Bunun nedeni, bu tür sayımların genellikle büyük aykırı değerlere sahip olmasıdır. (Birinin, **Yüzüklerin Efendisi**'ni 314,582 kez izlediği gerçeği, geri kalan sayımları gölgede bırakacaktır.) Bildiğimiz gibi, PCA, özellikler arasındaki doğrusal korelasyonları arar. Korelasyon ve varyans istatistikleri büyük aykırı değerlere oldukça duyarlıdır; tek bir büyük sayı, istatistikleri çok değiştirebilir. Bu nedenle, önce verileri büyük değerlerden (sayım temelli filtreleme) temizlemek veya tf-idf gibi bir ölçeklendirme dönüşümü (Bölüm 4) veya log dönüşümü (Bölüm 15) uygulamak iyi bir fikirdir.
+
+**Kullanım Alanları**
+
+PCA, özellikler arasındaki doğrusal korelasyon desenlerini arayarak özellik uzayının boyutunu indirger. SVD'yi içerdiğinden, PCA, birkaç bin özelliği aşan büyük verilerde hesaplamak pahalıdır. Ancak küçük sayıda reel değerli özellikler için, denenmeye kesinlikle değerdir.
+
+PCA dönüşümü, veriden bilgi atar. Dolayısıyla, aşağı akıştaki model daha ucuz bir şekilde eğitilebilir, ancak doğruluğu daha düşük olur. MNIST veri setinde, PCA'dan indirgenmiş boyutlu verilerin kullanılmasıyla daha az doğru sınıflandırma modelleri elde edildiği gözlemlenmiştir. Bu durumlarda, PCA kullanmanın hem artıları hem de eksileri vardır.
+
+PCA'nın en havalı uygulamalarından biri zaman serilerinin anomali tespiti alanında kullanımıdır. Lakhina ve diğerleri (2004), internet trafiğindeki anormallikleri tespit etmek ve teşhis etmek için PCA kullanmışlardır. Trafik hacmi anormalliklerine odaklanmışlardır, yani bir ağ bölgesinden diğerine giden trafik miktarındaki ani artış veya azalma. Bu ani değişiklikler, yanlış yapılandırılmış bir ağ veya koordine edilmiş hizmet reddi saldırıları olabilir.
+
+**Sonuç**
+
+Bu, PCA'nın tartışmasını sonlandırmaktadır. PCA hakkında hatırlanması gereken iki ana şey, mekanizması (doğrusal projeksiyon) ve amacı (projeksiyon verisinin varyansını maksimize etmektir). Çözüm, kovaryans matrisinin özdekompozisyonunu içerir ve bu, veri matrisinin SVD'siyle yakından ilişkilidir. Ayrıca, PCA'yı, veriyi mümkün olduğunca kabarık bir pankek gibi sıkıştırarak hayal edebilirsiniz.
+
+PCA, model tabanlı özellik mühendisliği bir örneğidir. (Bir hedef fonksiyonu sahneye girdiğinde, arka planda bir modelin gizlendiğinden hemen şüphelenilmelidir.) Buradaki model varsayımı, varyansın verideki bilgiyi yeterince temsil ettiğidir. Eşdeğer olarak, model, özellikler arasındaki doğrusal korelasyonları arar. Bu, birçok uygulamada, girdi verisindeki korelasyonu azaltmak veya ortak faktörleri bulmak için kullanılır.
+
+PCA, iyi bilinen bir boyut indirgeme yöntemidir. Ancak yüksek hesaplama maliyeti ve yorumlanamayan sonucu gibi sınırlamaları vardır. Özellikler arasında doğrusal korelasyonlar olduğunda, özellikle ön işleme adımı olarak faydalıdır. Doğrusal korelasyonu ortadan kaldırma yöntemi olarak görüldüğünde, PCA beyazlatma kavramı ile ilişkilidir. Bunun kuzeni olan **ZCA**, veriyi yorumlanabilir bir şekilde beyazlatır, ancak boyut indirgemez.
 
 
 
