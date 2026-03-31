@@ -336,8 +336,7 @@ ax3.set_xlabel('Theoretical quantiles')
 ax3.set_title('Probplot after Box-Cox transform')
 ```
 
-
-
+![](.\i\011.png)
 
 
 
