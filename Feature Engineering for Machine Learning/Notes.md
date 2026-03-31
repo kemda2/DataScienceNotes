@@ -155,9 +155,34 @@ ax2.set_ylabel('Occurrence', fontsize=14)
 
 ![](.\i\005.png)
 
+Başka Örnek;
+
+```py
+fig, (ax1, ax2) = plt.subplots(2,1)
+df['n_tokens_content'].hist(ax=ax1, bins=100)
+ax1.tick_params(labelsize=14)
+ax1.set_xlabel('Makaledeki Kelime Sayısı', fontsize=14)
+ax1.set_ylabel('Makale Sayısı', fontsize=14)
+df['log_n_tokens_content'].hist(ax=ax2, bins=100)
+ax2.tick_params(labelsize=14)
+ax2.set_xlabel('Kelime Sayısının Logaritması', fontsize=14)
+ax2.set_ylabel('Makale Sayısı', fontsize=14)
+```
+
+![](.\i\006.png)
 
 
 
+
+
+
+
+---
+---
+---
+---
+---
+---
 # 
 
 ```py
