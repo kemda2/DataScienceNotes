@@ -1,5 +1,6 @@
 # Dinleme Sayısını Binleme
 
+![](image.png)
 ```py
 import pandas as pd
 listen_count = pd.read_csv('millionsong/train_triplets.txt.zip', header=None, delimiter='\t')
@@ -32,7 +33,7 @@ ax.set_xlabel('Review Count', fontsize=14)
 ax.set_ylabel('Occurrence', fontsize=14)
 ```
 
-![](.\i\001.png)
+![](.\i\002.png)
 
 # Sabit Genişlikte Binleme ve Üssel Genişlikte Binleme
 
@@ -105,7 +106,7 @@ ax.set_xlabel('Yorum Sayısı', fontsize=14)
 ax.set_ylabel('Frekans', fontsize=14)
 ```
 
-![](.\i\002.png)
+![](.\i\003.png)
 
 # Sayımları Kuantilere Göre Binlemek
 
@@ -142,4 +143,4 @@ large_counts_series.quantile([0.25, 0.5, 0.75])
 
 ```
 
-![](.\i\001.png)
+![](.\i\00.png)
