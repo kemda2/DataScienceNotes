@@ -68,3 +68,5 @@ large_counts = [296, 8286, 64011, 80, 3, 725, 867, 2215, 7689, 11495, 91897, 44,
 np.floor(np.log10(large_counts))
 # array([ 2., 3., 4., 1., 0., 2., 2., 3., 3., 4., 4., 1., 1., 3., 2., 2., 4.])
 ```
+
+# Yelp İşletme Yorum Sayılarının Ondalıklarını Hesaplamak
