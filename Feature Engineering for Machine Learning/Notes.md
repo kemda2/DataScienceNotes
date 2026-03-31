@@ -155,7 +155,7 @@ ax2.set_ylabel('Occurrence', fontsize=14)
 
 ![](.\i\005.png)
 
-Başka Örnek;
+**Mashable Haber Makalelerindeki Kelime Sayılarının Karşılaştırılması**
 
 ```py
 fig, (ax1, ax2) = plt.subplots(2,1)
@@ -171,7 +171,7 @@ ax2.set_ylabel('Makale Sayısı', fontsize=14)
 
 ![](.\i\006.png)
 
-
+**Logaritma Dönüşümü Uygulanmış Yelp Yorum Sayılarını Kullanarak İşletme Ortalama Puanını Tahmin Etme**
 
 
 
