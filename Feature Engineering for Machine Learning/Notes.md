@@ -1241,6 +1241,10 @@ PCA, model tabanlı özellik mühendisliği bir örneğidir. (Bir hedef fonksiyo
 
 PCA, iyi bilinen bir boyut indirgeme yöntemidir. Ancak yüksek hesaplama maliyeti ve yorumlanamayan sonucu gibi sınırlamaları vardır. Özellikler arasında doğrusal korelasyonlar olduğunda, özellikle ön işleme adımı olarak faydalıdır. Doğrusal korelasyonu ortadan kaldırma yöntemi olarak görüldüğünde, PCA beyazlatma kavramı ile ilişkilidir. Bunun kuzeni olan **ZCA**, veriyi yorumlanabilir bir şekilde beyazlatır, ancak boyut indirgemez.
 
+# Doğrusal Olmayan Özelliklendirme K-Means Model Yığınlaştırma ile
+PCA, veriler bir doğrusal alt uzayda (düz bir pankek gibi) yer aldığında çok kullanışlıdır. Peki ya veriler daha karmaşık bir şekil oluşturuyorsa? Düz bir düzlem (doğrusal alt uzay), bir manifold (doğrusal olmayan alt uzay) ile genelleştirilebilir ve bu, çeşitli şekillerde gerilmiş ve yuvarlanmış bir yüzey olarak düşünülebilir.
+
+Eğer bir doğrusal alt uzay bir düz kağıt sayfasıysa, yuvarlanmış bir kağıt sayfası, doğrusal olmayan bir manifoldun basit bir örneğidir. Gayri resmi olarak buna İsviçre rulosu denir (Bkz. Şekil 7-1). Bir kez yuvarlandığında, 2D bir düzlem 3D uzayı kaplar. Yine de aslında hala bir 2D nesnesidir. Diğer bir deyişle, düşük içsel boyuta sahiptir, bu kavramı zaten "Sezgi" başlığı altında 99. sayfada ele almıştık. Eğer bir şekilde İsviçre rulosunu açabilseydik, 2D düzlemi geri kazanırdık. Bu, doğrusal olmayan boyut indirgeme amacıdır; bu, manifoldun, kapladığı tam boyuttan daha basit olduğunu varsayar ve onu açmaya çalışır.
 
 
 
