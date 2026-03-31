@@ -173,6 +173,30 @@ ax2.set_ylabel('Makale Sayısı', fontsize=14)
 
 **Logaritma Dönüşümü Uygulanmış Yelp Yorum Sayılarını Kullanarak İşletme Ortalama Puanını Tahmin Etme**
 
+```py
+# Yelp yorum sayıları ile işletme puanını tahmin etme örneği
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_val_score
+import numpy as np
+
+# Yorum sayısını ve logaritma dönüşümünü kullanarak doğrusal regresyon modeli
+model = LinearRegression()
+X = biz_df[['review_count']]  # Yorum sayısı
+X_log = np.log1p(X)  # Logaritma dönüşümü uygulanmış yorum sayısı
+y = biz_df['rating']  # İşletme puanı
+
+# 10 katlı çapraz doğrulama ile modelin doğruluğunu değerlendirme
+scores = cross_val_score(model, X, y, cv=10, scoring='r2')
+scores_log = cross_val_score(model, X_log, y, cv=10, scoring='r2')
+
+# Sonuçların yazdırılması
+print("R-kare skoru (ham veriler):", scores.mean())
+print("R-kare skoru (log dönüşümü):", scores_log.mean())
+# R-kare skoru (ham veriler): -0.03683 (+/- 0.07280)
+# R-kare skoru (log dönüşümü): -0.03694 (+/- 0.07650)
+```
+
+**Online News Popularity Veri Kümesinde Logaritma Dönüşümü Uygulanmış Kelime Sayıları ile Makale Popülerliğini Tahmin Etme**
 
 
 
@@ -183,6 +207,7 @@ ax2.set_ylabel('Makale Sayısı', fontsize=14)
 ---
 ---
 ---
+
 # 
 
 ```py
