@@ -885,7 +885,7 @@ $$
 
 Kısacası, **bin sayma**, bir kategorik değişkeni, değeriyle ilgili istatistiklere dönüştürür. One-hot encoding gibi büyük ve seyrek bir kategorik değişken temsili, çok küçük, yoğun ve gerçek değerli bir sayısal temsile dönüştürülür (Bkz. Şekil 5-2).
 
-
+![](.\i\015.png)
 
 
 ---
