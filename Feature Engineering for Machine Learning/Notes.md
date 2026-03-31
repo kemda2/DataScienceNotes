@@ -1,6 +1,6 @@
 # Dinleme Sayısını Binleme
 
-![alt text](image.png)
+![Million Song Dataset'in Taste Profile Alt Kümesindeki Dinleme Sayılarının Histogramı — y Ekseni Logaritmik Ölçektedir](image.png)
 ```py
 import pandas as pd
 listen_count = pd.read_csv('millionsong/train_triplets.txt.zip', header=None, delimiter='\t')
@@ -33,7 +33,8 @@ ax.set_xlabel('Review Count', fontsize=14)
 ax.set_ylabel('Occurrence', fontsize=14)
 ```
 
-![alt text](image-1.png)
+
+![Yelp Yorumları Veri Kümesindeki İşletme Yorum Sayılarının Histogramı — y Ekseni Logaritmik Ölçekte](image-1.png)
 
 # Sabit Genişlikte Binleme ve Üssel Genişlikte Binleme
 
@@ -106,7 +107,8 @@ ax.set_xlabel('Yorum Sayısı', fontsize=14)
 ax.set_ylabel('Frekans', fontsize=14)
 ```
 
-![](.\i\003.png)
+![Yelp Yorumları Veri Kümesindeki Yorum Sayılarının Ondalıkları — Hem X Hem de Y Ekseni Logaritmik Ölçekte](image-2.png)
+
 
 # Sayımları Kuantilere Göre Binlemek
 
