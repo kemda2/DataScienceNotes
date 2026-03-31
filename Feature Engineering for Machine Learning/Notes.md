@@ -364,6 +364,59 @@ $$[
 
 ![](.\i\012.png)
 
+**Özellik Ölçekleme Örneği**
+
+```python
+import pandas as pd
+import sklearn.preprocessing as preproc
+
+# Online News Popularity veri kümesini yükle
+df = pd.read_csv('OnlineNewsPopularity.csv', delimiter=', ')
+
+# Orijinal veriye bak - bir makaledeki kelime sayısı
+df['n_tokens_content'].as_matrix()
+# array([ 219., 255., 211., ..., 442., 682., 157.])
+
+# Min-max ölçekleme
+df['minmax'] = preproc.minmax_scale(df[['n_tokens_content']])
+df['minmax'].as_matrix()
+# array([ 0.02584376, 0.03009205, 0.02489969, ..., 0.05215955, 0.08048147, 0.01852726])
+
+# Standartlaştırma - tanım gereği, bazı çıktılar negatif olacaktır
+df['standardized'] = preproc.StandardScaler().fit_transform(df[['n_tokens_content']])
+df['standardized'].as_matrix()
+# array([-0.69521045, -0.61879381, -0.71219192, ..., -0.2218518 , 0.28759248, -0.82681689])
+
+# L2 normalizasyonu
+df['l2_normalized'] = preproc.normalize(df[['n_tokens_content']], axis=0)
+df['l2_normalized'].as_matrix()
+# array([ 0.00152439, 0.00177498, 0.00146871, ..., 0.00307663, 0.0047472 , 0.00109283])
+```
+
+```python
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(4,1)
+fig.tight_layout()
+df['n_tokens_content'].hist(ax=ax1, bins=100)
+ax1.tick_params(labelsize=14)
+ax1.set_xlabel('Makale Kelime Sayısı', fontsize=14)
+ax1.set_ylabel('Makale Sayısı', fontsize=14)
+
+df['minmax'].hist(ax=ax2, bins=100)
+ax2.tick_params(labelsize=14)
+ax2.set_xlabel('Min-max Ölçeklenmiş Kelime Sayısı', fontsize=14)
+ax2.set_ylabel('Makale Sayısı', fontsize=14)
+
+df['standardized'].hist(ax=ax3, bins=100)
+ax3.tick_params(labelsize=14)
+ax3.set_xlabel('Standartlaştırılmış Kelime Sayısı', fontsize=14)
+ax3.set_ylabel('Makale Sayısı', fontsize=14)
+
+df['l2_normalized'].hist(ax=ax4, bins=100)
+ax4.tick_params(labelsize=14)
+ax4.set_xlabel('L2-Normalize Edilmiş Kelime Sayısı', fontsize=14)
+ax4.set_ylabel('Makale Sayısı', fontsize=14)
+```
+
 
 
 
