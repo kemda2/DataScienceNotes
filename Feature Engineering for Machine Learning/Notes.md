@@ -74,13 +74,38 @@ np.floor(np.log10(large_counts))
 # array([ 2., 3., 4., 1., 0., 2., 2., 3., 3., 4., 4., 1., 1., 3., 2., 2., 4.])
 ```
 
-# Yelp İşletme Yorum Sayılarının Ondalıklarını Hesaplamak
+# Yelp İşletme Yorum Sayılarının Ondalıklarını Hesaplama ve Görselleştirme
 
-```py
 
+```python
+deciles = biz_df['review_count'].quantile([.1, .2, .3, .4, .5, .6, .7, .8, .9])
+deciles
+
+# 0.1 3.0
+# 0.2 4.0
+# 0.3 5.0
+# 0.4 6.0
+# 0.5 8.0
+# 0.6 12.0
+# 0.7 17.0
+# 0.8 28.0
+# 0.9 58.0
+# Name: review_count, dtype: float64
+
+sns.set_style('whitegrid')
+fig, ax = plt.subplots()
+biz_df['review_count'].hist(ax=ax, bins=100)
+for pos in deciles:
+    handle = plt.axvline(pos, color='r')
+ax.legend([handle], ['deciles'], fontsize=14)
+ax.set_yscale('log')
+ax.set_xscale('log')
+ax.tick_params(labelsize=14)
+ax.set_xlabel('Yorum Sayısı', fontsize=14)
+ax.set_ylabel('Frekans', fontsize=14)
 ```
 
-
+![](.\i\002.png)
 
 
 # 
