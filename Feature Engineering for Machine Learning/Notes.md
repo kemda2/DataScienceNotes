@@ -970,6 +970,17 @@ Bu problemi çözmenin bir diğer yolu ise count-min sketch (Cor‐mode ve Muthu
 
 Şekil 5-4 bunu gösterir. Her bir öğe i, sayılar dizisinin her bir satırındaki bir hücreye haritalanır. ct öğesine bir güncelleme geldiğinde, ct her bir hücreye eklenir ve bu hücreler, h1...hd fonksiyonları kullanılarak hash'lenir.
 
+![](.\i\017.png)
+
+# Veri sızıntısına karşı korunma
+
+Bin sayma yöntemi, gerekli istatistikleri oluşturmak için tarihsel verilere dayanır, bu da veri toplama süresi boyunca beklemeyi gerektirir ve öğrenme işlem hattında hafif bir gecikmeye yol açar. Ayrıca, veri dağılımı değiştiğinde, sayılar güncellenmelidir. Veri ne kadar hızlı değişirse, sayıları yeniden hesaplama sıklığı o kadar artar. Bu durum, kullanıcı tercihleri ve popüler sorguların çok hızlı değiştiği hedeflenmiş reklamcılık gibi uygulamalar için özellikle önemlidir; çünkü mevcut dağılıma adapte olmamak, reklam platformu için büyük kayıplara yol açabilir.
+
+Birisi şu soruyu sorabilir: Neden aynı veri setini, ilgili istatistikleri hesaplamak ve modeli eğitmek için kullanmıyoruz? Bu fikir yeterince masum görünüyor. Ancak burada büyük bir sorun var: İstatistikler, modelin tahmin etmeye çalıştığı hedef değişkeni içeriyor. Çıktıyı kullanarak giriş özelliklerini hesaplamak, sızıntı olarak bilinen kötü bir probleme yol açar. Kısacası, sızıntı, modele daha iyi tahminler yapması için ona gerçekçi olmayan bir avantaj veren bilgilerin ifşa edilmesidir. Bu durum, test verilerinin eğitim setine sızması veya gelecekteki verilerin geçmişe sızması gibi durumlarda gerçekleşebilir. Model, gerçek zamanlı tahminler yaparken erişmemesi gereken bilgilere her eriştiğinde sızıntı oluşur. Kaggle’ın wiki sayfası, sızıntının daha fazla örneğini ve neden makine öğrenimi uygulamaları için kötü olduğunu açıklar.
+
+Eğer bin sayma prosedürü, giriş istatistiğinin bir kısmını hesaplamak için mevcut veri noktasının etiketini kullanıyorsa, bu doğrudan sızıntı oluşturur. Bunu önlemenin bir yolu, sayım toplama (bin-count istatistiklerini hesaplamak için) ile eğitim arasında katı bir ayrım yapmaktır, bu şekilde Şekil 5-5'te gösterildiği gibi: Yani, sayım için daha önceki veri noktalarını kullanın, eğitim için mevcut veri noktalarını kullanın (kategorik değişkenleri az önce topladığımız tarihsel istatistiklere eşleyin) ve test için gelecekteki veri noktalarını kullanın. Bu, sızıntı sorununu çözer, ancak daha önce bahsedilen gecikmeyi (giriş istatistiklerinin ve dolayısıyla modelin mevcut veriye göre geride kalmasını) getirir.
+
+![](.\i\018.png)
 
 
 ---
