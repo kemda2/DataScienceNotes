@@ -818,6 +818,26 @@ print('Our hashed numpy array, in bytes: ', getsizeof(f))
 # Our hashed numpy array, in bytes: 56
 ```
 
+Özellik hash'lemenin bize nasıl hesaplama açısından fayda sağladığını açıkça görebiliyoruz, ancak bu faydayı elde ederken hemen kullanıcı yorumlanabilirliğinden feragat ediyoruz. Bu, veri keşfi ve görselleştirmeden büyük veri setleri için bir makine öğrenimi işlem hattına geçerken kabul edilmesi kolay bir takas (trade-off) durumudur.
+
+# Bin Sayma
+
+Bin sayma, makine öğrenimindeki uzun süreli yeniden keşiflerden biridir. Reklam tıklama oranı tahmininden donanım dalga tahminine kadar (Yeh ve Patt, 1991; Lee ve diğerleri, 1998; Chen ve diğerleri, 2009; Li ve diğerleri, 2010) çeşitli uygulamalarda yeniden keşfedilmiş ve kullanılmıştır. Ancak, bu bir özellik mühendisliği tekniği olduğu için, modelleme veya optimizasyon yöntemi olmadığından bu konuda bir araştırma makalesi yoktur. Bu tekniğin en ayrıntılı açıklamasına, Misha Bilenko'nun (2015) "Big Learning Made Easy—with Counts!" başlıklı blog yazısında ve ilgili slaytlarda rastlanabilir.
+
+Bin sayma fikri son derece basittir: kategorik değişkenin değerini özellik olarak kullanmak yerine, bu değerin altında hedefin koşullu olasılığını kullanırız. Diğer bir deyişle, kategorik değerin kimliğini kodlamak yerine, o değerin ve tahmin etmek istediğimiz hedef arasındaki ilişki istatistiklerini hesaplarız. Naive Bayes sınıflandırıcılarına aşina olanlar için bu istatistik tanıdık gelecektir, çünkü bu, tüm özelliklerin bağımsız olduğu varsayımı altında sınıfın koşullu olasılığıdır. En iyi şekilde bir örnekle açıklanabilir (bkz. Tablo 5-6)."
+
+| User  | Number of clicks | Number of nonclicks | Probability of click | QueryHash, AdDomain            | Number of clicks | Number of nonclicks | Probability of click |
+|-------|------------------|---------------------|----------------------|--------------------------------|------------------|---------------------|----------------------|
+| Alice | 5                | 120                 | 0.0400               | 0x598fd4fe, foo.com            | 5,000            | 30,000              | 0.167                |
+| Bob   | 20               | 230                 | 0.0800               | 0x50fa3cc0, bar.org            | 100              | 900                 | 0.100                |
+| ...   | ...              | ...                 | ...                  | ...                            | ...              | ...                 | ...                  |
+| Joe   | 2                | 3                   | 0.4000               | 0x437a45e1, qux.net            | 6                | 18                  | 0.250                |
+
+
+
+
+
+
 
 ---
 ---
