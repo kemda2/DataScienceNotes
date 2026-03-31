@@ -770,7 +770,53 @@ Hash'leme işleminden sonra iç çarpanın değeri, orijinal iç çarpanın $O\l
 Örnek 5-5’te, scikit-learn’ün FeatureHasher’ını kullanarak, Yelp yorumları veri seti ile depolama ve yorumlanabilirlik arasında nasıl bir denge kurulduğunu gösteriyoruz.
 Örnek 5-5. Özellik hash'leme (diğer adıyla “hashing hilesi”)
 
+```python
+import pandas as pd
+import json
+from sklearn.feature_extraction import FeatureHasher
+from sys import getsizeof
 
+# Load the first 10,000 reviews
+f = open('yelp_academic_dataset_review.json')
+js = []
+for i in range(10000):
+    js.append(json.loads(f.readline()))
+f.close()
+
+review_df = pd.DataFrame(js)
+
+# Define m as equal to the unique number of business_ids
+m = len(review_df.business_id.unique())
+print(f"Number of unique business_ids (m): {m}")
+
+# Apply FeatureHasher
+h = FeatureHasher(n_features=m, input_type='string')
+f = h.transform(review_df['business_id'])
+
+# Check how it affects feature interpretability
+print("First 5 unique business_ids:", review_df['business_id'].unique().tolist()[0:5])
+# ['vcNAWiLM4dR7D2nwwJ7nCA',
+# 'UsFtqoBl7naz8AVUBZMjQQ',
+# 'cE27W9VPgO88Qxe4ol6y_g',
+# 'HZdLhv6COCleJMo7nPl-RA',
+# 'mVHrayjG3uZ_RLHkLj-AMg']
+
+# Print the hashed feature array (as a dense array for readability)
+print(f.toarray())
+# array([[ 0., 0., 0., ..., 0., 0., 0.],
+#        [ 0., 0., 0., ..., 0., 0., 0.],
+#        [ 0., 0., 0., ..., 0., 0., 0.],
+#        ...,
+#        [ 0., 0., 0., ..., 0., 0., 0.],
+#        [ 0., 0., 0., ..., 0., 0., 0.],
+#        [ 0., 0., 0., ..., 0., 0., 0.]])
+
+# Compare storage size
+print('Our pandas Series, in bytes: ', getsizeof(review_df['business_id']))
+print('Our hashed numpy array, in bytes: ', getsizeof(f))
+# Our pandas Series, in bytes: 790104
+# Our hashed numpy array, in bytes: 56
+```
 
 
 ---
