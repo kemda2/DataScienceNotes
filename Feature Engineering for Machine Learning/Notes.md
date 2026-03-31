@@ -1246,6 +1246,44 @@ PCA, veriler bir doğrusal alt uzayda (düz bir pankek gibi) yer aldığında ç
 
 Eğer bir doğrusal alt uzay bir düz kağıt sayfasıysa, yuvarlanmış bir kağıt sayfası, doğrusal olmayan bir manifoldun basit bir örneğidir. Gayri resmi olarak buna İsviçre rulosu denir (Bkz. Şekil 7-1). Bir kez yuvarlandığında, 2D bir düzlem 3D uzayı kaplar. Yine de aslında hala bir 2D nesnesidir. Diğer bir deyişle, düşük içsel boyuta sahiptir, bu kavramı zaten "Sezgi" başlığı altında 99. sayfada ele almıştık. Eğer bir şekilde İsviçre rulosunu açabilseydik, 2D düzlemi geri kazanırdık. Bu, doğrusal olmayan boyut indirgeme amacıdır; bu, manifoldun, kapladığı tam boyuttan daha basit olduğunu varsayar ve onu açmaya çalışır.
 
+**"Ana gözlem, büyük bir manifold karmaşık göründüğünde bile, her nokta etrafındaki yerel komşuluğun genellikle düz bir yüzey parçası ile iyi bir şekilde yaklaşıklandırılabileceğidir. Başka bir deyişle, yamaçlar, yerel yapı kullanarak küresel yapıyı kodlamak için kullanılır. Doğrusal olmayan boyut indirgeme, doğrusal olmayan yerleştirme veya manifold öğrenme olarak da adlandırılır. Doğrusal olmayan yerleştirmeler, yüksek boyutlu verileri düşük boyutlu verilere agresif bir şekilde sıkıştırmak için kullanışlıdır. Genellikle iki veya üç boyutta görselleştirme için kullanılır.**
+
+**Ancak, özellik mühendisliğinin amacı, özellik boyutlarını mümkün olduğunca düşük yapmak değil, görev için doğru özelliklere ulaşmaktır. Bu bölümde doğru özellikler, verinin mekansal özelliklerini temsil edenlerdir. Kümeleme algoritmaları genellikle yerel yapı öğrenme teknikleri olarak sunulmaz. Ancak aslında tam olarak bunu mümkün kılarlar. Birbirine yakın olan noktalar (burada "yakınlık" seçilen bir metrikle tanımlanabilir) aynı kümeye aittir. Bir kümeleme verildiğinde, bir veri noktası küme üyeliği vektörü ile temsil edilebilir. Eğer küme sayısı orijinal özellik sayısından daha küçükse, yeni temsil orijinalinden daha az boyuta sahip olacaktır; yani orijinal veri, daha düşük bir boyuta sıkıştırılmış olur. Bu fikri bu bölümde açacağız.**
+
+**Doğrusal olmayan yerleştirme tekniklerine kıyasla, kümeleme daha fazla özellik üretebilir. Ancak nihai hedef görselleştirme değil de özellik mühendisliği ise, bu bir sorun değildir. Bu bölümde, yerel yapı öğrenme fikrini yaygın bir kümeleme algoritması olan k-means ile açıklayacağız. K-means, anlaması ve uygulaması basit bir algoritmadır. Doğrusal olmayan manifold indirgemesi yerine, k-means'in doğrusal olmayan manifold özellik çıkarımı yaptığını söylemek daha doğru olacaktır. Doğru kullanıldığında, özellik mühendisliği repertuarımızda güçlü bir araç olabilir."**
+
+# k-Means Kümeleme
+
+**k-means, bir kümeleme algoritmasıdır. Kümeleme algoritmaları, verilerin uzayda nasıl yerleştirildiğine bağlı olarak verileri gruplar. Denetimsizdirler, çünkü herhangi bir etiket gerektirmezler—algoritmanın görevi, yalnızca verinin geometrisine dayalı olarak küme etiketlerini çıkarmaktır.**
+
+**Bir kümeleme algoritması, bir metriğe dayanır—yani veri noktaları arasındaki yakınlık ölçüsüne. En popüler metrik, **Öklidyen mesafe** veya **Öklidyen metrik**'tir. Bu, Öklidyen geometriye dayanır ve iki nokta arasındaki doğrusal mesafeyi ölçer. Günlük fiziksel gerçeklikte gördüğümüz mesafe olduğu için bize çok doğal gelir.**
+
+**İki vektör **x** ve **y** arasındaki Öklidyen mesafe, **x – y**'nin ℓ2 normudur. (ℓ2 normu hakkında daha fazla bilgi için sayfa 32'ye bakınız.) Matematiksel dilde, genellikle şöyle yazılır: ‖x – y‖₂ veya sadece ‖x – y‖.**
+
+**k-means, katı bir kümeleme oluşturur, yani her veri noktası yalnızca bir kümeye atanır. Algoritma, her veri noktası ile kendi küme merkezi arasındaki toplam Öklidyen mesafeyi minimize edecek şekilde küme merkezlerini yerleştirir. Matematiksel dilde ifade etmek gerekirse, burada hedef fonksiyon şöyle tanımlanır:**
+
+$$
+[
+\min_{C_1, \dots, C_k, \mu_1, \dots, \mu_k} \sum_{i=1}^k \sum_{x \in C_i} | x - \mu_i |^2
+]
+$$
+
+**Her **C_i** kümesi, veri noktalarının bir alt kümesini içerir. Küme i'nin merkezi, kümedeki tüm veri noktalarının ortalamasına eşittir:**
+
+$$
+[
+\mu_i = \frac{\sum_{x \in C_i} x}{n_i}
+]
+$$
+
+**Burada, **n_i**, küme i'deki veri noktalarının sayısını belirtir.**
+
+**Şekil 7-2, k-means'in iki farklı rastgele oluşturulmuş veri seti üzerinde çalışırken nasıl çalıştığını gösterir. (a) şıkkındaki veri, aynı varyansa sahip ancak farklı ortalamalara sahip rastgele Gaussian dağılımlarından üretilmiştir. (c) şıkkındaki veri ise rastgele uniform olarak üretilmiştir. Bu toy problemler çok basit çözümler gerektirir ve k-means iyi bir iş çıkarır. (Sonuçlar, küme sayısına duyarlı olabilir, bu sayıyı algoritmaya vermek gerekir.)**
+
+![](.\i\023.png)
+
+
+
 
 
 ---
