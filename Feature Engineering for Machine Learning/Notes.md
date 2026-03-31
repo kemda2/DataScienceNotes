@@ -966,7 +966,9 @@ Bununla başa çıkmanın bir yolu, back-off (geri çekilme) tekniğini kullanma
 
 ![](.\i\016.png)
 
+Bu problemi çözmenin bir diğer yolu ise count-min sketch (Cor‐mode ve Muthukrishnan, 2005) adlı tekniktir. Bu yöntemde, tüm kategoriler, nadir ya da sık görülen fark etmeksizin, birden fazla hash fonksiyonu ile, kategorilerin sayısından (k) çok daha küçük bir çıktı aralığı olan m'ye haritalanır. Bir istatistik alındığında, kategorinin tüm hash'leri yeniden hesaplanır ve en küçük istatistik döndürülür. Birden fazla hash fonksiyonu kullanmak, tek bir hash fonksiyonu içindeki çakışma olasılığını azaltır. Bu şema, hash fonksiyonlarının sayısı ile hash tablosunun boyutunun çarpımının, kategorilerin sayısından (k) küçük tutulabileceğini ve yine de düşük çakışma olasılığı sağlanabileceğini gösterir.
 
+Şekil 5-4 bunu gösterir. Her bir öğe i, sayılar dizisinin her bir satırındaki bir hücreye haritalanır. ct öğesine bir güncelleme geldiğinde, ct her bir hücreye eklenir ve bu hücreler, h1...hd fonksiyonları kullanılarak hash'lenir.
 
 
 
