@@ -1066,8 +1066,37 @@ Pratikte, şeyler nadiren tam olarak birbirine eşittir. Genellikle, çok yakın
 
 ![](.\i\019.png)
 
+**Ana fikir**, gereksiz özellikleri, orijinal özellik uzayındaki bilgileri yeterince özetleyen birkaç yeni özellik ile değiştirmektir. Sadece iki özellik olduğunda, yeni özelliğin ne olması gerektiğini söylemek kolaydır. Ancak orijinal özellik uzayı yüzlerce veya binlerce boyuta sahip olduğunda, bu çok daha zor hale gelir. Aradığımız yeni özellikleri matematiksel olarak tanımlamanın bir yoluna ihtiyacımız var. Ardından, bunları bulmak için optimizasyon tekniklerini kullanabiliriz.
 
+"Yeterince bilgi özetlemek" ifadesini matematiksel olarak tanımlamanın bir yolu, yeni veri kümesinin mümkün olduğunca orijinal hacmi koruması gerektiğini söylemektir. Veriyi düz bir pankek gibi sıkıştırıyoruz, ancak pankekin doğru yönlerde mümkün olduğunca büyük olmasını istiyoruz. Bu da hacmi ölçmenin bir yoluna ihtiyacımız olduğu anlamına gelir.
 
+Hacim, mesafe ile ilgilidir. Ancak, veri noktaları kümesindeki mesafe kavramı biraz belirsizdir. İki nokta arasındaki maksimum mesafeyi ölçebilirsiniz, ancak bu, matematiksel olarak optimize edilmesi çok zor bir fonksiyon çıkar. Bir alternatif, nokta çiftleri arasındaki ortalama mesafeyi ölçmektir, ya da eşdeğer olarak, her nokta ile ortalaması arasındaki ortalama mesafeyi, yani varyansı ölçmektir. Bu, optimize edilmesi çok daha kolay bir şeydir. (Hayat zor. İstatistikçiler, kullanışlı kestirme yolları öğrenmiştir.) Matematiksel olarak, bu, veri noktalarının yeni özellik uzayındaki varyansını en üst düzeye çıkarmak anlamına gelir.
+
+**Lineer Cebir Formüllerinde Yol Gösterici İpuçları**
+
+Lineer cebir dünyasında yol alırken, hangi niceliklerin skalar, hangi niceliklerin vektör olduğunu ve vektörlerin hangi yönde olduğunu - dikey mi yoksa yatay mı - takip edin. Matrislerinizin boyutlarını bilin, çünkü genellikle ilginç vektörlerin satırlarda mı yoksa sütunlarda mı olduğunu size söyler. Matrisleri ve vektörleri sayfanın üzerinde dikdörtgenler olarak çizin ve şekillerin eşleştiğinden emin olun. Tıpkı cebirde ölçü birimlerini not ederek (mesafe mil olarak, hız mil/saat olarak) ilerleyebileceğiniz gibi, lineer cebirde de ihtiyacınız olan tek şey boyutlardır.
+
+**Türetme**
+
+Önceki gibi, X'i n × d veri matrisi olarak kabul edelim, burada **n**, veri noktalarının sayısı ve **d**, özellik sayısını temsil eder. x'i, tek bir veri noktasını içeren bir sütun vektörü olarak kabul edelim. (Yani x, X'in satırlarından birinin transpozudur.) v'yi ise bulmaya çalıştığımız yeni özellik vektörlerinden biri, yani temel bileşen olarak kabul edelim.
+
+**Bir Matrisi Tekil Değer Ayrışımı (SVD) ile Ayrıştırma**
+
+Herhangi bir dikdörtgen matris, özel şekil ve özelliklere sahip üç matrise ayrılabilir:
+
+$$
+[
+X = U\Sigma V^T
+]
+$$
+
+Burada, **U** ve **V** dikey matrislerdir (yani, (U^T U = I) ve (V^T V = I)). **Σ**, X'in tekil değerlerini içeren bir diagonal matristir ve bu değerler pozitif, sıfır veya negatif olabilir. Diyelim ki **X**'in n satırı ve d sütunu var ve **n ≥ d**. O zaman **U** n × d şekline sahiptir, **Σ** ve **V** ise d × d şekline sahiptir. (Tam bir SVD incelemesi için "Tekil Değer Ayrışımı (SVD)" başlığına bakınız, sayfa 185.)
+
+**Doğrusal Projeksiyon**
+
+Şimdi PCA türetmesini adım adım inceleyelim. **Şekil 6-2**, tüm süreci göstermektedir.
+
+![](.\i\020.png)
 
 
 
