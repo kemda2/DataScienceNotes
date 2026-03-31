@@ -896,7 +896,60 @@ Tam veri seti 40.428.967 gözlem içerir ve 2.686.408 benzersiz cihaz bulunmakta
 
 Avazu yarışmasının amacı, reklam verilerini kullanarak tıklama oranını tahmin etmekti, ancak biz bu veri setini, bin sayma tekniğinin, büyük miktarda akış verisi için özellik alanını nasıl büyük ölçüde azaltabileceğini göstermek için kullanacağız (Bkz. Örnek 5-6).
 
+```python
+import pandas as pd
 
+# train_subset verisi, 6+GB veri setinin ilk 10K satırıdır
+df = pd.read_csv('data/train_subset.csv')
+
+# Her kategoride kaç benzersiz özellik olmalı?
+print(f"Benzersiz cihaz sayısı: {len(df['device_id'].unique())}")
+
+# Her kategori için:
+# Theta = [counts, p(click), p(no click), p(click)/p(no click)]
+
+def click_counting(x, bin_column):
+    """
+    Tıklama sayıları ve tıklamama sayıları hesaplanır.
+    """
+    # Tıklanan veriler
+    clicks = pd.Series(x[x['click'] > 0][bin_column].value_counts(), name='clicks')
+    
+    # Tıklanmayan veriler
+    no_clicks = pd.Series(x[x['click'] < 1][bin_column].value_counts(), name='no_clicks')
+    
+    # Hem tıklamalar hem de tıklanmamalar ile toplam veriler
+    counts = pd.DataFrame([clicks, no_clicks]).T.fillna(0)
+    counts['total_clicks'] = counts['clicks'].astype('int64') + counts['no_clicks'].astype('int64')
+    return counts
+
+def bin_counting(counts):
+    """
+    Bin sayma özelliklerini hesaplar.
+    """
+    counts['N+'] = counts['clicks'].astype('int64').divide(counts['total_clicks'].astype('int64'))
+    counts['N-'] = counts['no_clicks'].astype('int64').divide(counts['total_clicks'].astype('int64'))
+    counts['log_N+'] = counts['N+'].divide(counts['N-'])
+    
+    # Sadece bin-counting özelliklerini döndürmek için filtreleme yapılabilir
+    bin_counts = counts.filter(items=['N+', 'N-', 'log_N+'])
+    return counts, bin_counts
+
+# Bin sayma örneği: device_id
+bin_column = 'device_id'
+
+# device_id için tıklama sayıları hesaplanıyor
+device_clicks = click_counting(df.filter(items=[bin_column, 'click']), bin_column)
+
+# Bin sayma hesaplaması yapılıyor
+device_all, device_bin_counts = bin_counting(device_clicks)
+
+# Tüm cihazların sayısını kontrol edelim
+print(f"Tüm cihaz sayısı: {len(device_bin_counts)}")
+
+# Tıklama sayısına göre sıralama yapalım
+print(device_all.sort_values(by='total_clicks', ascending=False).head(4))
+```
 
 ---
 ---
