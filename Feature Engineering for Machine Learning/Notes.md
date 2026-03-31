@@ -227,12 +227,25 @@ print("Log dönüşümü ile R-kare skoru: %0.5f (+/- %0.5f)" % (scores_log.mean
 Orijinal özellik ile model: R-kare skoru, -0.00242 ve standart sapma 0.00509. Bu model, hedef değişkenin tahmininde oldukça düşük bir başarıya sahip.
 Log dönüşümü uygulanmış özellik ile model: R-kare skoru -0.00114 ve standart sapma 0.00418. Log dönüşümü ile yapılan model, daha iyi bir performans sergiliyor.
 
+**Log Dönüşümünün Bu Veri Kümesinde Neden Daha Başarılı Olduğu?**
 
+Log dönüşümünün neden daha başarılı olduğunu anlamak için girdi özelliği ve hedef değerleri arasındaki ilişkiye bakmamız gerekir. Aşağıdaki grafiğin alt panelinde, log dönüşümünün x eksenini yeniden şekillendirdiği ve hedef değeri çok yüksek olan makalelerin (örneğin >200.000 paylaşım) sağa doğru kayarak daha fazla "boşluk" bıraktığı görülmektedir. Bu, doğrusal modele, girdi özelliği uzayının düşük ucunda daha fazla "nefes alma alanı" sağlıyor. Log dönüşümü uygulanmadan (üst panel) model, girişteki çok küçük değişikliklerle hedef değerler arasındaki büyük farklılıkları uyarlamakta daha fazla baskı altındadır. Bu, modelin daha zorlu bir şekilde çalışmasına neden olur.
 
+Bu durum, log dönüşümünün doğrusal regresyon modelinin veriyi daha iyi öğrenmesini sağladığını ve büyük değerlerin etkisini sınırlayarak modelin düşük değerler üzerinde daha sağlıklı bir şekilde çalışmasına yardımcı olduğunu gösteriyor.
 
+```py
+fig2, (ax1, ax2) = plt.subplots(2,1)
+ax1.scatter(df['n_tokens_content'], df['shares'])
+ax1.tick_params(labelsize=14)
+ax1.set_xlabel('Number of Words in Article', fontsize=14)
+ax1.set_ylabel('Number of Shares', fontsize=14)
+ax2.scatter(df['log_n_tokens_content'], df['shares'])
+ax2.tick_params(labelsize=14)
+ax2.set_xlabel('Log of the Number of Words in Article', fontsize=14)
+ax2.set_ylabel('Number of Shares', fontsize=14)
+```
 
-
-
+![](.\i\007.png)
 
 ---
 ---
