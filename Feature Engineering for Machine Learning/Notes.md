@@ -958,7 +958,11 @@ print(device_all.sort_values(by='total_clicks', ascending=False).head(4))
 | 31da1bd0  | 0      | 62        | 62    | 0.000000| 1.000000| 0.000000|
 | 936e92fb  | 5      | 54        | 59    | 0.084746| 0.915254| 0.092593|
 
+# Nadir kategoriler ne olacak?
 
+Tıpkı nadir kelimeler gibi, nadir kategoriler de özel bir tedavi gerektirir. Bir kullanıcıyı düşünün, yılda bir kez giriş yapan bir kullanıcı: Bu kullanıcının reklam tıklama oranını güvenilir bir şekilde tahmin etmek için çok az veri olacaktır. Dahası, nadir kategoriler sayılar tablosunda yer kaplar.
+
+Bununla başa çıkmanın bir yolu, back-off (geri çekilme) tekniğini kullanmaktır; bu teknik, tüm nadir kategorilerin sayılarının özel bir kutuda toplanmasını sağlar (Bkz. Şekil 5-3). Eğer sayılar belirli bir eşiği aşarsa, kategori kendi sayılama istatistiklerine sahip olur. Aksi takdirde, back-off kutusundaki istatistikler kullanılır. Bu, esasen tek bir nadir kategorinin istatistiklerini, tüm nadir kategoriler üzerinde hesaplanmış istatistiklere geri döndürür. Back-off yöntemini kullanırken, istatistiklerin back-off kutusundan gelip gelmediğini belirten bir ikili gösterge eklemek faydalı olabilir.
 
 
 
