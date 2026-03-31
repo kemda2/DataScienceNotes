@@ -342,6 +342,28 @@ ax3.set_title('Probplot after Box-Cox transform')
 
 Bazı özellikler, örneğin enlem veya boylam, belirli bir değeri aşmaz. Diğer sayısal özellikler ise, örneğin sayım verileri, sınırsız şekilde artabilir. Girdi verilerinin düzgün fonksiyonlarıyla çalışan modeller, örneğin doğrusal regresyon, lojistik regresyon veya matris kullanan diğer modeller, girdi verisinin ölçeğinden etkilenir. Ancak, ağaç tabanlı modeller bu ölçekten etkilenmezler. Eğer modeliniz, girdi özelliklerinin ölçeğine duyarlıysa, özellik ölçekleme yardımcı olabilir. Adından da anlaşılacağı gibi, özellik ölçekleme, özelliklerin ölçeğini değiştirir. Bazen buna özellik normalizasyonu da denir. Özellik ölçekleme genellikle her bir özellik için ayrı ayrı yapılır. Şimdi, her biri farklı bir özellik değeri dağılımı ile sonuçlanan birkaç yaygın ölçekleme işlemi türünü tartışacağız.
 
+**Bol sıfırlı matris gibi verilerde ölçekleme yapılmamalı ya da dikkatli yapılmalı.**
+
+# ℓ2 Normalizasyonu
+
+Bu teknik, orijinal özellik değerini **ℓ2 normu** (veya **Öklid normu**) ile böler. ℓ2 normu şu şekilde tanımlanır:
+
+$$[
+\tilde{x} = \frac{x}{| x |_2}
+]$$
+
+ℓ2 normu, **koordinat uzayındaki vektörün uzunluğunu** ölçer. Bu tanım, **Pisagor Teoremi**'nden türetilebilir ve dik üçgenin kenar uzunlukları verildiğinde hipotenüsün uzunluğunu verir:
+
+$$[
+| x |_2 = \sqrt{x_1^2 + x_2^2 + \dots + x_m^2}
+]$$
+
+ℓ2 normu, verisetindeki her bir özellik için değerlerin karelerini toplar ve ardından karekökünü alır. ℓ2 normalizasyonundan sonra, **özellik sütununda norm 1** olur. Bu işlem bazen **ℓ2 ölçekleme** olarak da adlandırılır. (Genel olarak, **ölçekleme** sabit bir sayı ile çarpmayı ifade ederken, **normalizasyon** birden fazla işlem içerebilir.)
+
+ℓ2 normalizasyonunu görselleştiren bir örnek;
+
+![](.\i\01.png)
+
 
 
 
