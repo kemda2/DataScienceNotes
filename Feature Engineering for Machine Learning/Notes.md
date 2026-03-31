@@ -130,7 +130,16 @@ large_counts_series.quantile([0.25, 0.5, 0.75])
 # dtype: float64
 ```
 
+# Logaritma Dönüşümü
 
+Önceki bölümde, veriyi üssel genişlikte binlere yerleştirmek için sayımın logaritmasını almanın kavramını kısaca tanıttık. Şimdi buna daha yakından bakalım.
+
+Logaritma fonksiyonu, üssel fonksiyonun tersidir. Şu şekilde tanımlanır:
+**loga(ax) = x**, burada **a** pozitif bir sabittir ve **x** pozitif herhangi bir sayı olabilir. Çünkü **a⁰ = 1**, bu durumda **loga(1) = 0** olur. Bu, logaritma fonksiyonunun, (0, 1) arasındaki küçük sayı aralığını tüm negatif sayılar aralığına (–∞, 0) eşlediği anlamına gelir. **log₁₀(x)** fonksiyonu, [1, 10] aralığını [0, 1] aralığına, [10, 100] aralığını [1, 2] aralığına ve benzer şekilde daha büyük sayıları sırasıyla eşler. Başka bir deyişle, logaritma fonksiyonu büyük sayıların aralığını sıkıştırır ve küçük sayıların aralığını genişletir. **x** ne kadar büyükse, **log(x)** daha yavaş artar.
+
+Bunu, logaritma fonksiyonunun bir grafiğine bakarak daha kolay anlayabiliriz (Şekil 2-6'ya bakınız). **100** ile **1.000** arasındaki yatay **x** değerlerinin, dikey **y** aralığında yalnızca **2.0** ile **3.0** arasına sıkıştırıldığını ve **100**'den küçük olan **x** değerlerinin yatayda çok küçük bir kısmının, dikey aralığın geri kalanına eşlendiğini gözlemleyebilirsiniz.
+
+![](.\i\004.png)
 
 
 
