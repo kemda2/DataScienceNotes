@@ -265,6 +265,10 @@ ax2.set_ylabel('Ortalama Yıldız Puanı', fontsize=14)
 
 ![](.\i\008.png)
 
+# Box-Cox Dönüşümü
+
+
+
 
 ---
 ---
