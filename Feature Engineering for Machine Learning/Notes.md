@@ -319,8 +319,7 @@ ax3.set_xlabel('')
 ax3.set_ylabel('Frekans', fontsize=14)
 ```
 
-
-
+![](.\i\010.png)
 
 
 
