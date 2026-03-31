@@ -198,6 +198,39 @@ print("R-kare skoru (log dönüşümü):", scores_log.mean())
 
 **Online News Popularity Veri Kümesinde Logaritma Dönüşümü Uygulanmış Kelime Sayıları ile Makale Popülerliğini Tahmin Etme**
 
+```py
+# UCI'den Online News Popularity veri kümesini indirin, ardından Pandas ile
+# dosyayı bir DataFrame'e yükleyin.
+df = pd.read_csv('OnlineNewsPopularity.csv', delimiter=', ')
+
+# 'n_tokens_content' özelliğinin logaritma dönüşümünü alın, bu özellik
+# bir haber makalesindeki kelime (token) sayısını temsil eder.
+df['log_n_tokens_content'] = np.log10(df['n_tokens_content'] + 1)
+
+# İki doğrusal regresyon modeli eğiterek bir makalenin paylaşımlarını tahmin edin,
+# biri orijinal özellik ile, diğeri ise logaritma dönüşümü uygulanmış versiyon ile.
+m_orig = linear_model.LinearRegression()
+scores_orig = cross_val_score(m_orig, df[['n_tokens_content']], df['shares'], cv=10)
+
+m_log = linear_model.LinearRegression()
+scores_log = cross_val_score(m_log, df[['log_n_tokens_content']], df['shares'], cv=10)
+
+print("Log dönüşümü uygulanmadan R-kare skoru: %0.5f (+/- %0.5f)" % (scores_orig.mean(), scores_orig.std() * 2))
+# Log dönüşümü uygulanmadan R-kare skoru: -0.00242 (+/- 0.00509)
+
+print("Log dönüşümü ile R-kare skoru: %0.5f (+/- %0.5f)" % (scores_log.mean(), scores_log.std() * 2))
+# Log dönüşümü ile R-kare skoru: -0.00114 (+/- 0.00418)
+```
+
+**Açıklama:**
+
+Orijinal özellik ile model: R-kare skoru, -0.00242 ve standart sapma 0.00509. Bu model, hedef değişkenin tahmininde oldukça düşük bir başarıya sahip.
+Log dönüşümü uygulanmış özellik ile model: R-kare skoru -0.00114 ve standart sapma 0.00418. Log dönüşümü ile yapılan model, daha iyi bir performans sergiliyor.
+
+
+
+
+
 
 
 
