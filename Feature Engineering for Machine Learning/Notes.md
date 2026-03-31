@@ -417,6 +417,16 @@ ax4.set_xlabel('L2-Normalize Edilmiş Kelime Sayısı', fontsize=14)
 ax4.set_ylabel('Makale Sayısı', fontsize=14)
 ```
 
+![](.\i\013.png)
+
+
+
+
+
+
+
+
+
 
 
 
