@@ -1048,7 +1048,24 @@ Bu nedenle, genellikle bilinen bir aralıkta sınırlandırılmış **normalleş
 
 Görüldüğü gibi, hiçbir yöntem mükemmel değildir. Hangi yöntemin kullanılacağı, istenilen modele bağlıdır. Doğrusal modeller daha ucuz eğitildiğinden, **one-hot encoding** gibi sıkıştırılmamış temsillerle başa çıkabilir. Ağaç tabanlı modeller ise, doğru bölmeyi bulmak için tüm özellikler üzerinde sürekli arama yapmaları gerektiğinden, bin sayma gibi küçük temsillere sınırlıdır. **Özellik hash'leme**, bu iki uç noktayı arasında bir yerde durur, ancak sonuçlanan doğrulukla ilgili karışık raporlar vardır.
 
-# 
+# Boyut İndirgeme: Veriyi PCA ile Sıkıştırma
+
+Otomatik veri toplama ve özellik üretim teknikleri ile çok sayıda özellik hızla elde edilebilir. Ancak bunların hepsi kullanışlı değildir. 3. ve 4. Bölümlerde, bilgi içermeyen özellikleri elemek için sıklık temelli filtreleme ve özellik ölçekleme gibi yöntemleri tartıştık. Şimdi ise, **temel bileşen analizi (PCA)** kullanarak özellik boyut indirgeme konusuna yakından bakacağız.
+
+Bu bölüm, model tabanlı özellik mühendisliği tekniklerine bir giriş niteliğindedir. Şimdiye kadar, çoğu teknik veriye başvurulmadan tanımlanabiliyordu. Örneğin, sıklık temelli filtreleme şöyle diyebilir: "n'den küçük tüm sayımları kaldır", bu işlem veriden başka bir giriş gerektirmeden yapılabilir.
+
+Öte yandan, model tabanlı teknikler veriden bilgi gerektirir. Örneğin, PCA, verinin temel eksenlerine dayanır. Önceki bölümlerde, veri, özellikler ve modeller arasında her zaman belirgin bir çizgi vardı. Ancak, bu noktadan sonra fark giderek daha belirsizleşir. Bu, özellik öğrenme üzerine yapılan mevcut araştırmalarda heyecan verici olan tam noktadır.
+
+### **Sezgi**
+
+Boyut indirgeme, "bilgi içermeyen veriyi" ortadan kaldırırken kritik bilgileri korumakla ilgilidir. "Bilgi içermeyen" kavramını tanımlamanın birçok yolu vardır. PCA, doğrusal bağımlılık kavramına odaklanır. "Bir Matrisin Anatomisi" başlığında, bir veri matrisinin sütun uzayını, tüm özellik vektörlerinin oluşturduğu bir alan olarak tanımlarız. Eğer sütun uzayı, toplam özellik sayısına kıyasla küçükse, o zaman çoğu özellik, birkaç anahtar özelliğin doğrusal kombinasyonlarıdır. Doğrusal bağımlı özellikler, bilgi aslında çok daha az özellikte kodlanabileceğinden, yer ve hesaplama gücü israfıdır. Bu durumu önlemek için, temel bileşen analizi (PCA), veriyi çok daha düşük boyutlu doğrusal bir alt uzaya sıkıştırarak böyle "gereksiz" kısımları ortadan kaldırmaya çalışır.
+
+Veri noktalarının özellik uzayındaki kümesini hayal edin. Her bir veri noktası bir nokta olarak temsil edilir ve tüm veri noktaları bir küme oluşturur. **Şekil 6-1(a)**'da, veri noktaları her iki özellik boyutunda eşit bir şekilde yayılmıştır ve küme uzayı doldurur. Bu örnekte, sütun uzayı tam derecededir. Ancak, eğer bazı özellikler diğerlerinin doğrusal kombinasyonlarıysa, o zaman küme bu kadar dolgun görünmez; **Şekil 6-1(b)**'de olduğu gibi, daha düz bir küme gibi görünür; burada özellik 1, özellik 2'nin bir kopyası (ya da skaler bir çarpanı) olmuştur. Bu durumda, kümenin içsel boyutunun 1 olduğunu söyleriz, ancak bu iki boyutlu bir özellik uzayında yer alıyor olmasına rağmen.
+
+Pratikte, şeyler nadiren tam olarak birbirine eşittir. Genellikle, çok yakın ama tam olarak eşit olmayan özellikler görürüz. Böyle bir durumda, veri kümesi **Şekil 6-1(c)**'de olduğu gibi zayıf bir küme gibi görünebilir. Eğer model için geçirecek özellik sayısını azaltmak isteseydik, o zaman özellik 1 ve özellik 2'yi, belki de özellik 1.5 olarak adlandırılabilecek yeni bir özellik ile değiştirebilirdik; bu özellik, orijinal iki özelliğin arasındaki diyagonal çizgi üzerinde yer alır. Orijinal veri kümesi, o zaman iki sayı yerine—f1 ve f2—tek bir sayı ile, yani özellik 1.5'in yönü boyunca pozisyonu ile yeterince temsil edilebilir.
+
+![](.\i\019.png)
+
 
 
 
@@ -1067,4 +1084,4 @@ Görüldüğü gibi, hiçbir yöntem mükemmel değildir. Hangi yöntemin kullan
 
 ```
 
-![](.\i\01.png)
+![](.\i\02.png)
