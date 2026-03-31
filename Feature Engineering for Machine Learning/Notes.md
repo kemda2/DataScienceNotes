@@ -964,6 +964,10 @@ Tıpkı nadir kelimeler gibi, nadir kategoriler de özel bir tedavi gerektirir. 
 
 Bununla başa çıkmanın bir yolu, back-off (geri çekilme) tekniğini kullanmaktır; bu teknik, tüm nadir kategorilerin sayılarının özel bir kutuda toplanmasını sağlar (Bkz. Şekil 5-3). Eğer sayılar belirli bir eşiği aşarsa, kategori kendi sayılama istatistiklerine sahip olur. Aksi takdirde, back-off kutusundaki istatistikler kullanılır. Bu, esasen tek bir nadir kategorinin istatistiklerini, tüm nadir kategoriler üzerinde hesaplanmış istatistiklere geri döndürür. Back-off yöntemini kullanırken, istatistiklerin back-off kutusundan gelip gelmediğini belirten bir ikili gösterge eklemek faydalı olabilir.
 
+![](.\i\016.png)
+
+
+
 
 
 ---
