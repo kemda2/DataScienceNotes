@@ -734,6 +734,35 @@ Bu büyük kategorik değişkenlerle başa çıkmanın iki çözümü vardır:
 
 ![](.\i\014.png)
 
+Çok sayıda özellik olduğunda, özellik vektörünü depolamak çok fazla yer kaplayabilir. Özellik hash’leme, orijinal özellik vektörünü, özellik ID’sine bir hash fonksiyonu uygulayarak m boyutlu bir vektöre sıkıştırır, bu durum Örnek 5-3'te gösterilmiştir. Örneğin, eğer orijinal özellikler bir belgedeki kelimelerse, hash’lenmiş versiyon, girişteki benzersiz kelime sayısına bakılmaksızın sabit bir kelime dağarcığı boyutuna sahip olacaktır.
+
+```python
+def hash_features(word_list, m):
+    output = [0] * m
+    for word in word_list:
+    index = hash_fcn(word) % m
+    output[index] += 1
+    return output
+```
+
+Özellik hash’lemenin bir başka çeşidi, bir işaret bileşeni ekler, böylece sayılar ya hashed kutuya eklenir ya da çıkarılır. İstatistiksel açıdan bakıldığında, bu, hash’lenmiş özellikler arasındaki iç çarpanların, orijinal özelliklerinkiyle beklenti açısından eşit olmasını sağlar.
+
+```python
+def hash_features(word_list, m):
+    output = [0] * m  # Boyutu m olan bir vektör oluşturulur ve tüm değerleri 0 ile başlatılır.
+    
+    for word in word_list:  # Verilen kelime listesinde her bir kelime için döngü başlatılır.
+        index = hash_fcn(word) % m  # Her kelime için bir hash fonksiyonu uygulanır, ardından m ile modül alınır.
+        sign_bit = sign_hash(word) % 2  # Her kelime için bir işaret fonksiyonu (0 veya 1) elde edilir.
+        
+        if sign_bit == 0:  # Eğer işaret 0 ise, vektörde ilgili indeksteki değer bir azaltılır.
+            output[index] -= 1
+        else:  # Eğer işaret 1 ise, vektördeki değeri bir arttırılır.
+            output[index] += 1
+    
+    return output  # Sonuç olarak, güncellenmiş özellik vektörü döndürülür.
+```
+
 
 
 
