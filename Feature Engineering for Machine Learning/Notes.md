@@ -247,6 +247,25 @@ ax2.set_ylabel('Number of Shares', fontsize=14)
 
 ![](.\i\007.png)
 
+**Yelp Yorumları Veri Kümesindeki Girdi ve Hedef Arasındaki Korelasyonu Görselleştirme**
+
+Şimdi, Yelp yorumları veri kümesindeki aynı dağılım grafiğini (scatter plot) ele alalım (Örnek 2-11). Şekil 2-10, Şekil 2-9'dan oldukça farklıdır. Ortalama yıldız puanı, 1 ile 5 arasında yarım-yıldız artışlarıyla ayrılmıştır. Yüksek yorum sayıları (yaklaşık olarak 2.500'ün üzerinde) yüksek ortalama yıldız puanlarıyla ilişkilidir, ancak bu ilişki doğrusal olmaktan uzaktır. Ortalama yıldız puanını tahmin etmek için herhangi bir girdi kullanarak net bir çizgi çizmek mümkün değildir. Temelde, grafik, yorum sayısının ve onun logaritmasının, ortalama yıldız puanını tahmin etmek için kötü doğrusal tahminciler olduğunu göstermektedir.
+
+```py
+fig, (ax1, ax2) = plt.subplots(2,1)
+ax1.scatter(biz_df['review_count'], biz_df['stars'])
+ax1.tick_params(labelsize=14)
+ax1.set_xlabel('Yorum Sayısı', fontsize=14)
+ax1.set_ylabel('Ortalama Yıldız Puanı', fontsize=14)
+ax2.scatter(biz_df['log_review_count'], biz_df['stars'])
+ax2.tick_params(labelsize=14)
+ax2.set_xlabel('Yorum Sayısının Logaritması', fontsize=14)
+ax2.set_ylabel('Ortalama Yıldız Puanı', fontsize=14)
+```
+
+![](.\i\008.png)
+
+
 ---
 ---
 ---
