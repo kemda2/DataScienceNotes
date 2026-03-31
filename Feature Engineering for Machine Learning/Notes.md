@@ -833,8 +833,57 @@ Bin sayma fikri son derece basittir: kategorik değişkenin değerini özellik o
 | ...   | ...              | ...                 | ...                  | ...                            | ...              | ...                 | ...                  |
 | Joe   | 2                | 3                   | 0.4000               | 0x437a45e1, qux.net            | 6                | 18                  | 0.250                |
 
+**Bin Sayma**, istatistikleri hesaplamak için tarihsel verilerin mevcut olduğunu varsayar. **Tablo 5-6**, her olası kategorik değişken değeri için toplanmış tarihsel sayıları içerir. Kullanıcı "Alice"in herhangi bir reklamı tıklama sayısı ve tıklamama sayısına dayalı olarak, herhangi bir reklama tıklama olasılığını hesaplayabiliriz. Benzer şekilde, her hangi bir **query-ad domain** kombinasyonu için tıklama olasılığını hesaplayabiliriz. Eğitim aşamasında, her "Alice" gördüğümüzde, onun tıklama olasılığını model için giriş özelliği olarak kullanabiliriz. Aynı şey "0x437a45e1, qux.net" gibi QueryHash-AdDomain çiftleri için de geçerlidir.
 
+Diyelim ki 10.000 kullanıcı var. **One-hot encoding** yöntemi, uzunluğu 10.000 olan seyrek bir vektör oluşturur ve mevcut veri noktasına karşılık gelen sütunda bir tane 1 bulunur. **Bin sayma** ise, 10.000 ikili sütunu tek bir özellik olarak 0 ile 1 arasında bir gerçek değerle kodlar.
 
+Tarihsel tıklama oranına ek olarak başka özellikler de dahil edebiliriz: ham sayılar (tıklamalar ve tıklamamalar), log-odds oranı veya olasılığın herhangi bir türevi. Buradaki örneğimiz reklam tıklama oranlarını tahmin etmek için olsa da, bu teknik genel ikili sınıflandırma için de rahatlıkla uygulanabilir. Ayrıca, ikili sınıflandırıcıları çoklu sınıf sınıflandırmasına genişletmek için yaygın tekniklerle kolayca genişletilebilir; yani, bir karşısına birçok odds oranı veya diğer çoklu sınıf etiketleme yöntemleri ile.
+
+**Bin Sayma için Odds Oranı ve Log Odds Oranı**
+
+**Odds oranı**, genellikle iki ikili değişken arasındaki ilişkiyi tanımlar. İki değişkenin ilişkisini, "X doğru olduğunda Y'nin doğru olma olasılığı ne kadar daha yüksek?" sorusunu sorarak değerlendiririz. Örneğin, şu soruyu sorabiliriz: "Alice'in reklamı tıklama olasılığı, genel nüfusa göre ne kadar daha yüksek?" Burada, X ikili değişkeni "Alice şu anda kullanıcı" ve Y değişkeni "reklama tıklama ya da tıklamama"dır. Hesaplama, **iki yönlü kontenjan tablosu** olarak adlandırılan (esas olarak, X ve Y'nin dört olası kombinasyonuna karşılık gelen dört sayıyı içeren) tabloyu kullanır, bu tabloyu **Tablo 5-7**'de görebiliriz.
+
+**Tablo 5-7**. Reklam tıklama ve kullanıcı için kontenjan tablosu:
+
+|           | Click | Nonclick | Total  |
+| --------- | ----- | -------- | ------ |
+| Alice     | 5     | 120      | 125    |
+| Not Alice | 995   | 18,880   | 19,875 |
+| **Total** | 1,000 | 19,000   | 20,000 |
+
+Verilen bir giriş değişkeni X ve bir hedef değişkeni Y için **odds oranı** şu şekilde tanımlanır:
+
+$$
+[
+\text{odds oranı} = \frac{P(Y = 1 | X = 1)}{P(Y = 0 | X = 1)} \div \frac{P(Y = 1 | X = 0)}{P(Y = 0 | X = 0)}
+]
+$$
+
+Örneğimizde, bu "Alice'in reklama tıklama olasılığı ile tıklamama olasılığı arasındaki fark" ile "diğer insanların reklama tıklama olasılığı ile tıklamama olasılığı arasındaki fark" oranı olarak çevrilebilir. Bu sayıyı, şu şekilde hesaplarız:
+
+$$
+[
+\text{odds oranı (user, ad click)} = \frac{5 / 125}{120 / 125} \div \frac{995 / 19,875}{18,880 / 19,875} = 0.7906
+]
+$$
+
+Daha basitçe, sadece paydada yer alan sayıya bakabiliriz, bu da tek bir kullanıcının (Alice) reklama tıklama olasılığını inceleyen bir oranı verir:
+
+$$
+[
+\text{odds oranı (Alice, ad click)} = \frac{5}{125} \div \frac{120}{125} = 0.04166
+]
+$$
+
+Olasılık oranları çok küçük veya çok büyük olabilir. (Örneğin, reklama neredeyse hiç tıklamayan kullanıcılar veya reklama çok daha sık tıklayan kullanıcılar olabilir.) Logaritma dönüşümü burada bize yardımcı olur. Logaritmanın bir diğer yararlı özelliği, bölmeyi çıkarmaya dönüştürmesidir:
+
+$$
+[
+\text{log-odds oranı (Alice, ad click)} = \log \left( \frac{5}{125} \right) - \log \left( \frac{120}{125} \right) = - 3.178
+]
+$$
+
+Kısacası, **bin sayma**, bir kategorik değişkeni, değeriyle ilgili istatistiklere dönüştürür. One-hot encoding gibi büyük ve seyrek bir kategorik değişken temsili, çok küçük, yoğun ve gerçek değerli bir sayısal temsile dönüştürülür (Bkz. Şekil 5-2).
 
 
 
