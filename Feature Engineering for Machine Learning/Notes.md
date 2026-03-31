@@ -1098,6 +1098,56 @@ Burada, **U** ve **V** dikey matrislerdir (yani, (U^T U = I) ve (V^T V = I)). **
 
 ![](.\i\020.png)
 
+```python
+from sklearn import datasets
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Veriyi yükleyin
+digits_data = datasets.load_digits()
+n = len(digits_data.images)
+
+# Her resmi 8x8 array'inden düzleştir
+image_data = digits_data.images.reshape((n, -1))
+
+# Gerçek etiketler
+labels = digits_data.target
+
+# PCA'yı veriye uygulayın, %80 varyansı açıklayan bileşenler seçilecek
+pca_transformer = PCA(n_components=0.8)
+pca_images = pca_transformer.fit_transform(image_data)
+
+# Açıklanan varyans oranı
+print(pca_transformer.explained_variance_ratio_)
+
+# İlk 3 bileşenin toplam varyansı
+print(pca_transformer.explained_variance_ratio_[:3].sum())
+
+# Sonuçları görselleştirme
+%matplotlib notebook
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# İlk 100 örneği görselleştir
+for i in range(100):
+    ax.scatter(pca_images[i, 0], pca_images[i, 1], pca_images[i, 2],
+               marker=r'${}$'.format(labels[i]), s=64)
+
+# Eksen etiketlerini ayarla
+ax.set_xlabel('Principal component 1')
+ax.set_ylabel('Principal component 2')
+ax.set_zlabel('Principal component 3')
+
+plt.show()
+```
+
+İlk 100 projeksiyonlu görüntü, Şekil 6-3'te 3D bir grafikte gösterilmiştir. İşaretçiler etiketlerle ilişkilidir. İlk üç temel bileşen, veri setindeki toplam varyansın yaklaşık %40'ını açıklamaktadır. Bu kesinlikle mükemmel değildir, ancak kullanışlı bir düşük boyutlu görselleştirme sağlar. PCA'nın benzer rakamları birbirine yakın grupladığını görüyoruz. 0 ve 6 sayıları aynı bölgede yer alırken, 1 ve 7 ile 3 ve 9 da benzer şekilde yer alır. Uzay, bir tarafta 0, 4 ve 6'yı, diğer tarafta ise diğer rakamları olacak şekilde kabaca bölünmüştür.
+
+![](.\i\021.png)
+
+
+
 
 
 ---
