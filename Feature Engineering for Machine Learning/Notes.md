@@ -141,10 +141,19 @@ Bunu, logaritma fonksiyonunun bir grafiÄŸine bakarak daha kolay anlayabiliriz (Å
 
 ![](.\i\004.png)
 
+```py
+fig, (ax1, ax2) = plt.subplots(2,1)
+biz_df['review_count'].hist(ax=ax1, bins=100)
+ax1.tick_params(labelsize=14)
+ax1.set_xlabel('review_count', fontsize=14)
+ax1.set_ylabel('Occurrence', fontsize=14)
+biz_df['log_review_count'].hist(ax=ax2, bins=100)
+ax2.tick_params(labelsize=14)
+ax2.set_xlabel('log10(review_count)', fontsize=14)
+ax2.set_ylabel('Occurrence', fontsize=14)
+```
 
-
-
-
+![](.\i\005.png)
 
 
 
