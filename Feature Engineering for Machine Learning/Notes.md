@@ -338,6 +338,9 @@ ax3.set_title('Probplot after Box-Cox transform')
 
 ![](.\i\011.png)
 
+# Özellik Ölçekleme veya Normalizasyonu
+
+Bazı özellikler, örneğin enlem veya boylam, belirli bir değeri aşmaz. Diğer sayısal özellikler ise, örneğin sayım verileri, sınırsız şekilde artabilir. Girdi verilerinin düzgün fonksiyonlarıyla çalışan modeller, örneğin doğrusal regresyon, lojistik regresyon veya matris kullanan diğer modeller, girdi verisinin ölçeğinden etkilenir. Ancak, ağaç tabanlı modeller bu ölçekten etkilenmezler. Eğer modeliniz, girdi özelliklerinin ölçeğine duyarlıysa, özellik ölçekleme yardımcı olabilir. Adından da anlaşılacağı gibi, özellik ölçekleme, özelliklerin ölçeğini değiştirir. Bazen buna özellik normalizasyonu da denir. Özellik ölçekleme genellikle her bir özellik için ayrı ayrı yapılır. Şimdi, her biri farklı bir özellik değeri dağılımı ile sonuçlanan birkaç yaygın ölçekleme işlemi türünü tartışacağız.
 
 
 
