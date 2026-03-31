@@ -321,7 +321,20 @@ ax3.set_ylabel('Frekans', fontsize=14)
 
 ![](.\i\010.png)
 
+**Bir Olasılık Grafiği (Probability Plot) veya Probplot, bir veri kümesinin ampirik dağılımını teorik bir dağılımla görsel olarak karşılaştırmanın kolay bir yoludur.** Bu, gözlemlenen ve teorik kuantillerin bir dağılım grafiğiyle gösterilmesidir. **Şekil 2-14**, orijinal ve dönüşüm uygulanmış **Yelp yorum sayıları** verilerinin **normal dağılım** ile karşılaştırıldığı probplotları göstermektedir (**Örnek 2-14**'e bakınız). Gözlemlenen veriler kesinlikle pozitif olduğu için, Gauss dağılımı negatif olabileceğinden, kuantillerin negatif uçta asla örtüşmemesi beklenir. Bu nedenle, odak noktamız pozitif taraftadır. Bu noktada, orijinal sayımların, normal dağılımdan çok daha ağır kuyruklu olduğu açıktır. (Sıralı değerler 4.000'e kadar giderken, teorik kuantiller yalnızca 4'e kadar uzanır.) Hem düz log dönüşümü hem de optimal Box-Cox dönüşümü, pozitif kuyrukları normal dağılıma daha yakınlaştırır. Optimal Box-Cox dönüşümü, log dönüşümüne kıyasla kuyrukları daha fazla düzleştirir, çünkü kuyruk, kırmızı diyagonal eşdeğerlik çizgisi altında düzleştiği için bu durum belirgindir.
 
+```python
+fig2, (ax1, ax2, ax3) = plt.subplots(3,1)
+prob1 = stats.probplot(biz_df['review_count'], dist=stats.norm, plot=ax1)
+ax1.set_xlabel('')
+ax1.set_title('Probplot against normal distribution')
+prob2 = stats.probplot(biz_df['rc_log'], dist=stats.norm, plot=ax2)
+ax2.set_xlabel('')
+ax2.set_title('Probplot after log transform')
+prob3 = stats.probplot(biz_df['rc_bc'], dist=stats.norm, plot=ax3)
+ax3.set_xlabel('Theoretical quantiles')
+ax3.set_title('Probplot after Box-Cox transform')
+```
 
 
 
