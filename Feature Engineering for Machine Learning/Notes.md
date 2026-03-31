@@ -270,7 +270,8 @@ ax2.set_ylabel('Ortalama Yıldız Puanı', fontsize=14)
 **Box-Cox Dönüşümü yalnızca veriler pozitif olduğunda çalışır. Pozitif olmayan veriler için, sabit bir konstant ekleyerek değerler kaydırılabilir.** Box-Cox dönüşümü veya daha genel bir güç dönüşümü uygularken, **λ parametresi** için bir değer belirlememiz gerekir. Bu, **maksimum olasılık** yöntemi ile yapılabilir (sonuçlanan dönüşmüş sinyalin **Gauss olasılığını maksimize eden λ**'yi bulmak) veya **Bayes yöntemleri** ile yapılabilir. Box-Cox ve genel güç dönüşümlerinin kullanımı hakkında tam bir açıklama bu kitabın kapsamı dışındadır. İlginç okurlar, güç dönüşümleri hakkında daha fazla bilgi için **Johnston ve DiNardo'nun (1997) Econometric Methods** kitabına başvurabilirler. Neyse ki, SciPy'nin **stats** paketi, **Box-Cox dönüşümünün** uygulanması ve optimal dönüşüm parametresinin bulunmasını içeren bir implementasyon sağlar. **Örnek 2-12**, bu uygulamayı Yelp yorumları veri kümesinde göstermektedir.
 
 Farklı λ Değerleri İçin Box-Cox Dönüşümleri
-![](.\i\00.png)
+
+![](.\i\009.png)
 
 ```py
 
@@ -289,3 +290,4 @@ Farklı λ Değerleri İçin Box-Cox Dönüşümleri
 
 ```
 
+![](.\i\01.png)
