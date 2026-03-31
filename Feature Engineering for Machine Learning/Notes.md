@@ -1,6 +1,7 @@
 # Dinleme Sayısını Binleme
 
-![](.\i\00.png)
+![](.\i\001.png)
+
 ```py
 import pandas as pd
 listen_count = pd.read_csv('millionsong/train_triplets.txt.zip', header=None, delimiter='\t')
@@ -34,7 +35,7 @@ ax.set_ylabel('Occurrence', fontsize=14)
 ```
 
 
-![Yelp Yorumları Veri Kümesindeki İşletme Yorum Sayılarının Histogramı — y Ekseni Logaritmik Ölçekte](image-1.png)
+![](.\i\002.png)
 
 # Sabit Genişlikte Binleme ve Üssel Genişlikte Binleme
 
@@ -107,7 +108,7 @@ ax.set_xlabel('Yorum Sayısı', fontsize=14)
 ax.set_ylabel('Frekans', fontsize=14)
 ```
 
-![Yelp Yorumları Veri Kümesindeki Yorum Sayılarının Ondalıkları — Hem X Hem de Y Ekseni Logaritmik Ölçekte](image-2.png)
+![](.\i\003.png)
 
 
 # Sayımları Kuantilere Göre Binlemek
