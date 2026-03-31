@@ -108,6 +108,8 @@ ax.set_ylabel('Frekans', fontsize=14)
 ![](.\i\002.png)
 
 
+
+
 # 
 
 ```py
