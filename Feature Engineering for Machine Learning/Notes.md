@@ -88,3 +88,5 @@ np.floor(np.log10(large_counts))
 ```py
 
 ```
+
+![](.\i\001.png)
