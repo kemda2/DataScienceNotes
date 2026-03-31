@@ -763,6 +763,12 @@ def hash_features(word_list, m):
     return output  # Sonuç olarak, güncellenmiş özellik vektörü döndürülür.
 ```
 
+Hash'leme işleminden sonra iç çarpanın değeri, orijinal iç çarpanın $O\left(\frac{1}{\sqrt{m}}\right)$ kadar yakınında olacaktır, bu nedenle hash tablosunun boyutu (m), kabul edilebilir hata miktarına göre seçilebilir. Pratikte, doğru (m)’yi seçmek bazı denemeler ve hatalar gerektirebilir.
+
+Özellik hash'leme, özellik vektörlerinin ve katsayılarının iç çarpanını içeren modellerde, örneğin doğrusal modeller ve çekirdek yöntemlerinde kullanılabilir. Spam filtreleme görevinde başarılı olduğu gösterilmiştir (Weinberger ve diğerleri, 2009). Hedefli reklamcılık durumunda ise McMahan ve diğerleri (2013), (m)’nin milyarlar mertebesinde olması gerektiğini, aksi takdirde tahmin hatalarını kabul edilebilir bir seviyeye indiremediklerini raporlamaktadır; bu da depolama alanında yeterli bir tasarruf sağlamaz.
+Özellik hash'lemenin bir dezavantajı, hash’lenmiş özelliklerin, orijinal özelliklerin birleştirilmiş hâli olmaları nedeniyle artık yorumlanabilir olmamalarıdır.
+Örnek 5-5’te, scikit-learn’ün FeatureHasher’ını kullanarak, Yelp yorumları veri seti ile depolama ve yorumlanabilirlik arasında nasıl bir denge kurulduğunu gösteriyoruz.
+Örnek 5-5. Özellik hash'leme (diğer adıyla “hashing hilesi”)
 
 
 
