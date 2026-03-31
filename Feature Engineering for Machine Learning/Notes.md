@@ -70,3 +70,16 @@ np.floor(np.log10(large_counts))
 ```
 
 # Yelp İşletme Yorum Sayılarının Ondalıklarını Hesaplamak
+
+```py
+
+```
+
+
+
+
+# 
+
+```py
+
+```
