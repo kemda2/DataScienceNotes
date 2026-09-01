@@ -196,3 +196,40 @@ plt.xlabel("max_depth", size=20)
 plt.ylabel("accuracy", size=20)
 plt.show()
 ```
+
+![](i/001.png)
+
+En popüler ve yaygın olarak kullanılan birkaç çapraz doğrulama tekniği:
+
+k-fold cross-validation (k-katlı çapraz doğrulama)
+stratified k-fold cross-validation (tabakalı k-katlı çapraz doğrulama)
+hold-out based validation (hold-out tabanlı doğrulama)
+leave-one-out cross-validation (birini dışarıda bırakma çapraz doğrulaması)
+group k-fold cross-validation (grup k-katlı çapraz doğrulama)
+
+Scikit-learn'deki KFold kullanılarak herhangi bir veri, k eşit parçaya bölünebilir.
+k-fold çapraz doğrulama kullanıldığında, her örneğe 0'dan k-1'e kadar bir değer atanır.
+
+```python
+# import pandas and model_selection module of scikit-learn
+import pandas as pd
+from sklearn import model_selection
+if __name__ == "__main__":
+    # Training data is in a CSV file called train.csv
+    df = pd.read_csv("train.csv")
+
+    # we create a new column called kfold and fill it with -1
+    df["kfold"] = -1
+
+    # the next step is to randomize the rows of the data
+    df = df.sample(frac=1).reset_index(drop=True)
+
+    # initiate the kfold class from model_selection module
+    kf = model_selection.KFold(n_splits=5)
+
+    # fill the new kfold column
+    for fold, (trn_, val_) in enumerate(kf.split(X=df)):
+        df.loc[val_, 'kfold'] = fold
+        # save the new csv with kfold column
+        df.to_csv("train_folds.csv", index=False)
+```
