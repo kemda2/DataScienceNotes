@@ -388,9 +388,9 @@ from sklearn import metrics
 l1 = [0,1,1,1,0,0,0,1]
 l2 = [0,1,0,1,0,1,0,0]
 metrics.accuracy_score(l1, l2)
-0.625
+# 0.625
 accuracy(l1, l2)
-0.625
+# 0.625
 ```
 
 ```python
@@ -451,13 +451,13 @@ l1 = [0,1,1,1,0,0,0,1]
 l2 = [0,1,0,1,0,1,0,0]
 
 true_positive(l1, l2)
-2
+# 2
 false_positive(l1, l2)
-1
+# 1
 false_negative(l1, l2)
-2
+# 2
 true_negative(l1, l2)
-3
+# 3
 
 def accuracy_v2(y_true, y_pred):
     """
@@ -475,5 +475,134 @@ def accuracy_v2(y_true, y_pred):
     accuracy_score = (tp + tn) / (tp + tn + fp + fn)
 
     return accuracy_score
+
+l1 = [0, 1, 1, 1, 0, 0, 0, 1]
+l2 = [0, 1, 0, 1, 0, 1, 0, 0]
+
+accuracy(l1, l2)
+# 0.625
+
+accuracy_v2(l1, l2)
+# 0.625
+
+metrics.accuracy_score(l1, l2)
+# 0.625
 ```
 
+```python
+def precision(y_true, y_pred):
+    """
+    Precision hesaplayan fonksiyon.
+    y_true: Gerçek değerler
+    y_pred: Modelin tahminleri
+    return: precision skoru
+    """
+
+    tp = true_positive(y_true, y_pred)
+    fp = false_positive(y_true, y_pred)
+
+    precision = tp / (tp + fp)
+
+    return precision
+
+l1 = [0, 1, 1, 1, 0, 0, 0, 1]  # gerçek değerler
+l2 = [0, 1, 0, 1, 0, 1, 0, 0]  # tahminler
+
+precision(l1, l2)
+# 0.6666666666666666
+
+def recall(y_true, y_pred):
+    """
+    Recall hesaplayan fonksiyon.
+    y_true: Gerçek değerler
+    y_pred: Modelin tahminleri
+    return: recall skoru
+    """
+
+    tp = true_positive(y_true, y_pred)
+    fn = false_negative(y_true, y_pred)
+
+    recall = tp / (tp + fn)
+
+    return recall
+
+l1 = [0, 1, 1, 1, 0, 0, 0, 1]
+l2 = [0, 1, 0, 1, 0, 1, 0, 0]
+
+recall(l1, l2)
+# 0.5
+
+
+
+import matplotlib.pyplot as plt
+
+# Gerçek değerler
+y_true = [
+    0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+    1, 0, 0, 0, 0, 0, 0, 0, 1, 0
+]
+
+# Modelin tahmin ettiği olasılıklar
+y_pred = [
+    0.02638412, 0.11114267, 0.31620708,
+    0.0490937, 0.0191491, 0.17554844,
+    0.15952202, 0.03819563, 0.11639273,
+    0.079377, 0.08584789, 0.39095342,
+    0.27259048, 0.03447096, 0.04644807,
+    0.03543574, 0.18521942, 0.05934905,
+    0.61977213, 0.33056815
+]
+
+# Listeler
+precisions = []
+recalls = []
+
+# Threshold değerleri
+thresholds = [
+    0.0490937,
+    0.05934905,
+    0.079377,
+    0.08584789,
+    0.11114267,
+    0.11639273,
+    0.15952202,
+    0.17554844,
+    0.18521942,
+    0.27259048,
+    0.31620708,
+    0.33056815,
+    0.39095342,
+    0.61977213
+]
+
+# Her threshold için precision ve recall hesapla
+for i in thresholds:
+
+    # Olasılıkları 0 veya 1'e dönüştür
+    temp_prediction = [
+        1 if x >= i else 0
+        for x in y_pred
+    ]
+
+    # Precision hesapla
+    p = precision(y_true, temp_prediction)
+
+    # Recall hesapla
+    r = recall(y_true, temp_prediction)
+
+    # Sonuçları listelere ekle
+    precisions.append(p)
+    recalls.append(r)
+
+
+# Precision-Recall grafiği
+plt.figure(figsize=(7, 7))
+plt.plot(recalls, precisions, marker="o")
+plt.xlabel("Recall", fontsize=15)
+plt.ylabel("Precision", fontsize=15)
+plt.title("Precision-Recall Curve")
+plt.grid()
+plt.show()
+```
+
+![](i/004.png)
