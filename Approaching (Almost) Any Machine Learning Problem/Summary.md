@@ -233,3 +233,108 @@ if __name__ == "__main__":
         # save the new csv with kfold column
         df.to_csv("train_folds.csv", index=False)
 ```
+
+Normal K-Fold, verileri katmanlara rastgele böler; Stratified K-Fold ise her katmanda sınıfların oranını mümkün olduğunca aynı tutar. Özellikle dengesiz veri kümelerinde Stratified K-Fold çok daha güvenlidir.
+
+```python
+# import pandas and model_selection module of scikit-learn
+import pandas as pd
+from sklearn import model_selection
+if __name__ == "__main__":
+    # Training data is in a csv file called train.csv
+    df = pd.read_csv("train.csv")
+    # we create a new column called kfold and fill it with -1
+    df["kfold"] = -1
+    # the next step is to randomize the rows of the data
+    df = df.sample(frac=1).reset_index(drop=True)
+    # fetch targets
+    y = df.target.values
+    # initiate the kfold class from model_selection module
+    kf = model_selection.StratifiedKFold(n_splits=5)
+    # fill the new kfold column
+    for f, (t_, v_) in enumerate(kf.split(X=df, y=y)):
+    df.loc[v_, 'kfold'] = f
+    # save the new csv with kfold column
+    df.to_csv("train_folds.csv", index=False)
+```
+
+```python
+b = sns.countplot(x='quality', data=df)
+b.set_xlabel("quality", fontsize=20)
+b.set_ylabel("count", fontsize=20)
+```
+
+![](i/002.png)
+
+Az örnekli regresyon problemlerinde aşağıdaki tabloya göre kaç bins'e bölünerek hedef binlere ayrılır bakılır ve oluşturulan bins değişkenine göre stratified k-fold yapılır. Direk k-fold da kullanılabilir.
+
+![10000'den az veride kaç bin'e böleceğimizin seçimi](i/003.png)
+
+```python
+# stratified-kfold for regression
+
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+from sklearn import model_selection
+
+
+def create_folds(data):
+    # kfold adında yeni bir sütun oluşturuyoruz ve başlangıçta -1 veriyoruz
+    data["kfold"] = -1
+
+    # Verinin satırlarını rastgele karıştırıyoruz
+    data = data.sample(frac=1).reset_index(drop=True)
+
+    # Sturges kuralına göre bin sayısını hesaplıyoruz
+    num_bins = np.floor(1 + np.log2(len(data)))
+
+    # Target değerlerini bin'lere ayırıyoruz
+    data.loc[:, "bins"] = pd.cut(
+        data["target"],
+        bins=num_bins,
+        labels=False
+    )
+
+    # 5 katlı Stratified K-Fold oluşturuyoruz
+    kf = model_selection.StratifiedKFold(n_splits=5)
+
+    # Fold'ları oluşturuyoruz
+    # Burada target yerine bins kullanıyoruz
+    for f, (t_, v_) in enumerate(
+        kf.split(X=data, y=data.bins.values)
+    ):
+        data.loc[v_, "kfold"] = f
+
+    # Geçici olarak oluşturduğumuz bins sütununu siliyoruz
+    data = data.drop("bins", axis=1)
+
+    # Fold bilgileri eklenmiş DataFrame'i döndürüyoruz
+    return data
+
+
+if __name__ == "__main__":
+    # 15000 örnek, 100 feature ve 1 target içeren
+    # yapay bir regresyon veri seti oluşturuyoruz
+    X, y = datasets.make_regression(
+        n_samples=15000,
+        n_features=100,
+        n_targets=1
+    )
+
+    # NumPy dizisini DataFrame'e dönüştürüyoruz
+    df = pd.DataFrame(
+        X,
+        columns=[f"f_{i}" for i in range(X.shape[1])]
+    )
+
+    # Target sütununu ekliyoruz
+    df.loc[:, "target"] = y
+
+    # Stratified K-Fold'ları oluşturuyoruz
+    df = create_folds(df)
+
+    # Sonucu görmek için ilk 10 satırı yazdırıyoruz
+    print(df.head(10))
+
+```
