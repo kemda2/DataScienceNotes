@@ -338,3 +338,142 @@ if __name__ == "__main__":
     print(df.head(10))
 
 ```
+
+## Değerlendirme Metrikleri
+
+Sınıflandırma problemlerinde en yaygın kullanılan metrikler şunlardır:
+
+* Accuracy (Doğruluk)
+* Precision (Kesinlik) — P
+* Recall (Duyarlılık) — R
+* F1 Score — F1
+* ROC (Receiver Operating Characteristic) eğrisinin altında kalan alan — AUC
+* Log Loss
+* Precision at k — P@k
+* Average Precision at k — AP@k
+* Mean Average Precision at k — MAP@k
+* Regresyon problemlerinde kullanılan metrikler
+
+Regresyon problemlerinde en yaygın kullanılan değerlendirme metrikleri ise şunlardır:
+
+* Mean Absolute Error (MAE) — Ortalama Mutlak Hata
+* Mean Squared Error (MSE) — Ortalama Kare Hata
+* Root Mean Squared Error (RMSE) — Kök Ortalama Kare Hata
+* Root Mean Squared Logarithmic Error (RMSLE) — Kök Ortalama Kare Logaritmik Hata
+* Mean Percentage Error (MPE) — Ortalama Yüzde Hata
+* Mean Absolute Percentage Error (MAPE) — Ortalama Mutlak * Yüzde Hata
+* R² — R-kare
+
+```python
+def accuracy(y_true, y_pred):
+    """
+    Function to calculate accuracy
+    :param y_true: list of true values
+    :param y_pred: list of predicted values
+    :return: accuracy score
+    """
+    # initialize a simple counter for correct predictions
+    correct_counter = 0
+    # loop over all elements of y_true
+    # and y_pred "together"
+    for yt, yp in zip(y_true, y_pred):
+        if yt == yp:
+        # if prediction is equal to truth, increase the counter
+        correct_counter += 1
+        # return accuracy
+        # which is correct predictions over the number of samples
+    return correct_counter / len(y_true)
+
+from sklearn import metrics
+l1 = [0,1,1,1,0,0,0,1]
+l2 = [0,1,0,1,0,1,0,0]
+metrics.accuracy_score(l1, l2)
+0.625
+accuracy(l1, l2)
+0.625
+```
+
+```python
+def true_positive(y_true, y_pred):
+    """
+    True Positive sayısını hesaplar.
+    y_true: Gerçek değerler
+    y_pred: Modelin tahminleri
+    """
+    tp = 0
+
+    for yt, yp in zip(y_true, y_pred):
+        if yt == 1 and yp == 1:
+            tp += 1
+
+    return tp
+
+
+def true_negative(y_true, y_pred):
+    """
+    True Negative sayısını hesaplar.
+    """
+    tn = 0
+
+    for yt, yp in zip(y_true, y_pred):
+        if yt == 0 and yp == 0:
+            tn += 1
+
+    return tn
+
+
+def false_positive(y_true, y_pred):
+    """
+    False Positive sayısını hesaplar.
+    """
+    fp = 0
+
+    for yt, yp in zip(y_true, y_pred):
+        if yt == 0 and yp == 1:
+            fp += 1
+
+    return fp
+
+
+def false_negative(y_true, y_pred):
+    """
+    False Negative sayısını hesaplar.
+    """
+    fn = 0
+
+    for yt, yp in zip(y_true, y_pred):
+        if yt == 1 and yp == 0:
+            fn += 1
+
+    return fn
+
+l1 = [0,1,1,1,0,0,0,1]
+l2 = [0,1,0,1,0,1,0,0]
+
+true_positive(l1, l2)
+2
+false_positive(l1, l2)
+1
+false_negative(l1, l2)
+2
+true_negative(l1, l2)
+3
+
+def accuracy_v2(y_true, y_pred):
+    """
+    TP/TN/FP/FN kullanarak accuracy hesaplayan fonksiyon.
+    
+    y_true: Gerçek değerler
+    y_pred: Modelin tahminleri
+    """
+    
+    tp = true_positive(y_true, y_pred)
+    fp = false_positive(y_true, y_pred)
+    fn = false_negative(y_true, y_pred)
+    tn = true_negative(y_true, y_pred)
+
+    accuracy_score = (tp + tn) / (tp + tn + fp + fn)
+
+    return accuracy_score
+```
+
