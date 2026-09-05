@@ -606,3 +606,166 @@ plt.show()
 ```
 
 ![](i/004.png)
+
+```python
+def f1(y_true, y_pred):
+    """
+    Function to calculate f1 score
+    :param y_true: list of true values
+    :param y_pred: list of predicted values
+    :return: f1 score
+    """
+    p = precision(y_true, y_pred)
+    r = recall(y_true, y_pred)
+    score = 2 * p * r / (p + r)
+    return score
+```
+
+```python
+y_true = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+          1, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+
+y_pred = [0, 0, 1, 0, 0, 0, 1, 0, 0, 0,
+          1, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+
+f1(y_true, y_pred)
+0.5714285714285715
+```
+
+```python
+from sklearn import metrics
+
+metrics.f1_score(y_true, y_pred)
+
+0.5714285714285715
+```
+
+```python
+def tpr(y_true, y_pred):
+    """
+    Function to calculate tpr
+    :param y_true: list of true values
+    :param y_pred: list of predicted values
+    :return: tpr/recall
+    """
+    return recall(y_true, y_pred)
+```
+
+```python
+def fpr(y_true, y_pred):
+    """
+    Function to calculate fpr
+    :param y_true: list of true values
+    :param y_pred: list of predicted values
+    :return: fpr
+    """
+    fp = false_positive(y_true, y_pred)
+    tn = true_negative(y_true, y_pred)
+    return fp / (tn + fp)
+```
+
+```python
+# TPR ve FPR değerlerini saklamak için boş listeler
+tpr_list = []
+fpr_list = []
+
+# Gerçek hedefler
+y_true = [0, 0, 0, 0, 1, 0, 1,
+          0, 0, 1, 0, 1, 0, 0, 1]
+
+# Bir örneğin 1 olma olasılığına dair tahminler
+y_pred = [0.1, 0.3, 0.2, 0.6, 0.8, 0.05,
+          0.9, 0.5, 0.3, 0.66, 0.3, 0.2,
+          0.85, 0.15, 0.99]
+
+# Elle belirlenmiş threshold (eşik) değerleri
+thresholds = [0, 0.1, 0.2, 0.3, 0.4, 0.5,
+              0.6, 0.7, 0.8, 0.85, 0.9, 0.99, 1.0]
+
+# Tüm threshold değerleri üzerinde döngü
+for thresh in thresholds:
+
+    # Belirli bir threshold için tahminleri hesapla
+    temp_pred = [1 if x >= thresh else 0 for x in y_pred]
+
+    # TPR hesapla
+    temp_tpr = tpr(y_true, temp_pred)
+
+    # FPR hesapla
+    temp_fpr = fpr(y_true, temp_pred)
+
+    # TPR ve FPR değerlerini listelere ekle
+    tpr_list.append(temp_tpr)
+    fpr_list.append(temp_fpr)
+```
+
+![alt text](i/005.png)
+
+```python
+plt.figure(figsize=(7, 7))
+
+plt.fill_between(fpr_list, tpr_list, alpha=0.4)
+plt.plot(fpr_list, tpr_list, lw=3)
+
+plt.xlim(0, 1.0)
+plt.ylim(0, 1.0)
+
+plt.xlabel('FPR', fontsize=15)
+plt.ylabel('TPR', fontsize=15)
+
+plt.show()
+```
+
+![](i/006.png)
+
+```python
+from sklearn import metrics
+
+y_true = [0, 0, 0, 0, 1, 0, 1,
+          0, 0, 1, 0, 1, 0, 0, 1]
+
+y_pred = [0.1, 0.3, 0.2, 0.6, 0.8, 0.05,
+          0.9, 0.5, 0.3, 0.66, 0.3, 0.2,
+          0.85, 0.15, 0.99]
+
+metrics.roc_auc_score(y_true, y_pred)
+0.8300000000000001
+```
+
+```python
+# True Positive ve False Positive değerlerini saklamak için boş listeler
+tp_list = []
+fp_list = []
+
+# Gerçek hedefler
+y_true = [0, 0, 0, 0, 1, 0, 1,
+          0, 0, 1, 0, 1, 0, 0, 1]
+
+# Bir örneğin 1 olma olasılığına dair tahminler
+y_pred = [0.1, 0.3, 0.2, 0.6, 0.8, 0.05,
+          0.9, 0.5, 0.3, 0.66, 0.3, 0.2,
+          0.85, 0.15, 0.99]
+
+# Elle belirlenmiş threshold (eşik) değerleri
+thresholds = [0, 0.1, 0.2, 0.3, 0.4, 0.5,
+              0.6, 0.7, 0.8, 0.85, 0.9, 0.99, 1.0]
+
+# Tüm threshold değerleri üzerinde döngü
+for thresh in thresholds:
+
+    # Belirli bir threshold için tahminleri hesapla
+    temp_pred = [1 if x >= thresh else 0 for x in y_pred]
+
+    # True Positive hesapla
+    temp_tp = true_positive(y_true, temp_pred)
+
+    # False Positive hesapla
+    temp_fp = false_positive(y_true, temp_pred)
+
+    # TP ve FP değerlerini listelere ekle
+    tp_list.append(temp_tp)
+    fp_list.append(temp_fp)
+```
+
+![alt text](i/007.png)
+
