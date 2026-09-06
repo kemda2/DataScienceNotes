@@ -771,3 +771,190 @@ for thresh in thresholds:
 
 ![alt text](i/008.png)
 
+```python
+import numpy as np
+
+def log_loss(y_true, y_proba):
+    """
+    Function to calculate log loss
+    :param y_true: list of true values
+    :param y_proba: list of probabilities for 1
+    :return: overall log loss
+    """
+
+    # epsilon değerini tanımla
+    epsilon = 1e-15
+
+    # Bireysel loss değerlerini saklamak için boş liste
+    loss = []
+
+    # Gerçek değerler ve tahmin olasılıkları üzerinde dolaş
+    for yt, yp in zip(y_true, y_proba):
+
+        # Olasılığı sınırla
+        yp = np.clip(yp, epsilon, 1 - epsilon)
+
+        # Tek bir örnek için loss hesapla
+        temp_loss = -1.0 * (
+            yt * np.log(yp)
+            + (1 - yt) * np.log(1 - yp)
+        )
+
+        # Loss değerini listeye ekle
+        loss.append(temp_loss)
+
+    # Tüm örneklerin ortalama loss değerini döndür
+    return np.mean(loss)
+```
+
+```python
+y_true = [0, 0, 0, 0, 1, 0, 1,
+          0, 0, 1, 0, 1, 0, 0, 1]
+
+y_proba = [0.1, 0.3, 0.2, 0.6, 0.8, 0.05,
+           0.9, 0.5, 0.3, 0.66, 0.3, 0.2,
+           0.85, 0.15, 0.99]
+
+log_loss(y_true, y_proba)
+0.49882711861432294
+
+from sklearn import metrics
+metrics.log_loss(y_true, y_proba)
+0.49882711861432294
+
+```
+
+```python
+import numpy as np
+
+def macro_precision(y_true, y_pred):
+    """
+    Function to calculate macro averaged precision
+    :param y_true: list of true values
+    :param y_pred: list of predicted values
+    :return: macro precision score
+    """
+
+    # unique değerlerin uzunluğunu alarak
+    # sınıf sayısını bul
+    num_classes = len(np.unique(y_true))
+
+    # precision değerini 0 olarak başlat
+    precision = 0
+
+    # tüm sınıflar üzerinde döngü
+    for class_ in range(num_classes):
+
+        # Mevcut sınıf dışındaki tüm sınıflar negatif kabul edilir
+        temp_true = [1 if p == class_ else 0 for p in y_true]
+        temp_pred = [1 if p == class_ else 0 for p in y_pred]
+
+        # Mevcut sınıf için True Positive hesapla
+        tp = true_positive(temp_true, temp_pred)
+
+        # Mevcut sınıf için False Positive hesapla
+        fp = false_positive(temp_true, temp_pred)
+
+        # Mevcut sınıf için precision hesapla
+        temp_precision = tp / (tp + fp)
+
+        # Tüm sınıfların precision değerlerini topla
+        precision += temp_precision
+
+    # Sınıfların ortalama precision değerini hesapla ve döndür
+    precision /= num_classes
+
+    return precision
+```
+
+```python
+import numpy as np
+
+def micro_precision(y_true, y_pred):
+    """
+    Function to calculate micro averaged precision
+    :param y_true: list of true values
+    :param y_pred: list of predicted values
+    :return: micro precision score
+    """
+
+    # Unique değerlerin uzunluğunu alarak
+    # sınıf sayısını bul
+    num_classes = len(np.unique(y_true))
+
+    # TP ve FP değerlerini 0 olarak başlat
+    tp = 0
+    fp = 0
+
+    # Tüm sınıflar üzerinde döngü
+    for class_ in range(num_classes):
+
+        # Mevcut sınıf dışındaki tüm sınıflar negatif kabul edilir
+        temp_true = [1 if p == class_ else 0 for p in y_true]
+        temp_pred = [1 if p == class_ else 0 for p in y_pred]
+
+        # Mevcut sınıf için True Positive hesapla
+        # ve toplam TP'ye ekle
+        tp += true_positive(temp_true, temp_pred)
+
+        # Mevcut sınıf için False Positive hesapla
+        # ve toplam FP'ye ekle
+        fp += false_positive(temp_true, temp_pred)
+
+    # Genel precision değerini hesapla ve döndür
+    precision = tp / (tp + fp)
+
+    return precision
+```
+
+```python
+from collections import Counter
+import numpy as np
+
+def weighted_precision(y_true, y_pred):
+    """
+    Function to calculate weighted averaged precision
+    :param y_true: list of true values
+    :param y_pred: list of predicted values
+    :return: weighted precision score
+    """
+
+    # Unique değerlerin uzunluğunu alarak
+    # sınıf sayısını bul
+    num_classes = len(np.unique(y_true))
+
+    # Sınıf: örnek sayısı sözlüğü oluştur
+    # Örneğin: {0: 20, 1: 15, 2: 21}
+    class_counts = Counter(y_true)
+
+    # Precision değerini 0 olarak başlat
+    precision = 0
+
+    # Tüm sınıflar üzerinde döngü
+    for class_ in range(num_classes):
+
+        # Mevcut sınıf dışındaki tüm sınıflar negatif kabul edilir
+        temp_true = [1 if p == class_ else 0 for p in y_true]
+        temp_pred = [1 if p == class_ else 0 for p in y_pred]
+
+        # Sınıf için TP ve FP hesapla
+        tp = true_positive(temp_true, temp_pred)
+        fp = false_positive(temp_true, temp_pred)
+
+        # Sınıfın precision değerini hesapla
+        temp_precision = tp / (tp + fp)
+
+        # Precision değerini sınıftaki örnek sayısıyla çarp
+        weighted_precision = class_counts[class_] * temp_precision
+
+        # Genel precision değerine ekle
+        precision += weighted_precision
+
+    # Toplam örnek sayısına bölerek
+    # genel weighted precision değerini hesapla
+    overall_precision = precision / len(y_true)
+
+    return overall_precision
+```
+
+56
