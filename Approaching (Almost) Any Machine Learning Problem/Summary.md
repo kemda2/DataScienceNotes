@@ -1098,6 +1098,65 @@ plt.show()
 
 ![](i/009.png)
 
+```python
+def pk(y_true, y_pred, k):
+    """
+    This function calculates precision at k
+    for a single sample
+
+    :param y_true: list of values, actual classes
+    :param y_pred: list of values, predicted classes
+    :return: precision at a given value k
+    """
+
+    # If k is 0, return 0.
+    # We should never have this as k is always >= 1
+    if k == 0:
+        return 0
+
+    # We are interested only in top-k predictions
+    y_pred = y_pred[:k]
+
+    # Convert predictions to set
+    pred_set = set(y_pred)
+
+    # Convert actual values to set
+    true_set = set(y_true)
+
+    # Find common values
+    common_values = pred_set.intersection(true_set)
+
+    # Return length of common values over k
+    return len(common_values) / len(y_pred[:k])
+```
+
+```python
+def apk(y_true, y_pred, k):
+    """
+    This function calculates average precision at k
+    for a single sample
+
+    :param y_true: list of values, actual classes
+    :param y_pred: list of values, predicted classes
+    :return: average precision at a given value k
+    """
+
+    # Initialize P@k list of values
+    pk_values = []
+
+    # Loop over all k, from 1 to k + 1
+    for i in range(1, k + 1):
+
+        # Calculate P@i and append to list
+        pk_values.append(pk(y_true, y_pred, i))
+
+    # If we have no values in the list, return 0
+    if len(pk_values) == 0:
+        return 0
+
+    # Return the sum of the list divided by its length
+    return sum(pk_values) / len(pk_values)
+```
 
 
-61
+56
