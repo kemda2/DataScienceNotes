@@ -1055,4 +1055,49 @@ print(metrics.f1_score(
 0.41269841269841273
 ```
 
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn import metrics
+
+# Gerçek sınıflar
+y_true = [0, 1, 2, 0, 1, 2, 0, 2, 2]
+
+# Tahminler
+y_pred = [0, 2, 1, 0, 2, 1, 0, 0, 2]
+
+# Confusion matrix
+cm = metrics.confusion_matrix(y_true, y_pred)
+
+# Grafik
+plt.figure(figsize=(10, 10))
+
+cmap = sns.cubehelix_palette(
+    50,
+    hue=0.05,
+    rot=0,
+    light=0.9,
+    dark=0,
+    as_cmap=True
+)
+
+sns.set(font_scale=2.5)
+
+sns.heatmap(
+    cm,
+    annot=True,
+    cmap=cmap,
+    cbar=False
+)
+
+plt.ylabel("Actual Labels", fontsize=20)
+plt.xlabel("Predicted Labels", fontsize=20)
+
+plt.show()
+```
+
+![](i/009.png)
+
+
+
 56
