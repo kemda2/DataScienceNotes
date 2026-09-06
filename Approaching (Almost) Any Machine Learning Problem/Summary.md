@@ -957,4 +957,102 @@ def weighted_precision(y_true, y_pred):
     return overall_precision
 ```
 
+```python
+from sklearn import metrics
+
+y_true = [0, 1, 2, 0, 1, 2, 0, 2, 2]
+y_pred = [0, 2, 1, 0, 2, 1, 0, 0, 2]
+
+# Macro Precision
+print("Macro Precision:")
+print("Bizim:", macro_precision(y_true, y_pred))
+print("sklearn:", metrics.precision_score(y_true, y_pred, average="macro"))
+
+# Micro Precision
+print("\nMicro Precision:")
+print("Bizim:", micro_precision(y_true, y_pred))
+print("sklearn:", metrics.precision_score(y_true, y_pred, average="micro"))
+
+# Weighted Precision
+print("\nWeighted Precision:")
+print("Bizim:", weighted_precision(y_true, y_pred))
+print("sklearn:", metrics.precision_score(y_true, y_pred, average="weighted"))
+```
+
+
+
+```python
+from collections import Counter
+import numpy as np
+
+
+def weighted_f1(y_true, y_pred):
+    """
+    Function to calculate weighted F1 score
+
+    :param y_true: list of true values
+    :param y_pred: list of predicted values
+    :return: weighted F1 score
+    """
+
+    # Find the number of classes by taking
+    # length of unique values in true list
+    num_classes = len(np.unique(y_true))
+
+    # Create class:sample count dictionary
+    # Example: {0: 20, 1: 15, 2: 21}
+    class_counts = Counter(y_true)
+
+    # Initialize F1 to 0
+    f1 = 0
+
+    # Loop over all classes
+    for class_ in range(num_classes):
+
+        # All classes except current are considered negative
+        temp_true = [1 if p == class_ else 0 for p in y_true]
+        temp_pred = [1 if p == class_ else 0 for p in y_pred]
+
+        # Calculate precision and recall for class
+        p = precision(temp_true, temp_pred)
+        r = recall(temp_true, temp_pred)
+
+        # Calculate F1 of class
+        if p + r != 0:
+            temp_f1 = 2 * p * r / (p + r)
+        else:
+            temp_f1 = 0
+
+        # Multiply F1 with count of samples in class
+        weighted_f1 = class_counts[class_] * temp_f1
+
+        # Add to F1
+        f1 += weighted_f1
+
+    # Calculate overall F1 by dividing by
+    # total number of samples
+    overall_f1 = f1 / len(y_true)
+
+    return overall_f1
+```
+
+```python
+from sklearn import metrics
+
+y_true = [0, 1, 2, 0, 1, 2, 0, 2, 2]
+y_pred = [0, 2, 1, 0, 2, 1, 0, 0, 2]
+
+print(weighted_f1(y_true, y_pred))
+
+0.41269841269841273
+
+print(metrics.f1_score(
+    y_true,
+    y_pred,
+    average="weighted"
+))
+
+0.41269841269841273
+```
+
 56
