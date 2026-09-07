@@ -1371,6 +1371,36 @@ metrics.accuracy_score(y_true, y_pred)
 0.4444444444444444
 ```
 
+```python
+def mcc(y_true, y_pred):
+    """
+    This function calculates Matthew's Correlation Coefficient
+    for binary classification.
 
+    :param y_true: list of true values
+    :param y_pred: list of predicted values
+    :return: MCC score
+    """
 
-72
+    tp = true_positive(y_true, y_pred)
+    tn = true_negative(y_true, y_pred)
+    fp = false_positive(y_true, y_pred)
+    fn = false_negative(y_true, y_pred)
+
+    numerator = (tp * tn) - (fp * fn)
+
+    denominator = (
+        (tp + fp) *
+        (fn + tn) *
+        (fp + tn) *
+        (tp + fn)
+    )
+
+    denominator = denominator ** 0.5
+
+    return numerator / denominator
+```
+
+## Makine öğrenmesi projelerini organize etmek
+
+74
