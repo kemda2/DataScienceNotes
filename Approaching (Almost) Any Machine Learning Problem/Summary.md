@@ -1351,6 +1351,26 @@ def mae_np(y_true, y_pred):
     return np.mean(np.abs(y_true - y_pred))
 ```
 
+```python
+from sklearn import metrics
+
+y_true = [1, 2, 3, 1, 2, 3, 1, 2, 3]
+
+y_pred = [2, 1, 3, 1, 2, 3, 3, 1, 2]
+
+metrics.cohen_kappa_score(
+    y_true,
+    y_pred,
+    weights="quadratic"
+)
+
+0.33333333333333337
+
+metrics.accuracy_score(y_true, y_pred)
+
+0.4444444444444444
+```
+
 
 
 72
