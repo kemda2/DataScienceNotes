@@ -1158,5 +1158,127 @@ def apk(y_true, y_pred, k):
     return sum(pk_values) / len(pk_values)
 ```
 
+```python
+def mapk(y_true, y_pred, k):
+    """
+    This function calculates mean average precision at k
+    for multiple samples.
 
-56
+    :param y_true: list of values, actual classes
+    :param y_pred: list of values, predicted classes
+    :param k: number of predictions to consider
+    :return: mean average precision at k
+    """
+
+    # initialize empty list for apk values
+    apk_values = []
+
+    # loop over all samples
+    for i in range(len(y_true)):
+
+        # store AP@k value for every sample
+        apk_values.append(
+            apk(y_true[i], y_pred[i], k=k)
+        )
+
+    # return mean of AP@k values
+    return sum(apk_values) / len(apk_values)
+```
+
+### Regresyon
+
+```python
+import numpy as np
+def mean_absolute_error(y_true, y_pred):
+ """
+ This function calculates mae
+ :param y_true: list of real numbers, true values
+ :param y_pred: list of real numbers, predicted values
+ :return: mean absolute error
+ """
+ # initialize error at 0
+ error = 0
+ # loop over all samples in the true and predicted list
+ for yt, yp in zip(y_true, y_pred):
+ # calculate absolute error
+ # and add to error
+ error += np.abs(yt - yp)
+ # return mean error
+ return error / len(y_true)
+```
+
+```python
+def mean_squared_error(y_true, y_pred):
+    """
+    Bu fonksiyon MSE hesaplar.
+
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: ortalama karesel hata
+    """
+
+    # Hatayı 0 olarak başlat
+    error = 0
+
+    # Gerçek ve tahmin edilen değerler üzerinde dolaş
+    for yt, yp in zip(y_true, y_pred):
+
+        # Karesel hatayı hesapla
+        # ve toplam hataya ekle
+        error += (yt - yp) ** 2
+
+    # Ortalama hatayı döndür
+    return error / len(y_true)
+```
+
+```python
+import numpy as np
+
+def mean_squared_log_error(y_true, y_pred):
+    """
+    Bu fonksiyon MSLE hesaplar.
+
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: ortalama karesel logaritmik hata
+    """
+
+    # Hatayı 0 olarak başlat
+    error = 0
+
+    # Gerçek ve tahmin edilen değerler üzerinde dolaş
+    for yt, yp in zip(y_true, y_pred):
+
+        # Karesel logaritmik hatayı hesapla
+        # ve toplam hataya ekle
+        error += (np.log(1 + yt) - np.log(1 + yp)) ** 2
+
+    # Ortalama hatayı döndür
+    return error / len(y_true)
+```
+
+```python
+def mean_percentage_error(y_true, y_pred):
+    """
+    This function calculates MPE.
+
+    :param y_true: list of real numbers, true values
+    :param y_pred: list of real numbers, predicted values
+    :return: mean percentage error
+    """
+
+    # initialize error at 0
+    error = 0
+
+    # loop over all samples in true and predicted list
+    for yt, yp in zip(y_true, y_pred):
+
+        # calculate percentage error
+        # and add to error
+        error += (yt - yp) / yt
+
+    # return mean percentage error
+    return error / len(y_true)
+```
+
+68
