@@ -1403,4 +1403,144 @@ def mcc(y_true, y_pred):
 
 ## Makine öğrenmesi projelerini organize etmek
 
-74
+# src/train.py
+
+import joblib
+import pandas as pd
+from sklearn import metrics
+from sklearn import tree
+
+
+```python
+# src/train.py
+
+import joblib
+import pandas as pd
+from sklearn import metrics
+from sklearn import tree
+
+
+def run(fold):
+    # read the training data with folds
+    df = pd.read_csv("../input/mnist_train_folds.csv")
+
+    # training data is where kfold is not equal to provided fold
+    # also, note that we reset the index
+    df_train = df[df.kfold != fold].reset_index(drop=True)
+
+    # validation data is where kfold is equal to provided fold
+    df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+    # drop the label column from dataframe and convert it to
+    # a numpy array by using .values.
+    # target is label column in the dataframe
+    x_train = df_train.drop("label", axis=1).values
+    y_train = df_train.label.values
+
+    # similarly, for validation, we have
+    x_valid = df_valid.drop("label", axis=1).values
+    y_valid = df_valid.label.values
+
+    # initialize simple decision tree classifier from sklearn
+    clf = tree.DecisionTreeClassifier()
+
+    # fit the model on training data
+    clf.fit(x_train, y_train)
+
+    # create predictions for validation samples
+    preds = clf.predict(x_valid)
+
+    # calculate & print accuracy
+    accuracy = metrics.accuracy_score(y_valid, preds)
+    print(f"Fold={fold}, Accuracy={accuracy}")
+
+    # save the model
+    joblib.dump(clf, f"../models/dt_{fold}.bin")
+
+
+if __name__ == "__main__":
+    run(fold=0)
+    run(fold=1)
+    run(fold=2)
+    run(fold=3)
+    run(fold=4)
+
+❯ python train.py
+Fold=0, Accuracy=0.8680833333333333
+Fold=1, Accuracy=0.8685
+Fold=2, Accuracy=0.8674166666666666
+Fold=3, Accuracy=0.8703333333333333
+Fold=4, Accuracy=0.8699166666666667
+```
+
+Elle yazılan kısımları koddan ayırmak için;
+
+```python
+# config.py
+TRAINING_FILE = "../input/mnist_train_folds.csv"
+MODEL_OUTPUT = "../models/"
+```
+Düzeltilmiş train.py;
+```python
+# train.py
+
+import os
+import config
+import joblib
+import pandas as pd
+from sklearn import metrics
+from sklearn import tree
+
+
+def run(fold):
+    # read the training data with folds
+    df = pd.read_csv(config.TRAINING_FILE)
+
+    # training data is where kfold is not equal to provided fold
+    # also, note that we reset the index
+    df_train = df[df.kfold != fold].reset_index(drop=True)
+
+    # validation data is where kfold is equal to provided fold
+    df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+    # drop the label column from dataframe and convert it to
+    # a numpy array by using .values.
+    # target is label column in the dataframe
+    x_train = df_train.drop("label", axis=1).values
+    y_train = df_train.label.values
+
+    # similarly, for validation, we have
+    x_valid = df_valid.drop("label", axis=1).values
+    y_valid = df_valid.label.values
+
+    # initialize simple decision tree classifier from sklearn
+    clf = tree.DecisionTreeClassifier()
+
+    # fit the model on training data
+    clf.fit(x_train, y_train)
+
+    # create predictions for validation samples
+    preds = clf.predict(x_valid)
+
+    # calculate & print accuracy
+    accuracy = metrics.accuracy_score(y_valid, preds)
+
+    print(f"Fold={fold}, Accuracy={accuracy}")
+
+    # save the model
+    joblib.dump(
+        clf,
+        os.path.join(config.MODEL_OUTPUT, f"dt_{fold}.bin")
+    )
+
+
+if __name__ == "__main__":
+    run(fold=0)
+    run(fold=1)
+    run(fold=2)
+    run(fold=3)
+    run(fold=4)
+```
+
+
+76
