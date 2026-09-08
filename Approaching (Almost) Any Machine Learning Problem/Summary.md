@@ -1720,4 +1720,122 @@ df.loc[:, "ord_2"] = lbl_enc.fit_transform(df.ord_2.values)
 
 > Ancak bu tür bir encoding, linear models (doğrusal modeller), Support Vector Machines (SVM) veya neural networks (sinir ağları) için kullanılamaz. Çünkü bu modeller verilerin normalize edilmesini veya standardize edilmesini bekler.
 
+Binarize de yapılabilir;
+
+Freezing    --> 0 --> 0 0 0
+Warm        --> 1 --> 0 0 1
+Cold        --> 2 --> 0 1 0
+Boiling Hot --> 3 --> 0 1 1
+Hot         --> 4 --> 1 0 0
+Lava Hot    --> 5 --> 1 0 1
+
+Bu olsıfırlı bir tablo oluşturur.
+
+Örneğin ilk üç satırın ne kadar hafıza tuttuğuna bakalım;
+
+```python
+import numpy as np
+
+# Örnek feature matrix oluşturuyoruz
+example = np.array(
+    [
+        [0, 0, 1],
+        [1, 0, 0],
+        [1, 0, 1]
+    ]
+)
+
+# Bellekte kapladığı alanı byte cinsinden yazdır
+print(example.nbytes)
+
+72
+```
+
+Boyut azaltmak için sadece 1 bulunan konumları saklarız;
+
+(0, 2) 1
+(1, 0) 1
+(2, 0) 1
+(2, 2) 1
+
+Numpy ile sparse yaparak aynı veri ne kadar yer kaplıyor bakalım;
+
+```python
+import numpy as np
+from scipy import sparse
+
+# Örnek feature matrix oluştur
+example = np.array(
+    [
+        [0, 0, 1],
+        [1, 0, 0],
+        [1, 0, 1]
+    ]
+)
+
+# NumPy array'i sparse CSR matrix'e dönüştür
+sparse_example = sparse.csr_matrix(example)
+
+# Sparse matrix'in data kısmının bellekte kapladığı alanı yazdır
+print(sparse_example.data.nbytes)
+
+32
+```
+
+```python
+print(
+    sparse_example.data.nbytes +
+    sparse_example.indptr.nbytes +
+    sparse_example.indices.nbytes
+)
+
+64
+```
+
+```python
+import numpy as np
+from scipy import sparse
+
+# number of rows
+n_rows = 10000
+
+# number of columns
+n_cols = 100000
+
+# create random binary matrix
+# with only 5% values as 1s
+example = np.random.binomial(
+    1,
+    p=0.05,
+    size=(n_rows, n_cols)
+)
+
+# print size in bytes
+print(f"Size of dense array: {example.nbytes}")
+
+# convert numpy array to sparse CSR matrix
+sparse_example = sparse.csr_matrix(example)
+
+# print size of this sparse matrix
+print(
+    f"Size of sparse array: "
+    f"{sparse_example.data.nbytes}"
+)
+
+# calculate full size of sparse matrix
+full_size = (
+    sparse_example.data.nbytes
+    + sparse_example.indptr.nbytes
+    + sparse_example.indices.nbytes
+)
+
+# print full size of sparse matrix
+print(f"Full size of sparse array: {full_size}")
+
+Size of dense array: 8000000000
+Size of sparse array: 399932496
+Full size of sparse array: 599938748
+```
+
+
 80
