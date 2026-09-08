@@ -1836,6 +1836,180 @@ Size of dense array: 8000000000
 Size of sparse array: 399932496
 Full size of sparse array: 599938748
 ```
+One Hot ile 6 özellikli bir özellikten gelen değerlerin sparse karşılaştırması;
 
+```python
+import numpy as np
+from scipy import sparse
+
+# Binary matrix oluştur
+example = np.array(
+    [
+        [0, 0, 0, 0, 1, 0],
+        [0, 1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0]
+    ]
+)
+
+# Dense array'in bellekte kapladığı alan
+print(f"Size of dense array: {example.nbytes}")
+
+# NumPy array'i sparse CSR matrix'e dönüştür
+sparse_example = sparse.csr_matrix(example)
+
+# Sadece sıfır olmayan değerlerin boyutu
+print(f"Size of sparse array: {sparse_example.data.nbytes}")
+
+# Sparse matrix'in toplam boyutu
+full_size = (
+    sparse_example.data.nbytes
+    + sparse_example.indptr.nbytes
+    + sparse_example.indices.nbytes
+)
+
+# Sparse matrix'in toplam bellekte kapladığı alan
+print(f"Full size of sparse array: {full_size}")
+
+Size of dense array: 144
+Size of sparse array: 24
+Full size of sparse array: 52
+```
+
+```python
+import numpy as np
+from sklearn import preprocessing
+
+# 1001 farklı kategori içeren
+# 1 boyutlu rastgele array oluştur
+example = np.random.randint(
+    1000,
+    size=1000000
+)
+
+# OneHotEncoder oluştur
+# sparse_output=False -> dense array
+ohe = preprocessing.OneHotEncoder(
+    sparse_output=False
+)
+
+# Veriyi dense One-Hot Encoding ile dönüştür
+ohe_example = ohe.fit_transform(
+    example.reshape(-1, 1)
+)
+
+# Dense array'in bellekte kapladığı alan
+print(
+    f"Size of dense array: {ohe_example.nbytes}"
+)
+
+# OneHotEncoder oluştur
+# sparse_output=True -> sparse array
+ohe = preprocessing.OneHotEncoder(
+    sparse_output=True
+)
+
+# Veriyi sparse One-Hot Encoding ile dönüştür
+ohe_example = ohe.fit_transform(
+    example.reshape(-1, 1)
+)
+
+# Sparse matrix'in data kısmının boyutu
+print(
+    f"Size of sparse array: "
+    f"{ohe_example.data.nbytes}"
+)
+
+# Sparse matrix'in toplam boyutu
+full_size = (
+    ohe_example.data.nbytes
+    + ohe_example.indptr.nbytes
+    + ohe_example.indices.nbytes
+)
+
+# Sparse matrix'in toplam bellekte kapladığı alan
+print(
+    f"Full size of sparse array: {full_size}"
+)
+
+Size of dense array: 8000000000
+Size of sparse array: 8000000
+Full size of sparse array: 16000004
+```
+
+```python
+df[df.ord_2 == "Boiling Hot"].shape
+
+(84790, 25)
+
+
+
+df.groupby(["ord_2"])["id"].count()
+
+ord_2
+Boiling Hot 84790
+Cold 97822
+Freezing 142726
+Hot 67508
+Lava Hot 64840
+Warm 124239
+Name: id, dtype: int64
+
+
+
+df.groupby(["ord_2"])["id"].transform("count")
+0 67508.0
+1 124239.0
+2 142726.0
+3 64840.0
+4 97822.0
+ ...
+599995 142726.0
+599996 84790.0
+599997 142726.0
+599998 124239.0
+599999 84790.0
+Name: id, Length: 600000, dtype: float64
+
+
+
+df.groupby(
+    [
+    "ord_1",
+    "ord_2"
+    ]
+    )["id"].count().reset_index(name="count")
+
+     ord_1          ord_2         count
+0    Contributor    Boiling Hot   15634
+1    Contributor    Cold          17734
+2    Contributor    Freezing 26082
+3    Contributor    Hot 12428
+4    Contributor    Lava Hot 11919
+5    Contributor    Warm 22774
+6    Expert         Boiling Hot 19477
+7    Expert         Cold 22956
+8    Expert         Freezing 33249
+9    Expert         Hot 15792
+10   Expert         Lava Hot 15078
+11   Expert         Warm 28900
+12   Grandmaster    Boiling Hot 13623
+13   Grandmaster    Cold 15464
+14   Grandmaster    Freezing 22818
+15   Grandmaster    Hot 10805
+16   Grandmaster    Lava Hot 10363
+17   Grandmaster    Warm 19899
+18   Master Boiling Hot 10800
+.
+.
+.
+.
+```
+
+df["new_feature"] = (
+    df.ord_1.astype(str)
+    + "_"
+    + df.ord_2.astype(str)
+    )
+df.new_feature
 
 80
