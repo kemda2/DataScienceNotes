@@ -1472,7 +1472,9 @@ Elle yazılan kısımları koddan ayırmak için;
 TRAINING_FILE = "../input/mnist_train_folds.csv"
 MODEL_OUTPUT = "../models/"
 ```
+
 Düzeltilmiş train.py;
+
 ```python
 # train.py
 
@@ -1570,6 +1572,7 @@ if __name__ == "__main__":
 ```
 
 Shell üzerinde çalıştırma;
+
 ```shell    
 #!/bin/sh
 python train.py --fold 0
