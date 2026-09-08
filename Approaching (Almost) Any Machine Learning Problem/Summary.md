@@ -1403,14 +1403,6 @@ def mcc(y_true, y_pred):
 
 ## Makine öğrenmesi projelerini organize etmek
 
-# src/train.py
-
-import joblib
-import pandas as pd
-from sklearn import metrics
-from sklearn import tree
-
-
 ```python
 # src/train.py
 
@@ -1541,6 +1533,156 @@ if __name__ == "__main__":
     run(fold=3)
     run(fold=4)
 ```
+
+argparser ile her foldu çalıştırma;
+
+```python
+# train.py
+
+import argparse
+
+# Diğer importlar ve kodlar
+# ...
+# ...
+
+def run(fold):
+    # Training kodları burada
+    # ...
+    pass
+
+
+if __name__ == "__main__":
+    # initialize ArgumentParser class of argparse
+    parser = argparse.ArgumentParser()
+
+    # add the different arguments you need and their type
+    # currently, we only need fold
+    parser.add_argument(
+        "--fold",
+        type=int
+    )
+
+    # read the arguments from the command line
+    args = parser.parse_args()
+
+    # run the fold specified by command line arguments
+    run(fold=args.fold)
+```
+
+Shell üzerinde çalıştırma;
+```shell    
+#!/bin/sh
+python train.py --fold 0
+python train.py --fold 1
+python train.py --fold 2
+python train.py --fold 3
+python train.py --fold 4
+
+sh run.sh
+Fold=0, Accuracy=0.8675
+Fold=1, Accuracy=0.8693333333333333
+Fold=2, Accuracy=0.8683333333333333
+Fold=3, Accuracy=0.8704166666666666
+Fold=4, Accuracy=0.8685
+```
+
+Model yönlendirme;
+
+```python
+# model_dispatcher.py
+from sklearn import tree
+models = {
+ "decision_tree_gini": tree.DecisionTreeClassifier(
+ criterion="gini"
+ ),
+ "decision_tree_entropy": tree.DecisionTreeClassifier(
+ criterion="entropy"
+ ),
+}
+```
+
+```python
+# train.py
+
+import argparse
+import os
+import joblib
+import pandas as pd
+from sklearn import metrics
+
+import config
+import model_dispatcher
+
+
+def run(fold, model):
+    # Read the training data with folds
+    df = pd.read_csv(config.TRAINING_FILE)
+
+    # Training data is where kfold is not equal to provided fold
+    df_train = df[df.kfold != fold].reset_index(drop=True)
+
+    # Validation data is where kfold is equal to provided fold
+    df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+    # Drop the label column and convert to numpy array
+    x_train = df_train.drop("label", axis=1).values
+    y_train = df_train.label.values
+
+    # Validation data
+    x_valid = df_valid.drop("label", axis=1).values
+    y_valid = df_valid.label.values
+
+    # Fetch the model from model_dispatcher
+    clf = model_dispatcher.models[model]
+
+    # Fit the model on training data
+    clf.fit(x_train, y_train)
+
+    # Create predictions for validation samples
+    preds = clf.predict(x_valid)
+
+    # Calculate and print accuracy
+    accuracy = metrics.accuracy_score(y_valid, preds)
+
+    print(f"Fold={fold}, Accuracy={accuracy}")
+
+    # Save the model
+    joblib.dump(
+        clf,
+        os.path.join(config.MODEL_OUTPUT, f"dt_{fold}.bin")
+    )
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--fold",
+        type=int
+    )
+
+    parser.add_argument(
+        "--model",
+        type=str
+    )
+
+    args = parser.parse_args()
+
+    run(
+        fold=args.fold,
+        model=args.model
+    )
+```
+
+Modeli çalıştırabiliriz;
+
+```python
+python train.py --fold 0 --model decision_tree_gini
+Fold=0, Accuracy=0.8665833333333334
+```
+
+## Kategorik Değişkenlere Yaklaşım
+
 
 
 80
