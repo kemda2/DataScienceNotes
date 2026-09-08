@@ -2005,11 +2005,222 @@ df.groupby(
 .
 ```
 
+```python
 df["new_feature"] = (
     df.ord_1.astype(str)
     + "_"
     + df.ord_2.astype(str)
     )
 df.new_feature
+
+0      Contributor_Hot
+1      Grandmaster_Warm
+2      nan_Freezing
+3      Novice_Lava Hot
+4      Grandmaster_Cold
+ ...
+599995 Novice_Freezing
+599996 Novice_Boiling Hot
+599997 Contributor_Freezing
+599998 Master_Warm
+599999 Contributor_Boiling Hot
+Name: new_feature, Length: 600000, dtype: object
+```
+
+```py
+df["new_feature"] = (
+    df.ord_1.astype(str)
+    + "_"
+    + df.ord_2.astype(str)
+    + "_"
+    + df.ord_3.astype(str)
+    )
+df.new_feature
+
+0      Contributor_Hot_c
+1      Grandmaster_Warm_e
+2      nan_Freezing_n
+3      Novice_Lava Hot_a
+4      Grandmaster_Cold_h
+ ...
+599995 Novice_Freezing_a
+599996 Novice_Boiling Hot_n
+599997 Contributor_Freezing_n
+599998 Master_Warm_m
+599999 Contributor_Boiling Hot_b
+Name: new_feature, Length: 600000, dtype: object
+```
+
+```py
+df.ord_2.value_counts()
+
+Freezing    142726
+Warm        124239
+Cold         97822
+Boiling Hot  84790
+Hot          67508
+Lava Hot     64840
+
+df.ord_2.fillna("NONE").value_counts()
+ 
+Freezing     142726
+Warm         124239
+Cold          97822
+Boiling Hot   84790
+Hot           67508
+Lava Hot      64840
+NONE          18075
+Name: ord_2, dtype: int64
+```
+
+Training ve test verilerini geçici olarak birleştirip kategorik değişkenleri birlikte encode etme yöntemi;
+
+```python
+import pandas as pd
+from sklearn import preprocessing
+
+# Training verisini oku
+train = pd.read_csv("../input/cat_train.csv")
+
+# Test verisini oku
+test = pd.read_csv("../input/cat_test.csv")
+
+# Test verisinde target olmadığı için sahte bir target sütunu oluştur
+test.loc[:, "target"] = -1
+
+# Training ve test verilerini birleştir
+data = pd.concat([train, test]).reset_index(drop=True)
+
+# Encode etmek istediğimiz feature'ları belirle
+# id ve target encode edilmeyecek
+features = [
+    x for x in train.columns
+    if x not in ["id", "target"]
+]
+
+# Feature'lar üzerinde tek tek dolaş
+for feat in features:
+
+    # Her feature için yeni bir LabelEncoder oluştur
+    lbl_enc = preprocessing.LabelEncoder()
+
+    # NaN değerleri "NONE" ile doldur
+    # Daha sonra bütün değerleri string'e çevir
+    temp_col = (
+        data[feat]
+        .fillna("NONE")
+        .astype(str)
+        .values
+    )
+
+    # Encoding işlemini gerçekleştir
+    data.loc[:, feat] = lbl_enc.fit_transform(temp_col)
+
+# Training ve test verilerini tekrar ayır
+train = data[data.target != -1].reset_index(drop=True)
+
+test = data[data.target == -1].reset_index(drop=True)
+```
+
+```python
+df.ord_4.fillna("NONE").value_counts()
+N    39978
+P    37890
+Y    36657
+A    36633
+R    33045
+U    32897
+.   
+.   
+.   
+K    21676
+I    19805
+NONE 17930
+D    17284
+F    16721
+W     8268
+Z     5790
+S     4595
+G     3404
+V     3107
+J     1950
+L     1657
+Name: ord_4, dtype: int64
+```
+
+```python
+df.ord_4 = df.ord_4.fillna("NONE")
+df.loc[
+    df["ord_4"].value_counts()[df["ord_4"]].values < 2000,
+    "ord_4"
+    ] = "RARE"
+df.ord_4.value_counts()
+
+N 39978
+P 37890
+Y 36657
+A 36633
+R 33045
+U 32897
+M 32504
+.
+.
+.
+B 25212
+E 21871
+K 21676
+I 19805
+NONE 17930
+D 17284
+F 16721
+W 8268
+Z 5790
+S 4595
+RARE 3607
+G 3404
+V 3107
+Name: ord_4, dtype: int64
+```
+
+```python
+# create_folds.py
+
+# pandas ve scikit-learn model_selection modülünü import et
+import pandas as pd
+from sklearn import model_selection
+
+
+if __name__ == "__main__":
+
+    # Training verisini oku
+    df = pd.read_csv("../input/cat_train.csv")
+
+    # kfold adında yeni bir sütun oluştur ve -1 ile doldur
+    df["kfold"] = -1
+
+    # Verinin satırlarını rastgele karıştır
+    df = df.sample(frac=1).reset_index(drop=True)
+
+    # Target değerlerini al
+    y = df.target.values
+
+    # 5 fold'lu StratifiedKFold oluştur
+    kf = model_selection.StratifiedKFold(
+        n_splits=5
+    )
+
+    # kfold sütununu doldur
+    for f, (t_, v_) in enumerate(
+        kf.split(X=df, y=y)
+    ):
+        df.loc[v_, "kfold"] = f
+
+    # kfold sütununu içeren yeni CSV dosyasını kaydet
+    df.to_csv(
+        "../input/cat_train_folds.csv",
+        index=False
+    )
+```
+
 
 80
