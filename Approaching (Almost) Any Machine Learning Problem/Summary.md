@@ -2375,10 +2375,10 @@ Değer 0,78 fakat converge olmadı uyarısı var. Bütün foldları çalıştır
     auc = metrics.roc_auc_score(df_valid.target.values, valid_preds)
     # print auc
     print(f"Fold = {fold}, AUC = {auc}")
-    
+
 if __name__ == "__main__":
     for fold_ in range(5):
         run(fold_)
 ```
 
-80
+113
