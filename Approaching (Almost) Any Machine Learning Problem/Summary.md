@@ -2909,5 +2909,132 @@ Fold = 3, AUC = 0.8676319549361007
 Fold = 4, AUC = 0.8714450054900602
 ```
 
+max_depth = 7  n_estimators = 200;
 
-113
+```python
+❯ python lbl_xgb.py
+Fold = 0, AUC = 0.8764108944332032
+Fold = 1, AUC = 0.8840708537662638
+Fold = 2, AUC = 0.8816601162613102
+Fold = 3, AUC = 0.8662335762581732
+Fold = 4, AUC = 0.8698983461709926
+```
+
+gelişme yok. sayısal özelliklerle birlikte deneyelim;
+
+```python
+# lbl_xgb_num.py
+
+import pandas as pd
+import xgboost as xgb
+from sklearn import metrics
+from sklearn import preprocessing
+
+
+def run(fold):
+
+    # Load the full training data with folds
+    df = pd.read_csv("../input/adult_folds.csv")
+
+    # List of numerical columns
+    num_cols = [
+        "fnlwgt",
+        "age",
+        "capital.gain",
+        "capital.loss",
+        "hours.per.week"
+    ]
+
+    # Map targets to 0s and 1s
+    target_mapping = {
+        "<=50K": 0,
+        ">50K": 1
+    }
+
+    df.loc[:, "income"] = df.income.map(target_mapping)
+
+    # All columns are features except kfold and income
+    features = [
+        f for f in df.columns
+        if f not in ("kfold", "income")
+    ]
+
+    # Fill NaN values for categorical columns
+    # Do not modify numerical columns
+    for col in features:
+        if col not in num_cols:
+            df.loc[:, col] = (
+                df[col]
+                .astype(str)
+                .fillna("NONE")
+            )
+
+    # Label encode categorical features
+    for col in features:
+
+        if col not in num_cols:
+
+            # Initialize LabelEncoder
+            lbl = preprocessing.LabelEncoder()
+
+            # Fit label encoder on all data
+            lbl.fit(df[col])
+
+            # Transform all data
+            df.loc[:, col] = lbl.transform(df[col])
+
+    # Get training data using folds
+    df_train = df[df.kfold != fold].reset_index(drop=True)
+
+    # Get validation data using folds
+    df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+    # Get training features
+    x_train = df_train[features].values
+
+    # Get validation features
+    x_valid = df_valid[features].values
+
+    # Initialize XGBoost model
+    model = xgb.XGBClassifier(
+        n_jobs=-1
+    )
+
+    # Fit model on training data
+    model.fit(
+        x_train,
+        df_train.income.values
+    )
+
+    # Predict probability of class 1
+    valid_preds = model.predict_proba(
+        x_valid
+    )[:, 1]
+
+    # Calculate ROC-AUC
+    auc = metrics.roc_auc_score(
+        df_valid.income.values,
+        valid_preds
+    )
+
+    # Print AUC
+    print(f"Fold = {fold}, AUC = {auc}")
+
+
+if __name__ == "__main__":
+
+    # Run for all 5 folds
+    for fold_ in range(5):
+        run(fold_)
+
+❯ python lbl_xgb_num.py
+Fold = 0, AUC = 0.9209790185449889
+Fold = 1, AUC = 0.9247157449144706
+Fold = 2, AUC = 0.9269329887598243
+Fold = 3, AUC = 0.9119349082169275
+Fold = 4, AUC = 0.9166408030141667
+```
+
+Mükemmel bir skor.
+
+130
