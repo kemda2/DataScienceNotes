@@ -2222,5 +2222,163 @@ if __name__ == "__main__":
     )
 ```
 
+```python
+import pandas as pd
+df = pd.read_csv("../input/cat_train_folds.csv")
+df.kfold.value_counts()
+
+4 120000
+3 120000
+2 120000
+1 120000
+0 120000
+Name: kfold, dtype: int64
+```
+
+```python
+
+df[df.kfold==0].target.value_counts()
+
+0 97536
+1 22464
+Name: target, dtype: int64
+
+df[df.kfold==1].target.value_counts()
+
+0 97536
+1 22464
+Name: target, dtype: int64
+
+df[df.kfold==2].target.value_counts()
+
+0 97535
+1 22465
+Name: target, dtype: int64
+
+df[df.kfold==3].target.value_counts()
+
+0 97535
+1 22465
+Name: target, dtype: int64
+
+df[df.kfold==4].target.value_counts()
+
+0 97535
+1 22465
+Name: target, dtype: int64
+```
+
+Dağılım korunarak foldlar ayrılmış Basit bir model ile deneme yapalım;
+
+```python
+# ohe_logres.py
+
+import pandas as pd
+from sklearn import linear_model
+from sklearn import metrics
+from sklearn import preprocessing
+
+
+def run(fold):
+    # Load the full training data with folds
+    df = pd.read_csv("../input/cat_train_folds.csv")
+
+    # All columns are features except id, target and kfold columns
+    features = [
+        f for f in df.columns
+        if f not in ("id", "target", "kfold")
+    ]
+
+    # Fill all NaN values with "NONE"
+    # Convert all columns to strings because they are categorical
+    for col in features:
+        df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+    # Get training data using folds
+    df_train = df[df.kfold != fold].reset_index(drop=True)
+
+    # Get validation data using folds
+    df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+    # Initialize OneHotEncoder
+    ohe = preprocessing.OneHotEncoder()
+
+    # Fit OHE on training + validation features
+    full_data = pd.concat(
+        [df_train[features], df_valid[features]],
+        axis=0
+    )
+
+    ohe.fit(full_data[features])
+
+    # Transform training data
+    x_train = ohe.transform(df_train[features])
+
+    # Transform validation data
+    x_valid = ohe.transform(df_valid[features])
+
+    # Initialize Logistic Regression model
+    model = linear_model.LogisticRegression()
+
+    # Fit model on training data
+    model.fit(x_train, df_train.target.values)
+
+    # Predict probabilities on validation data
+    # We use the probability of class 1 for AUC
+    valid_preds = model.predict_proba(x_valid)[:, 1]
+
+    # Calculate ROC-AUC score
+    auc = metrics.roc_auc_score(
+        df_valid.target.values,
+        valid_preds
+    )
+
+    # Print AUC
+    print(auc)
+
+
+if __name__ == "__main__":
+    # Run function for fold = 0
+    run(0)
+```
+
+```bash
+python ohe_logres.py
+/home/abhishek/miniconda3/envs/ml/lib/python3.7/sitepackages/sklearn/linear_model/_logistic.py:939: ConvergenceWarning: lbfgs
+failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+Increase the number of iterations (max_iter) or scale the data as shown
+in:
+https://scikit-learn.org/stable/modules/preprocessing.html.
+Please also refer to the documentation for alternative solver options:
+https://scikit-learn.org/stable/modules/linear_model.html#logisticregression
+ extra_warning_msg=_LOGISTIC_SOLVER_CONVERGENCE_MSG)
+0.7847865042255127
+```
+
+Değer 0,78 fakat converge olmadı uyarısı var. Bütün foldları çalıştıralım;
+
+```python
+# ohe_logres.py
+.
+.
+.
+    # initialize Logistic Regression model
+    model = linear_model.LogisticRegression()
+    # fit model on training data (ohe)
+    model.fit(x_train, df_train.target.values)
+    # predict on validation data
+    # we need the probability values as we are calculating AUC
+    # we will use the probability of 1s
+    valid_preds = model.predict_proba(x_valid)[:, 1]
+    # get roc auc score
+    auc = metrics.roc_auc_score(df_valid.target.values, valid_preds)
+    # print auc
+    print(f"Fold = {fold}, AUC = {auc}")
+    
+if __name__ == "__main__":
+    for fold_ in range(5):
+        run(fold_)
+```
 
 80
