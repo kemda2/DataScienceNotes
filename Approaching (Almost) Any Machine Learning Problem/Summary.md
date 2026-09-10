@@ -2381,4 +2381,205 @@ if __name__ == "__main__":
         run(fold_)
 ```
 
+```bash
+> python -W ignore ohe_logres.py
+Fold = 0, AUC = 0.7847865042255127
+Fold = 1, AUC = 0.7853553605899214
+Fold = 2, AUC = 0.7879321942914885
+Fold = 3, AUC = 0.7870315929550808
+Fold = 4, AUC = 0.7864668243125608
+```
+
+```python
+# lbl_rf.py
+
+import pandas as pd
+from sklearn import ensemble
+from sklearn import metrics
+from sklearn import preprocessing
+
+
+def run(fold):
+
+    # Load the full training data with folds
+    df = pd.read_csv("../input/cat_train_folds.csv")
+
+    # All columns are features except id, target and kfold
+    features = [
+        f for f in df.columns
+        if f not in ("id", "target", "kfold")
+    ]
+
+    # Fill all NaN values with "NONE"
+    # Convert all columns to strings
+    for col in features:
+        df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+    # Label encode the features
+    for col in features:
+
+        # Initialize LabelEncoder for each feature column
+        lbl = preprocessing.LabelEncoder()
+
+        # Fit label encoder on all data
+        lbl.fit(df[col])
+
+        # Transform all data
+        df.loc[:, col] = lbl.transform(df[col])
+
+    # Get training data using folds
+    df_train = df[df.kfold != fold].reset_index(drop=True)
+
+    # Get validation data using folds
+    df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+    # Get training features
+    x_train = df_train[features].values
+
+    # Get validation features
+    x_valid = df_valid[features].values
+
+    # Initialize Random Forest model
+    model = ensemble.RandomForestClassifier(
+        n_jobs=-1
+    )
+
+    # Fit model on training data
+    model.fit(
+        x_train,
+        df_train.target.values
+    )
+
+    # Predict probabilities on validation data
+    # We use the probability of class 1 for AUC
+    valid_preds = model.predict_proba(x_valid)[:, 1]
+
+    # Calculate ROC-AUC
+    auc = metrics.roc_auc_score(
+        df_valid.target.values,
+        valid_preds
+    )
+
+    # Print AUC
+    print(f"Fold = {fold}, AUC = {auc}")
+
+
+if __name__ == "__main__":
+
+    # Run for all 5 folds
+    for fold_ in range(5):
+        run(fold_)
+```
+
+```bash
+❯ python lbl_rf.py
+Fold = 0, AUC = 0.7167390828113697
+Fold = 1, AUC = 0.7165459672958506
+Fold = 2, AUC = 0.7159709909587376
+Fold = 3, AUC = 0.7161589664189556
+Fold = 4, AUC = 0.7156020216155978
+```
+
+```python
+# ohe_svd_rf.py
+
+import pandas as pd
+from scipy import sparse
+from sklearn import decomposition
+from sklearn import ensemble
+from sklearn import metrics
+from sklearn import preprocessing
+
+
+def run(fold):
+
+    # Load the full training data with folds
+    df = pd.read_csv("../input/cat_train_folds.csv")
+
+    # All columns are features except id, target and kfold
+    features = [
+        f for f in df.columns
+        if f not in ("id", "target", "kfold")
+    ]
+
+    # Fill all NaN values with "NONE"
+    # Convert all columns to strings
+    for col in features:
+        df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+    # Get training data using folds
+    df_train = df[df.kfold != fold].reset_index(drop=True)
+
+    # Get validation data using folds
+    df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+    # Initialize OneHotEncoder
+    ohe = preprocessing.OneHotEncoder()
+
+    # Fit OHE on training + validation features
+    full_data = pd.concat(
+        [df_train[features], df_valid[features]],
+        axis=0
+    )
+
+    ohe.fit(full_data[features])
+
+    # Transform training data
+    x_train = ohe.transform(df_train[features])
+
+    # Transform validation data
+    x_valid = ohe.transform(df_valid[features])
+
+    # Initialize Truncated SVD
+    # Reduce the data to 120 components
+    svd = decomposition.TruncatedSVD(
+        n_components=120
+    )
+
+    # Fit SVD on full sparse data
+    full_sparse = sparse.vstack(
+        (x_train, x_valid)
+    )
+
+    svd.fit(full_sparse)
+
+    # Transform training data
+    x_train = svd.transform(x_train)
+
+    # Transform validation data
+    x_valid = svd.transform(x_valid)
+
+    # Initialize Random Forest model
+    model = ensemble.RandomForestClassifier(
+        n_jobs=-1
+    )
+
+    # Fit model on training data
+    model.fit(
+        x_train,
+        df_train.target.values
+    )
+
+    # Predict probability of class 1
+    valid_preds = model.predict_proba(
+        x_valid
+    )[:, 1]
+
+    # Calculate ROC-AUC
+    auc = metrics.roc_auc_score(
+        df_valid.target.values,
+        valid_preds
+    )
+
+    # Print AUC
+    print(f"Fold = {fold}, AUC = {auc}")
+
+
+if __name__ == "__main__":
+
+    # Run for all 5 folds
+    for fold_ in range(5):
+        run(fold_)
+```
+
 113
