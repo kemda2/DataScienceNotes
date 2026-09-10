@@ -3035,6 +3035,336 @@ Fold = 3, AUC = 0.9119349082169275
 Fold = 4, AUC = 0.9166408030141667
 ```
 
-Mükemmel bir skor.
+Mükemmel bir skor. Feature engineering ekleyelim;
+
+```python
+# lbl_xgb_num_feat.py
+
+import itertools
+import pandas as pd
+import xgboost as xgb
+from sklearn import metrics
+from sklearn import preprocessing
+
+
+def feature_engineering(df, cat_cols):
+    """
+    This function is used for feature engineering.
+
+    :param df: pandas dataframe with train/test data
+    :param cat_cols: list of categorical columns
+    :return: dataframe with new features
+    """
+
+    # Create all 2-combinations of categorical columns
+    combi = list(itertools.combinations(cat_cols, 2))
+
+    for c1, c2 in combi:
+        df.loc[:, c1 + "_" + c2] = (
+            df[c1].astype(str)
+            + "_"
+            + df[c2].astype(str)
+        )
+
+    return df
+
+
+def run(fold):
+
+    # Load the full training data with folds
+    df = pd.read_csv("../input/adult_folds.csv")
+
+    # List of numerical columns
+    num_cols = [
+        "fnlwgt",
+        "age",
+        "capital.gain",
+        "capital.loss",
+        "hours.per.week"
+    ]
+
+    # Map targets to 0s and 1s
+    target_mapping = {
+        "<=50K": 0,
+        ">50K": 1
+    }
+
+    df.loc[:, "income"] = df.income.map(target_mapping)
+
+    # List of categorical columns
+    cat_cols = [
+        c for c in df.columns
+        if c not in num_cols
+        and c not in ("kfold", "income")
+    ]
+
+    # Add new features
+    df = feature_engineering(df, cat_cols)
+
+    # All columns are features except kfold and income
+    features = [
+        f for f in df.columns
+        if f not in ("kfold", "income")
+    ]
+
+    # Fill NaN values for categorical features
+    # Do not encode numerical columns
+    for col in features:
+        if col not in num_cols:
+            df.loc[:, col] = (
+                df[col]
+                .astype(str)
+                .fillna("NONE")
+            )
+
+    # Label encode categorical features
+    for col in features:
+
+        if col not in num_cols:
+
+            # Initialize LabelEncoder
+            lbl = preprocessing.LabelEncoder()
+
+            # Fit label encoder on all data
+            lbl.fit(df[col])
+
+            # Transform all data
+            df.loc[:, col] = lbl.transform(df[col])
+
+    # Get training data using folds
+    df_train = df[
+        df.kfold != fold
+    ].reset_index(drop=True)
+
+    # Get validation data using folds
+    df_valid = df[
+        df.kfold == fold
+    ].reset_index(drop=True)
+
+    # Get training features
+    x_train = df_train[features].values
+
+    # Get validation features
+    x_valid = df_valid[features].values
+
+    # Initialize XGBoost model
+    model = xgb.XGBClassifier(
+        n_jobs=-1
+    )
+
+    # Fit model on training data
+    model.fit(
+        x_train,
+        df_train.income.values
+    )
+
+    # Predict probability of class 1
+    valid_preds = model.predict_proba(
+        x_valid
+    )[:, 1]
+
+    # Calculate ROC-AUC
+    auc = metrics.roc_auc_score(
+        df_valid.income.values,
+        valid_preds
+    )
+
+    # Print AUC
+    print(
+        f"Fold = {fold}, AUC = {auc}"
+    )
+
+
+if __name__ == "__main__":
+
+    # Run for all 5 folds
+    for fold_ in range(5):
+        run(fold_)
+
+❯ python lbl_xgb_num_feat.py
+Fold = 0, AUC = 0.9211483465031423
+Fold = 1, AUC = 0.9251499446866125
+Fold = 2, AUC = 0.9262344766486692
+Fold = 3, AUC = 0.9114264068794995
+Fold = 4, AUC = 0.9177914453099201
+```
+
+max_depth = 7 yapınca;
+
+```python
+❯ python lbl_xgb_num_feat.py
+Fold = 0, AUC = 0.9286668430204137
+Fold = 1, AUC = 0.9329340656165378
+Fold = 2, AUC = 0.9319817543218744
+Fold = 3, AUC = 0.919046187194538
+Fold = 4, AUC = 0.9245692057162671
+```
+
+target encoding;
+
+```python
+# target_encoding.py
+
+import copy
+import pandas as pd
+from sklearn import metrics
+import xgboost as xgb
+
+
+def mean_target_encoding(data):
+
+    # Make a copy of dataframe
+    df = copy.deepcopy(data)
+
+    # List of numerical columns
+    num_cols = [
+        "fnlwgt",
+        "age",
+        "capital.gain",
+        "capital.loss",
+        "hours.per.week"
+    ]
+
+    # Map targets to 0s and 1s
+    target_mapping = {
+        "<=50K": 0,
+        ">50K": 1
+    }
+
+    df.loc[:, "income"] = df.income.map(target_mapping)
+
+    # All categorical columns
+    features = [
+        f for f in df.columns
+        if f not in ("kfold", "income")
+        and f not in num_cols
+    ]
+
+    # Fill NaN values with "NONE"
+    for col in features:
+        df.loc[:, col] = (
+            df[col]
+            .astype(str)
+            .fillna("NONE")
+        )
+
+    # Store validation dataframes
+    encoded_dfs = []
+
+    # Go over all folds
+    for fold in range(5):
+
+        # Get training data
+        df_train = df[
+            df.kfold != fold
+        ].reset_index(drop=True)
+
+        # Get validation data
+        df_valid = df[
+            df.kfold == fold
+        ].reset_index(drop=True)
+
+        # Target encode each categorical feature
+        for column in features:
+
+            # Create category -> mean target dictionary
+            mapping_dict = dict(
+                df_train
+                .groupby(column)["income"]
+                .mean()
+            )
+
+            # Create encoded validation column
+            df_valid.loc[
+                :,
+                column + "_enc"
+            ] = df_valid[column].map(mapping_dict)
+
+        # Append encoded validation dataframe
+        encoded_dfs.append(df_valid)
+
+    # Combine all encoded validation dataframes
+    encoded_df = pd.concat(
+        encoded_dfs,
+        axis=0
+    )
+
+    return encoded_df
+
+
+def run(df, fold):
+
+    # Get training data
+    df_train = df[
+        df.kfold != fold
+    ].reset_index(drop=True)
+
+    # Get validation data
+    df_valid = df[
+        df.kfold == fold
+    ].reset_index(drop=True)
+
+    # All columns are features except income and kfold
+    features = [
+        f for f in df.columns
+        if f not in ("kfold", "income")
+    ]
+
+    # Training features
+    x_train = df_train[features].values
+
+    # Validation features
+    x_valid = df_valid[features].values
+
+    # Initialize XGBoost model
+    model = xgb.XGBClassifier(
+        n_jobs=-1,
+        max_depth=7
+    )
+
+    # Fit model
+    model.fit(
+        x_train,
+        df_train.income.values
+    )
+
+    # Predict probability of class 1
+    valid_preds = model.predict_proba(
+        x_valid
+    )[:, 1]
+
+    # Calculate ROC-AUC
+    auc = metrics.roc_auc_score(
+        df_valid.income.values,
+        valid_preds
+    )
+
+    # Print AUC
+    print(
+        f"Fold = {fold}, AUC = {auc}"
+    )
+
+
+if __name__ == "__main__":
+
+    # Read data
+    df = pd.read_csv(
+        "../input/adult_folds.csv"
+    )
+
+    # Create mean target encoded features
+    df = mean_target_encoding(df)
+
+    # Run training and validation
+    for fold_ in range(5):
+        run(df, fold_)
+
+Fold = 0, AUC = 0.9332240662017529
+Fold = 1, AUC = 0.9363551625140347
+Fold = 2, AUC = 0.9375013544556173
+Fold = 3, AUC = 0.92237621307625
+Fold = 4, AUC = 0.9292131180445478
+```
+
 
 130
