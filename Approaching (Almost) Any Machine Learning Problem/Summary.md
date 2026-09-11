@@ -3366,5 +3366,8 @@ Fold = 3, AUC = 0.92237621307625
 Fold = 4, AUC = 0.9292131180445478
 ```
 
+Entity embedding (sinir ağı / neural network);
+
+
 
 130
