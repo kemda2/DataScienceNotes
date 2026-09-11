@@ -3592,4 +3592,42 @@ if __name__ == "__main__":
 
 ## Feature engineering
 
-130
+Tarih;
+
+```python
+df.loc[:, 'year'] = df['datetime_column'].dt.year
+df.loc[:, 'weekofyear'] = df['datetime_column'].dt.weekofyear
+df.loc[:, 'month'] = df['datetime_column'].dt.month
+df.loc[:, 'dayofweek'] = df['datetime_column'].dt.dayofweek
+df.loc[:, 'weekend'] = (
+    df.datetime_column.dt.weekday >= 5
+).astype(int)
+df.loc[:, 'hour'] = df['datetime_column'].dt.hour
+```
+
+```python
+import pandas as pd
+
+# 10 saatlik frekansa sahip bir datetime serisi oluştur
+s = pd.date_range(
+    '2020-01-06',
+    '2020-01-10',
+    freq='10H'
+).to_series()
+
+# datetime temel alınarak bazı feature'lar oluştur
+features = {
+    "dayofweek": s.dt.dayofweek.values,
+    "dayofyear": s.dt.dayofyear.values,
+    "hour": s.dt.hour.values,
+    "is_leap_year": s.dt.is_leap_year.values,
+    "quarter": s.dt.quarter.values,
+    "weekofyear": s.dt.weekofyear.values
+}
+```
+
+
+
+```py
+```
+144
