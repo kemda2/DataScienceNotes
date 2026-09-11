@@ -3368,6 +3368,228 @@ Fold = 4, AUC = 0.9292131180445478
 
 Entity embedding (sinir ağı / neural network);
 
+```python
+import os
+import gc
+import joblib
+import pandas as pd
+import numpy as np
 
+from sklearn import metrics, preprocessing
+
+from tensorflow.keras import layers
+from tensorflow.keras import optimizers
+from tensorflow.keras.models import Model, load_model
+from tensorflow.keras import callbacks
+from tensorflow.keras import backend as K
+from tensorflow.keras import utils
+
+
+def create_model(data, catcols):
+    """
+    This function returns a compiled tf.keras model
+    for entity embeddings.
+
+    :param data: pandas dataframe
+    :param catcols: list of categorical column names
+    :return: compiled tf.keras model
+    """
+
+    # Init list of inputs for embeddings
+    inputs = []
+
+    # Init list of outputs for embeddings
+    outputs = []
+
+    # Loop over all categorical columns
+    for c in catcols:
+
+        # Find the number of unique values in the column
+        num_unique_values = int(data[c].nunique())
+
+        # Calculate embedding dimension
+        embed_dim = int(
+            min(np.ceil(num_unique_values / 2), 50)
+        )
+
+        # Keras input layer
+        inp = layers.Input(shape=(1,))
+
+        # Embedding layer
+        out = layers.Embedding(
+            input_dim=num_unique_values + 1,
+            output_dim=embed_dim,
+            name=c
+        )(inp)
+
+        # Spatial dropout
+        out = layers.SpatialDropout1D(0.3)(out)
+
+        # Reshape embedding
+        out = layers.Reshape(
+            target_shape=(embed_dim,)
+        )(out)
+
+        # Add input and output to lists
+        inputs.append(inp)
+        outputs.append(out)
+
+    # Concatenate all embedding outputs
+    x = layers.Concatenate()(outputs)
+
+    # Batch normalization
+    x = layers.BatchNormalization()(x)
+
+    # Dense layer 1
+    x = layers.Dense(
+        300,
+        activation="relu"
+    )(x)
+
+    x = layers.Dropout(0.3)(x)
+    x = layers.BatchNormalization()(x)
+
+    # Dense layer 2
+    x = layers.Dense(
+        300,
+        activation="relu"
+    )(x)
+
+    x = layers.Dropout(0.3)(x)
+    x = layers.BatchNormalization()(x)
+
+    # Output layer
+    y = layers.Dense(
+        2,
+        activation="softmax"
+    )(x)
+
+    # Create model
+    model = Model(
+        inputs=inputs,
+        outputs=y
+    )
+
+    # Compile model
+    model.compile(
+        loss="binary_crossentropy",
+        optimizer="adam"
+    )
+
+    return model
+
+
+def run(fold):
+
+    # Load training data with folds
+    df = pd.read_csv(
+        "../input/cat_train_folds.csv"
+    )
+
+    # All columns are features except id, target and kfold
+    features = [
+        f for f in df.columns
+        if f not in ("id", "target", "kfold")
+    ]
+
+    # Fill NaN values and convert everything to string
+    for col in features:
+        df.loc[:, col] = (
+            df[col]
+            .fillna("NONE")
+            .astype(str)
+        )
+
+    # Label encode each categorical feature
+    for feat in features:
+        lbl_enc = preprocessing.LabelEncoder()
+
+        df.loc[:, feat] = lbl_enc.fit_transform(
+            df[feat].values
+        )
+
+    # Training data
+    df_train = (
+        df[df.kfold != fold]
+        .reset_index(drop=True)
+    )
+
+    # Validation data
+    df_valid = (
+        df[df.kfold == fold]
+        .reset_index(drop=True)
+    )
+
+    # Create model
+    model = create_model(
+        df,
+        features
+    )
+
+    # Prepare training inputs
+    xtrain = [
+        df_train[features].values[:, k]
+        for k in range(len(features))
+    ]
+
+    # Prepare validation inputs
+    xvalid = [
+        df_valid[features].values[:, k]
+        for k in range(len(features))
+    ]
+
+    # Target values
+    ytrain = df_train.target.values
+    yvalid = df_valid.target.values
+
+    # Convert target to categorical / one-hot
+    ytrain_cat = utils.to_categorical(
+        ytrain
+    )
+
+    yvalid_cat = utils.to_categorical(
+        yvalid
+    )
+
+    # Train model
+    model.fit(
+        xtrain,
+        ytrain_cat,
+        validation_data=(
+            xvalid,
+            yvalid_cat
+        ),
+        verbose=1,
+        batch_size=1024,
+        epochs=3
+    )
+
+    # Validation predictions
+    valid_preds = model.predict(
+        xvalid
+    )[:, 1]
+
+    # ROC-AUC score
+    auc = metrics.roc_auc_score(
+        yvalid,
+        valid_preds
+    )
+
+    print(f"Fold {fold} ROC-AUC: {auc:.5f}")
+
+    # Clear Keras session
+    K.clear_session()
+
+
+# Run 5-fold cross validation
+if __name__ == "__main__":
+    run(0)
+    run(1)
+    run(2)
+    run(3)
+    run(4)
+```
+
+## Feature engineering
 
 130
