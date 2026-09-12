@@ -3626,6 +3626,38 @@ features = {
 }
 ```
 
+elimizdeki dataset;
+
+![](i/010.png)
+
+```py
+def generate_features(df):
+    # Tarih sütunundan yeni özellikler oluşturuyoruz
+    df.loc[:, 'year'] = df['date'].dt.year                    # Yıl
+    df.loc[:, 'weekofyear'] = df['date'].dt.isocalendar().week # Yılın haftası
+    df.loc[:, 'month'] = df['date'].dt.month                  # Ay
+    df.loc[:, 'dayofweek'] = df['date'].dt.dayofweek          # Haftanın günü
+    df.loc[:, 'weekend'] = (df['date'].dt.weekday >= 5).astype(int) # Hafta sonu: 1, değilse 0
+
+    # Hangi sütunda hangi toplulaştırma işlemlerinin yapılacağını belirliyoruz
+    aggs = {}
+    aggs['month'] = ['nunique', 'mean']          # Farklı ay sayısı ve ay ortalaması
+    aggs['weekofyear'] = ['nunique', 'mean']     # Farklı hafta sayısı ve hafta ortalaması
+    aggs['num1'] = ['sum', 'max', 'min', 'mean'] # num1 için toplam, max, min ve ortalama
+    aggs['customer_id'] = ['nunique']            # Farklı müşteri sayısı
+
+    # customer_id'ye göre grupluyor ve belirlediğimiz istatistikleri hesaplıyoruz
+    agg_df = df.groupby('customer_id').agg(aggs)
+
+    # customer_id'yi tekrar normal sütun haline getiriyoruz
+    agg_df = agg_df.reset_index()
+
+    # Oluşturduğumuz yeni feature'ları döndürüyoruz
+    return agg_df
+```
+
+
+
 
 
 ```py
