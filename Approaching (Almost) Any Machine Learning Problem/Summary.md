@@ -3656,6 +3656,9 @@ def generate_features(df):
     return agg_df
 ```
 
+![](i/011.png)
+
+Aynı özellikler kategorik değişkenler için de kullanılabilir.
 
 
 
