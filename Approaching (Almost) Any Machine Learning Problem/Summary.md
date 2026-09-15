@@ -3700,6 +3700,29 @@ feature_dict['quantile_95'] = np.percentile(x, 95)
 feature_dict['quantile_99'] = np.percentile(x, 99)
 ```
 
+tsfresh ile feature üretimi;
+```py
+from tsfresh.feature_extraction import feature_calculators as fc
+
+# tsfresh based features
+feature_dict['abs_energy'] = fc.abs_energy(x)
+feature_dict['count_above_mean'] = fc.count_above_mean(x)
+feature_dict['count_below_mean'] = fc.count_below_mean(x)
+feature_dict['mean_abs_change'] = fc.mean_abs_change(x)
+feature_dict['mean_change'] = fc.mean_change(x)
+```
+
+```py
+import numpy as np
+
+# 2 sütun ve 100 satırdan oluşan
+# rastgele bir DataFrame oluştur
+df = pd.DataFrame(
+    np.random.rand(100, 2),
+    columns=[f"f_{i}" for i in range(1, 3)]
+)
+```
+
 ```py
 ```
 144
