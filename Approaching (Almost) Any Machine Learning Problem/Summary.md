@@ -3723,6 +3723,102 @@ df = pd.DataFrame(
 )
 ```
 
+scikit-learn kütüphanesindeki PolynomialFeatures kullanarak ikinci dereceden polinom özellikleri oluşturabiliriz;
+
+```py
+from sklearn import preprocessing
+import pandas as pd
+
+# Initialize polynomial features class object
+# for two-degree polynomial features
+pf = preprocessing.PolynomialFeatures(
+    degree=2,
+    interaction_only=False,
+    include_bias=False
+)
+
+# Fit to the features
+pf.fit(df)
+
+# Create polynomial features
+poly_feats = pf.transform(df)
+
+# Create a dataframe with all the features
+num_feats = poly_feats.shape[1]
+
+df_transformed = pd.DataFrame(
+    poly_feats,
+    columns=[f"f_{i}" for i in range(1, num_feats + 1)]
+)
+```
+
+```py
+import pandas as pd
+
+# Create bins of the numerical column
+
+# 10 bins
+df["f_bin_10"] = pd.cut(
+    df["f_1"],
+    bins=10,
+    labels=False
+)
+
+# 100 bins
+df["f_bin_100"] = pd.cut(
+    df["f_1"],
+    bins=100,
+    labels=False
+)
+```
+
+Değerlerin dağılımını sıkıştırarak varyansı azaltmak için Log dönüşümü;
+
+```py
+import numpy as np
+
+# Calculate the variance of f_3
+print(df["f_3"].var())
+8077265.875858586
+
+# Apply log transformation and calculate the variance
+print(df["f_3"].apply(lambda x: np.log(1 + x)).var())
+0.6058771732119975
+```
+
+Aşağıdaki matrixi KNN ile boş değerleri dolduralım; 
+
+![alt text](i/012.png)
+
+```py
+import numpy as np
+from sklearn.impute import KNNImputer
+
+# 10 örnek ve 6 özellikten oluşan,
+# 1 ile 15 arasında rastgele değerler içeren bir NumPy dizisi oluştur
+X = np.random.randint(1, 15, (10, 6))
+
+# Diziyi float türüne dönüştür
+X = X.astype(float)
+
+# Rastgele olarak 10 değeri NaN (eksik değer) yap
+X.ravel()[np.random.choice(X.size, 10, replace=False)] = np.nan
+
+# Eksik değerleri en yakın 3 komşuyu kullanarak doldur
+knn_imputer = KNNImputer(n_neighbors=3)
+
+# Eksik değerleri doldur
+knn_imputer.fit_transform(X)
+```
+
+doldurulmuş hali aşağıdadır;
+
+![](i/013.png)
+
+
+
+
+
 ```py
 ```
 144
