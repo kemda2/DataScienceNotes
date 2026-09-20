@@ -389,6 +389,9 @@ Bunlara sonraki bölümlerde bakalım.
 
 
 
+
+
+
 Cross-validation 
  
 We did not build any models in the previous chapter. The reason for that is simple. 
