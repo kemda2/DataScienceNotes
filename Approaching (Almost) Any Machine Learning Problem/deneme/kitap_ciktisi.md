@@ -1,19 +1,10 @@
-## ABHISHEK THAKUR
-APPROACHING 
-(ALMOST) ANY 
-MACHINE 
-LEARNING 
-PROBLEM
+## ABHISHEK THAKUR - APPROACHING (ALMOST) ANY MACHINE LEARNING PROBLEM
 
 
  
 
 
-## Sayfa 4
 
-Approaching (Almost) Any Machine Learning Problem  
- 
-3 
 Before you start, there are a few things that you must be aware of while going 
 through this book.  
  
@@ -54,26 +45,21 @@ with the details so that I can take necessary actions.
 If you didn’t code, you didn’t learn.
 
 
-## Sayfa 5
 
-Approaching (Almost) Any Machine Learning Problem  
- 
-4 
- 
 Table of Contents 
-Setting up your working environment ..................................................... 5 
-Supervised vs unsupervised learning ....................................................... 7 
-Cross-validation ................................................................................... 14 
-Evaluation metrics ................................................................................ 30 
-Arranging machine learning projects ................................................... 73 
-Approaching categorical variables ........................................................ 85 
-Feature engineering ........................................................................... 142 
-Feature selection ................................................................................ 155 
-Hyperparameter optimization ............................................................. 167 
-Approaching image classification & segmentation .............................. 185 
-Approaching text classification/regression .......................................... 225 
-Approaching ensembling and stacking ............................................... 272 
-Approaching reproducible code & model serving ................................ 283 
+Setting up your working environment ........................................... 5 
+Supervised vs unsupervised learning ........................................... 7 
+Cross-validation .............................................................. 14 
+Evaluation metrics ............................................................ 30 
+Arranging machine learning projects ........................................... 73 
+Approaching categorical variables ............................................. 85 
+Feature engineering ........................................................... 142 
+Feature selection ............................................................. 155 
+Hyperparameter optimization ................................................... 167 
+Approaching image classification & segmentation ............................... 185 
+Approaching text classification/regression .................................... 225 
+Approaching ensembling and stacking ........................................... 272 
+Approaching reproducible code & model serving ................................. 283 
  
  
   
