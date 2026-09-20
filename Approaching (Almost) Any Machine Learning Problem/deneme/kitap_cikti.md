@@ -385,645 +385,656 @@ Peki bunlar nelerdir ve nasıl kullanılır?
 
 Bunlara sonraki bölümlerde bakalım.
 
+Elbette. Aşağıda metni Türkçeye çevirirken **kodları değiştirmedim**, `![Görsel](...)` bağlantılarını **aynen korudum** ve görsel sıralamasını da korudum.
 
+## Çapraz Doğrulama
 
+Bir önceki bölümde herhangi bir model oluşturmadık. Bunun nedeni basit. Herhangi bir makine öğrenmesi modeli oluşturmadan önce **çapraz doğrulamanın (cross-validation)** ne olduğunu ve veri kümelerinize bağlı olarak en uygun çapraz doğrulama yöntemini nasıl seçeceğinizi bilmemiz gerekir.
 
+Peki çapraz doğrulama nedir ve neden önemsemeliyiz?
 
+Çapraz doğrulamanın ne olduğuna dair birden fazla tanım bulabiliriz. Benim tanımım tek cümleliktir: **Çapraz doğrulama, bir makine öğrenmesi modeli oluşturma sürecinde modellerimizin verilere doğru şekilde uyduğundan emin olmamızı ve aynı zamanda aşırı öğrenme (overfitting) yapmamamızı sağlayan bir adımdır.**
 
+Ancak bu bizi başka bir terime götürüyor: **overfitting (aşırı öğrenme).**
 
+Overfitting'i açıklamak için bir veri kümesine bakmanın en iyi yöntem olduğunu düşünüyorum.
 
-Cross-validation 
- 
-We did not build any models in the previous chapter. The reason for that is simple. 
-Before creating any kind of machine learning model, we must know what cross-
-validation is and how to choose the best cross-validation depending on your 
-datasets. 
- 
-So, what is cross-validation, and why should we care about it? 
- 
-We can find multiple definitions as to what cross-validation is. Mine is a one-liner: 
-cross-validation is a step in the process of building a machine learning model which 
-helps us ensure that our models fit the data accurately and also ensures that we do 
-not overfit. But this leads to another term: overfitting.  
- 
-To explain overfitting, I think it’s best if we look at a dataset. There is a red wine-
-quality dataset2 which is quite famous. This dataset has 11 different attributes that 
-decide the quality of red wine.  
- 
-These attributes include: 
-• 
-fixed acidity 
-• 
-volatile acidity 
-• 
-citric acid 
-• 
-residual sugar 
-• 
-chlorides 
-• 
-free sulfur dioxide 
-• 
-total sulfur dioxide 
-• 
-density 
-• 
-pH 
-• 
-sulphates 
-• 
-alcohol 
- 
-Based on these different attributes, we are required to predict the quality of red wine 
-which is a value between 0 and 10.  
+Oldukça ünlü bir kırmızı şarap kalitesi veri kümesi vardır². Bu veri kümesinde kırmızı şarabın kalitesini belirleyen 11 farklı özellik bulunmaktadır.
 
+Bu özellikler şunlardır:
 
-Let’s see how this data looks like. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
-df = pd.read_csv("winequality-red.csv") 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This dataset looks something like this: 
- 
- 
-Figure 1: A snapshot of the red wine quality dataset. 
- 
-We can treat this problem either as a classification problem or as a regression 
-problem since wine quality is nothing but a real number between 0 and 10. For 
-simplicity, let’s choose classification. This dataset, however, consists of only six 
-types of quality values. We will thus map all quality values from 0 to 5. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# a mapping dictionary that maps the quality values from 0 to 5 
-quality_mapping = { 
-    3: 0, 
-    4: 1, 
-    5: 2, 
-    6: 3, 
-    7: 4, 
-    8: 5 
-} 
- 
-# you can use the map function of pandas with 
-# any dictionary to convert the values in a given 
-# column to values in the dictionary 
-df.loc[:, "quality"] = df.quality.map(quality_mapping) 
+- sabit asitlik (fixed acidity)
+- uçucu asitlik (volatile acidity)
+- sitrik asit (citric acid)
+- artık şeker (residual sugar)
+- klorürler (chlorides)
+- serbest kükürt dioksit (free sulfur dioxide)
+- toplam kükürt dioksit (total sulfur dioxide)
+- yoğunluk (density)
+- pH
+- sülfatlar (sulphates)
+- alkol (alcohol)
+
+Bu farklı özelliklere dayanarak, 0 ile 10 arasında bir değer olan kırmızı şarabın kalitesini tahmin etmemiz gerekiyor.
+
+Bu verilerin nasıl göründüğüne bakalım.
+
 ═════════════════════════════════════════════════════════════════════════
 
+```
+import pandas as pd
+df = pd.read_csv("winequality-red.csv")
+```
 
-### Görsel 1
+═════════════════════════════════════════════════════════════════════════
+
+Bu veri kümesi aşağıdakine benzer şekilde görünür:
 
 ![Görsel](./i/sayfa_0016_gorsel_01.png)
 
-When we look at this data and consider it a classification problem, a lot of 
-algorithms come to our mind that we can apply to it, probably, we can use neural 
-networks. But it would be a bit of a stretch if we dive into neural networks from the 
-beginning. So, let’s start with something simple that we can visualize too: decision 
-trees. 
- 
-Before we begin to understand what overfitting is, let’s divide the data into two 
-parts. This dataset has 1599 samples. We keep 1000 samples for training and 599 
-as a separate set. 
- 
-Splitting can be done easily by the following chunk of code: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# use sample with frac=1 to shuffle the dataframe 
-# we reset the indices since they change after 
-# shuffling the dataframe 
-df = df.sample(frac=1).reset_index(drop=True) 
- 
-# top 1000 rows are selected 
-# for training 
-df_train = df.head(1000) 
- 
-# bottom 599 values are selected 
-# for testing/validation 
-df_test = df.tail(599) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We will now train a decision tree model on the training set. For the decision tree 
-model, I am going to use scikit-learn. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# import from scikit-learn 
-from sklearn import tree 
-from sklearn import metrics 
- 
-# initialize decision tree classifier class 
-# with a max_depth of 3 
-clf = tree.DecisionTreeClassifier(max_depth=3) 
- 
-# choose the columns you want to train on 
-# these are the features for the model 
-cols = ['fixed acidity',  
-        'volatile acidity',  
-        'citric acid',
-        'residual sugar', 
-        'chlorides', 
-        'free sulfur dioxide', 
-        'total sulfur dioxide', 
-        'density', 
-        'pH', 
-        'sulphates', 
-        'alcohol'] 
- 
-# train the model on the provided features 
-# and mapped quality from before 
-clf.fit(df_train[cols], df_test.quality) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Note that I have used a max_depth of 3 for the decision tree classifier. I have left 
-all other parameters of this model to its default value. 
- 
-Now, we test the accuracy of this model on the training set and the test set: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# generate predictions on the training set 
-train_predictions = clf.predict(df_train[cols]) 
- 
-# generate predictions on the test set 
-test_predictions = clf.predict(df_test[cols]) 
- 
-# calculate the accuracy of predictions on 
-# training data set 
-train_accuracy = metrics.accuracy_score( 
-    df_train.quality, train_predictions 
-) 
- 
-# calculate the accuracy of predictions on 
-# test data set 
-test_accuracy = metrics.accuracy_score( 
-    df_test.quality, test_predictions 
-) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-The training and test accuracies are found to be 58.9% and 54.25%. Now we 
-increase the max_depth to 7 and repeat the process. This gives training accuracy of 
-76.6% and test accuracy of 57.3%. Here, we have used accuracy, mainly because it 
-is the most straightforward metric. It might not be the best metric for this problem. 
-What about we calculate these accuracies for different values of max_depth and 
-make a plot?
+**Şekil 1: Kırmızı şarap kalitesi veri kümesinden bir görünüm.**
 
-═════════════════════════════════════════════════════════════════════════ 
-# NOTE: this code is written in a jupyter notebook 
- 
-# import scikit-learn tree and metrics 
-from sklearn import tree 
-from sklearn import metrics 
- 
-# import matplotlib and seaborn 
-# for plotting 
-import matplotlib 
-import matplotlib.pyplot as plt 
-import seaborn as sns 
- 
-# this is our global size of label text 
-# on the plots 
-matplotlib.rc('xtick', labelsize=20)  
-matplotlib.rc('ytick', labelsize=20)  
- 
-# This line ensures that the plot is displayed 
-# inside the notebook 
-%matplotlib inline 
- 
- 
-# initialize lists to store accuracies 
-# for training and test data 
-# we start with 50% accuracy 
-train_accuracies = [0.5] 
-test_accuracies = [0.5] 
- 
-# iterate over a few depth values 
-for depth in range(1, 25): 
-    # init the model 
-    clf = tree.DecisionTreeClassifier(max_depth=depth) 
- 
-    # columns/features for training 
-    # note that, this can be done outside  
-    # the loop 
-    cols = [ 
-        'fixed acidity',  
-        'volatile acidity', 
-        'citric acid',  
-        'residual sugar', 
-        'chlorides', 
-        'free sulfur dioxide',  
-        'total sulfur dioxide', 
-        'density', 
-        'pH',  
-        'sulphates',
-        'alcohol' 
-        ] 
- 
-    # fit the model on given features 
-    clf.fit(df_train[cols], df_train.quality) 
- 
-    # create training & test predictions 
-    train_predictions = clf.predict(df_train[cols]) 
-    test_predictions = clf.predict(df_test[cols]) 
- 
-    # calculate training & test accuracies 
-    train_accuracy = metrics.accuracy_score( 
-        df_train.quality, train_predictions 
-    ) 
-    test_accuracy = metrics.accuracy_score( 
-        df_test.quality, test_predictions 
-    ) 
-     
-    # append accuracies 
-    train_accuracies.append(train_accuracy) 
-    test_accuracies.append(test_accuracy) 
- 
- 
- 
-# create two plots using matplotlib 
-# and seaborn 
-plt.figure(figsize=(10, 5)) 
-sns.set_style("whitegrid") 
-plt.plot(train_accuracies, label="train accuracy") 
-plt.plot(test_accuracies, label="test accuracy") 
-plt.legend(loc="upper left", prop={'size': 15}) 
-plt.xticks(range(0, 26, 5)) 
-plt.xlabel("max_depth", size=20) 
-plt.ylabel("accuracy", size=20) 
-plt.show() 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This generates a plot, as shown in figure 2.  
- 
-We see that the best score for test data is obtained when max_depth has a value of 
-14. As we keep increasing the value of this parameter, test accuracy remains the 
-same or gets worse, but the training accuracy keeps increasing. It means that our 
-simple decision tree model keeps learning about the training data better and better 
-with an increase in max_depth, but the performance on test data does not improve 
-at all.
+Şarap kalitesi 0 ile 10 arasında gerçek bir sayı olduğundan, bu problemi hem bir sınıflandırma problemi hem de bir regresyon problemi olarak ele alabiliriz.
 
-This is called overfitting.  
- 
-The model fits perfectly on the training set and performs poorly when it comes to 
-the test set. This means that the model will learn the training data well but will not 
-generalize on unseen samples. In the dataset above, one can build a model with very 
-high max_depth which will have outstanding results on training data, but that kind 
-of model is not useful as it will not provide a similar result on the real-world samples 
-or live data. 
- 
-Figure 2: Training and test accuracies for different values of max_depth. 
- 
-One might argue that this approach isn’t overfitting as the accuracy of the test set 
-more or less remains the same. Another definition of overfitting would be when the 
-test loss increases as we keep improving training loss. This is very common when 
-it comes to neural networks.  
- 
-Whenever we train a neural network, we must monitor loss during the training time 
-for both training and test set. If we have a very large network for a dataset which is 
-quite small (i.e. very less number of samples), we will observe that the loss for both 
-training and test set will decrease as we keep training. However, at some point, test 
-loss will reach its minima, and after that, it will start increasing even though training 
-loss decreases further. We must stop training where the validation loss reaches its 
-minimum value.  
- 
-This is the most common explanation of overfitting.
+Basitlik açısından sınıflandırmayı seçelim.
 
+Ancak bu veri kümesi yalnızca altı farklı kalite değerinden oluşmaktadır. Bu nedenle tüm kalite değerlerini 0 ile 5 arasında eşleştireceğiz.
 
-### Görsel 1
+═════════════════════════════════════════════════════════════════════════
+
+```
+# kalite değerlerini 0'dan 5'e eşleyen bir eşleme sözlüğü
+quality_mapping = {
+3: 0,
+4: 1,
+5: 2,
+6: 3,
+7: 4,
+8: 5
+}
+
+# verilen bir sütundaki değerleri sözlükteki değerlere
+# dönüştürmek için pandas'ın map fonksiyonunu
+# herhangi bir sözlükle kullanabilirsiniz
+df.loc[:, "quality"] = df.quality.map(quality_mapping)
+```
+
+═════════════════════════════════════════════════════════════════════════
+
+Bu verilere baktığımızda ve problemi bir sınıflandırma problemi olarak değerlendirdiğimizde, uygulayabileceğimiz birçok algoritma aklımıza gelir. Muhtemelen sinir ağlarını da kullanabiliriz.
+
+Ancak daha başlangıçta sinir ağlarına geçmek biraz fazla olacaktır.
+
+Bu nedenle, görselleştirebileceğimiz basit bir yöntemle başlayalım: **karar ağaçları (decision trees).**
+
+Overfitting'in ne olduğunu anlamaya başlamadan önce veriyi iki parçaya ayıralım.
+
+Bu veri kümesinde 1599 örnek bulunmaktadır. 1000 örneği eğitim için, kalan 599 örneği ise ayrı bir küme olarak tutacağız.
+
+Ayırma işlemi aşağıdaki kod parçasıyla kolayca yapılabilir:
+
+═════════════════════════════════════════════════════════════════════════
+
+```
+# frac=1 kullanarak dataframe'i karıştır
+# dataframe'i karıştırdıktan sonra indeksler değiştiği için
+# indeksleri sıfırlıyoruz
+df = df.sample(frac=1).reset_index(drop=True)
+
+# ilk 1000 satır
+# eğitim için seçilir
+df_train = df.head(1000)
+
+# son 599 değer
+# test/doğrulama için seçilir
+df_test = df.tail(599)
+```
+
+═════════════════════════════════════════════════════════════════════════
+
+Şimdi eğitim kümesi üzerinde bir karar ağacı modeli eğiteceğiz. Karar ağacı modeli için scikit-learn kullanacağım.
+
+═════════════════════════════════════════════════════════════════════════
+
+```
+# scikit-learn'den içe aktar
+from sklearn import tree
+from sklearn import metrics
+
+# karar ağacı sınıflandırıcısını
+# max_depth değeri 3 olacak şekilde başlat
+clf = tree.DecisionTreeClassifier(max_depth=3)
+
+# üzerinde eğitim yapmak istediğiniz sütunları seçin
+# bunlar modelin özellikleridir
+cols = ['fixed acidity',
+    'volatile acidity',
+    'citric acid',
+    'residual sugar',
+    'chlorides',
+    'free sulfur dioxide',
+    'total sulfur dioxide',
+    'density',
+    'pH',
+    'sulphates',
+    'alcohol']
+
+# modeli verilen özellikler ve
+# daha önce eşlenen quality değerleri üzerinde eğit
+clf.fit(df_train[cols], df_test.quality)
+```
+
+═════════════════════════════════════════════════════════════════════════
+
+Karar ağacı sınıflandırıcısı için `max_depth` değerini 3 olarak kullandığımı unutmayın. Bu modelin diğer tüm parametrelerini varsayılan değerlerinde bıraktım.
+
+Şimdi bu modelin doğruluğunu hem eğitim kümesinde hem de test kümesinde test ediyoruz:
+
+═════════════════════════════════════════════════════════════════════════
+
+```
+# eğitim kümesi üzerinde tahminler oluştur
+train_predictions = clf.predict(df_train[cols])
+
+# test kümesi üzerinde tahminler oluştur
+test_predictions = clf.predict(df_test[cols])
+
+# eğitim veri kümesindeki tahminlerin
+# doğruluğunu hesapla
+train_accuracy = metrics.accuracy_score(
+df_train.quality, train_predictions
+)
+
+# test veri kümesindeki tahminlerin
+# doğruluğunu hesapla
+test_accuracy = metrics.accuracy_score(
+df_test.quality, test_predictions
+)
+```
+
+═════════════════════════════════════════════════════════════════════════
+
+Eğitim ve test doğruluklarının sırasıyla **%58,9 ve %54,25** olduğu görülüyor.
+
+Şimdi `max_depth` değerini 7'ye çıkarıp işlemi tekrarlayalım. Bu durumda eğitim doğruluğu **%76,6**, test doğruluğu ise **%57,3** oluyor.
+
+Burada doğruluğu kullandık çünkü en basit anlaşılabilen metriktir. Ancak bu problem için en iyi metrik olmayabilir.
+
+Peki farklı `max_depth` değerleri için bu doğrulukları hesaplayıp bir grafik oluştursak?
+
+═════════════════════════════════════════════════════════════════════════
+
+```
+# NOT: bu kod bir jupyter notebook'ta yazılmıştır
+
+# scikit-learn tree ve metrics modüllerini içe aktar
+from sklearn import tree
+from sklearn import metrics
+
+# grafik çizimi için matplotlib ve seaborn'u içe aktar
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# grafiklerdeki etiket metinlerinin
+# global boyutu
+matplotlib.rc('xtick', labelsize=20)
+matplotlib.rc('ytick', labelsize=20)
+
+# grafiğin notebook içinde görüntülenmesini sağlar
+%matplotlib inline
+
+# eğitim ve test verilerinin doğruluklarını
+# saklamak için listeler oluştur
+# %50 doğruluk ile başlıyoruz
+train_accuracies = [0.5]
+test_accuracies = [0.5]
+
+# birkaç farklı derinlik değeri üzerinde döngü oluştur
+for depth in range(1, 25):
+# modeli başlat
+clf = tree.DecisionTreeClassifier(max_depth=depth)
+
+# eğitim için sütunlar/özellikler
+# bunun döngünün dışında da yapılabileceğini unutmayın
+cols = [
+    'fixed acidity',
+    'volatile acidity',
+    'citric acid',
+    'residual sugar',
+    'chlorides',
+    'free sulfur dioxide',
+    'total sulfur dioxide',
+    'density',
+    'pH',
+    'sulphates',
+    'alcohol'
+    ]
+
+# modeli verilen özellikler üzerinde eğit
+clf.fit(df_train[cols], df_train.quality)
+
+# eğitim ve test tahminlerini oluştur
+train_predictions = clf.predict(df_train[cols])
+test_predictions = clf.predict(df_test[cols])
+
+# eğitim ve test doğruluklarını hesapla
+train_accuracy = metrics.accuracy_score(
+    df_train.quality, train_predictions
+)
+test_accuracy = metrics.accuracy_score(
+    df_test.quality, test_predictions
+)
+
+# doğrulukları listelere ekle
+train_accuracies.append(train_accuracy)
+test_accuracies.append(test_accuracy)
+
+# matplotlib ve seaborn kullanarak iki grafik oluştur
+plt.figure(figsize=(10, 5))
+sns.set_style("whitegrid")
+plt.plot(train_accuracies, label="train accuracy")
+plt.plot(test_accuracies, label="test accuracy")
+plt.legend(loc="upper left", prop={'size': 15})
+plt.xticks(range(0, 26, 5))
+plt.xlabel("max_depth", size=20)
+plt.ylabel("accuracy", size=20)
+plt.show()
+```
+
+═════════════════════════════════════════════════════════════════════════
+
+Bu kod Şekil 2'de gösterilen grafiği oluşturur.
 
 ![Görsel](./i/sayfa_0021_gorsel_01.png)
 
-Occam’s razor in simple words states that one should not try to complicate things 
-that can be solved in a much simpler manner. In other words, the simplest solutions 
-are the most generalizable solutions. In general, whenever your model does not 
-obey Occam’s razor, it is probably overfitting. 
- 
- 
-Figure 3: Most general definition of overfitting. 
- 
-Now we can go back to cross-validation. 
- 
-While explaining about overfitting, I decided to divide the data into two parts. I 
-trained the model on one part and checked its performance on the other part. Well, 
-this is also a kind of cross-validation commonly known as a hold-out set. We use 
-this kind of (cross-) validation when we have a large amount of data and model 
-inference is a time-consuming process. 
- 
-There are many different ways one can do cross-validation, and it is the most critical 
-step when it comes to building a good machine learning model which is 
-generalizable when it comes to unseen data. Choosing the right cross-validation 
-depends on the dataset you are dealing with, and one’s choice of cross-validation 
-on one dataset may or may not apply to other datasets. However, there are a few 
-types of cross-validation techniques which are the most popular and widely used.  
- 
-These include: 
- 
-• 
-k-fold cross-validation 
-• 
-stratified k-fold cross-validation
+Test verileri için en iyi skorun `max_depth` değerinin **14** olduğu durumda elde edildiğini görüyoruz.
 
+Bu parametrenin değerini artırmaya devam ettiğimizde test doğruluğu aynı kalıyor veya kötüleşiyor, ancak eğitim doğruluğu artmaya devam ediyor.
 
-### Görsel 1
+Bu, basit karar ağacı modelimizin `max_depth` arttıkça eğitim verilerini daha iyi ve daha iyi öğrenmeye devam ettiği, ancak test verilerindeki performansının hiç gelişmediği anlamına gelir.
+
+Buna **overfitting (aşırı öğrenme)** denir.
+
+Model eğitim kümesine mükemmel şekilde uyum sağlarken test kümesinde kötü performans gösterir.
+
+Bu, modelin eğitim verilerini iyi öğreneceği ancak daha önce görmediği örneklere **genelleme yapamayacağı** anlamına gelir.
+
+Yukarıdaki veri kümesinde çok yüksek `max_depth` değerine sahip bir model oluşturulabilir ve eğitim verileri üzerinde olağanüstü sonuçlar alınabilir. Ancak bu tür bir model kullanışlı değildir; çünkü gerçek dünya örneklerinde veya canlı verilerde benzer sonuçlar vermeyecektir.
+
+**Şekil 2: Farklı `max_depth` değerleri için eğitim ve test doğrulukları.**
+
+Birisi test kümesinin doğruluğu aşağı yukarı aynı kaldığı için bunun overfitting olmadığını savunabilir.
+
+Overfitting'in başka bir tanımı da eğitim kaybını iyileştirmeye devam ettiğimizde test kaybının artmasıdır.
+
+Bu durum özellikle sinir ağlarında oldukça yaygındır.
+
+Bir sinir ağı eğittiğimizde, eğitim süresince hem eğitim hem de test kümesi için kaybı izlememiz gerekir.
+
+Oldukça küçük bir veri kümesi için çok büyük bir ağımız varsa (yani örnek sayısı çok azsa), eğitim devam ettikçe hem eğitim hem de test kümesindeki kaybın azaldığını görürüz.
+
+Ancak belirli bir noktada test kaybı minimum değerine ulaşır ve bundan sonra, eğitim kaybı azalmaya devam etmesine rağmen test kaybı artmaya başlar.
+
+Doğrulama kaybının minimum değerine ulaştığı noktada eğitimi durdurmalıyız.
+
+Bu, overfitting'in en yaygın açıklamasıdır.
+
+**Şekil 3: Overfitting'in en genel tanımı.**
+
+**Occam'ın usturası**, basit bir ifadeyle, çok daha basit bir şekilde çözülebilecek şeyleri gereksiz yere karmaşıklaştırmamamız gerektiğini söyler.
+
+Başka bir ifadeyle, **en basit çözümler en fazla genellenebilirliğe sahip çözümlerdir.**
+
+Genel olarak, modeliniz Occam'ın usturasına uymuyorsa muhtemelen overfitting yapıyordur.
+
+Şimdi çapraz doğrulamaya geri dönebiliriz.
+
+Overfitting'i açıklarken veriyi iki parçaya ayırmaya karar verdim. Modeli bir parça üzerinde eğittim ve performansını diğer parça üzerinde kontrol ettim.
+
+Bu da yaygın olarak **hold-out set** olarak bilinen bir tür çapraz doğrulamadır.
+
+Bu tür (çapraz) doğrulamayı, büyük miktarda veriye sahip olduğumuzda ve model çıkarımının (inference) zaman alan bir işlem olduğu durumlarda kullanırız.
+
+Çapraz doğrulama yapmanın birçok farklı yolu vardır ve görülmemiş veriler üzerinde genellenebilirliği yüksek, iyi bir makine öğrenmesi modeli oluşturmak söz konusu olduğunda en kritik adımlardan biridir.
+
+Doğru çapraz doğrulama yöntemini seçmek, üzerinde çalıştığınız veri kümesine bağlıdır. Bir veri kümesinde yaptığınız çapraz doğrulama seçimi başka bir veri kümesine uygulanabilir veya uygulanamayabilir.
+
+Bununla birlikte, en popüler ve yaygın olarak kullanılan birkaç çapraz doğrulama tekniği vardır.
+
+Bunlar şunlardır:
+
+- k-fold çapraz doğrulama
+- stratified k-fold çapraz doğrulama
+
+- hold-out tabanlı doğrulama
+- leave-one-out çapraz doğrulama
+- group k-fold çapraz doğrulama
+
+Çapraz doğrulama, eğitim verilerini birkaç parçaya bölmektir.
+
+Modeli bu parçaların bazıları üzerinde eğitir ve kalan parçalar üzerinde test ederiz.
+
+Şekil 4'e bakın.
 
 ![Görsel](./i/sayfa_0022_gorsel_01.png)
 
-• 
-hold-out based validation 
-• 
-leave-one-out cross-validation 
-• 
-group k-fold cross-validation 
- 
-Cross-validation is dividing training data into a few parts. We train the model on 
-some of these parts and test on the remaining parts. Take a look at figure 4. 
- 
- 
-Figure 4: Splitting a dataset into training and validation sets 
- 
-Figure 4 & 5 say that when you get a dataset to build machine learning models, you 
-separate them into two different sets: training and validation. Many people also 
-split it into a third set and call it a test set. We will, however, be using only two 
-sets. As you can see, we divide the samples and the targets associated with them. 
-We can divide the data into k different sets which are exclusive of each other. This 
-is known as k-fold cross-validation. 
- 
- 
-Figure 5: K-fold cross-validation
+**Şekil 4: Bir veri kümesinin eğitim ve doğrulama kümelerine ayrılması**
 
+Şekil 4 ve 5, makine öğrenmesi modelleri oluşturmak için bir veri kümesi aldığınızda onu iki farklı kümeye ayırdığınızı göstermektedir: **eğitim ve doğrulama**.
 
-### Görsel 1
+Birçok kişi bunu üçüncü bir kümeye daha ayırır ve buna **test kümesi** der.
+
+Ancak biz yalnızca iki küme kullanacağız.
+
+Gördüğünüz gibi örnekleri ve bunlarla ilişkili hedefleri ayırıyoruz.
+
+Verileri birbirinden bağımsız olan `k` farklı kümeye ayırabiliriz. Buna **k-fold çapraz doğrulama** denir.
 
 ![Görsel](./i/sayfa_0023_gorsel_01.png)
 
-
-### Görsel 2
-
 ![Görsel](./i/sayfa_0023_gorsel_02.png)
 
-We can split any data into k-equal parts using KFold from scikit-learn. Each sample 
-is assigned a value from 0 to k-1 when using k-fold cross validation. 
- 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# import pandas and model_selection module of scikit-learn 
-import pandas as pd 
-from sklearn import model_selection 
- 
- 
-if __name__ == "__main__": 
-    # Training data is in a CSV file called train.csv 
-    df = pd.read_csv("train.csv") 
-     
-    # we create a new column called kfold and fill it with -1 
-    df["kfold"] = -1 
- 
-    # the next step is to randomize the rows of the data 
-    df = df.sample(frac=1).reset_index(drop=True) 
- 
-    # initiate the kfold class from model_selection module 
-    kf = model_selection.KFold(n_splits=5) 
- 
-    # fill the new kfold column 
-    for fold, (trn_, val_) in enumerate(kf.split(X=df)): 
-        df.loc[val_, 'kfold'] = fold 
- 
-    # save the new csv with kfold column  
-    df.to_csv("train_folds.csv", index=False) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-You can use this process with almost all kinds of datasets. For example, when you 
-have images, you can create a CSV with image id, image location and image label 
-and use the process above. 
- 
-The next important type of cross-validation is stratified k-fold. If you have a 
-skewed dataset for binary classification with 90% positive samples and only 10% 
-negative samples, you don't want to use random k-fold cross-validation. Using 
-simple k-fold cross-validation for a dataset like this can result in folds with all 
-negative samples. In these cases, we prefer using stratified k-fold cross-validation. 
-Stratified k-fold cross-validation keeps the ratio of labels in each fold constant. So, 
-in each fold, you will have the same 90% positive and 10% negative samples. Thus, 
-whatever metric you choose to evaluate, it will give similar results across all folds.
+**Şekil 5: K-fold çapraz doğrulama**
 
-It’s easy to modify the code for creating k-fold cross-validation to create stratified 
-k-folds. 
-We 
-are 
-only 
-changing 
-from 
-model_selection.KFold 
-to 
-model_selection.StratifiedKFold and in the kf.split(...) function, we specify the 
-target column on which we want to stratify. We assume that our CSV dataset has a 
-column called “target” and it is a classification problem! 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# import pandas and model_selection module of scikit-learn 
-import pandas as pd 
-from sklearn import model_selection 
- 
-if __name__ == "__main__": 
-    # Training data is in a csv file called train.csv 
-    df = pd.read_csv("train.csv") 
- 
-    # we create a new column called kfold and fill it with -1 
-    df["kfold"] = -1 
- 
-    # the next step is to randomize the rows of the data 
-    df = df.sample(frac=1).reset_index(drop=True) 
- 
-    # fetch targets 
-    y = df.target.values 
- 
-    # initiate the kfold class from model_selection module 
-    kf = model_selection.StratifiedKFold(n_splits=5) 
- 
-    # fill the new kfold column 
-    for f, (t_, v_) in enumerate(kf.split(X=df, y=y)): 
-        df.loc[v_, 'kfold'] = f 
- 
-    # save the new csv with kfold column 
-    df.to_csv("train_folds.csv", index=False) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-For the wine dataset, let’s look at the distribution of labels. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-b = sns.countplot(x='quality', data=df) 
-b.set_xlabel("quality", fontsize=20) 
-b.set_ylabel("count", fontsize=20) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Note that we continue on the code above. So, we have converted the target values. 
-Looking at figure 6 we can say that the quality is very much skewed. Some classes
+Scikit-learn'deki `KFold` kullanarak herhangi bir veriyi `k` eşit parçaya bölebiliriz.
 
-have a lot of samples, and some don’t have that many. If we do a simple k-fold, we 
-won’t have an equal distribution of targets in every fold. Thus, we choose stratified 
-k-fold in this case. 
- 
-Figure 6: Distribution of “quality” in wine dataset 
- 
-The rule is simple. If it’s a standard classification problem, choose stratified k-fold 
-blindly. 
- 
-But what should we do if we have a large amount of data? Suppose we have 1 
-million samples. A 5 fold cross-validation would mean training on 800k samples 
-and validating on 200k. Depending on which algorithm we choose, training and 
-even validation can be very expensive for a dataset which is of this size. In these 
-cases, we can opt for a hold-out based validation. 
- 
-The process for creating the hold-out remains the same as stratified k-fold. For a 
-dataset which has 1 million samples, we can create ten folds instead of 5 and keep 
-one of those folds as hold-out. This means we will have 100k samples in the hold-
-out, and we will always calculate loss, accuracy and other metrics on this set and 
-train on 900k samples. 
- 
-Hold-out is also used very frequently with time-series data. Let’s assume the 
-problem we are provided with is predicting sales of a store for 2020, and you are 
-provided all the data from 2015-2019. In this case, you can select all the data for 
-2019 as a hold-out and train your model on all the data from 2015 to 2018.
+K-fold çapraz doğrulama kullanıldığında her örneğe 0 ile `k-1` arasında bir değer atanır.
 
+═════════════════════════════════════════════════════════════════════════
 
-### Görsel 1
+```
+# pandas ve scikit-learn'ün model_selection modülünü içe aktar
+import pandas as pd
+from sklearn import model_selection
+
+if __name__ == "__main__":
+# Eğitim verileri train.csv adlı bir CSV dosyasındadır
+df = pd.read_csv("train.csv")
+
+# kfold adında yeni bir sütun oluştur ve -1 ile doldur
+df["kfold"] = -1
+
+# bir sonraki adım veri satırlarını rastgele karıştırmaktır
+df = df.sample(frac=1).reset_index(drop=True)
+
+# model_selection modülünden kfold sınıfını başlat
+kf = model_selection.KFold(n_splits=5)
+
+# yeni kfold sütununu doldur
+for fold, (trn_, val_) in enumerate(kf.split(X=df)):
+    df.loc[val_, 'kfold'] = fold
+
+# kfold sütununu içeren yeni CSV'yi kaydet
+df.to_csv("train_folds.csv", index=False)
+```
+
+═════════════════════════════════════════════════════════════════════════
+
+Bu işlemi neredeyse tüm veri kümesi türleriyle kullanabilirsiniz.
+
+Örneğin görüntüleriniz olduğunda görüntü kimliği, görüntünün konumu ve görüntü etiketi bilgilerini içeren bir CSV oluşturabilir ve yukarıdaki işlemi kullanabilirsiniz.
+
+Bir sonraki önemli çapraz doğrulama türü **stratified k-fold** yöntemidir.
+
+İkili sınıflandırma için %90 pozitif ve yalnızca %10 negatif örnek içeren dengesiz bir veri kümeniz olduğunu düşünün.
+
+Rastgele k-fold çapraz doğrulama kullanmak istemezsiniz.
+
+Bunun gibi bir veri kümesinde basit k-fold çapraz doğrulama kullanmak, yalnızca negatif örneklerden oluşan fold'ların ortaya çıkmasına neden olabilir.
+
+Bu durumlarda **stratified k-fold çapraz doğrulama** kullanmayı tercih ederiz.
+
+Stratified k-fold çapraz doğrulama, her fold içerisindeki etiket oranını sabit tutar.
+
+Dolayısıyla her fold'da aynı şekilde %90 pozitif ve %10 negatif örnek bulunacaktır.
+
+Böylece değerlendirme için hangi metriği seçerseniz seçin, tüm fold'larda benzer sonuçlar elde edecektir.
+
+K-fold çapraz doğrulama oluşturmak için kullandığımız kodu stratified k-fold oluşturacak şekilde değiştirmek kolaydır.
+
+Yalnızca `model_selection.KFold` yerine `model_selection.StratifiedKFold` kullanıyoruz ve `kf.split(...)` fonksiyonunda hangi hedef sütununa göre stratification yapmak istediğimizi belirtiyoruz.
+
+CSV veri kümemizde `"target"` adında bir sütun olduğunu ve bunun bir sınıflandırma problemi olduğunu varsayıyoruz!
+
+═════════════════════════════════════════════════════════════════════════
+
+```
+# pandas ve scikit-learn'ün model_selection modülünü içe aktar
+import pandas as pd
+from sklearn import model_selection
+
+if __name__ == "__main__":
+# Eğitim verileri train.csv adlı bir csv dosyasındadır
+df = pd.read_csv("train.csv")
+
+# kfold adında yeni bir sütun oluştur ve -1 ile doldur
+df["kfold"] = -1
+
+# bir sonraki adım veri satırlarını rastgele karıştırmaktır
+df = df.sample(frac=1).reset_index(drop=True)
+
+# hedefleri al
+y = df.target.values
+
+# model_selection modülünden kfold sınıfını başlat
+kf = model_selection.StratifiedKFold(n_splits=5)
+
+# yeni kfold sütununu doldur
+for f, (t_, v_) in enumerate(kf.split(X=df, y=y)):
+    df.loc[v_, 'kfold'] = f
+
+# kfold sütununu içeren yeni CSV'yi kaydet
+df.to_csv("train_folds.csv", index=False)
+```
+
+═════════════════════════════════════════════════════════════════════════
+
+Şarap veri kümesi için etiketlerin dağılımına bakalım.
+
+═════════════════════════════════════════════════════════════════════════
+
+```
+b = sns.countplot(x='quality', data=df)
+b.set_xlabel("quality", fontsize=20)
+b.set_ylabel("count", fontsize=20)
+```
+
+═════════════════════════════════════════════════════════════════════════
+
+Yukarıdaki kodla devam ettiğimizi unutmayın. Dolayısıyla hedef değerleri dönüştürdük.
+
+Şekil 6'ya baktığımızda kalitenin oldukça dengesiz dağıldığını söyleyebiliriz.
+
+Bazı sınıflarda çok sayıda örnek bulunurken bazı sınıflarda çok daha az örnek vardır.
+
+Basit bir k-fold uygularsak her fold'da hedeflerin eşit bir dağılımına sahip olamayız.
+
+Bu nedenle bu durumda **stratified k-fold** seçiyoruz.
 
 ![Görsel](./i/sayfa_0026_gorsel_01.png)
 
-Figure 7: Example of a time-series data 
- 
-In the example presented in figure 7, let’s say our job is to predict the sales from 
-time step 31 to 40. We can then keep 21 to 30 as hold-out and train our model from 
-step 0 to step 20. You should note that when you are predicting from 31 to 40, you 
-should include the data from 21 to 30 in your model; otherwise, performance will 
-be sub-par. 
- 
-In many cases, we have to deal with small datasets and creating big validation sets 
-means losing a lot of data for the model to learn. In those cases, we can opt for a 
-type of k-fold cross-validation where k=N, where N is the number of samples in the 
-dataset. This means that in all folds of training, we will be training on all data 
-samples except 1. The number of folds for this type of cross-validation is the same 
-as the number of samples that we have in the dataset.  
- 
-One should note that this type of cross-validation can be costly in terms of the time 
-it takes if the model is not fast enough, but since it’s only preferable to use this 
-cross-validation for small datasets, it doesn’t matter much. 
- 
-Now we can move to regression. The good thing about regression problems is that 
-we can use all the cross-validation techniques mentioned above for regression 
-problems except for stratified k-fold. That is we cannot use stratified k-fold directly, 
-but there are ways to change the problem a bit so that we can use stratified k-fold 
-for regression problems. Mostly, simple k-fold cross-validation works for any 
-regression problem. However, if you see that the distribution of targets is not 
-consistent, you can use stratified k-fold.
+**Şekil 6: Şarap veri kümesindeki “quality” dağılımı**
 
+Kural basittir:
 
-### Görsel 1
+**Standart bir sınıflandırma problemi ise doğrudan stratified k-fold seçin.**
+
+Peki çok büyük miktarda verimiz varsa ne yapmalıyız?
+
+1 milyon örneğimiz olduğunu varsayalım.
+
+5 katlı bir çapraz doğrulama, 800 bin örnek üzerinde eğitim ve 200 bin örnek üzerinde doğrulama yapılması anlamına gelir.
+
+Seçtiğimiz algoritmaya bağlı olarak, bu büyüklükteki bir veri kümesi için hem eğitim hem de doğrulama oldukça maliyetli olabilir.
+
+Bu durumlarda **hold-out tabanlı doğrulamayı** tercih edebiliriz.
+
+Hold-out oluşturma süreci stratified k-fold ile aynı kalır.
+
+1 milyon örneğe sahip bir veri kümesi için 5 yerine 10 fold oluşturabilir ve bu fold'lardan birini hold-out olarak ayırabiliriz.
+
+Bu durumda hold-out kümesinde 100 bin örnek bulunur ve kayıp, doğruluk ve diğer metrikleri her zaman bu küme üzerinde hesaplarız; modelimizi ise 900 bin örnek üzerinde eğitiriz.
+
+Hold-out, zaman serisi verileriyle çalışırken de oldukça sık kullanılır.
+
+Problemin 2020 yılı için bir mağazanın satışlarını tahmin etmek olduğunu ve elimizde 2015-2019 arasındaki tüm verilerin bulunduğunu varsayalım.
+
+Bu durumda 2019 yılına ait tüm verileri hold-out olarak seçebilir ve modelimizi 2015-2018 arasındaki tüm veriler üzerinde eğitebiliriz.
 
 ![Görsel](./i/sayfa_0027_gorsel_01.png)
 
-To use stratified k-fold for a regression problem, we have first to divide the target 
-into bins, and then we can use stratified k-fold in the same way as for classification 
-problems. There are several choices for selecting the appropriate number of bins. If 
-you have a lot of samples( > 10k, > 100k), then you don’t need to care about the 
-number of bins. Just divide the data into 10 or 20 bins. If you do not have a lot of 
-samples, you can use a simple rule like Sturge’s Rule to calculate the appropriate 
-number of bins. 
- 
-Sturge’s rule: 
-Number of Bins = 1 + log2(N) 
- 
-Where N is the number of samples you have in your dataset. This function is plotted 
-in Figure 8. 
- 
-Figure 8: Plotting samples vs the number of bins by Sturge’s Rule 
- 
-Let’s make a sample regression dataset and try to apply stratified k-fold as shown 
-in the following python snippet. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# stratified-kfold for regression 
-import numpy as np 
-import pandas as pd 
- 
-from sklearn import datasets 
-from sklearn import model_selection
+**Şekil 7: Zaman serisi verisine örnek**
 
+Şekil 7'de sunulan örnekte görevimizin 31\. zaman adımından 40\. zaman adımına kadar olan satışları tahmin etmek olduğunu varsayalım.
 
-### Görsel 1
+Bu durumda 21-30 arasındaki verileri hold-out olarak ayırabilir ve modelimizi 0-20 arasındaki adımlardan başlayarak eğitebiliriz.
+
+31-40 arasındaki değerleri tahmin ederken 21-30 arasındaki verileri modelimize dahil etmemiz gerektiğini unutmayın; aksi takdirde performans yeterli olmayacaktır.
+
+Birçok durumda küçük veri kümeleriyle çalışmak zorunda kalırız ve büyük doğrulama kümeleri oluşturmak modelin öğrenmesi için kullanılabilecek çok fazla veriyi kaybetmemize neden olur.
+
+Bu durumlarda `k=N` olacak şekilde bir k-fold çaprazraz doğrulama tekniklerini regresyon problemlerinde de bağlı olduğunu ve probleminize ve verilerinize göre yeni çapraz doğrulama biçimleri geliştirmeniz gerekebileceğini aklınızda bulundur doğrulama türünü tercih edebiliriz. Burada `N`, veri kümesindeki örnek sayısıdır.
+
+Bu, her eğitim fold'unda yalnızca 1 örnek hariç tüm veri örnekleri üzerinde eğitim yapılacağı anlamına gelir.
+
+Bu çapraz doğrulama türündeki fold sayısı, veri kümesindeki örnek sayısıyla aynıdır.
+
+Bu çapraz doğrulama türünün, model yeterince hızlı değilse çalışma süresi açısından maliyetli olabileceği unutulmamalıdır.
+
+Ancak bu yöntem yalnızca küçük veri kümelerinde tercih edildiğinden bu durum çok fazla önem taşımaz.
+
+Şimdi regresyona geçebiliriz.
+
+Regresyon problemlerinin güzel tarafı, yukarıda bahsedilen tüm çapraz doğrulama tekniklerini regresyon problemlerinde de kullanabilmemizdir; **stratified k-fold hariç**.
+
+Yani stratified k-fold'u doğrudan kullanamayız, ancak problemi biraz değiştirerek regresyon problemlerinde stratified k-fold kullanmanın yolları vardır.
+
+Çoğunlukla basit k-fold çapraz doğrulama herhangi bir regresyon problemi için çalışır.
+
+Ancak hedeflerin dağılımının tutarlı olmadığını görürseniz stratified k-fold kullanabilirsiniz.
+
+Bir regresyon probleminde stratified k-fold kullanmak için öncelikle hedefi **bin'lere** ayırmamız gerekir. Daha sonra sınıflandırma problemlerinde yaptığımız gibi stratified k-fold kullanabiliriz.
+
+Uygun bin sayısını seçmek için birkaç farklı yöntem vardır.
+
+Çok sayıda örneğiniz varsa (`> 10k`, `> 100k`), bin sayısı konusunda endişelenmenize gerek yoktur.
+
+Veriyi yalnızca 10 veya 20 bin'e ayırabilirsiniz.
+
+Çok fazla örneğiniz yoksa uygun bin sayısını hesaplamak için **Sturge Kuralı (Sturge's Rule)** gibi basit bir kural kullanabilirsiniz.
+
+**Sturge Kuralı:**
+
+**Bin Sayısı = 1 \+ log₂(N)**
+
+Burada `N`, veri kümenizde bulunan örnek sayısıdır.
+
+Bu fonksiyon Şekil 8'de gösterilmiştir.
 
 ![Görsel](./i/sayfa_0028_gorsel_01.png)
 
-def create_folds(data): 
-    # we create a new column called kfold and fill it with -1 
-    data["kfold"] = -1 
-     
-    # the next step is to randomize the rows of the data 
-    data = data.sample(frac=1).reset_index(drop=True) 
- 
-    # calculate the number of bins by Sturge's rule 
-    # I take the floor of the value, you can also 
-    # just round it 
-    num_bins = np.floor(1 + np.log2(len(data))) 
- 
-    # bin targets 
-    data.loc[:, "bins"] = pd.cut( 
-        data["target"], bins=num_bins, labels=False 
-    ) 
-     
-    # initiate the kfold class from model_selection module 
-    kf = model_selection.StratifiedKFold(n_splits=5) 
-     
-    # fill the new kfold column 
-    # note that, instead of targets, we use bins! 
-    for f, (t_, v_) in enumerate(kf.split(X=data, y=data.bins.values)): 
-        data.loc[v_, 'kfold'] = f 
-     
-    # drop the bins column 
-    data = data.drop("bins", axis=1) 
-    # return dataframe with folds 
-    return data 
- 
-if __name__ == "__main__": 
-    # we create a sample dataset with 15000 samples  
-    # and 100 features and 1 target 
-    X, y = datasets.make_regression( 
-        n_samples=15000, n_features=100, n_targets=1 
-    ) 
- 
-    # create a dataframe out of our numpy arrays 
-    df = pd.DataFrame( 
-        X, 
-        columns=[f"f_{i}" for i in range(X.shape[1])] 
-    ) 
-    df.loc[:, "target"] = y 
- 
-    # create folds 
-    df = create_folds(df) 
+**Şekil 8: Sturge Kuralı ile örnek sayısına karşı bin sayısının grafiği**
+
+Şimdi örnek bir regresyon veri kümesi oluşturalım ve aşağıdaki Python kodunda gösterildiği gibi stratified k-fold uygulamayı deneyelim.
+
 ═════════════════════════════════════════════════════════════════════════
 
-Cross-validation is the first and most essential step when it comes to building 
-machine learning models. If you want to do feature engineering, split your data first. 
-If you're going to build models, split your data first. If you have a good cross-
-validation scheme in which validation data is representative of training and real-
-world data, you will be able to build a good machine learning model which is highly 
-generalizable.  
- 
-The types of cross-validation presented in this chapter can be applied to almost any 
-machine learning problem. Still, you must keep in mind that cross-validation also 
-depends a lot on the data and you might need to adopt new forms of cross-validation 
-depending on your problem and data.  
- 
-For example, let’s say we have a problem in which we would like to build a model 
-to detect skin cancer from skin images of patients. Our task is to build a binary 
-classifier which takes an input image and predicts the probability for it being benign 
-or malignant.  
- 
-In these kinds of datasets, you might have multiple images for the same patient in 
-the training dataset. So, to build a good cross-validation system here, you must have 
-stratified k-folds, but you must also make sure that patients in training data do not 
-appear in validation data. Fortunately, scikit-learn offers a type of cross-validation 
-known as GroupKFold. Here the patients can be considered as groups. But 
-unfortunately, there is no way to combine GroupKFold with StratifiedKFold in 
-scikit-learn. So you need to do that yourself. I’ll leave it as an exercise for the reader.
+```
+# regresyon için stratified-kfold
+import numpy as np
+import pandas as pd
+
+from sklearn import datasets
+from sklearn import model_selection
+```
+
+```
+def create_folds(data):
+# kfold adında yeni bir sütun oluştur ve -1 ile doldur
+data["kfold"] = -1
+
+# bir sonraki adım veri satırlarını rastgele karıştırmaktır
+data = data.sample(frac=1).reset_index(drop=True)
+
+# Sturge kuralına göre bin sayısını hesapla
+# değerin tabanını alıyorum, isterseniz
+# yalnızca yuvarlayabilirsiniz
+num_bins = np.floor(1 + np.log2(len(data)))
+
+# hedefleri bin'lere ayır
+data.loc[:, "bins"] = pd.cut(
+    data["target"], bins=num_bins, labels=False
+)
+
+# model_selection modülünden kfold sınıfını başlat
+kf = model_selection.StratifiedKFold(n_splits=5)
+
+# yeni kfold sütununu doldur
+# dikkat edin, hedefler yerine bin'leri kullanıyoruz!
+for f, (t_, v_) in enumerate(kf.split(X=data, y=data.bins.values)):
+    data.loc[v_, 'kfold'] = f
+
+# bins sütununu kaldır
+data = data.drop("bins", axis=1)
+# fold'ları içeren dataframe'i döndür
+return data
+
+if __name__ == "__main__":
+# 15000 örnek, 100 özellik ve 1 hedef
+# içeren örnek bir veri kümesi oluşturuyoruz
+X, y = datasets.make_regression(
+    n_samples=15000, n_features=100, n_targets=1
+)
+
+# numpy dizilerimizden bir dataframe oluştur
+df = pd.DataFrame(
+    X,
+    columns=[f"f_{i}" for i in range(X.shape[1])]
+)
+df.loc[:, "target"] = y
+
+# fold'ları oluştur
+df = create_folds(df)
+```
+
+═════════════════════════════════════════════════════════════════════════
+
+Makine öğrenmesi modelleri oluştururken çapraz doğrulama ilk ve en önemli adımdır.
+
+Özellik mühendisliği (feature engineering) yapmak istiyorsanız önce verinizi bölün.
+
+Model oluşturacaksanız önce verinizi bölün.
+
+Eğer doğrulama verilerinin hem eğitim verilerini hem de gerçek dünya verilerini temsil ettiği iyi bir çapraz doğrulama sisteminiz varsa, genellenebilirliği yüksek, iyi bir makine öğrenmesi modeli oluşturabilirsiniz.
+
+Bu bölümde sunulan çapraz doğrulama türleri neredeyse her makine öğrenmesi problemine uygulanabilir.
+
+Yine de çapraz doğrulamanın büyük ölçüde verilere bağlı olduğunu ve probleminize ve verilerinize göre yeni çapraz doğrulama biçimleri geliştirmeniz gerekebileceğini aklınızda bulundurmalısınız.
+
+Örneğin, hastaların cilt görüntülerinden **cilt kanserini tespit etmek** için bir model oluşturmak istediğimiz bir problemimiz olduğunu düşünelim.
+
+Görevimiz, giriş olarak bir görüntü alan ve bunun iyi huylu veya kötü huylu olma olasılığını tahmin eden ikili bir sınıflandırıcı oluşturmaktır.
+
+Bu tür veri kümelerinde eğitim veri kümesinde aynı hastaya ait birden fazla görüntü bulunabilir.
+
+Dolayısıyla burada iyi bir çapraz doğrulama sistemi oluşturmak için **stratified k-fold** kullanmanız gerekir; ancak aynı zamanda eğitim verilerindeki hastaların doğrulama verilerinde yer almadığından da emin olmalısınız.
+
+Neyse ki scikit-learn, **GroupKFold** olarak bilinen bir çapraz doğrulama türü sunmaktadır.
+
+Burada hastalar grup olarak değerlendirilebilir.
+
+Ancak ne yazık ki scikit-learn'de `GroupKFold` ile `StratifiedKFold`'u birleştirmenin bir yolu yoktur.
+
+Bu nedenle bunu kendiniz yapmanız gerekir.
+
+Bunu okuyucu için bir alıştırma olarak bırakıyorum.
+
+## Kaldığım yer
+
+
+
+
 
 
 
