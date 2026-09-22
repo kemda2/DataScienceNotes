@@ -1781,6 +1781,7 @@ Bu nedenle bir sınıflandırma modelini değerlendirirken yalnızca tek bir thr
 
 ![resim](img/p0041_fig01_resim.png)
 
+## Kaldığım yer
 Figure 2: precision-recall curve 
  
 This precision-recall curve looks very different from what you might have seen 
