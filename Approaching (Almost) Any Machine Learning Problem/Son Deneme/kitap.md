@@ -1,485 +1,423 @@
 ![resim](img/p0001_fig01_resim.png)
 
-APPROACHING
+# Başlamadan Önce
 
-(ALMOST) ANY 
-MACHINE 
-LEARNING 
-PROBLEM
+Bu kitabı okumaya başlamadan önce bilmeniz gereken birkaç şey var.
 
-![resim](img/p0001_fig02_resim.png)
+Bu, geleneksel bir kitap değildir.
 
-»
+Kitap, makine öğrenmesi ve derin öğrenme hakkında temel düzeyde bilgi sahibi olduğunuzu varsayar.
 
-w
+Önemli terimler kalın yazılmıştır.
 
-1
+Değişken adları ile fonksiyon/sınıf adları italik yazılmıştır.
 
-r
+═════════════════════════════════════════════════════════════════════════
+Tüm kodlar bu iki çizginin arasında yer alır.
+═════════════════════════════════════════════════════════════════════════
 
-• 
-• ’ ABHISHEK THAKUR
-e
+Çoğu zaman, çıktı kod bloklarının hemen ardından verilmiştir.
 
-9
+Şekiller yerel olarak numaralandırılmıştır. Örneğin, Şekil 1, ilk şekildir.
 
-Approaching (Almost) Any Machine Learning Problem
+Kod, bu kitapta çok önemlidir ve oldukça fazla kod bulunmaktadır. Neler olup bittiğini gerçekten anlamak istiyorsanız, kodu dikkatlice incelemeli ve kendiniz uygulamalısınız.
 
-Approaching 
-(Almost) Any
+Python'da yorumlar diyez işaretiyle (#) başlar. Bu kitaptaki tüm kodlar yalnızca yorumlar kullanılarak satır satır açıklanmıştır. Bu nedenle bu yorumlar göz ardı edilmemelidir.
 
-Machine 
-Learning
+Bash komutları $ veya ❯ işaretiyle başlar.
 
-Problem
+Bu kitabın korsan bir kopyasına (basılı kitap, e-kitap veya PDF) rastlarsanız, gerekli işlemleri yapabilmem için lütfen ayrıntıları doğrudan benimle paylaşın.
 
-ISBN: 978-82-692115-2-8
+Kod yazmadıysanız, öğrenmediniz.
 
-1
 
-Approaching (Almost) Any Machine Learning Problem
+# İçindekiler
 
-It would not have been possible for me to write this book without the 
-support of my family and friends. I would also like to thank the reviewers
+Çalışma ortamının kurulması ................................................................... 5
 
-who selflessly devoted their time in reviewing this book (names in
+Denetimli ve denetimsiz öğrenme ......................................................... 7
 
-alphabetical order).
+Çapraz doğrulama (Cross-validation) ................................................. 14
 
-Aakash Nain
+Değerlendirme metrikleri ........................................................................ 30
 
-Aditya Soni 
-Andreas Müller 
-Andrey Lukyanenko
+Makine öğrenmesi projelerinin düzenlenmesi ................................ 73
 
-Ayon Roy 
-Bojan Tunguz 
-Gilberto Titericz Jr. 
-Konrad Banachewicz
+Kategorik değişkenlere yaklaşım ........................................................... 85
 
-Luca Massaron 
-Nabajeet Barman
+Özellik mühendisliği (Feature engineering) .................................... 142
 
-Parul Pandey 
-Ram Ramrakhya
+Özellik seçimi (Feature selection) ........................................................ 155
 
-Sanyam Bhutani 
-Sudalai Rajkumar 
-Tanishq Abraham
+Hiperparametre optimizasyonu ........................................................... 167
 
-Walter Reade
+Görüntü sınıflandırması ve segmentasyonuna yaklaşım ............ 185
 
-Yuval Reina
+Metin sınıflandırması/regresyonuna yaklaşım ................................ 225
 
-I hope I did not miss anyone.
+Ensemble (topluluk) yöntemleri ve stacking'e yaklaşım ............. 272
 
-2
+Tekrarlanabilir kod ve model sunumuna (serving) yaklaşım ..... 283
 
-Approaching (Almost) Any Machine Learning Problem
+# Çalışma Ortamının Kurulması
 
-Before you start, there are a few things that you must be aware of while going 
-through this book.  
- 
-This is not a traditional book. 
- 
-The book expects you to have basic knowledge of machine learning and deep 
-learning.  
- 
-Important terms are bold.  
- 
-Variable names and function/class names are italic.  
- 
-═════════════════════════════════════════════════════════════════════════ 
-All the code is between these two lines 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Most of the times, the output is provided right after the code blocks. 
- 
-Figures are locally defined. For example, figure 1 is the first figure  
- 
-Code is very important in this book and there is a lot of it. You must go through 
-the code carefully and implement it on your own if you want to understand what’s 
-going on. 
- 
-Comments in Python begin with a hash (#). All the code in this book is explained 
-line-by-line only using comments. Thus, these comments must not be ignored. 
- 
-Bash commands start with $ or ❯. 
- 
-If you find a pirated copy of this book (print or e-book or pdf), contact me directly 
-with the details so that I can take necessary actions.
+Kodlamaya başlamadan önce, makinenizde gerekli her şeyin kurulmuş olması önemlidir. Bu kitap boyunca Ubuntu 18.04 ve Python 3.7.6 kullanacağız.
 
-If you didn’t code, you didn’t learn.
+Eğer Windows kullanıcısıysanız, Ubuntu'yu birden fazla şekilde kurabilirsiniz. Örneğin, Oracle tarafından sağlanan ve ücretsiz bir yazılım olan VirtualBox kullanarak sanal makine üzerine kurabilirsiniz. Alternatif olarak Windows'un yanında çift işletim sistemi (dual boot) şeklinde de kurabilirsiniz. Ben, işletim sisteminin doğrudan donanım üzerinde çalışması nedeniyle dual boot yöntemini tercih ediyorum.
 
-3
+Eğer Ubuntu kullanıcısı değilseniz, bu kitaptaki bazı bash betikleriyle (bash scripts) sorun yaşayabilirsiniz. Bu sorunu aşmak için Ubuntu'yu bir sanal makineye kurabilir veya Windows üzerinde bir Linux shell kullanabilirsiniz.
 
-Approaching (Almost) Any Machine Learning Problem
+Herhangi bir makinede Python kurulumu Anaconda ile oldukça kolaydır. Ben özellikle, conda için minimal bir kurulum sağlayan Miniconda'yı seviyorum. Miniconda; Linux, OSX ve Windows için kullanılabilir.
 
-Table of Contents
+Python 2 desteği 2019'un sonunda sona erdiği için Python 3 dağıtımını kullanacağız. Miniconda'nın normal Anaconda gibi tüm paketlerle birlikte gelmediğini unutmamalısınız. Bu nedenle paketleri ilerledikçe kuracağız.
 
-Setting up your working environment ..................................................... 5
+Miniconda'yı kurmak oldukça kolaydır.
 
-Supervised vs unsupervised learning ....................................................... 7
+Yapmanız gereken ilk şey Miniconda3'ü sisteminize indirmektir.
 
-Cross-validation ................................................................................... 14
+```bash
+$ cd ~/Downloads
+$ wget https://repo.anaconda.com/miniconda/...
+```
 
-Evaluation metrics ................................................................................ 30
 
-Arranging machine learning projects ................................................... 73
+Burada wget komutundan sonra gelen URL, Miniconda3 web sayfasındaki URL'dir.
 
-Approaching categorical variables ........................................................ 85
+Kitabın yazıldığı sırada 64-bit Linux sistemleri için kullanılan URL şuydu:
 
-Feature engineering ........................................................................... 142
+https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
-Feature selection ................................................................................ 155
 
-Hyperparameter optimization ............................................................. 167
+Miniconda3'ü indirdikten sonra aşağıdaki komutu çalıştırabilirsiniz:
 
-Approaching image classification & segmentation .............................. 185
+```bash
+$ sh Miniconda3-latest-Linux-x86_64.sh
+```
 
-Approaching text classification/regression .......................................... 225
+Daha sonra lütfen ekrandaki talimatları okuyun ve uygulayın.
 
-Approaching ensembling and stacking ............................................... 272
+Her şeyi doğru şekilde kurduysanız, terminale conda init yazarak conda ortamını başlatabilmelisiniz.
 
-Approaching reproducible code & model serving ................................ 283
+Bu kitap boyunca kullanacağımız bir conda ortamı oluşturacağız. Bir conda ortamı oluşturmak için:
 
-4
-
-Approaching (Almost) Any Machine Learning Problem
-
-Setting up your working environment 
- 
-Before we begin with coding, it’s essential to get everything set-up on your 
-machine. Throughout this book, we will be using Ubuntu 18.04 and Python 3.7.6. 
-If you are a Windows user, you can install Ubuntu in multiple ways. On a virtual 
-machine, for example, Virtual Box which is provided by Oracle and is free software. 
-Alongside Windows as a dual boot system. I prefer dual boot as it is native. If you 
-are not an Ubuntu user, you might face problems with some of the bash scripts in 
-this book. To circumvent that you can install Ubuntu in a VM or go for Linux shell 
-on Windows. 
- 
-Setting up Python on any machine is quite easy with Anaconda. I particularly like 
-Miniconda, which is a minimal installer for conda. It is available for Linux, OSX 
-and Windows. Since Python 2 support ended at the end of 2019, we will be using 
-the Python 3 distribution. You should keep in mind that miniconda does not come 
-with all the packages as regular Anaconda. We will, thus, be installing packages as 
-we go. Installing miniconda is quite easy. 
- 
-The first thing that you need to do is download Miniconda3 to your system. 
- 
-$ cd ~/Downloads 
-$ wget https://repo.anaconda.com/miniconda/... 
- 
-where the URL after wget command is the URL from miniconda3 webpage. For 
-64-bit Linux systems, the URL at the time of writing this book was: 
- 
-https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh 
- 
-Once you have downloaded miniconda3, you can run the following command: 
- 
-$ sh Miniconda3-latest-Linux-x86_64.sh 
- 
-Next, please read and follow the instructions on your screen. If you installed 
-everything correctly, you should be able to start the conda environment by typing 
-conda init the terminal. We will create a conda environment that we will be using 
-throughout this book. To create a conda environment, you can type: 
- 
+```bash
 $ conda create -n environment_name python=3.7.6
+```
 
-5
+Bu komut, environment_name adında bir conda ortamı oluşturacaktır. Bu ortam aşağıdaki komutla etkinleştirilebilir:
 
-Approaching (Almost) Any Machine Learning Problem
+```bash
+$ conda activate environment_name
+```
 
-This command will create a conda environment named environment_name which 
-can be activated using: 
-  
-$ conda activate environment_name 
- 
-And we are all set-up with the environment. Now it’s time to install some packages 
-that we would be using. A package can be installed in two different ways when you 
-are in a conda environment. You can either install the package from conda 
-repository or the official PyPi repository. 
- 
-$ conda/pip install package_name 
- 
-Note: It might be possible that some packages are not available in the conda repo. 
-Thus, installing using pip would be the most preferred way in this book. I have 
-already created a list of packages used while writing this book which is saved in the 
-environment.yml. You can find it in extra material available in my GitHub 
-repository. You can create the environment using the following command: 
- 
-$ conda env create -f environment.yml 
- 
-This command will create an environment called ml. To activate this environment 
-and start using it, you should run: 
- 
-$ conda activate ml 
- 
-And we are all set and ready to do some applied machine learning!  
- 
-Always remember to be in the “ml” environment when coding along with this book.  
- 
-Let’s start with our real first chapter now.
+Böylece çalışma ortamımız hazır hale geldi.
 
-6
+Şimdi kullanacağımız bazı paketleri yükleme zamanı.
 
-Approaching (Almost) Any Machine Learning Problem
+Bir conda ortamındayken bir paket iki farklı şekilde kurulabilir. Paketi conda deposundan veya resmi PyPI deposundan kurabilirsiniz.
 
-Supervised vs unsupervised learning 
- 
-When dealing with machine learning problems, there are generally two types of 
-data (and machine learning models):
+```bash
+$ conda/pip install package_name
+```
 
-• 
-Supervised data: always has one or multiple targets associated with it. 
-• 
-Unsupervised data: does not have any target variable. 
- 
-A supervised problem is considerably easier to tackle than an unsupervised one. A 
-problem in which we are required to predict a value is known as a supervised 
-problem. For example, if the problem is to predict house prices given historical 
-house prices, with features like presence of a hospital, school or supermarket, 
-distance to nearest public transport, etc. is a supervised problem. Similarly, when 
-we are provided with images of cats and dogs, and we know beforehand which ones 
-are cats and which ones are dogs, and if the task is to create a model which predicts 
-whether a provided image is of a cat or a dog, the problem is considered to be 
-supervised.
+Not: Bazı paketlerin conda deposunda bulunmaması mümkündür. Bu nedenle bu kitapta paketleri pip kullanarak kurmak daha çok tercih edilecektir.
+
+Bu kitabı yazarken kullanılan paketlerin bir listesini zaten oluşturdum. Bu liste environment.yml dosyasında kayıtlıdır. Dosyayı GitHub depomdaki ek materyaller içerisinde bulabilirsiniz.
+
+Aşağıdaki komutu kullanarak ortamı oluşturabilirsiniz:
+
+```bash
+$ conda env create -f environment.yml
+```
+
+Bu komut ml adında bir ortam oluşturacaktır.
+
+Bu ortamı etkinleştirmek ve kullanmaya başlamak için:
+
+```bash
+$ conda activate ml
+```
+
+Artık her şey hazır ve uygulamalı makine öğrenmesine başlayabiliriz!
+
+Bu kitapla birlikte kod yazarken her zaman “ml” ortamında bulunmayı unutmayın.
+
+Şimdi ilk gerçek bölümümüze başlayalım.
+
+# Denetimli ve Denetimsiz Öğrenme
+
+Makine öğrenmesi problemleriyle uğraşırken genel olarak iki tür veri (ve makine öğrenmesi modeli) vardır:
+
+Denetimli veri (Supervised data): Her zaman kendisiyle ilişkili bir veya birden fazla hedef (target) içerir.
+
+Denetimsiz veri (Unsupervised data): Herhangi bir hedef değişken (target variable) içermez.
+
+## Denetimli Öğrenme
+
+Bir denetimli öğrenme (supervised learning) problemini ele almak, denetimsiz bir probleme göre oldukça daha kolaydır.
+
+Bir değeri tahmin etmemizin gerektiği problem, denetimli öğrenme problemi olarak bilinir.
+
+Örneğin, geçmişteki ev fiyatlarını kullanarak ev fiyatlarını tahmin etmek istediğimizi düşünelim. Elimizde hastane, okul veya süpermarket bulunup bulunmadığı, en yakın toplu taşıma aracına olan mesafe gibi özellikler (features) olsun. Bu bir denetimli öğrenme problemidir.
+
+Benzer şekilde, elimizde kedi ve köpek görüntüleri olduğunu ve bunların hangilerinin kedi, hangilerinin köpek olduğunu önceden bildiğimizi düşünelim.
+
+Görevimiz, verilen bir görüntünün kedi mi yoksa köpek mi olduğunu tahmin eden bir model oluşturmaksa, bu problem de denetimli öğrenme olarak kabul edilir.
 
 ![resim](img/p0008_fig01_resim.png)
 
-Figure 1: A supervised dataset. 
- 
-As we see in figure 1, every row of the data is associated with a target or label. The 
-columns are different features and rows represent different data points which are 
-usually called samples. The example shows ten samples with ten features and a 
-target variable which can be either a number or a category. If the target is 
-categorical, the problem becomes a classification problem. And if the target is a real
+Şekil 1: Denetimli bir veri kümesi
 
-7
+Şekil 1'de gördüğümüz gibi, verideki her satır bir hedef (target) veya etiket (label) ile ilişkilidir.
 
-Approaching (Almost) Any Machine Learning Problem
+Sütunlar farklı özellikleri (features), satırlar ise genellikle örnekler (samples) olarak adlandırılan farklı veri noktalarını temsil eder.
 
-number, the problem is defined as a regression problem. Thus, supervised problems 
-can be divided into two sub-classes:
+Örnekte, 10 örnek, 10 özellik ve bir hedef değişken bulunmaktadır. Hedef değişken bir sayı veya bir kategori olabilir.
 
-• 
-Classification: predicting a category, e.g. dog or cat. 
-• 
-Regression: predicting a value, e.g. house prices. 
- 
-It must be noted that sometimes we might use regression in a classification setting 
-depending on the metric used for evaluation. But we will come to that later. 
- 
-Another type of machine learning problem is the unsupervised type. Unsupervised 
-datasets do not have a target associated with them and in general, are more 
-challenging to deal with when compared to supervised problems. 
- 
-Let’s say you work in a financial firm which deals with credit card transactions. 
-There is a lot of data that comes in every second. The only problem is that it is 
-difficult to find humans who will mark each and every transaction either as a valid 
-or genuine transaction or a fraud. When we do not have any information about a 
-transaction being fraud or genuine, the problem becomes an unsupervised problem. 
-To tackle these kinds of problems we have to think about how many clusters can 
-data be divided into. Clustering is one of the approaches that you can use for 
-problems like this, but it must be noted that there are several other approaches 
-available that can be applied to unsupervised problems. For a fraud detection 
-problem, we can say that data can be divided into two classes (fraud or genuine). 
- 
-When we know the number of clusters, we can use a clustering algorithm for 
-unsupervised problems. In figure 2, the data is assumed to have two classes, dark 
-colour represents fraud, and light colour represents genuine transactions. These 
-classes, however, are not known to us before the clustering approach. After a 
-clustering algorithm is applied, we should be able to distinguish between the two 
-assumed targets. To make sense of unsupervised problems, we can also use 
-numerous decomposition techniques such as Principal Component Analysis 
-(PCA), t-distributed Stochastic Neighbour Embedding (t-SNE) etc.  
- 
-Supervised problems are easier to tackle in the sense that they can be evaluated 
-easily. We will read more about evaluation techniques in the following chapters. 
-However, it is challenging to assess the results of unsupervised algorithms and a lot 
-of human interference or heuristics are required. In this book, we will majorly be 
-focusing on supervised data and models, but it does not mean that we will be 
-ignoring the unsupervised data problems.
+Eğer hedef değişken kategorik ise problem bir sınıflandırma (classification) problemi haline gelir. Hedef gerçek bir sayı ise problem regresyon (regression) problemi olarak tanımlanır.
 
-8
+Dolayısıyla denetimli öğrenme problemleri iki alt sınıfa ayrılabilir:
 
-Approaching (Almost) Any Machine Learning Problem
+* Sınıflandırma (Classification): Bir kategoriyi tahmin etmek. Örneğin, köpek veya kedi.
+
+* Regresyon (Regression): Bir değeri tahmin etmek. Örneğin, ev fiyatı.
+
+Burada dikkat edilmesi gereken bir nokta, kullanılan değerlendirme metriğine bağlı olarak bazı durumlarda sınıflandırma probleminde regresyon kullanabileceğimizdir. Ancak buna ilerleyen bölümlerde değineceğiz.
+
+## Denetimsiz Öğrenme
+
+Bir diğer makine öğrenmesi problemi türü denetimsiz öğrenmedir (unsupervised learning).
+
+Denetimsiz veri kümeleri herhangi bir hedef değişken içermez ve genel olarak denetimli problemlere kıyasla ele alınmaları daha zordur.
+
+Bir finans şirketinde çalıştığınızı ve şirketin kredi kartı işlemleriyle ilgilendiğini düşünelim.
+
+Her saniye çok büyük miktarda veri geliyor. Buradaki tek problem, her bir işlemi tek tek inceleyip işlemin geçerli/meşru (genuine) mi yoksa sahte (fraud) mı olduğunu işaretleyecek yeterli sayıda insan bulmanın zor olmasıdır.
+
+Bir işlemin sahte veya gerçek olduğuna ilişkin herhangi bir bilgiye sahip olmadığımızda, problem denetimsiz öğrenme problemi haline gelir.
+
+Bu tür problemleri ele almak için verilerin kaç kümeye (cluster) ayrılabileceğini düşünmemiz gerekir.
+
+Kümeleme (clustering), bu tür problemlerde kullanabileceğiniz yaklaşımlardan biridir. Ancak denetimsiz öğrenme problemlerine uygulanabilecek başka birçok yaklaşımın da bulunduğunu belirtmek gerekir.
+
+Dolandırıcılık tespiti (fraud detection) problemi için verilerin iki sınıfa ayrılabileceğini söyleyebiliriz:
+
+* Dolandırıcılık (fraud)
+
+* Gerçek/meşru işlem (genuine)
+
+Küme sayısını bildiğimizde, denetimsiz öğrenme problemleri için bir kümeleme algoritması kullanabiliriz.
+
+Şekil 2'de verilerin iki sınıfa sahip olduğu varsayılmıştır. Koyu renk, dolandırıcılığı; açık renk ise gerçek/meşru işlemleri temsil etmektedir.
+
+Ancak bu sınıflar, kümeleme yaklaşımından önce bizim tarafımızdan bilinmemektedir.
+
+Bir kümeleme algoritması uygulandıktan sonra, varsaydığımız bu iki hedefi birbirinden ayırt edebilmemiz gerekir.
+
+## Diğer Denetimsiz Öğrenme Yaklaşımları
+
+Denetimsiz öğrenme problemlerini anlamlandırmak için Temel Bileşenler Analizi (Principal Component Analysis — PCA), t-dağılımlı Stokastik Komşuluk Gömme (t-distributed Stochastic Neighbour Embedding — t-SNE) gibi çok sayıda boyut indirgeme (decomposition) tekniğini de kullanabiliriz.
+
+Denetimli problemleri ele almak daha kolaydır; çünkü sonuçları kolayca değerlendirilebilir.
+
+Değerlendirme teknikleri hakkında ilerleyen bölümlerde daha fazla bilgi edineceğiz.
+
+Bununla birlikte, denetimsiz algoritmaların sonuçlarını değerlendirmek daha zordur ve çoğu zaman önemli miktarda insan müdahalesi veya sezgisel yöntem (heuristic) gerekir.
+
+Bu kitapta ağırlıklı olarak denetimli veriler ve modellere odaklanacağız. Ancak bu, denetimsiz veri problemlerini tamamen göz ardı edeceğimiz anlamına gelmez.
 
 ![resim](img/p0010_fig01_resim.png)
 
-Figure 2: An unsupervised dataset. 
- 
-Most of the time, when people start with data science or machine learning, they 
-begin with very well-known datasets, for example, Titanic dataset, or Iris dataset 
-which are supervised problems. In the Titanic dataset, you have to predict the 
-survival of people aboard Titanic based on factors like their ticket class, gender, 
-age, etc. Similarly, in the iris dataset, you have to predict the species of flower based 
-on factors like sepal width, petal length, sepal length and petal width.  
- 
-Unsupervised datasets may include datasets for customer segmentation. For 
-example, you have data for the customers visiting your e-commerce website or the 
-data for customers visiting a store or a mall, and you would like to segment them or 
-cluster them in different categories. Another example of unsupervised datasets may 
-include things like credit card fraud detection or just clustering several images. 
- 
-Most of the time, it’s also possible to convert a supervised dataset to unsupervised 
-to see how they look like when plotted. 
- 
-For example, let’s take a look at the dataset in figure 3. Figure 3 shows MNIST 
-dataset which is a very popular dataset of handwritten digits, and it is a supervised 
-problem in which you are given the images of the numbers and the correct label 
-associated with them. You have to build a model that can identify which digit is it 
-when provided only with the image.  
- 
-This dataset can easily be converted to an unsupervised setting for basic 
-visualization.
+Şekil 2: Denetimsiz bir veri kümesi
 
-9
+Çoğu zaman insanlar veri bilimi veya makine öğrenmesine başladıklarında, Titanic veri kümesi veya Iris veri kümesi gibi oldukça bilinen veri kümeleriyle başlarlar. Bunların ikisi de denetimli öğrenme problemleridir.
 
-Approaching (Almost) Any Machine Learning Problem
+Titanic veri kümesinde; yolcuların bilet sınıfı, cinsiyeti, yaşı vb. faktörlere dayanarak Titanic'te bulunan insanların hayatta kalıp kalmadığını tahmin etmeniz gerekir.
+
+Benzer şekilde, Iris veri kümesinde, çanak yaprağı genişliği (sepal width), taç yaprağı uzunluğu (petal length), çanak yaprağı uzunluğu (sepal length) ve taç yaprağı genişliği (petal width) gibi özelliklere dayanarak çiçeğin türünü tahmin etmeniz gerekir.
+
+Denetimsiz veri kümeleri ise müşteri segmentasyonu için kullanılan veri kümelerini içerebilir.
+
+Örneğin, e-ticaret web sitenizi ziyaret eden müşterilerle ilgili verilere veya bir mağazayı ya da alışveriş merkezini ziyaret eden müşterilerle ilgili verilere sahip olduğunuzu düşünelim. Bu müşterileri farklı kategorilere ayırmak, yani segmentlere veya kümelere ayırmak (cluster etmek) isteyebilirsiniz.
+
+Denetimsiz veri kümelerine başka bir örnek olarak kredi kartı dolandırıcılığı tespiti veya birkaç görüntünün yalnızca kümelenmesi verilebilir.
+
+Çoğu zaman, bir denetimli veri kümesini denetimsiz bir veri kümesine dönüştürmek ve grafik üzerinde gösterildiğinde nasıl göründüğünü incelemek de mümkündür.
+
+Örneğin, Şekil 3'teki veri kümesine bakalım.
+
+Şekil 3, el yazısıyla yazılmış rakamlardan oluşan oldukça popüler bir veri kümesi olan MNIST veri kümesini göstermektedir. MNIST, size sayıların görüntülerinin ve bunlarla ilişkili doğru etiketlerin (labels) verildiği bir denetimli öğrenme problemidir.
+
+Göreviniz, yalnızca görüntü kendisine verildiğinde hangi rakam olduğunu tespit edebilen bir model oluşturmaktır.
+
+Bu veri kümesi, temel görselleştirme amacıyla kolayca denetimsiz öğrenme biçimine dönüştürülebilir.
 
 ![resim](img/p0011_fig01_resim.png)
 
-Figure 3: MNIST dataset1
+Şekil 3: MNIST veri kümesi¹
 
-If we do a t-Distributed Stochastic Neighbour Embedding (t-SNE) decomposition 
-of this dataset, we can see that we can separate the images to some extent just by 
-doing with two components on the image pixels. This is shown in figure 4.
+Image source: By Josef Steppan - Own work, CC BY-SA 4.0, 
+https://commons.wikimedia.org/w/index.php?curid=64810040
+
+Bu veri kümesine t-Dağılımlı Stokastik Komşuluk Gömme (t-Distributed Stochastic Neighbour Embedding — t-SNE) yöntemiyle bir boyut indirgeme (decomposition) uyguladığımızda, yalnızca görüntü pikselleri üzerinde iki bileşen kullanarak bile görüntüleri belirli ölçüde birbirinden ayırabildiğimizi görebiliriz.
+
+Bu durum Şekil 4'te gösterilmektedir.
 
 ![resim](img/p0011_fig02_resim.png)
 
-Figure 4: t-SNE visualization of the MNIST dataset. 3000 images were used. 
- 
-Let’s take a look at how this was done. First and foremost is importing all the 
-required libraries.
+Şekil 4: MNIST veri kümesinin t-SNE görselleştirmesi
 
-1 Image source: By Josef Steppan - Own work, CC BY-SA 4.0, 
-https://commons.wikimedia.org/w/index.php?curid=64810040
+3000 görüntü kullanılmıştır.
 
-10
+Bunun nasıl yapıldığına bakalım.
 
-Approaching (Almost) Any Machine Learning Problem
+İlk olarak, gerekli olan tüm kütüphaneleri içe aktarmamız gerekiyor.
 
-═════════════════════════════════════════════════════════════════════════ 
-import matplotlib.pyplot as plt 
-import numpy as np 
-import pandas as pd 
-import seaborn as sns 
- 
-from sklearn import datasets 
-from sklearn import manifold 
- 
-%matplotlib inline 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We use matplotlib and seaborn for plotting, numpy to handle the numerical arrays, 
-pandas to create dataframes from the numerical arrays and scikit-learn (sklearn) to 
-get the data and perform t-SNE. 
- 
-After the imports, we need to either download the data and read it separately or use 
-sklearn’s built-in function that provides us with the MNIST dataset. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-data = datasets.fetch_openml( 
-                  'mnist_784',  
-                  version=1,  
-                  return_X_y=True 
-) 
-pixel_values, targets = data 
-targets = targets.astype(int) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-In this part of the code, we have fetched the data using sklearn datasets, and we 
-have an array of pixel values and another array of targets. Since the targets are of 
-string type, we convert them to integers. 
- 
-pixel_values is a 2-dimensional array of shape 70000x784. There are 70000 
-different images, each of size 28x28 pixels. Flattening 28x28 gives 784 data points. 
- 
-We can visualize the samples in this dataset by reshaping them to their original 
-shape and then plotting them using matplotlib. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-single_image = pixel_values[1, :].reshape(28, 28) 
- 
-plt.imshow(single_image, cmap='gray') 
+═════════════════════════════════════════════════════════════════════════
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+from sklearn import datasets
+from sklearn import manifold
+
+%matplotlib inline
 ═════════════════════════════════════════════════════════════════════════
 
-11
 
-Approaching (Almost) Any Machine Learning Problem
+Grafik çizimleri için matplotlib ve seaborn, sayısal dizileri işlemek için numpy, sayısal dizilerden DataFrame oluşturmak için pandas kullanıyoruz. MNIST verisini elde etmek ve t-SNE işlemini gerçekleştirmek için ise scikit-learn (sklearn) kullanıyoruz.
 
-This code will plot an image like the following:
+İçe aktarma işlemlerinden sonra verileri ya indirip ayrı olarak okumamız ya da bize MNIST veri kümesini sağlayan sklearn'ın yerleşik fonksiyonunu kullanmamız gerekiyor.
+
+═════════════════════════════════════════════════════════════════════════
+data = datasets.fetch_openml(
+                  'mnist_784',
+                  version=1,
+                  return_X_y=True
+)
+pixel_values, targets = data
+targets = targets.astype(int)
+═════════════════════════════════════════════════════════════════════════
+
+
+Kodun bu bölümünde verileri sklearn datasets kullanarak alıyoruz. Elimizde biri piksel değerlerini, diğeri ise hedefleri (targets) içeren iki dizi bulunuyor.
+
+Hedefler (targets) string (metin) türünde olduğu için bunları tam sayılara (integer) dönüştürüyoruz.
+
+pixel_values, 70000 × 784 boyutunda iki boyutlu bir dizidir.
+
+Toplam 70.000 farklı görüntü vardır ve her görüntünün boyutu 28 × 28 pikseldir.
+
+28 × 28 işleminin sonucu 784 olduğu için, her görüntü düzleştirildiğinde (flatten) 784 veri noktasından oluşur.
+
+Bu veri kümesindeki örnekleri görselleştirebiliriz. Bunun için görüntüleri önce orijinal boyutlarına yeniden şekillendirir (reshape), ardından matplotlib kullanarak çizeriz.
+
+═════════════════════════════════════════════════════════════════════════
+single_image = pixel_values[1, :].reshape(28, 28)
+
+plt.imshow(single_image, cmap='gray')
+═════════════════════════════════════════════════════════════════════════
+
+
+Burada pixel_values içerisindeki ikinci görüntüyü seçiyoruz ve reshape(28, 28) ile tekrar 28 × 28 boyutuna getiriyoruz.
+
+Ardından plt.imshow() ile görüntüyü gösteriyoruz.
+
+cmap='gray' ifadesi, görüntünün gri tonlarında (grayscale) gösterilmesini sağlar.
+
+Bu kod, aşağıdakine benzer bir görüntü oluşturacaktır:
 
 ![resim](img/p0013_fig01_resim.png)
 
-Figure 5: Plotting a single image from MNIST dataset. 
- 
-The most important step comes after we have grabbed the data. 
- 
+Şekil 5: MNIST veri kümesinden tek bir görüntünün çizdirilmesi
+
+Verileri elde ettikten sonra en önemli adım geliyor.
+
 ═════════════════════════════════════════════════════════════════════════ 
 tsne = manifold.TSNE(n_components=2, random_state=42) 
  
 transformed_data = tsne.fit_transform(pixel_values[:3000, :]) 
 ═════════════════════════════════════════════════════════════════════════ 
  
-This step creates the t-SNE transformation of the data. We use only two components 
-as we can visualize them well in a two-dimensional setting. The transformed_data, 
-in this case, is an array of shape 3000x2 (3000 rows and 2 columns). A data like 
-this can be converted to a pandas dataframe by calling pd.DataFrame on the array. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-tsne_df = pd.DataFrame( 
-    np.column_stack((transformed_data, targets[:3000])),  
-    columns=["x", "y", "targets"] 
-) 
- 
-tsne_df.loc[:, "targets"] = tsne_df.targets.astype(int) 
+Bu adım, verilerin t-SNE dönüşümünü oluşturur.
+
+Verileri iki boyutlu bir ortamda rahatça görselleştirebildiğimiz için yalnızca iki bileşen kullanıyoruz.
+
+Bu durumda transformed_data, 3000 × 2 boyutunda bir dizidir. Yani 3000 satır ve 2 sütundan oluşur.
+
+Böyle bir veri, dizi üzerinde pd.DataFrame çağrılarak bir pandas DataFrame'ine dönüştürülebilir.
+
+═════════════════════════════════════════════════════════════════════════
+tsne_df = pd.DataFrame(
+    np.column_stack((transformed_data, targets[:3000])),
+    columns=["x", "y", "targets"]
+)
+
+tsne_df.loc[:, "targets"] = tsne_df.targets.astype(int)
 ═════════════════════════════════════════════════════════════════════════
 
-Here we are creating a pandas dataframe from a numpy array. There are three 
-columns: x, y and targets. x and y are the two components from t-SNE 
-decomposition and targets is the actual number. This gives us a dataframe which 
-looks like the one shown in figure 6.
 
-12
+Burada bir NumPy dizisinden bir pandas DataFrame'i oluşturuyoruz.
 
-Approaching (Almost) Any Machine Learning Problem
+Üç sütunumuz bulunmaktadır:
+
+x
+
+y
+
+targets
+
+x ve y, t-SNE boyut indirgeme işlemi sonucunda elde edilen iki bileşendir.
+
+targets ise görüntünün gerçek rakamını temsil eder.
+
+Bunun sonucunda, Şekil 6'da gösterilene benzer bir DataFrame elde ederiz.
 
 ![resim](img/p0014_fig01_resim.png)
 
-Figure 6: First 10 rows of pandas dataframe with t-SNE components and targets. 
- 
-And finally, we can plot it using seaborn and matplotlib. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-grid = sns.FacetGrid(tsne_df, hue="targets", size=8) 
- 
-grid.map(plt.scatter, "x", "y").add_legend() 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This is one way of visualizing unsupervised datasets. We can also do k-means 
-clustering on the same dataset and see how it performs in an unsupervised setting. 
-One question that arises all the time is how to find the optimal number of clusters 
-in k-means clustering. Well, there is no right answer. You have to find the number 
-by cross-validation. Cross-validation will be discussed later in this book. Please 
-note that the above code was run in a jupyter notebook.  
- 
-In this book, we will use jupyter for simple things like the example above and for 
-plotting. For most of the stuff in this book, we will be using python scripts. You can 
-choose what you want to use since the results are going to be the same.  
- 
-MNIST is a supervised classification problem, and we converted it to an 
-unsupervised problem only to check if it gives any kind of good results and it is 
-apparent that we do get good results with decomposition with t-SNE. The results 
-would be even better if we use classification algorithms. What are they and how to 
-use them? Let’s look at them in the next chapters.
+Şekil 6: t-SNE bileşenlerini ve hedefleri içeren pandas DataFrame'inin ilk 10 satırı
 
-13
+Son olarak, bunu seaborn ve matplotlib kullanarak görselleştirebiliriz.
 
-Approaching (Almost) Any Machine Learning Problem
+═════════════════════════════════════════════════════════════════════════
+grid = sns.FacetGrid(tsne_df, hue="targets", size=8)
 
-Cross-validation 
+grid.map(plt.scatter, "x", "y").add_legend()
+═════════════════════════════════════════════════════════════════════════
+
+
+Bu, denetimsiz veri kümelerini görselleştirmenin yollarından biridir.
+
+Aynı veri kümesi üzerinde k-means kümeleme de yapabilir ve denetimsiz bir öğrenme ortamında nasıl performans gösterdiğini görebiliriz.
+
+Burada sürekli karşımıza çıkan bir soru şudur:
+
+K-means kümelemesinde en uygun küme sayısını nasıl bulabiliriz?
+
+Aslında bunun tek bir doğru cevabı yoktur.
+
+Küme sayısını çapraz doğrulama (cross-validation) kullanarak belirlemeniz gerekir. Çapraz doğrulama bu kitabın ilerleyen bölümlerinde ele alınacaktır.
+
+Yukarıdaki kodun bir Jupyter Notebook içerisinde çalıştırıldığını unutmayın.
+
+Bu kitapta, yukarıdaki örnekte olduğu gibi basit işlemler ve görselleştirme için Jupyter kullanacağız.
+
+Kitaptaki işlemlerin çoğunda ise Python script'leri kullanacağız.
+
+Hangisini kullanmak istediğinizi siz seçebilirsiniz; çünkü sonuçlar aynı olacaktır.
+
+MNIST, denetimli bir sınıflandırma problemidir. Biz onu yalnızca, herhangi bir anlamlı sonuç verip vermediğini kontrol etmek amacıyla denetimsiz bir probleme dönüştürdük.
+
+t-SNE ile yapılan boyut indirgeme sonucunda gerçekten de oldukça iyi sonuçlar elde ettiğimiz açıkça görülmektedir.
+
+Eğer sınıflandırma algoritmalarını kullansaydık sonuçlar daha da iyi olabilirdi.
+
+Peki bunlar nelerdir ve nasıl kullanılır?
+
+Bunlara sonraki bölümlerde bakalım.
+
+# Çapraz Doğrulama 
  
 We did not build any models in the previous chapter. The reason for that is simple. 
 Before creating any kind of machine learning model, we must know what cross-
