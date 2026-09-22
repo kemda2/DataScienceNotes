@@ -1154,460 +1154,630 @@ Bu nedenle böyle bir yöntemi kendiniz oluşturmanız gerekir.
 
 Yazar bu kısmı okuyucu için bir alıştırma (exercise) olarak bırakmaktadır.
 
-# Evaluation metrics
+# Değerlendirme Metrikleri
 
-When it comes to machine learning problems, you will encounter a lot of different 
-types of metrics in the real world. Sometimes, people even end up creating metrics 
-that suit the business problem. It’s out of the scope of this book to introduce and 
-explain each and every type of metric. Instead, we will see some of the most 
-common metrics that you can use when starting with your very first few projects. 
- 
-At the start of the book, we introduced supervised and unsupervised learning. 
-Although there are some kinds of metrics that you can use for unsupervised 
-learning, we will only focus on supervised. The reason for this is because supervised 
-problems are in abundance compared to un-supervised, and evaluation of 
-unsupervised methods is quite subjective. 
- 
-If we talk about classification problems, the most common metrics used are:
+Makine öğrenmesi problemleri söz konusu olduğunda, gerçek dünyada çok farklı türlerde metriklerle karşılaşacaksınız.
 
-- 
-Accuracy 
-- 
-Precision (P) 
-- 
-Recall (R) 
-- 
-F1 score (F1) 
-- 
-Area under the ROC (Receiver Operating Characteristic) curve or simply 
-AUC (AUC) 
-- 
-Log loss 
-- 
-Precision at k (P@k) 
-- 
-Average precision at k (AP@k) 
-- 
-Mean average precision at k (MAP@k) 
- 
-When it comes to regression, the most commonly used evaluation metrics are:
+Hatta bazen insanlar, doğrudan iş problemlerine uygun metrikler bile oluştururlar.
 
-- 
-Mean absolute error (MAE) 
-- 
-Mean squared error (MSE) 
-- 
-Root mean squared error (RMSE) 
-- 
-Root mean squared logarithmic error (RMSLE) 
-- 
-Mean percentage error (MPE) 
-- 
-Mean absolute percentage error (MAPE) 
-- 
-R2 
- 
-Knowing about how the aforementioned metrics work is not the only thing we have 
-to understand. We must also know when to use which metrics, and that depends on
+Bu kitabın amacı, her bir metriği tek tek tanıtmak ve açıklamak değildir. Bunun yerine, ilk birkaç projenize başlarken kullanabileceğiniz en yaygın metriklerden bazılarını inceleyeceğiz.
 
-what kind of data and targets you have. I think it’s more about the targets and less 
-about the data.  
- 
-To learn more about these metrics, let’s start with a simple problem. Suppose we 
-have a binary classification problem, i.e. a problem in which there are only two 
-targets. Let’s suppose it’s a problem of classifying chest x-ray images. There are 
-chest x-ray images with no problem, and some of the chest x-ray images have 
-collapsed lung which is also known as pneumothorax. So, our task is to build a 
-classifier that given a chest x-ray image can detect if it has pneumothorax.
+Kitabın başında denetimli (supervised) ve denetimsiz (unsupervised) öğrenmeden bahsetmiştik.
+
+Denetimsiz öğrenme için kullanılabilecek bazı metrikler olsa da burada yalnızca denetimli öğrenmeye odaklanacağız.
+
+Bunun nedeni, denetimli problemlerin denetimsiz problemlere kıyasla çok daha yaygın olması ve denetimsiz yöntemlerin değerlendirilmesinin oldukça öznel olmasıdır.
+
+## Sınıflandırma Metrikleri
+
+Sınıflandırma problemleri söz konusu olduğunda en yaygın kullanılan metrikler şunlardır:
+
+* Accuracy (Doğruluk)
+* Precision (P — Kesinlik)
+* Recall (R — Duyarlılık / Geri Çağırma)
+* F1 skoru (F1)
+ROC (Receiver Operating Characteristic) eğrisinin * altındaki alan, yani AUC
+* Log loss
+* Precision at k (P@k)
+* Average precision at k (AP@k)
+* Mean average precision at k (MAP@k)
+
+## Regresyon Metrikleri
+
+Regresyon problemlerinde en yaygın kullanılan değerlendirme metrikleri ise şunlardır:
+
+* Mean Absolute Error (MAE) — Ortalama Mutlak Hata
+* Mean Squared Error (MSE) — Ortalama Kare Hata
+* Root Mean Squared Error (RMSE) — Kök Ortalama Kare Hata
+* Root Mean Squared Logarithmic Error (RMSLE) — Kök 
+Ortalama Kare Logaritmik Hata
+* Mean Percentage Error (MPE) — Ortalama Yüzde Hata
+* Mean Absolute Percentage Error (MAPE) — Ortalama Mutlak Yüzde Hata
+* R² — Belirleme katsayısı
+
+Yukarıda bahsedilen metriklerin nasıl çalıştığını bilmek tek başına yeterli değildir.
+
+Aynı zamanda hangi durumda hangi metriği kullanmamız gerektiğini de bilmeliyiz.
+
+Bu seçim, sahip olduğunuz verinin ve hedeflerin türüne bağlıdır.
+
+Bence burada belirleyici olan şey veriden ziyade hedeflerdir.
+
+## İkili Sınıflandırma Problemi
+
+Bu metrikleri daha iyi anlamak için basit bir problemle başlayalım.
+
+Bir ikili sınıflandırma (binary classification) problemimiz olduğunu düşünelim. Yani yalnızca iki hedef/sınıfın bulunduğu bir problemimiz var.
+
+Örneğin bunun göğüs röntgeni görüntülerini sınıflandırma problemi olduğunu varsayalım.
+
+Elimizde herhangi bir problemi olmayan göğüs röntgeni görüntüleri ve pnömotoraks (pneumothorax) olarak da bilinen akciğer sönmesi bulunan bazı göğüs röntgeni görüntüleri olduğunu düşünelim.
+
+Görevimiz, kendisine bir göğüs röntgeni görüntüsü verilen ve bu görüntüde pnömotoraks bulunup bulunmadığını tespit edebilen bir sınıflandırıcı oluşturmaktır.
 
 ![resim](img/p0032_fig01_resim.png)
 
-Figure 1: A lung image showing pneumothorax. Image is taken from SIIM-ACR Pneumothorax
+Şekil 1: Pnömotoraks gösteren akciğer görüntüsü
 
-Segmentation Competition3 
- 
-We also assume that we have an equal number of pneumothorax and non- 
-pneumothorax chest x-ray images; let’s say 100 each. Thus, we have 100 positive 
-samples and 100 negative samples with a total of 200 images.  
- 
-The first step is to divide the data described above into two equal sets of 100 images 
-each, i.e. training and validation set. In both the sets, we have 50 positive and 50 
-negative samples.
+Görüntü, SIIM-ACR Pnömotoraks Segmentasyon Yarışmasından alınmıştır.
 
-3 https://www.kaggle.com/c/siim-acr-pneumothorax-segmentation
+Ayrıca eşit sayıda pnömotoraks ve pnömotoraks olmayan göğüs röntgeni görüntüsüne sahip olduğumuzu varsayalım. Örneğin her birinden 100 görüntü olsun. Böylece toplamda 200 görüntümüz, 100 pozitif ve 100 negatif örneğimiz olur.
 
-When we have an equal number of positive and negative samples in a binary 
-classification metric, we generally use accuracy, precision, recall and f1. 
- 
-Accuracy: It is one of the most straightforward metrics used in machine learning. 
-It defines how accurate your model is. For the problem described above, if you build 
-a model that classifies 90 images accurately, your accuracy is 90% or 0.90. If only 
-83 images are classified correctly, the accuracy of your model is 83% or 0.83. 
-Simple. 
- 
-Python code for calculating accuracy is also quite simple. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-def accuracy(y_true, y_pred): 
-    """ 
-    Function to calculate accuracy 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: accuracy score 
-    """ 
-    # initialize a simple counter for correct predictions 
-    correct_counter = 0 
-    # loop over all elements of y_true 
-    # and y_pred "together" 
-    for yt, yp in zip(y_true, y_pred): 
-        if yt == yp: 
-            # if prediction is equal to truth, increase the counter 
-            correct_counter += 1 
- 
-    # return accuracy 
-    # which is correct predictions over the number of samples 
-    return correct_counter / len(y_true) 
- 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We can also calculate accuracy using scikit-learn. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: from sklearn import metrics 
-   ...: l1 = [0,1,1,1,0,0,0,1] 
-   ...: l2 = [0,1,0,1,0,1,0,0] 
-   ...: metrics.accuracy_score(l1, l2) 
- 
-Out[X]: 0.625 
-═════════════════════════════════════════════════════════════════════════
+İlk adım, yukarıda açıklanan verileri 100'er görüntüden oluşan iki eşit kümeye ayırmaktır:
 
-Now, let’s say we change the dataset a bit such that there are 180 chest x-ray images 
-which do not have pneumothorax and only 20 with pneumothorax. Even in this 
-case, we will create the training and validation sets with the same ratio of positive 
-to negative (pneumothorax to non- pneumothorax) targets. In each set, we have 90 
-non- pneumothorax and 10 pneumothorax images. If you say that all images in the 
-validation set are non-pneumothorax, what would your accuracy be? Let’s see; you 
-classified 90% of the images correctly. So, your accuracy is 90%.  
- 
-But look at it one more time.  
- 
-You didn’t even build a model and got an accuracy of 90%. That seems kind of 
-useless. If we look carefully, we will see that the dataset is skewed, i.e., the number 
-of samples in one class outnumber the number of samples in other class by a lot. In 
-these kinds of cases, it is not advisable to use accuracy as an evaluation metric as it 
-is not representative of the data. So, you might get high accuracy, but your model 
-will probably not perform that well when it comes to real-world samples, and you 
-won’t be able to explain to your managers why. 
- 
-In these cases, it’s better to look at other metrics such as precision.  
- 
-Before learning about precision, we need to know a few terms. Here we have 
-assumed that chest x-ray images with pneumothorax are positive class (1) and 
-without pneumothorax are negative class (0). 
- 
-True positive (TP): Given an image, if your model predicts the image has 
-pneumothorax, and the actual target for that image has pneumothorax, it is 
-considered a true positive. 
- 
-True negative (TN): Given an image, if your model predicts that the image does not 
-have pneumothorax and the actual target says that it is a non-pneumothorax image, 
-it is considered a true negative. 
- 
-In simple words, if your model correctly predicts positive class, it is true positive, 
-and if your model accurately predicts negative class, it is a true negative. 
- 
-False positive (FP): Given an image, if your model predicts pneumothorax and the 
-actual target for that image is non- pneumothorax, it a false positive.
+Eğitim (training) kümesi: 50 pozitif + 50 negatif
 
-False negative (FN): Given an image, if your model predicts non-pneumothorax 
-and the actual target for that image is pneumothorax, it is a false negative. 
- 
-In simple words, if your model incorrectly (or falsely) predicts positive class, it is 
-a false positive. If your model incorrectly (or falsely) predicts negative class, it is a 
-false negative. 
- 
-Let’s look at implementations of these, one at a time. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-def true_positive(y_true, y_pred): 
-    """ 
-    Function to calculate True Positives 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: number of true positives 
-    """ 
-    # initialize 
-    tp = 0 
-    for yt, yp in zip(y_true, y_pred): 
-        if yt == 1 and yp == 1: 
-            tp += 1 
-    return tp 
- 
-def true_negative(y_true, y_pred): 
-    """ 
-    Function to calculate True Negatives 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: number of true negatives 
-    """ 
-    # initialize 
-    tn = 0 
-    for yt, yp in zip(y_true, y_pred): 
-        if yt == 0 and yp == 0: 
-            tn += 1 
-    return tn 
- 
-def false_positive(y_true, y_pred): 
-    """ 
-    Function to calculate False Positives 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: number of false positives 
-    """ 
-    # initialize
+Doğrulama (validation) kümesi: 50 pozitif + 50 negatif
 
-fp = 0 
-    for yt, yp in zip(y_true, y_pred): 
-        if yt == 0 and yp == 1: 
-            fp += 1 
-    return fp 
- 
-def false_negative(y_true, y_pred): 
-    """ 
-    Function to calculate False Negatives 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: number of false negatives 
-    """ 
-    # initialize 
-    fn = 0 
-    for yt, yp in zip(y_true, y_pred): 
-        if yt == 1 and yp == 0: 
-            fn += 1 
-    return fn 
-═════════════════════════════════════════════════════════════════════════ 
- 
-The way I have implemented these here is quite simple and works only for binary 
-classification. Let’s check these functions. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: l1 = [0,1,1,1,0,0,0,1] 
-   ...: l2 = [0,1,0,1,0,1,0,0] 
- 
-In [X]: true_positive(l1, l2) 
-Out[X]: 2 
- 
-In [X]: false_positive(l1, l2) 
-Out[X]: 1 
- 
-In [X]: false_negative(l1, l2) 
-Out[X]: 2 
- 
-In [X]: true_negative(l1, l2) 
-Out[X]: 3 
-═════════════════════════════════════════════════════════════════════════ 
- 
-If we have to define accuracy using the terms described above, we can write:
+## Accuracy — Doğruluk
 
-Accuracy Score = (TP + TN) / (TP + TN + FP + FN)
+İkili sınıflandırma probleminde pozitif ve negatif örneklerin sayısı eşitse genellikle accuracy, precision, recall ve F1 gibi metrikleri kullanırız.
 
-We can now quickly implement accuracy score using TP, TN, FP and FN in python. 
-Let’s call it accuracy_v2. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-def accuracy_v2(y_true, y_pred): 
-    """ 
-    Function to calculate accuracy using tp/tn/fp/fn 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: accuracy score 
-    """ 
-    tp = true_positive(y_true, y_pred) 
-    fp = false_positive(y_true, y_pred) 
-    fn = false_negative(y_true, y_pred) 
-    tn = true_negative(y_true, y_pred) 
-    accuracy_score = (tp + tn) / (tp + tn + fp + fn) 
-    return accuracy_score 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We can quickly check the correctness of this function by comparing it to our 
-previous implementation and scikit-learn version. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: l1 = [0,1,1,1,0,0,0,1] 
-   ...: l2 = [0,1,0,1,0,1,0,0] 
- 
-In [X]: accuracy(l1, l2) 
-Out[X]: 0.625 
- 
-In [X]: accuracy_v2(l1, l2) 
-Out[X]: 0.625 
- 
-In [X]: metrics.accuracy_score(l1, l2) 
-Out[X]: 0.625 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Please note that in this code, metrics.accuracy_score comes from scikit-learn. 
- 
-Great. All values match. This means we have not made any mistakes in the 
-implementation. 
- 
-Now, we can move to other important metrics. 
- 
-First one is precision. Precision is defined as:
+Accuracy, makine öğrenmesinde kullanılan en basit ve anlaşılması kolay metriklerden biridir. Modelimizin ne kadar doğru tahmin yaptığını gösterir.
 
-Precision = TP / (TP + FP) 
- 
-Let’s say we make a new model on the new skewed dataset and our model correctly 
-identified 80 non-pneumothorax out of 90 and 8 pneumothorax out of 10. Thus, we 
-identify 88 images out of 100 successfully. The accuracy is, therefore, 0.88 or 88%.  
- 
-But, out of these 100 samples, 10 non-pneumothorax images are misclassified as 
-having pneumothorax and 2 pneumothorax are misclassified as not having 
-pneumothorax. 
- 
-Thus, we have:
+Örneğin yukarıdaki problemde modelimiz 100 görüntünün 90'ını doğru sınıflandırıyorsa:
 
-- 
-TP : 8 
-- 
-TN: 80 
-- 
-FP: 10 
-- 
-FN: 2 
- 
-So, our precision is 8 / (8 + 10) = 0.444. This means our model is correct 44.4% 
-times when it’s trying to identify positive samples (pneumothorax). 
- 
-Now, since we have implemented TP, TN, FP and FN, we can easily implement 
-precision in python. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-def precision(y_true, y_pred): 
-    """ 
-    Function to calculate precision 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: precision score 
-    """ 
-    tp = true_positive(y_true, y_pred) 
-    fp = false_positive(y_true, y_pred) 
-    precision = tp / (tp + fp) 
-    return precision 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Let’s try this implementation of precision. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: l1 = [0,1,1,1,0,0,0,1] 
-   ...: l2 = [0,1,0,1,0,1,0,0]
+Accuracy = %90 = 0,90
 
-In [X]: precision(l1, l2) 
-Out[X]: 0.6666666666666666 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This seems fine. 
- 
-Next, we come to recall. Recall is defined as:
+Eğer yalnızca 83 görüntüyü doğru sınıflandırıyorsa:
 
-Recall = TP / (TP + FN) 
- 
-In the above case recall is 8 / (8 + 2) = 0.80. This means our model identified 80% 
-of positive samples correctly.  
- 
-═════════════════════════════════════════════════════════════════════════ 
-def recall(y_true, y_pred): 
-    """ 
-    Function to calculate recall 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: recall score 
-    """ 
-    tp = true_positive(y_true, y_pred) 
-    fn = false_negative(y_true, y_pred) 
-    recall = tp / (tp + fn) 
-    return recall 
-═════════════════════════════════════════════════════════════════════════ 
- 
-In the case of our two small lists, we should have a recall of 0.5. Let’s check. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: l1 = [0,1,1,1,0,0,0,1] 
-   ...: l2 = [0,1,0,1,0,1,0,0] 
- 
-In [X]: recall(l1, l2) 
-Out[X]: 0.5 
-═════════════════════════════════════════════════════════════════════════ 
- 
-And that matches our calculated value! 
- 
-For a “good” model, our precision and recall values should be high. We see that in 
-the above example, the recall value is quite high. However, precision is very low! 
-Our model produces quite a lot of false positives but less false negatives. Fewer 
-false negatives are good in this type of problem because you don’t want to say that
+Accuracy = %83 = 0,83
 
-patients do not have pneumothorax when they do. That is going to be more harmful. 
-But we do have a lot of false positives, and that’s not good either. 
- 
-Most of the models predict a probability, and when we predict, we usually choose 
-this threshold to be 0.5. This threshold is not always ideal, and depending on this 
-threshold, your value of precision and recall can change drastically. If for every 
-threshold we choose, we calculate the precision and recall values, we can create a 
-plot between these sets of values. This plot or curve is known as the precision-recall 
-curve.  
- 
-Before looking into the precision-recall curve, let’s assume two lists. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: y_true = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 
-   ...:           1, 0, 0, 0, 0, 0, 0, 0, 1, 0] 
- 
-In [X]: y_pred = [0.02638412, 0.11114267, 0.31620708, 
-   ...:           0.0490937,  0.0191491,  0.17554844, 
-   ...:           0.15952202, 0.03819563, 0.11639273, 
-   ...:           0.079377,   0.08584789, 0.39095342, 
-   ...:           0.27259048, 0.03447096, 0.04644807, 
-   ...:           0.03543574, 0.18521942, 0.05934905, 
-   ...:           0.61977213, 0.33056815] 
-═════════════════════════════════════════════════════════════════════════ 
- 
-So, y_true is our targets, and y_pred is the probability values for a sample being 
-assigned a value of 1. So, now, we look at probabilities in prediction instead of the 
-predicted value (which is most of the time calculated with a threshold at 0.5). 
- 
-═════════════════════════════════════════════════════════════════════════ 
-precisions = [] 
-recalls = [] 
-# how we assumed these thresholds is a long story 
-thresholds = [0.0490937 , 0.05934905, 0.079377,  
-              0.08584789, 0.11114267, 0.11639273,  
-              0.15952202, 0.17554844, 0.18521942,  
-              0.27259048, 0.31620708, 0.33056815,  
-              0.39095342, 0.61977213] 
- 
-# for every threshold, calculate predictions in binary 
-# and append calculated precisions and recalls 
-# to their respective lists 
-for i in thresholds: 
-    temp_prediction = [1 if x >= i else 0 for x in y_pred]
+Oldukça basit.
 
-p = precision(y_true, temp_prediction) 
-    r = recall(y_true, temp_prediction) 
-    precisions.append(p) 
-    recalls.append(r) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Now, we can plot these values of precisions and recalls. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-plt.figure(figsize=(7, 7)) 
-plt.plot(recalls, precisions) 
-plt.xlabel('Recall', fontsize=15) 
-plt.ylabel('Precision', fontsize=15) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Figure 2 shows the precision-recall curve we get this way.
+Accuracy hesaplamak için Python kodu da oldukça basittir:
+
+```python
+def accuracy(y_true, y_pred):
+    """
+    Accuracy hesaplayan fonksiyon
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: accuracy skoru
+    """
+    # Doğru tahminleri saymak için basit bir sayaç oluştur
+    correct_counter = 0
+
+    # y_true ve y_pred içerisindeki
+    # elemanları birlikte dolaş
+    for yt, yp in zip(y_true, y_pred):
+        if yt == yp:
+            # Tahmin gerçek değere eşitse
+            # sayacı artır
+            correct_counter += 1
+
+    # Accuracy değerini döndür
+    # doğru tahmin sayısı / toplam örnek sayısı
+    return correct_counter / len(y_true)
+```
+
+
+Accuracy'yi scikit-learn kullanarak da hesaplayabiliriz:
+
+```python
+from sklearn import metrics
+
+l1 = [0,1,1,1,0,0,0,1]
+l2 = [0,1,0,1,0,1,0,0]
+
+metrics.accuracy_score(l1, l2)
+
+
+Çıktı:
+
+0.625
+```
+
+## Dengesiz Veri ve Accuracy Problemi
+
+Şimdi veri kümesini biraz değiştirelim.
+
+Bu kez:
+
+180 göğüs röntgeninde pnömotoraks yok
+
+20 göğüs röntgeninde pnömotoraks var
+
+olsun.
+
+Yine aynı oranı koruyarak eğitim ve doğrulama kümeleri oluşturduğumuzu düşünelim. Her kümede:
+
+90 pnömotoraks olmayan görüntü
+
+10 pnömotoraks olan görüntü
+
+bulunsun.
+
+Eğer doğrulama kümesindeki bütün görüntülerin pnömotoraks olmadığını tahmin ederseniz ne olur?
+
+90 görüntüyü doğru sınıflandırmış olursunuz.
+
+Dolayısıyla:
+
+Accuracy = %90
+
+Fakat bir kez daha düşünelim.
+
+Hiçbir model oluşturmadan %90 accuracy elde ettiniz.
+
+Bu oldukça yanıltıcı olabilir.
+
+Burada veri kümesinin dengesiz (skewed / imbalanced) olduğunu görüyoruz. Bir sınıftaki örnek sayısı diğer sınıftakinden çok daha fazla.
+
+Bu tür durumlarda accuracy'yi tek başına değerlendirme metriği olarak kullanmak uygun değildir, çünkü veri kümesinin gerçek durumunu yeterince temsil etmeyebilir.
+
+Yüksek bir accuracy elde edebilirsiniz, ancak modeliniz gerçek dünya örneklerinde iyi performans göstermeyebilir.
+
+Bu gibi durumlarda precision gibi başka metriklere bakmak daha anlamlıdır.
+
+TP, TN, FP ve FN
+
+Precision'ı öğrenmeden önce birkaç temel kavramı bilmemiz gerekiyor.
+
+Burada:
+
+Pnömotoraks = pozitif sınıf (1)
+
+Pnömotoraks yok = negatif sınıf (0)
+
+olarak kabul ediyoruz.
+
+True Positive (TP) — Doğru Pozitif
+
+Bir görüntü için modelimiz pnömotoraks var tahmininde bulunuyor ve gerçek etiket de pnömotoraks olduğunu söylüyorsa bu bir True Positive (TP) durumudur.
+
+Başka bir ifadeyle:
+
+Model pozitif sınıfı doğru tahmin etti.
+
+True Negative (TN) — Doğru Negatif
+
+Model bir görüntünün pnömotoraks içermediğini tahmin ediyor ve gerçek etiket de pnömotoraks olmadığını söylüyorsa bu bir True Negative (TN) durumudur.
+
+Başka bir ifadeyle:
+
+Model negatif sınıfı doğru tahmin etti.
+
+False Positive (FP) — Yanlış Pozitif
+
+Model görüntünün pnömotoraks içerdiğini tahmin ediyor ancak gerçek etiket görüntünün pnömotoraks içermediğini söylüyorsa bu bir False Positive (FP) durumudur.
+
+Yani:
+
+Gerçekte negatif olan bir örneği pozitif olarak tahmin ettik.
+
+False Negative (FN) — Yanlış Negatif
+
+Model görüntünün pnömotoraks içermediğini tahmin ediyor ancak gerçek etiket görüntünün pnömotoraks içerdiğini söylüyorsa bu bir False Negative (FN) durumudur.
+
+Yani:
+
+Gerçekte pozitif olan bir örneği negatif olarak tahmin ettik.
+
+## TP, TN, FP ve FN'nin Python ile Hesaplanması
+
+```python
+def true_positive(y_true, y_pred):
+    """
+    True Positive değerlerini hesaplayan fonksiyon
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: true positive sayısı
+    """
+    tp = 0
+
+    for yt, yp in zip(y_true, y_pred):
+        if yt == 1 and yp == 1:
+            tp += 1
+
+    return tp
+
+
+def true_negative(y_true, y_pred):
+    """
+    True Negative değerlerini hesaplayan fonksiyon
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: true negative sayısı
+    """
+    tn = 0
+
+    for yt, yp in zip(y_true, y_pred):
+        if yt == 0 and yp == 0:
+            tn += 1
+
+    return tn
+
+
+def false_positive(y_true, y_pred):
+    """
+    False Positive değerlerini hesaplayan fonksiyon
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: false positive sayısı
+    """
+    fp = 0
+
+    for yt, yp in zip(y_true, y_pred):
+        if yt == 0 and yp == 1:
+            fp += 1
+
+    return fp
+
+
+def false_negative(y_true, y_pred):
+    """
+    False Negative değerlerini hesaplayan fonksiyon
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: false negative sayısı
+    """
+    fn = 0
+
+    for yt, yp in zip(y_true, y_pred):
+        if yt == 1 and yp == 0:
+            fn += 1
+
+    return fn
+```
+
+
+Buradaki uygulama oldukça basittir ve yalnızca ikili sınıflandırma için çalışır.
+
+Şimdi fonksiyonlarımızı kontrol edelim:
+
+```python
+l1 = [0,1,1,1,0,0,0,1]
+l2 = [0,1,0,1,0,1,0,0]
+
+true_positive(l1, l2)
+
+
+Çıktı:
+
+2
+
+false_positive(l1, l2)
+
+
+Çıktı:
+
+1
+
+false_negative(l1, l2)
+
+
+Çıktı:
+
+2
+
+true_negative(l1, l2)
+
+
+Çıktı:
+
+3
+```
+
+## Accuracy'nin TP, TN, FP ve FN ile Gösterilmesi
+
+Yukarıdaki kavramları kullanarak accuracy'yi şu şekilde ifade edebiliriz:
+
+Accuracy = (TP + TN) / (TP + TN + FP + FN)
+
+Bu formülü Python'da şöyle uygulayabiliriz:
+
+```python
+def accuracy_v2(y_true, y_pred):
+    """
+    TP/TN/FP/FN kullanarak accuracy hesaplayan fonksiyon
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: accuracy skoru
+    """
+    tp = true_positive(y_true, y_pred)
+    fp = false_positive(y_true, y_pred)
+    fn = false_negative(y_true, y_pred)
+    tn = true_negative(y_true, y_pred)
+
+    accuracy_score = (tp + tn) / (tp + tn + fp + fn)
+
+    return accuracy_score
+```
+
+
+Şimdi üç farklı yöntemin aynı sonucu verdiğini kontrol edebiliriz:
+
+```python
+l1 = [0,1,1,1,0,0,0,1]
+l2 = [0,1,0,1,0,1,0,0]
+
+accuracy(l1, l2)
+
+0.625
+
+accuracy_v2(l1, l2)
+
+0.625
+
+metrics.accuracy_score(l1, l2)
+
+0.625
+```
+
+
+Gördüğümüz gibi üç değer de aynıdır. Bu da implementasyonumuzda hata yapmadığımızı gösterir.
+
+Burada metrics.accuracy_score, scikit-learn kütüphanesinden gelmektedir.
+
+Şimdi diğer önemli metriklere geçebiliriz.
+
+## Precision — Kesinlik
+
+İlk metriğimiz precision.
+
+Precision şu şekilde tanımlanır:
+
+Precision = TP / (TP + FP)
+
+Yeni ve dengesiz veri kümesinde bir model oluşturduğumuzu düşünelim.
+
+Modelimiz:
+
+90 pnömotoraks olmayan görüntünün 80'ini doğru tanımlıyor.
+
+10 pnömotoraks görüntüsünün 8'ini doğru tanımlıyor.
+
+Böylece toplam 100 görüntünün 88'ini doğru sınıflandırıyoruz.
+
+Dolayısıyla:
+
+Accuracy = 88 / 100 = 0,88 = %88
+
+Fakat 100 örneğin içerisinde:
+
+10 pnömotoraks olmayan görüntü yanlışlıkla pnömotoraks olarak sınıflandırılmıştır.
+
+2 pnömotoraks görüntüsü yanlışlıkla pnömotoraks yok şeklinde sınıflandırılmıştır.
+
+Dolayısıyla:
+
+TP = 8
+
+TN = 80
+
+FP = 10
+
+FN = 2
+
+Precision:
+
+Precision = 8 / (8 + 10) = 0,444
+
+Yani modelimiz pozitif örnekleri, yani pnömotoraksı, tahmin ettiğinde bu tahminlerin yaklaşık %44,4'ü doğrudur.
+
+Python'da precision:
+
+```python
+def precision(y_true, y_pred):
+    """
+    Precision hesaplayan fonksiyon
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: precision skoru
+    """
+    tp = true_positive(y_true, y_pred)
+    fp = false_positive(y_true, y_pred)
+
+    precision = tp / (tp + fp)
+
+    return precision
+```
+
+
+Şimdi fonksiyonumuzu deneyelim:
+
+```python
+l1 = [0,1,1,1,0,0,0,1]
+l2 = [0,1,0,1,0,1,0,0]
+
+precision(l1, l2)
+
+
+Çıktı:
+
+0.6666666666666666
+```
+
+
+Bu sonuç beklediğimiz değerle uyumludur.
+
+## Recall — Duyarlılık
+
+Sıradaki metrik recall.
+
+Recall şu şekilde tanımlanır:
+
+Recall = TP / (TP + FN)
+
+Yukarıdaki örnekte:
+
+Recall = 8 / (8 + 2) = 0,80
+
+Bu, modelimizin pozitif örneklerin %80'ini doğru şekilde tespit ettiği anlamına gelir.
+
+Python'da recall:
+
+```python
+def recall(y_true, y_pred):
+    """
+    Recall hesaplayan fonksiyon
+    :param y_true: gerçek değerlerin listesi
+    :param y_pred: tahmin edilen değerlerin listesi
+    :return: recall skoru
+    """
+    tp = true_positive(y_true, y_pred)
+    fn = false_negative(y_true, y_pred)
+
+    recall = tp / (tp + fn)
+
+    return recall
+```
+
+
+İki küçük listemiz için recall değerinin 0,5 olması gerekir.
+
+Kontrol edelim:
+
+```python
+l1 = [0,1,1,1,0,0,0,1]
+l2 = [0,1,0,1,0,1,0,0]
+
+recall(l1, l2)
+
+
+Çıktı:
+
+0.5
+```
+
+
+Hesapladığımız değerle aynıdır.
+
+## Precision ve Recall Arasındaki Denge
+
+Bir model için genel olarak precision ve recall değerlerinin yüksek olması istenir.
+
+Yukarıdaki örnekte recall değerinin oldukça yüksek olduğunu, ancak precision değerinin oldukça düşük olduğunu görüyoruz.
+
+Modelimiz çok sayıda false positive üretirken daha az false negative üretmektedir.
+
+Pnömotoraks tespitinde false negative'lerin daha az olması özellikle önemlidir; çünkü gerçekten pnömotoraksı olan bir hastaya "pnömotoraks yok" demek ciddi bir sorun oluşturabilir.
+
+Ancak çok fazla false positive üretmek de istenen bir durum değildir.
+
+Dolayısıyla burada precision ve recall arasında bir denge söz konusudur.
+
+## Precision-Recall Eğrisi
+
+Çoğu makine öğrenmesi modeli doğrudan sınıf yerine bir olasılık tahmin eder.
+
+Tahmin yaparken çoğunlukla 0,5 eşik değeri (threshold) kullanırız.
+
+Örneğin:
+
+Olasılık ≥ 0,5 → 1
+
+Olasılık < 0,5 → 0
+
+Ancak 0,5 eşiği her zaman ideal olmak zorunda değildir.
+
+Seçtiğimiz threshold değerine bağlı olarak precision ve recall değerleri önemli ölçüde değişebilir.
+
+Her farklı threshold için precision ve recall değerlerini hesaplayabiliriz.
+
+Daha sonra bu değerleri bir grafik üzerinde gösterdiğimizde elde ettiğimiz eğriye:
+
+Precision-Recall Curve (Precision-Recall Eğrisi)
+
+denir.
+
+Öncelikle iki liste oluşturalım:
+
+```python
+y_true = [
+    0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+    1, 0, 0, 0, 0, 0, 0, 0, 1, 0
+]
+
+y_pred = [
+    0.02638412, 0.11114267, 0.31620708,
+    0.0490937,  0.0191491,  0.17554844,
+    0.15952202, 0.03819563, 0.11639273,
+    0.079377,   0.08584789, 0.39095342,
+    0.27259048, 0.03447096, 0.04644807,
+    0.03543574, 0.18521942, 0.05934905,
+    0.61977213, 0.33056815
+]
+```
+
+
+Burada y_true gerçek hedeflerimizi, y_pred ise bir örneğin 1 sınıfına ait olma olasılığını temsil etmektedir.
+
+Yani artık doğrudan tahmin edilmiş sınıflarla değil, tahmin olasılıklarıyla çalışıyoruz.
+
+Daha önce çoğunlukla 0,5 threshold'u kullanarak elde ettiğimiz 0 ve 1 değerleri yerine, elimizde olasılık değerleri bulunuyor.
+
+```python
+precisions = []
+recalls = []
+
+# Bu threshold değerlerinin nasıl belirlendiği
+# burada ayrıntılı olarak ele alınmıyor.
+thresholds = [
+    0.0490937, 0.05934905, 0.079377,
+    0.08584789, 0.11114267, 0.11639273,
+    0.15952202, 0.17554844, 0.18521942,
+    0.27259048, 0.31620708, 0.33056815,
+    0.39095342, 0.61977213
+]
+
+# Her threshold için ikili tahminler oluştur
+# ve hesaplanan precision ve recall değerlerini
+# ilgili listelere ekle
+for i in thresholds:
+    temp_prediction = [
+        1 if x >= i else 0
+        for x in y_pred
+    ]
+
+    p = precision(y_true, temp_prediction)
+    r = recall(y_true, temp_prediction)
+
+    precisions.append(p)
+    recalls.append(r)
+```
+
+
+Artık precision ve recall değerlerini grafik üzerinde gösterebiliriz:
+
+```python
+plt.figure(figsize=(7, 7))
+
+plt.plot(recalls, precisions)
+
+plt.xlabel('Recall', fontsize=15)
+plt.ylabel('Precision', fontsize=15)
+```
+
+
+Bu işlem sonucunda elde edilen grafik Şekil 2'deki precision-recall eğrisidir.
+
+Temel fikir şudur:
+
+Threshold değiştikçe modelin precision ve recall değerleri de değişir.
+
+Bu nedenle bir sınıflandırma modelini değerlendirirken yalnızca tek bir threshold ve tek bir metrik yerine, problemin gereksinimlerine göre precision, recall ve bunların threshold ile nasıl değiştiğini birlikte incelemek önemlidir.
 
 ![resim](img/p0041_fig01_resim.png)
 
