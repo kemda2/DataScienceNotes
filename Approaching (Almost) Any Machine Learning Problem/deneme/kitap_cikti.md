@@ -1096,13 +1096,6 @@ R2
 Knowing about how the aforementioned metrics work is not the only thing we have 
 to understand. We must also know when to use which metrics, and that depends on
 
----
-
-## Sayfa 32
-
-Approaching (Almost) Any Machine Learning Problem 
- 
-31 
 what kind of data and targets you have. I think it’s more about the targets and less 
 about the data.  
  
@@ -1113,6 +1106,8 @@ chest x-ray images with no problem, and some of the chest x-ray images have
 collapsed lung which is also known as pneumothorax. So, our task is to build a 
 classifier that given a chest x-ray image can detect if it has pneumothorax.  
  
+![Görsel](./i/sayfa_0032_gorsel_01.png)
+
 Figure 1: A lung image showing pneumothorax. Image is taken from SIIM-ACR Pneumothorax 
 Segmentation Competition3 
  
@@ -1126,18 +1121,6 @@ negative samples.
  
 3 https://www.kaggle.com/c/siim-acr-pneumothorax-segmentation
 
-
-### Görsel 1
-
-![Görsel](./i/sayfa_0032_gorsel_01.png)
-
----
-
-## Sayfa 33
-
-Approaching (Almost) Any Machine Learning Problem 
- 
-32 
 When we have an equal number of positive and negative samples in a binary 
 classification metric, we generally use accuracy, precision, recall and f1. 
  
@@ -1183,13 +1166,6 @@ In [X]: from sklearn import metrics
 Out[X]: 0.625 
 ═════════════════════════════════════════════════════════════════════════
 
----
-
-## Sayfa 34
-
-Approaching (Almost) Any Machine Learning Problem 
- 
-33 
 Now, let’s say we change the dataset a bit such that there are 180 chest x-ray images 
 which do not have pneumothorax and only 20 with pneumothorax. Even in this 
 case, we will create the training and validation sets with the same ratio of positive 
@@ -1228,13 +1204,6 @@ and if your model accurately predicts negative class, it is a true negative.
 False positive (FP): Given an image, if your model predicts pneumothorax and the 
 actual target for that image is non- pneumothorax, it a false positive.
 
----
-
-## Sayfa 35
-
-Approaching (Almost) Any Machine Learning Problem 
- 
-34 
 False negative (FN): Given an image, if your model predicts non-pneumothorax 
 and the actual target for that image is pneumothorax, it is a false negative. 
  
@@ -1282,13 +1251,6 @@ def false_positive(y_true, y_pred):
     """ 
     # initialize
 
----
-
-## Sayfa 36
-
-Approaching (Almost) Any Machine Learning Problem 
- 
-35 
     fp = 0 
     for yt, yp in zip(y_true, y_pred): 
         if yt == 0 and yp == 1: 
