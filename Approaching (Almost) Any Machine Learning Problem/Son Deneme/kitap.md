@@ -419,681 +419,742 @@ Bunlara sonraki bölümlerde bakalım.
 
 # Çapraz Doğrulama 
  
-We did not build any models in the previous chapter. The reason for that is simple. 
-Before creating any kind of machine learning model, we must know what cross-
-validation is and how to choose the best cross-validation depending on your 
-datasets. 
- 
-So, what is cross-validation, and why should we care about it? 
- 
-We can find multiple definitions as to what cross-validation is. Mine is a one-liner: 
-cross-validation is a step in the process of building a machine learning model which 
-helps us ensure that our models fit the data accurately and also ensures that we do 
-not overfit. But this leads to another term: overfitting.  
- 
-To explain overfitting, I think it’s best if we look at a dataset. There is a red wine-
-quality dataset2 which is quite famous. This dataset has 11 different attributes that 
-decide the quality of red wine.  
- 
-These attributes include:
+Önceki bölümde herhangi bir model oluşturmadık. Bunun nedeni oldukça basit.
 
-• 
-fixed acidity 
-• 
-volatile acidity 
-• 
-citric acid 
-• 
-residual sugar 
-• 
-chlorides 
-• 
-free sulfur dioxide 
-• 
-total sulfur dioxide 
-• 
-density 
-• 
-pH 
-• 
-sulphates 
-• 
-alcohol 
- 
-Based on these different attributes, we are required to predict the quality of red wine 
-which is a value between 0 and 10.
+Herhangi bir makine öğrenmesi modeli oluşturmadan önce, çapraz doğrulamanın (cross-validation) ne olduğunu ve veri kümenize bağlı olarak en uygun çapraz doğrulama yöntemini nasıl seçeceğinizi bilmemiz gerekir.
 
-2 P. Cortez, A. Cerdeira, F. Almeida, T. Matos and J. Reis; Modeling wine preferences by data 
-mining from physicochemical properties. In Decision Support Systems, Elsevier, 47(4):547-553, 
-2009.
+Peki çapraz doğrulama nedir ve neden önemsemeliyiz?
 
-14
+Çapraz doğrulamanın ne olduğuna dair birçok farklı tanım bulabiliriz. Benim tanımım tek cümleden oluşuyor:
 
-Approaching (Almost) Any Machine Learning Problem
+Çapraz doğrulama, bir makine öğrenmesi modeli oluşturma sürecinin bir parçasıdır. Modellerimizin verilere doğru şekilde uyduğundan emin olmamıza ve aşırı öğrenme (overfitting) yapmamamıza yardımcı olur.
 
-Let’s see how this data looks like. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
-df = pd.read_csv("winequality-red.csv") 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This dataset looks something like this:
+Ancak bu tanım bizi başka bir terime götürüyor: aşırı öğrenme (overfitting).
+
+Aşırı öğrenmeyi açıklamak için bir veri kümesine bakmanın en iyi yöntem olduğunu düşünüyorum.
+
+Oldukça ünlü olan bir kırmızı şarap kalitesi (red wine-quality) veri kümesi bulunmaktadır.
+
+P. Cortez, A. Cerdeira, F. Almeida, T. Matos ve J. Reis; Modeling wine preferences by data mining from physicochemical properties. Decision Support Systems, Elsevier, 47(4):547–553, 2009.
+
+Bu veri kümesinde kırmızı şarabın kalitesini belirleyen 11 farklı özellik vardır.
+
+Bu özellikler şunlardır:
+* fixed acidity — sabit asitlik
+* volatile acidity — uçucu asitlik
+* citric acid — sitrik asit
+* residual sugar — artık şeker
+* chlorides — klorürler
+* free sulfur dioxide — serbest kükürt dioksit
+* total sulfur dioxide — toplam kükürt dioksit
+* density — yoğunluk
+* pH — pH
+* sulphates — sülfatlar
+* alcohol — alkol
+
+Bu farklı özelliklere dayanarak, 0 ile 10 arasında bir değer olan kırmızı şarabın kalitesini tahmin etmemiz gerekiyor.
+
+Şimdi bu verilerin nasıl göründüğüne bakalım.
+
+═════════════════════════════════════════════════════════════════════════
+import pandas as pd
+
+df = pd.read_csv("winequality-red.csv")
+═════════════════════════════════════════════════════════════════════════
+
+Bu veri kümesi yaklaşık olarak şu şekilde görünmektedir:
 
 ![resim](img/p0016_fig01_resim.png)
 
-Figure 1: A snapshot of the red wine quality dataset. 
- 
-We can treat this problem either as a classification problem or as a regression 
-problem since wine quality is nothing but a real number between 0 and 10. For 
-simplicity, let’s choose classification. This dataset, however, consists of only six 
-types of quality values. We will thus map all quality values from 0 to 5. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# a mapping dictionary that maps the quality values from 0 to 5 
-quality_mapping = { 
-    3: 0, 
-    4: 1, 
-    5: 2, 
-    6: 3, 
-    7: 4, 
-    8: 5 
-} 
- 
-# you can use the map function of pandas with 
-# any dictionary to convert the values in a given 
-# column to values in the dictionary 
-df.loc[:, "quality"] = df.quality.map(quality_mapping) 
+Şekil 1: Kırmızı şarap kalitesi veri kümesinden bir görünüm
+
+Bu problemi, şarabın kalitesinin 0 ile 10 arasında gerçek bir sayı olması nedeniyle ister sınıflandırma ister regresyon problemi olarak ele alabiliriz.
+
+Basitlik açısından sınıflandırmayı seçelim.
+
+Ancak bu veri kümesi yalnızca altı farklı kalite değeri içermektedir. Bu nedenle tüm kalite değerlerini 0 ile 5 arasındaki değerlere eşleştireceğiz.
+
+═════════════════════════════════════════════════════════════════════════
+```python
+# Kalite değerlerini 0 ile 5 arasında eşleyen sözlük
+quality_mapping = {
+    3: 0,
+    4: 1,
+    5: 2,
+    6: 3,
+    7: 4,
+    8: 5
+}
+
+# pandas'ın map fonksiyonunu herhangi bir sözlükle kullanabilirsiniz.
+# Bu fonksiyon, belirli bir sütundaki değerleri
+# sözlükteki karşılıklarıyla değiştirir.
+df.loc[:, "quality"] = df.quality.map(quality_mapping)
+```
 ═════════════════════════════════════════════════════════════════════════
 
-15
 
-Approaching (Almost) Any Machine Learning Problem
+Bu verilere baktığımızda ve problemi bir sınıflandırma problemi olarak ele aldığımızda, kullanabileceğimiz birçok algoritma aklımıza gelebilir. Muhtemelen sinir ağlarını (neural networks) da kullanabiliriz.
 
-When we look at this data and consider it a classification problem, a lot of 
-algorithms come to our mind that we can apply to it, probably, we can use neural 
-networks. But it would be a bit of a stretch if we dive into neural networks from the 
-beginning. So, let’s start with something simple that we can visualize too: decision 
-trees. 
- 
-Before we begin to understand what overfitting is, let’s divide the data into two 
-parts. This dataset has 1599 samples. We keep 1000 samples for training and 599 
-as a separate set. 
- 
-Splitting can be done easily by the following chunk of code: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# use sample with frac=1 to shuffle the dataframe 
-# we reset the indices since they change after 
-# shuffling the dataframe 
-df = df.sample(frac=1).reset_index(drop=True) 
- 
-# top 1000 rows are selected 
-# for training 
-df_train = df.head(1000) 
- 
-# bottom 599 values are selected 
-# for testing/validation 
-df_test = df.tail(599) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We will now train a decision tree model on the training set. For the decision tree 
-model, I am going to use scikit-learn. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# import from scikit-learn 
-from sklearn import tree 
-from sklearn import metrics 
- 
-# initialize decision tree classifier class 
-# with a max_depth of 3 
-clf = tree.DecisionTreeClassifier(max_depth=3) 
- 
-# choose the columns you want to train on 
-# these are the features for the model 
-cols = ['fixed acidity',  
-        'volatile acidity',  
+Ancak daha en baştan sinir ağlarına dalmak biraz gereksiz bir karmaşıklık olur.
+
+Bu nedenle, aynı zamanda görselleştirebileceğimiz basit bir yöntemle başlayalım: karar ağaçları (decision trees).
+
+Verilerin Eğitim ve Test Olarak Ayrılması
+
+Aşırı öğrenmenin ne olduğunu anlamaya başlamadan önce verileri iki parçaya ayıralım.
+
+Bu veri kümesinde 1599 örnek bulunmaktadır.
+
+Bunların:
+
+1000 örneğini eğitim (training) için,
+
+599 örneğini ise ayrı bir test/doğrulama (testing/validation) kümesi olarak kullanacağız.
+
+Verileri aşağıdaki kod parçasıyla kolayca bölebiliriz:
+
+═════════════════════════════════════════════════════════════════════════
+```python
+# frac=1 kullanarak DataFrame'i karıştırıyoruz
+# DataFrame'i karıştırdıktan sonra indeksler değiştiği için
+# indeksleri yeniden oluşturuyoruz
+df = df.sample(frac=1).reset_index(drop=True)
+
+# İlk 1000 satır eğitim için seçiliyor
+df_train = df.head(1000)
+
+# Son 599 değer test/doğrulama için seçiliyor
+df_test = df.tail(599)
+```
+═════════════════════════════════════════════════════════════════════════
+
+
+Şimdi eğitim kümesi üzerinde bir karar ağacı modeli eğiteceğiz.
+
+Karar ağacı modeli için scikit-learn kullanacağım.
+
+═════════════════════════════════════════════════════════════════════════
+```python
+# scikit-learn'dan gerekli modülleri içe aktarıyoruz
+from sklearn import tree
+from sklearn import metrics
+
+# max_depth değeri 3 olan karar ağacı sınıflandırıcısını
+# başlatıyoruz
+clf = tree.DecisionTreeClassifier(max_depth=3)
+
+# Modeli eğitmek için kullanılacak sütunları seçiyoruz
+# Bunlar modelin özellikleridir
+cols = [
+    'fixed acidity',
+    'volatile acidity',
+    'citric acid',
+    'residual sugar',
+    'chlorides',
+    'free sulfur dioxide',
+    'total sulfur dioxide',
+    'density',
+    'pH',
+    'sulphates',
+    'alcohol'
+]
+
+# Modeli, yukarıda belirtilen özellikler ve
+# daha önce eşlediğimiz quality değerleri ile eğitiyoruz
+clf.fit(df_train[cols], df_train.quality)
+```
+═════════════════════════════════════════════════════════════════════════
+
+
+Burada karar ağacı sınıflandırıcısı için max_depth değerinin 3 olarak kullanıldığına dikkat edin.
+
+Bu modelin diğer tüm parametrelerini varsayılan değerlerinde bıraktım.
+
+Şimdi bu modelin eğitim kümesindeki ve test kümesindeki doğruluğunu ölçelim:
+
+═════════════════════════════════════════════════════════════════════════
+```python
+# Eğitim kümesi üzerinde tahminler oluştur
+train_predictions = clf.predict(df_train[cols])
+
+# Test kümesi üzerinde tahminler oluştur
+test_predictions = clf.predict(df_test[cols])
+
+# Eğitim veri kümesindeki tahminlerin doğruluğunu hesapla
+train_accuracy = metrics.accuracy_score(
+    df_train.quality, train_predictions
+)
+
+# Test veri kümesindeki tahminlerin doğruluğunu hesapla
+test_accuracy = metrics.accuracy_score(
+    df_test.quality, test_predictions
+)
+```
+═════════════════════════════════════════════════════════════════════════
+
+
+Eğitim ve test doğrulukları sırasıyla %58,9 ve %54,25 olarak bulunuyor.
+
+Şimdi max_depth değerini 7'ye çıkarıp işlemi tekrarlayalım.
+
+Bu durumda eğitim doğruluğu %76,6, test doğruluğu ise %57,3 oluyor.
+
+Burada temel olarak accuracy (doğruluk) metriğini kullandık; çünkü en basit ve anlaşılması en kolay metriktir.
+
+Ancak bu problem için en iyi metrik olmayabilir.
+
+Peki farklı max_depth değerleri için bu doğrulukları hesaplayıp bir grafik oluştursak nasıl olur?
+
+═════════════════════════════════════════════════════════════════════════
+```python
+# NOT: Bu kod bir Jupyter Notebook içerisinde yazılmıştır
+
+# scikit-learn tree ve metrics modüllerini içe aktar
+from sklearn import tree
+from sklearn import metrics
+
+# Grafik oluşturmak için matplotlib ve seaborn'u içe aktar
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Grafiklerdeki etiketlerin global boyutunu belirle
+matplotlib.rc('xtick', labelsize=20)
+matplotlib.rc('ytick', labelsize=20)
+
+# Grafiğin notebook içerisinde gösterilmesini sağla
+%matplotlib inline
+
+# Eğitim ve test verileri için doğrulukları
+# saklayacak listeleri başlat
+# %50 doğruluk ile başlıyoruz
+train_accuracies = [0.5]
+test_accuracies = [0.5]
+
+# Birkaç farklı derinlik değeri üzerinde döngü oluştur
+for depth in range(1, 25):
+    # Modeli başlat
+    clf = tree.DecisionTreeClassifier(max_depth=depth)
+
+    # Eğitim için kullanılacak sütunlar/özellikler
+    # Not: Bu işlem döngünün dışında da yapılabilir
+    cols = [
+        'fixed acidity',
+        'volatile acidity',
         'citric acid',
-
-16
-
-Approaching (Almost) Any Machine Learning Problem
-
-'residual sugar', 
-        'chlorides', 
-        'free sulfur dioxide', 
-        'total sulfur dioxide', 
-        'density', 
-        'pH', 
-        'sulphates', 
-        'alcohol'] 
- 
-# train the model on the provided features 
-# and mapped quality from before 
-clf.fit(df_train[cols], df_test.quality) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Note that I have used a max_depth of 3 for the decision tree classifier. I have left 
-all other parameters of this model to its default value. 
- 
-Now, we test the accuracy of this model on the training set and the test set: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# generate predictions on the training set 
-train_predictions = clf.predict(df_train[cols]) 
- 
-# generate predictions on the test set 
-test_predictions = clf.predict(df_test[cols]) 
- 
-# calculate the accuracy of predictions on 
-# training data set 
-train_accuracy = metrics.accuracy_score( 
-    df_train.quality, train_predictions 
-) 
- 
-# calculate the accuracy of predictions on 
-# test data set 
-test_accuracy = metrics.accuracy_score( 
-    df_test.quality, test_predictions 
-) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-The training and test accuracies are found to be 58.9% and 54.25%. Now we 
-increase the max_depth to 7 and repeat the process. This gives training accuracy of 
-76.6% and test accuracy of 57.3%. Here, we have used accuracy, mainly because it 
-is the most straightforward metric. It might not be the best metric for this problem. 
-What about we calculate these accuracies for different values of max_depth and 
-make a plot?
-
-17
-
-Approaching (Almost) Any Machine Learning Problem
-
-═════════════════════════════════════════════════════════════════════════ 
-# NOTE: this code is written in a jupyter notebook 
- 
-# import scikit-learn tree and metrics 
-from sklearn import tree 
-from sklearn import metrics 
- 
-# import matplotlib and seaborn 
-# for plotting 
-import matplotlib 
-import matplotlib.pyplot as plt 
-import seaborn as sns 
- 
-# this is our global size of label text 
-# on the plots 
-matplotlib.rc('xtick', labelsize=20)  
-matplotlib.rc('ytick', labelsize=20)  
- 
-# This line ensures that the plot is displayed 
-# inside the notebook 
-%matplotlib inline 
- 
- 
-# initialize lists to store accuracies 
-# for training and test data 
-# we start with 50% accuracy 
-train_accuracies = [0.5] 
-test_accuracies = [0.5] 
- 
-# iterate over a few depth values 
-for depth in range(1, 25): 
-    # init the model 
-    clf = tree.DecisionTreeClassifier(max_depth=depth) 
- 
-    # columns/features for training 
-    # note that, this can be done outside  
-    # the loop 
-    cols = [ 
-        'fixed acidity',  
-        'volatile acidity', 
-        'citric acid',  
-        'residual sugar', 
-        'chlorides', 
-        'free sulfur dioxide',  
-        'total sulfur dioxide', 
-        'density', 
-        'pH',  
+        'residual sugar',
+        'chlorides',
+        'free sulfur dioxide',
+        'total sulfur dioxide',
+        'density',
+        'pH',
         'sulphates',
+        'alcohol'
+    ]
 
-18
+    # Modeli verilen özellikler üzerinde eğit
+    clf.fit(df_train[cols], df_train.quality)
 
-Approaching (Almost) Any Machine Learning Problem
+    # Eğitim ve test tahminlerini oluştur
+    train_predictions = clf.predict(df_train[cols])
+    test_predictions = clf.predict(df_test[cols])
 
-'alcohol' 
-        ] 
- 
-    # fit the model on given features 
-    clf.fit(df_train[cols], df_train.quality) 
- 
-    # create training & test predictions 
-    train_predictions = clf.predict(df_train[cols]) 
-    test_predictions = clf.predict(df_test[cols]) 
- 
-    # calculate training & test accuracies 
-    train_accuracy = metrics.accuracy_score( 
-        df_train.quality, train_predictions 
-    ) 
-    test_accuracy = metrics.accuracy_score( 
-        df_test.quality, test_predictions 
-    ) 
-     
-    # append accuracies 
-    train_accuracies.append(train_accuracy) 
-    test_accuracies.append(test_accuracy) 
- 
- 
- 
-# create two plots using matplotlib 
-# and seaborn 
-plt.figure(figsize=(10, 5)) 
-sns.set_style("whitegrid") 
-plt.plot(train_accuracies, label="train accuracy") 
-plt.plot(test_accuracies, label="test accuracy") 
-plt.legend(loc="upper left", prop={'size': 15}) 
-plt.xticks(range(0, 26, 5)) 
-plt.xlabel("max_depth", size=20) 
-plt.ylabel("accuracy", size=20) 
-plt.show() 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This generates a plot, as shown in figure 2.  
- 
-We see that the best score for test data is obtained when max_depth has a value of 
-14. As we keep increasing the value of this parameter, test accuracy remains the 
-same or gets worse, but the training accuracy keeps increasing. It means that our 
-simple decision tree model keeps learning about the training data better and better 
-with an increase in max_depth, but the performance on test data does not improve 
-at all.
+    # Eğitim ve test doğruluklarını hesapla
+    train_accuracy = metrics.accuracy_score(
+        df_train.quality, train_predictions
+    )
+    test_accuracy = metrics.accuracy_score(
+        df_test.quality, test_predictions
+    )
 
-19
+    # Doğruluk değerlerini listelere ekle
+    train_accuracies.append(train_accuracy)
+    test_accuracies.append(test_accuracy)
 
-Approaching (Almost) Any Machine Learning Problem
+# matplotlib ve seaborn kullanarak iki grafik çiz
+plt.figure(figsize=(10, 5))
+sns.set_style("whitegrid")
+plt.plot(train_accuracies, label="train accuracy")
+plt.plot(test_accuracies, label="test accuracy")
+plt.legend(loc="upper left", prop={'size': 15})
+plt.xticks(range(0, 26, 5))
+plt.xlabel("max_depth", size=20)
+plt.ylabel("accuracy", size=20)
+plt.show()
+```
+═════════════════════════════════════════════════════════════════════════
 
-This is called overfitting.  
- 
-The model fits perfectly on the training set and performs poorly when it comes to 
-the test set. This means that the model will learn the training data well but will not 
-generalize on unseen samples. In the dataset above, one can build a model with very 
-high max_depth which will have outstanding results on training data, but that kind 
-of model is not useful as it will not provide a similar result on the real-world samples 
-or live data.
+Bu kod, Şekil 2'de gösterilen grafiği oluşturur.
+
+Test verileri için en iyi skorun max_depth değerinin 14 olduğu durumda elde edildiğini görüyoruz.
+
+Bu parametrenin değerini artırmaya devam ettiğimizde test doğruluğu aynı kalıyor veya daha da kötüleşiyor. Buna karşılık eğitim doğruluğu artmaya devam ediyor.
+
+Bu durum, basit karar ağacı modelimizin max_depth arttıkça eğitim verisini giderek daha iyi öğrenmeye devam ettiğini, ancak test verilerindeki performansının hiç gelişmediğini gösteriyor.
+
+Buna aşırı öğrenme (overfitting) adı verilir.
+
+Model, eğitim kümesine çok iyi uyum sağlarken test kümesinde kötü performans gösterir.
+
+Bu, modelin eğitim verilerini çok iyi öğrenmesine rağmen daha önce görmediği örneklere (unseen samples) genelleme yapamadığı anlamına gelir.
+
+Yukarıdaki veri kümesinde çok yüksek bir max_depth değerine sahip bir model oluşturabiliriz. Böyle bir model eğitim verileri üzerinde olağanüstü sonuçlar verebilir.
+
+Ancak bu tür bir model kullanışlı değildir; çünkü gerçek dünyadaki örneklerde veya canlı verilerde benzer sonuçları vermeyebilir.
 
 ![resim](img/p0021_fig01_resim.png)
 
-Figure 2: Training and test accuracies for different values of max_depth. 
- 
-One might argue that this approach isn’t overfitting as the accuracy of the test set 
-more or less remains the same. Another definition of overfitting would be when the 
-test loss increases as we keep improving training loss. This is very common when 
-it comes to neural networks.  
- 
-Whenever we train a neural network, we must monitor loss during the training time 
-for both training and test set. If we have a very large network for a dataset which is 
-quite small (i.e. very less number of samples), we will observe that the loss for both 
-training and test set will decrease as we keep training. However, at some point, test 
-loss will reach its minima, and after that, it will start increasing even though training 
-loss decreases further. We must stop training where the validation loss reaches its 
-minimum value.  
- 
-This is the most common explanation of overfitting.
+Şekil 2: Farklı max_depth değerleri için eğitim ve test doğrulukları
 
-20
+Birisi, test kümesindeki doğruluğun aşağı yukarı aynı kalması nedeniyle bu yaklaşımın aşırı öğrenme (overfitting) olmadığını ileri sürebilir.
 
-Approaching (Almost) Any Machine Learning Problem
+Aşırı öğrenmenin başka bir tanımı ise eğitim kaybını (training loss) iyileştirmeye devam ederken test kaybının (test loss) artmasıdır.
 
-Occam’s razor in simple words states that one should not try to complicate things 
-that can be solved in a much simpler manner. In other words, the simplest solutions 
-are the most generalizable solutions. In general, whenever your model does not 
-obey Occam’s razor, it is probably overfitting.
+Bu durum özellikle sinir ağlarında (neural networks) oldukça yaygındır.
+
+Bir sinir ağını her eğittiğimizde, hem eğitim hem de test kümesi için eğitim süreci boyunca kayıp (loss) değerini takip etmeliyiz.
+
+Eğer oldukça küçük bir veri kümesi için çok büyük bir ağ kullanıyorsak — yani örnek sayısı çok azsa — eğitim devam ettikçe hem eğitim hem de test kümesindeki kaybın azaldığını gözlemleyebiliriz.
+
+Ancak belirli bir noktada test kaybı minimum değerine ulaşır. Bundan sonra, eğitim kaybı azalmaya devam etmesine rağmen test kaybı tekrar artmaya başlar.
+
+Eğitimi, doğrulama kaybının (validation loss) minimum değerine ulaştığı noktada durdurmalıyız.
+
+Bu, aşırı öğrenmenin en yaygın açıklamasıdır.
+
+Occam'ın Usturası
+
+Occam'ın Usturası (Occam's Razor) basit bir ifadeyle, daha basit bir şekilde çözülebilecek problemleri gereksiz yere karmaşıklaştırmamamız gerektiğini söyler.
+
+Başka bir ifadeyle:
+
+En basit çözümler, genellikle en iyi genelleme yapabilen çözümlerdir.
+
+Genel olarak, modeliniz Occam'ın Usturası ilkesine uymuyorsa, muhtemelen aşırı öğrenme yapıyordur.
 
 ![resim](img/p0022_fig01_resim.png)
 
-Figure 3: Most general definition of overfitting. 
- 
-Now we can go back to cross-validation. 
- 
-While explaining about overfitting, I decided to divide the data into two parts. I 
-trained the model on one part and checked its performance on the other part. Well, 
-this is also a kind of cross-validation commonly known as a hold-out set. We use 
-this kind of (cross-) validation when we have a large amount of data and model 
-inference is a time-consuming process. 
- 
-There are many different ways one can do cross-validation, and it is the most critical 
-step when it comes to building a good machine learning model which is 
-generalizable when it comes to unseen data. Choosing the right cross-validation 
-depends on the dataset you are dealing with, and one’s choice of cross-validation 
-on one dataset may or may not apply to other datasets. However, there are a few 
-types of cross-validation techniques which are the most popular and widely used.  
- 
-These include:
+Şekil 3: Aşırı öğrenmenin en genel tanımı
 
-• 
-k-fold cross-validation 
-• 
-stratified k-fold cross-validation
+Şimdi tekrar çapraz doğrulamaya (cross-validation) dönebiliriz.
 
-21
+Aşırı öğrenmeyi açıklarken verileri iki parçaya ayırmaya karar verdim. Modeli bir parça üzerinde eğittim ve performansını diğer parça üzerinde kontrol ettim.
 
-Approaching (Almost) Any Machine Learning Problem
+Aslında bu da yaygın olarak hold-out set (ayrılmış doğrulama kümesi) olarak bilinen bir tür çapraz doğrulamadır.
 
-• 
-hold-out based validation 
-• 
-leave-one-out cross-validation 
-• 
-group k-fold cross-validation 
- 
-Cross-validation is dividing training data into a few parts. We train the model on 
-some of these parts and test on the remaining parts. Take a look at figure 4.
+Bu tür bir doğrulamayı, büyük miktarda veriye sahip olduğumuzda ve modelin tahmin üretme (inference) sürecinin zaman alıcı olduğu durumlarda kullanırız.
+
+Çapraz doğrulama yapmanın birçok farklı yolu vardır ve genellenebilir, yani daha önce görülmemiş veriler üzerinde iyi performans gösterebilen bir makine öğrenmesi modeli oluşturma söz konusu olduğunda, çapraz doğrulama en kritik adımlardan biridir.
+
+Doğru çapraz doğrulama yöntemini seçmek, üzerinde çalıştığınız veri kümesine bağlıdır. Bir veri kümesinde tercih edilen çapraz doğrulama yöntemi, başka bir veri kümesine uygulanabilir veya uygulanamayabilir.
+
+Bununla birlikte, en popüler ve yaygın olarak kullanılan birkaç çapraz doğrulama tekniği vardır.
+
+Bunlar şunlardır:
+
+k-katlı çapraz doğrulama (k-fold cross-validation)
+
+katmanlı k-katlı çapraz doğrulama (stratified k-fold cross-validation)
+
+hold-out tabanlı doğrulama (hold-out based validation)
+
+birini dışarıda bırakma çapraz doğrulaması (leave-one-out cross-validation)
+
+grup k-katlı çapraz doğrulama (group k-fold cross-validation)
+
+Çapraz doğrulama, eğitim verilerini birkaç parçaya bölme işlemidir.
+
+Modeli bu parçaların bazıları üzerinde eğitir, geriye kalan parçalar üzerinde ise test ederiz.
+
+Şekil 4'e bir göz atın.
 
 ![resim](img/p0023_fig01_resim.png)
 
-Figure 4: Splitting a dataset into training and validation sets 
- 
-Figure 4 & 5 say that when you get a dataset to build machine learning models, you 
-separate them into two different sets: training and validation. Many people also 
-split it into a third set and call it a test set. We will, however, be using only two 
-sets. As you can see, we divide the samples and the targets associated with them. 
-We can divide the data into k different sets which are exclusive of each other. This 
-is known as k-fold cross-validation.
+Şekil 4: Bir veri kümesinin eğitim ve doğrulama kümelerine ayrılması
+
+Şekil 4 ve 5, makine öğrenmesi modelleri oluşturmak için bir veri kümesi elde ettiğimizde, veriyi iki farklı kümeye ayırdığımızı göstermektedir:
+
+Eğitim kümesi (training set)
+
+Doğrulama kümesi (validation set)
+
+Birçok kişi veriyi ayrıca üçüncü bir kümeye ayırır ve buna test kümesi (test set) adını verir.
+
+Ancak biz yalnızca iki küme kullanacağız.
+
+Gördüğünüz gibi, örnekleri (samples) ve bunlarla ilişkili hedefleri (targets) bölümlere ayırıyoruz.
+
+Verileri birbirinden bağımsız olan k farklı kümeye ayırabiliriz.
+
+Bu yönteme k-katlı çapraz doğrulama (k-fold cross-validation) adı verilir.
 
 ![resim](img/p0023_fig02_resim.png)
 
-Figure 5: K-fold cross-validation
+Şekil 5: K-katlı çapraz doğrulama
 
-22
+Herhangi bir veriyi scikit-learn içerisindeki KFold kullanarak k eşit parçaya bölebiliriz.
 
-Approaching (Almost) Any Machine Learning Problem
+K-katlı çapraz doğrulama kullanıldığında her örneğe 0 ile k-1 arasında bir değer atanır.
 
-We can split any data into k-equal parts using KFold from scikit-learn. Each sample 
-is assigned a value from 0 to k-1 when using k-fold cross validation. 
- 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# import pandas and model_selection module of scikit-learn 
-import pandas as pd 
-from sklearn import model_selection 
- 
- 
-if __name__ == "__main__": 
-    # Training data is in a CSV file called train.csv 
-    df = pd.read_csv("train.csv") 
-     
-    # we create a new column called kfold and fill it with -1 
-    df["kfold"] = -1 
- 
-    # the next step is to randomize the rows of the data 
-    df = df.sample(frac=1).reset_index(drop=True) 
- 
-    # initiate the kfold class from model_selection module 
-    kf = model_selection.KFold(n_splits=5) 
- 
-    # fill the new kfold column 
-    for fold, (trn_, val_) in enumerate(kf.split(X=df)): 
-        df.loc[val_, 'kfold'] = fold 
- 
-    # save the new csv with kfold column  
-    df.to_csv("train_folds.csv", index=False) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-You can use this process with almost all kinds of datasets. For example, when you 
-have images, you can create a CSV with image id, image location and image label 
-and use the process above. 
- 
-The next important type of cross-validation is stratified k-fold. If you have a 
-skewed dataset for binary classification with 90% positive samples and only 10% 
-negative samples, you don't want to use random k-fold cross-validation. Using 
-simple k-fold cross-validation for a dataset like this can result in folds with all 
-negative samples. In these cases, we prefer using stratified k-fold cross-validation. 
-Stratified k-fold cross-validation keeps the ratio of labels in each fold constant. So, 
-in each fold, you will have the same 90% positive and 10% negative samples. Thus, 
-whatever metric you choose to evaluate, it will give similar results across all folds.
+═════════════════════════════════════════════════════════════════════════
+```python
+# pandas ve scikit-learn'ın model_selection modülünü içe aktar
+import pandas as pd
+from sklearn import model_selection
 
-23
 
-Approaching (Almost) Any Machine Learning Problem
+if __name__ == "__main__":
+    # Eğitim verileri train.csv isimli CSV dosyasında bulunuyor
+    df = pd.read_csv("train.csv")
 
-It’s easy to modify the code for creating k-fold cross-validation to create stratified 
-k-folds. 
-We 
-are 
-only 
-changing 
-from 
-model_selection.KFold 
-to 
-model_selection.StratifiedKFold and in the kf.split(...) function, we specify the 
-target column on which we want to stratify. We assume that our CSV dataset has a 
-column called “target” and it is a classification problem! 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# import pandas and model_selection module of scikit-learn 
-import pandas as pd 
-from sklearn import model_selection 
- 
-if __name__ == "__main__": 
-    # Training data is in a csv file called train.csv 
-    df = pd.read_csv("train.csv") 
- 
-    # we create a new column called kfold and fill it with -1 
-    df["kfold"] = -1 
- 
-    # the next step is to randomize the rows of the data 
-    df = df.sample(frac=1).reset_index(drop=True) 
- 
-    # fetch targets 
-    y = df.target.values 
- 
-    # initiate the kfold class from model_selection module 
-    kf = model_selection.StratifiedKFold(n_splits=5) 
- 
-    # fill the new kfold column 
-    for f, (t_, v_) in enumerate(kf.split(X=df, y=y)): 
-        df.loc[v_, 'kfold'] = f 
- 
-    # save the new csv with kfold column 
-    df.to_csv("train_folds.csv", index=False) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-For the wine dataset, let’s look at the distribution of labels. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-b = sns.countplot(x='quality', data=df) 
-b.set_xlabel("quality", fontsize=20) 
-b.set_ylabel("count", fontsize=20) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Note that we continue on the code above. So, we have converted the target values. 
-Looking at figure 6 we can say that the quality is very much skewed. Some classes
+    # kfold adında yeni bir sütun oluşturuyoruz
+    # ve tüm değerlerini -1 olarak dolduruyoruz
+    df["kfold"] = -1
 
-24
+    # Bir sonraki adım verinin satırlarını rastgele karıştırmak
+    df = df.sample(frac=1).reset_index(drop=True)
 
-Approaching (Almost) Any Machine Learning Problem
+    # model_selection modülünden KFold sınıfını başlat
+    kf = model_selection.KFold(n_splits=5)
 
-have a lot of samples, and some don’t have that many. If we do a simple k-fold, we 
-won’t have an equal distribution of targets in every fold. Thus, we choose stratified 
-k-fold in this case.
+    # Yeni kfold sütununu doldur
+    for fold, (trn_, val_) in enumerate(kf.split(X=df)):
+        df.loc[val_, 'kfold'] = fold
+
+    # kfold sütununu içeren yeni CSV dosyasını kaydet
+    df.to_csv("train_folds.csv", index=False)
+```
+═════════════════════════════════════════════════════════════════════════
+
+
+Bu işlemi neredeyse tüm veri kümesi türleriyle kullanabilirsiniz.
+
+Örneğin görüntülerle çalışıyorsanız; görüntü kimliği (image ID), görüntünün konumu (image location) ve görüntü etiketi (image label) bilgilerini içeren bir CSV dosyası oluşturabilir ve yukarıdaki yöntemi kullanabilirsiniz.
+
+Katmanlı K-Katlı Çapraz Doğrulama
+
+Bir sonraki önemli çapraz doğrulama türü katmanlı k-katlı çapraz doğrulama (stratified k-fold cross-validation) yöntemidir.
+
+Örneğin, ikili sınıflandırma (binary classification) probleminiz olduğunu ve veri kümenizin dengesiz olduğunu düşünelim:
+
+* %90 pozitif örnek
+
+* %10 negatif örnek
+
+Böyle bir durumda rastgele k-katlı çapraz doğrulama kullanmak istemeyiz.
+
+Bu tür bir veri kümesine basit k-katlı çapraz doğrulama uygulamak, bazı katmanların (folds) yalnızca negatif örneklerden oluşmasına neden olabilir.
+
+Bu gibi durumlarda katmanlı k-katlı çapraz doğrulamayı tercih ederiz.
+
+Katmanlı k-katlı çapraz doğrulama, her katmandaki etiket oranlarını sabit tutar.
+
+Dolayısıyla her katmanda yaklaşık olarak aynı dağılımı elde ederiz:
+
+* %90 pozitif örnek
+
+* %10 negatif örnek
+
+Böylece değerlendirme için hangi metriği seçerseniz seçin, tüm katmanlarda birbirine daha benzer sonuçlar elde edersiniz.
+
+K-katlı çapraz doğrulama oluşturmak için kullandığımız kodu katmanlı k-katlı çapraz doğrulama oluşturacak şekilde değiştirmek oldukça kolaydır.
+
+Burada yalnızca model_selection.KFold yerine model_selection.StratifiedKFold kullanıyoruz.
+
+Ayrıca kf.split(...) fonksiyonunda, katmanlandırmanın yapılacağı hedef sütununu belirtiyoruz.
+
+CSV veri kümemizde "target" adında bir sütun olduğunu ve bunun bir sınıflandırma problemi olduğunu varsayıyoruz.
+
+═════════════════════════════════════════════════════════════════════════
+```python
+# pandas ve scikit-learn'ın model_selection modülünü içe aktar
+import pandas as pd
+from sklearn import model_selection
+
+if __name__ == "__main__":
+    # Eğitim verileri train.csv isimli CSV dosyasında bulunuyor
+    df = pd.read_csv("train.csv")
+
+    # kfold adında yeni bir sütun oluşturuyoruz
+    # ve tüm değerlerini -1 olarak dolduruyoruz
+    df["kfold"] = -1
+
+    # Veri satırlarını rastgele karıştır
+    df = df.sample(frac=1).reset_index(drop=True)
+
+    # Hedef değerlerini al
+    y = df.target.values
+
+    # StratifiedKFold sınıfını başlat
+    kf = model_selection.StratifiedKFold(n_splits=5)
+
+    # Yeni kfold sütununu doldur
+    for f, (t_, v_) in enumerate(kf.split(X=df, y=y)):
+        df.loc[v_, 'kfold'] = f
+
+    # kfold sütununu içeren yeni CSV dosyasını kaydet
+    df.to_csv("train_folds.csv", index=False)
+```
+═════════════════════════════════════════════════════════════════════════
+
+Şarap Veri Kümesindeki Etiket Dağılımı
+
+Şimdi şarap veri kümesi için etiketlerin (labels) dağılımına bakalım.
+
+═════════════════════════════════════════════════════════════════════════
+```python
+b = sns.countplot(x='quality', data=df)
+b.set_xlabel("quality", fontsize=20)
+b.set_ylabel("count", fontsize=20)
+```
+═════════════════════════════════════════════════════════════════════════
+
+Yukarıdaki kodun devamından ilerlediğimizi unutmayın. Dolayısıyla hedef değerlerini daha önce dönüştürmüş durumdayız.
+
+Şekil 6'ya baktığımızda, kalite değerlerinin oldukça dengesiz (skewed) olduğunu söyleyebiliriz.
+
+Bazı sınıflarda çok fazla örnek bulunurken, bazı sınıflarda çok daha az örnek bulunmaktadır.
+
+Bu nedenle basit bir k-katlı çapraz doğrulama uygularsak, her katmanda hedeflerin eşit bir dağılıma sahip olmasını sağlayamayız.
+
+Bu durumda katmanlı k-katlı çapraz doğrulamayı (stratified k-fold) tercih ediyoruz.
 
 ![resim](img/p0026_fig01_resim.png)
 
-Figure 6: Distribution of “quality” in wine dataset 
- 
-The rule is simple. If it’s a standard classification problem, choose stratified k-fold 
-blindly. 
- 
-But what should we do if we have a large amount of data? Suppose we have 1 
-million samples. A 5 fold cross-validation would mean training on 800k samples 
-and validating on 200k. Depending on which algorithm we choose, training and 
-even validation can be very expensive for a dataset which is of this size. In these 
-cases, we can opt for a hold-out based validation. 
- 
-The process for creating the hold-out remains the same as stratified k-fold. For a 
-dataset which has 1 million samples, we can create ten folds instead of 5 and keep 
-one of those folds as hold-out. This means we will have 100k samples in the hold-
-out, and we will always calculate loss, accuracy and other metrics on this set and 
-train on 900k samples. 
- 
-Hold-out is also used very frequently with time-series data. Let’s assume the 
-problem we are provided with is predicting sales of a store for 2020, and you are 
-provided all the data from 2015-2019. In this case, you can select all the data for 
-2019 as a hold-out and train your model on all the data from 2015 to 2018.
+Şekil 6: Şarap veri kümesinde "quality" dağılımı
 
-25
+Buradaki kural basittir:
 
-Approaching (Almost) Any Machine Learning Problem
+Eğer standart bir sınıflandırma problemi ile karşı karşıyaysanız, doğrudan katmanlı k-katlı çapraz doğrulamayı (stratified k-fold) tercih edin.
+
+Peki elimizde çok büyük miktarda veri varsa ne yapmalıyız?
+
+Örneğin 1 milyon örneğimiz olduğunu düşünelim.
+
+5 katlı çapraz doğrulama (5-fold cross-validation) kullanırsak:
+
+800.000 örnekle eğitim yaparız.
+
+200.000 örnekle doğrulama yaparız.
+
+Seçtiğimiz algoritmaya bağlı olarak, bu büyüklükteki bir veri kümesinde hem eğitim hem de doğrulama oldukça maliyetli olabilir.
+
+Bu gibi durumlarda hold-out tabanlı doğrulamayı (hold-out based validation) tercih edebiliriz.
+
+Hold-Out Süreci
+
+Hold-out oluşturma süreci, katmanlı k-katlı çapraz doğrulama ile büyük ölçüde aynıdır.
+
+Örneğin 1 milyon örnekten oluşan bir veri kümesi için 5 kat yerine 10 kat oluşturabilir ve bu katlardan birini hold-out kümesi olarak ayırabiliriz.
+
+Bu durumda:
+
+Hold-out kümesinde 100.000 örnek bulunur.
+
+Modelimizi 900.000 örnek üzerinde eğitiriz.
+
+Kayıp (loss), doğruluk (accuracy) ve diğer metrikleri her zaman bu 100.000 örnekten oluşan hold-out kümesi üzerinde hesaplarız.
+
+Böylece çok büyük veri kümelerinde tam anlamıyla k-katlı çapraz doğrulama yapmanın getireceği hesaplama maliyetini azaltabiliriz.
+
+Zaman Serisi Verilerinde Hold-Out
+
+Hold-out, zaman serisi (time-series) verileriyle çalışırken de oldukça sık kullanılır.
+
+Örneğin problemimizin 2020 yılında bir mağazanın satışlarını tahmin etmek olduğunu ve elimizde 2015–2019 arasındaki tüm verilerin bulunduğunu varsayalım.
+
+Bu durumda 2019 yılındaki tüm verileri hold-out kümesi olarak ayırabilir ve modelimizi 2015–2018 arasındaki tüm veriler üzerinde eğitebiliriz.
+
+Bu yaklaşım, zaman sırasını koruduğu için zaman serisi problemlerinde özellikle kullanışlıdır.
 
 ![resim](img/p0027_fig01_resim.png)
 
-Figure 7: Example of a time-series data 
- 
-In the example presented in figure 7, let’s say our job is to predict the sales from 
-time step 31 to 40. We can then keep 21 to 30 as hold-out and train our model from 
-step 0 to step 20. You should note that when you are predicting from 31 to 40, you 
-should include the data from 21 to 30 in your model; otherwise, performance will 
-be sub-par. 
- 
-In many cases, we have to deal with small datasets and creating big validation sets 
-means losing a lot of data for the model to learn. In those cases, we can opt for a 
-type of k-fold cross-validation where k=N, where N is the number of samples in the 
-dataset. This means that in all folds of training, we will be training on all data 
-samples except 1. The number of folds for this type of cross-validation is the same 
-as the number of samples that we have in the dataset.  
- 
-One should note that this type of cross-validation can be costly in terms of the time 
-it takes if the model is not fast enough, but since it’s only preferable to use this 
-cross-validation for small datasets, it doesn’t matter much. 
- 
-Now we can move to regression. The good thing about regression problems is that 
-we can use all the cross-validation techniques mentioned above for regression 
-problems except for stratified k-fold. That is we cannot use stratified k-fold directly, 
-but there are ways to change the problem a bit so that we can use stratified k-fold 
-for regression problems. Mostly, simple k-fold cross-validation works for any 
-regression problem. However, if you see that the distribution of targets is not 
-consistent, you can use stratified k-fold.
+Şekil 7: Bir zaman serisi verisi örneği
 
-26
+Şekil 7'de gösterilen örnekte, görevimizin 31. zaman adımından 40. zaman adımına kadar olan satışları tahmin etmek olduğunu varsayalım.
 
-Approaching (Almost) Any Machine Learning Problem
+Bu durumda 21–30 arasındaki verileri hold-out kümesi olarak ayırabilir ve modelimizi 0–20 arasındaki verilerle eğitebiliriz.
 
-To use stratified k-fold for a regression problem, we have first to divide the target 
-into bins, and then we can use stratified k-fold in the same way as for classification 
-problems. There are several choices for selecting the appropriate number of bins. If 
-you have a lot of samples( > 10k, > 100k), then you don’t need to care about the 
-number of bins. Just divide the data into 10 or 20 bins. If you do not have a lot of 
-samples, you can use a simple rule like Sturge’s Rule to calculate the appropriate 
-number of bins. 
- 
-Sturge’s rule:
+Ancak önemli bir noktaya dikkat etmelisiniz:
 
-Number of Bins = 1 + log2(N) 
- 
-Where N is the number of samples you have in your dataset. This function is plotted 
-in Figure 8.
+31–40 arasındaki değerleri tahmin ederken 21–30 arasındaki verileri de modelinize dahil etmelisiniz. Aksi takdirde modelin performansı beklenenden düşük olacaktır.
+
+Leave-One-Out Çapraz Doğrulama
+
+Birçok durumda küçük veri kümeleriyle çalışmak zorunda kalırız.
+
+Büyük doğrulama kümeleri oluşturmak, modelin öğrenebileceği veri miktarının önemli bir bölümünü kaybetmemize neden olabilir.
+
+Bu gibi durumlarda, k = N olacak şekilde bir tür k-katlı çapraz doğrulama kullanabiliriz. Burada N, veri kümesindeki örnek sayısıdır.
+
+Bu yöntemde her eğitim aşamasında:
+
+Veri kümesindeki N örneğin N−1 tanesi eğitim için kullanılır.
+
+Yalnızca 1 örnek doğrulama için ayrılır.
+
+Toplam N adet katman (fold) oluşturulur.
+
+Dolayısıyla bu çapraz doğrulama yöntemindeki katman sayısı, veri kümesindeki örnek sayısına eşittir.
+
+Bu yöntemin, model yeterince hızlı değilse çalışma süresi açısından maliyetli olabileceğini unutmamak gerekir.
+
+Ancak bu yöntem yalnızca küçük veri kümelerinde tercih edildiğinden, bu maliyet çoğu durumda çok büyük bir problem oluşturmaz.
+
+Bu yönteme genellikle Leave-One-Out Cross-Validation (LOOCV), yani birini dışarıda bırakma çapraz doğrulaması adı verilir.
+
+Regresyonda Çapraz Doğrulama
+
+Şimdi regresyon problemine geçebiliriz.
+
+Regresyon problemlerinin güzel tarafı, yukarıda bahsettiğimiz çapraz doğrulama tekniklerinin neredeyse tamamını kullanabilmemizdir.
+
+Bunun istisnası katmanlı k-katlı çapraz doğrulamadır (stratified k-fold).
+
+Katmanlı k-katlı çapraz doğrulamayı regresyon problemine doğrudan uygulayamayız. Ancak problemi biraz değiştirerek regresyonda da katmanlı k-katlı çapraz doğrulama kullanmanın yolları vardır.
+
+Çoğu regresyon problemi için basit k-katlı çapraz doğrulama yeterlidir.
+
+Ancak hedef değerlerinin dağılımının tutarlı olmadığını görürseniz, katmanlı k-katlı çapraz doğrulama kullanabilirsiniz.
+
+Regresyonda Stratified K-Fold Kullanmak
+
+Bir regresyon probleminde katmanlı k-katlı çapraz doğrulama kullanmak için öncelikle hedef değişkeni belirli aralıklara (bin'lere) ayırmamız gerekir.
+
+Daha sonra, sınıflandırma problemlerinde yaptığımız gibi bu bin'leri kullanarak stratified k-fold uygulayabiliriz.
+
+Uygun bin sayısını belirlemek için çeşitli yöntemler vardır.
+
+Eğer çok sayıda örneğiniz varsa — örneğin 10.000'den fazla veya 100.000'den fazla — bin sayısı konusunda fazla endişelenmenize gerek yoktur.
+
+Verileri doğrudan 10 veya 20 bin'e ayırabilirsiniz.
+
+Eğer çok fazla örneğiniz yoksa, uygun bin sayısını hesaplamak için Sturges Kuralı (Sturge's Rule) gibi basit bir yöntem kullanabilirsiniz.
+
+Sturges Kuralı
+
+Bin sayısı = 1 + log₂(N)
+
+Burada N, veri kümenizde bulunan örnek sayısını ifade eder.
+
+Bu fonksiyon Şekil 8'de gösterilmektedir.
 
 ![resim](img/p0028_fig01_resim.png)
 
-Figure 8: Plotting samples vs the number of bins by Sturge’s Rule 
- 
-Let’s make a sample regression dataset and try to apply stratified k-fold as shown 
-in the following python snippet. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# stratified-kfold for regression 
-import numpy as np 
-import pandas as pd 
- 
-from sklearn import datasets 
+Şekil 8: Sturges Kuralı ile örnek sayısına karşılık bin sayısının grafiği
+
+Şimdi örnek bir regresyon veri kümesi oluşturalım ve aşağıdaki Python kodunda gösterildiği gibi stratified k-fold uygulamaya çalışalım.
+
+═════════════════════════════════════════════════════════════════════════
+```python
+# Regresyon için stratified-kfold
+import numpy as np
+import pandas as pd
+
+from sklearn import datasets
 from sklearn import model_selection
 
-27
 
-Approaching (Almost) Any Machine Learning Problem
+def create_folds(data):
+    # kfold adında yeni bir sütun oluşturuyoruz
+    # ve tüm değerlerini -1 olarak dolduruyoruz
+    data["kfold"] = -1
 
-def create_folds(data): 
-    # we create a new column called kfold and fill it with -1 
-    data["kfold"] = -1 
-     
-    # the next step is to randomize the rows of the data 
-    data = data.sample(frac=1).reset_index(drop=True) 
- 
-    # calculate the number of bins by Sturge's rule 
-    # I take the floor of the value, you can also 
-    # just round it 
-    num_bins = np.floor(1 + np.log2(len(data))) 
- 
-    # bin targets 
-    data.loc[:, "bins"] = pd.cut( 
-        data["target"], bins=num_bins, labels=False 
-    ) 
-     
-    # initiate the kfold class from model_selection module 
-    kf = model_selection.StratifiedKFold(n_splits=5) 
-     
-    # fill the new kfold column 
-    # note that, instead of targets, we use bins! 
-    for f, (t_, v_) in enumerate(kf.split(X=data, y=data.bins.values)): 
-        data.loc[v_, 'kfold'] = f 
-     
-    # drop the bins column 
-    data = data.drop("bins", axis=1) 
-    # return dataframe with folds 
-    return data 
- 
-if __name__ == "__main__": 
-    # we create a sample dataset with 15000 samples  
-    # and 100 features and 1 target 
-    X, y = datasets.make_regression( 
-        n_samples=15000, n_features=100, n_targets=1 
-    ) 
- 
-    # create a dataframe out of our numpy arrays 
-    df = pd.DataFrame( 
-        X, 
-        columns=[f"f_{i}" for i in range(X.shape[1])] 
-    ) 
-    df.loc[:, "target"] = y 
- 
-    # create folds 
-    df = create_folds(df) 
+    # Bir sonraki adım veri satırlarını rastgele karıştırmak
+    data = data.sample(frac=1).reset_index(drop=True)
+
+    # Sturges Kuralı ile bin sayısını hesapla
+    # Burada değerin tabanını (floor) alıyoruz.
+    # İsterseniz değeri yuvarlayabilirsiniz.
+    num_bins = np.floor(1 + np.log2(len(data)))
+
+    # Hedef değerlerini bin'lere ayır
+    data.loc[:, "bins"] = pd.cut(
+        data["target"], bins=num_bins, labels=False
+    )
+
+    # model_selection modülünden kfold sınıfını başlat
+    kf = model_selection.StratifiedKFold(n_splits=5)
+
+    # Yeni kfold sütununu doldur
+    # Dikkat: Burada doğrudan hedef değerlerini değil,
+    # bin'leri kullanıyoruz!
+    for f, (t_, v_) in enumerate(
+        kf.split(X=data, y=data.bins.values)
+    ):
+        data.loc[v_, 'kfold'] = f
+
+    # bins sütununu kaldır
+    data = data.drop("bins", axis=1)
+
+    # fold bilgilerini içeren DataFrame'i döndür
+    return data
+
+
+if __name__ == "__main__":
+    # 15000 örnek, 100 özellik ve 1 hedef değişken
+    # içeren örnek bir veri kümesi oluşturuyoruz
+    X, y = datasets.make_regression(
+        n_samples=15000, n_features=100, n_targets=1
+    )
+
+    # NumPy dizilerimizden bir DataFrame oluştur
+    df = pd.DataFrame(
+        X,
+        columns=[f"f_{i}" for i in range(X.shape[1])]
+    )
+
+    df.loc[:, "target"] = y
+
+    # Fold'ları oluştur
+    df = create_folds(df)
+```
 ═════════════════════════════════════════════════════════════════════════
 
-28
+## Çapraz Doğrulamanın Önemi
 
-Approaching (Almost) Any Machine Learning Problem
+Çapraz doğrulama, makine öğrenmesi modelleri oluştururken atılması gereken ilk ve en önemli adımdır.
 
-Cross-validation is the first and most essential step when it comes to building 
-machine learning models. If you want to do feature engineering, split your data first. 
-If you're going to build models, split your data first. If you have a good cross-
-validation scheme in which validation data is representative of training and real-
-world data, you will be able to build a good machine learning model which is highly 
-generalizable.  
- 
-The types of cross-validation presented in this chapter can be applied to almost any 
-machine learning problem. Still, you must keep in mind that cross-validation also 
-depends a lot on the data and you might need to adopt new forms of cross-validation 
-depending on your problem and data.  
- 
-For example, let’s say we have a problem in which we would like to build a model 
-to detect skin cancer from skin images of patients. Our task is to build a binary 
-classifier which takes an input image and predicts the probability for it being benign 
-or malignant.  
- 
-In these kinds of datasets, you might have multiple images for the same patient in 
-the training dataset. So, to build a good cross-validation system here, you must have 
-stratified k-folds, but you must also make sure that patients in training data do not 
-appear in validation data. Fortunately, scikit-learn offers a type of cross-validation 
-known as GroupKFold. Here the patients can be considered as groups. But 
-unfortunately, there is no way to combine GroupKFold with StratifiedKFold in 
-scikit-learn. So you need to do that yourself. I’ll leave it as an exercise for the reader.
+Eğer özellik mühendisliği (feature engineering) yapacaksanız, önce verilerinizi bölün.
 
-29
+Model oluşturacaksanız, önce verilerinizi bölün.
 
-Approaching (Almost) Any Machine Learning Problem
+Eğer doğrulama verilerinin hem eğitim verilerini hem de gerçek dünyadaki verileri iyi temsil ettiği sağlam bir çapraz doğrulama sisteminiz varsa, yüksek genelleme kabiliyetine (generalizability) sahip iyi bir makine öğrenmesi modeli oluşturabilirsiniz.
 
-Evaluation metrics
+Bu bölümde anlatılan çapraz doğrulama türleri, neredeyse her türlü makine öğrenmesi problemine uygulanabilir.
+
+Bununla birlikte, çapraz doğrulamanın büyük ölçüde verilere ve probleme bağlı olduğunu unutmamalısınız.
+
+Probleminize ve verilerinize bağlı olarak yeni veya farklı çapraz doğrulama yöntemleri geliştirmeniz gerekebilir.
+
+Hasta Bazlı Verilerde Çapraz Doğrulama
+
+Örneğin, hastaların cilt görüntülerinden cilt kanserini tespit etmek için bir model oluşturmak istediğimizi düşünelim.
+
+Görevimiz, bir görüntüyü girdi olarak alan ve görüntünün iyi huylu (benign) veya kötü huylu (malignant) olma olasılığını tahmin eden bir ikili sınıflandırıcı (binary classifier) oluşturmaktır.
+
+Bu tür veri kümelerinde, eğitim veri kümesinde aynı hastaya ait birden fazla görüntü bulunabilir.
+
+Dolayısıyla burada iyi bir çapraz doğrulama sistemi oluşturmak için yalnızca stratified k-fold kullanmak yeterli değildir.
+
+Aynı zamanda, eğitim verisindeki hastaların doğrulama verisinde bulunmadığından emin olmamız gerekir.
+
+Örneğin aynı hastaya ait 10 görüntü varsa, bu görüntülerin bir kısmının eğitim kümesine, geri kalanının ise doğrulama kümesine gitmesi model açısından sorun oluşturabilir.
+
+Model, hastaya özgü özellikleri öğrenerek doğrulama görüntülerinde yapay olarak yüksek performans gösterebilir. Bu nedenle aynı hastaya ait görüntülerin farklı fold'lara dağılmasını engellemek gerekir.
+
+Neyse ki scikit-learn, bu tür durumlar için GroupKFold adı verilen bir çapraz doğrulama yöntemi sunmaktadır.
+
+Burada hastalar grup (group) olarak değerlendirilebilir.
+
+Ancak scikit-learn'da GroupKFold ile StratifiedKFold'u doğrudan birleştirmenin bir yolu bulunmamaktadır.
+
+Bu nedenle böyle bir yöntemi kendiniz oluşturmanız gerekir.
+
+Yazar bu kısmı okuyucu için bir alıştırma (exercise) olarak bırakmaktadır.
+
+# Evaluation metrics
 
 When it comes to machine learning problems, you will encounter a lot of different 
 types of metrics in the real world. Sometimes, people even end up creating metrics 
@@ -1149,10 +1210,6 @@ R2
 Knowing about how the aforementioned metrics work is not the only thing we have 
 to understand. We must also know when to use which metrics, and that depends on
 
-30
-
-Approaching (Almost) Any Machine Learning Problem
-
 what kind of data and targets you have. I think it’s more about the targets and less 
 about the data.  
  
@@ -1178,10 +1235,6 @@ each, i.e. training and validation set. In both the sets, we have 50 positive an
 negative samples.
 
 3 https://www.kaggle.com/c/siim-acr-pneumothorax-segmentation
-
-31
-
-Approaching (Almost) Any Machine Learning Problem
 
 When we have an equal number of positive and negative samples in a binary 
 classification metric, we generally use accuracy, precision, recall and f1. 
@@ -1228,10 +1281,6 @@ In [X]: from sklearn import metrics
 Out[X]: 0.625 
 ═════════════════════════════════════════════════════════════════════════
 
-32
-
-Approaching (Almost) Any Machine Learning Problem
-
 Now, let’s say we change the dataset a bit such that there are 180 chest x-ray images 
 which do not have pneumothorax and only 20 with pneumothorax. Even in this 
 case, we will create the training and validation sets with the same ratio of positive 
@@ -1269,10 +1318,6 @@ and if your model accurately predicts negative class, it is a true negative.
  
 False positive (FP): Given an image, if your model predicts pneumothorax and the 
 actual target for that image is non- pneumothorax, it a false positive.
-
-33
-
-Approaching (Almost) Any Machine Learning Problem
 
 False negative (FN): Given an image, if your model predicts non-pneumothorax 
 and the actual target for that image is pneumothorax, it is a false negative. 
@@ -1321,10 +1366,6 @@ def false_positive(y_true, y_pred):
     """ 
     # initialize
 
-34
-
-Approaching (Almost) Any Machine Learning Problem
-
 fp = 0 
     for yt, yp in zip(y_true, y_pred): 
         if yt == 0 and yp == 1: 
@@ -1370,10 +1411,6 @@ If we have to define accuracy using the terms described above, we can write:
 
 Accuracy Score = (TP + TN) / (TP + TN + FP + FN)
 
-35
-
-Approaching (Almost) Any Machine Learning Problem
-
 We can now quickly implement accuracy score using TP, TN, FP and FN in python. 
 Let’s call it accuracy_v2. 
  
@@ -1418,10 +1455,6 @@ implementation.
 Now, we can move to other important metrics. 
  
 First one is precision. Precision is defined as:
-
-36
-
-Approaching (Almost) Any Machine Learning Problem
 
 Precision = TP / (TP + FP) 
  
@@ -1470,10 +1503,6 @@ Let’s try this implementation of precision.
 In [X]: l1 = [0,1,1,1,0,0,0,1] 
    ...: l2 = [0,1,0,1,0,1,0,0]
 
-37
-
-Approaching (Almost) Any Machine Learning Problem
-
 In [X]: precision(l1, l2) 
 Out[X]: 0.6666666666666666 
 ═════════════════════════════════════════════════════════════════════════ 
@@ -1517,10 +1546,6 @@ For a “good” model, our precision and recall values should be high. We see t
 the above example, the recall value is quite high. However, precision is very low! 
 Our model produces quite a lot of false positives but less false negatives. Fewer 
 false negatives are good in this type of problem because you don’t want to say that
-
-38
-
-Approaching (Almost) Any Machine Learning Problem
 
 patients do not have pneumothorax when they do. That is going to be more harmful. 
 But we do have a lot of false positives, and that’s not good either. 
@@ -1567,10 +1592,6 @@ thresholds = [0.0490937 , 0.05934905, 0.079377,
 for i in thresholds: 
     temp_prediction = [1 if x >= i else 0 for x in y_pred]
 
-39
-
-Approaching (Almost) Any Machine Learning Problem
-
 p = precision(y_true, temp_prediction) 
     r = recall(y_true, temp_prediction) 
     precisions.append(p) 
@@ -1596,10 +1617,6 @@ This precision-recall curve looks very different from what you might have seen
 on the internet. It’s because we had only 20 samples, and only 3 of them were 
 positive samples. But there’s nothing to worry. It’s the same old precision-recall 
 curve.
-
-40
-
-Approaching (Almost) Any Machine Learning Problem
 
 You will notice that it’s challenging to choose a value of threshold that gives both 
 good precision and recall values. If the threshold is too high, you have a smaller 
@@ -1644,10 +1661,6 @@ Let’s see the results of this and compare it with scikit-learn.
 In [X]: y_true = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 
    ...:           1, 0, 0, 0, 0, 0, 0, 0, 1, 0]
 
-41
-
-Approaching (Almost) Any Machine Learning Problem
-
 In [X]: y_pred = [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 
    ...:           1, 0, 0, 0, 0, 0, 0, 0, 1, 0] 
  
@@ -1690,10 +1703,6 @@ def tpr(y_true, y_pred):
 ═════════════════════════════════════════════════════════════════════════ 
  
 TPR or recall is also known as sensitivity.
-
-42
-
-Approaching (Almost) Any Machine Learning Problem
 
 And FPR or False Positive Rate, which is defined as:
 
@@ -1738,10 +1747,6 @@ Let’s calculate only two values, though: TPR and FPR.
 # empty lists to store tpr  
 # and fpr values
 
-43
-
-Approaching (Almost) Any Machine Learning Problem
-
 tpr_list = [] 
 fpr_list = [] 
  
@@ -1778,10 +1783,6 @@ We can thus get a tpr and fpr value for each threshold.
 
 Figure 3: Table for threshold, TPR and FPR values
 
-44
-
-Approaching (Almost) Any Machine Learning Problem
-
 If we plot the table as shown in figure 3, i.e. if we have TPR on the y-axis and FPR 
 on the x-axis, we will get a curve as shown in figure 4. 
  
@@ -1811,10 +1812,6 @@ learn.
  
 ═════════════════════════════════════════════════════════════════════════ 
 In [X]: from sklearn import metrics
-
-45
-
-Approaching (Almost) Any Machine Learning Problem
 
 In [X]: y_true = [0, 0, 0, 0, 1, 0, 1, 
    ...:           0, 0, 1, 0, 1, 0, 0, 1] 
@@ -1860,10 +1857,6 @@ dataset with pneumothorax (positive sample) and another random image without
 pneumothorax (negative sample), then the pneumothorax image will rank higher 
 than a non-pneumothorax image with a probability of 0.85.
 
-46
-
-Approaching (Almost) Any Machine Learning Problem
-
 After calculating probabilities and AUC, you would want to make predictions on 
 the test set. Depending on the problem and use-case, you might want to either have 
 probabilities or actual classes. If you want to have probabilities, it’s effortless. You 
@@ -1908,10 +1901,6 @@ thresholds = [0, 0.1, 0.2, 0.3, 0.4, 0.5,
 # loop over all thresholds 
 for thresh in thresholds:
 
-47
-
-Approaching (Almost) Any Machine Learning Problem
-
 # calculate predictions for a given threshold 
     temp_pred = [1 if x >= thresh else 0 for x in y_pred] 
     # calculate tp 
@@ -1935,10 +1924,6 @@ threshold, as shown in figure 6.
 Comparing the table and the ROC curve, we see that a threshold of around 0.8 is 
 quite good where we do not lose a lot of true positives and neither we have a lot of 
 false positives.
-
-48
-
-Approaching (Almost) Any Machine Learning Problem
 
 ![resim](img/p0050_fig01_resim.png)
 
@@ -1966,10 +1951,6 @@ sure and very wrong.
 import numpy as np 
  
 def log_loss(y_true, y_proba):
-
-49
-
-Approaching (Almost) Any Machine Learning Problem
 
 """ 
     Function to calculate fpr 
@@ -2018,10 +1999,6 @@ Out[X]: 0.49882711861432294
  
 We can compare this with scikit-learn:
 
-50
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 In [X]: from sklearn import metrics 
  
@@ -2065,10 +2042,6 @@ positive and then use that to calculate overall precision
 - 
 Weighted precision: same as macro but in this case, it is weighted average 
 depending on the number of items in each class
-
-51
-
-Approaching (Almost) Any Machine Learning Problem
 
 This seems complicated but is easy to understand by python implementations. Let’s 
 see how macro-averaged precision is implemented. 
@@ -2116,10 +2089,6 @@ def macro_precision(y_true, y_pred):
     return precision 
 ═════════════════════════════════════════════════════════════════════════
 
-52
-
-Approaching (Almost) Any Machine Learning Problem
-
 You will notice that it wasn’t so difficult. Similarly, we have micro-averaged 
 precision score. 
  
@@ -2165,10 +2134,6 @@ def micro_precision(y_true, y_pred):
 This isn’t difficult, either. Then what is? Nothing. Machine learning is easy.  
  
 Now, let’s look at the implementation of weighted precision.
-
-53
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 from collections import Counter 
@@ -2217,10 +2182,6 @@ def weighted_precision(y_true, y_pred):
     # total number of samples 
     overall_precision = precision / len(y_true)
 
-54
-
-Approaching (Almost) Any Machine Learning Problem
-
 return overall_precision 
 ═════════════════════════════════════════════════════════════════════════ 
  
@@ -2263,10 +2224,6 @@ precision and recall.
  
 Implementation for recall is left as an exercise for the reader and one version of F1 
 for multi-class, i.e., weighted average is implemented here.
-
-55
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 from collections import Counter 
@@ -2315,10 +2272,6 @@ def weighted_f1(y_true, y_pred):
         # add to f1 precision 
         f1 += weighted_f1
 
-56
-
-Approaching (Almost) Any Machine Learning Problem
-
 # calculate overall F1 by dividing by 
     # total number of samples 
     overall_f1 = f1 / len(y_true) 
@@ -2360,10 +2313,6 @@ We see that the confusion matrix is made up of TP, FP, FN and TN. These are the
 only values we need to calculate precision, recall, F1 score and AUC. Sometimes, 
 people also prefer calling FP as Type-I error and FN as Type-II error.
 
-57
-
-Approaching (Almost) Any Machine Learning Problem
-
 ![resim](img/p0059_fig01_resim.png)
 
 Figure 7: Confusion matrix for a binary classification task 
@@ -2393,10 +2342,6 @@ to 4 while in predicted it adds up to 3. Only 1 instance has a perfect predictio
 class 2 and 2 instances go to class 1.  
  
 A perfect confusion matrix should only be filled diagonally from left to right.
-
-58
-
-Approaching (Almost) Any Machine Learning Problem
 
 ![resim](img/p0060_fig01_resim.png)
 
@@ -2429,10 +2374,6 @@ as_cmap=True)
 sns.set(font_scale=2.5) 
 sns.heatmap(cm, annot=True, cmap=cmap, cbar=False)
 
-59
-
-Approaching (Almost) Any Machine Learning Problem
-
 plt.ylabel('Actual Labels', fontsize=20) 
 plt.xlabel('Predicted Labels', fontsize=20) 
 ═════════════════════════════════════════════════════════════════════════ 
@@ -2463,10 +2404,6 @@ Precision at k (P@k)
 Average precision at k (AP@k)
 
 4 https://www.flickr.com/photos/krakluski/2950388100 License: CC BY 2.0
-
-60
-
-Approaching (Almost) Any Machine Learning Problem
 
 - 
 Mean average precision at k (MAP@k) 
@@ -2512,10 +2449,6 @@ For example, if we have to calculate AP@3, we calculate AP@1, AP@2 and AP@3
 and then divide the sum by 3.  
  
 Let’s see its implementation.
-
-61
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 def apk(y_true, y_pred, k): 
@@ -2565,10 +2498,6 @@ In [X]: for i in range(len(y_true)):
    ...:     for j in range(1, 4): 
    ...:         print(
 
-62
-
-Approaching (Almost) Any Machine Learning Problem
-
 ...:             f""" 
    ...:             y_true={y_true[i]}, 
    ...:             y_pred={y_pred[i]}, 
@@ -2617,10 +2546,6 @@ def mapk(y_true, y_pred, k):
         # store apk values for every sample 
         apk_values.append(
 
-63
-
-Approaching (Almost) Any Machine Learning Problem
-
 apk(y_true[i], y_pred[i], k=k) 
         ) 
     # return mean of apk values list 
@@ -2667,10 +2592,6 @@ Please note that sometimes you might see different implementations of P@k and
 AP@k on the internet. For example, let’s take a look at one of these 
 implementations.
 
-64
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 # taken from: 
 # https://github.com/benhamner/Metrics/blob/ 
@@ -2716,10 +2637,6 @@ This implementation is another version of AP@k where order matters and we weigh
 the predictions. This implementation will have slightly different results from what 
 I have presented.
 
-65
-
-Approaching (Almost) Any Machine Learning Problem
-
 Now, we come to log loss for multi-label classification. This is quite easy. You 
 can convert the targets to binary format and then use a log loss for each column. In 
 the end, you can take the average of log loss in each column. This is also known as 
@@ -2762,10 +2679,6 @@ def mean_absolute_error(y_true, y_pred):
     # return mean error 
     return error / len(y_true) 
 ═════════════════════════════════════════════════════════════════════════
-
-66
-
-Approaching (Almost) Any Machine Learning Problem
 
 Similarly, we have squared error and mean squared error (MSE).
 
@@ -2812,10 +2725,6 @@ def mean_squared_log_error(y_true, y_pred):
     :param y_pred: list of real numbers, predicted values 
     :return: mean squared logarithmic error
 
-67
-
-Approaching (Almost) Any Machine Learning Problem
-
 """ 
     # initialize error at 0 
     error = 0 
@@ -2861,10 +2770,6 @@ def mean_percentage_error(y_true, y_pred):
 And an absolute version of the same (and more common version) is known as mean 
 absolute percentage error or MAPE.
 
-68
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 import numpy as np 
  
@@ -2905,10 +2810,6 @@ implementation makes things more clear.
 ![resim](img/p0070_fig01_resim.png)
 
 Figure 10: Formula for R-squared
-
-69
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 import numpy as np 
@@ -2957,10 +2858,6 @@ def mae_np(y_true, y_pred):
     return np.mean(np.abs(y_true - y_pred)) 
 ═════════════════════════════════════════════════════════════════════════
 
-70
-
-Approaching (Almost) Any Machine Learning Problem
-
 I could have implemented all the metrics this way but to learn it’s better to look at 
 low-level implementation. Once you learn the low-level implementation in pure 
 python, and without using a lot of numpy, you can easily convert it to numpy and 
@@ -3003,10 +2900,6 @@ TP * TN - FP * FN
 MCC = ─────────────────────────────────────
 
 [ (TP + FP) * (FN + TN) * (FP + TN) * (TP + FN) ] ^ (0.5)
-
-71
-
-Approaching (Almost) Any Machine Learning Problem
 
 We see that MCC takes into consideration TP, FP, TN and FN and thus can be used 
 for problems where classes are skewed. You can quickly implement it in python by 
@@ -3052,10 +2945,6 @@ using any of the supervised learning metrics.
 Once we understand what metric to use for a given problem, we can start looking 
 more deeply into our models for improvements.
 
-72
-
-Approaching (Almost) Any Machine Learning Problem
-
 Arranging machine learning projects 
  
 Finally, we are at a stage where we can start building our very first machine learning 
@@ -3095,10 +2984,6 @@ The inside of the project folder should look something like the following.
 ├── README.md 
 └── LICENSE
 
-73
-
-Approaching (Almost) Any Machine Learning Problem
-
 Let’s see what these folders and file are about. 
  
 input/: This folder consists of all the input files and data for your machine learning 
@@ -3136,10 +3021,6 @@ We can use pandas to read this data format easily.
 Please note that even though Figure 1 shows all pixel values as zeros, it is not the 
 case.
 
-74
-
-Approaching (Almost) Any Machine Learning Problem
-
 ![resim](img/p0076_fig01_resim.png)
 
 Figure 1: MNIST dataset in CSV format 
@@ -3165,10 +3046,6 @@ mnist_train.csv.
 How should these files look like for such a project? 
  
 The first script that one should create is create_folds.py.
-
-75
-
-Approaching (Almost) Any Machine Learning Problem
 
 This will create a new file in the input/ folder called mnist_train_folds.csv, and it’s 
 the same as mnist_train.csv. The only differences are that this CSV is shuffled and 
@@ -3216,10 +3093,6 @@ def run(fold):
     # create predictions for validation samples 
     preds = clf.predict(x_valid)
 
-76
-
-Approaching (Almost) Any Machine Learning Problem
-
 # calculate & print accuracy 
     accuracy = metrics.accuracy_score(y_valid, preds) 
     print(f"Fold={fold}, Accuracy={accuracy}") 
@@ -3263,10 +3136,6 @@ MODEL_OUTPUT = "../models/"
  
 And we make some changes to our training script too. The training file utilizes the 
 config file now. Thus making it easier to change data or the model output.
-
-77
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 # train.py 
@@ -3316,10 +3185,6 @@ def run(fold):
  
     # save the model
 
-78
-
-Approaching (Almost) Any Machine Learning Problem
-
 joblib.dump( 
         clf,  
         os.path.join(config.MODEL_OUTPUT, f"dt_{fold}.bin") 
@@ -3366,10 +3231,6 @@ if __name__ == "__main__":
  
     # run the fold specified by command line arguments
 
-79
-
-Approaching (Almost) Any Machine Learning Problem
-
 run(fold=args.fold) 
 ═════════════════════════════════════════════════════════════════════════ 
  
@@ -3413,10 +3274,6 @@ still are limited by a few things, for example, the model. The model is hardcode
 the training script, and the only way to change it is to modify the script. So, we will 
 create a new python script called model_dispatcher.py. model_dispatcher.py, as the 
 name suggests, will dispatch our models to our training script.
-
-80
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 # model_dispatcher.py 
@@ -3464,10 +3321,6 @@ def run(fold, model):
  
     # drop the label column from dataframe and convert it to 
     # a numpy array by using .values.
-
-81
-
-Approaching (Almost) Any Machine Learning Problem
 
 # target is label column in the dataframe 
     x_train = df_train.drop("label", axis=1).values 
@@ -3517,10 +3370,6 @@ if __name__ == "__main__":
     ) 
 ═════════════════════════════════════════════════════════════════════════
 
-82
-
-Approaching (Almost) Any Machine Learning Problem
-
 There are a few major changes to train.py:
 
 • 
@@ -3569,10 +3418,6 @@ models = {
  
 Let’s run this code.
 
-83
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 ❯ python train.py --fold 0 --model rf 
 Fold=0, Accuracy=0.9670833333333333 
@@ -3615,10 +3460,6 @@ from. Writing good, understandable code is an essential quality one can have, an
 many data scientists ignore it. If you work on a project that others can understand 
 and use without consulting you, you save their time and your own time and can 
 invest that time to improve your project or work on a new one.
-
-84
-
-Approaching (Almost) Any Machine Learning Problem
 
 Approaching categorical variables 
  
@@ -3663,10 +3504,6 @@ Features Encoding Challenge from Kaggle. There were two challenges, and we will
 be using the data from the second challenge as it had more variables and was more 
 difficult than its previous version.
 
-85
-
-Approaching (Almost) Any Machine Learning Problem
-
 Let’s take a look at the data.
 
 ![resim](img/p0087_fig01_resim.png)
@@ -3697,10 +3534,6 @@ precision and recall too, but AUC combines these two metrics. Thus, we will be
 using AUC to evaluate the model that we build on this dataset.
 
 5 https://www.kaggle.com/c/cat-in-the-dat-ii
-
-86
-
-Approaching (Almost) Any Machine Learning Problem
 
 ![resim](img/p0088_fig01_resim.png)
 
@@ -3738,10 +3571,6 @@ We have to know that computers do not understand text data and thus, we need to
 convert these categories to numbers. A simple way of doing this would be to create 
 a dictionary that maps these values to numbers starting from 0 to N-1, where N is 
 the total number of categories in a given feature.
-
-87
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 mapping = { 
@@ -3790,10 +3619,6 @@ Value counts after mapping:
 Name: ord_2, dtype: int64 
 ═════════════════════════════════════════════════════════════════════════
 
-88
-
-Approaching (Almost) Any Machine Learning Problem
-
 This type of encoding of categorical variables is known as Label Encoding, i.e., 
 we are encoding every category as a numerical label.
 
@@ -3840,10 +3665,6 @@ neural networks as they expect data to be normalized (or standardized).
 
 For these types of models, we can binarize the data.
 
-89
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 Freezing    --> 0 --> 0 0 0 
 Warm        --> 1 --> 0 0 1 
@@ -3885,10 +3706,6 @@ Currently, we are looking at only three samples in the dataset. Let’s convert 
 binary representation where we have three items for each sample.  
  
 These three items are the three features.
-
-90
-
-Approaching (Almost) Any Machine Learning Problem
 
 Index 
 Feature_0 
@@ -3950,10 +3767,6 @@ which keys are indices of rows and columns and value is 1:
 1 
 ═════════════════════════════════════════════════════════════════════════
 
-91
-
-Approaching (Almost) Any Machine Learning Problem
-
 A notation like this will occupy much less memory because it has to store only four 
 values (in this case). The total memory used will be 8x4 = 32 bytes. Any numpy 
 array can be converted to a sparse matrix by simple python code. 
@@ -3999,10 +3812,6 @@ dataset where we are using count-based features.
 import numpy as np 
 from scipy import sparse
 
-92
-
-Approaching (Almost) Any Machine Learning Problem
-
 # number of rows 
 n_rows = 10000 
  
@@ -4046,10 +3855,6 @@ in our features.
 Please note that there are many different ways of representing a sparse matrix. Here 
 I have shown only one such (and probably the most popular) way. Going deep into 
 these is beyond the scope of this book and is left as an exercise to the reader.
-
-93
-
-Approaching (Almost) Any Machine Learning Problem
 
 Even though the sparse representation of binarized features takes much less 
 memory than its dense representation, there is another transformation for 
@@ -4134,10 +3939,6 @@ Hot
 2 
 Lava hot
 
-94
-
-Approaching (Almost) Any Machine Learning Problem
-
 And we had three features for each sample. But one-hot vectors, in this case, are of 
 size 6. Thus, we have six features instead of 3.
 
@@ -4205,10 +4006,6 @@ full_size = (
 print(f"Full size of sparse array: {full_size}") 
 ═════════════════════════════════════════════════════════════════════════
 
-95
-
-Approaching (Almost) Any Machine Learning Problem
-
 This will print the sizes as: 
  
 Size of dense array: 144 
@@ -4256,10 +4053,6 @@ full_size = (
 print(f"Full size of sparse array: {full_size}") 
 ═════════════════════════════════════════════════════════════════════════
 
-96
-
-Approaching (Almost) Any Machine Learning Problem
-
 And this code prints: 
  
 Size of dense array: 8000000000 
@@ -4302,10 +4095,6 @@ Lava Hot        64840
 Warm           124239 
 Name: id, dtype: int64 
 ═════════════════════════════════════════════════════════════════════════
-
-97
-
-Approaching (Almost) Any Machine Learning Problem
 
 If we just replace ord_2 column with its count values, we have converted it to a 
 feature which is kind of numerical now. We can create a new column or replace this 
@@ -4354,10 +4143,6 @@ Out[X]:
 10       Expert     Lava Hot  15078 
 11       Expert         Warm  28900
 
-98
-
-Approaching (Almost) Any Machine Learning Problem
-
 12  Grandmaster  Boiling Hot  13623 
 13  Grandmaster         Cold  15464 
 14  Grandmaster     Freezing  22818 
@@ -4403,10 +4188,6 @@ Out[X]:
 599999    Contributor_Boiling Hot 
 Name: new_feature, Length: 600000, dtype: object 
 ═════════════════════════════════════════════════════════════════════════
-
-99
-
-Approaching (Almost) Any Machine Learning Problem
 
 Here, we have combined ord_1 and ord_2 by an underscore, and before that, we 
 convert these columns to string types. Note that NaN will also convert to string. But 
@@ -4455,10 +4236,6 @@ convert them to integers by applying label encoding using LabelEncoder
 of scikit-learn or by using a mapping dictionary. If you didn’t fill up NaN 
 values with something, you might have to take care of them in this step
 
-100
-
-Approaching (Almost) Any Machine Learning Problem
-
 • 
 create one-hot encoding. Yes, you can skip binarization! 
 • 
@@ -4505,10 +4282,6 @@ Cold            97822
 Boiling Hot     84790 
 Hot             67508
 
-101
-
-Approaching (Almost) Any Machine Learning Problem
-
 Lava Hot        64840 
 NONE            18075 
 Name: ord_2, dtype: int64 
@@ -4542,10 +4315,6 @@ Figure 3: An illustration of a data set with different features and no targets w
 
 assume a new value when it’s seen in the test set or live data
 
-102
-
-Approaching (Almost) Any Machine Learning Problem
-
 When we have a dataset like as shown in figure 3, we can build a simple model 
 that’s trained on all features except “f3”. Thus, you will be creating a model that 
 predicts “f3” when it’s not known or not available in training. I can’t say if this kind 
@@ -4575,10 +4344,6 @@ set.
 Figure 4: A simple concatenation of training and test sets to learn about the categories present in the
 
 test set but not in the training set or rare categories in the training set.
-
-103
-
-Approaching (Almost) Any Machine Learning Problem
 
 How this works is can be understood easily by looking at figure 4 and the following 
 code. 
@@ -4627,10 +4392,6 @@ train = data[data.target != -1].reset_index(drop=True)
 test = data[data.target == -1].reset_index(drop=True) 
 ═════════════════════════════════════════════════════════════════════════
 
-104
-
-Approaching (Almost) Any Machine Learning Problem
-
 This trick works when you have a problem where you already have the test dataset. 
 It must be noted that this trick will not work in a live setting. For example, let’s say 
 you are in a company that builds a real-time bidding solution (RTB). RTB systems 
@@ -4672,10 +4433,6 @@ Let’s see the value counts in ord_4 column after filling NaN values:
  
 ═════════════════════════════════════════════════════════════════════════ 
 In [X]: df.ord_4.fillna("NONE").value_counts()
-
-105
-
-Approaching (Almost) Any Machine Learning Problem
 
 Out[X]: 
 N       39978 
@@ -4723,10 +4480,6 @@ In [X]: df.ord_4.value_counts()
 Out[X]: 
 N       39978
 
-106
-
-Approaching (Almost) Any Machine Learning Problem
-
 P       37890 
 Y       36657 
 A       36633 
@@ -4769,10 +4522,6 @@ Before going to any kind of model building, it’s essential to take care of cro
 validation. We have already seen the label/target distribution, and we know that it 
 is a binary classification problem with skewed targets. Thus, we will be using 
 StratifiedKFold to split the data here.
-
-107
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 # create_folds.py 
@@ -4822,10 +4571,6 @@ Out[X]:
 Name: kfold, dtype: int64 
 ═════════════════════════════════════════════════════════════════════════
 
-108
-
-Approaching (Almost) Any Machine Learning Problem
-
 All folds have 120000 samples. This is expected as training data has 600000 
 samples, and we made five folds. So far, so good. 
  
@@ -4870,10 +4615,6 @@ we build our models, we will have the same distribution of targets across every 
  
 One of the simplest models we can build is by one-hot encoding all the data and 
 using logistic regression.
-
-109
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 # ohe_logres.py 
@@ -4923,10 +4664,6 @@ def run(fold):
     # initialize Logistic Regression model 
     model = linear_model.LogisticRegression()
 
-110
-
-Approaching (Almost) Any Machine Learning Problem
-
 # fit model on training data (ohe) 
     model.fit(x_train, df_train.target.values) 
  
@@ -4972,10 +4709,6 @@ regression
   extra_warning_msg=_LOGISTIC_SOLVER_CONVERGENCE_MSG) 
 0.7847865042255127 
 ═════════════════════════════════════════════════════════════════════════
-
-111
-
-Approaching (Almost) Any Machine Learning Problem
 
 There are a few warnings. It seems logistic regression did not converge for the max 
 number of iterations. We didn’t play with the parameters, so that is fine. We see 
@@ -5023,10 +4756,6 @@ Fold = 0, AUC = 0.7847865042255127
 Fold = 1, AUC = 0.7853553605899214 
 Fold = 2, AUC = 0.7879321942914885
 
-112
-
-Approaching (Almost) Any Machine Learning Problem
-
 Fold = 3, AUC = 0.7870315929550808 
 Fold = 4, AUC = 0.7864668243125608 
 ═════════════════════════════════════════════════════════════════════════ 
@@ -5072,10 +4801,6 @@ def run(fold):
     for col in features: 
          
         # initialize LabelEncoder for each feature column
-
-113
-
-Approaching (Almost) Any Machine Learning Problem
 
 lbl = preprocessing.LabelEncoder() 
          
@@ -5123,10 +4848,6 @@ if __name__ == "__main__":
 We use random forest from scikit-learn and have removed one-hot encoding. 
 Instead of one-hot encoding, we use label encoding. Scores are as follows:
 
-114
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 ❯ python lbl_rf.py 
 Fold = 0, AUC = 0.7167390828113697 
@@ -5171,10 +4892,6 @@ def run(fold):
     # all columns are features except id, target and kfold columns 
     features = [ 
         f for f in df.columns if f not in ("id", "target", "kfold")
-
-115
-
-Approaching (Almost) Any Machine Learning Problem
 
 ] 
  
@@ -5223,10 +4940,6 @@ Approaching (Almost) Any Machine Learning Problem
     # initialize random forest model 
     model = ensemble.RandomForestClassifier(n_jobs=-1)
 
-116
-
-Approaching (Almost) Any Machine Learning Problem
-
 # fit model on training data (ohe) 
     model.fit(x_train, df_train.target.values) 
  
@@ -5271,10 +4984,6 @@ tree-based algorithm, we will use label encoded data.
 ═════════════════════════════════════════════════════════════════════════ 
 # lbl_xgb.py 
 import pandas as pd
-
-117
-
-Approaching (Almost) Any Machine Learning Problem
 
 import xgboost as xgb 
  
@@ -5324,10 +5033,6 @@ def run(fold):
     # initialize xgboost model 
     model = xgb.XGBClassifier(
 
-118
-
-Approaching (Almost) Any Machine Learning Problem
-
 n_jobs=-1,  
         max_depth=7, 
         n_estimators=200 
@@ -5374,10 +5079,6 @@ and we can probably improve this further with more tuning of hyperparameters.
 You can also try some feature engineering, dropping certain columns which don’t 
 add any value to the model, etc. But it seems like there is not much we can do here
 
-119
-
-Approaching (Almost) Any Machine Learning Problem
-
 to demonstrate improvements in the model. Let’s change the dataset to another 
 dataset with a lot of categorical variables. One more famous dataset is US adult 
 census data. The dataset contains some features, and your job is to predict the 
@@ -5418,10 +5119,6 @@ capital.loss
 hours.per.week
 
 6 https://archive.ics.uci.edu/ml/datasets/adult
-
-120
-
-Approaching (Almost) Any Machine Learning Problem
 
 • 
 native.country 
@@ -5472,10 +5169,6 @@ from sklearn import linear_model
 from sklearn import metrics 
 from sklearn import preprocessing
 
-121
-
-Approaching (Almost) Any Machine Learning Problem
-
 def run(fold): 
     # load the full training data with folds 
     df = pd.read_csv("../input/adult_folds.csv") 
@@ -5524,10 +5217,6 @@ def run(fold):
         [df_train[features], df_valid[features]], 
         axis=0
 
-122
-
-Approaching (Almost) Any Machine Learning Problem
-
 ) 
     ohe.fit(full_data[features]) 
  
@@ -5574,10 +5263,6 @@ Fold = 4, AUC = 0.8728581541840037
 This is a very good AUC for a model which is that simple! 
  
 Let’s try the label encoded xgboost without tuning any of hyperparameters now.
-
-123
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 # lbl_xgb.py 
@@ -5627,10 +5312,6 @@ def run(fold):
          
         # initialize LabelEncoder for each feature column
 
-124
-
-Approaching (Almost) Any Machine Learning Problem
-
 lbl = preprocessing.LabelEncoder() 
          
         # fit label encoder on all data 
@@ -5678,10 +5359,6 @@ if __name__ == "__main__":
  
 Let’s run this!
 
-125
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 ❯ python lbl_xgb.py 
 Fold = 0, AUC = 0.8800810634234078 
@@ -5726,10 +5403,6 @@ def run(fold):
     df = pd.read_csv("../input/adult_folds.csv") 
  
     # list of numerical columns
-
-126
-
-Approaching (Almost) Any Machine Learning Problem
 
 num_cols = [ 
         "fnlwgt", 
@@ -5779,10 +5452,6 @@ num_cols = [
  
     # get training data
 
-127
-
-Approaching (Almost) Any Machine Learning Problem
-
 x_train = df_train[features].values 
  
     # get validation data 
@@ -5828,10 +5497,6 @@ Let’s run this script now!
 ❯ python lbl_xgb_num.py 
 Fold = 0, AUC = 0.9209790185449889 
 Fold = 1, AUC = 0.9247157449144706
-
-128
-
-Approaching (Almost) Any Machine Learning Problem
 
 Fold = 2, AUC = 0.9269329887598243 
 Fold = 3, AUC = 0.9119349082169275 
@@ -5879,10 +5544,6 @@ def feature_engineering(df, cat_cols):
  
 def run(fold): 
     # load the full training data with folds
-
-129
-
-Approaching (Almost) Any Machine Learning Problem
 
 df = pd.read_csv("../input/adult_folds.csv") 
  
@@ -5932,10 +5593,6 @@ df = pd.read_csv("../input/adult_folds.csv")
              
             # fit label encoder on all data
 
-130
-
-Approaching (Almost) Any Machine Learning Problem
-
 lbl.fit(df[col]) 
  
             # transform all the data 
@@ -5982,10 +5639,6 @@ This is a very naïve way of creating features from categorical columns. One sho
 take a look at the data and see which combinations make the most sense. If you use 
 this method, you might end up creating a lot of features, and in that case, you will
 
-131
-
-Approaching (Almost) Any Machine Learning Problem
-
 need to use some kind of feature selection to select the best features. We will read 
 more about feature selection later. Let’s see the scores now. 
  
@@ -6028,10 +5681,6 @@ variables in each fold which are not derived from the same fold. And then when
 you fit your model, you must use the same folds again. Target encoding for unseen 
 test data can be derived from the full training data or can be an average of all the 5 
 folds.
-
-132
-
-Approaching (Almost) Any Machine Learning Problem
 
 Let’s see how we can use target encoding on the same adult dataset so that we can 
 compare. 
@@ -6081,10 +5730,6 @@ def mean_target_encoding(data):
  
     # fill all NaN values with NONE
 
-133
-
-Approaching (Almost) Any Machine Learning Problem
-
 # note that I am converting all columns to "strings" 
     # it doesnt matter because all are categories 
     for col in features: 
@@ -6133,10 +5778,6 @@ def run(df, fold):
     # note that folds are same as before 
     # get training data using folds
 
-134
-
-Approaching (Almost) Any Machine Learning Problem
-
 df_train = df[df.kfold != fold].reset_index(drop=True) 
  
     # get validation data using folds 
@@ -6184,10 +5825,6 @@ if __name__ == "__main__":
  
     # run training and validation for 5 folds
 
-135
-
-Approaching (Almost) Any Machine Learning Problem
-
 for fold_ in range(5): 
         run(df, fold_) 
 ═════════════════════════════════════════════════════════════════════════ 
@@ -6229,10 +5866,6 @@ thousands of categories. This will create huge matrices and will take a long tim
 us to train complicated models. We can thus represent them by vectors with float 
 values instead.
 
-136
-
-Approaching (Almost) Any Machine Learning Problem
-
 The idea is super simple. You have an embedding layer for each categorical feature. 
 So, every category in a column can now be mapped to an embedding (like mapping 
 words to embeddings in natural language processing). You then reshape these 
@@ -6257,10 +5890,6 @@ import pandas as pd
 import numpy as np 
 from sklearn import metrics, preprocessing 
 from tensorflow.keras import layers
-
-137
-
-Approaching (Almost) Any Machine Learning Problem
 
 from tensorflow.keras import optimizers 
 from tensorflow.keras.models import Model, load_model 
@@ -6310,10 +5939,6 @@ def create_model(data, catcols):
  
         # reshape the input to the dimension of embedding
 
-138
-
-Approaching (Almost) Any Machine Learning Problem
-
 # this becomes our output layer for current feature 
         out = layers.Reshape(target_shape=(embed_dim, ))(out) 
  
@@ -6361,10 +5986,6 @@ Approaching (Almost) Any Machine Learning Problem
  
 def run(fold): 
     # load the full training data with folds
-
-139
-
-Approaching (Almost) Any Machine Learning Problem
 
 df = pd.read_csv("../input/cat_train_folds.csv") 
  
@@ -6414,10 +6035,6 @@ df = pd.read_csv("../input/cat_train_folds.csv")
     model.fit(xtrain, 
               ytrain_cat,
 
-140
-
-Approaching (Almost) Any Machine Learning Problem
-
 validation_data=(xvalid, yvalid_cat), 
               verbose=1, 
               batch_size=1024, 
@@ -6450,10 +6067,6 @@ size is the same as the number of unique categories, we have one-hot-encoding.
 This chapter is basically all about feature engineering. Let’s see how you can do 
 some more feature engineering when it comes to numerical features and 
 combination of different types of features in the next chapter.
-
-141
-
-Approaching (Almost) Any Machine Learning Problem
 
 Feature engineering
 
@@ -6502,10 +6115,6 @@ df.loc[:, 'weekofyear'] = df['datetime_column'].dt.weekofyear
 df.loc[:, 'month'] = df['datetime_column'].dt.month 
 df.loc[:, 'dayofweek'] = df['datetime_column'].dt.dayofweek
 
-142
-
-Approaching (Almost) Any Machine Learning Problem
-
 df.loc[:, 'weekend'] = (df.datetime_column.dt.weekday >=5).astype(int) 
 df.loc[:, 'hour'] = df['datetime_column'].dt.hour 
 ═════════════════════════════════════════════════════════════════════════ 
@@ -6541,10 +6150,6 @@ Suppose we have a dataframe that looks like the following:
 ![resim](img/p0144_fig01_resim.png)
 
 Figure 1: A sample dataframe with categorical and date features
-
-143
-
-Approaching (Almost) Any Machine Learning Problem
 
 In figure 1, we see that we have a date column, and we can easily extract features 
 like the year, month, quarter, etc. from that. Then we have a customer_id column 
@@ -6596,10 +6201,6 @@ def generate_features(df):
     return agg_df 
 ═════════════════════════════════════════════════════════════════════════
 
-144
-
-Approaching (Almost) Any Machine Learning Problem
-
 Please note that in the above function, we have skipped the categorical variables, 
 but you can use them in the same way as other aggregates.
 
@@ -6637,10 +6238,6 @@ Kstat
 Percentile 
 - 
 Quantile
-
-145
-
-Approaching (Almost) Any Machine Learning Problem
 
 - 
 Peak to peak 
@@ -6688,10 +6285,6 @@ The time series data (list of values) can be converted to a lot of features.
  
 A python library called tsfresh is instrumental in this case.
 
-146
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 from tsfresh.feature_extraction import feature_calculators as fc 
  
@@ -6727,10 +6320,6 @@ Which gives a dataframe, as shown in figure 3.
 ![resim](img/p0148_fig01_resim.png)
 
 Figure 3: A random dataframe with two numerical features
-
-147
-
-Approaching (Almost) Any Machine Learning Problem
 
 And we can create two-degree polynomial features using PolynomialFeatures from 
 scikit-learn. 
@@ -6769,10 +6358,6 @@ Figure 4: A sample dataframe with polynomial features
 So, now we have created some polynomial features. If you create third-degree 
 polynomial features, you will end up with nine features in total. The more the
 
-148
-
-Approaching (Almost) Any Machine Learning Problem
-
 number of features, the more the number of polynomial features and you must also 
 remember that if you have a lot of samples in the dataset, it is going to take a while 
 creating these kinds of features.
@@ -6800,10 +6385,6 @@ Which generates two new features in the dataframe, as shown in figure 6.
 
 Figure 6: Binning numerical features
 
-149
-
-Approaching (Almost) Any Machine Learning Problem
-
 When you bin, you can use both the bin and the original feature. We will learn a bit 
 more about selecting features later in this chapter. Binning also enables you to treat 
 numerical features as categorical. 
@@ -6825,10 +6406,6 @@ The values in column f_3 range from 0 to 10000 and a histogram is shown in figur
 ![resim](img/p0151_fig02_resim.png)
 
 Figure 8: Histogram of feature f_3.
-
-150
-
-Approaching (Almost) Any Machine Learning Problem
 
 And we can apply log(1 + x) to this column to reduce its variance. Figure 9 shows 
 what happens to the histogram when the log transformation is applied.
@@ -6860,10 +6437,6 @@ When dealing with both categorical and numerical variables, you might encounter
 missing values. We saw some ways to handle missing values in categorical features 
 in the previous chapter, but there are many more ways to handle missing/NaN 
 values. This is also considered feature engineering.
-
-151
-
-Approaching (Almost) Any Machine Learning Problem
 
 For categorical features, let’s keep it super simple. If you ever encounter missing 
 values in categorical features, treat is as a new category! As simple as this is, it 
@@ -6897,10 +6470,6 @@ from sklearn import impute
 # create a random numpy array with 10 samples 
 # and 6 features and values ranging from 1 to 15 
 X = np.random.randint(1, 15, (10, 6))
-
-152
-
-Approaching (Almost) Any Machine Learning Problem
 
 # convert the array to float 
 X = X.astype(float) 
@@ -6938,17 +6507,9 @@ create features like items per store. Now, this is one of the features that is n
 discussed above. These kinds of features cannot be generalized and come purely 
 from domain, data and business knowledge. Look at the data and see what fits and
 
-153
-
-Approaching (Almost) Any Machine Learning Problem
-
 create features accordingly. And always remember to scale or normalize your 
 features if you are using linear models like logistic regression or a model like SVM. 
 Tree-based models will always work fine without any normalization of features.
-
-154
-
-Approaching (Almost) Any Machine Learning Problem
 
 Feature selection
 
@@ -6992,10 +6553,6 @@ y = data["target"]
  
 # convert to pandas dataframe
 
-155
-
-Approaching (Almost) Any Machine Learning Problem
-
 df = pd.DataFrame(X, columns=col_names) 
 # introduce a highly correlated column 
 df.loc[:, "MedInc_Sqrt"] = df.MedInc.apply(np.sqrt) 
@@ -7030,10 +6587,6 @@ This is a particularly useful feature selection technique in natural language
 processing when we have a bag of words or tf-idf based features. It’s best to create 
 a wrapper for univariate feature selection that you can use for almost any new 
 problem.
-
-156
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 from sklearn.feature_selection import chi2 
@@ -7083,10 +6636,6 @@ class UnivariateFeatureSelction:
                 valid_scoring[scoring], 
                 k=n_features
 
-157
-
-Approaching (Almost) Any Machine Learning Problem
-
 ) 
         elif isinstance(n_features, float): 
             self.selection = SelectPercentile( 
@@ -7131,10 +6680,6 @@ The simplest form of feature selection that uses a model for selection is known 
 greedy feature selection. In greedy feature selection, the first step is to choose a 
 model. The second step is to select a loss/scoring function. And the third and final 
 step is to iteratively evaluate each feature and add it to the list of “good” features if
-
-158
-
-Approaching (Almost) Any Machine Learning Problem
 
 it improves loss/score. It can’t get simpler than this. But you must keep in mind that 
 this is known as greedy feature selection for a reason. This feature selection process 
@@ -7182,10 +6727,6 @@ class GreedyFeatureSelection:
         # and calculate AUC on same data 
         # again: BEWARE 
         # you can choose any model that suits your data
-
-159
-
-Approaching (Almost) Any Machine Learning Problem
 
 model = linear_model.LogisticRegression() 
         model.fit(X, y) 
@@ -7235,10 +6776,6 @@ model = linear_model.LogisticRegression()
  
             # if we have selected a feature, add it
 
-160
-
-Approaching (Almost) Any Machine Learning Problem
-
 # to the good feature list and update best scores list 
             if this_feature != None: 
                 good_features.append(this_feature) 
@@ -7284,10 +6821,6 @@ offers the least value? Well, if we use models like linear support vector machin
 the importance of the features. In case of any tree-based models, we get feature 
 importance in place of coefficients. In each iteration, we can eliminate the least
 
-161
-
-Approaching (Almost) Any Machine Learning Problem
-
 important feature and keep eliminating it until we reach the number of features 
 needed. So, yes, we have the ability to decide how many features we want to keep.
 
@@ -7316,10 +6849,6 @@ data = fetch_california_housing()
 X = data["data"] 
 col_names = data["feature_names"] 
 y = data["target"]
-
-162
-
-Approaching (Almost) Any Machine Learning Problem
 
 # initialize the model 
 model = LinearRegression() 
@@ -7365,10 +6894,6 @@ model = RandomForestRegressor()
 model.fit(X, y) 
 ═════════════════════════════════════════════════════════════════════════
 
-163
-
-Approaching (Almost) Any Machine Learning Problem
-
 Feature importance from random forest (or any model) can be plotted as follows. 
  
 ═════════════════════════════════════════════════════════════════════════ 
@@ -7394,10 +6919,6 @@ to train the model on chosen features. Scikit-learn also offers SelectFromModel
 class that helps you choose features directly from a given model. You can also 
 specify the threshold for coefficients or feature importance if you want and the 
 maximum number of features you want to select.
-
-164
-
-Approaching (Almost) Any Machine Learning Problem
 
 Take a look at the following snippet where we select the features using default 
 parameters in SelectFromModel. 
@@ -7444,16 +6965,8 @@ LightGBM or CatBoost. The feature importance function names might be different
 and may produce results in a different format, but the usage will remain the same. 
 In the end, you must be careful when doing feature selection. Select features on
 
-165
-
-Approaching (Almost) Any Machine Learning Problem
-
 training data and validate the model on validation data for proper selection of 
 features without overfitting the model.
-
-166
-
-Approaching (Almost) Any Machine Learning Problem
 
 Hyperparameter optimization
 
@@ -7497,10 +7010,6 @@ for a in range(1, 11):
             if accuracy > best_accuracy: 
                 best_accuracy = accuracy 
                 best_parameters["a"] = a
-
-167
-
-Approaching (Almost) Any Machine Learning Problem
 
 best_parameters["b"] = b 
                 best_parameters["c"] = c 
@@ -7546,10 +7055,6 @@ can say that n_estimators can be 100, 200, 250, 300, 400, 500; max_depth can be
 of parameters, but it would take a lot of time for computation if the dataset is too 
 large. We can make this grid search work by creating three for loops like before and
 
-168
-
-Approaching (Almost) Any Machine Learning Problem
-
 calculating the score on the validation set. It must also be noted that if you have k-
 fold cross-validation, you need even more loops which implies even more time to 
 find the perfect parameters. Grid search is therefore not very popular. Let’s look at 
@@ -7583,10 +7088,6 @@ if __name__ == "__main__":
     # note that there is no id column in this dataset
 
 7 https://www.kaggle.com/iabhishekofficial/mobile-price-classification
-
-169
-
-Approaching (Almost) Any Machine Learning Problem
 
 # here we have training features 
     X = df.drop("price_range", axis=1).values 
@@ -7634,10 +7135,6 @@ print(f"\t{param_name}: {best_parameters[param_name]}")
 ═════════════════════════════════════════════════════════════════════════ 
  
 This prints a lot of stuff, let’s look at the last few lines.
-
-170
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 [CV]  criterion=entropy, max_depth=15, n_estimators=500, score=0.895, 
@@ -7688,10 +7185,6 @@ if __name__ == "__main__":
     # i am using random forest with n_jobs=-1 
     # n_jobs=-1 => use all cores
 
-171
-
-Approaching (Almost) Any Machine Learning Problem
-
 classifier = ensemble.RandomForestClassifier(n_jobs=-1) 
  
     # define a grid of parameters 
@@ -7741,10 +7234,6 @@ even improved the results a little bit.
 Best score: 0.8905 
 Best parameters set:
 
-172
-
-Approaching (Almost) Any Machine Learning Problem
-
 criterion: entropy 
  
 max_depth: 25 
@@ -7793,10 +7282,6 @@ if __name__ == '__main__':
  
     # Load the training file
 
-173
-
-Approaching (Almost) Any Machine Learning Problem
-
 train = pd.read_csv('../input/train.csv') 
      
     # we dont need ID columns 
@@ -7844,10 +7329,6 @@ train = pd.read_csv('../input/train.csv')
     svm_model = SVC() 
      
     # Create the pipeline
-
-174
-
-Approaching (Almost) Any Machine Learning Problem
 
 clf = pipeline.Pipeline( 
         [ 
@@ -7898,10 +7379,6 @@ print("\t%s: %r" % (param_name, best_parameters[param_name]))
     preds = best_model.predict(...) 
 ═════════════════════════════════════════════════════════════════════════
 
-175
-
-Approaching (Almost) Any Machine Learning Problem
-
 The pipeline shown here has SVD (Singular Value Decomposition), standard 
 scaling and an SVM (Support Vector Machines) model. Please note that you won’t 
 be able to run the above code as it is as training data is not available. 
@@ -7944,10 +7421,6 @@ def optimize(params, param_names, x, y):
     The main optimization function.  
     This function takes all the arguments from the search space 
     and training features and targets. It then initializes
-
-176
-
-Approaching (Almost) Any Machine Learning Problem
 
 the models by setting the chosen parameters and runs  
     cross-validation and returns a negative accuracy score 
@@ -7997,10 +7470,6 @@ the models by setting the chosen parameters and runs
  
 if __name__ == "__main__":
 
-177
-
-Approaching (Almost) Any Machine Learning Problem
-
 # read the training data 
     df = pd.read_csv("../input/mobile_train.csv") 
  
@@ -8049,10 +7518,6 @@ Approaching (Almost) Any Machine Learning Problem
         y=y 
     )
 
-178
-
-Approaching (Almost) Any Machine Learning Problem
-
 # now we call gp_minimize from scikit-optimize 
     # gp_minimize uses bayesian optimization for  
     # minimization of the optimization function. 
@@ -8098,10 +7563,6 @@ It seems like we have managed to crack 0.90 accuracy. That’s just amazing!
 We can also see (plot) how we achieved convergence by using the following 
 snippet.
 
-179
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 from skopt.plots import plot_convergence 
  
@@ -8132,10 +7593,6 @@ from sklearn import metrics
 from sklearn import model_selection 
  
 from hyperopt import hp, fmin, tpe, Trials
-
-180
-
-Approaching (Almost) Any Machine Learning Problem
 
 from hyperopt.pyll.base import scope 
  
@@ -8184,10 +7641,6 @@ if __name__ == "__main__":
         # quniform gives round(uniform(low, high) / q) * q 
         # we want int values for depth and estimators
 
-181
-
-Approaching (Almost) Any Machine Learning Problem
-
 "max_depth": scope.int(hp.quniform("max_depth", 1, 15, 1)), 
         "n_estimators": scope.int( 
             hp.quniform("n_estimators", 100, 1500, 1) 
@@ -8233,10 +7686,6 @@ good!
 'n_estimators': 806.0} 
 ═════════════════════════════════════════════════════════════════════════
 
-182
-
-Approaching (Almost) Any Machine Learning Problem
-
 We get an accuracy which is a little better than before and a set of parameters that 
 we can use. Please note that criterion is 1 in the final result. This implies that choice 
 1 was selected, i.e., entropy.  The ways of tuning hyperparameters described above 
@@ -8261,10 +7710,6 @@ L1 is also known as Lasso regression and L2 as Ridge regression. When it comes
 to neural networks, we use dropouts, the addition of augmentations, noise, etc. to 
 regularize our models. Using hyper-parameter optimization, you can also find the 
 correct penalty to use.
-
-183
-
-Approaching (Almost) Any Machine Learning Problem
 
 Model 
 Optimize 
@@ -8410,10 +7855,6 @@ alpha
 
 XGBoost
 
-184
-
-Approaching (Almost) Any Machine Learning Problem
-
 Approaching image classification & segmentation
 
 When it comes to images, a lot has been achieved in the last few years. Computer 
@@ -8455,10 +7896,6 @@ The code above generates a random matrix using numpy. This matrix consists of
 values ranging from 0 to 255 (included) and is of size 256x256 (also known as 
 pixels).
 
-185
-
-Approaching (Almost) Any Machine Learning Problem
-
 Image 
 Ravelled version of the image
 
@@ -8493,10 +7930,6 @@ Pneumothorax
 Figure 2: Comparison of non-pneumothorax and pneumothorax x-ray images8.
 
 8 https://www.kaggle.com/c/siim-acr-pneumothorax-segmentation
-
-186
-
-Approaching (Almost) Any Machine Learning Problem
 
 In figure 2, you can see a comparison between non-pneumothorax and 
 pneumothorax images. As you must have already noticed, it is quite difficult for a 
@@ -8541,10 +7974,6 @@ def create_dataset(training_df, image_dir):
     :param training_df: dataframe with ImageId, Target columns 
     :param image_dir: location of images (folder), string 
     :return: X, y (training array with features and labels)
-
-187
-
-Approaching (Almost) Any Machine Learning Problem
 
 """ 
     # create empty list to store image vectors 
@@ -8594,10 +8023,6 @@ if __name__ == "__main__":
      
     # fetch labels
 
-188
-
-Approaching (Almost) Any Machine Learning Problem
-
 y = df.target.values 
      
     # initiate the kfold class from model_selection module 
@@ -8641,10 +8066,6 @@ for images, and this is how it was used in good old times. SVM was quite famous
 for image datasets. Deep Learning has been proved to be the state of the art when 
 solving such problems, hence we could try that next.
 
-189
-
-Approaching (Almost) Any Machine Learning Problem
-
 I won’t go into the history of deep learning and who invented what. Instead, let’s 
 take a look at one of the most famous deep learning models AlexNet and see what’s 
 happening there.
@@ -8671,10 +8092,6 @@ dimensional matrices which are initialized by a given function. “He initializa
 
 9 A. Krizhevsky, I. Sutskever, and G. Hinton. Imagenet classification with deep convolutional neural 
 networks. In NIPS, 2012
-
-190
-
-Approaching (Almost) Any Machine Learning Problem
 
 which is also known “Kaiming normal initialization” is a good choice for 
 convolutional neural networks. It is because most modern networks use ReLU 
@@ -8705,10 +8122,6 @@ the filters on a pen and paper.
 
 Figure 5: Padding enables us to provide an image with the same size as the input
 
-191
-
-Approaching (Almost) Any Machine Learning Problem
-
 We see the effect of padding in figure 5. Now, we have a 3x3 filter which is moving 
 with a stride of 1. Size of the original image is 6x6, and we have added padding of 
 1. The padding of 1 means increasing the size of the image by adding zero pixels 
@@ -8733,10 +8146,6 @@ average pooling or mean-pooling returns mean of pixels. They are used in the
 same way as the convolutional kernel. Pooling is faster than convolution and is a 
 way to down-sample the image. Max pooling detects edges and average pooling 
 smoothens the image.
-
-192
-
-Approaching (Almost) Any Machine Learning Problem
 
 There are way too many concepts in convolutional neural networks and deep 
 learning. The ones that I discussed are some of the basics that will help you get 
@@ -8783,10 +8192,6 @@ class AlexNet(nn.Module):
         ) 
         self.conv4 = nn.Conv2d( 
             in_channels=384,
-
-193
-
-Approaching (Almost) Any Machine Learning Problem
 
 out_channels=256, 
             kernel_size=3, 
@@ -8836,10 +8241,6 @@ out_channels=256,
         # softmax is an activation function that converts 
         # linear output to probabilities that add up to 1
 
-194
-
-Approaching (Almost) Any Machine Learning Problem
-
 # for each sample in the batch 
         x = torch.softmax(x, axis=1)  # size: (bs, 1000) 
         return x 
@@ -8883,10 +8284,6 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
  
  
 class ClassificationDataset:
-
-195
-
-Approaching (Almost) Any Machine Learning Problem
 
 """ 
     A general classification dataset class that you can use for all 
@@ -8936,10 +8333,6 @@ Approaching (Almost) Any Machine Learning Problem
                 resample=Image.BILINEAR 
             )
 
-196
-
-Approaching (Almost) Any Machine Learning Problem
-
 # convert image to numpy array 
         image = np.array(image) 
  
@@ -8987,10 +8380,6 @@ def train(data_loader, model, optimizer, device):
  
     # go over every batch of data in data loader 
     for data in data_loader:
-
-197
-
-Approaching (Almost) Any Machine Learning Problem
 
 # remember, we have image and targets 
         # in our dataset class 
@@ -9040,10 +8429,6 @@ def evaluate(data_loader, model, device):
             inputs = inputs.to(device, dtype=torch.float) 
             targets = targets.to(device, dtype=torch.float)
 
-198
-
-Approaching (Almost) Any Machine Learning Problem
-
 # do the forward step to generate prediction 
             output = model(inputs) 
  
@@ -9089,10 +8474,6 @@ def get_model(pretrained):
         nn.BatchNorm1d(4096), 
         nn.Dropout(p=0.25), 
         nn.Linear(in_features=4096, out_features=2048),
-
-199
-
-Approaching (Almost) Any Machine Learning Problem
 
 nn.ReLU(), 
         nn.BatchNorm1d(2048, eps=1e-05, momentum=0.1), 
@@ -9142,10 +8523,6 @@ track_running_stats=True)
     (1): Dropout(p=0.25, inplace=False) 
     (2): Linear(in_features=4096, out_features=2048, bias=True)
 
-200
-
-Approaching (Almost) Any Machine Learning Problem
-
 (3): ReLU() 
     (4): BatchNorm1d(2048, eps=1e-05, momentum=0.1, affine=True, 
 track_running_stats=True) 
@@ -9191,10 +8568,6 @@ if __name__ == "__main__":
  
     # fetch all image ids 
     images = df.ImageId.values.tolist()
-
-201
-
-Approaching (Almost) Any Machine Learning Problem
 
 # a list with image locations 
     images = [ 
@@ -9244,10 +8617,6 @@ train_test_split(
     train_dataset = dataset.ClassificationDataset( 
         image_paths=train_images,
 
-202
-
-Approaching (Almost) Any Machine Learning Problem
-
 targets=train_targets, 
         resize=(227, 227), 
         augmentations=aug, 
@@ -9296,10 +8665,6 @@ Epoch=3, Valid ROC AUC=0.6119219143780944
 Epoch=4, Valid ROC AUC=0.6229718888519726 
 Epoch=5, Valid ROC AUC=0.5983014999635341
 
-203
-
-Approaching (Almost) Any Machine Learning Problem
-
 Epoch=6, Valid ROC AUC=0.5523236874306134 
 Epoch=7, Valid ROC AUC=0.4717721611306046 
 Epoch=8, Valid ROC AUC=0.6473408263980617 
@@ -9347,10 +8712,6 @@ def get_model(pretrained):
         nn.Dropout(p=0.25), 
         nn.Linear(in_features=512, out_features=2048),
 
-204
-
-Approaching (Almost) Any Machine Learning Problem
-
 nn.ReLU(), 
         nn.BatchNorm1d(2048, eps=1e-05, momentum=0.1), 
         nn.Dropout(p=0.5), 
@@ -9395,10 +8756,6 @@ Skip-connections help with the vanishing gradient issue by propagating the
 gradients to further layers. This allows us to train very large convolutional neural 
 networks without loss of performance. Usually, the training loss increases at a given
 
-205
-
-Approaching (Almost) Any Machine Learning Problem
-
 point if we are using a large neural network, but that can be prevented by using 
 skip-connections. This can be better understood by figure 7.
 
@@ -9425,10 +8782,6 @@ Inception
 DenseNet (different variations)
 
 10 K. He, X. Zhang, S. Ren and J. Sun, Deep residual learning for image recognition, 2015
-
-206
-
-Approaching (Almost) Any Machine Learning Problem
 
 - 
 NASNet 
@@ -9458,10 +8811,6 @@ task, we try to remove/extract foreground from background. Foreground and
 
 11 O. Ronneberger, P. Fischer and T. Brox. U-Net: Convolutional networks for biomedical image 
 segmentation. In MICCAI, 2015
-
-207
-
-Approaching (Almost) Any Machine Learning Problem
 
 background can have different definitions. We can also say that it is a pixel-wise 
 classification task in which your job is to assign a class to each pixel in a given 
@@ -9507,10 +8856,6 @@ def double_conv(in_channels, out_channels):
  
  
 def crop_tensor(tensor, target_tensor):
-
-208
-
-Approaching (Almost) Any Machine Learning Problem
 
 """ 
     Center crops a tensor to size of a given target tensor size 
@@ -9560,10 +8905,6 @@ class UNet(nn.Module):
             in_channels=512, 
             out_channels=256,
 
-209
-
-Approaching (Almost) Any Machine Learning Problem
-
 kernel_size=2, 
             stride=2 
         ) 
@@ -9612,10 +8953,6 @@ kernel_size=2,
         x = self.up_conv_2(torch.cat([x, y], axis=1)) 
         x = self.up_trans_3(x)
 
-210
-
-Approaching (Almost) Any Machine Learning Problem
-
 y = crop_tensor(x3, x) 
         x = self.up_conv_3(torch.cat([x, y], axis=1)) 
         x = self.up_trans_4(x) 
@@ -9659,10 +8996,6 @@ mask. In the case of multiple objects, there will be multiple masks. In our
 pneumothorax dataset, we are provided with RLE instead. RLE stands for run-
 
 12 https://github.com/qubvel/segmentation_models.pytorch
-
-211
-
-Approaching (Almost) Any Machine Learning Problem
 
 length encoding and is a way to represent binary masks to save space. Going deep 
 into RLE is beyond the scope of this chapter. So, let’s assume that we have an input 
@@ -9710,10 +9043,6 @@ class SIIMDataset(torch.utils.data.Dataset):
         :param transform: True/False, no transform in validation 
         :param preprocessing_fn: a function for preprocessing image 
         """
-
-212
-
-Approaching (Almost) Any Machine Learning Problem
 
 # we create a empty dictionary to store iamge 
         # and mask paths 
@@ -9763,10 +9092,6 @@ Approaching (Almost) Any Machine Learning Problem
                 "img_path": os.path.join( 
                     TRAIN_PATH, imgid + ".png"
 
-213
-
-Approaching (Almost) Any Machine Learning Problem
-
 ), 
                 "mask_path": os.path.join( 
                     TRAIN_PATH, imgid + "_mask.png" 
@@ -9814,10 +9139,6 @@ Approaching (Almost) Any Machine Learning Problem
             "mask": transforms.ToTensor()(mask).float(), 
         } 
 ═════════════════════════════════════════════════════════════════════════
-
-214
-
-Approaching (Almost) Any Machine Learning Problem
 
 Once, we have the dataset class; we can create a training function. 
  
@@ -9867,10 +9188,6 @@ def train(dataset, data_loader, model, criterion, optimizer):
     training function that trains for one epoch 
     :param dataset: dataset class (SIIMDataset)
 
-215
-
-Approaching (Almost) Any Machine Learning Problem
-
 :param data_loader: torch dataset loader 
     :param model: model 
     :param criterion: loss function 
@@ -9919,10 +9236,6 @@ Approaching (Almost) Any Machine Learning Problem
     # close tqdm 
     tk0.close()
 
-216
-
-Approaching (Almost) Any Machine Learning Problem
-
 def evaluate(dataset, data_loader, model): 
     """ 
     evaluation function to calculate loss on validation 
@@ -9969,10 +9282,6 @@ if __name__ == "__main__":
     # training and validation images lists/arrays 
     training_images = df_train.image_id.values 
     validation_images = df_valid.image_id.values
-
-217
-
-Approaching (Almost) Any Machine Learning Problem
 
 # fetch unet model from segmentation models 
     # with specified encoder architecture 
@@ -10022,10 +9331,6 @@ Approaching (Almost) Any Machine Learning Problem
         batch_size=TEST_BATCH_SIZE,  
         shuffle=True,
 
-218
-
-Approaching (Almost) Any Machine Learning Problem
-
 num_workers=4 
     ) 
  
@@ -10074,10 +9379,6 @@ num_workers=4
             optimizer 
         )
 
-219
-
-Approaching (Almost) Any Machine Learning Problem
-
 print(f"Validation Epoch: {epoch}") 
         # calculate validation loss 
         val_log = evaluate( 
@@ -10111,10 +9412,6 @@ challenge of FGVC 202013.
 
 13 Ranjita Thapa , Noah Snavely , Serge Belongie , Awais Khan. The Plant Pathology 2020 challenge 
 dataset to classify foliar disease of apples. ArXiv e-prints
-
-220
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════
 import os 
@@ -10164,10 +9461,6 @@ class Model(nn.Module):
     def forward(self, image, targets=None): 
         batch_size, C, H, W = image.shape
 
-221
-
-Approaching (Almost) Any Machine Learning Problem
-
 x = self.base_model.conv1(image) 
         x = self.base_model.bn1(x) 
         x = self.base_model.relu(x) 
@@ -10214,10 +9507,6 @@ if __name__ == "__main__":
  
     mean = (0.485, 0.456, 0.406) 
     std = (0.229, 0.224, 0.225)
-
-222
-
-Approaching (Almost) Any Machine Learning Problem
 
 aug = albumentations.Compose( 
         [ 
@@ -10266,10 +9555,6 @@ aug = albumentations.Compose(
         optimizer, step_size=15, gamma=0.6 
     )
 
-223
-
-Approaching (Almost) Any Machine Learning Problem
-
 for epoch in range(args.epochs): 
         train_loss = Engine.train( 
             train_loader, model, optimizer, device=args.device 
@@ -10302,10 +9587,6 @@ write another book. So, I have decided to do that instead: Approaching (Almost)
 Any Image Problem.
 
 14 https://www.kaggle.com/c/plant-pathology-2020-fgvc7
-
-224
-
-Approaching (Almost) Any Machine Learning Problem
 
 Approaching text classification/regression
 
@@ -10346,10 +9627,6 @@ Christopher. Learning word vectors for sentiment analysis. In Proceedings of the
 of the Association for Computational Linguistics: Human Language Technologies-Volume 1, pp. 
 142–150. Association for Computational Linguistics, 2011.
 
-225
-
-Approaching (Almost) Any Machine Learning Problem
-
 one sentence contributes to the sentiment, but the sentiment score is a combination 
 of score from multiple sentences. A snapshot of the data is presented in figure 1.
 
@@ -10385,10 +9662,6 @@ def find_sentiment(sentence, pos, neg):
     """ 
      
     # split sentence by a space
-
-226
-
-Approaching (Almost) Any Machine Learning Problem
 
 # "this is a sentence!" becomes: 
     # ["this", "is" "a", "sentence!"] 
@@ -10433,10 +9706,6 @@ comes from NLTK (Natural Language Tool Kit).
 In [X]: from nltk.tokenize import word_tokenize 
  
 In [X]: sentence = "hi, how are you?"
-
-227
-
-Approaching (Almost) Any Machine Learning Problem
 
 In [X]: sentence.split() 
 Out[X]: ['hi,', 'how', 'are', 'you?'] 
@@ -10487,10 +9756,6 @@ If we print corpus_transformed, we get something like the following:
 1 
   (0, 22) 
 1
-
-228
-
-Approaching (Almost) Any Machine Learning Problem
 
 (1, 1) 
 1 
@@ -10556,10 +9821,6 @@ print(ctv.vocabulary_)
 'if': 12, 'this': 18, 'works': 20, 'yes': 21} 
 ═════════════════════════════════════════════════════════════════════════
 
-229
-
-Approaching (Almost) Any Machine Learning Problem
-
 We see that index 22 belongs to “you” and in the second sentence, we have used 
 “you” twice. Thus, the count is 2. I hope it’s clear now what is bag of words. But 
 we are missing some special characters. Sometimes those special characters can be 
@@ -10605,10 +9866,6 @@ Now, we have more words in the vocabulary. Thus, we can now create a sparse
 matrix by using all the sentences in IMDB dataset and can build a model. The ratio 
 to positive and negative samples in this dataset is 1:1, and thus, we can use accuracy 
 as the metric. We will use StratifiedKFold and create a single script to train five
-
-230
-
-Approaching (Almost) Any Machine Learning Problem
 
 folds. Which model to use you ask? Which is the fastest model for high dimensional 
 sparse data? Logistic regression. We will use logistic regression for this dataset to 
@@ -10657,10 +9914,6 @@ if __name__ == "__main__":
         # temporary dataframes for train and test 
         train_df = df[df.kfold != fold_].reset_index(drop=True)
 
-231
-
-Approaching (Almost) Any Machine Learning Problem
-
 test_df = df[df.kfold == fold_].reset_index(drop=True) 
  
         # initialize CountVectorizer with NLTK's word_tokenize 
@@ -10708,10 +9961,6 @@ Accuracy = 0.897
 Fold: 2 
 Accuracy = 0.891
 
-232
-
-Approaching (Almost) Any Machine Learning Problem
-
 Fold: 3 
 Accuracy = 0.8914 
  
@@ -10756,10 +10005,6 @@ Results are as follows:
 ❯ python ctv_nb.py 
 Fold: 0 
 Accuracy = 0.8444
-
-233
-
-Approaching (Almost) Any Machine Learning Problem
 
 Fold: 1 
 Accuracy = 0.8499 
@@ -10807,10 +10052,6 @@ from nltk.tokenize import word_tokenize
  
 # create a corpus of sentences 
 corpus = [
-
-234
-
-Approaching (Almost) Any Machine Learning Problem
 
 "hello, how are you?", 
     "im getting bored at home. And you? What do you think?", 
@@ -10886,10 +10127,6 @@ This gives the following output:
   (3, 21) 
 0.38775666010579296
 
-235
-
-Approaching (Almost) Any Machine Learning Problem
-
 (3, 20) 
 0.38775666010579296 
   (3, 17) 
@@ -10943,10 +10180,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
  
         # initialize logistic regression model
 
-236
-
-Approaching (Almost) Any Machine Learning Problem
-
 model = linear_model.LogisticRegression() 
  
         # fit the model on training data reviews and sentiment 
@@ -10993,10 +10226,6 @@ words in order. N-grams are easy to create. You just need to take care of the or
 To make things even more comfortable, we can use n-gram implementation from 
 NLTK.
 
-237
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 from nltk import ngrams 
 from nltk.tokenize import word_tokenize 
@@ -11042,10 +10271,6 @@ The only change required is in the initialization of TfidfVectorizer.
  
 Let’s see if we get any kind of improvements.
 
-238
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 ❯ python tfv_logres_trigram.py 
 Fold: 0 
@@ -11089,10 +10314,6 @@ from nltk.stem.snowball import SnowballStemmer
 # initialize lemmatizer 
 lemmatizer = WordNetLemmatizer()
 
-239
-
-Approaching (Almost) Any Machine Learning Problem
-
 # initialize stemmer 
 stemmer = SnowballStemmer("english") 
  
@@ -11135,10 +10356,6 @@ of components. You can fit any of these on sparse matrix obtained from
 CountVectorizer or TfidfVectorizer.  
  
 Let’s apply it on TfidfVetorizer that we have used before.
-
-240
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 import pandas as pd 
@@ -11187,10 +10404,6 @@ N = 5
 print(sorted(feature_scores, key=feature_scores.get, reverse=True)[:N]) 
 ═════════════════════════════════════════════════════════════════════════
 
-241
-
-Approaching (Almost) Any Machine Learning Problem
-
 You can run it for multiple samples by using a loop. 
  
 ═════════════════════════════════════════════════════════════════════════ 
@@ -11236,10 +10449,6 @@ def clean_text(s):
     """ 
     This function cleans the text a bit 
     :param s: string
-
-242
-
-Approaching (Almost) Any Machine Learning Problem
 
 :return: cleaned string 
     """ 
@@ -11287,10 +10496,6 @@ time look like the following.
 ['br', 'to', 'they', 'he', 'show'] 
 ═════════════════════════════════════════════════════════════════════════
 
-243
-
-Approaching (Almost) Any Machine Learning Problem
-
 Phew! At least this is better than what we had earlier. But you know what? You can 
 make it even better by removing stopwords in your cleaning function. What are 
 stopwords? These are high-frequency words that exist in every language. For 
@@ -11328,10 +10533,6 @@ different types of embeddings are in the end returning a dictionary where the ke
 a word in the corpus (for example English Wikipedia) and value is a vector of size 
 N (usually 300).
 
-244
-
-Approaching (Almost) Any Machine Learning Problem
-
 ![resim](img/p0246_fig01_resim.png)
 
 Figure 1: Visualizing word embeddings in two-dimensions. 
@@ -11368,10 +10569,6 @@ There are multiple ways to use this information. One of the simplest ways would
 be to use the embeddings as they are. As you can see in the example above, we have 
 a 1x300 embedding vector for each word. Using this information, we can calculate 
 the embedding for the whole sentence. There are multiple ways to do it. One such
-
-245
-
-Approaching (Almost) Any Machine Learning Problem
 
 method is shown as follows. In this function, we take all the individual word vectors 
 in a given sentence and create a normalized word vector from all word vectors of 
@@ -11420,10 +10617,6 @@ def sentence_to_vec(s, embedding_dict, stop_words, tokenizer):
     # calculate sum over axis=0 
     v = M.sum(axis=0)
 
-246
-
-Approaching (Almost) Any Machine Learning Problem
-
 # return normalized vector 
     return v / np.sqrt((v ** 2).sum()) 
 ═════════════════════════════════════════════════════════════════════════ 
@@ -11469,10 +10662,6 @@ def sentence_to_vec(s, embedding_dict, stop_words, tokenizer):
 if __name__ == "__main__": 
     # read the training data 
     df = pd.read_csv("../input/imdb.csv")
-
-247
-
-Approaching (Almost) Any Machine Learning Problem
 
 # map positive to 1 and negative to 0 
     df.sentiment = df.sentiment.apply( 
@@ -11522,10 +10711,6 @@ Approaching (Almost) Any Machine Learning Problem
  
         # fit the model on training data reviews and sentiment
 
-248
-
-Approaching (Almost) Any Machine Learning Problem
-
 model.fit(xtrain, ytrain) 
  
         # make predictions on test data 
@@ -11569,10 +10754,6 @@ similar to the time series data. Any sample in our reviews is a sequence of toke
 at different timestamps which are in increasing order, and each token can be 
 represented as a vector/embedding, as shown in figure 2.
 
-249
-
-Approaching (Almost) Any Machine Learning Problem
-
 ![resim](img/p0251_fig01_resim.png)
 
 Figure 2: Representing tokens as embeddings and treating it as a time series 
@@ -11602,10 +10783,6 @@ if __name__ == "__main__":
  
     # we create a new column called kfold and fill it with -1 
     df["kfold"] = -1
-
-250
-
-Approaching (Almost) Any Machine Learning Problem
 
 # the next step is to randomize the rows of the data 
     df = df.sample(frac=1).reset_index(drop=True) 
@@ -11655,10 +10832,6 @@ class IMDBDataset:
  
         return {
 
-251
-
-Approaching (Almost) Any Machine Learning Problem
-
 "review": torch.tensor(review, dtype=torch.long), 
             "target": torch.tensor(target, dtype=torch.float) 
         } 
@@ -11706,10 +10879,6 @@ class LSTM(nn.Module):
  
         # a simple bidirectional LSTM with 
         # hidden size of 128
-
-252
-
-Approaching (Almost) Any Machine Learning Problem
 
 self.lstm = nn.LSTM( 
             embed_dim, 
@@ -11759,10 +10928,6 @@ import torch.nn as nn
 def train(data_loader, model, optimizer, device): 
     """
 
-253
-
-Approaching (Almost) Any Machine Learning Problem
-
 This is the main training function that trains model 
     for one epoch 
     :param data_loader: this is the torch dataloader 
@@ -11810,10 +10975,6 @@ def evaluate(data_loader, model, device):
     final_targets = [] 
  
     # put the model in eval mode
-
-254
-
-Approaching (Almost) Any Machine Learning Problem
 
 model.eval() 
  
@@ -11863,10 +11024,6 @@ import lstm
 def load_vectors(fname): 
     # taken from: https://fasttext.cc/docs/en/english-vectors.html
 
-255
-
-Approaching (Almost) Any Machine Learning Problem
-
 fin = io.open( 
         fname,  
         'r',  
@@ -11914,10 +11071,6 @@ def run(df, fold):
     train_df = df[df.kfold != fold].reset_index(drop=True) 
  
     # fetch validation dataframe
-
-256
-
-Approaching (Almost) Any Machine Learning Problem
 
 valid_df = df[df.kfold == fold].reset_index(drop=True) 
  
@@ -11967,10 +11120,6 @@ valid_df = df[df.kfold == fold].reset_index(drop=True)
  
     # initialize dataset class for validation
 
-257
-
-Approaching (Almost) Any Machine Learning Problem
-
 valid_dataset = dataset.IMDBDataset( 
         reviews=xtest, 
         targets=valid_df.sentiment.values 
@@ -12019,10 +11168,6 @@ valid_dataset = dataset.IMDBDataset(
         # use threshold of 0.5  
         # please note we are using linear layer and no sigmoid
 
-258
-
-Approaching (Almost) Any Machine Learning Problem
-
 # you should do this 0.5 threshold after sigmoid 
         outputs = np.array(outputs) >= 0.5 
  
@@ -12068,10 +11213,6 @@ EPOCHS = 10
  
 Let’s see what this gives us.
 
-259
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 ❯ python train.py 
  
@@ -12115,10 +11256,6 @@ def load_embeddings(word_index, embedding_file, vector_length=300):
     max_features = len(word_index) + 1 
     words_to_find = list(word_index.keys()) 
     more_words_to_find = []
-
-260
-
-Approaching (Almost) Any Machine Learning Problem
 
 for wtf in words_to_find: 
         more_words_to_find.append(wtf) 
@@ -12166,10 +11303,6 @@ models. Transformer based networks are able to handle dependencies which are
 long term in nature. LSTM looks at the next word only when it has seen the previous 
 word. This is not the case with transformers. It can look at all the words in the whole
 
-261
-
-Approaching (Almost) Any Machine Learning Problem
-
 sentence simultaneously. Due to this, one more advantage is that it can easily be 
 parallelized and uses GPUs more efficiently. 
  
@@ -12214,10 +11347,6 @@ TOKENIZER = transformers.BertTokenizer.from_pretrained(
     do_lower_case=True 
 ) 
 ═════════════════════════════════════════════════════════════════════════
-
-262
-
-Approaching (Almost) Any Machine Learning Problem
 
 The config file here is the only place where we define tokenizer and other 
 parameters we would like to change frequently—this way we can do many 
@@ -12265,10 +11394,6 @@ class BERTDataset:
             add_special_tokens=True, 
             max_length=self.max_len, 
             pad_to_max_length=True,
-
-263
-
-Approaching (Almost) Any Machine Learning Problem
 
 ) 
         # ids are ids of tokens generated 
@@ -12318,10 +11443,6 @@ class BERTBaseUncased(nn.Module):
         # config.py 
         self.bert = transformers.BertModel.from_pretrained(
 
-264
-
-Approaching (Almost) Any Machine Learning Problem
-
 config.BERT_PATH 
         ) 
         # add a dropout for regularization 
@@ -12368,10 +11489,6 @@ import torch.nn as nn
 def loss_fn(outputs, targets): 
     """ 
     This function returns the loss.
-
-265
-
-Approaching (Almost) Any Machine Learning Problem
 
 :param outputs: output from the model (real numbers) 
     :param targets: input targets (binary) 
@@ -12421,10 +11538,6 @@ def train_fn(data_loader, model, optimizer, device, scheduler):
         loss.backward() 
         # step optimizer
 
-266
-
-Approaching (Almost) Any Machine Learning Problem
-
 optimizer.step() 
         # step scheduler 
         scheduler.step() 
@@ -12473,10 +11586,6 @@ def eval_fn(data_loader, model, device):
             targets = targets.cpu().detach() 
             fin_targets.extend(targets.numpy().tolist())
 
-267
-
-Approaching (Almost) Any Machine Learning Problem
-
 # convert outputs to cpu and extend the final list 
             outputs = torch.sigmoid(outputs).cpu().detach() 
             fin_outputs.extend(outputs.numpy().tolist()) 
@@ -12523,10 +11632,6 @@ def train():
         test_size=0.1,  
         random_state=42,  
         stratify=dfx.sentiment.values
-
-268
-
-Approaching (Almost) Any Machine Learning Problem
 
 ) 
  
@@ -12576,10 +11681,6 @@ Approaching (Almost) Any Machine Learning Problem
     no_decay = ["bias", "LayerNorm.bias", "LayerNorm.weight"] 
     optimizer_parameters = [
 
-269
-
-Approaching (Almost) Any Machine Learning Problem
-
 { 
             "params": [ 
                 p for n, p in param_optimizer if  
@@ -12628,10 +11729,6 @@ Approaching (Almost) Any Machine Learning Problem
         ) 
         outputs, targets = engine.eval_fn(
 
-270
-
-Approaching (Almost) Any Machine Learning Problem
-
 valid_data_loader, model, device 
         ) 
         outputs = np.array(outputs) >= 0.5 
@@ -12672,10 +11769,6 @@ classification or regression models. If I start writing in detail about everythi
 might end up writing a few hundred pages, and that’s why I have decided to include 
 everything in a separate book: Approaching (Almost) Any NLP Problem!
 
-271
-
-Approaching (Almost) Any Machine Learning Problem
-
 Approaching ensembling and stacking
 
 When we hear these two words, the first thing that comes to our mind is that it’s all 
@@ -12714,10 +11807,6 @@ with three classes: 0, 1 and 2.
 [2, 2, 2] : Highest voted class: 2 
  
 The following simple functions can accomplish these simple operations.
-
-272
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 import numpy as np 
@@ -12764,10 +11853,6 @@ def rank_mean(probas):
         rank_data = stats.rankdata(probas[:, i]) 
         ranked.append(rank_data)
 
-273
-
-Approaching (Almost) Any Machine Learning Problem
-
 ranked = np.column_stack(ranked) 
     return np.mean(ranked, axis=1) 
 ═════════════════════════════════════════════════════════════════════════ 
@@ -12793,10 +11878,6 @@ Final Probabilities = w1*M1_proba + w2*M2_proba + … + wn*Mn_proba
 Where (w1 + w2 + w3 + … + wn) = 1.0 
 For example, if you have a random forest model that gives very high AUC and a 
 logistic regression model with a little lower AUC, you can combine them with 70%
-
-274
-
-Approaching (Almost) Any Machine Learning Problem
 
 for random forest and 30% for logistic regression. So, how did I come up with these 
 numbers? Let’s add another model, let’s say now we also have an xgboost model 
@@ -12838,10 +11919,6 @@ import numpy as np
 from functools import partial 
 from scipy.optimize import fmin 
 from sklearn import metrics
-
-275
-
-Approaching (Almost) Any Machine Learning Problem
 
 class OptimizeAUC: 
     """ 
@@ -12891,10 +11968,6 @@ class OptimizeAUC:
  
     def predict(self, X):
 
-276
-
-Approaching (Almost) Any Machine Learning Problem
-
 # this is similar to _auc function 
         x_coef = X * self.coef_ 
         predictions = np.sum(x_coef, axis=1) 
@@ -12942,10 +12015,6 @@ pred_logreg = logreg.predict_proba(xfold2)[:, 1]
 pred_rf = rf.predict_proba(xfold2)[:, 1] 
 pred_xgbc = xgbc.predict_proba(xfold2)[:, 1]
 
-277
-
-Approaching (Almost) Any Machine Learning Problem
-
 # create an average of all predictions 
 # that is the simplest ensemble 
 avg_pred = (pred_logreg + pred_rf + pred_xgbc) / 3 
@@ -12992,10 +12061,6 @@ fold1_preds = np.column_stack((
     pred_xgbc, 
     avg_pred 
 ))
-
-278
-
-Approaching (Almost) Any Machine Learning Problem
 
 aucs_fold1 = [] 
 for i in range(fold1_preds.shape[1]): 
@@ -13045,10 +12110,6 @@ Optimization terminated successfully.
 Optimized AUC, Fold 2 = 0.9305386199756128 
 Coefficients = [-0.00188194  0.19328336  0.35891836]
 
-279
-
-Approaching (Almost) Any Machine Learning Problem
-
 Optimization terminated successfully. 
          Current function value: -0.931232 
          Iterations: 56 
@@ -13091,10 +12152,6 @@ predict function. I’m going to leave it as an exercise for you.
 And now we can move to the next interesting topic which is quite popular and is 
 known as stacking. Figure 2 shows how you can stack models.
 
-280
-
-Approaching (Almost) Any Machine Learning Problem
-
 ![resim](img/p0282_fig01_resim.png)
 
 Figure 2: Stacking 
@@ -13126,10 +12183,6 @@ set.
 Now you have L2 predictions for training data and also the final test set 
 predictions.
 
-281
-
-Approaching (Almost) Any Machine Learning Problem
-
 You can keep repeating the L1 part and can create as many levels as you want. 
  
 Sometimes, you will also come across a term called blending. If you do, don’t 
@@ -13138,10 +12191,6 @@ folds.
  
 It must be noted that what I have described in this chapter can be applied to any 
 kind of problem: classification, regression, multi-label classification, etc.
-
-282
-
-Approaching (Almost) Any Machine Learning Problem
 
 Approaching reproducible code & model serving
 
@@ -13182,10 +12231,6 @@ to containerize the training code.
  
 First and foremost, you need a file with requirements for your python project. 
 Requirements are contained in a file called requirements.txt. The filename is the
-
-283
-
-Approaching (Almost) Any Machine Learning Problem
 
 standard. The file consists of all the python libraries that you are using in your 
 project. That is the python libraries that can be downloaded via PyPI (pip). For 
@@ -13231,10 +12276,6 @@ RUN apt-get update && apt-get install -y \
     curl \ 
     ca-certificates \ 
     python3 \
-
-284
-
-Approaching (Almost) Any Machine Learning Problem
 
 python3-pip \ 
     sudo \ 
@@ -13283,10 +12324,6 @@ docker build -f Dockerfile -t bert:train .
  
 ═════════════════════════════════════════════════════════════════════════
 
-285
-
-Approaching (Almost) Any Machine Learning Problem
-
 This command builds a container from the provided Dockerfile. The name of the 
 docker container is bert:train. This produces the following output: 
  
@@ -13332,10 +12369,6 @@ $ docker run -ti bert:train python3 train.py
  
 Which gives the following output:
 
-286
-
-Approaching (Almost) Any Machine Learning Problem
-
 ═════════════════════════════════════════════════════════════════════════ 
 Traceback (most recent call last): 
   File "train.py", line 2, in <module> 
@@ -13377,10 +12410,6 @@ container. If you want to use a path from your local machine and want to modify 
 too, you would need to mount it to the docker container when running it. When we 
 look at this folder path, we know that it is one level up in a folder called input. Let’s 
 change the config.py file a bit!
-
-287
-
-Approaching (Almost) Any Machine Learning Problem
 
 ═════════════════════════════════════════════════════════════════════════ 
 # config.py 
@@ -13426,10 +12455,6 @@ Note that any change in the python scripts, means that the docker container need
 to be rebuilt! So, we rebuild the container and rerun the docker command but this 
 time with a twist. However, this won’t work either if we do not have the NVIDIA 
 docker runtimes. Don’t worry. It’s just a docker container again, and you need to
-
-288
-
-Approaching (Almost) Any Machine Learning Problem
 
 do it only once. To install the NVIDIA docker runtime, you can run the following 
 commands in Ubuntu 18.04. 
@@ -13484,10 +12509,6 @@ an API using Python is with Flask, which is a micro web service framework.
 import config 
 import flask
 
-289
-
-Approaching (Almost) Any Machine Learning Problem
-
 import time 
 import torch 
 import torch.nn as nn 
@@ -13534,10 +12555,6 @@ def sentence_prediction(sentence):
     ids = inputs["input_ids"] 
     mask = inputs["attention_mask"] 
     token_type_ids = inputs["token_type_ids"]
-
-290
-
-Approaching (Almost) Any Machine Learning Problem
 
 # add padding if needed 
     padding_length = max_len - len(ids) 
@@ -13587,10 +12604,6 @@ def predict():
     response["response"] = { 
         "positive": str(positive_prediction),
 
-291
-
-Approaching (Almost) Any Machine Learning Problem
-
 "negative": str(negative_prediction), 
         "sentence": str(sentence), 
         "time_taken": str(time.time() - start_time), 
@@ -13634,10 +12647,6 @@ k%20ever'
 sentence":"this is the best book 
 ever","time_taken":"0.029126882553100586"}} 
 ═════════════════════════════════════════════════════════════════════════
-
-292
-
-Approaching (Almost) Any Machine Learning Problem
 
 As you can see that we got a high probability for positive sentiment for the provided 
 input 
@@ -13693,10 +12702,6 @@ DEVICE = "cpu"
  
 # init the model
 
-293
-
-Approaching (Almost) Any Machine Learning Problem
-
 MODEL = BERTBaseUncased() 
  
 # load the dictionary 
@@ -13742,10 +12747,6 @@ Please note that now our endpoint uses CPU and thus, it does not need a GPU
 machine and can run on any standard server/VM. Still, we have one problem, we 
 have done everything in our local machine, so we must dockerize it. Take a look at 
 the following uncommented Dockerfile which can be used to deploy this API.
-
-294
-
-Approaching (Almost) Any Machine Learning Problem
 
 Notice the difference between the old Dockerfile for training and this one. There 
 are not many differences. 
@@ -13793,10 +12794,6 @@ ti bert:api /home/abhishek/.local/bin/gunicorn api:app --bind
 Please note that we expose port 5000 from the container to 5000 outside the 
 container. This can also be done in a nice way if you use docker-compose. Docker
 
-295
-
-Approaching (Almost) Any Machine Learning Problem
-
 compose is a tool that can allow you to run different services from different or the 
 same containers at the same time. You can install docker-compose using “pip install 
 docker-compose” and then run “docker-compose up” after building the container. 
@@ -13841,28 +12838,12 @@ technologies/platforms is a piece of cake. Always remember to make your code and
 model usable and well-documented for others so that anyone can use what you have 
 developed without asking you several times. This will save you time, and it will
 
-296
-
-Approaching (Almost) Any Machine Learning Problem
-
 also save their time. Good, open-source, re-usable code also looks good in your 
 portfolio. J
 
-297
-
-Approaching (Almost) Any Machine Learning Problem
-
 Notes
 
-298
-
-Approaching (Almost) Any Machine Learning Problem
-
 Notes
-
-299
-
-Approaching (Almost) Any Machine Learning Problem
 
 Notes
 
