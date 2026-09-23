@@ -3036,35 +3036,24 @@ Bu veri setindeki etiket (*label*) sütununda yer alan değerlerin sayılarına 
 
 ![resim](img/p0076_fig02_resim.png)
 
-## Kaldığım yer
+**Şekil 2: MNIST veri setindeki etiket (label) sayıları**
+ 
+Bu veri seti için daha fazla keşifsel analize (*data exploration*) ihtiyacımız yok. Elimizde ne olduğunu zaten biliyoruz ve farklı piksel değerleri üzerinde grafikler çizmemize gerek yok. Şekil 2'den de anlaşılacağı üzere etiketlerin dağılımı gayet dengeli ve homojendir. Bu nedenle metrik olarak **doğruluk (accuracy) / F1 skoru** kullanabiliriz. Bir makine öğrenimi problemine yaklaşırken ilk adım budur: **Metriğe karar vermek!**
+ 
+Şimdi biraz kod yazabiliriz. `src/` klasörünü ve bazı Python betiklerini (*scripts*) oluşturmamız gerekiyor.
+ 
+Eğitim için kullanılacak CSV dosyasının `input/` klasöründe yer aldığını ve adının `mnist_train.csv` olduğunu lütfen unutmayın.
+ 
+Böyle bir proje için bu dosyalar nasıl görünmelidir?
+ 
+Oluşturulması gereken ilk betik `create_folds.py` dosyasıdır.
 
-Figure 2: Counts of label in MNIST dataset 
+Bu betik, `input/` klasöründe `mnist_train_folds.csv` adında yeni bir dosya oluşturacaktır ve bu dosya `mnist_train.csv` ile tamamen aynı verileri içerir. Tek fark, bu yeni CSV dosyasının karıştırılmış (*shuffled*) olması ve `kfold` adında yeni bir sütuna sahip olmasıdır.
  
-We don’t need much more exploration for this dataset. We already know what we 
-have, and there is no need to make plots on different pixel values. From figure 2, it 
-is quite clear that the distribution of labels is quite good and even. We can thus use 
-accuracy/F1 as metrics. This is the first step when approaching a machine learning 
-problem: decide the metric! 
- 
-Now, we can code a little bit. We need to create the src/ folder and some python 
-scripts. 
- 
-Please note that the training CSV file is located in the input/ folder and is called 
-mnist_train.csv. 
- 
-How should these files look like for such a project? 
- 
-The first script that one should create is create_folds.py.
-
-This will create a new file in the input/ folder called mnist_train_folds.csv, and it’s 
-the same as mnist_train.csv. The only differences are that this CSV is shuffled and 
-has a new column called kfold.  
- 
-Once we have decided what kind of evaluation metric we want to use and have 
-created the folds, we are good to go with creating a basic model. This is done in 
-train.py. 
+Hangi değerlendirme metriğini kullanacağımıza karar verip katları (*folds*) oluşturduktan sonra, temel bir model oluşturmaya hazırız demektir. Bu işlem `train.py` dosyasında yapılır.
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 # src/train.py 
 import joblib 
 import pandas as pd 
@@ -3073,40 +3062,40 @@ from sklearn import tree
  
  
 def run(fold): 
-    # read the training data with folds 
+    # katları içeren eğitim verisini oku 
     df = pd.read_csv("../input/mnist_train_folds.csv") 
  
-    # training data is where kfold is not equal to provided fold 
-    # also, note that we reset the index 
+    # eğitim verisi, kfold sütununun verilen kat numarasına eşit olmadığı satırlardır 
+    # ayrıca indeksi sıfırladığımıza dikkat edin 
     df_train = df[df.kfold != fold].reset_index(drop=True) 
  
-    # validation data is where kfold is equal to provided fold 
+    # doğrulama verisi, kfold sütununun verilen kat numarasına eşit olduğu satırlardır 
     df_valid = df[df.kfold == fold].reset_index(drop=True) 
  
-    # drop the label column from dataframe and convert it to 
-    # a numpy array by using .values. 
-    # target is label column in the dataframe 
+    # label sütununu dataframe'den çıkar ve .values kullanarak 
+    # bir numpy dizisine dönüştür. 
+    # hedef sütun dataframe'deki "label" sütunudur 
     x_train = df_train.drop("label", axis=1).values 
     y_train = df_train.label.values 
  
-    # similarly, for validation, we have 
+    # benzer şekilde, doğrulama için: 
     x_valid = df_valid.drop("label", axis=1).values 
     y_valid = df_valid.label.values 
  
-    # initialize simple decision tree classifier from sklearn 
+    # sklearn'den basit bir karar ağacı sınıflandırıcısını başlat 
     clf = tree.DecisionTreeClassifier() 
  
-    # fir the model on training data 
+    # modeli eğitim verisi üzerinde eğit 
     clf.fit(x_train, y_train) 
  
-    # create predictions for validation samples 
+    # doğrulama örnekleri için tahminler oluştur 
     preds = clf.predict(x_valid)
 
-# calculate & print accuracy 
+    # doğruluğu (accuracy) hesapla ve yazdır 
     accuracy = metrics.accuracy_score(y_valid, preds) 
     print(f"Fold={fold}, Accuracy={accuracy}") 
  
-    # save the model 
+    # modeli kaydet 
     joblib.dump(clf, f"../models/dt_{fold}.bin") 
  
  
@@ -3116,37 +3105,40 @@ if __name__ == "__main__":
     run(fold=2) 
     run(fold=3) 
     run(fold=4) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-You can run this script by calling python train.py in the console. 
+Bu betiği konsoldan `python train.py` komutu ile çalıştırabilirsiniz:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```text
 ❯ python train.py 
 Fold=0, Accuracy=0.8680833333333333 
 Fold=1, Accuracy=0.8685 
 Fold=2, Accuracy=0.8674166666666666 
 Fold=3, Accuracy=0.8703333333333333 
 Fold=4, Accuracy=0.8699166666666667 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-When you look at the training script, you will see that there are still a few more 
-things that are hardcoded, for example, the fold numbers, the training file and the 
-output folder. 
+Eğitim betiğine baktığınızda kat numaraları, eğitim dosyası ve çıktı klasörü gibi hâlâ doğrudan kodun içine yazılmış (sabit kodlanmış / *hardcoded*) birkaç şey olduğunu göreceksiniz.
  
-We can thus create a config file with all this information: config.py. 
+Bu nedenle tüm bu bilgileri içeren bir yapılandırma dosyası oluşturabiliriz: `config.py`.
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 # config.py 
  
 TRAINING_FILE = "../input/mnist_train_folds.csv" 
  
 MODEL_OUTPUT = "../models/" 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-And we make some changes to our training script too. The training file utilizes the 
-config file now. Thus making it easier to change data or the model output.
+Ayrıca eğitim betiğimizde de bazı değişiklikler yaparız. Eğitim dosyası artık yapılandırma dosyasını kullanır. Böylece veriyi veya model çıktı konumunu değiştirmek çok daha kolay hale gelir:
 
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 # train.py 
 import os 
  
@@ -3159,42 +3151,41 @@ from sklearn import tree
  
  
 def run(fold): 
-    # read the training data with folds 
+    # katları içeren eğitim verisini oku 
     df = pd.read_csv(config.TRAINING_FILE) 
  
-    # training data is where kfold is not equal to provided fold 
-    # also, note that we reset the index 
+    # eğitim verisi, kfold sütununun verilen kat numarasına eşit olmadığı satırlardır 
+    # ayrıca indeksi sıfırladığımıza dikkat edin 
     df_train = df[df.kfold != fold].reset_index(drop=True) 
  
-    # validation data is where kfold is equal to provided fold 
+    # doğrulama verisi, kfold sütununun verilen kat numarasına eşit olduğu satırlardır 
     df_valid = df[df.kfold == fold].reset_index(drop=True) 
  
-    # drop the label column from dataframe and convert it to 
-    # a numpy array by using .values. 
-    # target is label column in the dataframe 
+    # label sütununu dataframe'den çıkar ve .values kullanarak 
+    # bir numpy dizisine dönüştür. 
+    # hedef sütun dataframe'deki "label" sütunudur 
     x_train = df_train.drop("label", axis=1).values 
     y_train = df_train.label.values 
  
-    # similarly, for validation, we have 
+    # benzer şekilde, doğrulama için: 
     x_valid = df_valid.drop("label", axis=1).values 
     y_valid = df_valid.label.values 
  
-    # initialize simple decision tree classifier from sklearn 
+    # sklearn'den basit bir karar ağacı sınıflandırıcısını başlat 
     clf = tree.DecisionTreeClassifier() 
  
-    # fir the model on training data 
+    # modeli eğitim verisi üzerinde eğit 
     clf.fit(x_train, y_train) 
  
-    # create predictions for validation samples 
+    # doğrulama örnekleri için tahminler oluştur 
     preds = clf.predict(x_valid) 
  
-    # calculate & print accuracy 
+    # doğruluğu hesapla ve yazdır 
     accuracy = metrics.accuracy_score(y_valid, preds) 
     print(f"Fold={fold}, Accuracy={accuracy}") 
  
-    # save the model
-
-joblib.dump( 
+    # modeli kaydet 
+    joblib.dump( 
         clf,  
         os.path.join(config.MODEL_OUTPUT, f"dt_{fold}.bin") 
     ) 
@@ -3206,19 +3197,15 @@ if __name__ == "__main__":
     run(fold=2) 
     run(fold=3) 
     run(fold=4) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Please note that I am not showing the difference between this training script and the 
-one before. Please take a careful look at both of them and find the differences 
-yourself. There aren’t many of them. 
+Bu eğitim betiği ile bir önceki arasındaki farkları özellikle vurgulamadığımı lütfen unutmayın. Lütfen her ikisine de dikkatlice bakın ve farkları kendiniz bulun; zaten çok fazla değişiklik yok.
  
-There is still one more thing related to the training script that can be improved. As 
-you can see, we call the run function multiple times for every fold. Sometimes it’s 
-not advisable to run multiple folds in the same script as the memory consumption 
-may keep increasing, and your program may crash. To take care of this problem, 
-we can pass arguments to the training script. I like doing it using argparse. 
+Eğitim betiğiyle ilgili geliştirilebilecek bir durum daha var: Gördüğünüz gibi her kat (*fold*) için `run` fonksiyonunu defalarca çağırıyoruz. Bazen aynı betik içinde birden fazla katı art arda çalıştırmak tavsiye edilmez; çünkü bellek kullanımı sürekli artabilir ve programınız çökebilir. Bu sorunun önüne geçmek için eğitim betiğine dışarıdan parametreler (argümanlar) geçebiliriz. Ben bunu `argparse` kullanarak yapmayı tercih ediyorum.
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 # train.py 
 import argparse 
 . 
@@ -3226,38 +3213,38 @@ import argparse
 . 
  
 if __name__ == "__main__": 
-    # initialize ArgumentParser class of argparse 
+    # argparse kütüphanesinin ArgumentParser sınıfını başlat 
     parser = argparse.ArgumentParser() 
  
-    # add the different arguments you need and their type 
-    # currently, we only need fold 
+    # ihtiyacınız olan argümanları ve türlerini ekleyin 
+    # şu anda sadece fold (kat) değerine ihtiyacımız var 
     parser.add_argument( 
         "--fold", 
         type=int 
     ) 
-    # read the arguments from the command line 
+    # komut satırından gelen argümanları oku 
     args = parser.parse_args() 
  
-    # run the fold specified by command line arguments
-
-run(fold=args.fold) 
+    # komut satırı argümanı ile belirtilen katı çalıştır 
+    run(fold=args.fold) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Now, we can run the python script again, but only for a given fold. 
+Artık Python betiğini yalnızca belirli bir kat için çalıştırabiliriz:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```text
 ❯ python train.py --fold 0 
 Fold=0, Accuracy=0.8656666666666667 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-If you see carefully, our fold 0 score was a bit different before. This is because of 
-the randomness in the model. We will come to handling randomness in later 
-chapters. 
+Dikkatli bakarsanız, kat 0 skorumuzun daha öncekinden biraz farklı olduğunu görürsünüz. Bu durum modeldeki rastgelelikten kaynaklanmaktadır. Rastgeleliği kontrol altına alma konusuna sonraki bölümlerde değineceğiz.
  
-Now, if you want, you can create a shell script with different commands for 
-different folds and run them all together, as shown below. 
+Şimdi, isterseniz farklı katlar için farklı komutlar içeren bir kabuk betiği (*shell script*) oluşturabilir ve aşağıda gösterildiği gibi hepsini birlikte çalıştırabilirsiniz:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```bash
 #!/bin/sh 
  
 python train.py --fold 0 
@@ -3265,26 +3252,26 @@ python train.py --fold 1
 python train.py --fold 2 
 python train.py --fold 3 
 python train.py --fold 4 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-And you can run this by the following command. 
+Ve bunu şu komutla çalıştırabilirsiniz:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```text
 ❯ sh run.sh 
 Fold=0, Accuracy=0.8675 
 Fold=1, Accuracy=0.8693333333333333 
 Fold=2, Accuracy=0.8683333333333333 
 Fold=3, Accuracy=0.8704166666666666 
 Fold=4, Accuracy=0.8685 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-We have made quite some progress now, but if we look at our training script, we 
-still are limited by a few things, for example, the model. The model is hardcoded in 
-the training script, and the only way to change it is to modify the script. So, we will 
-create a new python script called model_dispatcher.py. model_dispatcher.py, as the 
-name suggests, will dispatch our models to our training script.
+Şimdiye kadar epey ilerleme kaydettik; ancak eğitim betiğimize bakarsak hâlâ birkaç şeyle kısıtlı olduğumuzu görürüz, örneğin model. Model, eğitim betiğinin içine sabit olarak kodlanmıştır ve modeli değiştirmenin tek yolu betiğin kendisini değiştirmektir. Bu yüzden `model_dispatcher.py` adında yeni bir Python betiği oluşturacağız. `model_dispatcher.py`, adından da anlaşılacağı üzere modellerimizi eğitim betiğimize dağıtacaktır (*dispatch*).
 
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 # model_dispatcher.py 
 from sklearn import tree 
  
@@ -3297,14 +3284,13 @@ models = {
         criterion="entropy" 
     ), 
 } 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-model_dispatcher.py imports tree from scikit-learn and defines a dictionary with 
-keys that are names of the models and values are the models themselves. Here, we 
-define two different decision trees, one with gini criterion and one with entropy. To 
-use model_dispatcher.py, we need to make a few changes to our training script. 
+`model_dispatcher.py`, scikit-learn'den `tree` modülünü içe aktarır ve anahtarları model adları, değerleri ise modellerin kendisi olan bir sözlük (*dictionary*) tanımlar. Burada, biri *gini* kriterine ve diğeri *entropy* kriterine sahip iki farklı karar ağacı tanımlıyoruz. `model_dispatcher.py` dosyasını kullanmak için eğitim betiğimizde birkaç değişiklik yapmamız gerekir:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 # train.py 
 import argparse 
 import os 
@@ -3318,41 +3304,40 @@ import model_dispatcher
  
  
 def run(fold, model): 
-    # read the training data with folds 
+    # katları içeren eğitim verisini oku 
     df = pd.read_csv(config.TRAINING_FILE) 
  
-    # training data is where kfold is not equal to provided fold 
-    # also, note that we reset the index 
+    # eğitim verisi, kfold sütununun verilen kat numarasına eşit olmadığı satırlardır 
+    # ayrıca indeksi sıfırladığımıza dikkat edin 
     df_train = df[df.kfold != fold].reset_index(drop=True) 
  
-    # validation data is where kfold is equal to provided fold 
+    # doğrulama verisi, kfold sütununun verilen kat numarasına eşit olduğu satırlardır 
     df_valid = df[df.kfold == fold].reset_index(drop=True) 
  
-    # drop the label column from dataframe and convert it to 
-    # a numpy array by using .values.
-
-# target is label column in the dataframe 
+    # label sütununu dataframe'den çıkar ve .values kullanarak 
+    # bir numpy dizisine dönüştür. 
+    # hedef sütun dataframe'deki "label" sütunudur 
     x_train = df_train.drop("label", axis=1).values 
     y_train = df_train.label.values 
  
-    # similarly, for validation, we have 
+    # benzer şekilde, doğrulama için: 
     x_valid = df_valid.drop("label", axis=1).values 
     y_valid = df_valid.label.values 
  
-    # fetch the model from model_dispatcher 
+    # modeli model_dispatcher içinden getir 
     clf = model_dispatcher.models[model] 
  
-    # fir the model on training data 
+    # modeli eğitim verisi üzerinde eğit 
     clf.fit(x_train, y_train) 
  
-    # create predictions for validation samples 
+    # doğrulama örnekleri için tahminler oluştur 
     preds = clf.predict(x_valid) 
  
-    # calculate & print accuracy 
+    # doğruluğu hesapla ve yazdır 
     accuracy = metrics.accuracy_score(y_valid, preds) 
     print(f"Fold={fold}, Accuracy={accuracy}") 
  
-    # save the model 
+    # modeli kaydet 
     joblib.dump( 
         clf,  
         os.path.join(config.MODEL_OUTPUT, f"dt_{fold}.bin") 
@@ -3377,38 +3362,38 @@ if __name__ == "__main__":
         fold=args.fold, 
         model=args.model 
     ) 
+```
 ═════════════════════════════════════════════════════════════════════════
 
-There are a few major changes to train.py:
+`train.py` dosyasında birkaç önemli değişiklik yapıldı:
 
-• 
-import model_dispatcher 
-• 
-add --model argument to ArgumentParser 
-• 
-add model argument to run() function 
-• 
-use the dispatcher to fetch the model given the name 
+• `model_dispatcher` modülünü içe aktarmak  
+• `ArgumentParser`'a `--model` argümanını eklemek  
+• `run()` fonksiyonuna `model` parametresini eklemek  
+• Verilen isme karşılık gelen modeli getirmek için dağıtıcıyı (*dispatcher*) kullanmak  
  
-Now, we can run the script using the following command: 
+Artık betiği aşağıdaki komutla çalıştırabiliriz:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```text
 ❯ python train.py --fold 0 --model decision_tree_gini 
 Fold=0, Accuracy=0.8665833333333334 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Or the following command 
+Veya şu komutla:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```text
 ❯ python train.py --fold 0 --model decision_tree_entropy 
 Fold=0, Accuracy=0.8705833333333334 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Now, if you add a new model, all you have to do is make changes to 
-model_dispatcher.py. Let’s try adding random forest and see what happens to our 
-accuracy. 
+Artık yeni bir model eklemek istediğinizde yapmanız gereken tek şey `model_dispatcher.py` dosyasında değişiklik yapmaktır. Rastgele Orman (*Random Forest*) algoritmasını eklemeyi deneyelim ve doğruluğumuza (*accuracy*) ne olduğuna bakalım:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 # model_dispatcher.py 
 from sklearn import ensemble 
 from sklearn import tree 
@@ -3423,19 +3408,23 @@ models = {
     ), 
     "rf": ensemble.RandomForestClassifier(), 
 } 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Let’s run this code.
+Bu kodu çalıştıralım:
 
 ═════════════════════════════════════════════════════════════════════════ 
+```text
 ❯ python train.py --fold 0 --model rf 
 Fold=0, Accuracy=0.9670833333333333 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Wow, a simple change gave such a massive improvement in the score! 
-Let’s run all 5 folds using our run.sh script now! 
+Vay canına! Bu kadar basit bir değişiklik skorda ne kadar büyük bir artış sağladı!  
+Şimdi `run.sh` betiğimizi kullanarak 5 katın tamamını çalıştıralım:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```bash
 #!/bin/sh 
  
 python train.py --fold 0 --model rf 
@@ -3443,32 +3432,27 @@ python train.py --fold 1 --model rf
 python train.py --fold 2 --model rf 
 python train.py --fold 3 --model rf 
 python train.py --fold 4 --model rf 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-And the scores look like the following. 
+Ve skorlar şu şekilde karşımıza çıkar:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```text
 ❯ sh run.sh 
 Fold=0, Accuracy=0.9674166666666667 
 Fold=1, Accuracy=0.9698333333333333 
 Fold=2, Accuracy=0.96575 
 Fold=3, Accuracy=0.9684166666666667 
 Fold=4, Accuracy=0.9666666666666667 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-MNIST is a problem that is discussed in almost every book and every blog. But I 
-tried to convert this problem to more fun and show you how to write a basic 
-framework for almost any machine learning project you are doing, or you plan to 
-do in the near future. There are many different ways to improve on this MNIST 
-model and also this framework, and we will see that in future chapters. 
+MNIST, neredeyse her kitapta ve blogda ele alınan klasik bir problemdir. Ancak ben bu problemi daha eğlenceli hale getirmeye ve şu anda yaptığınız veya yakın gelecekte yapmayı planladığınız neredeyse her makine öğrenimi projesi için temel bir çalışma çatısını (*framework*) nasıl kuracağınızı göstermeye çalıştım. Bu MNIST modelini ve bu çatıyı geliştirmenin pek çok farklı yolu vardır ve bunları sonraki bölümlerde göreceğiz.
  
-I used some scripts like model_dispatcher.py and config.py and imported them in 
-my training script. Please note that I did not import * and neither should you. If I 
-had imported *, you would have never known where the models dictionary came 
-from. Writing good, understandable code is an essential quality one can have, and 
-many data scientists ignore it. If you work on a project that others can understand 
-and use without consulting you, you save their time and your own time and can 
-invest that time to improve your project or work on a new one.
+`model_dispatcher.py` ve `config.py` gibi bazı betikler kullandım ve bunları eğitim betiğimin içine aktardım. Lütfen `from module import *` şeklinde yıldız (`*`) kullanarak içe aktarma **yapmadığıma** dikkat edin; siz de yapmamalısınız. Eğer `import *` şeklinde içe aktarmış olsaydım, `models` sözlüğünün nereden geldiğini asla bilemezdiniz. İyi ve anlaşılır kod yazmak, bir veri bilimcisinin sahip olabileceği en temel niteliklerden biridir ve birçok veri bilimci bunu göz ardı eder. Başkalarının size danışmaya gerek kalmadan anlayabileceği ve kullanabileceği bir proje mimarisi inşa ederseniz, hem onların hem de kendi zamanınızdan tasarruf etmiş olursunuz; bu sayede kazandığınız zamanı projenizi geliştirmeye veya yenilerine odaklanmaya ayırabilirsiniz.
+
+## Kaldığım yer
 
 Approaching categorical variables 
  
