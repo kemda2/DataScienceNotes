@@ -3030,13 +3030,13 @@ Bu veri formatını kolayca okumak için `pandas` kütüphanesini kullanabiliriz
 
 ![resim](img/p0076_fig01_resim.png)
 
-## Kaldığım yer
-
-Figure 1: MNIST dataset in CSV format 
+**Şekil 1: CSV formatında MNIST veri seti**
  
-Let’s take a look at the counts of the label column in this dataset.
+Bu veri setindeki etiket (*label*) sütununda yer alan değerlerin sayılarına (sınıf dağılımına) bir göz atalım.
 
 ![resim](img/p0076_fig02_resim.png)
+
+## Kaldığım yer
 
 Figure 2: Counts of label in MNIST dataset 
  
