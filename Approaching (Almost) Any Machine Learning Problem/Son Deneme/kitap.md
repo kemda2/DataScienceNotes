@@ -1781,10 +1781,6 @@ Bu nedenle bir sınıflandırma modelini değerlendirirken yalnızca tek bir thr
 
 ![resim](img/p0041_fig01_resim.png)
 
-Metnin Türkçe çevirisi aşağıdadır:
-
----
-
 **Şekil 2: Hassasiyet-Duyarlılık Eğrisi (Precision-Recall Curve)**
  
 Bu hassasiyet-duyarlılık eğrisi, internette görmüş olabileceğiniz grafiklerden oldukça farklı görünüyor. Bunun sebebi sadece 20 örneğimizin bulunması ve bunlardan yalnızca 3'ünün pozitif örnek olmasıdır. Ancak endişelenecek bir durum yok; bu bildiğimiz standart hassasiyet-duyarlılık eğrisidir.
@@ -2410,10 +2406,6 @@ Karmaşıklık matrisinin TP, FP, FN ve TN'den oluştuğunu görüyoruz. Bunlar 
 
 ![resim](img/p0059_fig01_resim.png)
 
-Metnin Türkçe çevirisi aşağıdadır:
-
----
-
 **Şekil 7: İkili bir sınıflandırma görevi için karmaşıklık matrisi (Confusion Matrix)**
  
 İkili karmaşıklık matrisini çok sınıflı bir karmaşıklık matrisine de genişletebiliriz. Peki bu nasıl görünür? Eğer $N$ adet sınıfımız varsa, $N \times N$ boyutunda bir matris olacaktır. Her bir sınıf için, ilgili sınıfa ve diğer sınıflara dağılan toplam örnek sayısını hesaplarız. Bu en iyi bir örnek üzerinden anlaşılabilir.
@@ -2436,139 +2428,122 @@ Kusursuz bir karmaşıklık matrisinde yalnızca soldan sağa uzanan ana köşeg
 
 ![resim](img/p0060_fig01_resim.png)
 
-## Kaldığım yer
-
-Figure 8: Confusion matrix for a multi-class problem 
+**Şekil 8: Çok sınıflı bir problem için karmaşıklık matrisi (Confusion Matrix)**
  
-Confusion matrix gives an easy way to calculate different metrics that we have 
-discussed before. Scikit-learn offers an easy and straightforward way to generate a 
-confusion matrix. Please note that the confusion matrix that I have shown in figure 
-8 is a transpose of scikit-learn’s confusion matrix and an original version can be 
-plotted by the following code. 
+Karmaşıklık matrisi, daha önce tartıştığımız farklı metrikleri hesaplamak için kolay bir yol sunar. Scikit-learn, bir karmaşıklık matrisi oluşturmanın kolay ve pratik bir yolunu sağlar. Şekil 8'de gösterdiğim karmaşıklık matrisinin scikit-learn'ün ürettiği karmaşıklık matrisinin transpozesi (devriği) olduğunu ve orijinal halinin aşağıdaki kodla çizilebileceğini lütfen unutmayın:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 from sklearn import metrics 
  
-# some targets 
+# gerçek hedefler 
 y_true = [0, 1, 2, 0, 1, 2, 0, 2, 2] 
  
-#some predictions 
+# tahminler 
 y_pred = [0, 2, 1, 0, 2, 1, 0, 0, 2] 
  
-# get confusion matrix from sklearn 
+# sklearn ile karmaşıklık matrisini elde etme 
 cm = metrics.confusion_matrix(y_true, y_pred) 
  
-# plot using matplotlib and seaborn 
+# matplotlib ve seaborn kullanarak görselleştirme 
 plt.figure(figsize=(10, 10)) 
 cmap = sns.cubehelix_palette(50, hue=0.05, rot=0, light=0.9, dark=0, 
-as_cmap=True) 
+                             as_cmap=True) 
 sns.set(font_scale=2.5) 
 sns.heatmap(cm, annot=True, cmap=cmap, cbar=False)
 
 plt.ylabel('Actual Labels', fontsize=20) 
 plt.xlabel('Predicted Labels', fontsize=20) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-So, until now, we have tackled metrics for binary and multi-class classification. 
-Then comes another type of classification problem called multi-label 
-classification. In multi-label classification, each sample can have one or more 
-classes associated with it. One simple example of this type of problem would be a 
-task in which you are asked to predict different objects in a given image.
+Böylece şu ana kadar ikili (*binary*) ve çok sınıflı (*multi-class*) sınıflandırma için değerlendirme metriklerini ele almış olduk. 
+
+Sırada **çok etiketli sınıflandırma (multi-label classification)** adı verilen başka bir sınıflandırma problemi türü gelmektedir. Çok etiketli sınıflandırmada, her bir örnek kendisiyle ilişkili bir veya birden fazla sınıfa (etikete) sahip olabilir. Bu problem türüne basit bir örnek olarak, verilen bir görselde yer alan farklı nesneleri tahmin etmenizin istendiği bir görev verilebilir.
 
 ![resim](img/p0061_fig01_resim.png)
 
-Figure 9: Different objects in an image4 
+**Şekil 9: Bir görseldeki farklı nesneler** 
  
-Figure 9 shows an example image from a well-known dataset. Note that this 
-dataset’s objective is something different but let’s not go there. Let’s assume that 
-the aim is only to predict if an object is present in an image or not. For figure 9, we 
-have a chair, flower-pot, window, but we don’t have other objects such as computer, 
-bed, tv, etc. So, one image can have multiple targets associated with it. This type of 
-problem is the multi-label classification problem. 
+Şekil 9, iyi bilinen bir veri setinden örnek bir görseli göstermektedir. Bu veri setinin asıl amacının biraz daha farklı olduğunu belirtelim, ancak o detaya girmeyelim. Amacımızın yalnızca görselde belirli bir nesnenin bulunup bulunmadığını tahmin etmek olduğunu varsayalım. Şekil 9 için bir sandalye, saksı ve pencere mevcut; ancak bilgisayar, yatak, televizyon vb. diğer nesneler bulunmuyor. Dolayısıyla, tek bir görsel kendisiyle ilişkili birden fazla hedef değere (etikete) sahip olabilir. Bu tür problemlere **çok etiketli sınıflandırma (multi-label classification)** problemleri denir.
  
-The metrics for this type of classification problem are a bit different. Some suitable 
-and most common metrics are:
+Bu tür sınıflandırma problemleri için değerlendirme metrikleri biraz daha farklıdır. En uygun ve en yaygın metriklerden bazıları şunlardır:
 
-- 
-Precision at k (P@k) 
-- 
-Average precision at k (AP@k)
-
-4 https://www.flickr.com/photos/krakluski/2950388100 License: CC BY 2.0
-
-- 
-Mean average precision at k (MAP@k) 
-- 
-Log loss 
+- $k$ Konumundaki Hassasiyet (*Precision at k* - **P@k**) 
+- $k$ Konumundaki Ortalama Hassasiyet (*Average Precision at k* - **AP@k**) 
+- $k$ Konumundaki Ortalama Hassasiyetlerin Ortalaması (*Mean Average Precision at k* - **MAP@k**) 
+- Logaritmik Kayıp (*Log Loss*) 
  
-Let’s start with precision at k or P@k. One must not confuse this precision with 
-the precision discussed earlier. If you have a list of original classes for a given 
-sample and list of predicted classes for the same, precision is defined as the number 
-of hits in the predicted list considering only top-k predictions, divided by k. 
+**P@k (Precision at k)** ile başlayalım. Bu hassasiyeti daha önce tartıştığımız hassasiyet metriğiyle karıştırmamak gerekir. Belirli bir örnek için orijinal sınıfların listesine ve aynı örnek için tahmin edilen sınıfların listesine sahipseniz; hassasiyet, yalnızca en üstteki $k$ adet tahmin (*top-k*) dikkate alınarak tahmin listesindeki doğru eşleşmelerin (isabetlerin) sayısının $k$'ya bölünmesi olarak tanımlanır.
  
-If that’s confusing, it will become apparent with python code. 
+Eğer bu tanım kafa karıştırıcı geldiyse, Python koduyla çok daha anlaşılır hale gelecektir:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 def pk(y_true, y_pred, k): 
     """ 
-    This function calculates precision at k  
-    for a single sample 
-    :param y_true: list of values, actual classes 
-    :param y_pred: list of values, predicted classes 
-    :return: precision at a given value k 
+    Bu fonksiyon tek bir örnek için k konumundaki 
+    hassasiyeti (P@k) hesaplar. 
+    :param y_true: gerçek sınıfların değer listesi 
+    :param y_pred: tahmin edilen sınıfların değer listesi 
+    :param k: dikkate alınacak üst tahmin sayısı 
+    :return: verilen k değeri için hassasiyet 
     """ 
-    # if k is 0, return 0. we should never have this 
-    # as k is always >= 1 
+    # k 0 ise 0 döndür. k her zaman >= 1 olacağından 
+    # bu durumla hiç karşılaşmamamız gerekir 
     if k == 0: 
         return 0 
-    # we are interested only in top-k predictions 
+    # sadece en üstteki k tahmini dikkate alıyoruz 
     y_pred = y_pred[:k] 
-    # convert predictions to set 
+    # tahminleri kümeye (set) dönüştür 
     pred_set = set(y_pred) 
-    # convert actual values to set 
+    # gerçek değerleri kümeye dönüştür 
     true_set = set(y_true) 
-    # find common values 
+    # ortak değerleri (kesişimi) bul 
     common_values = pred_set.intersection(true_set) 
-    # return length of common values over k 
+    # ortak değerlerin sayısını k eleman sayısına bölerek döndür 
     return len(common_values) / len(y_pred[:k]) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-With code, everything becomes much easier to understand. 
+Kod sayesinde her şeyi anlamak çok daha kolay hale geliyor.
  
-Now, we have average precision at k or AP@k. AP@k is calculated using P@k. 
-For example, if we have to calculate AP@3, we calculate AP@1, AP@2 and AP@3 
-and then divide the sum by 3.  
+Sırada **AP@k (Average Precision at k)** var. AP@k, P@k kullanılarak hesaplanır. Örneğin AP@3 hesaplamamız gerekiyorsa; P@1, P@2 ve P@3 değerlerini hesaplarız ve ardından bu toplamı 3'e böleriz.
  
-Let’s see its implementation.
+Kodlamasına bakalım:
 
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 def apk(y_true, y_pred, k): 
     """ 
-    This function calculates average precision at k  
-    for a single sample 
-    :param y_true: list of values, actual classes 
-    :param y_pred: list of values, predicted classes 
-    :return: average precision at a given value k 
+    Bu fonksiyon tek bir örnek için k konumundaki 
+    ortalama hassasiyeti (AP@k) hesaplar. 
+    :param y_true: gerçek sınıfların değer listesi 
+    :param y_pred: tahmin edilen sınıfların değer listesi 
+    :param k: üst sınır 
+    :return: verilen k değeri için ortalama hassasiyet 
     """ 
-    # initialize p@k list of values 
+    # p@k değerleri için boş liste 
     pk_values = [] 
-    # loop over all k. from 1 to k + 1 
+    # 1'den k+1'e kadar tüm k değerleri üzerinde dön 
     for i in range(1, k + 1): 
-        # calculate p@i and append to list 
+        # p@i değerini hesapla ve listeye ekle 
         pk_values.append(pk(y_true, y_pred, i)) 
  
-    # if we have no values in the list, return 0 
+    # listede hiç değer yoksa 0 döndür 
     if len(pk_values) == 0: 
         return 0 
-    # else, we return the sum of list over length of list 
+    # aksi takdirde listedeki değerlerin toplamını liste uzunluğuna böl 
     return sum(pk_values) / len(pk_values) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-These two functions can be used to calculate average precision at k (AP@k) for two 
-given lists; let’s see how. 
+Bu iki fonksiyon, verilen iki liste için $k$ konumundaki ortalama hassasiyeti (AP@k) hesaplamak için kullanılabilir; nasıl çalıştığına bakalım:
  
+═════════════════════════════════════════════════════════════════════════ 
+```python
 In [X]: y_true = [ 
    ...:     [1, 2, 3], 
    ...:     [0, 2], 
@@ -2590,15 +2565,14 @@ In [X]: y_pred = [
 In [X]: for i in range(len(y_true)): 
    ...:     for j in range(1, 4): 
    ...:         print(
-
-...:             f""" 
+   ...:             f""" 
    ...:             y_true={y_true[i]}, 
    ...:             y_pred={y_pred[i]}, 
    ...:             AP@{j}={apk(y_true[i], y_pred[i], k=j)} 
    ...:             """ 
    ...:         ) 
    ...: 
- 
+
             y_true=[1, 2, 3], 
             y_pred=[0, 1, 2], 
             AP@1=0.0 
@@ -2612,42 +2586,41 @@ In [X]: for i in range(len(y_true)):
             y_true=[1, 2, 3], 
             y_pred=[0, 1, 2], 
             AP@3=0.38888888888888884
-
 . 
      . 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Please note that I have omitted many values from the output, but you get the point. 
-So, this is how we can calculate AP@k which is per sample. In machine learning, 
-we are interested in all samples, and that’s why we have mean average precision 
-at k or MAP@k. MAP@k is just an average of AP@k and can be calculated easily 
-by the following python code. 
+Çıktıdaki birçok değeri atladığımı lütfen unutmayın, ancak mantığı anladınız. Örnek başına AP@k değerini bu şekilde hesaplayabiliriz. Makine öğreniminde tüm örneklerin genel başarısıyla ilgileniriz; bu yüzden **MAP@k (Mean Average Precision at k)** metriğine sahibiz. MAP@k, sadece tüm örneklerin AP@k değerlerinin aritmetik ortalamasıdır ve aşağıdaki Python koduyla kolayca hesaplanabilir:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 def mapk(y_true, y_pred, k): 
     """ 
-    This function calculates mean avg precision at k  
-    for a single sample 
-    :param y_true: list of values, actual classes 
-    :param y_pred: list of values, predicted classes 
-    :return: mean avg precision at a given value k 
+    Tüm örnekler üzerinden k konumundaki ortalama 
+    hassasiyetlerin ortalamasını (MAP@k) hesaplayan fonksiyon 
+    :param y_true: gerçek sınıfların değer listesi (listelerin listesi) 
+    :param y_pred: tahmin edilen sınıfların değer listesi (listelerin listesi) 
+    :param k: üst sınır 
+    :return: verilen k değeri için MAP skoru 
     """ 
-    # initialize empty list for apk values 
+    # apk değerleri için boş liste 
     apk_values = [] 
-    # loop over all samples 
+    # tüm örnekler üzerinde dön 
     for i in range(len(y_true)): 
-        # store apk values for every sample 
+        # her örnek için apk değerini hesapla ve sakla 
         apk_values.append(
-
-apk(y_true[i], y_pred[i], k=k) 
+            apk(y_true[i], y_pred[i], k=k) 
         ) 
-    # return mean of apk values list 
+    # apk değerleri listesinin ortalamasını döndür 
     return sum(apk_values) / len(apk_values) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Now, we can calculate MAP@k for k=1, 2, 3 and 4 for the same list of lists. 
+Şimdi aynı listeler için $k=1, 2, 3$ ve $4$ değerlerine karşılık gelen MAP@k skorlarını hesaplayabiliriz:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 In [X]: y_true = [ 
    ...:     [1, 2, 3], 
    ...:     [0, 2], 
@@ -2677,298 +2650,266 @@ Out[X]: 0.3611111111111111
  
 In [X]: mapk(y_true, y_pred, k=4) 
 Out[X]: 0.34722222222222215  
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-P@k, AP@k and MAP@k all range from 0 to 1 with 1 being the best. 
+P@k, AP@k ve MAP@k değerlerinin tümü 0 ile 1 arasında değişir ve 1 en iyi skordur.
  
-Please note that sometimes you might see different implementations of P@k and 
-AP@k on the internet. For example, let’s take a look at one of these 
-implementations.
+İnternette bazen P@k ve AP@k için farklı uygulamalar görebileceğinizi lütfen unutmayın. Örneğin, bu alternatif uygulamalardan birine göz atalım:
 
 ═════════════════════════════════════════════════════════════════════════ 
-# taken from: 
+```python
+# Kaynak: 
 # https://github.com/benhamner/Metrics/blob/ 
 # master/Python/ml_metrics/average_precision.py 
 import numpy as np 
  
 def apk(actual, predicted, k=10): 
     """ 
-    Computes the average precision at k. 
-    This function computes the AP at k between two lists of 
-    items. 
-    Parameters 
+    k konumundaki ortalama hassasiyeti (AP@k) hesaplar. 
+    Bu fonksiyon iki öğe listesi arasındaki AP@k değerini hesaplar. 
+    Parametreler 
     ---------- 
     actual : list 
-             A list of elements to be predicted (order doesn't matter) 
+             Tahmin edilmesi gereken öğeler listesi (sıralama önemsizdir) 
     predicted : list 
-             A list of predicted elements (order does matter) 
-    k : int, optional 
-             The maximum number of predicted elements 
-    Returns 
+             Tahmin edilen öğeler listesi (sıralama önemlidir) 
+    k : int, isteğe bağlı 
+             Tahmin edilen maksimum öğe sayısı 
+    Döndürür 
     ------- 
     score : double 
-             The average precision at k over the input lists 
+             Girdi listeleri üzerinden k konumundaki ortalama hassasiyet 
     """ 
-    if len(predicted)>k: 
+    if len(predicted) > k: 
         predicted = predicted[:k] 
  
     score = 0.0 
     num_hits = 0.0 
  
-    for i,p in enumerate(predicted): 
+    for i, p in enumerate(predicted): 
         if p in actual and p not in predicted[:i]: 
             num_hits += 1.0 
-            score += num_hits / (i+1.0) 
+            score += num_hits / (i + 1.0) 
  
     if not actual: 
         return 0.0 
  
     return score / min(len(actual), k) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-This implementation is another version of AP@k where order matters and we weigh 
-the predictions. This implementation will have slightly different results from what 
-I have presented.
+Bu kod, sıralamanın önemli olduğu ve tahminleri konumuna göre ağırlıklandırdığımız AP@k metriğinin bir başka versiyonudur. Bu uygulama, az önce sunduğum sonuçlardan biraz daha farklı sonuçlar verecektir.
 
-Now, we come to log loss for multi-label classification. This is quite easy. You 
-can convert the targets to binary format and then use a log loss for each column. In 
-the end, you can take the average of log loss in each column. This is also known as 
-mean column-wise log loss. Of course, there are other ways you can implement this, 
-and you should explore it as you come across it. 
+Şimdi çok etiketli sınıflandırmada **log loss** konusuna geliyoruz. Bu oldukça kolaydır: Hedefleri ikili (*binary*) formata dönüştürebilir ve ardından her bir sütun için ayrı ayrı log loss uygulayabilirsiniz. Son olarak her sütundaki log loss değerlerinin ortalamasını alırsınız. Buna **sütun bazlı ortalama log loss (mean column-wise log loss)** da denir. Elbette bunu uygulayabileceğiniz başka yöntemler de vardır ve bunlarla karşılaştıkça keşfetmelisiniz.
  
-We have now reached a stage where we can say that we now know all binary, multi-
-class and multi-label classification metrics, and now we can move to regression 
-metrics. 
+Artık ikili (*binary*), çok sınıflı (*multi-class*) ve çok etiketli (*multi-label*) tüm sınıflandırma metriklerini bildiğimizi söyleyebileceğimiz aşamaya geldik; şimdi **regresyon metriklerine** geçebiliriz.
  
-The most common metric in regression is error. Error is simple and very easy to 
-understand.
+Regresyondaki en temel metrik **hata (error)** değeridir. Hata basittir ve anlaşılması çok kolaydır:
 
-Error = True Value – Predicted Value 
+$$\text{Hata} = \text{Gerçek Değer} - \text{Tahmin Edilen Değer}$$
  
-Absolute error is just absolute of the above.
+**Mutlak Hata (Absolute Error)** ise yukarıdaki ifadenin mutlak değerinden ibarettir:
 
-Absolute Error = Abs ( True Value – Predicted Value ) 
+$$\text{Mutlak Hata} = |\text{Gerçek Değer} - \text{Tahmin Edilen Değer}|$$
  
-Then we have mean absolute error (MAE). It’s just mean of all absolute errors. 
+Ardından **Ortalama Mutlak Hata (Mean Absolute Error - MAE)** gelir. Bu, tüm mutlak hataların aritmetik ortalamasıdır:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 import numpy as np 
- 
  
 def mean_absolute_error(y_true, y_pred): 
     """ 
-    This function calculates mae 
-    :param y_true: list of real numbers, true values 
-    :param y_pred: list of real numbers, predicted values 
-    :return: mean absolute error 
+    MAE hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi (reel sayılar) 
+    :param y_pred: tahmin edilen değerler listesi (reel sayılar) 
+    :return: ortalama mutlak hata 
     """ 
-    # initialize error at 0 
+    # hatayı 0 olarak başlat 
     error = 0 
-    # loop over all samples in the true and predicted list 
+    # gerçek ve tahmin listelerindeki tüm örnekler üzerinde dön 
     for yt, yp in zip(y_true, y_pred): 
-        # calculate absolute error  
-        # and add to error 
+        # mutlak hatayı hesapla ve toplama ekle 
         error += np.abs(yt - yp) 
-    # return mean error 
+    # ortalama hatayı döndür 
     return error / len(y_true) 
+```
 ═════════════════════════════════════════════════════════════════════════
 
-Similarly, we have squared error and mean squared error (MSE).
+Benzer şekilde **karesel hata (squared error)** ve **ortalama karesel hata (mean squared error - MSE)** metriklerine sahibiz:
 
-Squared Error = ( True Value – Predicted Value )2 
+$$\text{Karesel Hata} = (\text{Gerçek Değer} - \text{Tahmin Edilen Değer})^2$$
  
-And mean squared error (MSE) can be implemented as follows. 
+Ve **Ortalama Karesel Hata (MSE)** şu şekilde uygulanabilir:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 def mean_squared_error(y_true, y_pred): 
     """ 
-    This function calculates mse 
-    :param y_true: list of real numbers, true values 
-    :param y_pred: list of real numbers, predicted values 
-    :return: mean squared error 
+    MSE hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi (reel sayılar) 
+    :param y_pred: tahmin edilen değerler listesi (reel sayılar) 
+    :return: ortalama karesel hata 
     """ 
-    # initialize error at 0 
+    # hatayı 0 olarak başlat 
     error = 0 
-    # loop over all samples in the true and predicted list 
+    # gerçek ve tahmin listelerindeki tüm örnekler üzerinde dön 
     for yt, yp in zip(y_true, y_pred): 
-        # calculate squared error  
-        # and add to error 
+        # karesel hatayı hesapla ve toplama ekle 
         error += (yt - yp) ** 2 
-    # return mean error 
+    # ortalama hatayı döndür 
     return error / len(y_true) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-MSE and RMSE (root mean squared error) are the most popular metrics used in 
-evaluating regression models.
+**MSE** ve **RMSE (Root Mean Squared Error / Kök Ortalama Karesel Hata)**, regresyon modellerini değerlendirmede kullanılan en popüler metriklerdir:
 
-RMSE = SQRT ( MSE ) 
+$$RMSE = \sqrt{MSE}$$
  
-Another type of error in same class is squared logarithmic error. Some people 
-call it SLE, and when we take mean of this error across all samples, it is known as 
-MSLE (mean squared logarithmic error) and implemented as follows. 
+Aynı sınıftaki bir diğer hata türü **karesel logaritmik hatadır (squared logarithmic error)**. Bazıları buna SLE der; bu hatanın tüm örnekler üzerinden ortalamasını aldığımızda buna **MSLE (Mean Squared Logarithmic Error / Ortalama Karesel Logaritmik Hata)** denir ve aşağıdaki gibi uygulanır:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 import numpy as np 
- 
  
 def mean_squared_log_error(y_true, y_pred): 
     """ 
-    This function calculates msle 
-    :param y_true: list of real numbers, true values 
-    :param y_pred: list of real numbers, predicted values 
-    :return: mean squared logarithmic error
-
-""" 
-    # initialize error at 0 
+    MSLE hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi (reel sayılar) 
+    :param y_pred: tahmin edilen değerler listesi (reel sayılar) 
+    :return: ortalama karesel logaritmik hata 
+    """ 
+    # hatayı 0 olarak başlat 
     error = 0 
-    # loop over all samples in true and predicted list 
+    # gerçek ve tahmin listelerindeki tüm örnekler üzerinde dön 
     for yt, yp in zip(y_true, y_pred): 
-        # calculate squared log error  
-        # and add to error 
+        # karesel logaritmik hatayı hesapla ve toplama ekle 
         error += (np.log(1 + yt) - np.log(1 + yp)) ** 2 
-    # return mean error 
+    # ortalama hatayı döndür 
     return error / len(y_true) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Root mean squared logarithmic error is just a square root of this. It is also known 
-as RMSLE.  
+**Kök ortalama karesel logaritmik hata (Root Mean Squared Logarithmic Error)** ise bunun kareköküdür. Aynı zamanda **RMSLE** olarak da bilinir.
  
-Then we have the percentage error:
+Daha sonra **yüzdesel hata (percentage error)** gelir:
 
-Percentage Error = ( ( True Value – Predicted Value ) / True Value ) * 100 
+$$\text{Yüzdesel Hata} = \left( \frac{\text{Gerçek Değer} - \text{Tahmin Edilen Değer}}{\text{Gerçek Değer}} \right) \times 100$$
  
-Same can be converted to mean percentage error for all samples. 
+Aynı formül tüm örnekler için **ortalama yüzdesel hataya (Mean Percentage Error - MPE)** dönüştürülebilir:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 def mean_percentage_error(y_true, y_pred): 
     """ 
-    This function calculates mpe 
-    :param y_true: list of real numbers, true values 
-    :param y_pred: list of real numbers, predicted values 
-    :return: mean percentage error 
+    MPE hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi (reel sayılar) 
+    :param y_pred: tahmin edilen değerler listesi (reel sayılar) 
+    :return: ortalama yüzdesel hata 
     """ 
-    # initialize error at 0 
+    # hatayı 0 olarak başlat 
     error = 0 
  
-    # loop over all samples in true and predicted list 
+    # gerçek ve tahmin listelerindeki tüm örnekler üzerinde dön 
     for yt, yp in zip(y_true, y_pred): 
-        # calculate percentage error  
-        # and add to error 
+        # yüzdesel hatayı hesapla ve toplama ekle 
         error += (yt - yp) / yt 
  
-    # return mean percentage error 
+    # ortalama yüzdesel hatayı döndür 
     return error / len(y_true) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-And an absolute version of the same (and more common version) is known as mean 
-absolute percentage error or MAPE.
+Bunun mutlak versiyonu (ve çok daha yaygın kullanılan hali) **ortalama mutlak yüzdesel hata** veya **MAPE (Mean Absolute Percentage Error)** olarak bilinir:
 
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 import numpy as np 
- 
  
 def mean_abs_percentage_error(y_true, y_pred): 
     """ 
-    This function calculates MAPE 
-    :param y_true: list of real numbers, true values 
-    :param y_pred: list of real numbers, predicted values 
-    :return: mean absolute percentage error 
+    MAPE hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi (reel sayılar) 
+    :param y_pred: tahmin edilen değerler listesi (reel sayılar) 
+    :return: ortalama mutlak yüzdesel hata 
     """ 
-    # initialize error at 0 
+    # hatayı 0 olarak başlat 
     error = 0 
-    # loop over all samples in true and predicted list 
+    # gerçek ve tahmin listelerindeki tüm örnekler üzerinde dön 
     for yt, yp in zip(y_true, y_pred): 
-        # calculate percentage error  
-        # and add to error 
+        # mutlak yüzdesel hatayı hesapla ve toplama ekle 
         error += np.abs(yt - yp) / yt 
-    # return mean percentage error 
+    # ortalama yüzdesel hatayı döndür 
     return error / len(y_true) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-The best thing about regression is that there are only a few most popular metrics 
-that can be applied to almost every regression problem. And it is much easier to 
-understand when we compare it to classification metrics.  
+Regresyonun en güzel yanı, neredeyse her regresyon problemine uygulanabilen az sayıda ve son derece popüler metriğin bulunmasıdır. Ayrıca sınıflandırma metrikleriyle kıyaslandığında anlaşılması çok daha kolaydır.
  
-Let’s talk about another regression metric known as R2 (R-squared), also known 
-as the coefficient of determination.  
+Şimdi **$R^2$ (R-kare / R-squared)** veya diğer adıyla **belirleme katsayısı (coefficient of determination)** olarak bilinen bir başka regresyon metriğinden bahsedelim.
  
-In simple words, R-squared says how good your model fits the data. R-squared 
-closer to 1.0 says that the model fits the data quite well, whereas closer 0 means 
-that model isn’t that good. R-squared can also be negative when the model just 
-makes absurd predictions.  
+Basit bir ifadeyle $R^2$, modelinizin veriye ne kadar iyi uyum sağladığını (*fit*) gösterir. 1.0'a yakın bir $R^2$ değeri, modelin veriye oldukça iyi uyduğunu söylerken; 0'a yakın olması modelin pek iyi olmadığını gösterir. Model tamamen anlamsız/saçma tahminler yaptığında $R^2$ değeri **negatif** de çıkabilir.
  
-The formula for R-squared is shown in figure 10, but as always a python 
-implementation makes things more clear.
+$R^2$ formülü Şekil 10'da gösterilmiştir; ancak her zaman olduğu gibi Python uygulaması kavramları çok daha net hale getirecektir.
 
 ![resim](img/p0070_fig01_resim.png)
 
-Figure 10: Formula for R-squared
+**Şekil 10: R-kare ($R^2$) Formülü**
 
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 import numpy as np 
- 
  
 def r2(y_true, y_pred): 
     """ 
-    This function calculates r-squared score 
-    :param y_true: list of real numbers, true values 
-    :param y_pred: list of real numbers, predicted values 
-    :return: r2 score 
+    Bu fonksiyon R-kare skorunu hesaplar. 
+    :param y_true: gerçek değerler listesi (reel sayılar) 
+    :param y_pred: tahmin edilen değerler listesi (reel sayılar) 
+    :return: r2 skoru 
     """ 
      
-    # calculate the mean value of true values 
+    # gerçek değerlerin ortalamasını hesapla 
     mean_true_value = np.mean(y_true) 
      
-    # initialize numerator with 0 
+    # payı 0 olarak başlat 
     numerator = 0 
-    # initialize denominator with 0 
+    # paydayı 0 olarak başlat 
     denominator = 0 
      
-    # loop over all true and predicted values 
+    # tüm gerçek ve tahmin edilen değerler üzerinde dön 
     for yt, yp in zip(y_true, y_pred): 
-        # update numerator 
+        # payı güncelle 
         numerator += (yt - yp) ** 2 
-        # update denominator 
+        # paydayı güncelle 
         denominator += (yt - mean_true_value) ** 2 
-    # calculate the ratio 
+        
+    # oranı hesapla 
     ratio = numerator / denominator 
-    # return 1 - ratio 
-    return 1 – ratio 
+    # 1 - oran değerini döndür 
+    return 1 - ratio 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-There are many more evaluation metrics, and this list is never-ending. I can write a 
-book which is only about different evaluation metrics. Maybe I will. For now, these 
-evaluations metrics will fit almost every problem you want to attempt. Please note 
-that I have implemented these metrics in the most straightforward manner, and that 
-means they are not efficient enough. You can make most of them in a very efficient 
-way by properly using numpy. For example, take a look at the implementation of 
-mean absolute error without any loops. 
+Daha pek çok değerlendirme metriği mevcuttur ve bu liste sonsuzdur. Sırf farklı değerlendirme metriklerini anlatan bir kitap bile yazabilirim. Belki de yazarım. Şimdilik buradaki değerlendirme metrikleri, çözmek isteyeceğiniz neredeyse her probleme uyum sağlayacaktır. Bu metrikleri en anlaşılır şekilde uyguladığımı, dolayısıyla yeterince verimli (*efficient*) olmadıklarını lütfen unutmayın. `numpy` kütüphanesini düzgün şekilde kullanarak çoğunu son derece verimli hale getirebilirsiniz. Örneğin, ortalama mutlak hatanın (MAE) hiçbir döngü kullanılmadan yapılan uygulamasına göz atalım:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 import numpy as np 
  
 def mae_np(y_true, y_pred): 
     return np.mean(np.abs(y_true - y_pred)) 
+```
 ═════════════════════════════════════════════════════════════════════════
 
-I could have implemented all the metrics this way but to learn it’s better to look at 
-low-level implementation. Once you learn the low-level implementation in pure 
-python, and without using a lot of numpy, you can easily convert it to numpy and 
-make it much faster. 
+Tüm metrikleri bu şekilde de kodlayabilirdim; ancak öğrenme aşamasında alt seviye (*low-level*) uygulamalara bakmak daha iyidir. Çok fazla `numpy` kullanmadan, saf Python ile bu alt seviye mantığı öğrendikten sonra, kodu kolayca `numpy`'a uyarlayabilir ve çok daha hızlı hale getirebilirsiniz.
  
-Then, there are some advanced metrics. 
+Şimdi bazı **ileri düzey metriklerden** bahsedelim.
  
-One of them which is quite widely used is quadratic weighted kappa, also known 
-as QWK. It is also known as Cohen’s kappa. QWK measures the “agreement” 
-between two “ratings”. The ratings can be any real numbers in 0 to N. And 
-predictions are also in the same range. An agreement can be defined as how close 
-these ratings are to each other. So, it’s suitable for a classification problem with N 
-different categories/classes. If the agreement is high, the score is closer towards 1.0. 
-In the case of low agreement, the score is close to 0. Cohen’s kappa has a good 
-implementation in scikit-learn, and detailed discussion of this metric is beyond the 
-scope of this book. 
+Bunlardan oldukça yaygın kullanılan biri, **Cohen kappası** olarak da bilinen **karesel ağırlıklı kappa'dır (Quadratic Weighted Kappa - QWK)**. QWK, iki farklı "puanlama/değerlendirme" (*ratings*) arasındaki "uyumu" (*agreement*) ölçer. Puanlar $0$ ile $N$ arasındaki herhangi bir reel sayı olabilir; tahminler de aynı aralıktadır. Uyum, bu puanların birbirine ne kadar yakın olduğu olarak tanımlanabilir. Bu nedenle $N$ farklı kategoriye/sınıfa sahip bir sınıflandırma problemi için oldukça uygundur. Uyum yüksekse skor 1.0'a yaklaşır; uyum düşük olduğunda ise skor 0'a yakın olur. Cohen kappasının scikit-learn içinde başarılı bir uygulaması mevcuttur ve bu metriğin derinlemesine tartışılması bu kitabın kapsamı dışındadır.
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 In [X]: from sklearn import metrics 
  
 In [X]: y_true = [1, 2, 3, 1, 2, 3, 1, 2, 3] 
@@ -2980,32 +2921,30 @@ Out[X]: 0.33333333333333337
  
 In [X]: metrics.accuracy_score(y_true, y_pred) 
 Out[X]: 0.4444444444444444 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-You can see that even though accuracy is high, QWK is less. A QWK greater than 
-0.85 is considered to be very good! 
+Gördüğünüz gibi doğruluk (*accuracy*) yüksek olsa bile QWK düşüktür. 0.85'ten büyük bir QWK değeri çok iyi kabul edilir!
  
-An important metric is Matthew’s Correlation Coefficient (MCC). MCC ranges 
-from -1 to 1. 1 is perfect prediction, -1 is imperfect prediction, and 0 is random 
-prediction. The formula for MCC is quite simple.
+Bir diğer önemli metrik **Matthews Korelasyon Katsayısı'dır (Matthews Correlation Coefficient - MCC)**. MCC -1 ile 1 arasında değişir:
+- **1**, mükemmel tahmini,
+- **-1**, tamamen hatalı tahmini,
+- **0**, rastgele tahmini ifade eder.
 
-TP * TN - FP * FN 
-MCC = ─────────────────────────────────────
+MCC'nin formülü oldukça basittir:
 
-[ (TP + FP) * (FN + TN) * (FP + TN) * (TP + FN) ] ^ (0.5)
+$$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{(TP + FP)(FN + TN)(FP + TN)(TP + FN)}}$$
 
-We see that MCC takes into consideration TP, FP, TN and FN and thus can be used 
-for problems where classes are skewed. You can quickly implement it in python by 
-using what we have already implemented. 
+MCC'nin TP, FP, TN ve FN değerlerinin tamamını hesaba kattığını, dolayısıyla sınıfların dengesiz (çarpık) olduğu problemlerde rahatlıkla kullanılabileceğini görüyoruz. Daha önce yazdığımız fonksiyonları kullanarak bunu Python'da hızlıca kodlayabilirsiniz:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 def mcc(y_true, y_pred): 
     """ 
-    This function calculates Matthew's Correlation Coefficient 
-    for binary classification. 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: mcc score 
+    İkili sınıflandırma için Matthews Korelasyon Katsayısını (MCC) hesaplar. 
+    :param y_true: gerçek değerler listesi 
+    :param y_pred: tahmin edilen değerler listesi 
+    :return: mcc skoru 
     """ 
     tp = true_positive(y_true, y_pred) 
     tn = true_negative(y_true, y_pred) 
@@ -3023,98 +2962,75 @@ def mcc(y_true, y_pred):
  
     denominator = denominator ** 0.5 
  
-    return numerator/denominator 
+    return numerator / denominator 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-These are the metrics that can help you get started and will apply to almost every 
-machine learning problem. 
+Bunlar, başlamanıza yardımcı olacak ve neredeyse her makine öğrenimi problemine uygulanabilecek metriklerdir.
  
-One thing to keep in mind is that to evaluate un-supervised methods, for example, 
-some kind of clustering, it’s better to create or manually label the test set and keep 
-it separate from everything that is going on in your modelling part. When you are 
-done with clustering, you can evaluate the performance on the test set simply by 
-using any of the supervised learning metrics. 
+Unutulmaması gereken bir nokta şudur: Denetimsiz yöntemleri (örneğin bir tür kümeleme algoritmasını) değerlendirmek için, bir test seti oluşturup bunu elle etiketlemek ve modelleme aşamasındaki her şeyden ayrı tutmak en iyisidir. Kümeleme işlemini tamamladığınızda, denetimli öğrenme metriklerinden herhangi birini kullanarak modelin test seti üzerindeki performansını değerlendirebilirsiniz.
  
-Once we understand what metric to use for a given problem, we can start looking 
-more deeply into our models for improvements.
+Belirli bir problem için hangi metriği kullanmamız gerektiğini anladıktan sonra, iyileştirmeler yapabilmek adına modellerimizi daha derinlemesine incelemeye başlayabiliriz.
 
-Arranging machine learning projects 
+# Makine Öğrenimi Projelerini Düzenleme (Organize Etme)
  
-Finally, we are at a stage where we can start building our very first machine learning 
-models.
+Sonunda, ilk makine öğrenimi modellerimizi oluşturmaya başlayabileceğimiz aşamaya geldik.
 
-Or are we? 
+Yoksa henüz gelmedik mi?
  
-Before we start, we must take care of a few things. Please remember that we will 
-work in an IDE/text editor rather than jupyter notebooks. You can also work in 
-jupyter notebooks, and it’s totally up to you. However, I will be using jupyter only 
-for things like data exploration and for plotting charts and graphs. We will build the 
-classification framework in such a way that most problems will become plug n’ 
-play. You will be able to train a model without making too many changes to the 
-code, and when you improve your models, you will be able to track them using git. 
+Başlamadan önce birkaç noktayı halletmemiz gerekiyor. Lütfen Jupyter Notebook'lar yerine bir IDE / metin editörü (VS Code, PyCharm vb.) içinde çalışacağımızı unutmayın. Elbette Jupyter Notebook'larda da çalışabilirsiniz; bu tamamen size kalmış. Ancak ben Jupyter'ı yalnızca veri keşfi (*data exploration*) ve grafik/şema çizimleri gibi işlemler için kullanacağım. Sınıflandırma çatısını (*framework*) öyle bir şekilde inşa edeceğiz ki çoğu problem **"tak-çalıştır" (plug n' play)** hale gelecek. Kod üzerinde çok fazla değişiklik yapmadan model eğitebilecek ve modellerinizi geliştirdikçe bunları `git` kullanarak takip edebileceksiniz.
  
-Let’s look at the structure of the files first of all. For any project that you are doing, 
-create a new folder. For this example, I am calling the project “project”. 
+Her şeyden önce dosya ve klasör yapısına bakalım. Yaptığınız herhangi bir proje için yeni bir klasör oluşturun. Bu örnek için projeye `"project"` adını veriyorum.
  
-The inside of the project folder should look something like the following. 
- . 
+Proje klasörünün içeriği yaklaşık olarak şu şekilde görünmelidir:
+
+```text
+. 
 ├── input 
 │   ├── train.csv 
 │   └── test.csv 
 ├── src 
-│       ├── create_folds.py 
-│       ├── train.py 
-│       ├── inference.py 
-│       ├── models.py 
-│       ├── config.py 
-│       └── model_dispatcher.py 
+│   ├── create_folds.py 
+│   ├── train.py 
+│   ├── inference.py 
+│   ├── models.py 
+│   ├── config.py 
+│   └── model_dispatcher.py 
 ├── models 
-│       ├── model_rf.bin 
-│       └── model_et.bin 
+│   ├── model_rf.bin 
+│   └── model_et.bin 
 ├── notebooks 
-│       ├── exploration.ipynb 
-│       └── check_data.ipynb 
+│   ├── exploration.ipynb 
+│   └── check_data.ipynb 
 ├── README.md 
 └── LICENSE
+```
 
-Let’s see what these folders and file are about. 
+Bu klasör ve dosyaların ne işe yaradığına bakalım:
  
-input/: This folder consists of all the input files and data for your machine learning 
-project. If you are working on NLP projects, you can keep your embeddings here. 
-If you are working on image projects, all images go to a subfolder inside this folder. 
+- **`input/`:** Bu klasör, makine öğrenimi projeniz için gereken tüm girdi dosyalarını ve verileri içerir. Eğer bir NLP (Doğal Dil İşleme) projesi üzerinde çalışıyorsanız, kelime gömme vektörlerinizi (*embeddings*) burada tutabilirsiniz. Görüntü projeleri üzerinde çalışıyorsanız, tüm görseller bu klasörün altındaki bir alt klasöre gider.
  
-src/: We will keep all the python scripts associated with the project here. If I talk 
-about a python script, i.e. any *.py file, it is stored in the src folder. 
+- **`src/`:** Projeyle ilişkili tüm Python betiklerini (*scripts*) burada tutacağız. Bir Python betiğinden, yani herhangi bir `*.py` dosyasından bahsediyorsam, bu dosya `src` klasöründe saklanır.
  
-models/: This folder keeps all the trained models. 
+- **`models/`:** Bu klasör, eğitilmiş tüm modelleri saklar.
  
-notebooks/: All jupyter notebooks (i.e. any *.ipynb file) are stored in the notebooks 
-folder. 
+- **`notebooks/`:** Tüm Jupyter Notebook dosyaları (yani tüm `*.ipynb` dosyaları) `notebooks` klasöründe saklanır.
  
-README.md: This is a markdown file where you can describe your project and 
-write instructions on how to train the model or to serve this in a production 
-environment. 
+- **`README.md`:** Projenizi tanıtabileceğiniz, modelin nasıl eğitileceğine veya canlı ortamda (*production*) nasıl sunulacağına dair talimatları yazabileceğiniz bir Markdown dosyasıdır.
  
-LICENSE: This is a simple text file that consists of a license for the project, such as 
-MIT, Apache, etc. Going into details of the licenses is beyond the scope of this 
-book. 
+- **`LICENSE`:** Proje için MIT, Apache vb. lisans bilgilerini içeren basit bir metin dosyasıdır. Lisansların detaylarına girmek bu kitabın kapsamı dışındadır.
  
-Let’s assume you are building a model to classify MNIST dataset (a dataset that has 
-been used in almost every machine learning book). If you remember, we touched 
-MNIST dataset in cross-validation chapter too. So, I am not going to explain how 
-this dataset looks like. There are many different formats of MNIST dataset available 
-online, but we will be using the CSV format of the dataset. 
+MNIST veri setini (neredeyse her makine öğrenimi kitabında kullanılan klasik veri seti) sınıflandırmak için bir model geliştirdiğinizi varsayalım. Hatırlarsanız, çapraz doğrulama (*cross-validation*) bölümünde de MNIST veri setine değinmiştik. Bu yüzden veri setinin nasıl göründüğünü tekrar uzun uzun açıklamayacağım. İnternette MNIST veri setinin birçok farklı formatı mevcuttur; ancak biz veri setinin **CSV** formatını kullanacağız.
  
-In this format of the dataset, each row of the CSV consists of the label of the image 
-and 784 pixel values ranging from 0 to 255. The dataset consists of 60000 images 
-in this format. 
+Veri setinin bu formatında, CSV dosyasındaki her bir satır görselin etiketini ve 0 ile 255 arasında değişen 784 piksel değerini içerir. Veri seti bu formatta 60.000 adet görselden oluşmaktadır.
  
-We can use pandas to read this data format easily. 
+Bu veri formatını kolayca okumak için `pandas` kütüphanesini kullanabiliriz.
  
-Please note that even though Figure 1 shows all pixel values as zeros, it is not the 
-case.
+Şekil 1 tüm piksel değerlerini sıfır olarak gösteriyor olsa da durumun aslında öyle olmadığını lütfen unutmayın.
 
 ![resim](img/p0076_fig01_resim.png)
+
+## Kaldığım yer
 
 Figure 1: MNIST dataset in CSV format 
  
