@@ -1781,42 +1781,36 @@ Bu nedenle bir sınıflandırma modelini değerlendirirken yalnızca tek bir thr
 
 ![resim](img/p0041_fig01_resim.png)
 
-## Kaldığım yer
-Figure 2: precision-recall curve 
- 
-This precision-recall curve looks very different from what you might have seen 
-on the internet. It’s because we had only 20 samples, and only 3 of them were 
-positive samples. But there’s nothing to worry. It’s the same old precision-recall 
-curve.
+Metnin Türkçe çevirisi aşağıdadır:
 
-You will notice that it’s challenging to choose a value of threshold that gives both 
-good precision and recall values. If the threshold is too high, you have a smaller 
-number of true positives and a high number of false negatives. This decreases your 
-recall; however, your precision score will be high. If you reduce the threshold too 
-low, false positives will increase a lot, and precision will be less. 
- 
-Both precision and recall range from 0 to 1 and a value closer to 1 is better. 
- 
-F1 score is a metric that combines both precision and recall. It is defined as a simple 
-weighted average (harmonic mean) of precision and recall. If we denote precision 
-using P and recall using R, we can represent the F1 score as:
+---
 
-F1 = 2PR / (P + R) 
+**Şekil 2: Hassasiyet-Duyarlılık Eğrisi (Precision-Recall Curve)**
  
-A little bit of mathematics will lead you to the following equation of F1 based on 
-TP, FP and FN
+Bu hassasiyet-duyarlılık eğrisi, internette görmüş olabileceğiniz grafiklerden oldukça farklı görünüyor. Bunun sebebi sadece 20 örneğimizin bulunması ve bunlardan yalnızca 3'ünün pozitif örnek olmasıdır. Ancak endişelenecek bir durum yok; bu bildiğimiz standart hassasiyet-duyarlılık eğrisidir.
 
-F1 = 2TP / (2TP + FP + FN) 
+Hem iyi bir hassasiyet (*precision*) hem de iyi bir duyarlılık (*recall*) değeri sağlayan bir eşik (*threshold*) değeri seçmenin oldukça zor olduğunu fark edeceksiniz. Eğer eşik değeri çok yüksek olursa, doğru pozitif (*true positive*) sayınız azalır ve yanlış negatif (*false negative*) sayınız artar. Bu durum duyarlılığınızı (*recall*) düşürür; ancak hassasiyet (*precision*) puanınız yüksek olur. Eşik değerini çok fazla düşürürseniz, yanlış pozitifler (*false positive*) çok artar ve hassasiyetiniz düşer.
  
-A Python implementation is simple because we have already implemented these. 
+Hem hassasiyet hem de duyarlılık 0 ile 1 arasında değişir ve 1'e yakın bir değer daha iyidir.
+ 
+**F1 Skoru**, hem hassasiyeti hem de duyarlılığı birleştiren bir metriktir. Hassasiyet ve duyarlılığın basit bir ağırlıklı ortalaması (harmonik ortalaması) olarak tanımlanır. Hassasiyeti **P** ve duyarlılığı **R** ile gösterirsek, F1 skorunu şu şekilde ifade edebiliriz:
+
+$$F1 = \frac{2PR}{P + R}$$
+ 
+Küçük bir matematiksel işlemle TP, FP ve FN değerlerine dayalı şu F1 denklemine ulaşırsınız:
+
+$$F1 = \frac{2TP}{2TP + FP + FN}$$
+ 
+Daha önce bu fonksiyonları yazdığımız için Python uygulaması oldukça basittir:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 def f1(y_true, y_pred): 
     """ 
-    Function to calculate f1 score 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
-    :return: f1 score 
+    F1 skorunu hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi 
+    :param y_pred: tahmin edilen değerler listesi 
+    :return: f1 skoru 
     """ 
     p = precision(y_true, y_pred) 
     r = recall(y_true, y_pred) 
@@ -1824,11 +1818,13 @@ def f1(y_true, y_pred):
     score = 2 * p * r / (p + r) 
  
     return score 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Let’s see the results of this and compare it with scikit-learn. 
+Bunun sonuçlarına bakalım ve scikit-learn kütüphanesi ile karşılaştıralım:
  
 ═════════════════════════════════════════════════════════════════════════  
+```python
 In [X]: y_true = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 
    ...:           1, 0, 0, 0, 0, 0, 0, 0, 1, 0]
 
@@ -1837,127 +1833,123 @@ In [X]: y_pred = [0, 0, 1, 0, 0, 0, 1, 0, 0, 0,
  
 In [X]: f1(y_true, y_pred) 
 Out[X]: 0.5714285714285715 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-And from scikit learn for the same lists, we get: 
+Aynı listeler için scikit-learn'den şu sonucu alırız:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 In [X]: from sklearn import metrics 
  
 In [X]: metrics.f1_score(y_true, y_pred) 
 Out[X]: 0.5714285714285715 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Instead of looking at precision and recall individually, you can also just look at F1 
-score. Same as for precision, recall and accuracy, F1 score also ranges from 0 to 1, 
-and a perfect prediction model has an F1 of 1. When dealing with datasets that have 
-skewed targets, we should look at F1 (or precision and recall) instead of accuracy. 
+Hassasiyet ve duyarlılığa ayrı ayrı bakmak yerine yalnızca F1 skoruna da bakabilirsiniz. Hassasiyet, duyarlılık ve doğrulukta (*accuracy*) olduğu gibi, F1 skoru da 0 ile 1 arasında değişir ve kusursuz bir tahmin modelinin F1 skoru 1'dir. Dengesiz/çarpık (*skewed*) hedef sınıflara sahip veri setleriyle çalışırken doğruluk (*accuracy*) yerine F1 skoruna (veya hassasiyet ve duyarlılığa) bakmalıyız.
  
-Then there are other crucial terms that we should know about.  
+Bunun yanında bilmemiz gereken diğer kritik terimler de mevcuttur:
  
-The first one is TPR or True Positive Rate, which is the same as recall.
+İlki, duyarlılık (*recall*) ile aynı anlama gelen **TPR (True Positive Rate / Doğru Pozitif Oranı)** değeridir:
 
-TPR = TP / (TP + FN) 
+$$TPR = \frac{TP}{TP + FN}$$
  
-Even though it is same as recall, we will make a python function for it for further 
-use with this name. 
+Duyarlılık ile aynı olmasına rağmen, ileride bu isimle kullanmak üzere bunun için de bir Python fonksiyonu oluşturalım:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 def tpr(y_true, y_pred): 
     """ 
-    Function to calculate tpr 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
+    TPR hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi 
+    :param y_pred: tahmin edilen değerler listesi 
     :return: tpr/recall 
     """ 
     return recall(y_true, y_pred) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-TPR or recall is also known as sensitivity.
+TPR veya duyarlılık (*recall*), aynı zamanda **hassasiyet/duyarlık (*sensitivity*)** olarak da bilinir.
 
-And FPR or False Positive Rate, which is defined as:
+Bir diğeri ise şu şekilde tanımlanan **FPR (False Positive Rate / Yanlış Pozitif Oranı)** değeridir:
 
-FPR = FP / (TN + FP) 
+$$FPR = \frac{FP}{TN + FP}$$
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 def fpr(y_true, y_pred): 
     """ 
-    Function to calculate fpr 
-    :param y_true: list of true values 
-    :param y_pred: list of predicted values 
+    FPR hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi 
+    :param y_pred: tahmin edilen değerler listesi 
     :return: fpr 
     """ 
     fp = false_positive(y_true, y_pred) 
     tn = true_negative(y_true, y_pred) 
     return fp / (tn + fp) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-And 1 - FPR is known as specificity or True Negative Rate or TNR. 
+Ve $1 - FPR$ değeri ise **özgüllük (*specificity*)** veya **TNR (True Negative Rate / Doğru Negatif Oranı)** olarak adlandırılır.
  
-These are a lot of terms, but the most important ones out of these are only TPR and 
-FPR.  
+Bunlar çok fazla terim gibi görünebilir, ancak aralarındaki en önemlileri sadece **TPR** ve **FPR**'dir.
  
-Let’s assume that we have only 15 samples and their target values are binary: 
+Yalnızca 15 örneğimiz olduğunu ve bunların hedef değerlerinin ikili (*binary*) olduğunu varsayalım:
  
-Actual targets : [0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1] 
+**Gerçek hedefler:** `[0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1]`
   
-We train a model like the random forest, and we can get the probability of when a 
-sample is positive. 
+Random forest (rastgele orman) gibi bir model eğittiğimizi ve bir örneğin pozitif (1) olma olasılığını elde edebildiğimizi düşünelim.
  
-Predicted probabilities for 1: [0.1, 0.3, 0.2, 0.6, 0.8, 0.05, 0.9, 0.5, 0.3, 0.66, 0.3, 
-0.2, 0.85, 0.15, 0.99] 
+**1 sınıfı için tahmin edilen olasılıklar:** `[0.1, 0.3, 0.2, 0.6, 0.8, 0.05, 0.9, 0.5, 0.3, 0.66, 0.3, 0.2, 0.85, 0.15, 0.99]`
  
-For a typical threshold of  >= 0.5, we can evaluate all the above values of precision, 
-recall/TPR, F1 and FPR. But we can do the same if we choose the value of the 
-threshold to be 0.4 or 0.6. In fact, we can choose any value between 0 and 1 and 
-calculate all the metrics described above. 
+Tipik bir $\ge 0.5$ eşik değeri için yukarıdaki hassasiyet, duyarlılık/TPR, F1 ve FPR değerlerinin tümünü hesaplayabiliriz. Ancak eşik değerini 0.4 veya 0.6 olarak seçtiğimizde de aynısını yapabiliriz. Hatta 0 ile 1 arasında herhangi bir değer seçip yukarıda açıklanan tüm metrikleri hesaplamamız mümkündür.
  
-Let’s calculate only two values, though: TPR and FPR. 
+Biz şimdilik yalnızca iki değeri hesaplayalım: **TPR** ve **FPR**.
  
 ═════════════════════════════════════════════════════════════════════════ 
-# empty lists to store tpr  
-# and fpr values
-
+```python
+# tpr ve fpr değerlerini saklamak için boş listeler
 tpr_list = [] 
 fpr_list = [] 
  
-# actual targets 
+# gerçek hedefler 
 y_true = [0, 0, 0, 0, 1, 0, 1,  
           0, 0, 1, 0, 1, 0, 0, 1] 
  
-# predicted probabilities of a sample being 1 
+# bir örneğin 1 olma olasılığı tahminleri 
 y_pred = [0.1, 0.3, 0.2, 0.6, 0.8, 0.05,  
           0.9, 0.5, 0.3, 0.66, 0.3, 0.2,  
           0.85, 0.15, 0.99] 
  
-# handmade thresholds 
+# elle belirlenen eşik değerleri 
 thresholds = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 
               0.6, 0.7, 0.8, 0.85, 0.9, 0.99, 1.0] 
  
-# loop over all thresholds 
+# tüm eşik değerleri üzerinde döngü 
 for thresh in thresholds:  
-    # calculate predictions for a given threshold 
+    # belirli bir eşik değeri için tahminleri hesapla 
     temp_pred = [1 if x >= thresh else 0 for x in y_pred] 
-    # calculate tpr 
+    # tpr değerini hesapla 
     temp_tpr = tpr(y_true, temp_pred) 
-    # calculate fpr 
+    # fpr değerini hesapla 
     temp_fpr = fpr(y_true, temp_pred) 
-    # append tpr and fpr to lists 
+    # tpr ve fpr değerlerini listelere ekle 
     tpr_list.append(temp_tpr) 
     fpr_list.append(temp_fpr) 
- 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-We can thus get a tpr and fpr value for each threshold.
+Böylece her bir eşik değeri için karşılık gelen bir TPR ve FPR değeri elde edebiliriz.
 
 ![resim](img/p0045_fig01_resim.png)
 
-Figure 3: Table for threshold, TPR and FPR values
+**Şekil 3: Eşik (threshold), TPR ve FPR değerleri tablosu**
 
-If we plot the table as shown in figure 3, i.e. if we have TPR on the y-axis and FPR 
-on the x-axis, we will get a curve as shown in figure 4. 
+Şekil 3'te gösterilen tabloyu grafiğe dökersek — yani y ekseninde TPR ve x ekseninde FPR yer alacak şekilde çizersek — Şekil 4'te gösterilene benzer bir eğri elde ederiz.
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 plt.figure(figsize=(7, 7)) 
 plt.fill_between(fpr_list, tpr_list, alpha=0.4) 
 plt.plot(fpr_list, tpr_list, lw=3) 
@@ -1966,22 +1958,19 @@ plt.ylim(0, 1.0)
 plt.xlabel('FPR', fontsize=15) 
 plt.ylabel('TPR', fontsize=15) 
 plt.show() 
+```
 ═════════════════════════════════════════════════════════════════════════
 
 ![resim](img/p0046_fig01_resim.png)
 
-Figure 4: Receiver operating characteristic (ROC) curve 
+**Şekil 4: Alıcı İşletim Karakteristiği (ROC) Eğrisi**
  
-This curve is also known as the Receiver Operating Characteristic (ROC). And 
-if we calculate the area under this ROC curve, we are calculating another metric 
-which is used very often when you have a dataset which has skewed binary targets.  
+Bu eğri aynı zamanda **Alıcı İşletim Karakteristiği (ROC - Receiver Operating Characteristic)** olarak da bilinir. Ve bu ROC eğrisinin altında kalan alanı hesaplarsak, dengesiz (çarpık) ikili hedef değişkenlere sahip bir veri setiniz olduğunda çok sık kullanılan başka bir metriği hesaplamış oluruz.
  
-This metric is known as the Area Under ROC Curve or Area Under Curve or 
-just simply AUC. There are many ways to calculate the area under the ROC curve. 
-For this particular purpose, we will stick to the fantastic implementation by scikit-
-learn. 
+Bu metrik, **ROC Eğrisi Altındaki Alan (Area Under ROC Curve)**, **Eğri Altındaki Alan (Area Under Curve)** veya kısaca **AUC** olarak bilinir. ROC eğrisi altındaki alanı hesaplamanın pek çok yolu vardır. Bu özel amaç için scikit-learn kütüphanesinin sunduğu harika uygulamayı kullanacağız.
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 In [X]: from sklearn import metrics
 
 In [X]: y_true = [0, 0, 0, 0, 1, 0, 1, 
@@ -1993,170 +1982,135 @@ In [X]: y_pred = [0.1, 0.3, 0.2, 0.6, 0.8, 0.05,
  
 In [X]: metrics.roc_auc_score(y_true, y_pred) 
 Out[X]: 0.8300000000000001 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-AUC values range from 0 to 1.
+AUC değerleri 0 ile 1 arasında değişir:
 
-- 
-AUC = 1 implies you have a perfect model. Most of the time, it means that 
-you made some mistake with validation and should revisit data processing 
-and validation pipeline of yours. If you didn’t make any mistakes, then 
-congratulations, you have the best model one can have for the dataset you 
-built it on.
+- **AUC = 1**, mükemmel bir modele sahip olduğunuz anlamına gelir. Çoğu zaman bu, doğrulama (*validation*) aşamasında bir hata yaptığınızı gösterir; veri işleme ve doğrulama süreçlerinizi (*pipeline*) tekrar gözden geçirmelisiniz. Şayet herhangi bir hata yapmadıysanız, tebrikler; üzerinde çalıştığınız veri seti için elde edilebilecek en iyi modele sahipsiniz demektir.
 
-- 
-AUC = 0 implies that your model is very bad (or very good!). Try inverting 
-the probabilities for the predictions, for example, if your probability for the 
-positive class is p, try substituting it with 1-p. This kind of AUC may also 
-mean that there is some problem with your validation or data processing.
+- **AUC = 0**, modelinizin çok kötü (veya çok iyi!) olduğunu gösterir. Tahminlerin olasılıklarını tersine çevirmeyi deneyin; örneğin pozitif sınıf için olasılığınız $p$ ise, bunu $1-p$ ile değiştirmeyi deneyin. Bu tür bir AUC değeri de doğrulama veya veri işleme süreçlerinizde bir problem olduğu anlamına gelebilir.
 
-- 
-AUC = 0.5 implies that your predictions are random. So, for any binary 
-classification problem, if I predict all targets as 0.5, I will get an AUC of 
-0.5. 
+- **AUC = 0.5**, tahminlerinizin rastgele (yazı-tura gibi) olduğu anlamına gelir. Yani, herhangi bir ikili sınıflandırma probleminde tüm hedefleri 0.5 olarak tahmin edersem, 0.5'lik bir AUC değeri elde ederim.
  
-AUC values between 0 and 0.5 imply that your model is worse than random. Most 
-of the time, it’s because you inverted the classes. If you try to invert your 
-predictions, your AUC might become more than 0.5. AUC values closer to 1 are 
-considered good. 
+0 ile 0.5 arasındaki AUC değerleri, modelinizin rastgele tahminlerden bile daha kötü olduğunu gösterir. Çoğu zaman bunun nedeni sınıfları ters tanımlamış olmanızdır. Tahminlerinizi tersine çevirmeyi denerseniz, AUC değeriniz 0.5'in üzerine çıkabilir. 1'e yakın AUC değerleri iyi kabul edilir.
  
-But what does AUC say about our model?  
+Peki AUC modelimiz hakkında bize tam olarak ne söyler?  
  
-Suppose you get an AUC of 0.85 when you build a model to detect pneumothorax 
-from chest x-ray images. This means that if you select a random image from your 
-dataset with pneumothorax (positive sample) and another random image without 
-pneumothorax (negative sample), then the pneumothorax image will rank higher 
-than a non-pneumothorax image with a probability of 0.85.
+Göğüs röntgeni (akciğer grafisi) görüntülerinden pnömotoraksı tespit etmek için bir model geliştirdiğinizi ve 0.85'lik bir AUC değeri elde ettiğinizi varsayalım. Bu, veri setinizden pnömotoraksı olan rastgele bir görüntü (pozitif örnek) ve pnömotoraksı olmayan rastgele başka bir görüntü (negatif örnek) seçtiğinizde, pnömotorakslı görüntünün pnömotorakssız görüntüden daha yüksek bir olasılık puanı alma ihtimalinin %85 (0.85) olduğu anlamına gelir.
 
-After calculating probabilities and AUC, you would want to make predictions on 
-the test set. Depending on the problem and use-case, you might want to either have 
-probabilities or actual classes. If you want to have probabilities, it’s effortless. You 
-already have them. If you want to have classes, you need to select a threshold. In 
-the case of binary classification, you can do something like the following.
+Olasılıkları ve AUC değerini hesapladıktan sonra test seti üzerinde tahminler yapmak istersiniz. Probleme ve kullanım senaryosuna bağlı olarak, ya olasılıkları ya da doğrudan sınıfları elde etmek isteyebilirsiniz. Olasılıkları almak istiyorsanız bu zahmetsizdir; zaten elinizde mevcuttur. Ancak kesin sınıfları elde etmek istiyorsanız bir eşik (*threshold*) değeri seçmeniz gerekir. İkili sınıflandırma durumunda aşağıdaki gibi bir işlem yapabilirsiniz:
 
-Prediction = Probability >= Threshold 
+$$\text{Tahmin} = \text{Olasılık} \ge \text{Eşik Değeri}$$
  
-Which means, that prediction is a new list which contains only binary variables. An 
-item in prediction is 1 if the probability is greater than or equal to a given threshold 
-else the value is 0. 
+Bu, tahminin yalnızca ikili (*binary*) değişkenler içeren yeni bir liste olduğu anlamına gelir. Bir olasılık değeri verilen eşik değerine eşit veya ondan büyükse tahmindeki ilgili eleman 1, aksi takdirde 0 olur.
  
-And guess what, you can use the ROC curve to choose this threshold! The ROC 
-curve will tell you how the threshold impacts false positive rate and true positive 
-rate and thus, in turn, false positives and true positives. You should choose the 
-threshold that is best suited for your problem and datasets.  
+Ve tahmin edin ne oldu; bu eşik değerini seçmek için ROC eğrisini kullanabilirsiniz! ROC eğrisi, eşik değerinin yanlış pozitif oranını (FPR) ve doğru pozitif oranını (TPR) ve dolayısıyla sırasıyla yanlış pozitifler (FP) ile doğru pozitifleri (TP) nasıl etkilediğini size gösterir. Probleminize ve veri setinize en uygun eşik değerini seçmelisiniz.  
  
-For example, if you don’t want to have too many false positives, you should have a 
-high threshold value. This will, however, also give you a lot more false negatives. 
-Observe the trade-off and select the best threshold. Let’s see how these thresholds 
-impact true positive and false positive values. 
+Örneğin, çok fazla yanlış pozitif (*false positive*) istemiyorsanız, yüksek bir eşik değeri belirlemelisiniz. Ancak bu durum aynı zamanda çok daha fazla yanlış negatif (*false negative*) elde etmenize neden olacaktır. Bu dengeyi/ödünleşimi (*trade-off*) gözlemleyin ve en iyi eşik değerini seçin. Şimdi bu eşik değerlerinin doğru pozitif ve yanlış pozitif değerlerini nasıl etkilediğini görelim:
  
 ═════════════════════════════════════════════════════════════════════════ 
-# empty lists to store true positive  
-# and false positive values 
+```python
+# doğru pozitif ve yanlış pozitif değerlerini 
+# saklamak için boş listeler
 tp_list = [] 
 fp_list = [] 
  
-# actual targets 
+# gerçek hedefler 
 y_true = [0, 0, 0, 0, 1, 0, 1,  
           0, 0, 1, 0, 1, 0, 0, 1] 
  
-# predicted probabilities of a sample being 1 
+# bir örneğin 1 olma olasılığı tahminleri 
 y_pred = [0.1, 0.3, 0.2, 0.6, 0.8, 0.05,  
           0.9, 0.5, 0.3, 0.66, 0.3, 0.2,  
           0.85, 0.15, 0.99] 
  
-# some handmade thresholds 
+# elle belirlenen bazı eşik değerleri 
 thresholds = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 
               0.6, 0.7, 0.8, 0.85, 0.9, 0.99, 1.0] 
  
-# loop over all thresholds 
+# tüm eşik değerleri üzerinde döngü 
 for thresh in thresholds:
-
-# calculate predictions for a given threshold 
+    # belirli bir eşik değeri için tahminleri hesapla 
     temp_pred = [1 if x >= thresh else 0 for x in y_pred] 
-    # calculate tp 
+    # tp değerini hesapla 
     temp_tp = true_positive(y_true, temp_pred) 
-    # calculate fp 
+    # fp değerini hesapla 
     temp_fp = false_positive(y_true, temp_pred) 
-    # append tp and fp to lists 
+    # tp ve fp değerlerini listelere ekle 
     tp_list.append(temp_tp) 
     fp_list.append(temp_fp) 
+```
 ═══════════════════════════════════════════════════════════════════════ 
  
-Using this, we can create a table, as shown in Figure 5.
+Bunu kullanarak Şekil 5'te gösterildiği gibi bir tablo oluşturabiliriz.
 
 ![resim](img/p0049_fig01_resim.png)
 
-Figure 5: TP and FP values for different thresholds 
+**Şekil 5: Farklı eşik değerleri için TP ve FP değerleri**
  
-Most of the time, the top-left value on ROC curve should give you a quite good 
-threshold, as shown in figure 6. 
+Şekil 6'da gösterildiği gibi, çoğu zaman ROC eğrisinin sol üst kısmındaki (sol üst köşeye en yakın) değer size oldukça iyi bir eşik değeri verecektir. 
  
-Comparing the table and the ROC curve, we see that a threshold of around 0.8 is 
-quite good where we do not lose a lot of true positives and neither we have a lot of 
-false positives.
+Tabloyu ve ROC eğrisini karşılaştırdığımızda, 0.8 civarındaki bir eşik değerinin gayet iyi olduğunu görürüz; bu değerde hem çok fazla doğru pozitif kaybetmeyiz hem de çok fazla yanlış pozitife sahip olmayız.
 
 ![resim](img/p0050_fig01_resim.png)
 
-Figure 6: Select the best threshold from the leftmost top point in the ROC curve 
+**Şekil 6: ROC eğrisinde en sol üst noktadan en iyi eşik değerinin seçilmesi**
  
-AUC is a widely used metric for skewed binary classification tasks in the industry, 
-and a metric everyone should know about. Once you understand the idea behind 
-AUC, as explained in the paragraphs above, it is also easy to explain it to non-
-technical people who would probably be assessing your models in the industry. 
+AUC, sektörde dengesiz (çarpık) ikili sınıflandırma görevleri için yaygın olarak kullanılan ve herkesin bilmesi gereken bir metriktir. Yukarıdaki paragraflarda açıklandığı gibi AUC'nin ardındaki mantığı anladığınızda, sektörde muhtemelen modellerinizi değerlendirecek olan teknik olmayan kişilere bunu açıklamak da kolaylaşır.
  
-Another important metric you should learn after learning AUC is log loss. In case 
-of a binary classification problem, we define log loss as:
+AUC'yi öğrendikten sonra öğrenmeniz gereken bir diğer önemli metrik **log loss (logaritmik kayıp)** değeridir. İkili bir sınıflandırma problemi durumunda log loss'u şu şekilde tanımlarız:
 
-Log Loss = - 1.0 * ( target * log(prediction) + (1 - target) * log(1 - prediction) ) 
+$$\text{Log Loss} = -1.0 \times \Big( \text{hedef} \times \log(\text{tahmin}) + (1 - \text{hedef}) \times \log(1 - \text{tahmin}) \Big)$$
  
-Where target is either 0 or 1 and prediction is a probability of a sample belonging 
-to class 1. 
+Burada hedef (*target*) 0 veya 1'dir ve tahmin (*prediction*), bir örneğin sınıf 1'e ait olma olasılığıdır.
  
-For multiple samples in the dataset, the log-loss over all samples is a mere average 
-of all individual log losses. One thing to remember is that log loss penalizes quite 
-high for an incorrect or a far-off prediction, i.e. log loss punishes you for being very 
-sure and very wrong. 
+Veri setindeki birden fazla örnek için tüm veri seti üzerindeki log loss, her bir münferit kaybın basit bir ortalamasından ibarettir. Unutulmaması gereken bir nokta, log loss'un yanlış veya çok uzak bir tahmini oldukça ağır şekilde cezalandırmasıdır; yani log loss sizi **"çok emin olup çok yanıldığınız"** durumlar için cezalandırır.
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 import numpy as np 
  
-def log_loss(y_true, y_proba):
-
-""" 
-    Function to calculate fpr 
-    :param y_true: list of true values 
-    :param y_proba: list of probabilities for 1 
-    :return: overall log loss 
+def log_loss(y_true, y_proba): 
     """ 
-    # define an epsilon value 
-    # this can also be an input 
-    # this value is used to clip probabilities 
+    Log loss hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi 
+    :param y_proba: 1 sınıfı için olasılıklar listesi 
+    :return: genel log loss 
+    """ 
+    # bir epsilon değeri tanımlayın 
+    # bu bir girdi parametresi de olabilir 
+    # bu değer olasılıkları kırpmak (clip) için kullanılır 
     epsilon = 1e-15 
-    # initialize empty list to store 
-    # individual losses 
+    
+    # münferit kayıpları saklamak için boş liste 
     loss = [] 
-    # loop over all true and predicted probability values 
+    
+    # tüm gerçek ve tahmin edilen olasılık değerleri üzerinde dönün 
     for yt, yp in zip(y_true, y_proba): 
-        # adjust probability 
-        # 0 gets converted to 1e-15 
-        # 1 gets converted to 1-1e-15 
-        # Why? Think about it! 
+        # olasılığı sınırlandırın/ayarlayın 
+        # 0 değeri 1e-15'e dönüşür 
+        # 1 değeri 1-1e-15'e dönüşür 
+        # Neden? Bunu biraz düşünün! 
         yp = np.clip(yp, epsilon, 1 - epsilon) 
-        # calculate loss for one sample 
+        
+        # tek bir örnek için kaybı hesaplayın 
         temp_loss = - 1.0 * ( 
             yt * np.log(yp)  
             + (1 - yt) * np.log(1 - yp) 
         ) 
-        # add to loss list 
+        # kayıp listesine ekleyin 
         loss.append(temp_loss) 
-    # return mean loss over all samples 
+        
+    # tüm örneklerin ortalama kaybını döndürün 
     return np.mean(loss) 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Let’s test our implementation: 
+Yazdığımız kodu test edelim:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 In [X]: y_true = [0, 0, 0, 0, 1, 0, 1, 
    ...:           0, 0, 1, 0, 1, 0, 0, 1] 
  
@@ -2166,200 +2120,186 @@ In [X]: y_proba = [0.1, 0.3, 0.2, 0.6, 0.8, 0.05,
  
 In [X]: log_loss(y_true, y_proba) 
 Out[X]: 0.49882711861432294 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-We can compare this with scikit-learn:
+Bunu scikit-learn ile karşılaştırabiliriz:
 
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 In [X]: from sklearn import metrics 
  
 In [X]: metrics.log_loss(y_true, y_proba) 
 Out[X]: 0.49882711861432294 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Thus, our implementation is correct. Implementation of log loss is easy. 
-Interpretation may seem a bit difficult. You must remember that log loss penalizes 
-a lot more than other metrics.  
+Görüldüğü gibi uygulamamız doğru çalışıyor. Log loss'u kodlamak kolaydır; yorumlanması ise biraz zor görünebilir. Log loss'un diğer metriklere kıyasla çok daha ağır cezalandırdığını unutmamalısınız.
  
-For example, if you are 51% sure about a sample belonging to class 1, log loss 
-would be:
+Örneğin, bir örneğin sınıf 1'e ait olduğundan %51 eminseniz (olasılık = 0.51), log loss:
 
-- 1.0 * ( 1 * log(0.51) + (1 - 1) * log(1 – 0.51) ) = 0.67 
+$$-1.0 \times \big( 1 \times \log(0.51) + (1 - 1) \times \log(1 - 0.51) \big) = 0.67$$
  
-And if you are 49% sure for a sample belonging to class 0, log loss would be:
+Ve sınıf 0'a ait bir örnek için %49 eminseniz (yani 1 olma olasılığı 0.49), log loss:
 
-- 1.0 * ( 0 * log(0.49) + (1 - 0) * log(1 – 0.49) ) = 0.67 
+$$-1.0 \times \big( 0 \times \log(0.49) + (1 - 0) \times \log(1 - 0.49) \big) = 0.67$$
  
-So, even though we can choose a cut off at 0.5 and get perfect predictions, we will 
-still have a very high log loss. So, when dealing with log loss, you need to be very 
-careful; any non-confident prediction will have a very high log loss. 
+Dolayısıyla, 0.5'lik bir kesme noktası (*cut-off*) belirleyip kusursuz sınıf tahminleri elde edebilsek bile, yine de çok yüksek bir log loss değerine sahip oluruz. Bu nedenle log loss ile çalışırken çok dikkatli olmalısınız; güven düzeyi düşük olan (kesinlikten uzak) her tahmin oldukça yüksek bir log loss getirecektir.
  
-Most of the metrics that we discussed until now can be converted to a multi-class 
-version. The idea is quite simple. Let’s take precision and recall. We can calculate 
-precision and recall for each class in a multi-class classification problem. 
+Şimdiye kadar ele aldığımız metriklerin çoğu **çok sınıflı (multi-class)** versiyonlara dönüştürülebilir. Mantık oldukça basittir. Hassasiyet (*precision*) ve duyarlılığı (*recall*) ele alalım. Çok sınıflı bir sınıflandırma probleminde her sınıf için ayrı ayrı hassasiyet ve duyarlılık hesaplayabiliriz.
  
-There are three different ways to calculate this which might get confusing from time 
-to time. Let’s assume we are interested in precision first. We know that precision 
-depends on true positives and false positives.
+Bunu hesaplamanın zaman zaman kafa karıştırabilen üç farklı yolu vardır. Öncelikle hassasiyetle ilgilendiğimizi varsayalım. Hassasiyetin doğru pozitiflere (TP) ve yanlış pozitiflere (FP) bağlı olduğunu biliyoruz:
 
-- 
-Macro averaged precision: calculate precision for all classes individually 
-and then average them 
+- **Makro ortalamalı hassasiyet (Macro averaged precision):** Tüm sınıflar için hassasiyeti ayrı ayrı hesaplayıp ardından bunların aritmetik ortalamasını almak.
  
-- 
-Micro averaged precision: calculate class wise true positive and false 
-positive and then use that to calculate overall precision 
+- **Mikro ortalamalı hassasiyet (Micro averaged precision):** Sınıf bazında doğru pozitif ve yanlış pozitifleri toplayıp küresel havuz üzerinden genel hassasiyeti hesaplamak.
  
-- 
-Weighted precision: same as macro but in this case, it is weighted average 
-depending on the number of items in each class
+- **Ağırlıklı hassasiyet (Weighted precision):** Makro ile aynıdır; ancak bu durumda her sınıftaki örnek sayısına bağlı olarak ağırlıklı bir ortalama alınır.
 
-This seems complicated but is easy to understand by python implementations. Let’s 
-see how macro-averaged precision is implemented. 
+Bu karmaşık görünebilir ancak Python kodlarıyla anlaması oldukça kolaydır. Makro ortalamalı hassasiyetin nasıl uygulandığına bakalım:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 import numpy as np 
- 
  
 def macro_precision(y_true, y_pred): 
     """ 
-    Function to calculate macro averaged precision 
-    :param y_true: list of true values 
-    :param y_proba: list of predicted values 
-    :return: macro precision score 
+    Makro ortalamalı hassasiyeti (precision) hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi 
+    :param y_pred: tahmin edilen değerler listesi 
+    :return: makro hassasiyet skoru 
     """ 
      
-    # find the number of classes by taking 
-    # length of unique values in true list 
+    # gerçek listedeki benzersiz değerlerin uzunluğunu alarak 
+    # sınıf sayısını bulun 
     num_classes = len(np.unique(y_true)) 
      
-    # initialize precision to 0 
+    # hassasiyeti 0 olarak başlatın 
     precision = 0 
      
-    # loop over all classes 
+    # tüm sınıflar üzerinde dönün 
     for class_ in range(num_classes): 
          
-        # all classes except current are considered negative 
+        # mevcut sınıf dışındaki tüm sınıflar negatif kabul edilir 
         temp_true = [1 if p == class_ else 0 for p in y_true] 
         temp_pred = [1 if p == class_ else 0 for p in y_pred] 
          
-        # calculate true positive for current class 
+        # mevcut sınıf için doğru pozitif değerini hesaplayın 
         tp = true_positive(temp_true, temp_pred) 
          
-        # calculate false positive for current class 
+        # mevcut sınıf için yanlış pozitif değerini hesaplayın 
         fp = false_positive(temp_true, temp_pred) 
          
-        # calculate precision for current class 
+        # mevcut sınıf için hassasiyeti hesaplayın 
         temp_precision = tp / (tp + fp) 
          
-        # keep adding precision for all classes 
+        # tüm sınıfların hassasiyetini eklemeye devam edin 
         precision += temp_precision 
  
-    # calculate and return average precision over all classes 
+    # tüm sınıflar üzerinden ortalama hassasiyeti hesaplayıp döndürün 
     precision /= num_classes 
     return precision 
+```
 ═════════════════════════════════════════════════════════════════════════
 
-You will notice that it wasn’t so difficult. Similarly, we have micro-averaged 
-precision score. 
+Gördüğünüz gibi o kadar da zor değildi. Benzer şekilde mikro ortalamalı hassasiyet skorumuz bulunmaktadır:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 import numpy as np 
- 
  
 def micro_precision(y_true, y_pred): 
     """ 
-    Function to calculate micro averaged precision 
-    :param y_true: list of true values 
-    :param y_proba: list of predicted values 
-    :return: micro precision score 
+    Mikro ortalamalı hassasiyeti (precision) hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi 
+    :param y_pred: tahmin edilen değerler listesi 
+    :return: mikro hassasiyet skoru 
     """ 
      
-    # find the number of classes by taking 
-    # length of unique values in true list 
+    # sınıf sayısını bulun 
     num_classes = len(np.unique(y_true)) 
      
-    # initialize tp and fp to 0 
+    # tp ve fp'yi 0 olarak başlatın 
     tp = 0 
     fp = 0 
      
-    # loop over all classes 
+    # tüm sınıflar üzerinde dönün 
     for class_ in range(num_classes): 
-        # all classes except current are considered negative 
+        # mevcut sınıf dışındakiler negatif kabul edilir 
         temp_true = [1 if p == class_ else 0 for p in y_true] 
         temp_pred = [1 if p == class_ else 0 for p in y_pred] 
          
-        # calculate true positive for current class 
-        # and update overall tp 
+        # mevcut sınıf için doğru pozitifi hesaplayıp 
+        # genel tp değerini güncelleyin 
         tp += true_positive(temp_true, temp_pred) 
          
-        # calculate false positive for current class 
-        # and update overall tp 
+        # mevcut sınıf için yanlış pozitifi hesaplayıp 
+        # genel fp değerini güncelleyin 
         fp += false_positive(temp_true, temp_pred) 
          
-    # calculate and return overall precision 
+    # genel hassasiyeti hesaplayıp döndürün 
     precision = tp / (tp + fp) 
     return precision 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-This isn’t difficult, either. Then what is? Nothing. Machine learning is easy.  
+Bu da zor değil. Peki o zaman zor olan ne? Hiçbir şey. Makine öğrenimi kolaydır.
  
-Now, let’s look at the implementation of weighted precision.
+Şimdi ağırlıklı hassasiyetin (*weighted precision*) kodlanmasına bakalım:
 
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 from collections import Counter 
 import numpy as np 
  
- 
 def weighted_precision(y_true, y_pred): 
     """ 
-    Function to calculate weighted averaged precision 
-    :param y_true: list of true values 
-    :param y_proba: list of predicted values 
-    :return: weighted precision score 
+    Ağırlıklı hassasiyeti (precision) hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi 
+    :param y_pred: tahmin edilen değerler listesi 
+    :return: ağırlıklı hassasiyet skoru 
     """ 
      
-    # find the number of classes by taking 
-    # length of unique values in true list 
+    # sınıf sayısını bulun 
     num_classes = len(np.unique(y_true)) 
      
-    # create class:sample count dictionary 
-    # it looks something like this: 
-    # {0: 20, 1:15, 2:21} 
+    # sınıf:örnek sayısı sözlüğünü oluşturun 
+    # şuna benzer bir yapı oluşur: {0: 20, 1: 15, 2: 21} 
     class_counts = Counter(y_true) 
      
-    # initialize precision to 0 
+    # hassasiyeti 0 olarak başlatın 
     precision = 0 
      
-    # loop over all classes 
+    # tüm sınıflar üzerinde dönün 
     for class_ in range(num_classes): 
-        # all classes except current are considered negative 
+        # mevcut sınıf dışındakiler negatif kabul edilir 
         temp_true = [1 if p == class_ else 0 for p in y_true] 
         temp_pred = [1 if p == class_ else 0 for p in y_pred] 
          
-        # calculate tp and fp for class 
+        # sınıf için tp ve fp hesaplayın 
         tp = true_positive(temp_true, temp_pred) 
         fp = false_positive(temp_true, temp_pred) 
          
-        # calculate precision of class 
+        # sınıfın hassasiyetini hesaplayın 
         temp_precision = tp / (tp + fp) 
          
-        # multiply precision with count of samples in class 
-        weighted_precision = class_counts[class_] * temp_precision 
+        # hassasiyeti sınıftaki örnek sayısı ile çarpın 
+        weighted_precision_val = class_counts[class_] * temp_precision 
          
-        # add to overall precision 
-        precision += weighted_precision 
-    # calculate overall precision by dividing by 
-    # total number of samples 
-    overall_precision = precision / len(y_true)
+        # genel toplama ekleyin 
+        precision += weighted_precision_val 
+        
+    # toplam örnek sayısına bölerek genel hassasiyeti hesaplayın 
+    overall_precision = precision / len(y_true) 
 
-return overall_precision 
+    return overall_precision 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Let’s compare our implementations with scikit-learn to know if we implemented it 
-right. 
+Doğru uygulayıp uygulamadığımızı anlamak için yazdığımız kodları scikit-learn ile karşılaştıralım:
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 In [X]: from sklearn import metrics 
  
 In [X]: y_true = [0, 1, 2, 0, 1, 2, 0, 2, 2] 
@@ -2383,76 +2323,70 @@ Out[X]: 0.39814814814814814
  
 In [X]: metrics.precision_score(y_true, y_pred, average="weighted") 
 Out[X]: 0.39814814814814814 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-It seems like we implemented everything correctly. Please note that the 
-implementations shown here may not be the most efficient, but they are the easiest 
-to understand. 
+Her şeyi doğru uygulamışız gibi görünüyor. Burada gösterilen uygulamaların en verimli (*efficient*) yöntemler olmayabileceğini, ancak anlaşılması en kolay yöntemler olduğunu lütfen unutmayın.
  
-Similarly, we can implement the recall metric for multi-class. Precision and recall 
-depend on true positive, false positive and false negative while F1 depends on 
-precision and recall.  
+Benzer şekilde, çok sınıflı sınıflandırma için duyarlılık (*recall*) metriğini de uygulayabiliriz. Hassasiyet ve duyarlılık TP, FP ve FN değerlerine bağlıyken, F1 skoru hassasiyet ve duyarlılığa bağlıdır.
  
-Implementation for recall is left as an exercise for the reader and one version of F1 
-for multi-class, i.e., weighted average is implemented here.
+Duyarlılığın kodlanması okuyucuya bir alıştırma olarak bırakılmıştır; F1 skorunun çok sınıflı bir versiyonu olan **ağırlıklı ortalama (weighted F1)** ise aşağıda uygulanmıştır:
 
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 from collections import Counter 
 import numpy as np 
  
- 
 def weighted_f1(y_true, y_pred): 
     """ 
-    Function to calculate weighted f1 score 
-    :param y_true: list of true values 
-    :param y_proba: list of predicted values 
-    :return: weighted f1 score 
+    Ağırlıklı F1 skorunu hesaplayan fonksiyon 
+    :param y_true: gerçek değerler listesi 
+    :param y_pred: tahmin edilen değerler listesi 
+    :return: ağırlıklı f1 skoru 
     """ 
      
-    # find the number of classes by taking 
-    # length of unique values in true list 
+    # sınıf sayısını bulun 
     num_classes = len(np.unique(y_true)) 
      
-    # create class:sample count dictionary 
-    # it looks something like this: 
-    # {0: 20, 1:15, 2:21} 
+    # sınıf:örnek sayısı sözlüğü oluşturun 
+    # {0: 20, 1: 15, 2: 21} gibi 
     class_counts = Counter(y_true) 
      
-    # initialize f1 to 0 
+    # f1 skorunu 0 olarak başlatın 
     f1 = 0 
      
-    # loop over all classes 
+    # tüm sınıflar üzerinde dönün 
     for class_ in range(num_classes): 
-        # all classes except current are considered negative 
+        # mevcut sınıf dışındakiler negatif kabul edilir 
         temp_true = [1 if p == class_ else 0 for p in y_true] 
         temp_pred = [1 if p == class_ else 0 for p in y_pred] 
          
-        # calculate precision and recall for class 
+        # sınıf için hassasiyet ve duyarlılığı hesaplayın 
         p = precision(temp_true, temp_pred) 
         r = recall(temp_true, temp_pred) 
          
-        # calculate f1 of class 
+        # sınıfın F1 skorunu hesaplayın 
         if p + r != 0: 
             temp_f1 = 2 * p * r / (p + r) 
         else: 
             temp_f1 = 0 
          
-        # multiply f1 with count of samples in class 
-        weighted_f1 = class_counts[class_] * temp_f1 
+        # F1 skorunu sınıftaki örnek sayısı ile çarpın 
+        weighted_f1_val = class_counts[class_] * temp_f1 
          
-        # add to f1 precision 
-        f1 += weighted_f1
+        # genel toplama ekleyin 
+        f1 += weighted_f1_val
 
-# calculate overall F1 by dividing by 
-    # total number of samples 
+    # toplam örnek sayısına bölerek genel F1 skorunu hesaplayın 
     overall_f1 = f1 / len(y_true) 
     return overall_f1 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Note that there are a few lines of code above which are new. And that’s why you 
-should read the code carefully. 
+Yukarıdaki kodda birkaç satırın yeni olduğuna dikkat edin. Bu yüzden kodu dikkatlice okumalısınız.
  
 ═════════════════════════════════════════════════════════════════════════ 
+```python
 In [X]: from sklearn import metrics 
  
 In [X]: y_true = [0, 1, 2, 0, 1, 2, 0, 2, 2] 
@@ -2464,57 +2398,45 @@ Out[X]: 0.41269841269841273
  
 In [X]: metrics.f1_score(y_true, y_pred, average="weighted") 
 Out[X]: 0.41269841269841273 
+```
 ═════════════════════════════════════════════════════════════════════════ 
  
-Thus, we have precision, recall and F1 implemented for multi-class problems. You 
-can similarly convert AUC and log loss to multi-class formats too. This format of 
-conversion is known as one-vs-all. I’m not going to implement them here as the 
-implementation is quite similar to what we have already discussed. 
+Böylece çok sınıflı problemler için hassasiyet, duyarlılık ve F1 skorunu uygulamış olduk. Benzer şekilde AUC ve log loss'u da çok sınıflı formatlara dönüştürebilirsiniz. Bu dönüştürme yaklaşımı **bire-karşı-hepsi (one-vs-all / one-vs-rest)** olarak bilinir. Mantık daha önce tartıştıklarımızla oldukça benzer olduğundan bunları burada ayrıca kodlamayacağım.
  
-In binary or multi-class classification, it is also quite popular to take a look at 
-confusion matrix. Don’t be confused; it’s quite easy. A confusion matrix is nothing 
-but a table of TP, FP, TN and FN. Using the confusion matrix, you can quickly see 
-how many samples were misclassified and how many were classified correctly.  
-One might argue that the confusion matrix should be covered quite early in this 
-chapter, but I chose not to do it. If you understand TP, FP, TN, FN, precision, recall 
-and AUC, it becomes quite easy to understand and interpret confusion matrix. Let’s 
-see what confusion matrix looks like for a binary classification problem in figure 7. 
+İkili veya çok sınıflı sınıflandırmada, **karmaşıklık matrisine (confusion matrix)** göz atmak da oldukça yaygındır. Kafanız karışmasın (*don't be confused*); aslında oldukça basittir. Karmaşıklık matrisi, TP, FP, TN ve FN değerlerinden oluşan bir tablodan başka bir şey değildir. Karmaşıklık matrisini kullanarak kaç örneğin yanlış, kaçının doğru sınıflandırıldığını hızlıca görebilirsiniz.  
+Birisi bu bölümde karmaşıklık matrisinin en başta anlatılması gerektiğini savunabilir, ancak ben öyle yapmamayı tercih ettim. TP, FP, TN, FN, hassasiyet, duyarlılık ve AUC kavramlarını anladıysanız, karmaşıklık matrisini anlamak ve yorumlamak çok kolay hale gelir. Şekil 7'de ikili bir sınıflandırma problemi için karmaşıklık matrisinin nasıl göründüğüne bakalım.
  
-We see that the confusion matrix is made up of TP, FP, FN and TN. These are the 
-only values we need to calculate precision, recall, F1 score and AUC. Sometimes, 
-people also prefer calling FP as Type-I error and FN as Type-II error.
+Karmaşıklık matrisinin TP, FP, FN ve TN'den oluştuğunu görüyoruz. Bunlar hassasiyet, duyarlılık, F1 skoru ve AUC hesaplamak için ihtiyacımız olan yegâne değerlerdir. Bazen insanlar FP'yi **Tip-I hata (Type-I error)** ve FN'yi **Tip-II hata (Type-II error)** olarak adlandırmayı da tercih ederler.
 
 ![resim](img/p0059_fig01_resim.png)
 
-Figure 7: Confusion matrix for a binary classification task 
- 
-We can also expand the binary confusion matrix to a multi-class confusion matrix. 
-How would that look like? If we have N classes, it will be a matrix of size NxN. 
-For every class, we calculate the total number of samples that went to the class in 
-concern and other classes. This can be best understood by an example. 
- 
-Suppose we have the following actual classes:
+Metnin Türkçe çevirisi aşağıdadır:
 
-[0, 1, 2, 0, 1, 2, 0, 2, 2]
+---
 
-And our predictions are:
+**Şekil 7: İkili bir sınıflandırma görevi için karmaşıklık matrisi (Confusion Matrix)**
+ 
+İkili karmaşıklık matrisini çok sınıflı bir karmaşıklık matrisine de genişletebiliriz. Peki bu nasıl görünür? Eğer $N$ adet sınıfımız varsa, $N \times N$ boyutunda bir matris olacaktır. Her bir sınıf için, ilgili sınıfa ve diğer sınıflara dağılan toplam örnek sayısını hesaplarız. Bu en iyi bir örnek üzerinden anlaşılabilir.
+ 
+Gerçek sınıfların aşağıdaki gibi olduğunu varsayalım:
 
-[0, 2, 1, 0, 2, 1, 0, 0, 2] 
+`[0, 1, 2, 0, 1, 2, 0, 2, 2]`
+
+Ve tahminlerimiz şu şekilde olsun:
+
+`[0, 2, 1, 0, 2, 1, 0, 0, 2]`
  
-Then our confusion matrix will look as shown in figure 8. 
+Bu durumda karmaşıklık matrisimiz Şekil 8'de gösterildiği gibi görünecektir.
  
-What does figure 8 tell us?  
+**Şekil 8 bize ne anlatıyor?**  
  
-Let’s look at class 0. We see that there are 3 instances of class 0 in the actual target. 
-However, in prediction, we have 3 instances that belong to class 0 and 1 instance 
-that belongs to class 1. Ideally, for class 0 in the actual label, predicted labels 1 and 
-2 shouldn’t have any instance. Let’s see class 2. In actual labels, this count adds up 
-to 4 while in predicted it adds up to 3. Only 1 instance has a perfect prediction for 
-class 2 and 2 instances go to class 1.  
+Sınıf 0'a bakalım. Gerçek hedef değerlerde sınıf 0'a ait 3 örnek olduğunu görüyoruz. Ancak tahminlerde sınıf 0'a ait 3 örnek ve sınıf 1'e ait 1 örnek yer alıyor. İdeal olarak, gerçek etiketi 0 olan durumlar için tahmin edilen 1 ve 2 etiketlerinde hiçbir örneğin bulunmaması gerekirdi. Şimdi sınıf 2'ye bakalım: Gerçek etiketlerde bu sınıfın toplam sayısı 4 iken tahmin edilenlerde 3'e denk gelmektedir. Sınıf 2 için sadece 1 örnek kusursuz şekilde doğru tahmin edilmiş, 2 örnek ise yanlışlıkla sınıf 1 olarak tahmin edilmiştir.
  
-A perfect confusion matrix should only be filled diagonally from left to right.
+Kusursuz bir karmaşıklık matrisinde yalnızca soldan sağa uzanan ana köşegen (diyagonal) dolu olmalı, diğer tüm hücreler ise 0 olmalıdır.
 
 ![resim](img/p0060_fig01_resim.png)
+
+## Kaldığım yer
 
 Figure 8: Confusion matrix for a multi-class problem 
  
