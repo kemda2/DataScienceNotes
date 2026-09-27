@@ -3498,807 +3498,699 @@ Precision ve recall değerlerini de kullanabiliriz, ancak AUC bu iki metriği bi
 
 ![resim](img/p0088_fig01_resim.png)
 
-Figure 2: Count of targets. the x-axis shows the label, and the y-axis shows the count of the label 
- 
-Overall, there are:
+**Şekil 2: Hedeflerin sayısı**
 
-• 
-Five binary variables 
-• 
-Ten nominal variables 
-• 
-Six ordinal variables 
-• 
-Two cyclic variables 
-• 
-And a target variable 
- 
-Let’s look at ord_2 feature in the dataset. It consists of six different categories:
+x ekseni etiketi, y ekseni ise etiketin sayısını göstermektedir.
 
-• 
-Freezing 
-• 
-Warm 
-• 
-Cold 
-• 
-Boiling Hot 
-• 
-Hot 
-• 
-Lava Hot 
- 
-We have to know that computers do not understand text data and thus, we need to 
-convert these categories to numbers. A simple way of doing this would be to create 
-a dictionary that maps these values to numbers starting from 0 to N-1, where N is 
-the total number of categories in a given feature.
+Genel olarak şunlar bulunmaktadır:
 
-═════════════════════════════════════════════════════════════════════════ 
-mapping = { 
-    "Freezing": 0, 
-    "Warm": 1, 
-    "Cold": 2, 
-    "Boiling Hot": 3, 
-    "Hot": 4, 
-    "Lava Hot": 5   
-} 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Now, we can read the dataset and convert these categories to numbers easily.  
- 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
- 
-df = pd.read_csv("../input/cat_train.csv") 
- 
-df.loc[:, "ord_2"] = df.ord_2.map(mapping) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Value counts before mapping: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-df.ord_2.value_counts() 
- 
-Freezing       142726 
-Warm           124239 
-Cold            97822 
-Boiling Hot     84790 
-Hot             67508 
-Lava Hot        64840 
-Name: ord_2, dtype: int64 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Value counts after mapping: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-0.0    142726 
-1.0    124239 
-2.0     97822 
-3.0     84790 
-4.0     67508 
-5.0     64840 
-Name: ord_2, dtype: int64 
-═════════════════════════════════════════════════════════════════════════
+- Beş ikili (binary) değişken
+- On nominal değişken
+- Altı ordinal değişken
+- İki döngüsel (cyclic) değişken
+- Ve bir hedef değişken
 
-This type of encoding of categorical variables is known as Label Encoding, i.e., 
-we are encoding every category as a numerical label.
+Veri setindeki **ord\_2** özelliğine bakalım. Altı farklı kategoriden oluşmaktadır:
 
-We can do the same by using LabelEncoder from scikit-learn.
+- Freezing
+- Warm
+- Cold
+- Boiling Hot
+- Hot
+- Lava Hot
 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
-from sklearn import preprocessing 
- 
-# read the data 
-df = pd.read_csv("../input/cat_train.csv") 
- 
-# fill NaN values in ord_2 column 
-df.loc[:, "ord_2"] = df.ord_2.fillna("NONE") 
- 
-# initialize LabelEncoder 
-lbl_enc = preprocessing.LabelEncoder() 
- 
-# fit label encoder and transform values on ord_2 column 
-# P.S: do not use this directly. fit first, then transform 
-df.loc[:, "ord_2"] = lbl_enc.fit_transform(df.ord_2.values) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-You will see that I use fillna from pandas. The reason is LabelEncoder from scikit-
-learn does not handle NaN values, and ord_2 column has NaN values in it. 
- 
-We can use this directly in many tree-based models:
+Bilgisayarların metin verilerini anlamadığını ve bu nedenle bu kategorileri sayılara dönüştürmemiz gerektiğini bilmeliyiz. Bunu yapmanın basit bir yolu, bu değerleri 0'dan N-1'e kadar sayılara eşleyen bir sözlük oluşturmaktır. Burada N, belirli bir özellikteki toplam kategori sayısıdır.
 
-• 
-Decision trees 
-• 
-Random forest 
-• 
-Extra Trees 
-• 
-Or any kind of boosted trees model
+```
+mapping = {
+"Freezing": 0,
+"Warm": 1,
+"Cold": 2,
+"Boiling Hot": 3,
+"Hot": 4,
+"Lava Hot": 5
+}
+```
 
-o XGBoost 
-o GBM 
-o LightGBM
+Artık veri setini okuyabilir ve bu kategorileri kolayca sayılara dönüştürebiliriz.
 
-This type of encoding cannot be used in linear models, support vector machines or 
-neural networks as they expect data to be normalized (or standardized).
+```
+import pandas as pd
 
-For these types of models, we can binarize the data.
+df = pd.read_csv("../input/cat_train.csv")
 
-═════════════════════════════════════════════════════════════════════════ 
-Freezing    --> 0 --> 0 0 0 
-Warm        --> 1 --> 0 0 1 
-Cold        --> 2 --> 0 1 0 
-Boiling Hot --> 3 --> 0 1 1 
-Hot         --> 4 --> 1 0 0 
-Lava Hot    --> 5 --> 1 0 1 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This is just converting the categories to numbers and then converting them to their 
-binary representation. We are thus splitting one feature into three (in this case) 
-features (or columns). If we have more categories, we might end up splitting into a 
-lot more columns. 
- 
-It becomes easy to store lots of binarized variables like this if we store them in a 
-sparse format. A sparse format is nothing but a representation or way of storing 
-data in memory in which you do not store all the values but only the values that 
-matter. In the case of binary variables described above, all that matters is where we 
-have ones (1s).  
- 
-It’s difficult to imagine a format like this but should become clear with an example. 
- 
-Let’s assume that we are provided with only one feature in the dataframe above: 
-ord_2.
+df.loc[:, "ord_2"] = df.ord_2.map(mapping)
+```
 
-Index 
-Feature
+**Eşleme (mapping) öncesindeki değer sayımları:**
 
-0 
-Warm
+```
+df.ord_2.value_counts()
 
-1 
-Hot
+Freezing       142726
+Warm           124239
+Cold            97822
+Boiling Hot     84790
+Hot             67508
+Lava Hot        64840
+Name: ord_2, dtype: int64
+```
 
-2 
-Lava hot
+**Eşleme sonrasındaki değer sayımları:**
 
-Currently, we are looking at only three samples in the dataset. Let’s convert this to 
-binary representation where we have three items for each sample.  
- 
-These three items are the three features.
+```
+0.0    142726
+1.0    124239
+2.0     97822
+3.0     84790
+4.0     67508
+5.0     64840
+Name: ord_2, dtype: int64
+```
 
-Index 
-Feature_0 
-Feature_1 
-Feature_2
+Kategorik değişkenlerin bu tür kodlanmasına **Label Encoding (Etiket Kodlama)** adı verilir; yani her kategoriyi sayısal bir etiket olarak kodluyoruz.
 
-0 
-0 
-0 
-1
+Aynı şeyi scikit-learn'deki **LabelEncoder** kullanarak da yapabiliriz.
 
-1 
-1 
-0 
-0
+```
+import pandas as pd
+from sklearn import preprocessing
 
-2 
-1 
-0 
-1 
- 
-So, our features are stored in a matrix which has 3 rows and 3 columns - 3x3. Each 
-element of this matrix occupies 8 bytes. So, our total memory requirement for this 
-array is 8x3x3 = 72 bytes. 
- 
-We can also check this using a simple python snippet. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import numpy as np 
- 
-# create our example feature matrix 
-example = np.array( 
-    [ 
-        [0, 0, 1], 
-        [1, 0, 0], 
-        [1, 0, 1] 
-    ] 
-) 
- 
-# print size in bytes 
-print(example.nbytes) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This code will print 72 as we calculated before. But do we need to store all the 
-elements of this matrix? No. As mentioned before we are only interested in 1s. 0s 
-are not that important because anything multiplied with 0 will be zero and 0 
-added/subtracted to/from anything doesn’t make any difference. One way to 
-represent this matrix only with ones would be some kind of dictionary method in 
-which keys are indices of rows and columns and value is 1: 
-   
-═════════════════════════════════════════════════════════════════════════ 
-  (0, 2) 
-1 
-  (1, 0) 
-1 
-  (2, 0) 
-1 
-  (2, 2) 
-1 
-═════════════════════════════════════════════════════════════════════════
+# verileri oku
+df = pd.read_csv("../input/cat_train.csv")
 
-A notation like this will occupy much less memory because it has to store only four 
-values (in this case). The total memory used will be 8x4 = 32 bytes. Any numpy 
-array can be converted to a sparse matrix by simple python code. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import numpy as np 
-from scipy import sparse 
- 
-# create our example feature matrix 
-example = np.array( 
-    [ 
-        [0, 0, 1], 
-        [1, 0, 0], 
-        [1, 0, 1] 
-    ] 
-) 
- 
-# convert numpy array to sparse CSR matrix 
-sparse_example = sparse.csr_matrix(example) 
- 
-# print size of this sparse matrix 
-print(sparse_example.data.nbytes) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This will print 32, which is so less than our dense array! The total size of the sparse 
-csr matrix is the sum of three values. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-print( 
-    sparse_example.data.nbytes +  
-    sparse_example.indptr.nbytes +  
-    sparse_example.indices.nbytes 
-) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This will print 64, which is still less than our dense array. Unfortunately, I will not 
-go into the details of these elements. You can read more about them in scipy docs. 
-The difference in size becomes vast when we have much larger arrays, let’s say 
-with thousands of samples and tens of thousands of features. For example, a text 
-dataset where we are using count-based features. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import numpy as np 
+# ord_2 sütunundaki NaN değerlerini doldur
+df.loc[:, "ord_2"] = df.ord_2.fillna("NONE")
+
+# LabelEncoder'ı başlat
+lbl_enc = preprocessing.LabelEncoder()
+
+# ord_2 sütunundaki değerlere label encoder'ı uydur ve dönüştür
+# NOT: Bunu doğrudan kullanmayın. Önce fit, sonra transform yapın
+df.loc[:, "ord_2"] = lbl_enc.fit_transform(df.ord_2.values)
+```
+
+Burada pandas'ın **fillna** fonksiyonunu kullandığımı göreceksiniz. Bunun nedeni, scikit-learn'deki **LabelEncoder'ın NaN değerlerini ele alamaması** ve **ord\_2** sütununda NaN değerlerinin bulunmasıdır.
+
+Bunu doğrudan birçok **ağaç tabanlı modelde** kullanabiliriz:
+
+- Karar ağaçları (Decision trees)
+- Rastgele orman (Random forest)
+- Extra Trees
+- Veya herhangi bir tür boosted trees modeli
+- XGBoost
+- GBM
+- LightGBM
+
+Bu tür kodlama **doğrusal modellerde (linear models), destek vektör makinelerinde (support vector machines) veya sinir ağlarında (neural networks)** kullanılamaz; çünkü bunlar verinin normalize edilmesini (veya standardize edilmesini) bekler.
+
+Bu tür modeller için veriyi **ikili hale (binarize)** getirebiliriz.
+
+```
+Freezing    --> 0 --> 0 0 0
+Warm        --> 1 --> 0 0 1
+Cold        --> 2 --> 0 1 0
+Boiling Hot --> 3 --> 0 1 1
+Hot         --> 4 --> 1 0 0
+Lava Hot    --> 5 --> 1 0 1
+```
+
+Bu, kategorileri sayılara dönüştürmek ve ardından onları ikili gösterimlerine dönüştürmekten ibarettir. Böylece bir özelliği bu durumda üç özelliğe (veya sütuna) bölmüş oluyoruz. Daha fazla kategorimiz varsa, çok daha fazla sütuna bölmek zorunda kalabiliriz.
+
+Bu şekilde çok sayıda ikili hale getirilmiş değişkeni **seyrek (sparse) formatta** saklarsak depolamak kolaylaşır. Seyrek format, tüm değerleri saklamadığınız, yalnızca önemli olan değerleri sakladığınız bir veri gösterimi veya verileri bellekte saklama yöntemidir. Yukarıda açıklanan ikili değişkenler durumunda önemli olan tek şey, **1'lerin (1s) nerede olduğudur**.
+
+Böyle bir formatı hayal etmek zordur ancak bir örnekle daha anlaşılır hale gelmelidir.
+
+Yukarıdaki dataframe'de yalnızca bir özelliğimiz olduğunu varsayalım: **ord\_2**.
+
+| Index | Feature |
+| --- | --- |
+| 0 | Warm |
+| 1 | Hot |
+| 2 | Lava hot |
+
+Şu anda veri setindeki yalnızca üç örneğe bakıyoruz. Bunu, her örnek için üç öğeye sahip olduğumuz ikili gösterime dönüştürelim.
+
+Bu üç öğe üç özelliktir.
+
+| Index | Feature\_0 | Feature\_1 | Feature\_2 |
+| --- | --- | --- | --- |
+| 0 | 0 | 0 | 1 |
+| 1 | 1 | 0 | 0 |
+| 2 | 1 | 0 | 1 |
+
+Dolayısıyla özelliklerimiz 3 satır ve 3 sütuna sahip, yani **3x3** boyutunda bir matriste saklanmaktadır. Bu matrisin her elemanı 8 byte yer kaplar. Dolayısıyla bu dizi için toplam bellek gereksinimimiz:
+
+**8 × 3 × 3 = 72 byte**
+
+olur.
+
+Bunu basit bir Python kod parçacığı kullanarak da kontrol edebiliriz.
+
+```
+import numpy as np
+
+# örnek özellik matrisimizi oluştur
+example = np.array(
+[
+    [0, 0, 1],
+    [1, 0, 0],
+    [1, 0, 1]
+]
+)
+
+# byte cinsinden boyutu yazdır
+print(example.nbytes)
+```
+
+Bu kod, daha önce hesapladığımız gibi **72** yazdıracaktır. Ancak bu matrisin tüm elemanlarını saklamamız gerekiyor mu? Hayır. Daha önce bahsettiğimiz gibi yalnızca **1'lerle ilgileniyoruz**. 0'lar o kadar önemli değildir; çünkü 0 ile çarpılan herhangi bir şey sıfır olacaktır ve herhangi bir şeye 0 eklemek/çıkarmak hiçbir fark oluşturmaz.
+
+Bu matrisi yalnızca birleri kullanarak göstermenin bir yolu, anahtarların satır ve sütun indeksleri, değerin ise 1 olduğu bir tür sözlük yöntemi olacaktır:
+
+```
+(0, 2)    1
+(1, 0)    1
+(2, 0)    1
+(2, 2)    1
+```
+
+Böyle bir gösterim çok daha az bellek kaplayacaktır çünkü yalnızca dört değeri (bu durumda) saklaması gerekir. Kullanılan toplam bellek:
+
+**8 × 4 = 32 byte**
+
+olacaktır.
+
+Herhangi bir numpy dizisi basit bir Python koduyla seyrek matrise dönüştürülebilir.
+
+```
+import numpy as np
 from scipy import sparse
 
-# number of rows 
-n_rows = 10000 
- 
-# number of columns 
-n_cols = 100000 
- 
-# create random binary matrix with only 5% values as 1s 
-example = np.random.binomial(1, p=0.05, size=(n_rows, n_cols)) 
- 
-# print size in bytes 
-print(f"Size of dense array: {example.nbytes}") 
- 
-# convert numpy array to sparse CSR matrix 
-sparse_example = sparse.csr_matrix(example) 
- 
-# print size of this sparse matrix 
-print(f"Size of sparse array: {sparse_example.data.nbytes}") 
- 
-full_size = ( 
-    sparse_example.data.nbytes +  
-    sparse_example.indptr.nbytes +  
-    sparse_example.indices.nbytes 
-) 
- 
-# print full size of this sparse matrix 
-print(f"Full size of sparse array: {full_size}") 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This prints: 
- 
-Size of dense array: 8000000000 
-Size of sparse array: 399932496 
-Full size of sparse array: 599938748 
- 
-So, dense array takes ~8000MB or approximately 8GB of memory. The sparse 
-array, on the other hand, takes only 399MB of memory. 
- 
-And, that’s why we prefer sparse arrays over dense whenever we have a lot of zeros 
-in our features.  
- 
-Please note that there are many different ways of representing a sparse matrix. Here 
-I have shown only one such (and probably the most popular) way. Going deep into 
-these is beyond the scope of this book and is left as an exercise to the reader.
+# örnek özellik matrisimizi oluştur
+example = np.array(
+[
+    [0, 0, 1],
+    [1, 0, 0],
+    [1, 0, 1]
+]
+)
 
-Even though the sparse representation of binarized features takes much less 
-memory than its dense representation, there is another transformation for 
-categorical variables that takes even less memory. This is known as One Hot 
-Encoding. 
- 
-One hot encoding is a binary encoding too in the sense that there are only two 
-values, 0s and 1s. However, it must be noted that it’s not a binary representation. 
-Its representation can be understood by looking at the following example. 
- 
-Suppose we represent each category of the ord_2 variable by a vector. This vector 
-is of the same size as the number of categories in the ord_2 variable. In this specific 
-case, each vector is of size six and has all zeros except at one position. Let’s look 
-at this particular table of vectors.
+# numpy dizisini seyrek CSR matrisine dönüştür
+sparse_example = sparse.csr_matrix(example)
 
-Freezing 
-0 
-0 
-0 
-0 
-0 
-1
+# bu seyrek matrisin boyutunu yazdır
+print(sparse_example.data.nbytes)
+```
 
-Warm 
-0 
-0 
-0 
-0 
-1 
-0
+Bu kod **32** yazdıracaktır; bu, yoğun dizimizden çok daha küçüktür!
 
-Cold 
-0 
-0 
-0 
-1 
-0 
-0
+Seyrek CSR matrisinin toplam boyutu üç değerin toplamıdır.
 
-Boiling Hot 
-0 
-0 
-1 
-0 
-0 
-0
+```
+print(
+sparse_example.data.nbytes +
+sparse_example.indptr.nbytes +
+sparse_example.indices.nbytes
+)
+```
 
-Hot 
-0 
-1 
-0 
-0 
-0 
-0
+Bu kod **64** yazdıracaktır; bu hâlâ yoğun dizimizden daha küçüktür. Ne yazık ki bu elemanların ayrıntılarına girmeyeceğim. Bunlar hakkında daha fazla bilgiyi scipy dokümantasyonunda okuyabilirsiniz.
 
-Lava Hot 
-1 
-0 
-0 
-0 
-0 
-0 
- 
-We see that the size of vectors is 1x6, i.e. there are six elements in the vector. Where 
-does this number come from? If you look carefully, you will see that there are six 
-categories, as mentioned before. When one-hot encoding, the vector size has to be 
-same as the number of categories we are looking at. Each vector has a 1 and rest all 
-other values are 0s. Now, let’s use these features instead of the binarized feature as 
-before and see how much memory can we save. 
- 
-If you remember the old data, it looked as follows:
+Boyut farkı çok daha büyük dizilerimiz olduğunda çok büyük hale gelir; örneğin binlerce örnek ve on binlerce özellik olduğunda. Buna bir örnek, sayım tabanlı özellikleri kullandığımız bir metin veri setidir.
 
-Index 
-Feature
+```
+import numpy as np
+from scipy import sparse
 
-0 
-Warm
+# satır sayısı
+n_rows = 10000
 
-1 
-Hot
+# sütun sayısı
+n_cols = 100000
 
-2 
-Lava hot
+# yalnızca %5'i 1 olan rastgele ikili matris oluştur
+example = np.random.binomial(1, p=0.05, size=(n_rows, n_cols))
 
-And we had three features for each sample. But one-hot vectors, in this case, are of 
-size 6. Thus, we have six features instead of 3.
+# byte cinsinden boyutu yazdır
+print(f"Size of dense array: {example.nbytes}")
 
-Index 
-F_0 
-F_1 
-F_2 
-F_3 
-F_4 
-F_5 
-0 
-0 
-0 
-0 
-0 
-1 
-0 
-1 
-0 
-1 
-0 
-0 
-0 
-0 
-2 
-1 
-0 
-0 
-0 
-0 
-0 
- 
-So, we have six features, and in this 3x6 array, there are only 3 ones. Finding size 
-using numpy is very similar to the binarization size calculation script. All you need 
-to change is the array. Let’s take a look at this code. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import numpy as np 
-from scipy import sparse 
-# create binary matrix 
-example = np.array( 
-    [ 
-        [0, 0, 0, 0, 1, 0], 
-        [0, 1, 0, 0, 0, 0], 
-        [1, 0, 0, 0, 0, 0] 
-    ] 
-) 
- 
-# print size in bytes 
-print(f"Size of dense array: {example.nbytes}") 
- 
-# convert numpy array to sparse CSR matrix 
-sparse_example = sparse.csr_matrix(example) 
- 
-# print size of this sparse matrix 
-print(f"Size of sparse array: {sparse_example.data.nbytes}") 
- 
-full_size = ( 
-    sparse_example.data.nbytes +  
-    sparse_example.indptr.nbytes +  
-    sparse_example.indices.nbytes 
-) 
- 
-# print full size of this sparse matrix 
-print(f"Full size of sparse array: {full_size}") 
-═════════════════════════════════════════════════════════════════════════
+# numpy dizisini seyrek CSR matrisine dönüştür
+sparse_example = sparse.csr_matrix(example)
 
-This will print the sizes as: 
- 
-Size of dense array: 144 
-Size of sparse array: 24 
-Full size of sparse array: 52 
- 
-We see that the dense array size is much larger than the one with binarization. 
-However, the size of the sparse array is much less. Let’s try this with a much larger 
-array. In this example, we will use OneHotEncoder from scikit-learn to transform 
-our feature array with 1001 categories into dense and sparse matrices. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import numpy as np 
-from sklearn import preprocessing 
- 
-# create random 1-d array with 1001 different categories (int) 
-example = np.random.randint(1000, size=1000000) 
- 
-# initialize OneHotEncoder from scikit-learn 
-# keep sparse = False to get dense array 
-ohe = preprocessing.OneHotEncoder(sparse=False) 
- 
-# fit and transform data with dense one hot encoder 
-ohe_example = ohe.fit_transform(example.reshape(-1, 1)) 
- 
-# print size in bytes for dense array 
-print(f"Size of dense array: {ohe_example.nbytes}") 
- 
-# initialize OneHotEncoder from scikit-learn 
-# keep sparse = True to get sparse array 
-ohe = preprocessing.OneHotEncoder(sparse=True) 
- 
-# fit and transform data with sparse one-hot encoder 
-ohe_example = ohe.fit_transform(example.reshape(-1, 1)) 
- 
-# print size of this sparse matrix 
-print(f"Size of sparse array: {ohe_example.data.nbytes}") 
- 
-full_size = ( 
-    ohe_example.data.nbytes +  
-    ohe_example.indptr.nbytes + ohe_example.indices.nbytes 
-) 
- 
-# print full size of this sparse matrix 
-print(f"Full size of sparse array: {full_size}") 
-═════════════════════════════════════════════════════════════════════════
+# bu seyrek matrisin boyutunu yazdır
+print(f"Size of sparse array: {sparse_example.data.nbytes}")
 
-And this code prints: 
- 
-Size of dense array: 8000000000 
-Size of sparse array: 8000000 
-Full size of sparse array: 16000004 
- 
-Dense array size here is approximately 8GB and sparse array is 8MB. If you had a 
-choice, which one would you choose? Seems like a quite simple choice to me, isn’t 
-it? 
- 
-These three methods are the most important ways to handle categorical variables. 
-There are, however, many other different methods you can use to handle categorical 
-variables. An example of one such method is about converting categorical variables 
-to numerical variables. 
- 
-Suppose we go back to the categorical features dataframe (original cat-in-the-dat-
-ii) that we had. How many ids do we have in the dataframe where the value of ord_2 
-is Boiling Hot ?  
- 
-We can easily calculate this value by calculating the shape of the dataframe where 
-ord_2 column has the value Boiling Hot. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df[df.ord_2 == "Boiling Hot"].shape 
-Out[X]: (84790, 25) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We see that there are 84790 rows with this value. We can also calculate this value 
-for all the categories using groupby in pandas. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df.groupby(["ord_2"])["id"].count() 
-Out[X]: 
-ord_2 
-Boiling Hot     84790 
-Cold            97822 
-Freezing       142726 
-Hot             67508 
-Lava Hot        64840 
-Warm           124239 
-Name: id, dtype: int64 
-═════════════════════════════════════════════════════════════════════════
+full_size = (
+sparse_example.data.nbytes +
+sparse_example.indptr.nbytes +
+sparse_example.indices.nbytes
+)
 
-If we just replace ord_2 column with its count values, we have converted it to a 
-feature which is kind of numerical now. We can create a new column or replace this 
-column by using the transform function of pandas along with groupby. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df.groupby(["ord_2"])["id"].transform("count") 
-Out[X]: 
-0          67508.0 
-1         124239.0 
-2         142726.0 
-3          64840.0 
-4          97822.0 
-            ... 
-599995    142726.0 
-599996     84790.0 
-599997    142726.0 
-599998    124239.0 
-599999     84790.0 
-Name: id, Length: 600000, dtype: float64 
-═════════════════════════════════════════════════════════════════════════ 
- 
-You can add counts of all the features or can also replace them or maybe group by 
-multiple columns and their counts. For example, the following code counts by 
-grouping on ord_1 and ord_2 columns. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df.groupby( 
-   ...:     [ 
-   ...:         "ord_1", 
-   ...:         "ord_2" 
-   ...:     ] 
-   ...: )["id"].count().reset_index(name="count") 
-Out[X]: 
-          ord_1        ord_2  count 
-0   Contributor  Boiling Hot  15634 
-1   Contributor         Cold  17734 
-2   Contributor     Freezing  26082 
-3   Contributor          Hot  12428 
-4   Contributor     Lava Hot  11919 
-5   Contributor         Warm  22774 
-6        Expert  Boiling Hot  19477 
-7        Expert         Cold  22956 
-8        Expert     Freezing  33249 
-9        Expert          Hot  15792 
-10       Expert     Lava Hot  15078 
-11       Expert         Warm  28900
+# bu seyrek matrisin tam boyutunu yazdır
+print(f"Full size of sparse array: {full_size}")
+```
 
-12  Grandmaster  Boiling Hot  13623 
-13  Grandmaster         Cold  15464 
-14  Grandmaster     Freezing  22818 
-15  Grandmaster          Hot  10805 
-16  Grandmaster     Lava Hot  10363 
-17  Grandmaster         Warm  19899 
-18       Master  Boiling Hot  10800 
-. 
-. 
-. 
-. 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Please note that I have eliminated some rows from the output to fit them in one 
-page. This is another kind of count that you can add as a feature. You must have 
-noted by now that I am using the id column for counts. You can, however, also 
-count other columns by grouping by on combinations of the columns. 
- 
-One more trick is to create new features from these categorical variables. You can 
-create new categorical features from existing features, and this can be done in an 
-effortless manner. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df["new_feature"] = ( 
-   ...:     df.ord_1.astype(str) 
-   ...:     + "_" 
-   ...:     + df.ord_2.astype(str) 
-   ...: ) 
- 
-In [X]: df.new_feature 
- 
-Out[X]: 
-0                 Contributor_Hot 
-1                Grandmaster_Warm 
-2                    nan_Freezing 
-3                 Novice_Lava Hot 
-4                Grandmaster_Cold 
-                   ... 
-599995            Novice_Freezing 
-599996         Novice_Boiling Hot 
-599997       Contributor_Freezing 
-599998                Master_Warm 
-599999    Contributor_Boiling Hot 
-Name: new_feature, Length: 600000, dtype: object 
-═════════════════════════════════════════════════════════════════════════
+Bu kod şunları yazdırır:
 
-Here, we have combined ord_1 and ord_2 by an underscore, and before that, we 
-convert these columns to string types. Note that NaN will also convert to string. But 
-it’s okay. We can also treat NaN as a new category. Thus, we have a new feature 
-which is a combination of these two features. You can also combine more than three 
-columns or four or even more. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df["new_feature"] = ( 
-    ...:     df.ord_1.astype(str) 
-    ...:     + "_" 
-    ...:     + df.ord_2.astype(str) 
-    ...:     + "_" 
-    ...:     + df.ord_3.astype(str) 
-    ...: ) 
- 
-In [X]: df.new_feature 
-Out[X]: 
-0                 Contributor_Hot_c 
-1                Grandmaster_Warm_e 
-2                    nan_Freezing_n 
-3                 Novice_Lava Hot_a 
-4                Grandmaster_Cold_h 
-                    ... 
-599995            Novice_Freezing_a 
-599996         Novice_Boiling Hot_n 
-599997       Contributor_Freezing_n 
-599998                Master_Warm_m 
-599999    Contributor_Boiling Hot_b 
-Name: new_feature, Length: 600000, dtype: object 
-═════════════════════════════════════════════════════════════════════════ 
- 
-So which categories should we combine? Well, there isn't an easy answer to that. It 
-depends on your data and the types of features. Some domain knowledge might be 
-useful for creating features like this. But if you don’t have concerns about memory 
-and CPU usage, you can go for a greedy approach where you can create many such 
-combinations and then use a model to decide which features are useful and keep 
-them. We will read about it later in this book. 
- 
-Whenever you get categorical variables, follow these simple steps:
+```
+Size of dense array: 8000000000
+Size of sparse array: 399932496
+Full size of sparse array: 599938748
+```
 
-• 
-fill the NaN values (this is very important!) 
-• 
-convert them to integers by applying label encoding using LabelEncoder 
-of scikit-learn or by using a mapping dictionary. If you didn’t fill up NaN 
-values with something, you might have to take care of them in this step
+Dolayısıyla yoğun dizi yaklaşık **8000 MB** veya yaklaşık **8 GB** bellek kullanır. Seyrek dizi ise yalnızca **399 MB** bellek kullanır.
 
-• 
-create one-hot encoding. Yes, you can skip binarization! 
-• 
-go for modelling! I mean the machine learning one. Not on the ramp. 
- 
-Handling NaN data in categorical features is quite essential else you can get the 
-infamous error from scikit-learn’s LabelEncoder: 
- 
-ValueError: y contains previously unseen labels: [nan, nan, nan, nan, 
-nan, nan, nan, nan] 
- 
-This simply means that when you are transforming the test data, you have NaN 
-values in it. It’s because you forgot to handle them during training. One simple way 
-to handle NaN values would be to drop them. Well, it’s simple but not ideal. NaN 
-values may have a lot of information in them, and you will lose it if you just drop 
-these values. There might also be many situations where most of your data has NaN 
-values, and thus, you cannot drop rows/samples with NaN values. Another way of 
-handling NaN values is to treat them as a completely new category. This is the most 
-preferred way of handling NaN values. And can be achieved in a very simple 
-manner if you are using pandas. 
- 
-Check this out on ord_2 column of the data we have been looking at till now. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df.ord_2.value_counts() 
-Out[X]: 
-Freezing       142726 
-Warm           124239 
-Cold            97822 
-Boiling Hot     84790 
-Hot             67508 
-Lava Hot        64840 
-Name: ord_2, dtype: int64 
-═════════════════════════════════════════════════════════════════════════ 
- 
-And after filling the NaN values, it becomes: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df.ord_2.fillna("NONE").value_counts() 
-Out[X]: 
-Freezing       142726 
-Warm           124239 
-Cold            97822 
-Boiling Hot     84790 
+Ve işte bu nedenle, özelliklerimizde çok sayıda sıfır olduğunda **yoğun (dense) diziler yerine seyrek (sparse) dizileri tercih ederiz**.
+
+Lütfen bir seyrek matrisi temsil etmenin birçok farklı yolu olduğunu unutmayın. Burada bunlardan yalnızca birini (ve muhtemelen en popüler olanını) gösterdim. Bunların ayrıntılarına derinlemesine girmek bu kitabın kapsamı dışındadır ve okuyucuya bir alıştırma olarak bırakılmıştır.
+
+İkili hale getirilmiş özelliklerin seyrek gösterimi, yoğun gösteriminden çok daha az bellek kullansa da, kategorik değişkenler için daha da az bellek kullanan başka bir dönüşüm vardır. Buna **One Hot Encoding (One-Hot Kodlama)** adı verilir.
+
+One-hot encoding aynı zamanda ikili bir kodlamadır; çünkü yalnızca iki değer, yani **0 ve 1**, vardır. Ancak bunun bir **ikili gösterim (binary representation)** olmadığına dikkat edilmelidir. Gösterimi aşağıdaki örneğe bakılarak anlaşılabilir.
+
+**ord\_2** değişkeninin her kategorisini bir vektör ile temsil ettiğimizi varsayalım. Bu vektörün boyutu, ord\_2 değişkenindeki kategori sayısıyla aynıdır. Bu özel durumda her vektörün boyutu altıdır ve bir konum dışındaki tüm değerleri sıfırdır.
+
+Bu özel vektör tablosuna bakalım:
+
+| Kategori | Gösterim |
+| --- | --- |
+| Freezing | 0 0 0 0 0 1 |
+| Warm | 0 0 0 0 1 0 |
+| Cold | 0 0 0 1 0 0 |
+| Boiling Hot | 0 0 1 0 0 0 |
+| Hot | 0 1 0 0 0 0 |
+| Lava Hot | 1 0 0 0 0 0 |
+
+Vektörlerin boyutunun **1x6**, yani vektörde altı eleman olduğunu görüyoruz.
+
+Bu sayı nereden geliyor?
+
+Dikkatlice bakarsanız, daha önce belirtildiği gibi altı kategori olduğunu göreceksiniz. One-hot encoding uygulanırken vektör boyutu, baktığımız kategori sayısıyla aynı olmalıdır.
+
+Her vektörde bir tane **1**, geri kalan tüm değerlerde ise **0** vardır.
+
+Şimdi daha önceki ikili hale getirilmiş özellik yerine bu özellikleri kullanalım ve ne kadar bellek tasarrufu sağlayabileceğimize bakalım.
+
+Eski verileri hatırlarsanız şöyle görünüyordu:
+
+| Index | Feature |
+| --- | --- |
+| 0 | Warm |
+| 1 | Hot |
+| 2 | Lava hot |
+
+Ve her örnek için üç özelliğimiz vardı.
+
+Fakat bu durumda one-hot vektörlerinin boyutu **6**'dır. Dolayısıyla 3 yerine **altı özelliğimiz** vardır.
+
+```
+Index  F_0  F_1  F_2  F_3  F_4  F_5
+0      0    0    0    0    1    0
+1      0    1    0    0    0    0
+2      1    0    0    0    0    0
+```
+
+Dolayısıyla altı özelliğimiz var ve bu **3x6** dizide yalnızca **3 tane 1** bulunmaktadır.
+
+Numpy kullanarak boyutu bulmak, ikili hale getirme boyutu hesaplama koduna oldukça benzerdir. Tek yapmanız gereken diziyi değiştirmektir. Bu koda bakalım.
+
+```
+import numpy as np
+from scipy import sparse
+
+# ikili matris oluştur
+example = np.array(
+[
+    [0, 0, 0, 0, 1, 0],
+    [0, 1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0]
+]
+)
+
+# byte cinsinden boyutu yazdır
+print(f"Size of dense array: {example.nbytes}")
+
+# numpy dizisini seyrek CSR matrisine dönüştür
+sparse_example = sparse.csr_matrix(example)
+
+# bu seyrek matrisin boyutunu yazdır
+print(f"Size of sparse array: {sparse_example.data.nbytes}")
+
+full_size = (
+sparse_example.data.nbytes +
+sparse_example.indptr.nbytes +
+sparse_example.indices.nbytes
+)
+
+# bu seyrek matrisin tam boyutunu yazdır
+print(f"Full size of sparse array: {full_size}")
+```
+
+Bu kod şu boyutları yazdıracaktır:
+
+```
+Size of dense array: 144
+Size of sparse array: 24
+Full size of sparse array: 52
+```
+
+Yoğun dizi boyutunun, ikili hale getirme işlemindekinden çok daha büyük olduğunu görüyoruz. Ancak seyrek dizinin boyutu çok daha küçüktür.
+
+Bunu çok daha büyük bir diziyle deneyelim. Bu örnekte, **1001 kategoriye sahip özellik dizimizi** yoğun ve seyrek matrislere dönüştürmek için scikit-learn'den **OneHotEncoder** kullanacağız.
+
+```
+import numpy as np
+from sklearn import preprocessing
+
+# 1001 farklı kategoriye (int) sahip rastgele 1-boyutlu dizi oluştur
+example = np.random.randint(1000, size=1000000)
+
+# scikit-learn'den OneHotEncoder'ı başlat
+# yoğun dizi elde etmek için sparse = False kullan
+ohe = preprocessing.OneHotEncoder(sparse=False)
+
+# verileri yoğun one-hot encoder ile fit et ve dönüştür
+ohe_example = ohe.fit_transform(example.reshape(-1, 1))
+
+# yoğun dizinin byte cinsinden boyutunu yazdır
+print(f"Size of dense array: {ohe_example.nbytes}")
+
+# scikit-learn'den OneHotEncoder'ı başlat
+# seyrek dizi elde etmek için sparse = True kullan
+ohe = preprocessing.OneHotEncoder(sparse=True)
+
+# verileri seyrek one-hot encoder ile fit et ve dönüştür
+ohe_example = ohe.fit_transform(example.reshape(-1, 1))
+
+# bu seyrek matrisin boyutunu yazdır
+print(f"Size of sparse array: {ohe_example.data.nbytes}")
+
+full_size = (
+ohe_example.data.nbytes +
+ohe_example.indptr.nbytes + ohe_example.indices.nbytes
+)
+
+# bu seyrek matrisin tam boyutunu yazdır
+print(f"Full size of sparse array: {full_size}")
+```
+
+Ve bu kod şunları yazdırır:
+
+```
+Size of dense array: 8000000000
+Size of sparse array: 8000000
+Full size of sparse array: 16000004
+```
+
+Buradaki yoğun dizi boyutu yaklaşık **8 GB**, seyrek dizi ise **8 MB**'dır.
+
+Bir seçeneğiniz olsaydı hangisini seçerdiniz?
+
+Bana oldukça basit bir seçim gibi geliyor, değil mi?
+
+Bu üç yöntem, kategorik değişkenleri ele almanın en önemli yollarıdır. Bununla birlikte, kategorik değişkenleri ele almak için kullanabileceğiniz birçok farklı yöntem daha vardır. Bu yöntemlerden bir tanesi, kategorik değişkenleri sayısal değişkenlere dönüştürmekle ilgilidir.
+
+Daha önce sahip olduğumuz kategorik özellikler dataframe'ine (**orijinal cat-in-the-dat-ii**) geri döndüğümüzü varsayalım.
+
+**ord\_2** değerinin **Boiling Hot** olduğu dataframe'de kaç tane id olduğunu nasıl bulabiliriz?
+
+ord\_2 sütununun değerinin **Boiling Hot** olduğu dataframe'in şeklini hesaplayarak bu değeri kolayca hesaplayabiliriz.
+
+```
+In [X]: df[df.ord_2 == "Boiling Hot"].shape
+Out[X]: (84790, 25)
+```
+
+Bu değere sahip **84790 satır** olduğunu görüyoruz.
+
+Ayrıca pandas'ta **groupby** kullanarak tüm kategoriler için bu değeri hesaplayabiliriz.
+
+```
+In [X]: df.groupby(["ord_2"])["id"].count()
+Out[X]:
+ord_2
+Boiling Hot     84790
+Cold            97822
+Freezing       142726
 Hot             67508
+Lava Hot        64840
+Warm           124239
+Name: id, dtype: int64
+```
 
-Lava Hot        64840 
-NONE            18075 
-Name: ord_2, dtype: int64 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Wow! There were 18075 NaN values in this column that we didn’t even consider 
-using previously. With the addition of this new category, the total number of 
-categories have now increased from 6 to 7. This is okay because now when we build 
-our models, we will also consider NaN. The more relevant information we have, 
-the better the model is. 
- 
-Let’s assume that ord_2 did not have any NaN values. We see that all categories in 
-this column have a significant count. There are no “rare” categories; i.e. the 
-categories which appear only a small percentage of the total number of samples. 
-Now, let’s assume that you have deployed this model which uses this column in 
-production and when the model or the project is live, you get a category in ord_2 
-column that is not present in train. You model pipeline, in this case, will throw an 
-error and there is nothing that you can do about it. If this happens, then probably 
-something is wrong with your pipeline in production. If this is expected, then you 
-must modify your model pipeline and include a new category to these six categories.  
- 
-This new category is known as the “rare” category. A rare category is a category 
-which is not seen very often and can include many different categories. You can 
-also try to “predict” the unknown category by using a nearest neighbour model. 
-Remember, if you predict this category, it will become one of the categories from 
-the training data.
+Eğer **ord\_2** sütununu yalnızca sayım değerleriyle değiştirirsek, onu artık bir tür sayısal özellik olan bir özelliğe dönüştürmüş oluruz.
+
+**groupby** ile birlikte pandas'ın **transform** fonksiyonunu kullanarak yeni bir sütun oluşturabilir veya bu sütunu değiştirebiliriz.
+
+```
+In [X]: df.groupby(["ord_2"])["id"].transform("count")
+Out[X]:
+0          67508.0
+1         124239.0
+2         142726.0
+3          64840.0
+4          97822.0
+        ...
+599995    142726.0
+599996     84790.0
+599997    142726.0
+599998    124239.0
+599999     84790.0
+Name: id, Length: 600000, dtype: float64
+```
+
+Tüm özelliklerin sayımlarını ekleyebilir veya bunları değiştirebilirsiniz. Hatta birden fazla sütunu ve bunların sayımlarını birlikte gruplayabilirsiniz.
+
+Örneğin, aşağıdaki kod **ord\_1 ve ord\_2 sütunlarına göre gruplayarak** sayım yapar.
+
+```
+In [X]: df.groupby(
+...:     [
+...:         "ord_1",
+...:         "ord_2"
+...:     ]
+...: )["id"].count().reset_index(name="count")
+Out[X]:
+        ord_1        ord_2  count
+0   Contributor  Boiling Hot  15634
+1   Contributor         Cold  17734
+2   Contributor     Freezing  26082
+3   Contributor          Hot  12428
+4   Contributor     Lava Hot  11919
+5   Contributor         Warm  22774
+6        Expert  Boiling Hot  19477
+7        Expert         Cold  22956
+8        Expert     Freezing  33249
+9        Expert          Hot  15792
+10       Expert     Lava Hot  15078
+11       Expert         Warm  28900
+12  Grandmaster  Boiling Hot  13623
+13  Grandmaster         Cold  15464
+14  Grandmaster     Freezing  22818
+15  Grandmaster          Hot  10805
+16  Grandmaster     Lava Hot  10363
+17  Grandmaster         Warm  19899
+18       Master  Boiling Hot  10800
+.
+.
+.
+.
+```
+
+Lütfen çıktının tek bir sayfaya sığması için bazı satırları çıkardığımı unutmayın.
+
+Bu da özellik olarak ekleyebileceğiniz başka bir tür sayımdır.
+
+Şimdiye kadar sayımlar için **id sütununu** kullandığımı fark etmiş olmalısınız. Ancak sütun kombinasyonlarına göre gruplayarak başka sütunları da sayabilirsiniz.
+
+Bir başka püf noktası, bu kategorik değişkenlerden **yeni özellikler oluşturmaktır**.
+
+Mevcut özelliklerden yeni kategorik özellikler oluşturabilirsiniz ve bu oldukça zahmetsiz bir şekilde yapılabilir.
+
+```
+In [X]: df["new_feature"] = (
+...:     df.ord_1.astype(str)
+...:     + "_"
+...:     + df.ord_2.astype(str)
+...: )
+
+In [X]: df.new_feature
+
+Out[X]:
+0                 Contributor_Hot
+1                Grandmaster_Warm
+2                    nan_Freezing
+3                 Novice_Lava Hot
+4                Grandmaster_Cold
+                ...
+599995            Novice_Freezing
+599996         Novice_Boiling Hot
+599997       Contributor_Freezing
+599998                Master_Warm
+599999    Contributor_Boiling Hot
+Name: new_feature, Length: 600000, dtype: object
+```
+
+Burada **ord\_1 ve ord\_2** sütunlarını bir alt çizgi (`_`) ile birleştirdik ve bundan önce bu sütunları string türlerine dönüştürdük.
+
+**NaN değerinin de string'e dönüştürüleceğine** dikkat edin. Ancak bu sorun değildir. NaN'ı yeni bir kategori olarak da ele alabiliriz.
+
+Böylece bu iki özelliğin birleşiminden oluşan yeni bir özelliğimiz oldu.
+
+Üçten fazla sütunu, hatta dört veya daha fazla sütunu da birleştirebilirsiniz.
+
+```
+In [X]: df["new_feature"] = (
+...:     df.ord_1.astype(str)
+...:     + "_"
+...:     + df.ord_2.astype(str)
+...:     + "_"
+...:     + df.ord_3.astype(str)
+...: )
+
+In [X]: df.new_feature
+
+Out[X]:
+0                 Contributor_Hot_c
+1                Grandmaster_Warm_e
+2                    nan_Freezing_n
+3                 Novice_Lava Hot_a
+4                Grandmaster_Cold_h
+                ...
+599995            Novice_Freezing_a
+599996         Novice_Boiling Hot_n
+599997       Contributor_Freezing_n
+599998                Master_Warm_m
+599999    Contributor_Boiling Hot_b
+Name: new_feature, Length: 600000, dtype: object
+```
+
+Peki hangi kategorileri birleştirmeliyiz?
+
+Bunun kolay bir cevabı yoktur. Bu, verilerinize ve özelliklerin türlerine bağlıdır. Bunun gibi özellikler oluşturmak için bazı **alan bilgileri (domain knowledge)** faydalı olabilir.
+
+Ancak bellek ve CPU kullanımı konusunda endişeleriniz yoksa, **açgözlü (greedy) bir yaklaşım** izleyebilirsiniz. Çok sayıda böyle kombinasyon oluşturabilir ve ardından hangi özelliklerin faydalı olduğuna karar vermek ve onları tutmak için bir model kullanabilirsiniz.
+
+Bunu kitabın ilerleyen bölümlerinde okuyacağız.
+
+Kategorik değişkenlerle karşılaştığınızda şu basit adımları izleyin:
+
+- **NaN değerlerini doldurun** (bu çok önemlidir!)
+- scikit-learn'ün **LabelEncoder**'ını kullanarak veya bir **mapping dictionary** kullanarak label encoding uygulayarak bunları integer'lara dönüştürün. NaN değerlerini bir şeyle doldurmadıysanız, bu adımda bunlarla ayrıca ilgilenmeniz gerekebilir.
+- **One-hot encoding oluşturun.** Evet, binarization işlemini atlayabilirsiniz!
+- **Modellemeye geçin!** Yani makine öğrenmesi modellemesine. Podyumda yürümeye değil.
+
+Kategorik özelliklerdeki **NaN verilerini ele almak** oldukça önemlidir; aksi takdirde scikit-learn'ün **LabelEncoder**'ından gelen meşhur hatayı alabilirsiniz:
+
+```
+ValueError: y contains previously unseen labels: [nan, nan, nan, nan,
+nan, nan, nan, nan]
+```
+
+Bu basitçe, test verilerini dönüştürürken verilerinizde NaN değerlerinin bulunduğu anlamına gelir.
+
+Bunun nedeni, eğitim sırasında bunları ele almayı unutmuş olmanızdır.
+
+NaN değerlerini ele almanın basit bir yolu onları **silmek** olabilir.
+
+Basit, ancak ideal değildir.
+
+NaN değerleri çok fazla bilgi içerebilir ve yalnızca bu değerleri silerseniz bu bilgiyi kaybedersiniz. Ayrıca verilerinizin büyük bölümünün NaN değerlerinden oluştuğu birçok durum olabilir ve bu nedenle NaN değerlerine sahip satırları/örnekleri silemezsiniz.
+
+NaN değerlerini ele almanın başka bir yolu, onları **tamamen yeni bir kategori olarak değerlendirmektir**.
+
+Bu, NaN değerlerini ele almanın en çok tercih edilen yoludur. Ve pandas kullanıyorsanız bunu oldukça basit bir şekilde gerçekleştirebilirsiniz.
+
+Şimdiye kadar incelediğimiz verilerin **ord\_2** sütununda buna bakalım.
+
+```
+In [X]: df.ord_2.value_counts()
+Out[X]:
+Freezing       142726
+Warm           124239
+Cold            97822
+Boiling Hot     84790
+Hot             67508
+Lava Hot        64840
+Name: ord_2, dtype: int64
+```
+
+Ve NaN değerlerini doldurduktan sonra şöyle olur:
+
+```
+In [X]: df.ord_2.fillna("NONE").value_counts()
+Out[X]:
+Freezing       142726
+Warm           124239
+Cold            97822
+Boiling Hot     84790
+Hot             67508
+Lava Hot        64840
+NONE            18075
+Name: ord_2, dtype: int64
+```
+
+Vay canına!
+
+Daha önce kullanmayı bile düşünmediğimiz bu sütunda **18075 NaN değeri** varmış.
+
+Bu yeni kategorinin eklenmesiyle toplam kategori sayısı **6'dan 7'ye** yükseldi.
+
+Bu sorun değildir; çünkü artık modellerimizi oluşturduğumuzda **NaN değerlerini de dikkate alacağız**.
+
+Ne kadar fazla ilgili bilgiye sahip olursak, model o kadar iyi olur.
+
+Şimdi **ord\_2** sütununda hiç NaN değeri olmadığını varsayalım.
+
+Bu sütundaki tüm kategorilerin önemli sayımlara sahip olduğunu görüyoruz. “Nadir (rare)” kategoriler yoktur; yani toplam örnek sayısının yalnızca küçük bir yüzdesinde görünen kategoriler bulunmamaktadır.
+
+Şimdi bu sütunu kullanan modeli production ortamına aldığınızı ve model veya proje canlı durumdayken **ord\_2 sütununda eğitim verisinde bulunmayan bir kategori** aldığınızı varsayalım.
+
+Bu durumda model pipeline'ınız bir hata verecektir ve bu konuda yapabileceğiniz hiçbir şey olmayacaktır.
+
+Eğer bu gerçekleşirse, muhtemelen production ortamındaki pipeline'ınızda bir şeyler yanlıştır.
+
+Eğer bunun olması beklenen bir durumsa, model pipeline'ınızı değiştirmeli ve bu altı kategoriye **yeni bir kategori** eklemelisiniz.
+
+Bu yeni kategori **“rare” (nadir) kategori** olarak bilinir.
+
+Nadir kategori, çok sık görülmeyen ve birçok farklı kategoriyi içerebilen bir kategoridir.
+
+Bilinmeyen kategoriyi bir **nearest neighbour (en yakın komşu)** modeli kullanarak “tahmin etmeyi” de deneyebilirsiniz.
+
+Unutmayın, eğer bu kategoriyi tahmin ederseniz, eğitim verisindeki kategorilerden biri haline gelecektir.
 
 ![resim](img/p0103_fig01_resim.png)
 
-Figure 3: An illustration of a data set with different features and no targets where one feature might
+**Şekil 3: Farklı özelliklere ve hedef değişkenlere sahip olmayan bir veri setinin gösterimi; burada bir özellik, test setinde veya canlı veride görüldüğünde yeni bir değer alabilir.**
 
-assume a new value when it’s seen in the test set or live data
+Şekil 3'te gösterildiği gibi bir veri setimiz olduğunda, **“f3” dışındaki tüm özellikler** üzerinde eğitilmiş basit bir model oluşturabiliriz. Böylece, **“f3” bilinmediğinde veya eğitim sırasında mevcut olmadığında “f3” değerini tahmin eden** bir model oluşturmuş olursunuz.
 
-When we have a dataset like as shown in figure 3, we can build a simple model 
-that’s trained on all features except “f3”. Thus, you will be creating a model that 
-predicts “f3” when it’s not known or not available in training. I can’t say if this kind 
-of model is going to give you an excellent performance but might be able to handle 
-those missing values in test set or live data and one can’t say without trying just like 
-everything else when it comes to machine learning. 
- 
-If you have a fixed test set, you can add your test data to training to know about the 
-categories in a given feature. This is very similar to semi-supervised learning in 
-which you use data which is not available for training to improve your model. This 
-will also take care of rare values that appear very less number of times in training 
-data but are in abundance in test data. Your model will be more robust.  
- 
-Many people think that this idea overfits. It may or may not overfit. There is a 
-simple fix for that. If you design your cross-validation in such a way that it 
-replicates the prediction process when you run your model on test data, then it’s 
-never going to overfit. It means that the first step should be the separation of folds, 
-and in each fold, you should apply the same pre-processing that you want to apply 
-to test data. Suppose you want to concatenate training and test data, then in each 
-fold you must concatenate training and validation data and also make sure that your 
-validation dataset replicates the test set. In this specific case, you must design your 
-validation sets in such a way that it has categories which are “unseen” in the training 
-set.
+Bu tür bir modelin size mükemmel bir performans sağlayıp sağlamayacağını söyleyemem, ancak test setindeki veya canlı verideki bu eksik değerlerin ele alınmasına yardımcı olabilir. Makine öğrenmesi söz konusu olduğunda, diğer her şeyde olduğu gibi, denemeden bunu söylemek mümkün değildir.
+
+Eğer sabit bir test setiniz varsa, belirli bir özellikteki kategorileri öğrenmek için test verilerinizi eğitime ekleyebilirsiniz.
+
+Bu, modelinizi geliştirmek için eğitim sırasında mevcut olmayan verileri kullandığınız **yarı denetimli öğrenmeye (semi-supervised learning)** oldukça benzer.
+
+Bu aynı zamanda eğitim verilerinde çok az sayıda kez görünen ancak test verilerinde bol miktarda bulunan **nadir (rare) değerlerin** de ele alınmasını sağlayacaktır.
+
+Modeliniz daha dayanıklı (**robust**) olacaktır.
+
+Birçok insan bu fikrin **overfitting (aşırı öğrenme)** yaptığını düşünür.
+
+Aşırı öğrenmeye neden olabilir de olmayabilir de.
+
+Bunun basit bir çözümü vardır.
+
+**Cross-validation'ınızı**, modelinizi test verileri üzerinde çalıştırdığınızda gerçekleşen tahmin sürecini taklit edecek şekilde tasarlarsanız, aşırı öğrenme meydana gelmeyecektir.
+
+Bu, ilk adımın **fold'ların ayrılması** olması gerektiği anlamına gelir ve her fold'da test verilerine uygulamak istediğiniz **aynı ön işleme (pre-processing)** işlemini uygulamalısınız.
+
+Örneğin, eğitim ve test verilerini birleştirmek istediğinizi varsayalım.
+
+Bu durumda her fold'da **eğitim ve doğrulama verilerini de birleştirmeli** ve ayrıca doğrulama veri setinizin test setini taklit ettiğinden emin olmalısınız.
+
+Bu özel durumda, doğrulama setlerinizi eğitim setinde **“görülmemiş (unseen)” kategorilerin** bulunacağı şekilde tasarlamalısınız.
 
 ![resim](img/p0104_fig01_resim.png)
 
