@@ -3452,79 +3452,47 @@ MNIST, neredeyse her kitapta ve blogda ele alınan klasik bir problemdir. Ancak 
  
 `model_dispatcher.py` ve `config.py` gibi bazı betikler kullandım ve bunları eğitim betiğimin içine aktardım. Lütfen `from module import *` şeklinde yıldız (`*`) kullanarak içe aktarma **yapmadığıma** dikkat edin; siz de yapmamalısınız. Eğer `import *` şeklinde içe aktarmış olsaydım, `models` sözlüğünün nereden geldiğini asla bilemezdiniz. İyi ve anlaşılır kod yazmak, bir veri bilimcisinin sahip olabileceği en temel niteliklerden biridir ve birçok veri bilimci bunu göz ardı eder. Başkalarının size danışmaya gerek kalmadan anlayabileceği ve kullanabileceği bir proje mimarisi inşa ederseniz, hem onların hem de kendi zamanınızdan tasarruf etmiş olursunuz; bu sayede kazandığınız zamanı projenizi geliştirmeye veya yenilerine odaklanmaya ayırabilirsiniz.
 
-## Kaldığım yer
+# Kategorik Değişkenlere Yaklaşım
 
-Approaching categorical variables 
- 
-Many people struggle a lot with the handling of categorical variables, and thus this 
-deserves a full chapter. In this chapter, I will talk about different types of categorical 
-data and how to approach a problem with categorical variables. 
- 
-What are categorical variables? 
- 
-Categorical variables/features are any feature type  can be classified into two major 
-types:
+Birçok insan kategorik değişkenlerin ele alınması konusunda oldukça fazla zorlanır ve bu nedenle bu konu tam bir bölümü hak etmektedir. Bu bölümde, farklı kategorik veri türlerinden ve kategorik değişkenlerle ilgili bir probleme nasıl yaklaşılacağından bahsedeceğim.
 
-• 
-Nominal 
-• 
-Ordinal 
- 
-Nominal variables are variables that have two or more categories which do not 
-have any kind of order associated with them. For example, if gender is classified 
-into two groups, i.e. male and female, it can be considered as a nominal variable. 
- 
-Ordinal variables, on the other hand, have “levels” or categories with a particular 
-order associated with them. For example, an ordinal categorical variable can be a 
-feature with three different levels: low, medium and high. Order is important. 
- 
-As far as definitions are concerned, we can also categorize categorical variables as 
-binary, i.e., a categorical variable with only two categories. Some even talk about 
-a type called “cyclic” for categorical variables. Cyclic variables are present in 
-“cycles” for example, days in a week: Sunday, Monday, Tuesday, Wednesday, 
-Thursday, Friday and Saturday. After Saturday, we have Sunday again. This is a 
-cycle. Another example would be hours in a day if we consider them to be 
-categories. 
- 
-There are many different definitions of categorical variables, and many people talk 
-about handling categorical variables differently depending on the type of 
-categorical variable. However, I do not see any need for it. All problems with 
-categorical variables can be approached in the same way. 
- 
-Before we start, we need a dataset to work with (as always). One of the best free 
-datasets to understand categorical variables is cat-in-the-dat from Categorical 
-Features Encoding Challenge from Kaggle. There were two challenges, and we will 
-be using the data from the second challenge as it had more variables and was more 
-difficult than its previous version.
+## Kategorik değişkenler nelerdir?
 
-Let’s take a look at the data.
+Kategorik değişkenler/özellikler, iki ana türe ayrılabilen herhangi bir özellik türüdür:
+
+* Nominal
+* Ordinal
+
+Nominal değişkenler, kendileriyle ilişkili herhangi bir sıralaması olmayan iki veya daha fazla kategoriye sahip değişkenlerdir. Örneğin, cinsiyet iki gruba, yani erkek ve kadın olarak sınıflandırılıyorsa, nominal bir değişken olarak kabul edilebilir.
+
+Ordinal değişkenler ise, kendileriyle ilişkili belirli bir sıralamaya sahip “seviyelere” veya kategorilere sahiptir. Örneğin, ordinal bir kategorik değişken; düşük, orta ve yüksek olmak üzere üç farklı seviyeye sahip bir özellik olabilir. Sıralama önemlidir.
+
+Tanımlar açısından, kategorik değişkenleri ikili (binary) olarak da sınıflandırabiliriz; yani yalnızca iki kategoriye sahip bir kategorik değişken. Bazıları ayrıca kategorik değişkenler için “döngüsel (cyclic)” adı verilen bir türden de bahseder. Döngüsel değişkenler “döngüler” içerisinde bulunur; örneğin haftanın günleri: Pazar, Pazartesi, Salı, Çarşamba, Perşembe, Cuma ve Cumartesi. Cumartesi'den sonra tekrar Pazar gelir. Bu bir döngüdür. Bir başka örnek, onları kategoriler olarak değerlendirirsek, bir gündeki saatler olabilir.
+
+Kategorik değişkenlerin birçok farklı tanımı vardır ve birçok kişi kategorik değişkenlerin türüne bağlı olarak kategorik değişkenleri farklı şekillerde ele almaktan bahseder. Ancak ben buna gerek olduğunu düşünmüyorum. Kategorik değişkenlerle ilgili tüm problemlere aynı şekilde yaklaşılabilir.
+
+Başlamadan önce, üzerinde çalışacağımız bir veri setine ihtiyacımız var (her zamanki gibi). Kategorik değişkenleri anlamak için en iyi ücretsiz veri setlerinden biri, Kaggle'daki Categorical Features Encoding Challenge'a ait cat-in-the-dat veri setidir. İki challenge vardı ve biz ikinci challenge'daki verileri kullanacağız; çünkü bu versiyonda daha fazla değişken vardı ve önceki versiyona göre daha zordu.
+
+Verilere bir göz atalım.
 
 ![resim](img/p0087_fig01_resim.png)
 
-Figure 1: Viewing a subset of the data. Cat-in-the-dat-ii challenge5 
- 
-The dataset consists of all kinds of categorical variables:
+Şekil 1: Verilerin bir alt kümesinin görüntülenmesi. Cat-in-the-dat-ii challenge
 
-• 
-Nominal 
-• 
-Ordinal 
-• 
-Cyclical 
-• 
-Binary 
- 
-In Figure 1, we see only a subset of all the variables that are present and the target 
-variable.  
- 
-It is a binary classification problem.  
- 
-The target is not very important for us to learn categorical variables, but in the end, 
-we will be building an end-to-end model so let’s take a look at the target distribution 
-in figure 2. We see that the target is skewed and thus the best metric for this binary 
-classification problem would be Area Under the ROC Curve (AUC). We can use 
-precision and recall too, but AUC combines these two metrics. Thus, we will be 
-using AUC to evaluate the model that we build on this dataset.
+Veri seti her türlü kategorik değişkenden oluşmaktadır:
+
+* Nominal
+* Ordinal
+* Döngüsel (Cyclical)
+* İkili (Binary)
+
+Şekil 1'de, mevcut tüm değişkenlerin ve hedef değişkenin yalnızca bir alt kümesini görüyoruz.
+
+Bu, bir ikili sınıflandırma problemidir.
+
+Kategorik değişkenleri öğrenmemiz açısından hedef değişken çok önemli değildir, ancak en sonunda uçtan uca (end-to-end) bir model oluşturacağımız için Şekil 2'deki hedef dağılımına bir göz atalım. Hedef değişkenin çarpık (skewed) olduğunu ve dolayısıyla bu ikili sınıflandırma problemi için en iyi metriğin ROC Eğrisi Altındaki Alan (Area Under the ROC Curve - AUC) olacağını görüyoruz.
+
+Precision ve recall değerlerini de kullanabiliriz, ancak AUC bu iki metriği birleştirir. Bu nedenle, bu veri seti üzerinde oluşturacağımız modeli değerlendirmek için AUC kullanacağız.
 
 5 https://www.kaggle.com/c/cat-in-the-dat-ii
 
