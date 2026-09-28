@@ -7845,7 +7845,7 @@ Doğrusal modellerde en yaygın düzenlileştirme türleri L1 ve L2’dir. L1 ay
 |  | `alpha` | 0, 0.1, 0.5, 1.0, RS\* |
 
 # Görüntü sınıflandırması ve segmentasyonuna yaklaşım
-
+```
 Görüntüler söz konusu olduğunda, son birkaç yılda çok şey başarıldı. Computer vision oldukça hızlı ilerliyor ve bilgisayarla görme problemlerinin çoğunun artık çözülmesinin çok daha kolay olduğu hissine kapılıyoruz. Önceden eğitilmiş modellerin ortaya çıkması ve hesaplama maliyetlerinin düşmesiyle, görüntülerle ilgili problemlerin çoğu için evde neredeyse son teknoloji seviyesinde bir model eğitmek artık oldukça kolay.
 
 Ancak birçok farklı türde görüntü problemi vardır. Görüntülerin iki veya daha fazla kategoriye ayrıldığı standart sınıflandırma probleminden, kendi kendine giden arabalar gibi zorlu bir probleme kadar farklı senaryolar olabilir. Bu kitapta kendi kendine giden arabaları incelemeyeceğiz, ancak en yaygın görüntü problemlerinden bazılarıyla elbette ilgileneceğiz.
@@ -12813,11 +12813,3 @@ developed without asking you several times. This will save you time, and it will
 
 also save their time. Good, open-source, re-usable code also looks good in your 
 portfolio. J
-
-Notes
-
-Notes
-
-Notes
-
-300
