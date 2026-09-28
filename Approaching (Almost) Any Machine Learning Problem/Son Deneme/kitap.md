@@ -7896,232 +7896,211 @@ Yukarıdaki kod, numpy kullanarak rastgele bir matris oluşturur. Bu matris 0 il
 **Görüntünün ravel edilmiş (düzleştirilmiş) versiyonu**
 ![resim](img/p0187_fig02_resim.png)
 
-# ö
-Figure 1: A 2-D image array (single channel) and its ravelled version 
- 
-As you can see that the ravelled version is nothing but a vector of size M, where M 
-= N * N. In this case, this vector is of the size 256 * 256 = 65536. 
- 
-Now, if we go ahead and do it for all the images in our dataset, we have 65536 
-features for each sample. We can now quickly build a decision tree model or 
-random forest or SVM-based model on this data. The models will look at pixel 
-values and would try to separate positive samples from negative samples (in case 
-of a binary classification problem). 
- 
-All of you must have heard about the cats vs dogs problem. It's a classic one. But 
-let's try something different. If you remember, at the beginning of the chapter on 
-evaluation metrics, I introduced you to a dataset of pneumothorax images. So, let’s 
-try building a model to detect if an X-ray image of a lung has pneumothorax or not. 
-That is, a (not so) simple binary classification.
+**Şekil 1: 2 boyutlu bir görüntü dizisi (tek kanal) ve bunun ravel (tek boyutlu hâle getirilmiş) versiyonu**
 
-No pneumothorax 
-Pneumothorax
+Gördüğünüz gibi, ravel uygulanmış versiyon, **M boyutunda bir vektörden** başka bir şey değildir; burada\
+**M = N \* N**’dir. Bu durumda, bu vektörün boyutu **256 \* 256 = 65536**’dır.
+
+Şimdi, veri setimizdeki tüm görüntüler için aynı işlemi yaparsak, her örnek için **65536 özellik** elde ederiz. Artık bu veriler üzerinde hızlıca bir **karar ağacı modeli (decision tree)** veya **rastgele orman (random forest)** ya da **SVM tabanlı bir model** oluşturabiliriz. Modeller, piksel değerlerine bakacak ve **pozitif örnekleri negatif örneklerden ayırmaya** çalışacaktır (ikili sınıflandırma problemi olması durumunda).
+
+Hepiniz **kediler ve köpekler (cats vs dogs)** problemini duymuşsunuzdur. Bu, klasik bir problemdir. Fakat biraz farklı bir şey deneyelim. Eğer hatırlıyorsanız, **değerlendirme metrikleri (evaluation metrics)** bölümünün başında size **pnömotoraks görüntülerinden oluşan bir veri seti** tanıtmıştım. Öyleyse, bir **akciğer röntgeni görüntüsünde pnömotoraks olup olmadığını tespit etmek** için bir model oluşturmaya çalışalım. Yani, **(pek de) basit olmayan bir ikili sınıflandırma** problemi.
+
+**Pnömotoraks yok**
 
 ![resim](img/p0187_fig03_resim.png)
 
+**Pnömotoraks**
+
 ![resim](img/p0187_fig04_resim.png)
 
-Figure 2: Comparison of non-pneumothorax and pneumothorax x-ray images8.
+**Şekil 2: Pnömotoraks olmayan ve pnömotoraks bulunan X-ray görüntülerinin karşılaştırılması⁸**
 
-8 https://www.kaggle.com/c/siim-acr-pneumothorax-segmentation
+⁸ https://www.kaggle.com/c/siim-acr-pneumothorax-segmentation
 
-In figure 2, you can see a comparison between non-pneumothorax and 
-pneumothorax images. As you must have already noticed, it is quite difficult for a 
-non-expert (like me) to even identify which of these images have pneumothorax.  
- 
-The original dataset is about detecting where exactly pneumothorax is present, but 
-we have modified the problem to find if the given x-ray image has pneumothorax 
-or not. Don’t worry; we will cover the where part in this chapter. The dataset 
-consists of 10675 unique images and 2379 have pneumothorax (note that these 
-numbers are after some cleaning of data and thus do not match original dataset). As 
-a data doctor would say: this is a classic case of skewed binary classification. 
-Therefore, we choose the evaluation metric to be AUC and go for a stratified k-fold 
-cross-validation scheme. 
- 
-You can flatten out the features and try some classical methods like SVM, RF for 
-doing classification, which is perfectly fine, but it won't get you anywhere near state 
-of the art. Also, the images are of size 1024x1024. It’s going to take a long time to 
-train a model on this dataset. For what it’s worth, let’s try building a simple random 
-forest model on this data. Since the images are grayscale, we do not need to do any 
-kind of conversion. We will resize the images to 256x256 to make them smaller and 
-use AUC as a metric as discussed before. 
- 
-Let’s see how this performs. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import os 
- 
-import numpy as np 
-import pandas as pd 
- 
-from PIL import Image 
-from sklearn import ensemble 
-from sklearn import metrics 
-from sklearn import model_selection 
-from tqdm import tqdm 
- 
- 
-def create_dataset(training_df, image_dir): 
-    """ 
-    This function takes the training dataframe 
-    and outputs training array and labels 
-    :param training_df: dataframe with ImageId, Target columns 
-    :param image_dir: location of images (folder), string 
-    :return: X, y (training array with features and labels)
+Şekil 2’de, **pnömotoraks olmayan ve pnömotoraks bulunan görüntüler arasındaki karşılaştırmayı** görebilirsiniz. Muhtemelen zaten fark etmiş olduğunuz gibi, **uzman olmayan bir kişinin (benim gibi) bu görüntülerden hangilerinde pnömotoraks olduğunu belirlemesi bile oldukça zordur.**
 
-""" 
-    # create empty list to store image vectors 
-    images = [] 
-    # create empty list to store targets 
-    targets = [] 
-    # loop over the dataframe 
-    for index, row in tqdm( 
-        training_df.iterrows(),  
-        total=len(training_df),  
-        desc="processing images" 
-    ): 
-        # get image id 
-        image_id = row["ImageId"] 
-        # create image path 
-        image_path = os.path.join(image_dir, image_id) 
-        # open image using PIL 
-        image = Image.open(image_path + ".png") 
-        # resize image to 256x256. we use bilinear resampling 
-        image = image.resize((256, 256), resample=Image.BILINEAR) 
-        # convert image to array 
-        image = np.array(image) 
-        # ravel 
-        image = image.ravel() 
-        # append images and targets lists 
-        images.append(image) 
-        targets.append(int(row["target"])) 
-    # convert list of list of images to numpy array 
-    images = np.array(images) 
-    # print size of this array 
-    print(images.shape) 
-    return images, targets 
- 
- 
-if __name__ == "__main__": 
-    csv_path = "/home/abhishek/workspace/siim_png/train.csv" 
-    image_path = "/home/abhishek/workspace/siim_png/train_png/" 
- 
-    # read CSV with imageid and target columns 
-    df = pd.read_csv(csv_path) 
- 
-    # we create a new column called kfold and fill it with -1 
-    df["kfold"] = -1 
-     
-    # the next step is to randomize the rows of the data 
-    df = df.sample(frac=1).reset_index(drop=True) 
-     
-    # fetch labels
+Orijinal veri seti, **pnömotoraksın tam olarak nerede bulunduğunu tespit etmekle** ilgilidir, ancak biz problemi, verilen X-ray görüntüsünde **pnömotoraks olup olmadığını bulmak** şeklinde değiştirdik. Endişelenmeyin; bu bölümde **“nerede” kısmını** ele alacağız. Veri seti **10675 benzersiz görüntüden** oluşmaktadır ve bunların **2379 tanesinde pnömotoraks vardır** (bu sayıların bazı veri temizleme işlemlerinden sonraki sayılar olduğunu ve dolayısıyla orijinal veri setindeki sayılarla uyuşmadığını unutmayın). Bir **veri doktorunun** söyleyeceği gibi: bu, **dengesiz (skewed) ikili sınıflandırmanın klasik bir örneğidir.** Bu nedenle değerlendirme metriği olarak **AUC’yi** seçiyoruz ve **katmanlı (stratified) k-katlı çapraz doğrulama (k-fold cross-validation)** şemasını kullanıyoruz.
 
-y = df.target.values 
-     
-    # initiate the kfold class from model_selection module 
-    kf = model_selection.StratifiedKFold(n_splits=5) 
-     
-    # fill the new kfold column 
-    for f, (t_, v_) in enumerate(kf.split(X=df, y=y)): 
-        df.loc[v_, 'kfold'] = f 
- 
-    # we go over the folds created 
-    for fold_ in range(5): 
-        # temporary dataframes for train and test 
-        train_df = df[df.kfold != fold_].reset_index(drop=True) 
-        test_df = df[df.kfold == fold_].reset_index(drop=True) 
-         
-        # create train dataset 
-        # you can move this outside to save some computation time 
-        xtrain, ytrain = create_dataset(train_df, image_path) 
- 
-        # create test dataset 
-        # you can move this outside to save some computation time 
-        xtest, ytest = create_dataset(test_df, image_path) 
- 
-        # fit random forest without any modification of params 
-        clf = ensemble.RandomForestClassifier(n_jobs=-1) 
-        clf.fit(xtrain, ytrain) 
- 
-        # predict probability of class 1 
-        preds = clf.predict_proba(xtest)[:, 1] 
- 
-        # print results 
-        print(f"FOLD: {fold_}") 
-        print(f"AUC = {metrics.roc_auc_score(ytest, preds)}") 
-        print("") 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This gives a mean AUC of around 0.72. 
- 
-Which is not bad but hopefully, we can do a lot better. You can use this approach 
-for images, and this is how it was used in good old times. SVM was quite famous 
-for image datasets. Deep Learning has been proved to be the state of the art when 
-solving such problems, hence we could try that next.
+Özellikleri düzleştirebilir ve sınıflandırma yapmak için **SVM, RF** gibi bazı klasik yöntemleri deneyebilirsiniz; bu tamamen uygundur, ancak sizi **son teknolojiye (state of the art)** yaklaşabilecek bir sonuca götürmeyecektir. Ayrıca görüntüler **1024x1024** boyutundadır. Bu veri seti üzerinde bir model eğitmek uzun zaman alacaktır. Her ne kadar bunun için değer olsa da, bu veri üzerinde **basit bir random forest modeli** oluşturmaya çalışalım. Görüntüler gri tonlamalı (**grayscale**) olduğundan herhangi bir dönüştürme yapmamıza gerek yoktur. Görüntüleri küçültmek için **256x256** boyutuna yeniden boyutlandıracağız ve daha önce tartıştığımız gibi **AUC’yi bir metrik olarak** kullanacağız.
 
-I won’t go into the history of deep learning and who invented what. Instead, let’s 
-take a look at one of the most famous deep learning models AlexNet and see what’s 
-happening there.
+Bakalım bu nasıl bir performans gösteriyor.
+
+```
+import os
+
+import numpy as np
+import pandas as pd
+
+from PIL import Image
+from sklearn import ensemble
+from sklearn import metrics
+from sklearn import model_selection
+from tqdm import tqdm
+
+def create_dataset(training_df, image_dir):
+    """
+    Bu fonksiyon training dataframe'ini alır
+    ve training array ile etiketleri (labels) çıktı olarak verir.
+    :param training_df: ImageId ve Target sütunlarını içeren dataframe
+    :param image_dir: görüntülerin bulunduğu konum (klasör), string
+    :return: X, y (özellikleri ve etiketleri içeren training array)
+    """
+
+    # görüntü vektörlerini saklamak için boş bir liste oluştur
+    images = []
+
+    # hedefleri saklamak için boş bir liste oluştur
+    targets = []
+
+    # dataframe üzerinde döngü
+    for index, row in tqdm(
+        training_df.iterrows(),
+        total=len(training_df),
+        desc="processing images"
+    ):
+        # image id'yi al
+        image_id = row["ImageId"]
+
+        # görüntü yolunu oluştur
+        image_path = os.path.join(image_dir, image_id)
+
+        # PIL kullanarak görüntüyü aç
+        image = Image.open(image_path + ".png")
+
+        # görüntüyü 256x256 boyutuna yeniden boyutlandır.
+        # bilinear yeniden örnekleme kullanıyoruz
+        image = image.resize((256, 256), resample=Image.BILINEAR)
+
+        # görüntüyü array'e dönüştür
+        image = np.array(image)
+
+        # ravel işlemi
+        image = image.ravel()
+
+        # görüntüler ve hedefler listelerine ekle
+        images.append(image)
+        targets.append(int(row["target"]))
+
+    # görüntü listelerinin listesini numpy array'e dönüştür
+    images = np.array(images)
+
+    # bu array'in boyutunu yazdır
+    print(images.shape)
+
+    return images, targets
+
+if __name__ == "__main__":
+    csv_path = "/home/abhishek/workspace/siim_png/train.csv"
+    image_path = "/home/abhishek/workspace/siim_png/train_png/"
+
+    # imageid ve target sütunlarını içeren CSV'yi oku
+    df = pd.read_csv(csv_path)
+
+    # kfold adında yeni bir sütun oluşturuyoruz
+    # ve bunu -1 ile dolduruyoruz
+    df["kfold"] = -1
+
+    # sonraki adım verinin satırlarını rastgele hale getirmek
+    df = df.sample(frac=1).reset_index(drop=True)
+
+    # etiketleri al
+    y = df.target.values
+
+    # model_selection modülünden kfold sınıfını başlat
+    kf = model_selection.StratifiedKFold(n_splits=5)
+
+    # yeni kfold sütununu doldur
+    for f, (t_, v_) in enumerate(kf.split(X=df, y=y)):
+        df.loc[v_, 'kfold'] = f
+
+    # oluşturulan fold'lar üzerinde ilerliyoruz
+    for fold_ in range(5):
+
+        # train ve test için geçici dataframe'ler
+        train_df = df[df.kfold != fold_].reset_index(drop=True)
+        test_df = df[df.kfold == fold_].reset_index(drop=True)
+
+        # train veri setini oluştur
+        # hesaplama süresinden tasarruf etmek için bunu dışarı taşıyabilirsiniz
+        xtrain, ytrain = create_dataset(train_df, image_path)
+
+        # test veri setini oluştur
+        # hesaplama süresinden tasarruf etmek için bunu dışarı taşıyabilirsiniz
+        xtest, ytest = create_dataset(test_df, image_path)
+
+        # herhangi bir parametre değişikliği yapmadan
+        # random forest'ı eğit
+        clf = ensemble.RandomForestClassifier(n_jobs=-1)
+        clf.fit(xtrain, ytrain)
+
+        # sınıf 1'in olasılığını tahmin et
+        preds = clf.predict_proba(xtest)[:, 1]
+
+        # sonuçları yazdır
+        print(f"FOLD: {fold_}")
+        print(f"AUC = {metrics.roc_auc_score(ytest, preds)}")
+        print("")
+```
+
+Bu işlem yaklaşık **0.72 ortalama AUC** verir.
+
+Bu kötü değil, ancak umarız **çok daha iyisini yapabiliriz.** Görüntüler için bu yaklaşımı kullanabilirsiniz ve **eski güzel zamanlarda** bu şekilde kullanılıyordu. **SVM, görüntü veri setleri için oldukça ünlüydü.** Derin öğrenmenin (**Deep Learning**) bu tür problemleri çözerken **son teknoloji (state of the art)** olduğu kanıtlanmıştır; dolayısıyla sıradaki adımda bunu deneyebiliriz.
+
+Derin öğrenmenin tarihine ve kimin neyi icat ettiğine girmeyeceğim. Bunun yerine, en ünlü derin öğrenme modellerinden biri olan **AlexNet**’e bir göz atalım ve orada neler olduğunu görelim.
 
 ![resim](img/p0191_fig01_resim.png)
 
-Figure 3: AlexNet architecture9. Please note that the input size in this figure is not 224x224 but
+**Şekil 3: AlexNet mimarisi⁹.** 
 
-227x227 
- 
-Nowadays, you might say that it is a basic deep convolutional neural network, 
-but it is the foundation of many new deep nets (deep neural networks). We see that 
-the network in figure 3 is a convolutional neural network with five convolution 
-layers, two dense layers and an output layer. We see that there is also max pooling. 
-What is it? Let’s look at some terms which you will come across when doing deep 
-learning.
+Lütfen bu şekildeki giriş boyutunun **224x224 değil, 227x227** olduğunu unutmayın.
+
+Günümüzde bunun **temel bir derin evrişimli sinir ağı (deep convolutional neural network)** olduğunu söyleyebilirsiniz, ancak bu ağ birçok yeni **derin ağın (deep neural networks)** temelini oluşturmaktadır. Şekil 3’teki ağın; **beş evrişim katmanına (convolution layers), iki yoğun katmana (dense layers) ve bir çıktı katmanına (output layer)** sahip bir **evrişimli sinir ağı (convolutional neural network)** olduğunu görüyoruz.
+
+Ayrıca **max pooling** işleminin de bulunduğunu görüyoruz. **Bu nedir?**
+
+Derin öğrenme yaparken karşılaşacağınız bazı terimlere bir göz atalım.
 
 ![resim](img/p0191_fig02_resim.png)
 
-Figure 4: An image of size 8x8 with a filter of size 3x3 and stride of 2. 
- 
-Figure 4 introduces two new terms: filter and strides. Filters are nothing but two-
-dimensional matrices which are initialized by a given function. “He initialization”
+**Şekil 4: 2 stride değerine sahip 3x3 boyutunda bir filtre ile 8x8 boyutunda bir görüntü.**
 
-9 A. Krizhevsky, I. Sutskever, and G. Hinton. Imagenet classification with deep convolutional neural 
-networks. In NIPS, 2012
+Şekil 4 iki yeni terimi tanıtmaktadır: **filtre (filter)** ve **stride (adım)**. Filtreler, verilen bir fonksiyon tarafından başlatılan iki boyutlu matrislerden başka bir şey değildir. **“He başlatması (He initialization)”**, aynı zamanda **“Kaiming normal başlatması (Kaiming normal initialization)”** olarak da bilinir ve evrişimli sinir ağları için iyi bir seçimdir. Bunun nedeni, modern ağların çoğunun **ReLU (Rectified Linear Units)** aktivasyon fonksiyonunu kullanması ve **kaybolan gradyanlar (vanishing gradients)** problemini önlemek için uygun bir başlatmanın gerekli olmasıdır (gradyanların sıfıra yaklaşması ve ağın ağırlıklarının değişmemesi durumu).
 
-which is also known “Kaiming normal initialization” is a good choice for 
-convolutional neural networks. It is because most modern networks use ReLU 
-(Rectified Linear Units) activation function and proper initialization is required to 
-avoid the problem of vanishing gradients (when gradients approach zero and 
-weights of network do not change). This filter is convolved with the image. 
-Convolution is nothing but a summation of elementwise multiplication (cross-
-correlation) between the filter and the pixels it is currently overlapping in a given 
-image. You can read more about convolution in any high school mathematics 
-textbook. We start convolution of this filter from the top left corner of the image, 
-and we move it horizontally. If we move it by 1 pixel, the stride is 1. If we move it 
-by 2 pixels, the stride is 2. And that’s what stride is.  
- 
-Stride is a useful concept even in natural language processing, e.g. in question and 
-answering systems when you have to filter answer from a large text corpus. When 
-we are exhausted horizontally, we move the filter by the same stride downwards 
-vertically, starting from left again. Figure 4 also shows a filter going outside the 
-image. In these cases, it’s not possible to calculate the convolution. So, we skip it. 
-If you don’t want to skip it, you will need to pad the image. It must also be noted 
-that convolution will decrease the size of the image. Padding is also a way to keep 
-the size of the image the same. In figure 4, A 3x3 filter is moving horizontally and 
-vertically, and every time it moves, it skips two columns and two rows (i.e. pixels) 
-respectively. Since it skips two pixels, stride = 2. And resulting image size is [(8-3) 
-/ 2] + 1 = 3.5. We take the floor of 3.5, so its 3x3. You can do it by hand by moving 
-the filters on a pen and paper.
+Bu filtre görüntü ile **evriştirilir (convolved)**. **Evrişim (convolution)**, filtre ile belirli bir görüntüde o anda filtrenin örtüştüğü pikseller arasındaki **eleman bazında çarpımların toplamından (cross-correlation)** başka bir şey değildir. Evrişim hakkında herhangi bir lise matematik kitabında daha fazla bilgi okuyabilirsiniz.
+
+Bu filtrenin evrişimine görüntünün **sol üst köşesinden** başlarız ve filtreyi yatay olarak hareket ettiririz. Eğer filtreyi **1 piksel** hareket ettirirsek, **stride 1** olur. Eğer **2 piksel** hareket ettirirsek, **stride 2** olur. İşte stride budur.
+
+**Stride**, örneğin doğal dil işleme (**natural language processing**) alanında da kullanışlı bir kavramdır; örneğin büyük bir metin külliyatından (**text corpus**) bir cevabı filtrelemeniz gereken **soru-cevap sistemlerinde**.
+
+Yatay olarak hareket edebileceğimiz alanı tükettiğimizde, filtreyi aynı stride miktarıyla dikey olarak aşağı doğru hareket ettiririz ve yine **soldan** başlarız. Şekil 4 ayrıca görüntünün dışına çıkan bir filtreyi de göstermektedir. Bu durumlarda evrişimi hesaplamak mümkün değildir. Bu nedenle **atlarız (skip)**.
+
+Eğer atlamak istemiyorsanız, görüntüyü **padding** ile doldurmanız gerekir. Ayrıca evrişimin görüntünün boyutunu **azaltacağı** da belirtilmelidir. **Padding**, görüntünün boyutunu aynı tutmanın da bir yoludur.
+
+Şekil 4’te **3x3 boyutunda bir filtre** yatay ve dikey olarak hareket etmektedir ve her hareket ettiğinde sırasıyla **iki sütunu ve iki satırı (yani pikseli)** atlamaktadır. İki piksel atladığı için:
+
+**stride = 2**
+
+Ve ortaya çıkan görüntünün boyutu:
+
+**\[(8 - 3) / 2\] + 1 = 3.5**
+
+şeklindedir.
+
+**3.5’in taban değerini (floor)** alıyoruz, dolayısıyla sonuç **3x3** olur.
+
+Filtreleri bir kalem ve kâğıt üzerinde hareket ettirerek bunu **elle** yapabilirsiniz.
 
 ![resim](img/p0192_fig01_resim.png)
 
-Figure 5: Padding enables us to provide an image with the same size as the input
+**Şekil 5: Padding, giriş ile aynı boyutta bir görüntü elde etmemizi sağlar**
 
-We see the effect of padding in figure 5. Now, we have a 3x3 filter which is moving 
-with a stride of 1. Size of the original image is 6x6, and we have added padding of 
-1. The padding of 1 means increasing the size of the image by adding zero pixels 
-on each side once. In this case, the resulting image will be of the same size as the 
-input image, i.e. 6x6. Another relevant term that you might come across when 
-dealing with deep neural networks is dilation, as shown in figure 6.
+Şekil 5’te **padding’in etkisini** görüyoruz. Şimdi **stride değeri 1 olan 3x3 boyutunda bir filtreye** sahibiz. Orijinal görüntünün boyutu **6x6** ve **1 padding** ekledik.
+
+**1 padding**, görüntünün her bir kenarına bir kez **sıfır pikseller ekleyerek** görüntünün boyutunu artırmak anlamına gelir.
+
+Bu durumda ortaya çıkan görüntünün boyutu, giriş görüntüsüyle aynı olacaktır; yani **6x6**.
+
+Derin sinir ağlarıyla çalışırken karşılaşabileceğiniz bir diğer ilgili terim ise **dilation (seyreltme/genişletme)** terimidir; bu terim **Şekil 6’da** gösterilmiştir.
 
 ![resim](img/p0193_fig01_resim.png)
 
