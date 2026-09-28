@@ -6690,7 +6690,7 @@ Yani evet, **kaç feature'ı tutmak istediğimize karar verme yeteneğine sahibi
 
 ![resim](img/p0163_fig01_resim.png)
 
-## Şekil 2: Greedy feature selection'da yeni feature'ların eklenmesiyle AUC skorunun nasıl değiştiği
+**Şekil 2: Greedy feature selection'da yeni feature'ların eklenmesiyle AUC skorunun nasıl değiştiği**
 
 **Recursive feature elimination** yaptığımızda, her iterasyonda **feature importance'a sahip olan veya coefficient değeri 0'a yakın olan feature'ı** kaldırırız.
 
@@ -6790,668 +6790,895 @@ Ortaya çıkan grafik **Şekil 3'te** gösterilmiştir.
 
 ![resim](img/p0165_fig01_resim.png)
 
-Figure 3: Plot of feature importance 
- 
-Well, selecting the best features from the model is nothing new. You can choose 
-features from one model and use another model to train. For example, you can use 
-Logistic Regression coefficients to select the features and then use Random Forest 
-to train the model on chosen features. Scikit-learn also offers SelectFromModel 
-class that helps you choose features directly from a given model. You can also 
-specify the threshold for coefficients or feature importance if you want and the 
-maximum number of features you want to select.
+**Şekil 3: Feature importance grafiği**
 
-Take a look at the following snippet where we select the features using default 
-parameters in SelectFromModel. 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
-from sklearn.datasets import load_diabetes 
-from sklearn.ensemble import RandomForestRegressor 
-from sklearn.feature_selection import SelectFromModel 
- 
-# fetch a regression dataset 
-# in diabetes data we predict diabetes progression 
-# after one year based on some features 
-data = load_diabetes() 
-X = data["data"] 
-col_names = data["feature_names"] 
-y = data["target"] 
- 
-# initialize the model 
-model = RandomForestRegressor() 
- 
-# select from the model 
-sfm = SelectFromModel(estimator=model) 
-X_transformed = sfm.fit_transform(X, y) 
- 
-# see which features were selected 
-support = sfm.get_support() 
- 
-# get feature names 
-print([ 
-    x for x, y in zip(col_names, support) if y == True 
-]) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Which prints: ['bmi', 's5']. When we look at figure 3, we see that these are the top-
-2 features. Thus, we could have also selected directly from feature importance 
-provided by random forest. One more thing that we are missing here is feature 
-selection using models that have L1 (Lasso) penalization. When we have L1 
-penalization for regularization, most coefficients will be 0 (or close to 0), and we 
-select the features with non-zero coefficients. You can do it by just replacing 
-random forest in the snippet of selection from a model with a model that supports 
-L1 penalty, e.g. lasso regression. All tree-based models provide feature importance 
-so all the model-based snippets shown in this chapter can be used for XGBoost, 
-LightGBM or CatBoost. The feature importance function names might be different 
-and may produce results in a different format, but the usage will remain the same. 
-In the end, you must be careful when doing feature selection. Select features on
+Modelden en iyi feature'ları seçmek yeni bir şey değildir. Bir modelden feature'ları seçip, eğitim için başka bir model kullanabilirsiniz.
 
-training data and validate the model on validation data for proper selection of 
-features without overfitting the model.
+Örneğin, feature'ları seçmek için **Logistic Regression coefficient'larını** kullanabilir ve daha sonra seçilen feature'lar üzerinde modeli eğitmek için **Random Forest** kullanabilirsiniz.
 
-Hyperparameter optimization
+Scikit-learn ayrıca, feature'ları doğrudan verilen bir modelden seçmenize yardımcı olan **SelectFromModel** sınıfını da sunar.
 
-With great models, comes the great problem of optimizing hyper-parameters to get 
-the best scoring model. So, what is this hyper-parameter optimization? Suppose 
-there is a simple pipeline for your machine learning project. There is a dataset, you 
-directly apply a model, and then you have results. The parameters that the model 
-has here are known as hyper-parameters, i.e. the parameters that control the 
-training/fitting process of the model. If we train a linear regression with SGD, 
-parameters of a model are the slope and the bias and hyperparameter is learning 
-rate. You will notice that I use these terms interchangeably in this chapter and 
-throughout this book. Let’s say there are three parameters a, b, c in the model, and 
-all these parameters can be integers between 1 and 10. A “correct” combination of 
-these parameters will provide you with the best result. So, it’s kind of like a suitcase 
-with a 3-dial combination lock. However, in 3 dial combination lock has only one 
-correct answer. The model has many right answers. So, how would you find the 
-best parameters? A method would be to evaluate all the combinations and see which 
-one improves the metric. Let’s see how this is done. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# define the best accuracy to be 0 
-# if you choose loss as a metric, 
-# you can make best loss to be inf (np.inf) 
-best_accuracy = 0 
-best_parameters = {"a": 0, "b": 0, "c": 0} 
- 
-# loop over all values for a, b & c 
-for a in range(1, 11): 
-    for b in range(1, 11): 
-        for c in range(1, 11): 
-            # inititalize model with current parameters 
-            model = MODEL(a, b, c) 
-            # fit the model 
-            model.fit(training_data) 
-            # make predictions 
-            preds = model.predict(validation_data) 
-            # calculate accuracy 
-            accuracy = metrics.accuracy_score(targets, preds) 
-            # save params if current accuracy 
-            # is greater than best accuracy 
-            if accuracy > best_accuracy: 
-                best_accuracy = accuracy 
+İsterseniz coefficient'lar veya feature importance için **threshold** ve seçmek istediğiniz **maksimum feature sayısını** da belirtebilirsiniz.
+
+Aşağıdaki örneğe bakalım. Burada `SelectFromModel` içerisindeki varsayılan parametreleri kullanarak feature'ları seçiyoruz.
+
+```
+import pandas as pd
+from sklearn.datasets import load_diabetes
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.feature_selection import SelectFromModel
+
+# bir regression dataset'i getir
+# diabetes verisinde bazı feature'lara dayanarak
+# bir yıl sonraki diabetes progression'ı
+# tahmin ediyoruz
+data = load_diabetes()
+
+X = data["data"]
+col_names = data["feature_names"]
+y = data["target"]
+
+# modeli başlat
+model = RandomForestRegressor()
+
+# modelden seçim yap
+sfm = SelectFromModel(estimator=model)
+
+X_transformed = sfm.fit_transform(X, y)
+
+# hangi feature'ların seçildiğini gör
+support = sfm.get_support()
+
+# feature isimlerini al
+print([
+    x for x, y in zip(col_names, support)
+    if y == True
+])
+```
+
+Bu kod şunu yazdırır:
+
+```
+['bmi', 's5']
+```
+
+Şekil 3'e baktığımızda bunların **en yüksek öneme sahip ilk 2 feature** olduğunu görüyoruz.
+
+Dolayısıyla doğrudan **Random Forest tarafından sağlanan feature importance** üzerinden de seçim yapabilirdik.
+
+Burada eksik olan bir diğer şey, **L1 (Lasso) regularization** kullanan modellerle feature selection yapmaktır.
+
+Regularization için **L1 penalization** kullandığımızda, coefficient'ların çoğu **0 (veya 0'a çok yakın)** olur ve biz **sıfır olmayan coefficient'lara sahip feature'ları** seçeriz.
+
+Bunu yapmak için, bir modelden seçim yaptığımız yukarıdaki kodda Random Forest'ı, **L1 penalty destekleyen bir modelle**, örneğin **Lasso regression** ile değiştirmeniz yeterlidir.
+
+Tüm **tree-based modeller** feature importance sağlar. Dolayısıyla bu bölümde gösterilen model tabanlı kod parçalarının tamamı **XGBoost, LightGBM veya CatBoost** için kullanılabilir.
+
+Feature importance fonksiyonlarının isimleri farklı olabilir ve sonuçları farklı bir formatta üretebilir, ancak kullanım şekli aynı kalacaktır.
+
+Sonuç olarak, feature selection yaparken **dikkatli olmalısınız**.
+
+Feature'ları **training data** üzerinde seçin ve feature'ların doğru şekilde, modelde overfitting oluşturmadan seçildiğini doğrulamak için modeli **validation data** üzerinde değerlendirin.
+
+# Hyperparameter Optimization
+
+Harika modeller beraberinde, en iyi skoru veren modeli elde etmek için **hyperparameter'ları optimize etme** gibi büyük bir problemi de getirir.
+
+Peki **hyperparameter optimization** nedir?
+
+Makine öğrenmesi projeniz için basit bir pipeline olduğunu varsayalım.
+
+Bir dataset vardır, doğrudan bir model uygularsınız ve ardından sonuçları elde edersiniz.
+
+Buradaki modelin sahip olduğu parametreler **hyperparameter** olarak bilinir. Yani bunlar, modelin **training/fitting sürecini kontrol eden parametrelerdir**.
+
+Eğer SGD ile bir **linear regression** eğitirsek, modelin parametreleri **slope ve bias**, hyperparameter ise **learning rate** olur.
+
+Bu bölümde ve kitabın tamamında bu terimleri birbirinin yerine kullandığımı fark edeceksiniz.
+
+Modelde `a`, `b`, `c` olmak üzere üç parametre olduğunu ve bu parametrelerin tamamının **1 ile 10 arasında integer** değerler alabildiğini varsayalım.
+
+Bu parametrelerin "doğru" bir kombinasyonu size **en iyi sonucu** verecektir.
+
+Bu durum biraz, **3 kadranlı bir kombinasyon kilidine sahip bir bavul** gibidir.
+
+Ancak 3 kadranlı kombinasyon kilidinde yalnızca **bir doğru cevap** vardır.
+
+Modelde ise **birçok doğru cevap** vardır.
+
+Peki en iyi parametreleri nasıl bulacaksınız?
+
+Bir yöntem, **tüm kombinasyonları değerlendirmek** ve hangisinin metriği iyileştirdiğini görmektir.
+
+Bunun nasıl yapıldığını görelim.
+
+```
+# en iyi accuracy'yi 0 olarak tanımla
+# eğer metric olarak loss seçerseniz,
+# best loss'u inf (np.inf) olarak belirleyebilirsiniz
+best_accuracy = 0
+
+best_parameters = {
+    "a": 0,
+    "b": 0,
+    "c": 0
+}
+
+# a, b ve c için tüm değerler üzerinde döngü
+for a in range(1, 11):
+    for b in range(1, 11):
+        for c in range(1, 11):
+
+            # mevcut parametrelerle modeli başlat
+            model = MODEL(a, b, c)
+
+            # modeli fit et
+            model.fit(training_data)
+
+            # tahminleri yap
+            preds = model.predict(validation_data)
+
+            # accuracy'yi hesapla
+            accuracy = metrics.accuracy_score(
+                targets,
+                preds
+            )
+
+            # mevcut accuracy,
+            # en iyi accuracy'den büyükse
+            # parametreleri kaydet
+            if accuracy > best_accuracy:
+                best_accuracy = accuracy
+
                 best_parameters["a"] = a
+                best_parameters["b"] = b
+                best_parameters["c"] = c
+```
 
-best_parameters["b"] = b 
-                best_parameters["c"] = c 
-═════════════════════════════════════════════════════════════════════════ 
- 
-In the above code, we go through all the parameters from 1 to 10. So, we have a 
-total of 1000 (10 x 10 x 10) fits for the model. Well, that might be expensive because 
-the model can take a long time to train. In this situation, it should, however, be okay, 
-but in a real-world scenario, there are not only three parameters and not only ten 
-values for each parameter. Most models parameters are real-valued, and the 
-combinations of different parameters can be infinite. 
- 
-Let’s look at the random forest model from scikit-learn. 
- 
-RandomForestClassifier( 
-    n_estimators=100, 
-    criterion='gini', 
-    max_depth=None, 
-    min_samples_split=2, 
-    min_samples_leaf=1, 
-    min_weight_fraction_leaf=0.0, 
-    max_features='auto', 
-    max_leaf_nodes=None, 
-    min_impurity_decrease=0.0, 
-    min_impurity_split=None, 
-    bootstrap=True, 
-    oob_score=False, 
-    n_jobs=None, 
-    random_state=None, 
-    verbose=0, 
-    warm_start=False, 
-    class_weight=None, 
-    ccp_alpha=0.0, 
-    max_samples=None, 
-) 
- 
-There are nineteen parameters, and all the combinations of all these parameters for 
-all the values they can assume are going to be infinite. Normally, we don’t have the 
-resource and time to do this. Thus, we specify a grid of parameters. A search over 
-this grid to find the best combination of parameters is known as grid search. We 
-can say that n_estimators can be 100, 200, 250, 300, 400, 500; max_depth can be 
-1, 2, 5, 7, 11, 15 and criterion can be gini or entropy. These may not look like a lot 
-of parameters, but it would take a lot of time for computation if the dataset is too 
-large. We can make this grid search work by creating three for loops like before and
+Yukarıdaki kodda tüm parametreleri **1'den 10'a kadar** dolaşıyoruz.
 
-calculating the score on the validation set. It must also be noted that if you have k-
-fold cross-validation, you need even more loops which implies even more time to 
-find the perfect parameters. Grid search is therefore not very popular. Let’s look at 
-how it’s done with an example of predicting mobile phone price range given the 
-specifications.
+Dolayısıyla model için toplam **1000 (10 × 10 × 10) fit** işlemi gerçekleştiriyoruz.
+
+Bu pahalı olabilir, çünkü modelin eğitilmesi uzun zaman alabilir.
+
+Bu durumda yine de sorun olmayabilir, ancak gerçek dünya senaryosunda yalnızca üç parametre ve her parametre için yalnızca on değer bulunmaz.
+
+Çoğu model parametresi **gerçek değerli (real-valued)** değerlerdir ve farklı parametrelerin kombinasyonları **sonsuz** olabilir.
+
+Şimdi scikit-learn'deki **Random Forest modeline** bakalım.
+
+```
+RandomForestClassifier(
+    n_estimators=100,
+    criterion='gini',
+    max_depth=None,
+    min_samples_split=2,
+    min_samples_leaf=1,
+    min_weight_fraction_leaf=0.0,
+    max_features='auto',
+    max_leaf_nodes=None,
+    min_impurity_decrease=0.0,
+    min_impurity_split=None,
+    bootstrap=True,
+    oob_score=False,
+    n_jobs=None,
+    random_state=None,
+    verbose=0,
+    warm_start=False,
+    class_weight=None,
+    ccp_alpha=0.0,
+    max_samples=None,
+)
+```
+
+Burada **19 parametre** vardır ve bu parametrelerin alabileceği tüm değerler için tüm kombinasyonları denemek **sonsuz sayıda kombinasyon** oluşturacaktır.
+
+Normalde bunu yapmak için gerekli kaynağa ve zamana sahip değiliz.
+
+Bu nedenle bir **parametre grid'i (parameter grid)** belirleriz.
+
+Bu grid üzerinde en iyi parametre kombinasyonunu bulmak için yapılan arama işlemine **grid search** adı verilir.
+
+Örneğin:
+
+- `n_estimators` → `100, 200, 250, 300, 400, 500`
+- `max_depth` → `1, 2, 5, 7, 11, 15`
+- `criterion` → `gini` veya `entropy`
+
+diyebiliriz.
+
+Bunlar çok fazla parametre gibi görünmeyebilir, ancak dataset çok büyükse hesaplama için **çok fazla zaman** gerekebilir.
+
+Daha önce yaptığımız gibi üç `for` döngüsü oluşturarak ve validation seti üzerinde skoru hesaplayarak bu **grid search** işlemini gerçekleştirebiliriz.
+
+Ayrıca **k-fold cross-validation** kullanıyorsanız daha da fazla döngüye ihtiyacınız olacağını ve bunun da en iyi parametreleri bulmak için **daha fazla zaman** anlamına geldiğini belirtmek gerekir.
+
+Bu nedenle **grid search çok popüler değildir**.
+
+Şimdi, verilen özelliklere göre **cep telefonu fiyat aralığını tahmin etme** örneği üzerinden bunun nasıl yapıldığına bakalım.
 
 ![resim](img/p0170_fig01_resim.png)
 
-Figure 1: A snapshot of the mobile price dataset7 
- 
-We have 20 features like dual sim, battery power, etc. and a range of price which 
-has 4 categories from 0 to 3. There are only 2000 samples in the training set. We 
-can easily use stratified kfold and accuracy as a metric to evaluate. We will use a 
-random forest model with the aforementioned parameter ranges and see how we 
-can do a grid search in the following example. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# rf_grid_search.py 
-import numpy as np 
-import pandas as pd 
- 
-from sklearn import ensemble 
-from sklearn import metrics 
-from sklearn import model_selection 
- 
-if __name__ == "__main__": 
-    # read the training data 
-    df = pd.read_csv("../input/mobile_train.csv") 
- 
-    # features are all columns without price_range 
-    # note that there is no id column in this dataset
+**Şekil 1: Mobil fiyat dataset'inin bir görüntüsü**
 
-7 https://www.kaggle.com/iabhishekofficial/mobile-price-classification
+20 adet feature'ımız var. Bunlar arasında **dual sim, battery power** vb. feature'lar bulunuyor ve `price_range` değişkeni 0'dan 3'e kadar olan **4 kategoriye** sahip.
 
-# here we have training features 
-    X = df.drop("price_range", axis=1).values 
-    # and the targets 
-    y = df.price_range.values 
- 
-    # define the model here 
-    # i am using random forest with n_jobs=-1 
-    # n_jobs=-1 => use all cores 
-    classifier = ensemble.RandomForestClassifier(n_jobs=-1) 
- 
-    # define a grid of parameters 
-    # this can be a dictionary or a list of 
-    # dictionaries 
-    param_grid = { 
-        "n_estimators": [100, 200, 250, 300, 400, 500], 
-        "max_depth": [1, 2, 5, 7, 11, 15], 
-        "criterion": ["gini", "entropy"] 
-    } 
-     
-    # initialize grid search 
-    # estimator is the model that we have defined 
-    # param_grid is the grid of parameters 
-    # we use accuracy as our metric. you can define your own 
-    # higher value of verbose implies a lot of details are printed 
-    # cv=5 means that we are using 5 fold cv (not stratified) 
-    model = model_selection.GridSearchCV( 
-        estimator=classifier,  
-        param_grid=param_grid,  
-        scoring="accuracy", 
-        verbose=10,  
-        n_jobs=1, 
-        cv=5 
-    ) 
- 
-    # fit the model and extract best score 
-    model.fit(X, y) 
-    print(f"Best score: {model.best_score_}") 
- 
-    print("Best parameters set:") 
-    best_parameters = model.best_estimator_.get_params() 
-    for param_name in sorted(param_grid.keys()): 
-     
-print(f"\t{param_name}: {best_parameters[param_name]}") 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This prints a lot of stuff, let’s look at the last few lines.
+Training setinde yalnızca **2000 sample** bulunmaktadır.
 
-═════════════════════════════════════════════════════════════════════════ 
-[CV]  criterion=entropy, max_depth=15, n_estimators=500, score=0.895, 
-total=   1.0s 
-[CV] criterion=entropy, max_depth=15, n_estimators=500 ............... 
-[CV]  criterion=entropy, max_depth=15, n_estimators=500, score=0.890, 
-total=   1.1s 
-[CV] criterion=entropy, max_depth=15, n_estimators=500 ............... 
-[CV]  criterion=entropy, max_depth=15, n_estimators=500, score=0.910, 
-total=   1.1s 
-[CV] criterion=entropy, max_depth=15, n_estimators=500 ............... 
-[CV]  criterion=entropy, max_depth=15, n_estimators=500, score=0.880, 
-total=   1.1s 
-[CV] criterion=entropy, max_depth=15, n_estimators=500 ............... 
-[CV]  criterion=entropy, max_depth=15, n_estimators=500, score=0.870, 
-total=   1.1s 
-[Parallel(n_jobs=1)]: Done 360 out of 360 | elapsed:  3.7min finished 
-Best score: 0.889 
-Best parameters set: 
- 
-criterion: 'entropy' 
- 
-max_depth: 15 
- 
-n_estimators: 500 
-═════════════════════════════════════════════════════════════════════════ 
- 
-In the end, we see that our best five fold accuracy score was 0.889, and we have the 
-best parameters from our grid search. Next best thing that we can use is random 
-search. In random search, we randomly select a combination of parameters and 
-calculate the cross-validation score. The time consumed here is less than grid search 
-because we do not evaluate over all different combinations of parameters. We 
-choose how many times we want to evaluate our models, and that’s what decides 
-how much time the search takes. The code is not very different from above. Except 
-for GridSearchCV, we use RandomizedSearchCV. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# rf_random_search.py 
-. 
-. 
-. 
- 
-if __name__ == "__main__": 
-    . 
-    . 
-    . 
-    # define the model here 
-    # i am using random forest with n_jobs=-1 
-    # n_jobs=-1 => use all cores
+Değerlendirme için kolayca **stratified k-fold** ve **accuracy** metriğini kullanabiliriz.
 
-classifier = ensemble.RandomForestClassifier(n_jobs=-1) 
- 
-    # define a grid of parameters 
-    # this can be a dictionary or a list of 
-    # dictionaries 
-    param_grid = { 
-        "n_estimators": np.arange(100, 1500, 100), 
-        "max_depth": np.arange(1, 31), 
-        "criterion": ["gini", "entropy"] 
-    } 
-    # initialize random search 
-    # estimator is the model that we have defined 
-    # param_distributions is the grid/distribution of parameters 
-    # we use accuracy as our metric. you can define your own 
-    # higher value of verbose implies a lot of details are printed 
-    # cv=5 means that we are using 5 fold cv (not stratified) 
-    # n_iter is the number of iterations we want 
-    # if param_distributions has all the values as list, 
-    # random search will be done by sampling without replacement 
-    # if any of the parameters come from a distribution, 
-    # random search uses sampling with replacement 
-    model = model_selection.RandomizedSearchCV( 
-        estimator=classifier,  
-        param_distributions=param_grid, 
-        n_iter=20, 
-        scoring="accuracy", 
-        verbose=10,  
-        n_jobs=1, 
-        cv=5 
-    ) 
- 
-    # fit the model and extract best score 
-    model.fit(X, y) 
-    print(f"Best score: {model.best_score_}") 
- 
-    print("Best parameters set:") 
-    best_parameters = model.best_estimator_.get_params() 
-    for param_name in sorted(param_grid.keys()): 
-     
-print(f"\t{param_name}: {best_parameters[param_name]}") 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We have changed the grid of parameters for random search, and it seems like we 
-even improved the results a little bit. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-Best score: 0.8905 
-Best parameters set:
+Önceden belirtilen parametre aralıklarıyla bir **random forest modeli** kullanacağız ve aşağıdaki örnekte grid search'ün nasıl yapılabileceğini göreceğiz.
 
-criterion: entropy 
- 
-max_depth: 25 
- 
-n_estimators: 300 
-═════════════════════════════════════════════════════════════════════════ 
-Random search is faster than grid search if the number of iterations is less. Using 
-these two, you can find the optimal (?) parameters for all kinds of models as long 
-as they have a fit and predict function, which is the standard of scikit-learn. 
-Sometimes, you might want to use a pipeline. For example, let’s say that we are 
-dealing with a multiclass classification problem. In this problem, the training data 
-consists of two text columns, and you are required to build a model to predict the 
-class. Let’s assume that the pipeline you choose is to first apply tf-idf in a semi-
-supervised manner and then use SVD with SVM classifier. Now, the problem is we 
-have to select the components of SVD and also need to tune the parameters of SVM. 
-How to do this is shown in the following snippet. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# pipeline_search.py 
-import numpy as np 
-import pandas as pd 
- 
-from sklearn import metrics 
-from sklearn import model_selection 
-from sklearn import pipeline 
- 
-from sklearn.decomposition import TruncatedSVD 
-from sklearn.feature_extraction.text import TfidfVectorizer 
-from sklearn.preprocessing import StandardScaler 
-from sklearn.svm import SVC 
- 
- 
-def quadratic_weighted_kappa(y_true, y_pred): 
-    """ 
-    Create a wrapper for cohen's kappa 
-    with quadratic weights 
-    """ 
-    return metrics.cohen_kappa_score( 
-        y_true,  
-        y_pred,  
-        weights="quadratic" 
-    ) 
- 
- 
-if __name__ == '__main__': 
- 
-    # Load the training file
+```
+# rf_grid_search.py
 
-train = pd.read_csv('../input/train.csv') 
-     
-    # we dont need ID columns 
-    idx = test.id.values.astype(int) 
-    train = train.drop('id', axis=1) 
-    test = test.drop('id', axis=1) 
-     
-    # create labels. drop useless columns 
-    y = train.relevance.values 
-     
-    # do some lambda magic on text columns 
-    traindata = list( 
-        train.apply(lambda x:'%s %s' % (x['text1'], x['text2']),axis=1) 
-    ) 
-    testdata = list( 
-        test.apply(lambda x:'%s %s' % (x['text1'], x['text2']),axis=1) 
-    ) 
-     
-    # tfidf vectorizer 
-    tfv = TfidfVectorizer( 
-        min_df=3,   
-        max_features=None,  
-        strip_accents='unicode',  
-        analyzer='word', 
-        token_pattern=r'\w{1,}', 
-        ngram_range=(1, 3),  
-        use_idf=1, 
-        smooth_idf=1, 
-        sublinear_tf=1, 
-        stop_words='english' 
-    ) 
-     
-    # Fit TFIDF 
-    tfv.fit(traindata) 
-    X =  tfv.transform(traindata)  
-    X_test = tfv.transform(testdata) 
-     
-    # Initialize SVD 
-    svd = TruncatedSVD() 
-     
-    # Initialize the standard scaler  
-    scl = StandardScaler() 
-     
-    # We will use SVM here.. 
-    svm_model = SVC() 
-     
-    # Create the pipeline
+import numpy as np
+import pandas as pd
 
-clf = pipeline.Pipeline( 
-        [ 
-            ('svd', svd), 
-            ('scl', scl), 
-            ('svm', svm_model) 
-        ] 
-    ) 
-     
-    # Create a parameter grid to search for  
-    # best parameters for everything in the pipeline 
-    param_grid = { 
-        'svd__n_components' : [200, 300], 
-        'svm__C': [10, 12] 
-    } 
-     
-    # Kappa Scorer  
-    kappa_scorer = metrics.make_scorer( 
-        quadratic_weighted_kappa,  
-        greater_is_better=True 
-    ) 
-     
-    # Initialize Grid Search Model 
-    model = model_selection.GridSearchCV( 
-        estimator=clf, 
-        param_grid=param_grid, 
-        scoring=kappa_scorer, 
-        verbose=10, 
-        n_jobs=-1, 
-        refit=True, 
-        cv=5 
-    ) 
-                                      
-    # Fit Grid Search Model 
-    model.fit(X, y) 
-    print("Best score: %0.3f" % model.best_score_) 
-    print("Best parameters set:") 
-    best_parameters = model.best_estimator_.get_params() 
-    for param_name in sorted(param_grid.keys()): 
-     
-print("\t%s: %r" % (param_name, best_parameters[param_name])) 
-     
-    # Get best model 
-    best_model = model.best_estimator_ 
-     
-    # Fit model with best parameters optimized for QWK 
-    best_model.fit(X, y) 
-    preds = best_model.predict(...) 
-═════════════════════════════════════════════════════════════════════════
+from sklearn import ensemble
+from sklearn import metrics
+from sklearn import model_selection
 
-The pipeline shown here has SVD (Singular Value Decomposition), standard 
-scaling and an SVM (Support Vector Machines) model. Please note that you won’t 
-be able to run the above code as it is as training data is not available. 
-When we go into advanced hyperparameter optimization techniques, we can take a 
-look at minimization of functions using different kinds of minimization 
-algorithms. This can be achieved by using many minimization functions such as 
-downhill simplex algorithm, Nelder-Mead optimization, using a Bayesian 
-technique with Gaussian process for finding optimal parameters or by using a 
-genetic algorithm. I will talk more about the application of downhill simplex and 
-Nelder-Mead in ensembling and stacking chapter. First, let’s see how the gaussian 
-process can be used for hyper-parameter optimization. These kinds of algorithms 
-need a function they can optimize. Most of the time, it’s about the minimization of 
-this function, like we minimize loss.  
- 
-So, let’s say, you want to find the best parameters for best accuracy and obviously, 
-the more the accuracy is better. Now we cannot minimize the accuracy, but we can 
-minimize it when we multiply it by -1. This way, we are minimizing the negative 
-of accuracy, but in fact, we are maximizing accuracy. Using Bayesian optimization 
-with gaussian process can be accomplished by using gp_minimize function from 
-scikit-optimize (skopt) library. Let’s take a look at how we can tune the parameters 
-of our random forest model using this function. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# rf_gp_minimize.py 
-import numpy as np 
-import pandas as pd 
- 
-from functools import partial 
- 
-from sklearn import ensemble 
-from sklearn import metrics 
-from sklearn import model_selection 
- 
-from skopt import gp_minimize 
-from skopt import space 
- 
- 
-def optimize(params, param_names, x, y): 
-    """ 
-    The main optimization function.  
-    This function takes all the arguments from the search space 
-    and training features and targets. It then initializes
-
-the models by setting the chosen parameters and runs  
-    cross-validation and returns a negative accuracy score 
-    :param params: list of params from gp_minimize 
-    :param param_names: list of param names. order is important! 
-    :param x: training data 
-    :param y: labels/targets 
-    :return: negative accuracy after 5 folds 
-    """ 
-    # convert params to dictionary 
-    params = dict(zip(param_names, params)) 
- 
-    # initialize model with current parameters 
-    model = ensemble.RandomForestClassifier(**params) 
- 
-    # initialize stratified k-fold 
-    kf = model_selection.StratifiedKFold(n_splits=5) 
- 
-    # initialize accuracy list 
-    accuracies = [] 
- 
-    # loop over all folds 
-    for idx in kf.split(X=x, y=y): 
-        train_idx, test_idx = idx[0], idx[1] 
-        xtrain = x[train_idx] 
-        ytrain = y[train_idx] 
- 
-        xtest = x[test_idx] 
-        ytest = y[test_idx] 
- 
-        # fit model for current fold 
-        model.fit(xtrain, ytrain) 
- 
-        #create predictions 
-        preds = model.predict(xtest) 
- 
-        # calculate and append accuracy 
-        fold_accuracy = metrics.accuracy_score( 
-            ytest, 
-            preds 
-        ) 
-        accuracies.append(fold_accuracy) 
-     
-    # return negative accuracy 
-    return -1 * np.mean(accuracies) 
- 
- 
 if __name__ == "__main__":
 
-# read the training data 
-    df = pd.read_csv("../input/mobile_train.csv") 
- 
-    # features are all columns without price_range 
-    # note that there is no id column in this dataset 
-    # here we have training features 
-    X = df.drop("price_range", axis=1).values 
-    # and the targets 
-    y = df.price_range.values 
- 
-    # define a parameter space 
-    param_space = [ 
-        # max_depth is an integer between 3 and 10 
-        space.Integer(3, 15, name="max_depth"), 
-        # n_estimators is an integer between 50 and 1500 
-        space.Integer(100, 1500, name="n_estimators"), 
-        # criterion is a category. here we define list of categories 
-        space.Categorical(["gini", "entropy"], name="criterion"), 
-        # you can also have Real numbered space and define a  
-        # distribution you want to pick it from 
-        space.Real(0.01, 1, prior="uniform", name="max_features") 
-    ] 
- 
-    # make a list of param names 
-    # this has to be same order as the search space 
-    # inside the main function 
-    param_names = [ 
-        "max_depth", 
-        "n_estimators", 
-        "criterion", 
-        "max_features" 
-    ] 
- 
-    # by using functools partial, i am creating a  
-    # new function which has same parameters as the  
-    # optimize function except for the fact that 
-    # only one param, i.e. the "params" parameter is 
-    # required. this is how gp_minimize expects the  
-    # optimization function to be. you can get rid of this 
-    # by reading data inside the optimize function or by 
-    # defining the optimize function here. 
-    optimization_function = partial( 
-        optimize, 
-        param_names=param_names, 
-        x=X, 
-        y=y 
+    # training verisini oku
+    df = pd.read_csv("../input/mobile_train.csv")
+
+    # feature'lar price_range dışındaki tüm sütunlardır
+    # bu dataset'te id sütunu olmadığına dikkat edin
+
+    # burada training feature'larımız var
+    X = df.drop("price_range", axis=1).values
+
+    # ve target'lar
+    y = df.price_range.values
+
+    # modeli burada tanımla
+    # n_jobs=-1 ile random forest kullanıyorum
+    # n_jobs=-1 => tüm çekirdekleri kullan
+
+    classifier = ensemble.RandomForestClassifier(
+        n_jobs=-1
     )
 
-# now we call gp_minimize from scikit-optimize 
-    # gp_minimize uses bayesian optimization for  
-    # minimization of the optimization function. 
-    # we need a space of parameters, the function itself, 
-    # the number of calls/iterations we want to have 
-    result = gp_minimize( 
-        optimization_function, 
-        dimensions=param_space, 
-        n_calls=15, 
-        n_random_starts=10, 
-        verbose=10 
-    ) 
- 
-    # create best params dict and print it 
-    best_params = dict( 
-        zip( 
-            param_names, 
-            result.x 
-        ) 
-    ) 
-    print(best_params) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Yet again, this produces a lot of output, and the last part of it is shown below. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-Iteration No: 14 started. Searching for the next optimal point. 
-Iteration No: 14 ended. Search finished for the next optimal point. 
-Time taken: 4.7793 
-Function value obtained: -0.9075 
-Current minimum: -0.9075 
-Iteration No: 15 started. Searching for the next optimal point. 
-Iteration No: 15 ended. Search finished for the next optimal point. 
-Time taken: 49.4186 
-Function value obtained: -0.9075 
-Current minimum: -0.9075 
-{'max_depth': 12, 'n_estimators': 100, 'criterion': 'entropy', 
-'max_features': 1.0} 
-═════════════════════════════════════════════════════════════════════════ 
- 
-It seems like we have managed to crack 0.90 accuracy. That’s just amazing! 
- 
-We can also see (plot) how we achieved convergence by using the following 
-snippet.
+    # parametrelerden oluşan bir grid tanımla
+    # bu bir dictionary veya dictionary listesi olabilir
 
-═════════════════════════════════════════════════════════════════════════ 
-from skopt.plots import plot_convergence 
- 
-plot_convergence(result) 
-═════════════════════════════════════════════════════════════════════════ 
-The convergence plot is shown in figure 2.
+    param_grid = {
+        "n_estimators": [100, 200, 250, 300, 400, 500],
+        "max_depth": [1, 2, 5, 7, 11, 15],
+        "criterion": ["gini", "entropy"]
+    }
+
+    # grid search'ü başlat
+    # estimator, tanımladığımız modeldir
+    # param_grid, parametrelerin grid'idir
+    # metric olarak accuracy kullanıyoruz.
+    # isterseniz kendi metric'inizi tanımlayabilirsiniz
+    # verbose değeri yükseldikçe daha fazla detay yazdırılır
+    # cv=5, 5-fold CV kullandığımız anlamına gelir
+    # (stratified değildir)
+
+    model = model_selection.GridSearchCV(
+        estimator=classifier,
+        param_grid=param_grid,
+        scoring="accuracy",
+        verbose=10,
+        n_jobs=1,
+        cv=5
+    )
+
+    # modeli fit et ve en iyi skoru çıkar
+    model.fit(X, y)
+
+    print(f"Best score: {model.best_score_}")
+
+    print("Best parameters set:")
+
+    best_parameters = model.best_estimator_.get_params()
+
+    for param_name in sorted(param_grid.keys()):
+        print(
+            f"\t{param_name}: "
+            f"{best_parameters[param_name]}"
+        )
+```
+
+Bu kod çok fazla çıktı yazdırır. Son birkaç satıra bakalım.
+
+```
+[CV] criterion=entropy, max_depth=15, n_estimators=500, score=0.895,
+total=   1.0s
+
+[CV] criterion=entropy, max_depth=15, n_estimators=500 ...............
+
+[CV] criterion=entropy, max_depth=15, n_estimators=500, score=0.890,
+total=   1.1s
+
+[CV] criterion=entropy, max_depth=15, n_estimators=500 ...............
+
+[CV] criterion=entropy, max_depth=15, n_estimators=500, score=0.910,
+total=   1.1s
+
+[CV] criterion=entropy, max_depth=15, n_estimators=500 ...............
+
+[CV] criterion=entropy, max_depth=15, n_estimators=500, score=0.880,
+total=   1.1s
+
+[CV] criterion=entropy, max_depth=15, n_estimators=500 ...............
+
+[CV] criterion=entropy, max_depth=15, n_estimators=500, score=0.870,
+total=   1.1s
+
+[Parallel(n_jobs=1)]: Done 360 out of 360 | elapsed: 3.7min finished
+
+Best score: 0.889
+
+Best parameters set:
+
+criterion: 'entropy'
+
+max_depth: 15
+
+n_estimators: 500
+```
+
+Sonuç olarak, **en iyi five-fold accuracy skorumuz 0.889** oldu ve grid search sonucunda en iyi parametreleri elde ettik.
+
+Bundan sonra kullanabileceğimiz en iyi yöntemlerden biri **random search**'tür.
+
+Random search'te rastgele bir parametre kombinasyonu seçer ve **cross-validation skorunu** hesaplarız.
+
+Burada harcanan zaman grid search'ten daha azdır çünkü bütün farklı parametre kombinasyonlarını değerlendirmeyiz.
+
+Modellerimizi **kaç kez değerlendirmek istediğimizi biz seçeriz** ve aramanın ne kadar süreceğini bu belirler.
+
+Kod, yukarıdaki koddan çok farklı değildir.
+
+`GridSearchCV` yerine **`RandomizedSearchCV`** kullanırız.
+
+```
+# rf_random_search.py
+
+.
+.
+.
+
+if __name__ == "__main__":
+
+    .
+    .
+    .
+
+    # modeli burada tanımla
+    # n_jobs=-1 ile random forest kullanıyorum
+    # n_jobs=-1 => tüm çekirdekleri kullan
+
+    classifier = ensemble.RandomForestClassifier(
+        n_jobs=-1
+    )
+
+    # parametrelerden oluşan bir grid tanımla
+
+    param_grid = {
+        "n_estimators": np.arange(100, 1500, 100),
+        "max_depth": np.arange(1, 31),
+        "criterion": ["gini", "entropy"]
+    }
+
+    # random search'ü başlat
+    # estimator, tanımladığımız modeldir
+    # param_distributions, parametrelerin grid'i/dağılımıdır
+    # metric olarak accuracy kullanıyoruz.
+    # isterseniz kendi metric'inizi tanımlayabilirsiniz
+    # verbose değeri yükseldikçe daha fazla detay yazdırılır
+    # cv=5, 5-fold CV kullandığımız anlamına gelir
+    # (stratified değildir)
+    # n_iter, yapmak istediğimiz iterasyon sayısıdır
+    #
+    # param_distributions içerisindeki tüm değerler listeden
+    # geliyorsa random search replacement olmadan örnekleme yapar.
+    #
+    # parametrelerden herhangi biri bir distribution'dan geliyorsa,
+    # random search replacement ile örnekleme yapar.
+
+    model = model_selection.RandomizedSearchCV(
+        estimator=classifier,
+        param_distributions=param_grid,
+        n_iter=20,
+        scoring="accuracy",
+        verbose=10,
+        n_jobs=1,
+        cv=5
+    )
+
+    # modeli fit et ve en iyi skoru çıkar
+    model.fit(X, y)
+
+    print(f"Best score: {model.best_score_}")
+
+    print("Best parameters set:")
+
+    best_parameters = model.best_estimator_.get_params()
+
+    for param_name in sorted(param_grid.keys()):
+        print(
+            f"\t{param_name}: "
+            f"{best_parameters[param_name]}"
+        )
+```
+
+Random search için parametre grid'ini değiştirdik ve sonuçları **biraz daha iyileştirmişiz gibi görünüyor.**
+
+```
+Best score: 0.8905
+
+Best parameters set:
+
+criterion: entropy
+
+max_depth: 25
+
+n_estimators: 300
+```
+
+Random search, iterasyon sayısı daha azsa **grid search'ten daha hızlıdır**.
+
+Bu iki yöntemi kullanarak, `fit` ve `predict` fonksiyonlarına sahip oldukları sürece her türlü model için **optimal (?) parametreleri** bulabilirsiniz.
+
+Bu fonksiyonlar scikit-learn'ün standart yapısıdır.
+
+Bazen bir **pipeline** kullanmak isteyebilirsiniz.
+
+Örneğin, bir **multiclass classification** problemiyle uğraştığımızı varsayalım.
+
+Bu problemde training data iki adet text sütunundan oluşuyor ve bu text'lerden sınıfı tahmin eden bir model oluşturmamız gerekiyor.
+
+Seçtiğiniz pipeline'ın önce **tf-idf'yi semi-supervised bir şekilde uyguladığını**, ardından **SVD ve SVM classifier** kullandığını varsayalım.
+
+Buradaki problem, hem **SVD'nin component sayısını** seçmemiz hem de **SVM'nin parametrelerini** ayarlamamız gerektiğidir.
+
+Bunun nasıl yapılacağı aşağıdaki örnekte gösterilmiştir.
+
+```
+# pipeline_search.py
+
+import numpy as np
+import pandas as pd
+
+from sklearn import metrics
+from sklearn import model_selection
+from sklearn import pipeline
+
+from sklearn.decomposition import TruncatedSVD
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+
+def quadratic_weighted_kappa(y_true, y_pred):
+    """
+    Cohen's kappa için quadratic weights kullanan
+    bir wrapper oluştur.
+    """
+
+    return metrics.cohen_kappa_score(
+        y_true,
+        y_pred,
+        weights="quadratic"
+    )
+
+if __name__ == '__main__':
+
+    # training dosyasını yükle
+    train = pd.read_csv('../input/train.csv')
+
+    # ID sütunlarına ihtiyacımız yok
+    idx = test.id.values.astype(int)
+
+    train = train.drop('id', axis=1)
+    test = test.drop('id', axis=1)
+
+    # label'ları oluştur.
+    # gereksiz sütunları kaldır
+    y = train.relevance.values
+
+    # text sütunlarında biraz lambda magic yap
+    traindata = list(
+        train.apply(
+            lambda x: '%s %s' % (
+                x['text1'],
+                x['text2']
+            ),
+            axis=1
+        )
+    )
+
+    testdata = list(
+        test.apply(
+            lambda x: '%s %s' % (
+                x['text1'],
+                x['text2']
+            ),
+            axis=1
+        )
+    )
+
+    # tfidf vectorizer
+    tfv = TfidfVectorizer(
+        min_df=3,
+        max_features=None,
+        strip_accents='unicode',
+        analyzer='word',
+        token_pattern=r'\w{1,}',
+        ngram_range=(1, 3),
+        use_idf=1,
+        smooth_idf=1,
+        sublinear_tf=1,
+        stop_words='english'
+    )
+
+    # TFIDF'i fit et
+    tfv.fit(traindata)
+
+    X = tfv.transform(traindata)
+    X_test = tfv.transform(testdata)
+
+    # SVD'yi başlat
+    svd = TruncatedSVD()
+
+    # standard scaler'ı başlat
+    scl = StandardScaler()
+
+    # burada SVM kullanacağız
+    svm_model = SVC()
+
+    # pipeline oluştur
+    clf = pipeline.Pipeline(
+        [
+            ('svd', svd),
+            ('scl', scl),
+            ('svm', svm_model)
+        ]
+    )
+
+    # pipeline içerisindeki her şey için
+    # en iyi parametreleri arayacak bir
+    # parametre grid'i oluştur
+
+    param_grid = {
+        'svd__n_components': [200, 300],
+        'svm__C': [10, 12]
+    }
+
+    # Kappa Scorer
+    kappa_scorer = metrics.make_scorer(
+        quadratic_weighted_kappa,
+        greater_is_better=True
+    )
+
+    # Grid Search modelini başlat
+    model = model_selection.GridSearchCV(
+        estimator=clf,
+        param_grid=param_grid,
+        scoring=kappa_scorer,
+        verbose=10,
+        n_jobs=-1,
+        refit=True,
+        cv=5
+    )
+
+    # Grid Search modelini fit et
+    model.fit(X, y)
+
+    print(
+        "Best score: %0.3f"
+        % model.best_score_
+    )
+
+    print("Best parameters set:")
+
+    best_parameters = model.best_estimator_.get_params()
+
+    for param_name in sorted(param_grid.keys()):
+        print(
+            "\t%s: %r"
+            % (
+                param_name,
+                best_parameters[param_name]
+            )
+        )
+
+    # en iyi modeli al
+    best_model = model.best_estimator_
+
+    # QWK için optimize edilmiş
+    # en iyi parametrelerle modeli fit et
+    best_model.fit(X, y)
+
+    preds = best_model.predict(...)
+```
+
+Burada gösterilen pipeline içerisinde **SVD (Singular Value Decomposition), standard scaling ve SVM (Support Vector Machines)** modeli bulunmaktadır.
+
+Yukarıdaki kodu training data mevcut olmadığı için çalıştıramayacağınızı unutmayın.
+
+İleri seviye **hyperparameter optimization** tekniklerine geçtiğimizde, farklı minimization algoritmalarını kullanarak fonksiyonların minimize edilmesine bakabiliriz.
+
+Bu işlem, aşağıdaki gibi birçok minimization fonksiyonu kullanılarak gerçekleştirilebilir:
+
+- Downhill simplex algorithm
+- Nelder-Mead optimization
+- Optimal parametreleri bulmak için Gaussian process kullanan Bayesian technique
+- Genetic algorithm
+
+**Ensembling ve stacking** bölümünde downhill simplex ve Nelder-Mead'in uygulanması hakkında daha fazla konuşacağım.
+
+Öncelikle **Gaussian process'in hyperparameter optimization için nasıl kullanılabileceğine** bakalım.
+
+Bu tür algoritmaların optimize edebilecekleri bir fonksiyona ihtiyaçları vardır.
+
+Çoğu zaman bu fonksiyonun **minimize edilmesi** söz konusudur; örneğin loss'u minimize ederiz.
+
+En iyi accuracy için en iyi parametreleri bulmak istediğinizi varsayalım.
+
+Açıkça görüldüğü gibi accuracy ne kadar yüksekse o kadar iyidir.
+
+Şimdi accuracy'yi minimize edemeyiz, ancak accuracy'yi `-1` ile çarparak minimize edebiliriz.
+
+Bu şekilde **accuracy'nin negatifini minimize ederiz**, fakat aslında accuracy'yi maximize etmiş oluruz.
+
+Gaussian process ile **Bayesian optimization**, `scikit-optimize (skopt)` kütüphanesindeki `gp_minimize` fonksiyonu kullanılarak gerçekleştirilebilir.
+
+Bu fonksiyon ile random forest modelimizin parametrelerini nasıl ayarlayabileceğimize bakalım.
+
+```
+# rf_gp_minimize.py
+
+import numpy as np
+import pandas as pd
+
+from functools import partial
+
+from sklearn import ensemble
+from sklearn import metrics
+from sklearn import model_selection
+
+from skopt import gp_minimize
+from skopt import space
+
+def optimize(params, param_names, x, y):
+    """
+    Ana optimization fonksiyonu.
+
+    Bu fonksiyon search space'teki tüm argümanları
+    ve training feature'larını ve target'ları alır.
+
+    Daha sonra seçilen parametreleri ayarlayarak
+    modeli başlatır, cross-validation çalıştırır
+    ve negatif accuracy skorunu döndürür.
+
+    :param params: gp_minimize'dan gelen parametre listesi
+    :param param_names: parametre isimleri listesi.
+                        Sıra önemlidir!
+    :param x: training data
+    :param y: labels/targets
+    :return: 5 fold sonrası negatif accuracy
+    """
+
+    # parametreleri dictionary'ye dönüştür
+    params = dict(
+        zip(param_names, params)
+    )
+
+    # mevcut parametrelerle modeli başlat
+    model = ensemble.RandomForestClassifier(
+        **params
+    )
+
+    # stratified k-fold'u başlat
+    kf = model_selection.StratifiedKFold(
+        n_splits=5
+    )
+
+    # accuracy listesini başlat
+    accuracies = []
+
+    # tüm fold'lar üzerinde döngü
+    for idx in kf.split(X=x, y=y):
+
+        train_idx, test_idx = idx[0], idx[1]
+
+        xtrain = x[train_idx]
+        ytrain = y[train_idx]
+
+        xtest = x[test_idx]
+        ytest = y[test_idx]
+
+        # mevcut fold için modeli fit et
+        model.fit(xtrain, ytrain)
+
+        # tahminleri oluştur
+        preds = model.predict(xtest)
+
+        # accuracy'yi hesapla ve ekle
+        fold_accuracy = metrics.accuracy_score(
+            ytest,
+            preds
+        )
+
+        accuracies.append(fold_accuracy)
+
+    # negatif accuracy'yi döndür
+    return -1 * np.mean(accuracies)
+
+if __name__ == "__main__":
+
+    # training verisini oku
+    df = pd.read_csv(
+        "../input/mobile_train.csv"
+    )
+
+    # feature'lar price_range dışındaki
+    # tüm sütunlardır
+    # bu dataset'te id sütunu yoktur
+
+    # training feature'larımız
+    X = df.drop(
+        "price_range",
+        axis=1
+    ).values
+
+    # target'lar
+    y = df.price_range.values
+
+    # bir parameter space tanımla
+    param_space = [
+
+        # max_depth, 3 ile 15 arasında
+        # bir integer'dır
+        space.Integer(
+            3,
+            15,
+            name="max_depth"
+        ),
+
+        # n_estimators, 100 ile 1500 arasında
+        # bir integer'dır
+        space.Integer(
+            100,
+            1500,
+            name="n_estimators"
+        ),
+
+        # criterion bir kategoridir.
+        # burada kategori listesini tanımlıyoruz
+        space.Categorical(
+            ["gini", "entropy"],
+            name="criterion"
+        ),
+
+        # ayrıca Real değerli bir space'e sahip olabilir
+        # ve buradan alınacak değerlerin dağılımını
+        # tanımlayabilirsiniz
+        space.Real(
+            0.01,
+            1,
+            prior="uniform",
+            name="max_features"
+        )
+    ]
+
+    # parametre isimlerinin listesini oluştur
+    # bunun search space ile aynı sırada olması gerekir
+    # ana fonksiyonun içerisinde
+
+    param_names = [
+        "max_depth",
+        "n_estimators",
+        "criterion",
+        "max_features"
+    ]
+
+    # functools partial kullanarak,
+    # optimize fonksiyonuyla aynı parametrelere sahip
+    # ancak yalnızca tek bir parametrenin, yani
+    # "params" parametresinin gerekli olduğu
+    # yeni bir fonksiyon oluşturuyorum.
+
+    # gp_minimize optimization fonksiyonunun
+    # bu şekilde olmasını bekler.
+
+    # bunu optimize fonksiyonunun içinde data okuyarak
+    # veya optimize fonksiyonunu burada tanımlayarak
+    # ortadan kaldırabilirsiniz.
+
+    optimization_function = partial(
+        optimize,
+        param_names=param_names,
+        x=X,
+        y=y
+    )
+
+    # şimdi scikit-optimize'dan gp_minimize'ı çağır
+    # gp_minimize, optimization fonksiyonunun
+    # minimize edilmesi için Bayesian optimization kullanır.
+    #
+    # bir parametre space'ine,
+    # fonksiyonun kendisine ve
+    # yapmak istediğimiz çağrı/iterasyon sayısına
+    # ihtiyacımız var.
+
+    result = gp_minimize(
+        optimization_function,
+        dimensions=param_space,
+        n_calls=15,
+        n_random_starts=10,
+        verbose=10
+    )
+
+    # en iyi params dictionary'sini oluştur ve yazdır
+    best_params = dict(
+        zip(
+            param_names,
+            result.x
+        )
+    )
+
+    print(best_params)
+```
+
+Bu da yine çok fazla çıktı üretir. Son kısmı aşağıda gösterilmiştir.
+
+```
+Iteration No: 14 started.
+Searching for the next optimal point.
+
+Iteration No: 14 ended.
+Search finished for the next optimal point.
+
+Time taken: 4.7793
+
+Function value obtained: -0.9075
+
+Current minimum: -0.9075
+
+Iteration No: 15 started.
+Searching for the next optimal point.
+
+Iteration No: 15 ended.
+Search finished for the next optimal point.
+
+Time taken: 49.4186
+
+Function value obtained: -0.9075
+
+Current minimum: -0.9075
+
+{
+    'max_depth': 12,
+    'n_estimators': 100,
+    'criterion': 'entropy',
+    'max_features': 1.0
+}
+```
+
+Görünüşe göre **0.90 accuracy seviyesini geçmeyi başardık**.
+
+Bu gerçekten harika!
+
+Aşağıdaki kod parçasını kullanarak **convergence'ın nasıl gerçekleştiğini** de görebiliriz.
+
+```
+from skopt.plots import plot_convergence
+
+plot_convergence(result)
+```
+
+Convergence grafiği **Şekil 2'de** gösterilmiştir.
 
 ![resim](img/p0181_fig01_resim.png)
 
+## Ö
 Figure 2: Convergence plot of our random forest parameter optimization 
  
  
