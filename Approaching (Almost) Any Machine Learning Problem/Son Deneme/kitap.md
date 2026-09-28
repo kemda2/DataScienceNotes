@@ -7678,339 +7678,225 @@ Convergence grafiği **Şekil 2'de** gösterilmiştir.
 
 ![resim](img/p0181_fig01_resim.png)
 
-# Ö
+**Şekil 2: Random forest parametre optimizasyonumuzun yakınsama grafiği**
 
-Figure 2: Convergence plot of our random forest parameter optimization 
- 
- 
-There are many libraries available that offer hyperparameter optimization. scikit-
-optimize is one such library that you can use. Another useful library for 
-hyperparameter optimization is hyperopt. hyperopt uses Tree-structured Parzen 
-Estimator (TPE) to find the most optimal parameters. Take a look at the following 
-snippet where I use hyperopt with minimal changes to the previous code. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# rf_hyperopt.py 
-import numpy as np 
-import pandas as pd 
- 
-from functools import partial 
- 
-from sklearn import ensemble 
-from sklearn import metrics 
-from sklearn import model_selection 
- 
+# Hiperparametre Optimizasyonu ve Görüntü Sınıflandırmasına Yaklaşım
+
+Hiperparametre optimizasyonu sunan birçok kütüphane bulunmaktadır. scikit-optimize, kullanabileceğiniz bu tür kütüphanelerden biridir. Hiperparametre optimizasyonu için bir diğer kullanışlı kütüphane ise hyperopt’tur. hyperopt, en uygun parametreleri bulmak için Tree-structured Parzen Estimator (TPE) kullanır. Önceki kodda çok az değişiklik yaparak hyperopt’u kullandığım aşağıdaki örneğe bakalım.
+
+```
+# rf_hyperopt.py
+import numpy as np
+import pandas as pd
+
+from functools import partial
+
+from sklearn import ensemble
+from sklearn import metrics
+from sklearn import model_selection
+
 from hyperopt import hp, fmin, tpe, Trials
+from hyperopt.pyll.base import scope
 
-from hyperopt.pyll.base import scope 
- 
- 
-def optimize(params, x, y): 
-    """ 
-    The main optimization function.  
-    This function takes all the arguments from the search space 
-    and training features and targets. It then initializes 
-    the models by setting the chosen parameters and runs  
-    cross-validation and returns a negative accuracy score 
-    :param params: dict of params from hyperopt 
-    :param x: training data 
-    :param y: labels/targets 
-    :return: negative accuracy after 5 folds 
-    """ 
- 
-    # initialize model with current parameters 
-    model = ensemble.RandomForestClassifier(**params) 
- 
-    # initialize stratified k-fold 
-    kf = model_selection.StratifiedKFold(n_splits=5) 
- 
-    . 
-    . 
-    . 
-     
-    # return negative accuracy 
-    return -1 * np.mean(accuracies) 
- 
- 
-if __name__ == "__main__": 
-    # read the training data 
-    df = pd.read_csv("../input/mobile_train.csv") 
- 
-    # features are all columns without price_range 
-    # note that there is no id column in this dataset 
-    # here we have training features 
-    X = df.drop("price_range", axis=1).values 
-    # and the targets 
-    y = df.price_range.values 
- 
-    # define a parameter space 
-    # now we use hyperopt  
-    param_space = { 
-        # quniform gives round(uniform(low, high) / q) * q 
-        # we want int values for depth and estimators
+def optimize(params, x, y):
+    """
+    Ana optimizasyon fonksiyonu.
+    Bu fonksiyon arama uzayındaki tüm argümanları,
+    eğitim özelliklerini ve hedefleri alır. Daha sonra
+    seçilen parametreleri ayarlayarak modelleri başlatır
+    ve çapraz doğrulama çalıştırır ve negatif doğruluk skorunu döndürür.
 
-"max_depth": scope.int(hp.quniform("max_depth", 1, 15, 1)), 
-        "n_estimators": scope.int( 
-            hp.quniform("n_estimators", 100, 1500, 1) 
-        ), 
-        # choice chooses from a list of values 
-        "criterion": hp.choice("criterion", ["gini", "entropy"]), 
-        # uniform chooses a value between two values 
-        "max_features": hp.uniform("max_features", 0, 1) 
-    } 
- 
-    # partial function 
-    optimization_function = partial( 
-        optimize, 
-        x=X, 
-        y=y 
-    ) 
- 
-    # initialize trials to keep logging information 
-    trials = Trials() 
-     
-    # run hyperopt 
-    hopt = fmin( 
-        fn=optimization_function, 
-        space=param_space, 
-        algo=tpe.suggest, 
-        max_evals=15, 
-        trials=trials 
- 
-    ) 
-    print(hopt) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-As you can see, this is not very different from the previous code. You have to define 
-the parameter space in a different format, and you also need to change the actual 
-optimization part by using hyperopt instead of gp_minimize. The results are quite 
-good! 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python rf_hyperopt.py 
-100%|██████████████████| 15/15 [04:38<00:00, 18.57s/trial, best loss: -
-0.9095000000000001] 
-{'criterion': 1, 'max_depth': 11.0, 'max_features': 0.821163568049807, 
-'n_estimators': 806.0} 
-═════════════════════════════════════════════════════════════════════════
+    :param params: hyperopt'tan gelen parametre sözlüğü
+    :param x: eğitim verisi
+    :param y: etiketler/hedefler
+    :return: 5 fold sonrasında negatif doğruluk
+    """
 
-We get an accuracy which is a little better than before and a set of parameters that 
-we can use. Please note that criterion is 1 in the final result. This implies that choice 
-1 was selected, i.e., entropy.  The ways of tuning hyperparameters described above 
-are the most common, and these will work with almost all models: linear regression, 
-logistic regression, tree-based methods, gradient boosting models such as xgboost, 
-lightgbm, and even neural networks! 
- 
-Although, these methods exist, to learn, one must start with tuning the hyper-
-parameters manually, i.e., by hand. Hand tuning will help you learn the basics, for 
-example, in gradient boosting, when you increase the depth, you should reduce the 
-learning rate. It won’t be possible to learn this if you use automated tools. Refer to 
-the following table to know what to tune. RS* implies random search should be 
-better. 
- 
-Once you get better with hand-tuning the parameters, you might not even need any 
-automated hyper-parameter tuning. When you create large models or introduce a 
-lot of features, you also make it susceptible to overfitting the training data. To avoid 
-overfitting, you need to introduce noise in training data features or penalize the cost 
-function. This penalization is called regularization and helps with generalizing the 
-model. In linear models, the most common types of regularizations are L1 and L2. 
-L1 is also known as Lasso regression and L2 as Ridge regression. When it comes 
-to neural networks, we use dropouts, the addition of augmentations, noise, etc. to 
-regularize our models. Using hyper-parameter optimization, you can also find the 
-correct penalty to use.
+    # mevcut parametrelerle modeli başlat
+    model = ensemble.RandomForestClassifier(**params)
 
-Model 
-Optimize 
-Range of values
+    # stratified k-fold'u başlat
+    kf = model_selection.StratifiedKFold(n_splits=5)
 
-- 
-fit_intercept 
-- 
-normalize
+    .
+    .
+    .
 
-- 
-True/False 
-- 
-True/False
+    # negatif doğruluğu döndür
+    return -1 * np.mean(accuracies)
 
-Linear Regression
+if __name__ == "__main__":
+    # eğitim verisini oku
+    df = pd.read_csv("../input/mobile_train.csv")
 
-- 
-alpha 
-- 
-fit_intercept 
-- 
-normalize
+    # özellikler price_range dışındaki tüm sütunlardır
+    # bu veri setinde id sütunu olmadığını unutmayın
+    # burada eğitim özelliklerine sahibiz
+    X = df.drop("price_range", axis=1).values
 
-- 
-0.01, 0.1, 1.0, 10, 100 
-- 
-True/False 
-- 
-True/False
+    # ve hedefler
+    y = df.price_range.values
 
-Ridge
+    # bir parametre uzayı tanımla
+    # şimdi hyperopt kullanıyoruz
+    param_space = {
+        # quniform, round(uniform(low, high) / q) * q verir
+        # depth ve estimators için int değerler istiyoruz
 
-- 
-n_neighbors 
-- 
-p
+        "max_depth": scope.int(
+            hp.quniform("max_depth", 1, 15, 1)
+        ),
 
-- 
-2, 4, 8, 16 …. 
-- 
-2, 3
+        "n_estimators": scope.int(
+            hp.quniform("n_estimators", 100, 1500, 1)
+        ),
 
-k-neighbors
+        # choice bir değer listesinden seçim yapar
+        "criterion": hp.choice(
+            "criterion",
+            ["gini", "entropy"]
+        ),
 
-- 
-C 
-- 
-gamma 
-- 
-class_weight
+        # uniform iki değer arasında bir değer seçer
+        "max_features": hp.uniform(
+            "max_features",
+            0,
+            1
+        )
+    }
 
-- 
-0.001,0.01..10..100..1000 
-- 
-‘auto’, RS* 
-- 
-‘balanced’ , None
+    # partial fonksiyonu
+    optimization_function = partial(
+        optimize,
+        x=X,
+        y=y
+    )
 
-SVM
+    # loglama bilgilerini tutmak için trials'ı başlat
+    trials = Trials()
 
-- 
-Penalty 
-- 
-C
+    # hyperopt'u çalıştır
+    hopt = fmin(
+        fn=optimization_function,
+        space=param_space,
+        algo=tpe.suggest,
+        max_evals=15,
+        trials=trials
+    )
 
-- 
-l1 or l2 
-- 
-0.001, 0.01…..10...100
+    print(hopt)
+```
 
-Logistic Regression
+Gördüğünüz gibi bu, önceki koddan çok farklı değildir. Parametre uzayını farklı bir formatta tanımlamanız ve gerçek optimizasyon kısmını `gp_minimize` yerine `hyperopt` kullanarak değiştirmeniz gerekir. Sonuçlar oldukça iyidir!
 
-- 
-Alpha 
-- 
-Normalize
+```
+❯ python rf_hyperopt.py
+100%|██████████████████| 15/15 [04:38<00:00, 18.57s/trial, best loss:
+-0.9095000000000001]
 
-- 
-0.1, 1.0, 10 
-- 
-True/False
+{
+    'criterion': 1,
+    'max_depth': 11.0,
+    'max_features': 0.821163568049807,
+    'n_estimators': 806.0
+}
+```
 
-Lasso
+Öncekinden biraz daha iyi bir doğruluk elde ediyoruz ve kullanabileceğimiz bir dizi parametreye sahibiz. Lütfen nihai sonuçta `criterion` değerinin 1 olduğuna dikkat edin. Bu, 1 numaralı seçeneğin seçildiği anlamına gelir; yani `entropy`.
 
-- 
-n_estimators 
-- 
-max_depth 
-- 
-min_samples_split 
-- 
-min_samples_leaf 
-- 
-max features
+Yukarıda açıklanan hiperparametre ayarlama yöntemleri en yaygın yöntemlerdir ve neredeyse tüm modellerle çalışırlar: linear regression, logistic regression, ağaç tabanlı yöntemler, xgboost ve lightgbm gibi gradient boosting modelleri ve hatta neural network’ler!
 
-- 
-120, 300, 500, 800, 1200 
-- 
-5, 8, 15, 25, 30, None 
-- 
-1, 2, 5, 10, 15, 100 
-- 
-1, 2, 5, 10 
-- 
-log2, sqrt, None
+Bu yöntemler mevcut olsa da öğrenmek için öncelikle hiperparametreleri manuel olarak, yani elle ayarlamaya başlamak gerekir. Elle ayarlama, temel bilgileri öğrenmenize yardımcı olur. Örneğin gradient boosting'de depth değerini artırdığınızda learning rate değerini azaltmanız gerekir. Otomatik araçlar kullanırsanız bunu öğrenmeniz mümkün olmayacaktır. Neleri ayarlamanız gerektiğini öğrenmek için aşağıdaki tabloya bakın. RS\*, random search'ün daha iyi olması gerektiğini ifade eder.
 
-Random Forest
+Hiperparametreleri elle ayarlama konusunda daha iyi hale geldiğinizde, herhangi bir otomatik hiperparametre ayarlamasına bile ihtiyaç duymayabilirsiniz.
 
-- 
-eta 
-- 
-gamma 
-- 
-max_depth 
-- 
-min_child_weight 
-- 
-subsample 
-- 
-colsample_bytree 
-- 
-lambda 
-- 
-alpha
+Büyük modeller oluşturduğunuzda veya çok sayıda özellik eklediğinizde, modelin eğitim verisine aşırı uyum sağlama olasılığını da artırırsınız. Aşırı öğrenmeyi (overfitting) önlemek için eğitim verilerindeki özelliklere gürültü eklemeniz veya maliyet fonksiyonunu cezalandırmanız gerekir. Bu cezalandırmaya **regularization (düzenlileştirme)** denir ve modelin genelleme yapmasına yardımcı olur.
 
-- 
-0.01,0.015, 0.025, 0.05, 0.1 
-- 
-0.05-0.1,0.3,0.5,0.7,0.9,1.0 
-- 
-3, 5, 7, 9, 12, 15, 17, 25 
-- 
-1, 3, 5, 7 
-- 
-0.6, 0.7, 0.8, 0.9, 1.0 
-- 
-0.6, 0.7, 0.8, 0.9, 1.0 
-- 
-0.01-0.1, 1.0 , RS* 
-- 
-0, 0.1, 0.5, 1.0 RS*
+Doğrusal modellerde en yaygın düzenlileştirme türleri L1 ve L2’dir. L1 aynı zamanda Lasso regression, L2 ise Ridge regression olarak bilinir. Neural network’lerde ise modellerimizi düzenlileştirmek için dropout, augmentation eklenmesi, gürültü vb. yöntemleri kullanırız. Hiperparametre optimizasyonunu kullanarak doğru cezalandırma yöntemini de bulabilirsiniz.
 
-XGBoost
+| Model | Optimize | Değer aralığı |
+| --- | --- | --- |
+| **Linear Regression** | `fit_intercept` | True/False |
+|  | `normalize` | True/False |
+| **Ridge** | `alpha` | 0.01, 0.1, 1.0, 10, 100 |
+|  | `fit_intercept` | True/False |
+|  | `normalize` | True/False |
+| **k-neighbors** | `n_neighbors` | 2, 4, 8, 16 … |
+|  | `p` | 2, 3 |
+| **SVM** | `C` | 0.001, 0.01..10..100..1000 |
+|  | `gamma` | ‘auto’, RS\* |
+|  | `class_weight` | ‘balanced’, None |
+| **Logistic Regression** | `Penalty` | l1 veya l2 |
+|  | `C` | 0.001, 0.01…..10...100 |
+| **Lasso** | `Alpha` | 0.1, 1.0, 10 |
+|  | `Normalize` | True/False |
+| **Random Forest** | `n_estimators` | 120, 300, 500, 800, 1200 |
+|  | `max_depth` | 5, 8, 15, 25, 30, None |
+|  | `min_samples_split` | 1, 2, 5, 10, 15, 100 |
+|  | `min_samples_leaf` | 1, 2, 5, 10 |
+|  | `max_features` | log2, sqrt, None |
+| **XGBoost** | `eta` | 0.01, 0.015, 0.025, 0.05, 0.1 |
+|  | `gamma` | 0.05-0.1, 0.3, 0.5, 0.7, 0.9, 1.0 |
+|  | `max_depth` | 3, 5, 7, 9, 12, 15, 17, 25 |
+|  | `min_child_weight` | 1, 3, 5, 7 |
+|  | `subsample` | 0.6, 0.7, 0.8, 0.9, 1.0 |
+|  | `colsample_bytree` | 0.6, 0.7, 0.8, 0.9, 1.0 |
+|  | `lambda` | 0.01-0.1, 1.0, RS\* |
+|  | `alpha` | 0, 0.1, 0.5, 1.0, RS\* |
 
-Approaching image classification & segmentation
+# Görüntü sınıflandırması ve segmentasyonuna yaklaşım
 
-When it comes to images, a lot has been achieved in the last few years. Computer 
-vision is progressing quite fast, and it feels like many problems of computer vision 
-are now much easier to solve. With the advent of pretrained models and cheaper 
-compute, it’s now as easy as pie to train a near state-of-the-art model at home for 
-most of the problems related to images. But there are many different types of image 
-problems. You can have the standard classification of images in two or more 
-categories to a challenging problem like self-driving cars. We won’t look at self-
-driving cars in this book, but we will obviously deal with some of the most common 
-image problems. 
- 
-What are the different approaches that we can apply to images? Image is nothing 
-but a matrix of numbers. The computer cannot see the images as humans do. It only 
-looks at numbers, and that’s what the images are. A grayscale image is a two-
-dimensional matrix with values ranging from 0 to 255. 0 is black, 255 is white and 
-in between you have all shades of grey. Previously, when there was no deep learning 
-(or when deep learning was not popular), people used to look at pixels. Each pixel 
-was a feature. You can do this easily in Python. Just read the grayscale image using 
-OpenCV or Python-PIL, convert to a numpy array and ravel (flatten) the matrix. If 
-you are dealing with RGB images, then you have three matrices instead of one. But 
-the idea remains the same. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import numpy as np 
-import matplotlib.pyplot as plt 
- 
-# generate random numpy array with values from 0 to 255 
-# and a size of 256x256 
-random_image = np.random.randint(0, 256, (256, 256)) 
-# initialize plot 
-plt.figure(figsize=(7, 7)) 
-# show grayscale image, nb: cmap, vmin and vmax 
-plt.imshow(random_image, cmap='gray', vmin=0, vmax=255) 
-plt.show() 
-═════════════════════════════════════════════════════════════════════════ 
- 
-The code above generates a random matrix using numpy. This matrix consists of 
-values ranging from 0 to 255 (included) and is of size 256x256 (also known as 
-pixels).
+Görüntüler söz konusu olduğunda, son birkaç yılda çok şey başarıldı. Computer vision oldukça hızlı ilerliyor ve bilgisayarla görme problemlerinin çoğunun artık çözülmesinin çok daha kolay olduğu hissine kapılıyoruz. Önceden eğitilmiş modellerin ortaya çıkması ve hesaplama maliyetlerinin düşmesiyle, görüntülerle ilgili problemlerin çoğu için evde neredeyse son teknoloji seviyesinde bir model eğitmek artık oldukça kolay.
 
-Image 
-Ravelled version of the image
+Ancak birçok farklı türde görüntü problemi vardır. Görüntülerin iki veya daha fazla kategoriye ayrıldığı standart sınıflandırma probleminden, kendi kendine giden arabalar gibi zorlu bir probleme kadar farklı senaryolar olabilir. Bu kitapta kendi kendine giden arabaları incelemeyeceğiz, ancak en yaygın görüntü problemlerinden bazılarıyla elbette ilgileneceğiz.
+
+Peki görüntülere hangi farklı yaklaşımları uygulayabiliriz?
+
+Görüntü, aslında sayılardan oluşan bir matristen başka bir şey değildir. Bilgisayar görüntüleri insanların gördüğü şekilde göremez. Yalnızca sayılara bakar ve görüntüler de bundan ibarettir.
+
+Gri tonlamalı (**grayscale**) bir görüntü, değerleri 0 ile 255 arasında olan iki boyutlu bir matristir. 0 siyahtır, 255 beyazdır ve aradaki değerlerde grinin tüm tonları bulunur.
+
+Geçmişte, deep learning henüz yokken (veya henüz popüler değilken), insanlar piksellere bakarlardı. Her piksel bir özellikti. Bunu Python'da kolayca yapabilirsiniz. Grayscale görüntüyü OpenCV veya Python-PIL kullanarak okuyabilir, bir numpy array'e dönüştürebilir ve ardından matrisi `ravel` (flatten) edebilirsiniz.
+
+RGB görüntülerle uğraşıyorsanız, tek bir matris yerine üç matrisiniz olur. Ancak fikir aynı kalır.
+
+```
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 0 ile 255 arasında değerlere sahip
+# 256x256 boyutunda rastgele numpy array oluştur
+random_image = np.random.randint(
+    0,
+    256,
+    (256, 256)
+)
+
+# grafiği başlat
+plt.figure(figsize=(7, 7))
+
+# grayscale görüntüyü göster
+# nb: cmap, vmin ve vmax
+plt.imshow(
+    random_image,
+    cmap='gray',
+    vmin=0,
+    vmax=255
+)
+
+plt.show()
+```
+
+Yukarıdaki kod, numpy kullanarak rastgele bir matris oluşturur. Bu matris 0 ile 255 (dahil) arasında değerlerden oluşur ve 256x256 boyutundadır (aynı zamanda **piksel** olarak da bilinir).
+
+**Görüntü**
 
 ![resim](img/p0187_fig01_resim.png)
 
+**Görüntünün ravel edilmiş (düzleştirilmiş) versiyonu**
 ![resim](img/p0187_fig02_resim.png)
 
+# ö
 Figure 1: A 2-D image array (single channel) and its ravelled version 
  
 As you can see that the ravelled version is nothing but a vector of size M, where M 
