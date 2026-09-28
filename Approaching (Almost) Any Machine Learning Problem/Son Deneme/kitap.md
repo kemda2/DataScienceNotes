@@ -5825,7 +5825,7 @@ Bu yaklaşımın **en iyi sonuçları verdiğini** ve GPU'nuz varsa aynı zamand
 
 Bu bölüm temel olarak **feature engineering** hakkındaydı. Bir sonraki bölümde, sayısal feature'lar söz konusu olduğunda nasıl daha fazla feature engineering yapabileceğinizi ve farklı feature türlerini nasıl birleştirebileceğinizi görelim.
 
-## Feature Engineering
+# Feature Engineering
 
 **Feature engineering**, iyi bir makine öğrenmesi modeli oluşturmanın en önemli kısımlarından biridir. Eğer kullanışlı feature'larımız varsa, model daha iyi performans gösterecektir. Büyük ve karmaşık modellerden kaçınabileceğiniz ve bunun yerine kritik şekilde oluşturulmuş feature'lara sahip basit modeller kullanabileceğiniz birçok durum vardır.
 
@@ -5899,764 +5899,894 @@ Diyelim ki elimizde aşağıdaki gibi görünen bir dataframe var:
 
 ![resim](img/p0144_fig01_resim.png)
 
-Figure 1: A sample dataframe with categorical and date features
+**Şekil 1: Kategorik ve tarih feature'larına sahip örnek bir dataframe**
 
-In figure 1, we see that we have a date column, and we can easily extract features 
-like the year, month, quarter, etc. from that. Then we have a customer_id column 
-which has multiple entries, so a customer is seen many times (not visible in the 
-screenshot). And each date and customer id has three categorical and one numerical 
-feature attached to it. There are a bunch of features we can create from it:
+Şekil 1'de bir **date sütununa** sahip olduğumuzu görüyoruz ve bu sütundan **year, month, quarter** vb. feature'ları kolayca çıkarabiliriz.
 
-- 
-What’s the month a customer is most active in 
-- 
-What is the count of cat1, cat2, cat3 for a customer 
-- 
-What is the count of cat1, cat2, cat3 for a customer for a given week of the 
-year 
-- 
-What is the mean of num1 for a given customer 
-- 
-And so on. 
- 
-Using aggregates in pandas, it is quite easy to create features like these. Let’s see 
-how. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-def generate_features(df): 
-    # create a bunch of features using the date column 
-    df.loc[:, 'year'] = df['date'].dt.year 
-    df.loc[:, 'weekofyear'] = df['date'].dt.weekofyear 
-    df.loc[:, 'month'] = df['date'].dt.month 
-    df.loc[:, 'dayofweek'] = df['date'].dt.dayofweek 
-    df.loc[:, 'weekend'] = (df['date'].dt.weekday >=5).astype(int) 
-     
-    # create an aggregate dictionary 
-    aggs = {} 
-    # for aggregation by month, we calculate the 
-    # number of unique month values and also the mean 
-    aggs['month'] = ['nunique', 'mean'] 
-    aggs['weekofyear'] = ['nunique', 'mean'] 
-    # we aggregate by num1 and calculate sum, max, min  
-    # and mean values of this column 
-    aggs['num1'] = ['sum','max','min','mean'] 
-    # for customer_id, we calculate the total count 
-    aggs['customer_id'] = ['size'] 
-    # again for customer_id, we calculate the total unique 
-    aggs['customer_id'] = ['nunique'] 
-     
-    # we group by customer_id and calculate the aggregates 
-    agg_df = df.groupby('customer_id').agg(aggs) 
-    agg_df = agg_df.reset_index() 
-    return agg_df 
-═════════════════════════════════════════════════════════════════════════
+Daha sonra birden fazla kayda sahip olan bir **customer\_id** sütunumuz var. Yani bir müşteri birçok kez görülüyor (ekran görüntüsünde görünmüyor).
 
-Please note that in the above function, we have skipped the categorical variables, 
-but you can use them in the same way as other aggregates.
+Her **date** ve **customer id** için üç kategorik ve bir sayısal feature bulunuyor.
+
+Bunlardan oluşturabileceğimiz bir sürü feature var:
+
+- Bir müşterinin en aktif olduğu ay hangisidir?
+- Bir müşteri için `cat1`, `cat2`, `cat3` değerlerinin sayısı nedir?
+- Bir müşterinin belirli bir yıl haftası için `cat1`, `cat2`, `cat3` değerlerinin sayısı nedir?
+- Belirli bir müşteri için `num1` değerinin ortalaması nedir?
+- Ve benzeri.
+
+Pandas'ta **aggregate (toplulaştırma)** işlemlerini kullanarak bunun gibi feature'lar oluşturmak oldukça kolaydır. Nasıl yapıldığını görelim.
+
+```
+def generate_features(df):
+
+    # date sütununu kullanarak bir grup feature oluştur
+    df.loc[:, 'year'] = df['date'].dt.year
+    df.loc[:, 'weekofyear'] = df['date'].dt.weekofyear
+    df.loc[:, 'month'] = df['date'].dt.month
+    df.loc[:, 'dayofweek'] = df['date'].dt.dayofweek
+    df.loc[:, 'weekend'] = (
+        df['date'].dt.weekday >= 5
+    ).astype(int)
+
+    # bir aggregate dictionary oluştur
+    aggs = {}
+
+    # aya göre aggregation için,
+    # benzersiz ay değerlerinin sayısını ve ayrıca
+    # ortalamasını hesaplıyoruz
+    aggs['month'] = ['nunique', 'mean']
+
+    aggs['weekofyear'] = ['nunique', 'mean']
+
+    # num1 üzerinde aggregation yapıyoruz ve bu sütunun
+    # sum, max, min ve mean değerlerini hesaplıyoruz
+    aggs['num1'] = ['sum', 'max', 'min', 'mean']
+
+    # customer_id için toplam kayıt sayısını hesaplıyoruz
+    aggs['customer_id'] = ['size']
+
+    # tekrar customer_id için toplam benzersiz
+    # değer sayısını hesaplıyoruz
+    aggs['customer_id'] = ['nunique']
+
+    # customer_id'ye göre grupluyoruz ve aggregation'ları hesaplıyoruz
+    agg_df = df.groupby('customer_id').agg(aggs)
+
+    agg_df = agg_df.reset_index()
+
+    return agg_df
+```
+
+Lütfen yukarıdaki fonksiyonda **kategorik değişkenleri atladığımıza** dikkat edin. Ancak onları da diğer aggregation'larda olduğu gibi aynı şekilde kullanabilirsiniz.
 
 ![resim](img/p0146_fig01_resim.png)
 
-Figure 2: Aggregate and other features 
- 
-Now, we can join this dataframe in figure 2 with the original dataframe with 
-customer_id column to start training a model. Here, we are not trying to predict 
-anything; we are just creating generic features. However, it would have been easier 
-to create features if we were trying to predict something here. 
- 
-Sometimes, for example, when dealing with time-series problems, you might have 
-features which are not individual values but a list of values. For example, 
-transactions by a customer in a given period of time. In these cases, we create 
-different types of features such as: with numerical features, when you are grouping 
-on a categorical column, you will get features like a list of values which are time 
-distributed. In these cases, you can create a bunch of statistical features such as:
+**Şekil 2: Aggregate ve diğer feature'lar**
 
-- 
-Mean 
-- 
-Max 
-- 
-Min 
-- 
-Unique 
-- 
-Skew 
-- 
-Kurtosis 
-- 
-Kstat 
-- 
-Percentile 
-- 
-Quantile
+Şimdi Şekil 2'deki bu dataframe'i, **customer\_id sütununu kullanarak orijinal dataframe ile birleştirebilir** ve bir modeli eğitmeye başlayabiliriz.
 
-- 
-Peak to peak 
-- 
-And many more 
- 
-These can be created using simple numpy functions, as shown in the following 
-python snippet. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import numpy as np 
- 
-feature_dict = {} 
- 
-# calculate mean 
-feature_dict['mean'] = np.mean(x) 
- 
-# calculate max 
-feature_dict['max'] = np.max(x) 
- 
-# calculate min 
-feature_dict['min'] = np.min(x) 
- 
-# calculate standard deviation 
-feature_dict['std'] = np.std(x) 
- 
-# calculate variance 
-feature_dict['var'] = np.var(x) 
- 
-# peak-to-peak 
-feature_dict['ptp'] = np.ptp(x) 
- 
-# percentile features 
-feature_dict['percentile_10'] = np.percentile(x, 10) 
-feature_dict['percentile_60'] = np.percentile(x, 60) 
-feature_dict['percentile_90'] = np.percentile(x, 90) 
- 
-# quantile features 
-feature_dict['quantile_5'] = np.percentile(x, 5) 
-feature_dict['quantile_95'] = np.percentile(x, 95) 
-feature_dict['quantile_99'] = np.percentile(x, 99) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-The time series data (list of values) can be converted to a lot of features.  
- 
-A python library called tsfresh is instrumental in this case.
+Burada herhangi bir şeyi tahmin etmeye çalışmıyoruz; yalnızca **genel (generic) feature'lar** oluşturuyoruz. Ancak burada bir şeyi tahmin etmeye çalışıyor olsaydık, feature'ları oluşturmak daha kolay olurdu.
 
-═════════════════════════════════════════════════════════════════════════ 
-from tsfresh.feature_extraction import feature_calculators as fc 
- 
-# tsfresh based features 
-feature_dict['abs_energy'] = fc.abs_energy(x) 
-feature_dict['count_above_mean'] = fc.count_above_mean(x) 
-feature_dict['count_below_mean'] = fc.count_below_mean(x) 
-feature_dict['mean_abs_change'] = fc.mean_abs_change(x) 
-feature_dict['mean_change'] = fc.mean_change(x) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This is not all; tsfresh offers hundreds of features and tens of variations of different 
-features that you can use for time series (list of values) based features. In the 
-examples above, x is a list of values. But that’s not all. There are many other features 
-that you can create for numerical data with or without categorical data. A simple 
-way to generate many features is just to create a bunch of polynomial features. For 
-example, a second-degree polynomial feature from two features “a” and “b” would 
-include: “a”, “b”, “ab”, “a2” and “b2”. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import numpy as np 
- 
-# generate a random dataframe with  
-# 2 columns and 100 rows 
-df = pd.DataFrame( 
-    np.random.rand(100, 2), 
-    columns=[f"f_{i}" for i in range(1, 3)] 
-) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Which gives a dataframe, as shown in figure 3.
+Bazen, örneğin **time-series problemleriyle** uğraşırken, tekil değerler olmayan, bunun yerine bir **değerler listesi** olan feature'lara sahip olabilirsiniz. Örneğin, belirli bir zaman aralığında bir müşterinin yaptığı işlemler.
+
+Bu durumlarda farklı türlerde feature'lar oluştururuz. Örneğin, sayısal feature'larla çalışırken ve bir kategorik sütuna göre gruplama yaptığınızda, zaman boyunca dağıtılmış bir değerler listesi gibi feature'lar elde edersiniz.
+
+Bu durumlarda aşağıdaki gibi birçok **istatistiksel feature** oluşturabilirsiniz:
+
+- Mean (ortalama)
+- Max (maksimum)
+- Min (minimum)
+- Unique (benzersiz değer)
+- Skew (çarpıklık)
+- Kurtosis (basıklık)
+- Kstat
+- Percentile (yüzdelik dilim)
+- Quantile (kantil)
+- Peak to peak
+- Ve daha birçok feature
+
+ Bunlar, aşağıdaki Python kodunda gösterildiği gibi basit **numpy fonksiyonları** kullanılarak oluşturulabilir.
+
+```
+import numpy as np
+
+feature_dict = {}
+
+# mean hesapla
+feature_dict['mean'] = np.mean(x)
+
+# max hesapla
+feature_dict['max'] = np.max(x)
+
+# min hesapla
+feature_dict['min'] = np.min(x)
+
+# standart sapmayı hesapla
+feature_dict['std'] = np.std(x)
+
+# varyansı hesapla
+feature_dict['var'] = np.var(x)
+
+# peak-to-peak
+feature_dict['ptp'] = np.ptp(x)
+
+# percentile feature'ları
+feature_dict['percentile_10'] = np.percentile(x, 10)
+feature_dict['percentile_60'] = np.percentile(x, 60)
+feature_dict['percentile_90'] = np.percentile(x, 90)
+
+# quantile feature'ları
+feature_dict['quantile_5'] = np.percentile(x, 5)
+feature_dict['quantile_95'] = np.percentile(x, 95)
+feature_dict['quantile_99'] = np.percentile(x, 99)
+```
+
+**Time-series verileri (değerler listesi)** çok sayıda feature'a dönüştürülebilir.
+
+Bu durumda **tsfresh** isimli bir Python kütüphanesi oldukça kullanışlıdır.
+
+```
+from tsfresh.feature_extraction import feature_calculators as fc
+
+# tsfresh tabanlı feature'lar
+feature_dict['abs_energy'] = fc.abs_energy(x)
+
+feature_dict['count_above_mean'] = (
+    fc.count_above_mean(x)
+)
+
+feature_dict['count_below_mean'] = (
+    fc.count_below_mean(x)
+)
+
+feature_dict['mean_abs_change'] = (
+    fc.mean_abs_change(x)
+)
+
+feature_dict['mean_change'] = (
+    fc.mean_change(x)
+)
+```
+
+Bu kadarla sınırlı değil; **tsfresh**, time-series (**değerler listesi**) tabanlı feature'lar için kullanabileceğiniz **yüzlerce feature** ve farklı feature'ların **onlarca varyasyonunu** sunar.
+
+Yukarıdaki örneklerde `x`, bir **değerler listesidir**.
+
+Ama hepsi bu kadar değil. Kategorik veriler olsun veya olmasın, sayısal veriler için oluşturabileceğiniz daha birçok feature vardır.
+
+Çok sayıda feature üretmenin basit bir yolu, yalnızca bir grup **polynomial feature** oluşturmaktır.
+
+Örneğin, `"a"` ve `"b"` olmak üzere iki feature'dan elde edilen **ikinci dereceden bir polynomial feature**, şunları içerir:
+
+- `"a"`
+- `"b"`
+- `"ab"`
+- `"a2"`
+- `"b2"`
+
+```
+import numpy as np
+
+# 2 sütun ve 100 satırdan oluşan
+# rastgele bir dataframe oluştur
+df = pd.DataFrame(
+    np.random.rand(100, 2),
+    columns=[f"f_{i}" for i in range(1, 3)]
+)
+```
+
+Bu işlem, **Şekil 3'te gösterildiği gibi bir dataframe** oluşturur.
 
 ![resim](img/p0148_fig01_resim.png)
 
-Figure 3: A random dataframe with two numerical features
+**Şekil 3: İki sayısal feature'a sahip rastgele bir dataframe**
 
-And we can create two-degree polynomial features using PolynomialFeatures from 
-scikit-learn. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-from sklearn import preprocessing 
- 
-# initialize polynomial features class object 
-# for two-degree polynomial features 
-pf = preprocessing.PolynomialFeatures( 
-    degree=2, 
-    interaction_only=False, 
-    include_bias=False 
-) 
- 
-# fit to the features 
-pf.fit(df) 
- 
-# create polynomial features 
-poly_feats = pf.transform(df) 
- 
-# create a dataframe with all the features 
-num_feats = poly_feats.shape[1] 
-df_transformed = pd.DataFrame( 
-    poly_feats, 
-    columns=[f"f_{i}" for i in range(1, num_feats + 1)] 
-) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-And that would give a dataframe, as shown in figure 4.
+Ve **scikit-learn** içerisindeki `PolynomialFeatures` kullanarak **ikinci dereceden polynomial feature'lar** oluşturabiliriz.
+
+```
+from sklearn import preprocessing
+
+# polynomial features class nesnesini başlat
+# iki dereceli polynomial feature'lar için
+pf = preprocessing.PolynomialFeatures(
+    degree=2,
+    interaction_only=False,
+    include_bias=False
+)
+
+# feature'lara fit et
+pf.fit(df)
+
+# polynomial feature'ları oluştur
+poly_feats = pf.transform(df)
+
+# tüm feature'larla birlikte bir dataframe oluştur
+num_feats = poly_feats.shape[1]
+
+df_transformed = pd.DataFrame(
+    poly_feats,
+    columns=[
+        f"f_{i}"
+        for i in range(1, num_feats + 1)
+    ]
+)
+```
+
+Ve bu işlem, **Şekil 4'te gösterildiği gibi bir dataframe** oluşturacaktır.
 
 ![resim](img/p0149_fig01_resim.png)
 
-Figure 4: A sample dataframe with polynomial features 
- 
-So, now we have created some polynomial features. If you create third-degree 
-polynomial features, you will end up with nine features in total. The more the
+**Şekil 4: Polynomial feature'lara sahip örnek bir dataframe**
 
-number of features, the more the number of polynomial features and you must also 
-remember that if you have a lot of samples in the dataset, it is going to take a while 
-creating these kinds of features.
+Böylece artık bazı **polynomial feature'lar** oluşturmuş olduk.
+
+Eğer **üçüncü dereceden polynomial feature'lar** oluşturursanız, toplamda **dokuz feature** elde edersiniz.
+
+Feature sayısı arttıkça, oluşturulan **polynomial feature'ların sayısı da artar**. Ayrıca datasetinizde çok fazla örnek varsa, bu tür feature'ları oluşturmanın **biraz zaman alacağını** da unutmamanız gerekir.
 
 ![resim](img/p0150_fig01_resim.png)
 
-Figure 5: Histogram of a numerical feature column 
- 
-Another interesting feature converts the numbers to categories. It’s known as 
-binning. Let’s look at figure 5, which shows a sample histogram of a random 
-numerical feature. We use ten bins for this figure, and we see that we can divide the 
-data into ten parts. This is accomplished using the pandas’ cut function. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# create bins of the numerical columns 
-# 10 bins 
-df["f_bin_10"] = pd.cut(df["f_1"], bins=10, labels=False) 
-# 100 bins 
-df["f_bin_100"] = pd.cut(df["f_1"], bins=100, labels=False) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Which generates two new features in the dataframe, as shown in figure 6.
+**Şekil 5: Sayısal bir feature sütununun histogramı**
+
+Bir diğer ilginç feature, **sayıları kategorilere dönüştürür**. Buna **binning** adı verilir.
+
+Şekil 5'e bakalım. Şekil 5, rastgele bir sayısal feature'ın örnek bir **histogramını** göstermektedir.
+
+Bu şekil için **10 bin** kullanıyoruz ve verileri **10 parçaya bölebileceğimizi** görüyoruz.
+
+Bu işlem, pandas'ın `cut` fonksiyonu kullanılarak gerçekleştirilir.
+
+```
+# sayısal sütunların bin'lerini oluştur
+# 10 bin
+df["f_bin_10"] = pd.cut(
+    df["f_1"],
+    bins=10,
+    labels=False
+)
+
+# 100 bin
+df["f_bin_100"] = pd.cut(
+    df["f_1"],
+    bins=100,
+    labels=False
+)
+```
+
+Bu işlem, **Şekil 6'da gösterildiği gibi dataframe'e iki yeni feature** ekler.
 
 ![resim](img/p0150_fig02_resim.png)
 
-Figure 6: Binning numerical features
+**Şekil 6: Sayısal feature'ların binning işlemi**
 
-When you bin, you can use both the bin and the original feature. We will learn a bit 
-more about selecting features later in this chapter. Binning also enables you to treat 
-numerical features as categorical. 
- 
-Yet another interesting type of feature that you can create from numerical features 
-is log transformation. Take a look at feature f_3 in figure 7.
+Binning yaptığınızda, **hem bin'i hem de orijinal feature'ı** kullanabilirsiniz.
+
+Bu bölümün ilerleyen kısımlarında **feature seçimi** hakkında biraz daha fazla bilgi edineceğiz.
+
+Binning aynı zamanda **sayısal feature'ları kategorik olarak ele almanıza** olanak sağlar.
+
+Sayısal feature'lardan oluşturabileceğiniz bir diğer ilginç feature türü ise \*\*log transformation (logaritmik dönüşüm)\*\*dür.
+
+Şekil 7'deki **f\_3** feature'ına bir göz atın.
 
 ![resim](img/p0151_fig01_resim.png)
 
-Figure 7: Example of a feature that has a high variance 
- 
-f_3 is a special feature with a very high variance. Compared to other features that 
-have a low variance (let’s assume that). Thus, we would want to reduce the variance 
-of this column, and that can be done by taking a log transformation.  
- 
-The values in column f_3 range from 0 to 10000 and a histogram is shown in figure 
-8.
+**Şekil 7: Yüksek varyansa sahip bir feature örneği**
+
+`f_3`, **çok yüksek varyansa** sahip özel bir feature'dır.
+
+Diğer feature'larla karşılaştırıldığında, diğer feature'ların **düşük varyansa** sahip olduğunu varsayalım. Bu nedenle, bu sütunun varyansını azaltmak isteyebiliriz ve bu işlem **log transformation (logaritmik dönüşüm)** alınarak yapılabilir.
+
+`f_3` sütunundaki değerler **0 ile 10000** arasında değişmektedir ve bir histogram **Şekil 8'de** gösterilmektedir.
 
 ![resim](img/p0151_fig02_resim.png)
 
-Figure 8: Histogram of feature f_3.
+**Şekil 8: f\_3 feature'ının histogramı**
 
-And we can apply log(1 + x) to this column to reduce its variance. Figure 9 shows 
-what happens to the histogram when the log transformation is applied.
+Ve bu sütuna **log(1 + x)** uygulayarak varyansını azaltabiliriz.
+
+**Şekil 9**, logaritmik dönüşüm uygulandığında histogramda ne olduğunu göstermektedir.
 
 ![resim](img/p0152_fig01_resim.png)
 
-Figure 9: Histogram of f_3 after applying log transformation. 
- 
-Let’s take a look at the variance without and with the log transformation. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df.f_3.var() 
-Out[X]: 8077265.875858586 
- 
-In [X]: df.f_3.apply(lambda x: np.log(1 + x)).var() 
-Out[X]: 0.6058771732119975 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Sometimes, instead of log, you can also take exponential. A very interesting case is 
-when you use a log-based evaluation metric, for example, RMSLE. In that case, 
-you can train on log-transformed targets and convert back to original using 
-exponential on the prediction. That would help optimize the model for the metric. 
- 
-Most of the time, these kinds of numerical features are created based on intuition. 
-There is no formula. If you are working in an industry, you will create your industry-
-specific features.  
- 
-When dealing with both categorical and numerical variables, you might encounter 
-missing values. We saw some ways to handle missing values in categorical features 
-in the previous chapter, but there are many more ways to handle missing/NaN 
-values. This is also considered feature engineering.
+**Şekil 9: Log dönüşümü uygulandıktan sonra f\_3 feature'ının histogramı**
 
-For categorical features, let’s keep it super simple. If you ever encounter missing 
-values in categorical features, treat is as a new category! As simple as this is, it 
-(almost) always works! 
- 
-One way to fill missing values in numerical data would be to choose a value that 
-does not appear in the specific feature and fill using that. For example, let’s say 0 
-is not seen in the feature. So, we fill all the missing values using 0. This is one of 
-the ways but might not be the most effective. One of the methods that works better 
-than filling 0s for numerical data is to fill with mean instead. You can also try to fill 
-with the median of all the values for that feature, or you can use the most common 
-value to fill the missing values. There are just so many ways to do this. 
- 
-A fancy way of filling in the missing values would be to use a k-nearest neighbour 
-method. You can select a sample with missing values and find the nearest 
-neighbours utilising some kind of distance metric, for example, Euclidean distance. 
-Then you can take the mean of all nearest neighbours and fill up the missing value. 
-You can use the KNN imputer implementation for filling missing values like this.
+Log dönüşümü uygulanmadan önceki ve sonraki **varyansa** bir göz atalım.
+
+```
+In [X]: df.f_3.var()
+Out[X]: 8077265.875858586
+
+In [X]: df.f_3.apply(lambda x: np.log(1 + x)).var()
+Out[X]: 0.6058771732119975
+```
+
+Bazen logaritma yerine **üstel (exponential)** dönüşüm de uygulayabilirsiniz.
+
+Çok ilginç bir durum, örneğin **RMSLE** gibi logaritma tabanlı bir değerlendirme metriği kullandığınız zamandır. Bu durumda, **log dönüşümü uygulanmış target'lar** üzerinde eğitim yapabilir ve tahmin üzerinde **exponential** uygulayarak orijinal değerlere geri dönebilirsiniz. Bu, modeli kullanılan metriğe göre optimize etmeye yardımcı olur.
+
+Çoğu zaman, bu tür sayısal feature'lar **sezgiye (intuition)** dayalı olarak oluşturulur. Bunun bir formülü yoktur. Eğer bir sektörde çalışıyorsanız, **sektörünüze özgü feature'lar** oluşturursunuz.
+
+Hem kategorik hem de sayısal değişkenlerle çalışırken **eksik değerlerle** karşılaşabilirsiniz. Önceki bölümde kategorik feature'lardaki eksik değerleri ele almanın bazı yollarını gördük, ancak eksik/NaN değerleri ele almanın daha birçok yolu vardır. Bu da **feature engineering** olarak kabul edilir.
+
+Kategorik feature'lar için işi oldukça basit tutalım. Eğer kategorik feature'larda herhangi bir eksik değerle karşılaşırsanız, bunu **yeni bir kategori olarak değerlendirin!** Bu kadar basit olmasına rağmen, bu yöntem **(neredeyse) her zaman işe yarar!**
+
+Sayısal verilerde eksik değerleri doldurmanın bir yolu, belirli bir feature'da bulunmayan bir değer seçmek ve eksik değerleri bu değerle doldurmaktır.
+
+Örneğin, feature'da **0 değerinin hiç bulunmadığını** varsayalım. Bu durumda tüm eksik değerleri **0 kullanarak** doldururuz. Bu yöntemlerden biridir, ancak en etkili yöntem olmayabilir.
+
+Sayısal veriler için 0'larla doldurmaktan daha iyi çalışan yöntemlerden biri, eksik değerleri **ortalama (mean)** ile doldurmaktır.
+
+Ayrıca o feature'daki tüm değerlerin **medyanını (median)** kullanarak doldurmayı deneyebilir veya eksik değerleri doldurmak için **en sık görülen değeri (most common value)** kullanabilirsiniz.
+
+Bunu yapmanın gerçekten çok fazla yolu vardır.
+
+Eksik değerleri doldurmanın daha gelişmiş bir yolu ise **k-en yakın komşu (k-nearest neighbour / KNN)** yöntemini kullanmaktır.
+
+Eksik değerlere sahip bir örnek seçebilir ve örneğin **Öklid mesafesi (Euclidean distance)** gibi bir tür uzaklık metriği kullanarak en yakın komşuları bulabilirsiniz.
+
+Daha sonra tüm en yakın komşuların **ortalamasını** alabilir ve eksik değeri bununla doldurabilirsiniz.
+
+Eksik değerleri bu şekilde doldurmak için **KNN imputer** uygulamasını kullanabilirsiniz.
 
 ![resim](img/p0153_fig01_resim.png)
 
-Figure 10: A 2d array with missing values 
- 
-Let’s see how a matrix with missing values, as shown in figure 10 is handled by 
-KNNImputer. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import numpy as np 
-from sklearn import impute 
- 
-# create a random numpy array with 10 samples 
-# and 6 features and values ranging from 1 to 15 
+**Şekil 10: Eksik değerlere sahip 2 boyutlu bir dizi**
+
+Şimdi, Şekil 10'da gösterildiği gibi **eksik değerlere sahip bir matrisin**, `KNNImputer` tarafından nasıl ele alındığına bakalım.
+
+```
+import numpy as np
+from sklearn import impute
+
+# 10 örnek ve 6 feature'a sahip,
+# değerleri 1 ile 15 arasında değişen
+# rastgele bir numpy array oluştur
 X = np.random.randint(1, 15, (10, 6))
 
-# convert the array to float 
-X = X.astype(float) 
- 
-# randomly assign 10 elements to NaN (missing) 
-X.ravel()[np.random.choice(X.size, 10, replace=False)] = np.nan 
- 
-# use 3 nearest neighbours to fill na values 
-knn_imputer = impute.KNNImputer(n_neighbors=2) 
-knn_imputer.fit_transform(X) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Which fills the above matrix, as shown in figure 11.
+# array'i float'a dönüştür
+X = X.astype(float)
+
+# rastgele olarak 10 elemanı NaN (eksik) olarak ata
+X.ravel()[
+    np.random.choice(
+        X.size,
+        10,
+        replace=False
+    )
+] = np.nan
+
+# NaN değerlerini doldurmak için
+# en yakın 3 komşuyu kullan
+knn_imputer = impute.KNNImputer(n_neighbors=2)
+
+knn_imputer.fit_transform(X)
+```
+
+Bu işlem, **Şekil 11'de gösterildiği gibi yukarıdaki matrisi doldurur.**
 
 ![resim](img/p0154_fig01_resim.png)
 
-Figure 11: Values imputed by KNN Imputer
+**Şekil 11: KNN Imputer tarafından doldurulan değerler**
 
-Another way of imputing missing values in a column would be to train a regression 
-model that tries to predict missing values in a column based on other columns. So, 
-you start with one column that has a missing value and treat this column as the 
-target column for regression model without the missing values. Using all the other 
-columns, you now train a model on samples for which there is no missing value in 
-the concerned column and then try to predict target (the same column) for the 
-samples that were removed earlier. This way, you have a more robust model based 
-imputation. 
- 
-Always remember that imputing values for tree-based models is unnecessary as they 
-can handle it themselves. 
- 
-What I have shown until now are some of the ways of creating features in general. 
-Now, let’s say you are working on a problem of predicting store sales of different 
-items (per week or month). You have items, and you have store ids. So, you can 
-create features like items per store. Now, this is one of the features that is not 
-discussed above. These kinds of features cannot be generalized and come purely 
-from domain, data and business knowledge. Look at the data and see what fits and
+Bir sütundaki eksik değerleri doldurmanın başka bir yolu, **diğer sütunlara dayanarak bir sütundaki eksik değerleri tahmin etmeye çalışan bir regresyon modeli** eğitmektir.
 
-create features accordingly. And always remember to scale or normalize your 
-features if you are using linear models like logistic regression or a model like SVM. 
-Tree-based models will always work fine without any normalization of features.
+Öncelikle eksik değere sahip bir sütunla başlarsınız ve bu sütundaki eksik değerleri olmayan satırları kullanarak bu sütunu **regresyon modeli için target sütunu** olarak ele alırsınız.
 
-Feature selection
+Diğer tüm sütunları kullanarak, ilgili sütunda eksik değer bulunmayan örnekler üzerinde bir model eğitirsiniz ve daha sonra daha önce çıkarılmış olan örnekler için target'ı (yani aynı sütunu) tahmin etmeye çalışırsınız.
 
-When you are done creating hundreds of thousands of features, it’s time for 
-selecting a few of them. Well, we should never create hundreds of thousands of 
-useless features. Having too many features pose a problem well known as the curse 
-of dimensionality. If you have a lot of features, you must also have a lot of training 
-samples to capture all the features. What’s considered a “lot” is not defined 
-correctly and is up to you to figure out by validating your models properly and 
-checking how much time it takes to train your models. 
- 
-The simplest form of selecting features would be to remove features with very 
-low variance. If the features have a very low variance (i.e. very close to 0), they 
-are close to being constant and thus, do not add any value to any model at all. It 
-would just be nice to get rid of them and hence lower the complexity. Please note 
-that the variance also depends on scaling of the data. Scikit-learn has an 
-implementation for VarianceThreshold that does precisely this. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-from sklearn.feature_selection import VarianceThreshold 
-data = ... 
-var_thresh = VarianceThreshold(threshold=0.1) 
-transformed_data = var_thresh.fit_transform(data) 
-# transformed data will have all columns with variance less  
-# than 0.1 removed 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We can also remove features which have a high correlation. For calculating the 
-correlation between different numerical features, you can use the Pearson 
-correlation.  
- 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
-from sklearn.datasets import fetch_california_housing 
- 
-# fetch a regression dataset 
-data = fetch_california_housing() 
-X = data["data"] 
-col_names = data["feature_names"] 
-y = data["target"] 
- 
-# convert to pandas dataframe
+Bu şekilde, **model tabanlı ve daha sağlam bir imputasyon** elde etmiş olursunuz.
 
-df = pd.DataFrame(X, columns=col_names) 
-# introduce a highly correlated column 
-df.loc[:, "MedInc_Sqrt"] = df.MedInc.apply(np.sqrt) 
- 
-# get correlation matrix (pearson) 
-df.corr() 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Which gives a correlation matrix, as shown in figure 1.
+Ayrıca her zaman şunu hatırlayın: **tree-based modeller için değerleri impute etmek gereksizdir**, çünkü bu modeller eksik değerleri kendileri ele alabilir.
+
+Şimdiye kadar genel olarak feature oluşturmanın bazı yollarını gösterdim.
+
+Şimdi farklı ürünlerin mağaza satışlarını (haftalık veya aylık) tahmin ettiğiniz bir problem üzerinde çalıştığınızı varsayalım.
+
+Elinizde ürünler ve mağaza ID'leri var. Bu durumda **mağaza başına ürünler (items per store)** gibi feature'lar oluşturabilirsiniz.
+
+Şimdi, bu yukarıda bahsedilmeyen feature'lardan biridir.
+
+Bu tür feature'lar **genelleştirilemez** ve tamamen **domain, data ve business knowledge**'dan gelir.
+
+Verilere bakın, neyin uygun olduğunu görün ve feature'ları buna göre oluşturun.
+
+Ayrıca **logistic regression** gibi linear modeller veya **SVM** gibi bir model kullanıyorsanız feature'larınızı her zaman **scale veya normalize etmeyi** unutmayın.
+
+**Tree-based modeller**, feature'ların herhangi bir normalization işleminden geçirilmesine gerek olmadan her zaman düzgün şekilde çalışacaktır.
+
+# Feature Selection
+
+Yüzlerce veya binlerce feature oluşturmayı bitirdiğinizde, bunlardan birkaç tanesini **seçmenin** zamanı gelir.
+
+Aslında hiçbir zaman yüz binlerce **işe yaramaz feature** oluşturmamalıyız.
+
+Çok fazla feature'a sahip olmak, **curse of dimensionality (boyutluluk laneti)** olarak bilinen önemli bir probleme yol açar.
+
+Eğer çok fazla feature'ınız varsa, tüm feature'ları yakalayabilmek için aynı zamanda **çok sayıda training sample'a** da sahip olmanız gerekir.
+
+Neyin "çok" olarak kabul edildiği tam olarak tanımlanmış değildir. Bunu, modellerinizi doğru şekilde **validate ederek** ve modellerinizi eğitmenin ne kadar zaman aldığını kontrol ederek sizin belirlemeniz gerekir.
+
+Feature seçmenin en basit şekli, **çok düşük varyansa sahip feature'ları kaldırmaktır**.
+
+Eğer feature'ların varyansı çok düşükse (yani 0'a çok yakınsa), bu feature'lar sabit olmaya çok yakındır ve dolayısıyla herhangi bir modele neredeyse hiç değer katmazlar.
+
+Bunlardan kurtulmak ve böylece modelin karmaşıklığını azaltmak iyi olacaktır.
+
+Lütfen varyansın aynı zamanda **verilerin ölçeklendirilmesine (scaling)** de bağlı olduğunu unutmayın.
+
+Scikit-learn, tam olarak bunu yapan bir `VarianceThreshold` uygulamasına sahiptir.
+
+```
+from sklearn.feature_selection import VarianceThreshold
+
+data = ...
+
+var_thresh = VarianceThreshold(
+    threshold=0.1
+)
+
+transformed_data = var_thresh.fit_transform(data)
+
+# transformed data, varyansı 0.1'den
+# daha düşük olan tüm sütunların
+# kaldırılmış hâlini içerir
+```
+
+Ayrıca **yüksek korelasyona sahip feature'ları** da kaldırabiliriz.
+
+Farklı sayısal feature'lar arasındaki korelasyonu hesaplamak için **Pearson korelasyonu** kullanılabilir.
+
+```
+import pandas as pd
+from sklearn.datasets import fetch_california_housing
+
+# bir regression dataset'i getir
+data = fetch_california_housing()
+
+X = data["data"]
+col_names = data["feature_names"]
+y = data["target"]
+
+# pandas dataframe'e dönüştür
+df = pd.DataFrame(
+    X,
+    columns=col_names
+)
+
+# yüksek korelasyona sahip bir sütun oluştur
+df.loc[:, "MedInc_Sqrt"] = (
+    df.MedInc.apply(np.sqrt)
+)
+
+# korelasyon matrisini (Pearson) al
+df.corr()
+```
+
+Bu işlem, **Şekil 1'de gösterildiği gibi bir korelasyon matrisi** oluşturur.
 
 ![resim](img/p0157_fig01_resim.png)
 
-Figure 1: A sample Pearson correlation matrix 
- 
-We see that the feature MedInc_Sqrt has a very high correlation with MedInc. We 
-can thus remove one of them.  
- 
-And now we can move to some univariate ways of feature selection. Univariate 
-feature selection is nothing but a scoring of each feature against a given target. 
-Mutual information, ANOVA F-test and chi2 are some of the most popular 
-methods for univariate feature selection. There are two ways of using these in scikit-
-learn.
+**Şekil 1: Örnek bir Pearson korelasyon matrisi**
 
-- 
-SelectKBest: It keeps the top-k scoring features 
-- 
-SelectPercentile: It keeps the top features which are in a percentage 
-specified by the user 
- 
-It must be noted that you can use chi2 only for data which is non-negative in nature. 
-This is a particularly useful feature selection technique in natural language 
-processing when we have a bag of words or tf-idf based features. It’s best to create 
-a wrapper for univariate feature selection that you can use for almost any new 
-problem.
+`MedInc_Sqrt` feature'ının `MedInc` ile **çok yüksek bir korelasyona** sahip olduğunu görüyoruz. Dolayısıyla bunlardan birini kaldırabiliriz.
 
-═════════════════════════════════════════════════════════════════════════ 
-from sklearn.feature_selection import chi2 
-from sklearn.feature_selection import f_classif 
-from sklearn.feature_selection import f_regression 
-from sklearn.feature_selection import mutual_info_classif 
-from sklearn.feature_selection import mutual_info_regression 
-from sklearn.feature_selection import SelectKBest 
-from sklearn.feature_selection import SelectPercentile 
- 
- 
-class UnivariateFeatureSelction: 
-    def __init__(self, n_features, problem_type, scoring): 
-        """ 
-        Custom univariate feature selection wrapper on 
-        different univariate feature selection models from 
-        scikit-learn. 
-        :param n_features: SelectPercentile if float else SelectKBest 
-        :param problem_type: classification or regression 
-        :param scoring: scoring function, string 
-        """ 
-        # for a given problem type, there are only 
-        # a few valid scoring methods 
-        # you can extend this with your own custom 
-        # methods if you wish 
-        if problem_type == "classification": 
-            valid_scoring = { 
-                "f_classif": f_classif, 
-                "chi2": chi2, 
-                "mutual_info_classif": mutual_info_classif 
-            } 
-        else: 
-            valid_scoring = { 
-                "f_regression": f_regression, 
-                "mutual_info_regression": mutual_info_regression 
-            } 
-         
-        # raise exception if we do not have a valid scoring method 
-        if scoring not in valid_scoring: 
-            raise Exception("Invalid scoring function") 
-         
-        # if n_features is int, we use selectkbest 
-        # if n_features is float, we use selectpercentile 
-        # please note that it is int in both cases in sklearn 
-        if isinstance(n_features, int): 
-            self.selection = SelectKBest( 
-                valid_scoring[scoring], 
+Şimdi bazı **univariate (tek değişkenli) feature selection** yöntemlerine geçebiliriz.
+
+Univariate feature selection, her feature'ın verilen bir **target'a göre skorlanmasından** başka bir şey değildir.
+
+**Mutual information, ANOVA F-test ve chi2**, univariate feature selection için en popüler yöntemlerden bazılarıdır.
+
+Bunları scikit-learn'de kullanmanın iki yolu vardır:
+
+- **SelectKBest:** En yüksek skora sahip ilk `k` feature'ı tutar.
+- **SelectPercentile:** Kullanıcı tarafından belirtilen yüzde içerisindeki en iyi feature'ları tutar.
+
+`chi2` yönteminin yalnızca **negatif olmayan veriler** için kullanılabileceğine dikkat edilmelidir.
+
+Bu, özellikle **natural language processing (NLP)** alanında, **bag of words** veya **tf-idf tabanlı feature'lara** sahip olduğumuzda oldukça kullanışlı bir feature selection tekniğidir.
+
+Neredeyse her yeni problemde kullanabileceğiniz **univariate feature selection için bir wrapper** oluşturmak en iyisidir.
+
+```
+from sklearn.feature_selection import chi2
+from sklearn.feature_selection import f_classif
+from sklearn.feature_selection import f_regression
+from sklearn.feature_selection import mutual_info_classif
+from sklearn.feature_selection import mutual_info_regression
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import SelectPercentile
+
+class UnivariateFeatureSelction:
+
+    def __init__(self, n_features, problem_type, scoring):
+        """
+        scikit-learn'deki farklı univariate feature selection
+        modelleri üzerinde özel bir univariate feature
+        selection wrapper'ı.
+
+        :param n_features: float ise SelectPercentile,
+                           değilse SelectKBest
+        :param problem_type: classification veya regression
+        :param scoring: scoring fonksiyonu, string
+        """
+
+        # verilen problem türü için yalnızca birkaç
+        # geçerli scoring yöntemi vardır.
+        # isterseniz bunu kendi özel yöntemlerinizle
+        # genişletebilirsiniz.
+        if problem_type == "classification":
+            valid_scoring = {
+                "f_classif": f_classif,
+                "chi2": chi2,
+                "mutual_info_classif": mutual_info_classif
+            }
+        else:
+            valid_scoring = {
+                "f_regression": f_regression,
+                "mutual_info_regression": mutual_info_regression
+            }
+
+        # geçerli bir scoring yöntemi yoksa
+        # exception oluştur
+        if scoring not in valid_scoring:
+            raise Exception("Invalid scoring function")
+
+        # n_features int ise SelectKBest kullan
+        # n_features float ise SelectPercentile kullan
+        # sklearn'de her iki durumda da int olarak ele alındığına
+        # dikkat edin
+        if isinstance(n_features, int):
+            self.selection = SelectKBest(
+                valid_scoring[scoring],
                 k=n_features
+            )
 
-) 
-        elif isinstance(n_features, float): 
-            self.selection = SelectPercentile( 
-                valid_scoring[scoring], 
-                percentile=int(n_features * 100) 
-            ) 
-        else: 
-            raise Exception("Invalid type of feature") 
-     
-    # same fit function 
-    def fit(self, X, y): 
-        return self.selection.fit(X, y) 
-     
-    # same transform function 
-    def transform(self, X): 
-        return self.selection.transform(X) 
-     
-    # same fit_transform function 
-    def fit_transform(self, X, y): 
-        return self.selection.fit_transform(X, y) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Using this class is pretty simple. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-ufs = UnivariateFeatureSelction( 
-    n_features=0.1,  
-    problem_type="regression",  
-    scoring="f_regression" 
-) 
-ufs.fit(X, y) 
-X_transformed = ufs.transform(X) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-That should take care of most of your univariate feature selection needs. Please note 
-that it’s usually better to create less and important features than to create hundreds 
-of features in the first place. Univariate feature selection may not always perform 
-well. Most of the time, people prefer doing feature selection using a machine 
-learning model. Let’s see how that is done. 
- 
-The simplest form of feature selection that uses a model for selection is known as 
-greedy feature selection. In greedy feature selection, the first step is to choose a 
-model. The second step is to select a loss/scoring function. And the third and final 
-step is to iteratively evaluate each feature and add it to the list of “good” features if
+        elif isinstance(n_features, float):
+            self.selection = SelectPercentile(
+                valid_scoring[scoring],
+                percentile=int(n_features * 100)
+            )
 
-it improves loss/score. It can’t get simpler than this. But you must keep in mind that 
-this is known as greedy feature selection for a reason. This feature selection process 
-will fit a given model each time it evaluates a feature. The computational cost 
-associated with this kind of method is very high. It will also take a lot of time for 
-this kind of feature selection to finish. And if you do not use this feature selection 
-properly, then you might even end up overfitting the model.  
- 
-Let’s see how it works by looking at how its implemented. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# greedy.py 
-import pandas as pd 
- 
-from sklearn import linear_model 
-from sklearn import metrics 
-from sklearn.datasets import make_classification 
- 
- 
-class GreedyFeatureSelection:     
-    """ 
-    A simple and custom class for greedy feature selection. 
-    You will need to modify it quite a bit to make it suitable 
-    for your dataset. 
-    """ 
-    def evaluate_score(self, X, y): 
-        """ 
-        This function evaluates model on data and returns 
-        Area Under ROC Curve (AUC) 
-        NOTE: We fit the data and calculate AUC on same data. 
-        WE ARE OVERFITTING HERE.  
-        But this is also a way to achieve greedy selection. 
-        k-fold will take k times longer. 
- 
-        If you want to implement it in really correct way, 
-        calculate OOF AUC and return mean AUC over k folds. 
-        This requires only a few lines of change and has been  
-        shown a few times in this book. 
- 
-        :param X: training data 
-        :param y: targets 
-        :return: overfitted area under the roc curve 
-        """ 
-        # fit the logistic regression model, 
-        # and calculate AUC on same data 
-        # again: BEWARE 
-        # you can choose any model that suits your data
+        else:
+            raise Exception("Invalid type of feature")
 
-model = linear_model.LogisticRegression() 
-        model.fit(X, y) 
-        predictions = model.predict_proba(X)[:, 1] 
-        auc = metrics.roc_auc_score(y, predictions) 
-        return auc 
-     
-    def _feature_selection(self, X, y): 
-        """ 
-        This function does the actual greedy selection 
-        :param X: data, numpy array 
-        :param y: targets, numpy array 
-        :return: (best scores, best features) 
-        """ 
-        # initialize good features list  
-        # and best scores to keep track of both 
-        good_features = [] 
-        best_scores = [] 
-         
-        # calculate the number of features 
-        num_features = X.shape[1] 
-         
-        # infinite loop 
-        while True: 
-            # initialize best feature and score of this loop 
-            this_feature = None 
-            best_score = 0 
- 
-            # loop over all features 
-            for feature in range(num_features): 
-                # if feature is already in good features, 
-                # skip this for loop 
-                if feature in good_features: 
-                    continue 
-                # selected features are all good features till now 
-                # and current feature 
-                selected_features = good_features + [feature] 
-                # remove all other features from data 
-                xtrain = X[:, selected_features] 
-                # calculate the score, in our case, AUC 
-                score = self.evaluate_score(xtrain, y) 
-                # if score is greater than the best score 
-                # of this loop, change best score and best feature 
-                if score > best_score: 
-                    this_feature = feature 
-                    best_score = score 
- 
-            # if we have selected a feature, add it
+    # aynı fit fonksiyonu
+    def fit(self, X, y):
+        return self.selection.fit(X, y)
 
-# to the good feature list and update best scores list 
-            if this_feature != None: 
-                good_features.append(this_feature) 
-                best_scores.append(best_score) 
- 
-            # if we didnt improve during the last two rounds, 
-            # exit the while loop 
-            if len(best_scores) > 2: 
-                if best_scores[-1] < best_scores[-2]: 
-                    break 
-        # return best scores and good features 
-        # why do we remove the last data point? 
-        return best_scores[:-1], good_features[:-1] 
- 
-    def __call__(self, X, y): 
-        """ 
-        Call function will call the class on a set of arguments 
-        """ 
-        # select features, return scores and selected indices 
-        scores, features = self._feature_selection(X, y) 
-        # transform data with selected features 
-        return X[:, features], scores 
- 
-if __name__ == "__main__": 
-    # generate binary classification data 
-    X, y = make_classification(n_samples=1000, n_features=100) 
- 
-    # transform data by greedy feature selection 
-    X_transformed, scores = GreedyFeatureSelection()(X, y) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-The greedy feature selection implemented the way returns scores and a list of 
-feature indices. Figure 2 shows how this score improves with the addition of a new 
-feature in every iteration. We see that we are not able to improve our score after a 
-certain point, and that’s where we stop. 
- 
-Another greedy approach is known as recursive feature elimination (RFE). In the 
-previous method, we started with one feature and kept adding new features, but in 
-RFE, we start with all features and keep removing one feature in every iteration that 
-provides the least value to a given model. But how to do we know which feature 
-offers the least value? Well, if we use models like linear support vector machine 
-(SVM) or logistic regression, we get a coefficient for each feature which decides 
-the importance of the features. In case of any tree-based models, we get feature 
-importance in place of coefficients. In each iteration, we can eliminate the least
+    # aynı transform fonksiyonu
+    def transform(self, X):
+        return self.selection.transform(X)
 
-important feature and keep eliminating it until we reach the number of features 
-needed. So, yes, we have the ability to decide how many features we want to keep.
+    # aynı fit_transform fonksiyonu
+    def fit_transform(self, X, y):
+        return self.selection.fit_transform(X, y)
+```
+
+Bu sınıfı kullanmak oldukça basittir.
+
+```
+ufs = UnivariateFeatureSelction(
+    n_features=0.1,
+    problem_type="regression",
+    scoring="f_regression"
+)
+
+ufs.fit(X, y)
+
+X_transformed = ufs.transform(X)
+```
+
+Bu, **univariate feature selection ihtiyaçlarınızın çoğunu** karşılamalıdır.
+
+Yüzlerce feature oluşturmak yerine, **daha az sayıda ve önemli feature oluşturmanın** genellikle daha iyi olduğunu lütfen unutmayın.
+
+Univariate feature selection her zaman iyi performans göstermeyebilir.
+
+Çoğu zaman insanlar **machine learning modeli kullanarak feature selection** yapmayı tercih eder.
+
+Bunun nasıl yapıldığına bakalım.
+
+Model kullanan feature selection'ın en basit şekli **greedy feature selection** olarak bilinir.
+
+Greedy feature selection'da ilk adım bir **model seçmektir**.
+
+İkinci adım bir **loss/scoring fonksiyonu** seçmektir.
+
+Üçüncü ve son adım ise her feature'ı sırayla değerlendirmek ve eğer loss/score'u iyileştiriyorsa onu **"iyi" feature'lar listesine eklemektir**.
+
+Bundan daha basit olamaz.
+
+Ancak bunun bir nedenle **greedy feature selection** olarak adlandırıldığını unutmamalısınız.
+
+Bu feature selection süreci, bir feature'ı her değerlendirdiğinde verilen modeli **yeniden fit eder**.
+
+Bu tür bir yöntemin beraberinde getirdiği **hesaplama maliyeti çok yüksektir**.
+
+Ayrıca bu tür feature selection'ın tamamlanması da çok uzun zaman alabilir.
+
+Ve eğer bu feature selection yöntemini doğru şekilde kullanmazsanız, modelinizi **overfit** bile edebilirsiniz.
+
+Nasıl çalıştığına, nasıl uygulandığına bakarak görelim.
+
+```
+# greedy.py
+
+import pandas as pd
+
+from sklearn import linear_model
+from sklearn import metrics
+from sklearn.datasets import make_classification
+
+class GreedyFeatureSelection:
+    """
+    Greedy feature selection için basit ve özel bir sınıf.
+
+    Bunu kendi dataset'inize uygun hâle getirmek için
+    oldukça fazla değişiklik yapmanız gerekecektir.
+    """
+
+    def evaluate_score(self, X, y):
+        """
+        Bu fonksiyon modelin veriler üzerindeki performansını
+        değerlendirir ve Area Under ROC Curve (AUC) döndürür.
+
+        NOT: Veriyi fit ediyor ve AUC'yi aynı veri üzerinde
+        hesaplıyoruz.
+
+        BURADA OVERFITTING YAPIYORUZ.
+
+        Ancak bu da greedy selection elde etmenin bir yoludur.
+
+        k-fold kullanmak k kat daha uzun sürecektir.
+
+        Bunu gerçekten doğru şekilde uygulamak istiyorsanız,
+        OOF AUC hesaplayın ve k fold üzerindeki ortalama AUC'yi
+        döndürün.
+
+        Bu yalnızca birkaç satırlık değişiklik gerektirir ve
+        bu kitapta birkaç kez gösterilmiştir.
+
+        :param X: training data
+        :param y: targets
+        :return: overfit edilmiş ROC curve altındaki alan
+        """
+
+        # logistic regression modelini fit et
+        # ve AUC'yi aynı veri üzerinde hesapla
+
+        # tekrar: DİKKAT
+
+        # verinize uygun herhangi bir model seçebilirsiniz
+        model = linear_model.LogisticRegression()
+
+        model.fit(X, y)
+
+        predictions = model.predict_proba(X)[:, 1]
+
+        auc = metrics.roc_auc_score(
+            y,
+            predictions
+        )
+
+        return auc
+
+    def _feature_selection(self, X, y):
+        """
+        Bu fonksiyon gerçek greedy selection işlemini yapar.
+
+        :param X: data, numpy array
+        :param y: targets, numpy array
+        :return: (best scores, best features)
+        """
+
+        # iyi feature'lar listesini başlat
+        # ve her ikisini de takip etmek için
+        # en iyi skorları başlat
+        good_features = []
+        best_scores = []
+
+        # feature sayısını hesapla
+        num_features = X.shape[1]
+
+        # sonsuz döngü
+        while True:
+
+            # bu döngünün en iyi feature'ını ve
+            # skorunu başlat
+            this_feature = None
+            best_score = 0
+
+            # tüm feature'lar üzerinde döngü
+            for feature in range(num_features):
+
+                # feature zaten iyi feature'lar listesindeyse
+                # bu döngüyü atla
+                if feature in good_features:
+                    continue
+
+                # seçilen feature'lar şu ana kadar
+                # bulunan tüm iyi feature'lar ve
+                # mevcut feature'dır
+                selected_features = good_features + [feature]
+
+                # diğer tüm feature'ları veriden çıkar
+                xtrain = X[:, selected_features]
+
+                # skoru, bizim durumumuzda AUC'yi hesapla
+                score = self.evaluate_score(xtrain, y)
+
+                # skor bu döngünün en iyi skorundan büyükse
+                # en iyi skoru ve en iyi feature'ı değiştir
+                if score > best_score:
+                    this_feature = feature
+                    best_score = score
+
+            # eğer bir feature seçtiysek,
+            # bunu iyi feature'lar listesine ekle
+            # ve en iyi skorlar listesini güncelle
+            if this_feature != None:
+                good_features.append(this_feature)
+                best_scores.append(best_score)
+
+            # son iki turda herhangi bir iyileşme olmadıysa
+            # while döngüsünden çık
+            if len(best_scores) > 2:
+                if best_scores[-1] < best_scores[-2]:
+                    break
+
+        # en iyi skorları ve iyi feature'ları döndür
+        # neden son veri noktasını kaldırıyoruz?
+        return best_scores[:-1], good_features[:-1]
+
+    def __call__(self, X, y):
+        """
+        Call fonksiyonu, sınıfı bir argüman kümesi üzerinde
+        çağıracaktır.
+        """
+
+        # feature'ları seç,
+        # skorları ve seçilen index'leri döndür
+        scores, features = self._feature_selection(X, y)
+
+        # seçilen feature'larla veriyi dönüştür
+        return X[:, features], scores
+
+if __name__ == "__main__":
+
+    # binary classification verisi oluştur
+    X, y = make_classification(
+        n_samples=1000,
+        n_features=100
+    )
+
+    # greedy feature selection ile veriyi dönüştür
+    X_transformed, scores = GreedyFeatureSelection()(X, y)
+```
+
+Yukarıda uygulanan **greedy feature selection**, skorları ve bir **feature index listesi** döndürür.
+
+Şekil 2, her iterasyonda yeni bir feature'ın eklenmesiyle bu skorun nasıl iyileştiğini göstermektedir.
+
+Belirli bir noktadan sonra skorumuzu daha fazla iyileştiremediğimizi görüyoruz ve **işte bu noktada duruyoruz**.
+
+Bir diğer greedy yaklaşım ise **recursive feature elimination (RFE)** olarak bilinir.
+
+Önceki yöntemde **bir feature ile başladık ve yeni feature'lar eklemeye devam ettik**.
+
+Ancak RFE'de **tüm feature'larla başlarız** ve her iterasyonda verilen modele en az değer sağlayan bir feature'ı kaldırmaya devam ederiz.
+
+Peki hangi feature'ın en az değeri sağladığını nasıl biliyoruz?
+
+Eğer **linear support vector machine (SVM)** veya **logistic regression** gibi modeller kullanırsak, her feature için feature'ların önemini belirleyen bir **coefficient (katsayı)** elde ederiz.
+
+Tree-based modeller söz konusu olduğunda ise coefficient yerine **feature importance** elde ederiz.
+
+Her iterasyonda **en az önemli feature'ı** kaldırabilir ve gerekli feature sayısına ulaşana kadar kaldırmaya devam edebiliriz.
+
+Yani evet, **kaç feature'ı tutmak istediğimize karar verme yeteneğine sahibiz.**
 
 ![resim](img/p0163_fig01_resim.png)
 
-Figure 2: How AUC score varies in greedy feature selection with the addition of new features 
- 
-When we are doing recursive feature elimination, in each iteration, we remove the 
-feature which has the feature importance or the feature which has a coefficient 
-close to 0. Please remember that when you use a model like logistic regression for 
-binary classification, the coefficients for features are more positive if they are 
-important for the positive class and more negative if they are important for the 
-negative class. It’s very easy to modify our greedy feature selection class to create 
-a new class for recursive feature elimination, but scikit-learn also provides RFE 
-out of the box. A simple usage is shown in the following example. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
- 
-from sklearn.feature_selection import RFE 
-from sklearn.linear_model import LinearRegression 
-from sklearn.datasets import fetch_california_housing 
- 
-# fetch a regression dataset 
-data = fetch_california_housing() 
-X = data["data"] 
-col_names = data["feature_names"] 
+## Şekil 2: Greedy feature selection'da yeni feature'ların eklenmesiyle AUC skorunun nasıl değiştiği
+
+**Recursive feature elimination** yaptığımızda, her iterasyonda **feature importance'a sahip olan veya coefficient değeri 0'a yakın olan feature'ı** kaldırırız.
+
+Binary classification için **logistic regression** gibi bir model kullandığınızda, feature'ların katsayılarının (**coefficients**) pozitif sınıf için önemli olan feature'larda daha pozitif, negatif sınıf için önemli olan feature'larda ise daha negatif olduğunu lütfen unutmayın.
+
+Greedy feature selection sınıfımızı değiştirerek **recursive feature elimination için yeni bir sınıf oluşturmak** oldukça kolaydır, ancak scikit-learn ayrıca RFE'yi hazır olarak sunmaktadır.
+
+Basit bir kullanım aşağıdaki örnekte gösterilmiştir.
+
+```
+import pandas as pd
+
+from sklearn.feature_selection import RFE
+from sklearn.linear_model import LinearRegression
+from sklearn.datasets import fetch_california_housing
+
+# bir regression dataset'i getir
+data = fetch_california_housing()
+
+X = data["data"]
+col_names = data["feature_names"]
 y = data["target"]
 
-# initialize the model 
-model = LinearRegression() 
-# initialize RFE 
-rfe = RFE( 
-    estimator=model, 
-    n_features_to_select=3 
-) 
- 
-# fit RFE 
-rfe.fit(X, y) 
- 
-# get the transformed data with 
-# selected columns 
-X_transformed = rfe.transform(X) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We saw two different greedy ways to select features from a model. But you can also 
-fit the model to the data and select features from the model by the feature 
-coefficients or the importance of features. If you use coefficients, you can select 
-a threshold, and if the coefficient is above that threshold, you can keep the feature 
-else eliminate it. 
- 
-Let’s see how we can get feature importance from a model like random forest. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
-from sklearn.datasets import load_diabetes 
-from sklearn.ensemble import RandomForestRegressor 
- 
-# fetch a regression dataset 
-# in diabetes data we predict diabetes progression 
-# after one year based on some features 
-data = load_diabetes() 
-X = data["data"] 
-col_names = data["feature_names"] 
-y = data["target"] 
- 
-# initialize the model 
-model = RandomForestRegressor() 
- 
-# fit the model 
-model.fit(X, y) 
-═════════════════════════════════════════════════════════════════════════
+# modeli başlat
+model = LinearRegression()
 
-Feature importance from random forest (or any model) can be plotted as follows. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-importances = model.feature_importances_ 
-idxs = np.argsort(importances) 
-plt.title('Feature Importances') 
-plt.barh(range(len(idxs)), importances[idxs], align='center') 
-plt.yticks(range(len(idxs)), [col_names[i] for i in idxs]) 
-plt.xlabel('Random Forest Feature Importance') 
-plt.show() 
-═════════════════════════════════════════════════════════════════════════ 
- 
-The resulting plot is shown in figure 3.
+# RFE'yi başlat
+rfe = RFE(
+    estimator=model,
+    n_features_to_select=3
+)
+
+# RFE'yi fit et
+rfe.fit(X, y)
+
+# seçilen sütunlarla birlikte
+# dönüştürülmüş veriyi al
+X_transformed = rfe.transform(X)
+```
+
+Bir modelden feature seçmek için **iki farklı greedy yöntem** gördük.
+
+Ancak modeli verilere fit edip feature'ları, modeldeki **feature coefficient'ları veya feature importance değerleri** üzerinden de seçebilirsiniz.
+
+Coefficient'ları kullanıyorsanız bir **threshold (eşik)** belirleyebilirsiniz. Eğer coefficient bu threshold'un üzerindeyse feature'ı tutabilirsiniz; aksi durumda feature'ı kaldırabilirsiniz.
+
+Şimdi **random forest** gibi bir modelden feature importance'ı nasıl elde edebileceğimize bakalım.
+
+```
+import pandas as pd
+from sklearn.datasets import load_diabetes
+from sklearn.ensemble import RandomForestRegressor
+
+# bir regression dataset'i getir
+# diabetes verisinde bazı feature'lara dayanarak
+# bir yıl sonraki diabetes progression'ı
+# tahmin ediyoruz
+data = load_diabetes()
+
+X = data["data"]
+col_names = data["feature_names"]
+y = data["target"]
+
+# modeli başlat
+model = RandomForestRegressor()
+
+# modeli fit et
+model.fit(X, y)
+```
+
+Random forest'tan (veya herhangi bir modelden) elde edilen **feature importance** aşağıdaki şekilde görselleştirilebilir.
+
+```
+importances = model.feature_importances_
+
+idxs = np.argsort(importances)
+
+plt.title('Feature Importances')
+
+plt.barh(
+    range(len(idxs)),
+    importances[idxs],
+    align='center'
+)
+
+plt.yticks(
+    range(len(idxs)),
+    [col_names[i] for i in idxs]
+)
+
+plt.xlabel('Random Forest Feature Importance')
+
+plt.show()
+```
+
+Ortaya çıkan grafik **Şekil 3'te** gösterilmiştir.
 
 ![resim](img/p0165_fig01_resim.png)
 
