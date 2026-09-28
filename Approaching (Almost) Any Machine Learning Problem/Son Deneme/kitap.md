@@ -5825,84 +5825,77 @@ Bu yaklaşımın **en iyi sonuçları verdiğini** ve GPU'nuz varsa aynı zamand
 
 Bu bölüm temel olarak **feature engineering** hakkındaydı. Bir sonraki bölümde, sayısal feature'lar söz konusu olduğunda nasıl daha fazla feature engineering yapabileceğinizi ve farklı feature türlerini nasıl birleştirebileceğinizi görelim.
 
-Feature engineering
+## Feature Engineering
 
-Feature engineering is one of the most crucial parts of building a good machine 
-learning model. If we have useful features, the model will perform better. There are 
-many situations where you can avoid large, complicated models and use simple 
-models with crucially engineered features. We must keep in mind that feature 
-engineering is something that is done in the best possible manner only when you 
-have some knowledge about the domain of the problem and depends a lot on the 
-data in concern. However, there are some general techniques that you can try to 
-create features from almost all kinds of numerical and categorical variables. Feature 
-engineering is not just about creating new features from data but also includes 
-different types of normalization and transformations. 
- 
-In the chapter about categorical features, we have seen a way to combine different 
-categorical variables, how we can convert categorical variables to counts, target 
-encoding and using embeddings. These are almost all kinds of ways to engineer 
-features from categorical variables. Thus, in this chapter, our focus will be limited 
-to numerical variables and a combination of numerical and categorical variables. 
- 
-Let’s start with the most simple but most widely used feature engineering 
-techniques. Let’s say that you are dealing with date and time data. So, we have a 
-pandas dataframe with a datetime type column. Using this column, we can create 
-features like:
+**Feature engineering**, iyi bir makine öğrenmesi modeli oluşturmanın en önemli kısımlarından biridir. Eğer kullanışlı feature'larımız varsa, model daha iyi performans gösterecektir. Büyük ve karmaşık modellerden kaçınabileceğiniz ve bunun yerine kritik şekilde oluşturulmuş feature'lara sahip basit modeller kullanabileceğiniz birçok durum vardır.
 
-- 
-Year 
-- 
-Week of year 
-- 
-Month 
-- 
-Day of week 
-- 
-Weekend 
-- 
-Hour 
-- 
-And many more. 
- 
-And this can be done using pandas very easily. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-df.loc[:, 'year'] = df['datetime_column'].dt.year 
-df.loc[:, 'weekofyear'] = df['datetime_column'].dt.weekofyear 
-df.loc[:, 'month'] = df['datetime_column'].dt.month 
+Feature engineering'in yalnızca problem alanı hakkında biraz bilgi sahibi olduğunuzda mümkün olan en iyi şekilde yapılabileceğini ve büyük ölçüde söz konusu verilere bağlı olduğunu aklımızda tutmalıyız. Bununla birlikte, neredeyse her türlü sayısal ve kategorik değişkenden feature oluşturmak için deneyebileceğiniz bazı genel teknikler vardır.
+
+Feature engineering yalnızca verilerden yeni feature'lar oluşturmakla ilgili değildir; aynı zamanda farklı türlerde **normalization** ve **transformation** işlemlerini de içerir.
+
+Kategorik feature'lar hakkındaki bölümde; farklı kategorik değişkenleri nasıl birleştirebileceğimizi, kategorik değişkenleri nasıl sayılara dönüştürebileceğimizi, **target encoding** ve **embedding** kullanımını gördük. Bunlar, kategorik değişkenlerden feature üretmenin neredeyse tüm yöntemleridir.
+
+Bu nedenle bu bölümdeki odağımız **sayısal değişkenler** ve **sayısal + kategorik değişkenlerin kombinasyonu** ile sınırlı olacaktır.
+
+En basit fakat en yaygın kullanılan feature engineering teknikleriyle başlayalım.
+
+Diyelim ki **tarih ve zaman verileriyle** uğraşıyorsunuz. Elimizde `datetime` türünde bir sütun bulunan bir pandas dataframe olduğunu varsayalım. Bu sütunu kullanarak aşağıdaki gibi feature'lar oluşturabiliriz:
+
+- Yıl (**Year**)
+- Yılın haftası (**Week of year**)
+- Ay (**Month**)
+- Haftanın günü (**Day of week**)
+- Hafta sonu (**Weekend**)
+- Saat (**Hour**)
+- Ve daha birçok feature
+
+Ve bunlar **pandas kullanılarak çok kolay bir şekilde** yapılabilir.
+
+```
+df.loc[:, 'year'] = df['datetime_column'].dt.year
+df.loc[:, 'weekofyear'] = df['datetime_column'].dt.weekofyear
+df.loc[:, 'month'] = df['datetime_column'].dt.month
 df.loc[:, 'dayofweek'] = df['datetime_column'].dt.dayofweek
 
-df.loc[:, 'weekend'] = (df.datetime_column.dt.weekday >=5).astype(int) 
-df.loc[:, 'hour'] = df['datetime_column'].dt.hour 
-═════════════════════════════════════════════════════════════════════════ 
- 
-So, we are creating a bunch of new columns using the datetime column. Let’s see 
-some of the sample features that can be created. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
- 
-# create a series of datetime with a frequency of 10 hours 
-s = pd.date_range('2020-01-06', '2020-01-10', freq='10H').to_series() 
- 
-# create some features based on datetime 
-features = { 
-    "dayofweek": s.dt.dayofweek.values, 
-    "dayofyear": s.dt.dayofyear.values, 
-    "hour": s.dt.hour.values, 
-    "is_leap_year": s.dt.is_leap_year.values, 
-    "quarter": s.dt.quarter.values, 
-    "weekofyear": s.dt.weekofyear.values 
-} 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This will generate a dictionary of features from a given series. You can apply this 
-to any datetime column in a pandas dataframe. These are some of the many date 
-time features that pandas offer. Date time features are critical when you are dealing 
-with time-series data, for example, predicting sales of a store but would like to use 
-a model like xgboost on aggregated features. 
- 
-Suppose we have a dataframe that looks like the following:
+df.loc[:, 'weekend'] = (
+df.datetime_column.dt.weekday >= 5
+).astype(int)
+
+df.loc[:, 'hour'] = df['datetime_column'].dt.hour
+```
+
+Böylece `datetime` sütununu kullanarak bir grup yeni sütun oluşturuyoruz.
+
+Şimdi oluşturulabilecek bazı örnek feature'lara bakalım.
+
+```
+import pandas as pd
+
+# 10 saatlik frekansa sahip bir datetime serisi oluştur
+s = pd.date_range(
+'2020-01-06',
+'2020-01-10',
+freq='10H'
+).to_series()
+
+# datetime temelinde bazı feature'lar oluştur
+features = {
+"dayofweek": s.dt.dayofweek.values,
+"dayofyear": s.dt.dayofyear.values,
+"hour": s.dt.hour.values,
+"is_leap_year": s.dt.is_leap_year.values,
+"quarter": s.dt.quarter.values,
+"weekofyear": s.dt.weekofyear.values
+}
+```
+
+Bu işlem, verilen bir seriden bir **feature sözlüğü (dictionary)** oluşturacaktır. Bunu bir pandas dataframe'inde bulunan herhangi bir `datetime` sütununa uygulayabilirsiniz.
+
+Bunlar, pandas'ın sunduğu birçok **tarih-zaman feature'ından** yalnızca bazılarıdır.
+
+Tarih-zaman feature'ları, **time-series verileriyle** çalışırken kritik öneme sahiptir. Örneğin bir mağazanın satışlarını tahmin etmek istediğinizi, ancak **aggregated feature'lar** üzerinde `xgboost` gibi bir model kullanmak istediğinizi düşünün.
+
+Diyelim ki elimizde aşağıdaki gibi görünen bir dataframe var:
 
 ![resim](img/p0144_fig01_resim.png)
 
