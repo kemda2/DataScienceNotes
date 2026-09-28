@@ -7678,7 +7678,8 @@ Convergence grafiği **Şekil 2'de** gösterilmiştir.
 
 ![resim](img/p0181_fig01_resim.png)
 
-## Ö
+# Ö
+
 Figure 2: Convergence plot of our random forest parameter optimization 
  
  
