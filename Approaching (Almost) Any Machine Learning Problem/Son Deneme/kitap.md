@@ -4194,1732 +4194,1636 @@ Bu özel durumda, doğrulama setlerinizi eğitim setinde **“görülmemiş (uns
 
 ![resim](img/p0104_fig01_resim.png)
 
-Figure 4: A simple concatenation of training and test sets to learn about the categories present in the
+**Şekil 4: Eğitim ve test setlerinin, test setinde olup eğitim setinde bulunmayan kategoriler veya eğitim setinde nadir bulunan kategoriler hakkında bilgi edinmek için basitçe birleştirilmesi**
 
-test set but not in the training set or rare categories in the training set.
+Bunun nasıl çalıştığı, Şekil 4'e ve aşağıdaki koda bakılarak kolayca anlaşılabilir.
 
-How this works is can be understood easily by looking at figure 4 and the following 
-code. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-import pandas as pd 
-from sklearn import preprocessing 
- 
-# read training data 
-train = pd.read_csv("../input/cat_train.csv") 
- 
-#read test data 
-test = pd.read_csv("../input/cat_test.csv") 
- 
-# create a fake target column for test data 
-# since this column doesn't exist 
-test.loc[:, "target"] = -1 
- 
-# concatenate both training and test data 
-data = pd.concat([train, test]).reset_index(drop=True) 
- 
-# make a list of features we are interested in 
-# id and target is something we should not encode 
-features = [x for x in train.columns if x not in ["id", "target"]] 
- 
-# loop over the features list 
-for feat in features: 
-    # create a new instance of LabelEncoder for each feature 
-    lbl_enc = preprocessing.LabelEncoder() 
-     
-    # note the trick here 
-    # since its categorical data, we fillna with a string 
-    # and we convert all the data to string type 
-    # so, no matter its int or float, its converted to string 
-    # int/float but categorical!!! 
-    temp_col = data[feat].fillna("NONE").astype(str).values 
- 
-    # we can use fit_transform here as we do not 
-    # have any extra test data that we need to 
-    # transform on separately 
-    data.loc[:, feat] = lbl_enc.fit_transform(temp_col) 
-     
- 
-# split the training and test data again     
-train = data[data.target != -1].reset_index(drop=True) 
-test = data[data.target == -1].reset_index(drop=True) 
-═════════════════════════════════════════════════════════════════════════
+```
+import pandas as pd
+from sklearn import preprocessing
 
-This trick works when you have a problem where you already have the test dataset. 
-It must be noted that this trick will not work in a live setting. For example, let’s say 
-you are in a company that builds a real-time bidding solution (RTB). RTB systems 
-bid on every user they see online to buy ad space. The features that can be used for 
-such a model may include pages viewed in a website. Let’s assume that features are 
-the last five categories/pages visited by the user. In this case, if the website 
-introduces new categories, we will no longer be able to predict accurately. Our 
-model, in this case, will fail. A situation like this can be avoided by using an 
-“unknown” category.  
- 
-In our cat-in-the-dat dataset, we already have unknowns in ord_2 column. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df.ord_2.fillna("NONE").value_counts() 
-Out[X]: 
-Freezing       142726 
-Warm           124239 
-Cold            97822 
-Boiling Hot     84790 
-Hot             67508 
-Lava Hot        64840 
-NONE            18075 
-Name: ord_2, dtype: int64 
-═════════════════════════════════════════════════════════════════════════ 
-We can treat “NONE” as unknown. So, if during live testing, we get new categories 
-that we have not seen before, we will mark them as “NONE”. 
- 
-This is very similar to natural language processing problems. We always build a 
-model based on a fixed vocabulary. Increasing the size of the vocabulary increases 
-the size of the model. Transformer models like BERT are trained on ~30000 words 
-(for English). So, when we have a new word coming in, we mark it as UNK 
-(unknown). 
- 
-So, you can either assume that your test data will have the same categories as 
-training or you can introduce a rare or unknown category to training to take care of 
-new categories in test data. 
- 
-Let’s see the value counts in ord_4 column after filling NaN values: 
- 
-═════════════════════════════════════════════════════════════════════════ 
+# eğitim verilerini oku
+train = pd.read_csv("../input/cat_train.csv")
+
+# test verilerini oku
+test = pd.read_csv("../input/cat_test.csv")
+
+# test verileri için sahte bir target sütunu oluştur
+# çünkü bu sütun mevcut değil
+test.loc[:, "target"] = -1
+
+# hem eğitim hem de test verilerini birleştir
+data = pd.concat([train, test]).reset_index(drop=True)
+
+# ilgilendiğimiz özelliklerin bir listesini oluştur
+# id ve target kodlamamamız gereken sütunlardır
+features = [x for x in train.columns if x not in ["id", "target"]]
+
+# features listesi üzerinde döngü oluştur
+for feat in features:
+# her özellik için yeni bir LabelEncoder örneği oluştur
+lbl_enc = preprocessing.LabelEncoder()
+
+# burada dikkat edilmesi gereken püf nokta
+# kategorik veri olduğu için fillna ile bir string kullanıyoruz
+# ve tüm verileri string türüne dönüştürüyoruz
+# böylece int veya float olması fark etmeksizin string'e dönüşür
+# int/float ama kategorik!!!
+temp_col = data[feat].fillna("NONE").astype(str).values
+
+# burada fit_transform kullanabiliriz çünkü
+# ayrıca ayrı olarak dönüştürmemiz gereken ekstra bir test verimiz yok
+data.loc[:, feat] = lbl_enc.fit_transform(temp_col)
+
+# eğitim ve test verilerini tekrar ayır
+train = data[data.target != -1].reset_index(drop=True)
+test = data[data.target == -1].reset_index(drop=True)
+```
+
+Bu yöntem, elinizde test veri setinin zaten bulunduğu bir problem olduğunda çalışır.
+
+Bu yöntemin **canlı (live) bir ortamda çalışmayacağına** dikkat edilmelidir.
+
+Örneğin, gerçek zamanlı teklif verme çözümü (**RTB — Real-Time Bidding**) geliştiren bir şirkette olduğunuzu varsayalım.
+
+RTB sistemleri, reklam alanı satın almak için internette gördükleri her kullanıcıya teklif verir.
+
+Böyle bir model için kullanılabilecek özellikler arasında bir web sitesinde görüntülenen sayfalar bulunabilir.
+
+Özelliklerin kullanıcının ziyaret ettiği son beş kategori/sayfa olduğunu varsayalım.
+
+Bu durumda web sitesi yeni kategoriler sunarsa, artık doğru şekilde tahmin yapamayız.
+
+Bu durumda modelimiz başarısız olacaktır.
+
+Bunun gibi bir durum **“unknown” (bilinmeyen)** kategorisi kullanılarak önlenebilir.
+
+Bizim **cat-in-the-dat** veri setimizde zaten **ord\_2** sütununda bilinmeyenler bulunmaktadır.
+
+```
+In [X]: df.ord_2.fillna("NONE").value_counts()
+Out[X]:
+Freezing       142726
+Warm           124239
+Cold            97822
+Boiling Hot     84790
+Hot             67508
+Lava Hot        64840
+NONE            18075
+Name: ord_2, dtype: int64
+```
+
+**“NONE” değerini unknown olarak değerlendirebiliriz.**
+
+Dolayısıyla canlı test sırasında daha önce görmediğimiz yeni kategorilerle karşılaşırsak, onları **“NONE”** olarak işaretleriz.
+
+Bu, **doğal dil işleme (Natural Language Processing)** problemlerine oldukça benzer.
+
+Her zaman sabit bir kelime dağarcığı (**vocabulary**) temelinde bir model oluştururuz.
+
+Kelime dağarcığının boyutunu artırmak, modelin boyutunu da artırır.
+
+BERT gibi Transformer modelleri İngilizce için yaklaşık **30000 kelime** ile eğitilir.
+
+Dolayısıyla yeni bir kelime geldiğinde onu **UNK (unknown)** olarak işaretleriz.
+
+Böylece ya test verilerinizin eğitim verileriyle aynı kategorilere sahip olacağını varsayabilirsiniz ya da test verilerindeki yeni kategorilerle ilgilenmek için eğitim verilerine **rare veya unknown kategorisi** ekleyebilirsiniz.
+
+Şimdi NaN değerlerini doldurduktan sonra **ord\_4** sütunundaki değer sayılarına bakalım:
+
+```
 In [X]: df.ord_4.fillna("NONE").value_counts()
 
-Out[X]: 
-N       39978 
-P       37890 
-Y       36657 
-A       36633 
-R       33045 
-U       32897 
-. 
-. 
-. 
-K       21676 
-I       19805 
-NONE    17930 
-D       17284 
-F       16721 
-W        8268 
-Z        5790 
-S        4595 
-G        3404 
-V        3107 
-J        1950 
-L        1657 
-Name: ord_4, dtype: int64 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We see that some values appear only a couple thousand times, and some appear 
-almost 40000 times. NaNs are also seen a lot. Please note that I have removed some 
-values from the output.  
- 
-We can now define our criteria for calling a value “rare”. Let’s say the requirement 
-for a value being rare in this column is a count of less than 2000. So, it seems, J and 
-L can be marked as rare values. With pandas, it is quite easy to replace categories 
-based on count threshold. Let’s take a look at how it’s done. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df.ord_4 = df.ord_4.fillna("NONE") 
- 
-In [X]: df.loc[ 
-   ...:     df["ord_4"].value_counts()[df["ord_4"]].values < 2000, 
-   ...:     "ord_4" 
-   ...: ] = "RARE" 
- 
-In [X]: df.ord_4.value_counts() 
-Out[X]: 
+Out[X]:
 N       39978
+P       37890
+Y       36657
+A       36633
+R       33045
+U       32897
+.
+.
+.
+K       21676
+I       19805
+NONE    17930
+D       17284
+F       16721
+W        8268
+Z        5790
+S        4595
+G        3404
+V        3107
+J        1950
+L        1657
+Name: ord_4, dtype: int64
+```
 
-P       37890 
-Y       36657 
-A       36633 
-R       33045 
-U       32897 
-M       32504 
-. 
-. 
-. 
-B       25212 
-E       21871 
-K       21676 
-I       19805 
-NONE    17930 
-D       17284 
-F       16721 
-W        8268 
-Z        5790 
-S        4595 
-RARE     3607 
-G        3404 
-V        3107 
-Name: ord_4, dtype: int64 
- 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We say that wherever the value count for a certain category is less than 2000, 
-replace it with rare. So, now, when it comes to test data, all the new, unseen 
-categories will be mapped to “RARE”, and all missing values will be mapped to 
-“NONE”. 
- 
-This approach will also ensure that the model works in a live setting, even if you 
-have new categories. 
- 
-Now we have everything we need to approach any kind of problem with categorical 
-variables in it. Let’s try building our first model and try to improve its performance 
-in a step-wise manner. 
- 
-Before going to any kind of model building, it’s essential to take care of cross-
-validation. We have already seen the label/target distribution, and we know that it 
-is a binary classification problem with skewed targets. Thus, we will be using 
-StratifiedKFold to split the data here.
+Bazı değerlerin yalnızca birkaç bin kez, bazılarının ise neredeyse **40000 kez** ortaya çıktığını görüyoruz.
 
-═════════════════════════════════════════════════════════════════════════ 
-# create_folds.py 
-# import pandas and model_selection module of scikit-learn 
-import pandas as pd 
-from sklearn import model_selection 
- 
-if __name__ == "__main__": 
- 
-    # Read training data 
-    df = pd.read_csv("../input/cat_train.csv") 
- 
-    # we create a new column called kfold and fill it with -1 
-    df["kfold"] = -1 
-     
-    # the next step is to randomize the rows of the data 
-    df = df.sample(frac=1).reset_index(drop=True) 
-     
-    # fetch labels 
-    y = df.target.values 
-     
-    # initiate the kfold class from model_selection module 
-    kf = model_selection.StratifiedKFold(n_splits=5) 
-     
-    # fill the new kfold column 
-    for f, (t_, v_) in enumerate(kf.split(X=df, y=y)): 
-        df.loc[v_, 'kfold'] = f 
-     
-    # save the new csv with kfold column 
-    df.to_csv("../input/cat_train_folds.csv", index=False) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We can now check our new folds csv to see the number of samples per fold: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: import pandas as pd 
- 
-In [X]: df = pd.read_csv("../input/cat_train_folds.csv") 
- 
-In [X]: df.kfold.value_counts() 
-Out[X]: 
-4    120000 
-3    120000 
-2    120000 
-1    120000 
-0    120000 
-Name: kfold, dtype: int64 
-═════════════════════════════════════════════════════════════════════════
+NaN değerleri de oldukça fazla görülmektedir.
 
-All folds have 120000 samples. This is expected as training data has 600000 
-samples, and we made five folds. So far, so good. 
- 
-Now, we can also check the target distribution per fold. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: df[df.kfold==0].target.value_counts() 
-Out[X]: 
-0    97536 
-1    22464 
-Name: target, dtype: int64 
- 
-In [X]: df[df.kfold==1].target.value_counts() 
-Out[X]: 
-0    97536 
-1    22464 
-Name: target, dtype: int64 
- 
-In [X]: df[df.kfold==2].target.value_counts() 
-Out[X]: 
-0    97535 
-1    22465 
-Name: target, dtype: int64 
- 
- 
-In [X]: df[df.kfold==3].target.value_counts() 
-Out[X]: 
-0    97535 
-1    22465 
-Name: target, dtype: int64 
- 
-In [X]: df[df.kfold==4].target.value_counts() 
-Out[X]: 
-0    97535 
-1    22465 
-Name: target, dtype: int64 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We see that in each fold, the distribution of targets is the same. This is what we 
-need. It can also be similar and doesn’t have to be the same all the time. Now, when 
-we build our models, we will have the same distribution of targets across every fold. 
- 
-One of the simplest models we can build is by one-hot encoding all the data and 
-using logistic regression.
+Lütfen çıktının bazı değerlerini çıkardığımı unutmayın.
 
-═════════════════════════════════════════════════════════════════════════ 
-# ohe_logres.py 
-import pandas as pd 
- 
-from sklearn import linear_model 
-from sklearn import metrics 
-from sklearn import preprocessing 
- 
-def run(fold): 
-    # load the full training data with folds 
-    df = pd.read_csv("../input/cat_train_folds.csv") 
- 
-    # all columns are features except id, target and kfold columns 
-    features = [ 
-        f for f in df.columns if f not in ("id", "target", "kfold") 
-    ] 
- 
-    # fill all NaN values with NONE 
-    # note that I am converting all columns to "strings" 
-    # it doesn’t matter because all are categories 
-    for col in features: 
-        df.loc[:, col] = df[col].astype(str).fillna("NONE") 
-     
-    # get training data using folds 
-    df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # initialize OneHotEncoder from scikit-learn 
-    ohe = preprocessing.OneHotEncoder() 
- 
-    # fit ohe on training + validation features 
-    full_data = pd.concat( 
-        [df_train[features], df_valid[features]], 
-        axis=0 
-    ) 
-    ohe.fit(full_data[features]) 
- 
-    # transform training data 
-    x_train = ohe.transform(df_train[features]) 
- 
-    # transform validation data 
-    x_valid = ohe.transform(df_valid[features]) 
- 
-    # initialize Logistic Regression model 
-    model = linear_model.LogisticRegression()
+Artık bir değeri **“rare”** olarak adlandırmak için kriterimizi belirleyebiliriz.
 
-# fit model on training data (ohe) 
-    model.fit(x_train, df_train.target.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.target.values, valid_preds) 
- 
-    # print auc 
-    print(auc) 
- 
- 
-if __name__ == "__main__": 
-    # run function for fold = 0 
-    # we can just replace this number and  
-    # run this for any fold 
-    run(0) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-So, what’s happening? 
- 
-We have created a function that splits data into training and validation, given a fold 
-number, handles NaN values, applies one-hot encoding on all the data and trains a 
-simple Logistic Regression model. 
- 
-When we run this chunk of code, it produces an output like this: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python ohe_logres.py 
-/home/abhishek/miniconda3/envs/ml/lib/python3.7/site-
-packages/sklearn/linear_model/_logistic.py:939: ConvergenceWarning: lbfgs 
-failed to converge (status=1): 
-STOP: TOTAL NO. of ITERATIONS REACHED LIMIT. 
-Increase the number of iterations (max_iter) or scale the data as shown 
-in: 
-    https://scikit-learn.org/stable/modules/preprocessing.html. 
-Please also refer to the documentation for alternative solver options: 
-    https://scikit-learn.org/stable/modules/linear_model.html#logistic-
-regression 
-  extra_warning_msg=_LOGISTIC_SOLVER_CONVERGENCE_MSG) 
-0.7847865042255127 
-═════════════════════════════════════════════════════════════════════════
+Diyelim ki bu sütunda bir değerin rare olması için gereken sayı **2000'den az** olsun.
 
-There are a few warnings. It seems logistic regression did not converge for the max 
-number of iterations. We didn’t play with the parameters, so that is fine. We see 
-that AUC is ~ 0.785. 
- 
-Let’s run it for all folds now with a simple change in code. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# ohe_logres.py 
-. 
-. 
-. 
- 
-    # initialize Logistic Regression model 
-    model = linear_model.LogisticRegression() 
- 
-    # fit model on training data (ohe) 
-    model.fit(x_train, df_train.target.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.target.values, valid_preds) 
- 
-    # print auc 
-    print(f"Fold = {fold}, AUC = {auc}") 
- 
- 
-if __name__ == "__main__": 
-    for fold_ in range(5): 
-        run(fold_) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Please note that we are not making a lot of changes and that’s why I have shown 
-only some lines of the code; some of which have changes. 
- 
-This gives: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python -W ignore ohe_logres.py 
-Fold = 0, AUC = 0.7847865042255127 
-Fold = 1, AUC = 0.7853553605899214 
-Fold = 2, AUC = 0.7879321942914885
+Bu durumda **J ve L'nin nadir (rare) değerler** olarak işaretlenebileceği görülüyor.
 
-Fold = 3, AUC = 0.7870315929550808 
-Fold = 4, AUC = 0.7864668243125608 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Note that I use “-W ignore” to ignore all the warnings.  
- 
-We see that AUC scores are quite stable across all folds. The average AUC is 
-0.78631449527. Quite good for our first model! 
- 
-Many people will start this kind of problem with a tree-based model, such as random 
-forest. For applying random forest in this dataset, instead of one-hot encoding, we 
-can use label encoding and convert every feature in every column to an integer as 
-discussed previously. 
- 
-The code is not very different from one hot encoding code. Let’s take a look. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# lbl_rf.py 
-import pandas as pd 
- 
-from sklearn import ensemble 
-from sklearn import metrics 
-from sklearn import preprocessing 
- 
- 
-def run(fold): 
- 
-    # load the full training data with folds 
-    df = pd.read_csv("../input/cat_train_folds.csv") 
- 
-    # all columns are features except id, target and kfold columns 
-    features = [ 
-        f for f in df.columns if f not in ("id", "target", "kfold") 
-    ] 
- 
-    # fill all NaN values with NONE 
-    # note that I am converting all columns to "strings" 
-    # it doesnt matter because all are categories 
-    for col in features: 
-        df.loc[:, col] = df[col].astype(str).fillna("NONE") 
-     
-    # now its time to label encode the features 
-    for col in features: 
-         
-        # initialize LabelEncoder for each feature column
+Pandas ile kategorileri bir sayı eşiğine göre değiştirmek oldukça kolaydır.
 
-lbl = preprocessing.LabelEncoder() 
-         
-        # fit label encoder on all data 
-        lbl.fit(df[col]) 
- 
-        # transform all the data 
-        df.loc[:, col] = lbl.transform(df[col]) 
- 
-    # get training data using folds 
-    df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # get training data 
-    x_train = df_train[features].values 
- 
-    # get validation data 
-    x_valid = df_valid[features].values 
- 
-    # initialize random forest model 
-    model = ensemble.RandomForestClassifier(n_jobs=-1) 
- 
-    # fit model on training data (ohe) 
-    model.fit(x_train, df_train.target.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.target.values, valid_preds) 
- 
-    # print auc 
-    print(f"Fold = {fold}, AUC = {auc}") 
- 
- 
-if __name__ == "__main__": 
-    for fold_ in range(5): 
-        run(fold_) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We use random forest from scikit-learn and have removed one-hot encoding. 
-Instead of one-hot encoding, we use label encoding. Scores are as follows:
+Nasıl yapıldığına bakalım.
 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python lbl_rf.py 
-Fold = 0, AUC = 0.7167390828113697 
-Fold = 1, AUC = 0.7165459672958506 
-Fold = 2, AUC = 0.7159709909587376 
-Fold = 3, AUC = 0.7161589664189556 
-Fold = 4, AUC = 0.7156020216155978 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Wow! Huge difference! The random forest model, without any tuning of 
-hyperparameters, performs a lot worse than simple logistic regression.  
- 
-And this is a reason why we should always start with simple models first. A fan of 
-random forest would begin with it here and will ignore logistic regression model 
-thinking it’s a very simple model that cannot bring any value better than random 
-forest. That kind of person will make a huge mistake. In our implementation of 
-random forest, the folds take a much longer time to complete compared to logistic 
-regression. So, we are not only losing on AUC but also taking much longer to 
-complete the training. Please note that inference is also time-consuming with 
-random forest and it also takes much larger space. 
- 
-If we want, we can also try to run random forest on sparse one-hot encoded data, 
-but that is going to take a lot of time. We can also try reducing the sparse one-hot 
-encoded matrices using singular value decomposition. This is a very common 
-method of extracting topics in natural language processing.  
- 
-═════════════════════════════════════════════════════════════════════════ 
-# ohe_svd_rf.py 
-import pandas as pd 
- 
-from scipy import sparse 
-from sklearn import decomposition 
-from sklearn import ensemble 
-from sklearn import metrics 
-from sklearn import preprocessing 
- 
- 
-def run(fold): 
-    # load the full training data with folds 
-    df = pd.read_csv("../input/cat_train_folds.csv") 
- 
-    # all columns are features except id, target and kfold columns 
-    features = [ 
-        f for f in df.columns if f not in ("id", "target", "kfold")
+```
+In [X]: df.ord_4 = df.ord_4.fillna("NONE")
 
-] 
- 
-    # fill all NaN values with NONE 
-    # note that I am converting all columns to "strings" 
-    # it doesnt matter because all are categories 
-    for col in features: 
-        df.loc[:, col] = df[col].astype(str).fillna("NONE") 
- 
-    # get training data using folds 
-    df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # initialize OneHotEncoder from scikit-learn 
-    ohe = preprocessing.OneHotEncoder() 
- 
-    # fit ohe on training + validation features 
-    full_data = pd.concat( 
-        [df_train[features], df_valid[features]], 
-        axis=0 
-    ) 
-    ohe.fit(full_data[features]) 
- 
-    # transform training data 
-    x_train = ohe.transform(df_train[features]) 
- 
-    # transform validation data 
-    x_valid = ohe.transform(df_valid[features]) 
- 
-    # initialize Truncated SVD 
-    # we are reducing the data to 120 components 
-    svd = decomposition.TruncatedSVD(n_components=120) 
- 
-    # fit svd on full sparse training data 
-    full_sparse = sparse.vstack((x_train, x_valid)) 
-    svd.fit(full_sparse) 
- 
-    # transform sparse training data 
-    x_train = svd.transform(x_train) 
- 
-    # transform sparse validation data 
-    x_valid = svd.transform(x_valid) 
- 
-    # initialize random forest model 
-    model = ensemble.RandomForestClassifier(n_jobs=-1)
+In [X]: df.loc[
+...:     df["ord_4"].value_counts()[df["ord_4"]].values < 2000,
+...:     "ord_4"
+...: ] = "RARE"
 
-# fit model on training data (ohe) 
-    model.fit(x_train, df_train.target.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.target.values, valid_preds) 
- 
-    # print auc 
-    print(f"Fold = {fold}, AUC = {auc}") 
- 
- 
-if __name__ == "__main__": 
-    for fold_ in range(5): 
-        run(fold_) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We one-hot encode the full data and then fit TruncatedSVD from scikit-learn on 
-sparse matrix with training + validation data. In this way, we reduce the high 
-dimensional sparse matrix to 120 features and then fit random forest classifier.  
- 
-Below is the output of this model: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python ohe_svd_rf.py 
-Fold = 0, AUC = 0.7064863038754249 
-Fold = 1, AUC = 0.706050102937374 
-Fold = 2, AUC = 0.7086069243167242 
-Fold = 3, AUC = 0.7066819080085971 
-Fold = 4, AUC = 0.7058154015055585 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We see that it is even worse. It seems like the best method for this problem is one-
-hot encoding with logistic regression. Random forest appears to be taking way too 
-much time. Maybe we can give XGBoost a try. In case you don’t know about 
-XGBoost, it is one of the most popular gradient boosting algorithms. Since it’s a 
-tree-based algorithm, we will use label encoded data. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# lbl_xgb.py 
+In [X]: df.ord_4.value_counts()
+Out[X]:
+N       39978
+P       37890
+Y       36657
+A       36633
+R       33045
+U       32897
+M       32504
+.
+.
+.
+B       25212
+E       21871
+K       21676
+I       19805
+NONE    17930
+D       17284
+F       16721
+W        8268
+Z        5790
+S        4595
+RARE     3607
+G        3404
+V        3107
+Name: ord_4, dtype: int64
+```
+
+Belirli bir kategorinin değer sayısı **2000'den az olduğunda**, onu **rare** ile değiştirdiğimizi söylüyoruz.
+
+Dolayısıyla artık test verileri söz konusu olduğunda, daha önce görülmemiş tüm yeni kategoriler **“RARE”** ile eşleştirilecek ve tüm eksik değerler **“NONE”** ile eşleştirilecektir.
+
+Bu yaklaşım, yeni kategorileriniz olsa bile modelin **canlı bir ortamda çalışmasını** da sağlayacaktır.
+
+Artık içinde kategorik değişkenler bulunan her türlü probleme yaklaşmak için ihtiyacımız olan her şeye sahibiz.
+
+İlk modelimizi oluşturmaya ve performansını adım adım geliştirmeye çalışalım.
+
+Herhangi bir model oluşturmaya başlamadan önce **cross-validation** işlemini ele almak önemlidir.
+
+Etiket/hedef dağılımını daha önce gördük ve bunun hedeflerin çarpık olduğu bir **ikili sınıflandırma problemi** olduğunu biliyoruz.
+
+Bu nedenle verileri burada bölmek için **StratifiedKFold** kullanacağız.
+
+```
+# create_folds.py
+# pandas ve scikit-learn'ün model_selection modülünü içe aktar
+import pandas as pd
+from sklearn import model_selection
+
+if __name__ == "__main__":
+
+# Eğitim verilerini oku
+df = pd.read_csv("../input/cat_train.csv")
+
+# kfold adında yeni bir sütun oluştur ve -1 ile doldur
+df["kfold"] = -1
+
+# sonraki adım verilerin satırlarını rastgeleleştirmektir
+df = df.sample(frac=1).reset_index(drop=True)
+
+# etiketleri al
+y = df.target.values
+
+# model_selection modülünden kfold sınıfını başlat
+kf = model_selection.StratifiedKFold(n_splits=5)
+
+# yeni kfold sütununu doldur
+for f, (t_, v_) in enumerate(kf.split(X=df, y=y)):
+    df.loc[v_, 'kfold'] = f
+
+# kfold sütunuyla yeni csv'yi kaydet
+df.to_csv("../input/cat_train_folds.csv", index=False)
+```
+
+Artık yeni folds csv dosyamızı kontrol ederek fold başına düşen örnek sayısını görebiliriz:
+
+```
+In [X]: import pandas as pd
+
+In [X]: df = pd.read_csv("../input/cat_train_folds.csv")
+
+In [X]: df.kfold.value_counts()
+Out[X]:
+4    120000
+3    120000
+2    120000
+1    120000
+0    120000
+Name: kfold, dtype: int64
+```
+
+Tüm fold'larda **120000 örnek** bulunmaktadır.
+
+Bu beklenen bir durumdur; çünkü eğitim verilerinde **600000 örnek** vardır ve biz **beş fold** oluşturduk.
+
+Şimdiye kadar her şey yolunda.
+
+Şimdi ayrıca her fold'daki hedef dağılımını da kontrol edebiliriz.
+
+```
+In [X]: df[df.kfold==0].target.value_counts()
+Out[X]:
+0    97536
+1    22464
+Name: target, dtype: int64
+
+In [X]: df[df.kfold==1].target.value_counts()
+Out[X]:
+0    97536
+1    22464
+Name: target, dtype: int64
+
+In [X]: df[df.kfold==2].target.value_counts()
+Out[X]:
+0    97535
+1    22465
+Name: target, dtype: int64
+
+In [X]: df[df.kfold==3].target.value_counts()
+Out[X]:
+0    97535
+1    22465
+Name: target, dtype: int64
+
+In [X]: df[df.kfold==4].target.value_counts()
+Out[X]:
+0    97535
+1    22465
+Name: target, dtype: int64
+```
+
+Her fold'da hedeflerin dağılımının aynı olduğunu görüyoruz.
+
+İhtiyacımız olan şey budur.
+
+Dağılım benzer de olabilir ve her zaman tamamen aynı olmak zorunda değildir.
+
+Şimdi modellerimizi oluşturduğumuzda, her fold boyunca aynı hedef dağılımına sahip olacağız.
+
+Oluşturabileceğimiz en basit modellerden biri, tüm verileri **one-hot encoding** işleminden geçirip **lojistik regresyon (logistic regression)** kullanmaktır.
+
+```
+# ohe_logres.py
 import pandas as pd
 
-import xgboost as xgb 
- 
-from sklearn import metrics 
-from sklearn import preprocessing 
- 
- 
-def run(fold): 
-    # load the full training data with folds 
-    df = pd.read_csv("../input/cat_train_folds.csv") 
- 
-    # all columns are features except id, target and kfold columns 
-    features = [ 
-        f for f in df.columns if f not in ("id", "target", "kfold") 
-    ] 
- 
-    # fill all NaN values with NONE 
-    # note that I am converting all columns to "strings" 
-    # it doesnt matter because all are categories 
-    for col in features: 
-        df.loc[:, col] = df[col].astype(str).fillna("NONE") 
-     
-    # now it’s time to label encode the features 
-    for col in features: 
-         
-        # initialize LabelEncoder for each feature column 
-        lbl = preprocessing.LabelEncoder() 
-         
-        # fit label encoder on all data 
-        lbl.fit(df[col]) 
- 
-        # transform all the data 
-        df.loc[:, col] = lbl.transform(df[col]) 
- 
-    # get training data using folds 
-    df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # get training data 
-    x_train = df_train[features].values 
- 
-    # get validation data 
-    x_valid = df_valid[features].values 
- 
-    # initialize xgboost model 
-    model = xgb.XGBClassifier(
+from sklearn import linear_model
+from sklearn import metrics
+from sklearn import preprocessing
 
-n_jobs=-1,  
-        max_depth=7, 
-        n_estimators=200 
-    ) 
- 
-    # fit model on training data (ohe) 
-    model.fit(x_train, df_train.target.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.target.values, valid_preds) 
- 
-    # print auc 
-    print(f"Fold = {fold}, AUC = {auc}") 
- 
- 
-if __name__ == "__main__": 
-    for fold_ in range(5): 
-        run(fold_) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-It must be noted that in this code, I modified xgboost parameters a bit. Default 
-max_depth for xgboost is 3, and I changed it to 7, and I also changed the number of 
-estimators (n_estimators) from 100 to 200. 
- 
-The 5 fold scores from this model are as follows: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python lbl_xgb.py 
-Fold = 0, AUC = 0.7656768851999011 
-Fold = 1, AUC = 0.7633006564148015 
-Fold = 2, AUC = 0.7654277821434345 
-Fold = 3, AUC = 0.7663609758878182 
-Fold = 4, AUC = 0.764914671468069 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We see that we have much better scores than plain random forest without any tuning 
-and we can probably improve this further with more tuning of hyperparameters. 
- 
-You can also try some feature engineering, dropping certain columns which don’t 
-add any value to the model, etc. But it seems like there is not much we can do here
+def run(fold):
+# fold'larla birlikte tüm eğitim verisini yükle
+df = pd.read_csv("../input/cat_train_folds.csv")
 
-to demonstrate improvements in the model. Let’s change the dataset to another 
-dataset with a lot of categorical variables. One more famous dataset is US adult 
-census data. The dataset contains some features, and your job is to predict the 
-salary bracket. Let’s take a look at this dataset. Figure 5 shows some of the columns 
-from this dataset.
+# id, target ve kfold sütunları dışındaki tüm sütunlar özelliktir
+features = [
+    f for f in df.columns if f not in ("id", "target", "kfold")
+]
+
+# tüm NaN değerlerini NONE ile doldur
+# tüm sütunları "string"e dönüştürdüğüme dikkat edin
+# hepsi kategori olduğu için bunun bir önemi yok
+for col in features:
+    df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+# fold'ları kullanarak eğitim verilerini al
+df_train = df[df.kfold != fold].reset_index(drop=True)
+
+# fold'ları kullanarak doğrulama verilerini al
+df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+# scikit-learn'den OneHotEncoder'ı başlat
+ohe = preprocessing.OneHotEncoder()
+
+# ohe'yi eğitim + doğrulama özellikleri üzerinde fit et
+full_data = pd.concat(
+    [df_train[features], df_valid[features]],
+    axis=0
+)
+ohe.fit(full_data[features])
+
+# eğitim verilerini dönüştür
+x_train = ohe.transform(df_train[features])
+
+# doğrulama verilerini dönüştür
+x_valid = ohe.transform(df_valid[features])
+
+# Logistic Regression modelini başlat
+model = linear_model.LogisticRegression()
+
+# modeli eğitim verileri (ohe) üzerinde fit et
+model.fit(x_train, df_train.target.values)
+
+# doğrulama verileri üzerinde tahmin yap
+# AUC hesapladığımız için olasılık değerlerine ihtiyacımız var
+# 1'lerin olasılığını kullanacağız
+valid_preds = model.predict_proba(x_valid)[:, 1]
+
+# roc auc skorunu al
+auc = metrics.roc_auc_score(df_valid.target.values, valid_preds)
+
+# auc'yi yazdır
+print(auc)
+
+if __name__ == "__main__":
+# fold = 0 için fonksiyonu çalıştır
+# sadece bu sayıyı değiştirerek
+# herhangi bir fold için çalıştırabiliriz
+run(0)
+```
+
+Peki ne oluyor?
+
+Bir fold numarası verildiğinde verileri eğitim ve doğrulama olarak ayıran, NaN değerlerini ele alan, tüm verilere one-hot encoding uygulayan ve basit bir **Logistic Regression** modeli eğiten bir fonksiyon oluşturduk.
+
+Bu kod parçasını çalıştırdığımızda aşağıdakine benzer bir çıktı üretir:
+
+```
+❯ python ohe_logres.py
+/home/abhishek/miniconda3/envs/ml/lib/python3.7/site-packages/sklearn/linear_model/_logistic.py:939: ConvergenceWarning: lbfgs
+failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+Increase the number of iterations (max_iter) or scale the data as shown
+in:
+https://scikit-learn.org/stable/modules/preprocessing.html.
+Please also refer to the documentation for alternative solver options:
+https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+extra_warning_msg=_LOGISTIC_SOLVER_CONVERGENCE_MSG)
+0.7847865042255127
+```
+
+Birkaç uyarı var.
+
+Görünüşe göre logistic regression, maksimum iterasyon sayısı içinde **converge (yakınsamamış)**.
+
+Parametrelerle oynamadık, dolayısıyla bu sorun değil.
+
+**AUC'nin yaklaşık 0.785** olduğunu görüyoruz.
+
+Şimdi kodda basit bir değişiklik yaparak bunu tüm fold'lar için çalıştıralım.
+
+```
+# ohe_logres.py
+.
+.
+.
+
+# Logistic Regression modelini başlat
+model = linear_model.LogisticRegression()
+
+# modeli eğitim verileri (ohe) üzerinde fit et
+model.fit(x_train, df_train.target.values)
+
+# doğrulama verileri üzerinde tahmin yap
+# AUC hesapladığımız için olasılık değerlerine ihtiyacımız var
+# 1'lerin olasılığını kullanacağız
+valid_preds = model.predict_proba(x_valid)[:, 1]
+
+# roc auc skorunu al
+auc = metrics.roc_auc_score(df_valid.target.values, valid_preds)
+
+# auc'yi yazdır
+print(f"Fold = {fold}, AUC = {auc}")
+
+if __name__ == "__main__":
+for fold_ in range(5):
+    run(fold_)
+```
+
+Çok fazla değişiklik yapmadığımıza dikkat edin; bu nedenle kodun yalnızca bazı satırlarını, değişiklik yapılanları gösterdim.
+
+Bu şunu verir:
+
+```
+❯ python -W ignore ohe_logres.py
+Fold = 0, AUC = 0.7847865042255127
+Fold = 1, AUC = 0.7853553605899214
+Fold = 2, AUC = 0.7879321942914885
+Fold = 3, AUC = 0.7870315929550808
+Fold = 4, AUC = 0.7864668243125608
+```
+
+Tüm uyarıları yok saymak için **“-W ignore”** kullandığımı unutmayın.
+
+AUC skorlarının tüm fold'larda oldukça istikrarlı olduğunu görüyoruz.
+
+Ortalama AUC **0.78631449527**'dir.
+
+İlk modelimiz için oldukça iyi!
+
+Birçok kişi bu tür bir probleme **random forest** gibi ağaç tabanlı bir model ile başlayacaktır.
+
+Bu veri setine random forest uygulamak için one-hot encoding yerine **label encoding** kullanabilir ve daha önce tartışıldığı gibi her sütundaki her özelliği bir integer'a dönüştürebiliriz.
+
+Kod one-hot encoding kodundan çok farklı değildir.
+
+Bakalım.
+
+```
+# lbl_rf.py
+import pandas as pd
+
+from sklearn import ensemble
+from sklearn import metrics
+from sklearn import preprocessing
+
+def run(fold):
+
+# fold'larla birlikte tüm eğitim verisini yükle
+df = pd.read_csv("../input/cat_train_folds.csv")
+
+# id, target ve kfold sütunları dışındaki tüm sütunlar özelliktir
+features = [
+    f for f in df.columns if f not in ("id", "target", "kfold")
+]
+
+# tüm NaN değerlerini NONE ile doldur
+# tüm sütunları "string"e dönüştürdüğüme dikkat edin
+# hepsi kategori olduğu için bunun bir önemi yok
+for col in features:
+    df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+# şimdi özellikleri label encode etme zamanı
+for col in features:
+
+    # her özellik sütunu için LabelEncoder'ı başlat
+    lbl = preprocessing.LabelEncoder()
+
+    # label encoder'ı tüm verilere fit et
+    lbl.fit(df[col])
+
+    # tüm verileri dönüştür
+    df.loc[:, col] = lbl.transform(df[col])
+
+# fold'ları kullanarak eğitim verilerini al
+df_train = df[df.kfold != fold].reset_index(drop=True)
+
+# fold'ları kullanarak doğrulama verilerini al
+df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+# eğitim verilerini al
+x_train = df_train[features].values
+
+# doğrulama verilerini al
+x_valid = df_valid[features].values
+
+# random forest modelini başlat
+model = ensemble.RandomForestClassifier(n_jobs=-1)
+
+# modeli eğitim verileri üzerinde fit et
+model.fit(x_train, df_train.target.values)
+
+# doğrulama verileri üzerinde tahmin yap
+# AUC hesapladığımız için olasılık değerlerine ihtiyacımız var
+# 1'lerin olasılığını kullanacağız
+valid_preds = model.predict_proba(x_valid)[:, 1]
+
+# roc auc skorunu al
+auc = metrics.roc_auc_score(df_valid.target.values, valid_preds)
+
+# auc'yi yazdır
+print(f"Fold = {fold}, AUC = {auc}")
+
+if __name__ == "__main__":
+for fold_ in range(5):
+    run(fold_)
+```
+
+scikit-learn'den **random forest** kullanıyoruz ve one-hot encoding'i kaldırdık.
+
+One-hot encoding yerine **label encoding** kullanıyoruz.
+
+Skorlar şu şekildedir:
+
+```
+❯ python lbl_rf.py
+Fold = 0, AUC = 0.7167390828113697
+Fold = 1, AUC = 0.7165459672958506
+Fold = 2, AUC = 0.7159709909587376
+Fold = 3, AUC = 0.7161589664189556
+Fold = 4, AUC = 0.7156020216155978
+```
+
+Vay canına!
+
+**Devasa bir fark!**
+
+Hiperparametrelerde herhangi bir ayarlama yapmadan random forest modeli, basit logistic regression'dan çok daha kötü performans gösteriyor.
+
+Ve bu, neden her zaman önce **basit modellerle başlamamız gerektiğinin** bir nedenidir.
+
+Random forest hayranı olan bir kişi burada random forest ile başlayabilir ve logistic regression modelini, random forest'tan daha iyi bir değer getiremeyecek kadar basit bir model olduğunu düşünerek göz ardı edebilir.
+
+Böyle bir kişi büyük bir hata yapacaktır.
+
+Random forest uygulamamızda fold'ların tamamlanması logistic regression'a kıyasla çok daha uzun sürmektedir.
+
+Dolayısıyla yalnızca AUC'de kaybetmiyoruz, aynı zamanda eğitimin tamamlanması için çok daha uzun süre harcıyoruz.
+
+Lütfen **inference'ın (çıkarımın)** da random forest ile zaman alıcı olduğunu ve ayrıca çok daha fazla alan kapladığını unutmayın.
+
+İstersek random forest'ı seyrek one-hot encoded veriler üzerinde de çalıştırmayı deneyebiliriz, ancak bunun çok fazla zaman alması beklenir.
+
+Ayrıca seyrek one-hot encoded matrisleri **singular value decomposition (tekil değer ayrıştırması)** kullanarak küçültmeyi de deneyebiliriz.
+
+Bu, **doğal dil işlemede** konuları çıkarmak için çok yaygın bir yöntemdir.
+
+```
+# ohe_svd_rf.py
+import pandas as pd
+
+from scipy import sparse
+from sklearn import decomposition
+from sklearn import ensemble
+from sklearn import metrics
+from sklearn import preprocessing
+
+def run(fold):
+# fold'larla birlikte tüm eğitim verisini yükle
+df = pd.read_csv("../input/cat_train_folds.csv")
+
+# id, target ve kfold sütunları dışındaki tüm sütunlar özelliktir
+features = [
+    f for f in df.columns if f not in ("id", "target", "kfold")
+]
+
+# tüm NaN değerlerini NONE ile doldur
+# tüm sütunları "string"e dönüştürdüğüme dikkat edin
+# hepsi kategori olduğu için bunun bir önemi yok
+for col in features:
+    df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+# fold'ları kullanarak eğitim verilerini al
+df_train = df[df.kfold != fold].reset_index(drop=True)
+
+# fold'ları kullanarak doğrulama verilerini al
+df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+# scikit-learn'den OneHotEncoder'ı başlat
+ohe = preprocessing.OneHotEncoder()
+
+# ohe'yi eğitim + doğrulama özellikleri üzerinde fit et
+full_data = pd.concat(
+    [df_train[features], df_valid[features]],
+    axis=0
+)
+ohe.fit(full_data[features])
+
+# eğitim verilerini dönüştür
+x_train = ohe.transform(df_train[features])
+
+# doğrulama verilerini dönüştür
+x_valid = ohe.transform(df_valid[features])
+
+# Truncated SVD'yi başlat
+# veriyi 120 bileşene indiriyoruz
+svd = decomposition.TruncatedSVD(n_components=120)
+
+# tam seyrek eğitim verisi üzerinde svd'yi fit et
+full_sparse = sparse.vstack((x_train, x_valid))
+svd.fit(full_sparse)
+
+# seyrek eğitim verilerini dönüştür
+x_train = svd.transform(x_train)
+
+# seyrek doğrulama verilerini dönüştür
+x_valid = svd.transform(x_valid)
+
+# random forest modelini başlat
+model = ensemble.RandomForestClassifier(n_jobs=-1)
+
+# modeli eğitim verileri üzerinde fit et
+model.fit(x_train, df_train.target.values)
+
+# doğrulama verileri üzerinde tahmin yap
+# AUC hesapladığımız için olasılık değerlerine ihtiyacımız var
+# 1'lerin olasılığını kullanacağız
+valid_preds = model.predict_proba(x_valid)[:, 1]
+
+# roc auc skorunu al
+auc = metrics.roc_auc_score(df_valid.target.values, valid_preds)
+
+# auc'yi yazdır
+print(f"Fold = {fold}, AUC = {auc}")
+
+if __name__ == "__main__":
+for fold_ in range(5):
+    run(fold_)
+```
+
+Tüm verileri one-hot encode ediyoruz ve ardından scikit-learn'den **TruncatedSVD**'yi eğitim + doğrulama verilerinden oluşan seyrek matris üzerinde fit ediyoruz.
+
+Bu şekilde yüksek boyutlu seyrek matrisi **120 özelliğe** indiriyor ve ardından random forest classifier'ı fit ediyoruz.
+
+Bu modelin çıktısı aşağıdadır:
+
+```
+❯ python ohe_svd_rf.py
+Fold = 0, AUC = 0.7064863038754249
+Fold = 1, AUC = 0.706050102937374
+Fold = 2, AUC = 0.7086069243167242
+Fold = 3, AUC = 0.7066819080085971
+Fold = 4, AUC = 0.7058154015055585
+```
+
+Daha da kötü olduğunu görüyoruz.
+
+Görünüşe göre bu problem için en iyi yöntem **one-hot encoding + logistic regression**.
+
+Random forest çok fazla zaman alıyor gibi görünüyor.
+
+Belki **XGBoost**'u deneyebiliriz.
+
+XGBoost'u bilmiyorsanız, en popüler **gradient boosting algoritmalarından** biri olduğunu söyleyebilirim.
+
+Ağaç tabanlı bir algoritma olduğu için **label encoded verileri** kullanacağız.
+
+```
+# lbl_xgb.py
+import pandas as pd
+
+import xgboost as xgb
+
+from sklearn import metrics
+from sklearn import preprocessing
+
+def run(fold):
+# fold'larla birlikte tüm eğitim verisini yükle
+df = pd.read_csv("../input/cat_train_folds.csv")
+
+# id, target ve kfold sütunları dışındaki tüm sütunlar özelliktir
+features = [
+    f for f in df.columns if f not in ("id", "target", "kfold")
+]
+
+# tüm NaN değerlerini NONE ile doldur
+# tüm sütunları "string"e dönüştürdüğüme dikkat edin
+# hepsi kategori olduğu için bunun bir önemi yok
+for col in features:
+    df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+# şimdi özellikleri label encode etme zamanı
+for col in features:
+
+    # her özellik sütunu için LabelEncoder'ı başlat
+    lbl = preprocessing.LabelEncoder()
+
+    # label encoder'ı tüm verilere fit et
+    lbl.fit(df[col])
+
+    # tüm verileri dönüştür
+    df.loc[:, col] = lbl.transform(df[col])
+
+# fold'ları kullanarak eğitim verilerini al
+df_train = df[df.kfold != fold].reset_index(drop=True)
+
+# fold'ları kullanarak doğrulama verilerini al
+df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+# eğitim verilerini al
+x_train = df_train[features].values
+
+# doğrulama verilerini al
+x_valid = df_valid[features].values
+
+# xgboost modelini başlat
+model = xgb.XGBClassifier(
+    n_jobs=-1,
+    max_depth=7,
+    n_estimators=200
+)
+
+# modeli eğitim verileri üzerinde fit et
+model.fit(x_train, df_train.target.values)
+
+# doğrulama verileri üzerinde tahmin yap
+# AUC hesapladığımız için olasılık değerlerine ihtiyacımız var
+# 1'lerin olasılığını kullanacağız
+valid_preds = model.predict_proba(x_valid)[:, 1]
+
+# roc auc skorunu al
+auc = metrics.roc_auc_score(df_valid.target.values, valid_preds)
+
+# auc'yi yazdır
+print(f"Fold = {fold}, AUC = {auc}")
+
+if __name__ == "__main__":
+for fold_ in range(5):
+    run(fold_)
+```
+
+Bu kodda XGBoost parametrelerini biraz değiştirdiğime dikkat edilmelidir.
+
+XGBoost için varsayılan **max\_depth değeri 3'tür** ve ben bunu **7** olarak değiştirdim.
+
+Ayrıca estimator sayısını (**n\_estimators**) **100'den 200'e** değiştirdim.
+
+Bu modelin 5 fold skoru aşağıdaki gibidir:
+
+```
+❯ python lbl_xgb.py
+Fold = 0, AUC = 0.7656768851999011
+Fold = 1, AUC = 0.7633006564148015
+Fold = 2, AUC = 0.7654277821434345
+Fold = 3, AUC = 0.7663609758878182
+Fold = 4, AUC = 0.764914671468069
+```
+
+Herhangi bir ayarlama yapmadan elde ettiğimiz skorların basit random forest'tan çok daha iyi olduğunu görüyoruz ve muhtemelen hiperparametrelerde daha fazla ayarlama yaparak bunu daha da geliştirebiliriz.
+
+Ayrıca bazı **feature engineering** işlemleri deneyebilir, modele herhangi bir değer katmayan belirli sütunları çıkarabilir vb. şeyler yapabilirsiniz.
+
+Ancak burada modeldeki gelişmeleri göstermek için yapabileceğimiz çok fazla şey olmadığını görüyoruz.
+
+Veri setini, çok sayıda kategorik değişkene sahip başka bir veri setiyle değiştirelim.
+
+Bir başka ünlü veri seti **US adult census data**'dır.
+
+Bu veri seti bazı özellikler içerir ve sizin göreviniz **maaş aralığını (salary bracket)** tahmin etmektir.
+
+Bu veri setine bir göz atalım.
+
+**Şekil 5**, bu veri setindeki bazı sütunları göstermektedir.
 
 ![resim](img/p0121_fig01_resim.png)
 
-Figure 5: Snapshot with few columns from the adult dataset6 
- 
-This dataset has the following columns:
+**Şekil 5: Adult veri setindeki birkaç sütunun görüntüsü**
 
-• 
-age 
-• 
-workclass 
-• 
-fnlwgt 
-• 
-education 
-• 
-education.num 
-• 
-marital.status 
-• 
-occupation 
-• 
-relationship 
-• 
-race 
-• 
-sex 
-• 
-capital.gain 
-• 
-capital.loss 
-• 
-hours.per.week
+Bu veri setinde aşağıdaki sütunlar bulunmaktadır:
 
-6 https://archive.ics.uci.edu/ml/datasets/adult
+- `age`
+- `workclass`
+- `fnlwgt`
+- `education`
+- `education.num`
+- `marital.status`
+- `occupation`
+- `relationship`
+- `race`
+- `sex`
+- `capital.gain`
+- `capital.loss`
+- `hours.per.week`
+- `native.country`
+- `income`
 
-• 
-native.country 
-• 
-income 
- 
-Most of these columns are self-explanatory. Those which are not, we can forget 
-about it. Let’s try to build a model first. 
- 
-We see that the income column is a string. Let’s do a value counts on that column. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-In [X]: import pandas as pd 
- 
-In [X]: df = pd.read_csv("../input/adult.csv") 
- 
-In [X]: df.income.value_counts() 
-Out[X]: 
-<=50K    24720 
->50K      7841 
-═════════════════════════════════════════════════════════════════════════ 
- 
-We see that there are 7841 instances with income greater than 50K USD. This is 
-~24% of the total number of samples. Thus, we will keep the evaluation same as 
-the cat-in-the-dat dataset, i.e. AUC.  Before we start modelling, for simplicity, we 
-will be dropping a few columns, which are numerical, namely:
+Bu sütunların çoğu kendiliğinden anlaşılmaktadır. Anlaşılmayanları şimdilik göz ardı edebiliriz. Öncelikle bir model oluşturmaya çalışalım.
 
-• 
-fnlwgt 
-• 
-age 
-• 
-capital.gain 
-• 
-capital.loss 
-• 
-hours.per.week 
- 
-Let’s try to quickly throw in one hot encoder with logistic regression and see what 
-happens. The first step is always making cross-validation. I’m not going to show 
-that part of the code here. It is left as an exercise for the reader. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# ohe_logres.py 
-import pandas as pd 
- 
-from sklearn import linear_model 
-from sklearn import metrics 
+`income` sütununun bir string olduğunu görüyoruz. Bu sütunda `value_counts` yapalım.
+
+```
+In [X]: import pandas as pd
+
+In [X]: df = pd.read_csv("../input/adult.csv")
+
+In [X]: df.income.value_counts()
+
+Out[X]:
+<=50K    24720
+>50K      7841
+```
+
+Gelir değeri 50K USD'den büyük olan **7841 örnek** olduğunu görüyoruz. Bu, toplam örnek sayısının yaklaşık **%24'üne** karşılık geliyor. Bu nedenle değerlendirme yöntemini, `cat-in-the-dat` veri setinde olduğu gibi, yani **AUC** olarak tutacağız.
+
+Modellemeye başlamadan önce, basitlik açısından sayısal olan birkaç sütunu çıkaracağız:
+
+- `fnlwgt`
+- `age`
+- `capital.gain`
+- `capital.loss`
+- `hours.per.week`
+
+Şimdi hızlıca **one-hot encoder \+ logistic regression** uygulayalım ve ne olduğunu görelim. İlk adım her zaman **cross-validation** oluşturmaktır. Bu kısmın kodunu burada göstermeyeceğim. Bunu okuyucu için bir egzersiz olarak bırakıyorum.
+
+```
+# ohe_logres.py
+import pandas as pd
+
+from sklearn import linear_model
+from sklearn import metrics
 from sklearn import preprocessing
 
-def run(fold): 
-    # load the full training data with folds 
-    df = pd.read_csv("../input/adult_folds.csv") 
- 
-    # list of numerical columns 
-    num_cols = [ 
-        "fnlwgt", 
-        "age", 
-        "capital.gain", 
-        "capital.loss", 
-        "hours.per.week" 
-    ] 
- 
-    # drop numerical columns 
-    df = df.drop(num_cols, axis=1) 
- 
-    # map targets to 0s and 1s 
-    target_mapping = { 
-        "<=50K": 0, 
-        ">50K": 1 
-    } 
-    df.loc[:, "income"] = df.income.map(target_mapping) 
- 
-    # all columns are features except income and kfold columns 
-    features = [ 
-        f for f in df.columns if f not in ("kfold", "income") 
-    ] 
- 
-    # fill all NaN values with NONE 
-    # note that I am converting all columns to "strings" 
-    # it doesnt matter because all are categories 
-    for col in features: 
-        df.loc[:, col] = df[col].astype(str).fillna("NONE") 
-     
-    # get training data using folds 
-    df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # initialize OneHotEncoder from scikit-learn 
-    ohe = preprocessing.OneHotEncoder() 
- 
-    # fit ohe on training + validation features 
-    full_data = pd.concat( 
-        [df_train[features], df_valid[features]], 
-        axis=0
+def run(fold):
+# load the full training data with folds
+df = pd.read_csv("../input/adult_folds.csv")
 
-) 
-    ohe.fit(full_data[features]) 
- 
-    # transform training data 
-    x_train = ohe.transform(df_train[features]) 
- 
-    # transform validation data 
-    x_valid = ohe.transform(df_valid[features]) 
- 
-    # initialize Logistic Regression model 
-    model = linear_model.LogisticRegression() 
- 
-    # fit model on training data (ohe) 
-    model.fit(x_train, df_train.income.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.income.values, valid_preds) 
- 
-    # print auc 
-    print(f"Fold = {fold}, AUC = {auc}") 
- 
- 
-if __name__ == "__main__": 
-    for fold_ in range(5): 
-        run(fold_) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-And when we run this code, we get: 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python -W ignore ohe_logres.py 
-Fold = 0, AUC = 0.8794809708119079 
-Fold = 1, AUC = 0.8875785068274882 
-Fold = 2, AUC = 0.8852609687685753 
-Fold = 3, AUC = 0.8681236223251438 
-Fold = 4, AUC = 0.8728581541840037 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This is a very good AUC for a model which is that simple! 
- 
-Let’s try the label encoded xgboost without tuning any of hyperparameters now.
+# list of numerical columns
+num_cols = [
+    "fnlwgt",
+    "age",
+    "capital.gain",
+    "capital.loss",
+    "hours.per.week"
+]
 
-═════════════════════════════════════════════════════════════════════════ 
-# lbl_xgb.py 
-import pandas as pd 
-import xgboost as xgb 
- 
-from sklearn import metrics 
-from sklearn import preprocessing 
- 
- 
-def run(fold): 
-    # load the full training data with folds 
-    df = pd.read_csv("../input/adult_folds.csv") 
- 
-    # list of numerical columns 
-    num_cols = [ 
-        "fnlwgt", 
-        "age", 
-        "capital.gain", 
-        "capital.loss", 
-        "hours.per.week" 
-    ] 
- 
-    # drop numerical columns 
-    df = df.drop(num_cols, axis=1) 
- 
-    # map targets to 0s and 1s 
-    target_mapping = { 
-        "<=50K": 0, 
-        ">50K": 1 
-    } 
-    df.loc[:, "income"] = df.income.map(target_mapping) 
- 
-    # all columns are features except kfold & income columns 
-    features = [ 
-        f for f in df.columns if f not in ("kfold", "income") 
-    ] 
- 
-    # fill all NaN values with NONE 
-    # note that I am converting all columns to "strings" 
-    # it doesnt matter because all are categories 
-    for col in features: 
-        df.loc[:, col] = df[col].astype(str).fillna("NONE") 
-     
-    # now its time to label encode the features 
-    for col in features: 
-         
+# drop numerical columns
+df = df.drop(num_cols, axis=1)
+
+# map targets to 0s and 1s
+target_mapping = {
+    "<=50K": 0,
+    ">50K": 1
+}
+
+df.loc[:, "income"] = df.income.map(target_mapping)
+
+# all columns are features except income and kfold columns
+features = [
+    f for f in df.columns if f not in ("kfold", "income")
+]
+
+# fill all NaN values with NONE
+# note that I am converting all columns to "strings"
+# it doesnt matter because all are categories
+for col in features:
+    df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+# get training data using folds
+df_train = df[df.kfold != fold].reset_index(drop=True)
+
+# get validation data using folds
+df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+# initialize OneHotEncoder from scikit-learn
+ohe = preprocessing.OneHotEncoder()
+
+# fit ohe on training + validation features
+full_data = pd.concat(
+    [df_train[features], df_valid[features]],
+    axis=0
+)
+
+ohe.fit(full_data[features])
+
+# transform training data
+x_train = ohe.transform(df_train[features])
+
+# transform validation data
+x_valid = ohe.transform(df_valid[features])
+
+# initialize Logistic Regression model
+model = linear_model.LogisticRegression()
+
+# fit model on training data (ohe)
+model.fit(x_train, df_train.income.values)
+
+# predict on validation data
+# we need the probability values as we are calculating AUC
+# we will use the probability of 1s
+valid_preds = model.predict_proba(x_valid)[:, 1]
+
+# get roc auc score
+auc = metrics.roc_auc_score(
+    df_valid.income.values,
+    valid_preds
+)
+
+# print auc
+print(f"Fold = {fold}, AUC = {auc}")
+
+if __name__ == "__main__":
+for fold_ in range(5):
+    run(fold_)
+```
+
+Ve bu kodu çalıştırdığımızda şunu elde ediyoruz:
+
+```
+❯ python -W ignore ohe_logres.py
+
+Fold = 0, AUC = 0.8794809708119079
+Fold = 1, AUC = 0.8875785068274882
+Fold = 2, AUC = 0.8852609687685753
+Fold = 3, AUC = 0.8681236223251438
+Fold = 4, AUC = 0.8728581541840037
+```
+
+Bu kadar basit bir model için **çok iyi bir AUC** değeri!
+
+Şimdi herhangi bir hiperparametre ayarı yapmadan **label encoded XGBoost** modelini deneyelim.
+
+```
+# lbl_xgb.py
+import pandas as pd
+import xgboost as xgb
+
+from sklearn import metrics
+from sklearn import preprocessing
+
+def run(fold):
+
+# load the full training data with folds
+df = pd.read_csv("../input/adult_folds.csv")
+
+# list of numerical columns
+num_cols = [
+    "fnlwgt",
+    "age",
+    "capital.gain",
+    "capital.loss",
+    "hours.per.week"
+]
+
+# drop numerical columns
+df = df.drop(num_cols, axis=1)
+
+# map targets to 0s and 1s
+target_mapping = {
+    "<=50K": 0,
+    ">50K": 1
+}
+
+df.loc[:, "income"] = df.income.map(target_mapping)
+
+# all columns are features except kfold & income columns
+features = [
+    f for f in df.columns if f not in ("kfold", "income")
+]
+
+# fill all NaN values with NONE
+# note that I am converting all columns to "strings"
+# it doesn't matter because all are categories
+for col in features:
+    df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+# now it's time to label encode the features
+for col in features:
+
+    # initialize LabelEncoder for each feature column
+    lbl = preprocessing.LabelEncoder()
+
+    # fit label encoder on all data
+    lbl.fit(df[col])
+
+    # transform all the data
+    df.loc[:, col] = lbl.transform(df[col])
+
+# get training data using folds
+df_train = df[df.kfold != fold].reset_index(drop=True)
+
+# get validation data using folds
+df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+# get training data
+x_train = df_train[features].values
+
+# get validation data
+x_valid = df_valid[features].values
+
+# initialize xgboost model
+model = xgb.XGBClassifier(
+    n_jobs=-1
+)
+
+# fit model on training data
+model.fit(x_train, df_train.income.values)
+
+# predict on validation data
+# we need the probability values as we are calculating AUC
+# we will use the probability of 1s
+valid_preds = model.predict_proba(x_valid)[:, 1]
+
+# get roc auc score
+auc = metrics.roc_auc_score(
+    df_valid.income.values,
+    valid_preds
+)
+
+# print auc
+print(f"Fold = {fold}, AUC = {auc}")
+
+if __name__ == "__main__":
+for fold_ in range(5):
+    run(fold_)
+```
+
+Çalıştıralım:
+
+```
+❯ python lbl_xgb.py
+
+Fold = 0, AUC = 0.8800810634234078
+Fold = 1, AUC = 0.886811884948154
+Fold = 2, AUC = 0.8854421433318472
+Fold = 3, AUC = 0.8676319549361007
+Fold = 4, AUC = 0.8714450054900602
+```
+
+Bu sonuç şimdiden oldukça iyi görünüyor.
+
+Şimdi `max_depth` değerini **7**, `n_estimators` değerini ise **200** yaptığımızda sonuçların ne olduğuna bakalım.
+
+```
+❯ python lbl_xgb.py
+
+Fold = 0, AUC = 0.8764108944332032
+Fold = 1, AUC = 0.8840708537662638
+Fold = 2, AUC = 0.8816601162613102
+Fold = 3, AUC = 0.8662335762581732
+Fold = 4, AUC = 0.8698983461709926
+```
+
+Görünüşe göre iyileşme olmadı.
+
+Bu durum bize, **bir veri setinden elde edilen parametrelerin başka bir veri setine doğrudan aktarılabilir olmadığını** gösteriyor. Parametreleri yeniden ayarlamamız gerekiyor. Ancak bunu sonraki bölümlerde daha ayrıntılı şekilde ele alacağız.
+
+Şimdi sayısal özellikleri de XGBoost modeline eklemeyi deneyelim; yine herhangi bir parametre ayarı yapmayacağız.
+
+```
+# lbl_xgb_num.py
+import pandas as pd
+import xgboost as xgb
+
+from sklearn import metrics
+from sklearn import preprocessing
+
+def run(fold):
+
+# load the full training data with folds
+df = pd.read_csv("../input/adult_folds.csv")
+
+# list of numerical columns
+num_cols = [
+    "fnlwgt",
+    "age",
+    "capital.gain",
+    "capital.loss",
+    "hours.per.week"
+]
+
+# map targets to 0s and 1s
+target_mapping = {
+    "<=50K": 0,
+    ">50K": 1
+}
+
+df.loc[:, "income"] = df.income.map(target_mapping)
+
+# all columns are features except kfold & income columns
+features = [
+    f for f in df.columns if f not in ("kfold", "income")
+]
+
+# fill all NaN values with NONE
+# note that I am converting all columns to "strings"
+# it doesn't matter because all are categories
+for col in features:
+
+    # do not encode the numerical columns
+    if col not in num_cols:
+        df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+# now it's time to label encode the features
+for col in features:
+    if col not in num_cols:
+
         # initialize LabelEncoder for each feature column
+        lbl = preprocessing.LabelEncoder()
 
-lbl = preprocessing.LabelEncoder() 
-         
-        # fit label encoder on all data 
-        lbl.fit(df[col]) 
- 
-        # transform all the data 
-        df.loc[:, col] = lbl.transform(df[col]) 
- 
-    # get training data using folds 
-    df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # get training data 
-    x_train = df_train[features].values 
- 
-    # get validation data 
-    x_valid = df_valid[features].values 
- 
-    # initialize xgboost model 
-    model = xgb.XGBClassifier( 
-        n_jobs=-1 
-    ) 
- 
-    # fit model on training data (ohe) 
-    model.fit(x_train, df_train.income.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.income.values, valid_preds) 
- 
-    # print auc 
-    print(f"Fold = {fold}, AUC = {auc}") 
- 
- 
-if __name__ == "__main__": 
-    for fold_ in range(5): 
-        run(fold_) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Let’s run this!
+        # fit label encoder on all data
+        lbl.fit(df[col])
 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python lbl_xgb.py 
-Fold = 0, AUC = 0.8800810634234078 
-Fold = 1, AUC = 0.886811884948154 
-Fold = 2, AUC = 0.8854421433318472 
-Fold = 3, AUC = 0.8676319549361007 
-Fold = 4, AUC = 0.8714450054900602 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This seems quite good already. Let’s see the scores when we increase max_depth 
-to 7 and n_estimators to 200. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python lbl_xgb.py 
-Fold = 0, AUC = 0.8764108944332032 
-Fold = 1, AUC = 0.8840708537662638 
-Fold = 2, AUC = 0.8816601162613102 
-Fold = 3, AUC = 0.8662335762581732 
-Fold = 4, AUC = 0.8698983461709926 
-═════════════════════════════════════════════════════════════════════════ 
- 
-It looks like it doesn’t improve.  
- 
-This shows that parameters from one dataset are not transferrable to another dataset. 
-We must try tuning the parameters again, but we will do it in more details in next 
-chapters. 
- 
-Now, let’s try to include numerical features in the xgboost model without 
-parameter tuning. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# lbl_xgb_num.py 
-import pandas as pd 
-import xgboost as xgb 
- 
-from sklearn import metrics 
-from sklearn import preprocessing 
- 
- 
-def run(fold): 
-    # load the full training data with folds 
-    df = pd.read_csv("../input/adult_folds.csv") 
- 
-    # list of numerical columns
+        # transform all the data
+        df.loc[:, col] = lbl.transform(df[col])
 
-num_cols = [ 
-        "fnlwgt", 
-        "age", 
-        "capital.gain", 
-        "capital.loss", 
-        "hours.per.week" 
-    ] 
- 
-    # map targets to 0s and 1s 
-    target_mapping = { 
-        "<=50K": 0, 
-        ">50K": 1 
-    } 
-    df.loc[:, "income"] = df.income.map(target_mapping) 
- 
-    # all columns are features except kfold & income columns 
-    features = [ 
-        f for f in df.columns if f not in ("kfold", "income") 
-    ] 
- 
-    # fill all NaN values with NONE 
-    # note that I am converting all columns to "strings" 
-    # it doesnt matter because all are categories 
-    for col in features: 
-        # do not encode the numerical columns 
-        if col not in num_cols: 
-            df.loc[:, col] = df[col].astype(str).fillna("NONE") 
-     
-    # now its time to label encode the features 
-    for col in features: 
-        if col not in num_cols:         
-            # initialize LabelEncoder for each feature column 
-            lbl = preprocessing.LabelEncoder() 
-             
-            # fit label encoder on all data 
-            lbl.fit(df[col]) 
- 
-            # transform all the data 
-            df.loc[:, col] = lbl.transform(df[col]) 
- 
-    # get training data using folds 
-    df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # get training data
+# get training data using folds
+df_train = df[df.kfold != fold].reset_index(drop=True)
 
-x_train = df_train[features].values 
- 
-    # get validation data 
-    x_valid = df_valid[features].values 
- 
-    # initialize xgboost model 
-    model = xgb.XGBClassifier( 
-        n_jobs=-1 
-    ) 
- 
-    # fit model on training data (ohe) 
-    model.fit(x_train, df_train.income.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.income.values, valid_preds) 
- 
-    # print auc 
-    print(f"Fold = {fold}, AUC = {auc}") 
- 
- 
-if __name__ == "__main__": 
-    for fold_ in range(5): 
-        run(fold_) 
- 
-═════════════════════════════════════════════════════════════════════════ 
- 
-So, we keep the numerical columns; we just do not label encode it. So, our final 
-feature matrix consists of numerical columns (as it is) and encoded categorical 
-columns. Any tree-based algorithm can handle this mix easily. 
- 
-Please note that we do not need to normalize data when we use tree-based models. 
-This is, however, a vital thing to do and cannot be missed when we are using linear 
-models such as logistic regression. 
- 
-Let’s run this script now! 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python lbl_xgb_num.py 
-Fold = 0, AUC = 0.9209790185449889 
+# get validation data using folds
+df_valid = df[df.kfold == fold].reset_index(drop=True)
+
+# get training data
+x_train = df_train[features].values
+
+# get validation data
+x_valid = df_valid[features].values
+
+# initialize xgboost model
+model = xgb.XGBClassifier(
+    n_jobs=-1
+)
+
+# fit model on training data
+model.fit(x_train, df_train.income.values)
+
+# predict on validation data
+# we need the probability values as we are calculating AUC
+# we will use the probability of 1s
+valid_preds = model.predict_proba(x_valid)[:, 1]
+
+# get roc auc score
+auc = metrics.roc_auc_score(
+    df_valid.income.values,
+    valid_preds
+)
+
+# print auc
+print(f"Fold = {fold}, AUC = {auc}")
+
+if __name__ == "__main__":
+for fold_ in range(5):
+    run(fold_)
+```
+
+Burada sayısal sütunları **koruyoruz**; yalnızca onları label encode etmiyoruz. Böylece nihai özellik matrisimiz, olduğu gibi bırakılmış sayısal sütunlar ile encode edilmiş kategorik sütunlardan oluşuyor. **Ağaç tabanlı herhangi bir algoritma bu karışımı kolaylıkla işleyebilir.**
+
+Ağaç tabanlı modeller kullandığımızda veriyi normalize etmemize gerek olmadığını unutmayın. Ancak bu, **logistic regression gibi doğrusal modeller** kullandığımızda yapılması gereken önemli bir işlemdir ve atlanmamalıdır.
+
+Şimdi bu script'i çalıştıralım!
+
+```
+❯ python lbl_xgb_num.py
+
+Fold = 0, AUC = 0.9209790185449889
 Fold = 1, AUC = 0.9247157449144706
+Fold = 2, AUC = 0.9269329887598243
+Fold = 3, AUC = 0.9119349082169275
+Fold = 4, AUC = 0.9166408030141667
+```
 
-Fold = 2, AUC = 0.9269329887598243 
-Fold = 3, AUC = 0.9119349082169275 
-Fold = 4, AUC = 0.9166408030141667 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Whoa!  
- 
-That’s an excellent score! 
- 
-Now, we can try to add some features. We will take all the categorical columns and 
-create all combinations of degree two. Take a look at feature_engineering function 
-in the snippet below to know how this is done. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# lbl_xgb_num_feat.py 
-import itertools 
-import pandas as pd 
-import xgboost as xgb 
- 
-from sklearn import metrics 
-from sklearn import preprocessing 
- 
- 
-def feature_engineering(df, cat_cols): 
-    """ 
-    This function is used for feature engineering 
-    :param df: the pandas dataframe with train/test data 
-    :param cat_cols: list of categorical columns 
-    :return: dataframe with new features 
-    """ 
-    # this will create all 2-combinations of values 
-    # in this list 
-    # for example: 
-    # list(itertools.combinations([1,2,3], 2)) will return 
-    # [(1, 2), (1, 3), (2, 3)] 
-    combi = list(itertools.combinations(cat_cols, 2)) 
-    for c1, c2 in combi: 
-        df.loc[ 
-          :,  
-          c1 + "_" + c2 
-        ] = df[c1].astype(str) + "_" + df[c2].astype(str) 
-    return df 
- 
- 
-def run(fold): 
-    # load the full training data with folds
+Vay canına!
 
-df = pd.read_csv("../input/adult_folds.csv") 
- 
-    # list of numerical columns 
-    num_cols = [ 
-        "fnlwgt", 
-        "age", 
-        "capital.gain", 
-        "capital.loss", 
-        "hours.per.week" 
-    ] 
- 
-    # map targets to 0s and 1s 
-    target_mapping = { 
-        "<=50K": 0, 
-        ">50K": 1 
-    } 
-    df.loc[:, "income"] = df.income.map(target_mapping) 
- 
-    # list of categorical columns for feature engineering 
-    cat_cols = [ 
-        c for c in df.columns if c not in num_cols 
-        and c not in ("kfold", "income") 
-    ] 
- 
-    # add new features 
-    df = feature_engineering(df, cat_cols) 
- 
-    # all columns are features except kfold & income columns 
-    features = [ 
-        f for f in df.columns if f not in ("kfold", "income") 
-    ] 
- 
-    # fill all NaN values with NONE 
-    # note that I am converting all columns to "strings" 
-    # it doesnt matter because all are categories 
-    for col in features: 
-        # do not encode the numerical columns 
-        if col not in num_cols: 
-            df.loc[:, col] = df[col].astype(str).fillna("NONE") 
-     
-    # now its time to label encode the features 
-    for col in features: 
-        if col not in num_cols:         
-            # initialize LabelEncoder for each feature column 
-            lbl = preprocessing.LabelEncoder() 
-             
-            # fit label encoder on all data
+Bu **mükemmel bir skor!**
 
-lbl.fit(df[col]) 
- 
-            # transform all the data 
-            df.loc[:, col] = lbl.transform(df[col]) 
- 
-    # get training data using folds 
-    df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # get training data 
-    x_train = df_train[features].values 
- 
-    # get validation data 
-    x_valid = df_valid[features].values 
- 
-    # initialize xgboost model 
-    model = xgb.XGBClassifier( 
-        n_jobs=-1 
-    ) 
- 
-    # fit model on training data (ohe) 
-    model.fit(x_train, df_train.income.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.income.values, valid_preds) 
- 
-    # print auc 
-    print(f"Fold = {fold}, AUC = {auc}") 
- 
- 
-if __name__ == "__main__": 
-    for fold_ in range(5): 
-        run(fold_) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-This is a very naïve way of creating features from categorical columns. One should 
-take a look at the data and see which combinations make the most sense. If you use 
-this method, you might end up creating a lot of features, and in that case, you will
+Şimdi bazı özellikler eklemeyi deneyebiliriz. Tüm kategorik sütunları alıp **derece 2 olan tüm kombinasyonları** oluşturacağız. Bunun nasıl yapıldığını görmek için aşağıdaki kod parçasındaki `feature_engineering` fonksiyonuna bakabilirsiniz.
 
-need to use some kind of feature selection to select the best features. We will read 
-more about feature selection later. Let’s see the scores now. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python lbl_xgb_num_feat.py 
-Fold = 0, AUC = 0.9211483465031423 
-Fold = 1, AUC = 0.9251499446866125 
-Fold = 2, AUC = 0.9262344766486692 
-Fold = 3, AUC = 0.9114264068794995 
-Fold = 4, AUC = 0.9177914453099201 
-═════════════════════════════════════════════════════════════════════════ 
- 
-It seems that even without changing any hyperparameters and just by adding a 
-bunch of features, we can improve our fold scores a bit. Let’s see if increasing 
-max_depth to 7 helps. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-❯ python lbl_xgb_num_feat.py 
-Fold = 0, AUC = 0.9286668430204137 
-Fold = 1, AUC = 0.9329340656165378 
-Fold = 2, AUC = 0.9319817543218744 
-Fold = 3, AUC = 0.919046187194538 
-Fold = 4, AUC = 0.9245692057162671 
-═════════════════════════════════════════════════════════════════════════ 
- 
-And yet again, we have been able to improve our model. 
- 
-Note that we have not yet used rare values, binary features, a combination of one-
-hot and label encoded features and several other methods. 
- 
-One more way of feature engineering from categorical features is to use target 
-encoding. However, you have to be very careful here as this might overfit your 
-model. Target encoding is a technique in which you map each category in a given 
-feature to its mean target value, but this must always be done in a cross-validated 
-manner. It means that the first thing you do is create the folds, and then use those 
-folds to create target encoding features for different columns of the data in the same 
-way you fit and predict the model on folds. So, if you have created 5 folds, you have 
-to create target encoding 5 times such that in the end, you have encoding for 
-variables in each fold which are not derived from the same fold. And then when 
-you fit your model, you must use the same folds again. Target encoding for unseen 
-test data can be derived from the full training data or can be an average of all the 5 
-folds.
+```
+# lbl_xgb_num_feat.py
+import itertools
+import pandas as pd
+import xgboost as xgb
 
-Let’s see how we can use target encoding on the same adult dataset so that we can 
-compare. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# target_encoding.py 
-import copy 
-import pandas as pd 
- 
-from sklearn import metrics 
-from sklearn import preprocessing 
-import xgboost as xgb 
- 
- 
-def mean_target_encoding(data): 
- 
-    # make a copy of dataframe 
-    df = copy.deepcopy(data) 
- 
-    # list of numerical columns 
-    num_cols = [ 
-        "fnlwgt", 
-        "age", 
-        "capital.gain", 
-        "capital.loss", 
-        "hours.per.week" 
-    ] 
- 
-    # map targets to 0s and 1s 
-    target_mapping = { 
-        "<=50K": 0, 
-        ">50K": 1 
-    } 
- 
-    df.loc[:, "income"] = df.income.map(target_mapping) 
-     
-    # all columns are features except income and kfold columns 
-    features = [ 
-        f for f in df.columns if f not in ("kfold", "income") 
-        and f not in num_cols 
-    ] 
- 
-    # all columns are features except kfold & income columns 
-    features = [ 
-        f for f in df.columns if f not in ("kfold", "income") 
-    ] 
- 
-    # fill all NaN values with NONE
+from sklearn import metrics
+from sklearn import preprocessing
 
-# note that I am converting all columns to "strings" 
-    # it doesnt matter because all are categories 
-    for col in features: 
-        # do not encode the numerical columns 
-        if col not in num_cols: 
-            df.loc[:, col] = df[col].astype(str).fillna("NONE") 
-     
-    # now its time to label encode the features 
-    for col in features: 
-        if col not in num_cols:         
-            # initialize LabelEncoder for each feature column 
-            lbl = preprocessing.LabelEncoder() 
-             
-            # fit label encoder on all data 
-            lbl.fit(df[col]) 
- 
-            # transform all the data 
-            df.loc[:, col] = lbl.transform(df[col]) 
- 
-    # a list to store 5 validation dataframes 
-    encoded_dfs = [] 
- 
-    # go over all folds 
-    for fold in range(5): 
-        # fetch training and validation data 
-        df_train = df[df.kfold != fold].reset_index(drop=True) 
-        df_valid = df[df.kfold == fold].reset_index(drop=True) 
-        # for all feature columns, i.e. categorical columns 
-        for column in features: 
-            # create dict of category:mean target 
-            mapping_dict = dict( 
-                df_train.groupby(column)["income"].mean() 
-            ) 
-            # column_enc is the new column we have with mean encoding 
-            df_valid.loc[ 
-                :, column + "_enc" 
-            ] = df_valid[column].map(mapping_dict) 
-        # append to our list of encoded validation dataframes 
-        encoded_dfs.append(df_valid) 
-    # create full data frame again and return 
-    encoded_df = pd.concat(encoded_dfs, axis=0) 
-    return encoded_df 
- 
- 
-def run(df, fold): 
-    # note that folds are same as before 
-    # get training data using folds
+def feature_engineering(df, cat_cols):
+"""
+This function is used for feature engineering
+:param df: the pandas dataframe with train/test data
+:param cat_cols: list of categorical columns
+:return: dataframe with new features
+"""
 
-df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # all columns are features except income and kfold columns 
-    features = [ 
-        f for f in df.columns if f not in ("kfold", "income") 
-    ] 
- 
-    # scale training data 
-    x_train = df_train[features].values 
- 
-    # scale validation data 
-    x_valid = df_valid[features].values 
- 
-    # initialize xgboost model 
-    model = xgb.XGBClassifier( 
-        n_jobs=-1, 
-        max_depth=7 
-    ) 
- 
-    # fit model on training data (ohe) 
-    model.fit(x_train, df_train.income.values) 
- 
-    # predict on validation data 
-    # we need the probability values as we are calculating AUC 
-    # we will use the probability of 1s 
-    valid_preds = model.predict_proba(x_valid)[:, 1] 
- 
-    # get roc auc score 
-    auc = metrics.roc_auc_score(df_valid.income.values, valid_preds) 
- 
-    # print auc 
-    print(f"Fold = {fold}, AUC = {auc}") 
- 
- 
-if __name__ == "__main__": 
-    # read data 
-    df = pd.read_csv("../input/adult_folds.csv") 
-     
-    # create mean target encoded categories and 
-    # munge data 
-    df = mean_target_encoding(df) 
- 
-    # run training and validation for 5 folds
+# this will create all 2-combinations of values
+# in this list
+#
+# for example:
+# list(itertools.combinations([1,2,3], 2)) will return
+# [(1, 2), (1, 3), (2, 3)]
 
-for fold_ in range(5): 
-        run(df, fold_) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-It must be noted that in the above snippet, I had not dropped categorical columns 
-when I did the target encoding. I kept all the features and added target encoded 
-features on top of it. Also, I used mean. You can use mean, median, standard 
-deviation or any other function of targets.  
- 
-Let’s see the results. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-Fold = 0, AUC = 0.9332240662017529 
-Fold = 1, AUC = 0.9363551625140347 
-Fold = 2, AUC = 0.9375013544556173 
-Fold = 3, AUC = 0.92237621307625 
-Fold = 4, AUC = 0.9292131180445478 
-═════════════════════════════════════════════════════════════════════════ 
- 
-Nice! It seems like we have improved again. However, you must be very careful 
-when using target encoding as it is too prone to overfitting. When we use target 
-encoding, it’s better to use some kind of smoothing or adding noise in the encoded 
-values. Scikit-learn has contrib repository which has target encoding with 
-smoothing, or you can create your own smoothing. Smoothing introduces some 
-kind of regularization that helps with not overfitting the model. It’s not very 
-difficult. 
- 
-Handling categorical features is a complicated task. There is a lot of information 
-floating around in several resources. This chapter should help you get started with 
-any problem with categorical variables. For most of the problems, however, you 
-won’t need anything more than one-hot encoding and label encoding. For 
-improving the models further, you might need a lot more! 
- 
-We cannot end this chapter without using a neural network on this data. So, let’s 
-take a look at a technique known as entity embedding. In entity embeddings, the 
-categories are represented as vectors. We represent categories by vectors in both 
-binarization and one hot encoding approaches. But what if we have tens of 
-thousands of categories. This will create huge matrices and will take a long time for 
-us to train complicated models. We can thus represent them by vectors with float 
-values instead.
+combi = list(itertools.combinations(cat_cols, 2))
 
-The idea is super simple. You have an embedding layer for each categorical feature. 
-So, every category in a column can now be mapped to an embedding (like mapping 
-words to embeddings in natural language processing). You then reshape these 
-embeddings to their dimension to make them flat and then concatenate all the 
-flattened inputs embeddings. Then add a bunch of dense layers, an output layer and 
-you are done.
+for c1, c2 in combi:
+    df.loc[
+        :,
+        c1 + "_" + c2
+    ] = df[c1].astype(str) + "_" + df[c2].astype(str)
+
+return df
+```
+
+Bu, kategorik sütunlardan özellik üretmenin oldukça **naif** bir yöntemidir. Veriye bakıp hangi kombinasyonların anlamlı olduğuna karar vermek gerekir. Bu yöntemi kullanırsanız çok fazla özellik oluşturabilirsiniz. Böyle bir durumda en iyi özellikleri seçmek için bir çeşit **feature selection (özellik seçimi)** yöntemi kullanmanız gerekir. Özellik seçimi hakkında ilerleyen bölümlerde daha fazla okuyacağız.
+
+Şimdi skorları görelim:
+
+```
+❯ python lbl_xgb_num_feat.py
+
+Fold = 0, AUC = 0.9211483465031423
+Fold = 1, AUC = 0.9251499446866125
+Fold = 2, AUC = 0.9262344766486692
+Fold = 3, AUC = 0.9114264068794995
+Fold = 4, AUC = 0.9177914453099201
+```
+
+Görünüşe göre herhangi bir hiperparametreyi değiştirmeden, yalnızca bir grup özellik ekleyerek fold skorlarımızı biraz iyileştirebildik.
+
+Şimdi `max_depth` değerini 7'ye çıkarmanın yardımcı olup olmadığına bakalım.
+
+```
+❯ python lbl_xgb_num_feat.py
+
+Fold = 0, AUC = 0.9286668430204137
+Fold = 1, AUC = 0.9329340656165378
+Fold = 2, AUC = 0.9319817543218744
+Fold = 3, AUC = 0.919046187194538
+Fold = 4, AUC = 0.9245692057162671
+```
+
+Ve yine modelimizi geliştirmeyi başardık.
+
+Henüz **rare values**, **binary features**, one-hot ve label encoded özelliklerin kombinasyonu ve diğer bazı yöntemleri kullanmadığımızı unutmayın.
+
+Kategorik özelliklerden feature engineering yapmanın bir başka yöntemi **target encoding** kullanmaktır. Ancak burada çok dikkatli olmalısınız çünkü bu yöntem modelinizin **overfit olmasına** neden olabilir.
+
+Target encoding, belirli bir özellikteki her kategoriyi o kategorinin **ortalama target değeriyle** eşleştiren bir tekniktir. Ancak bu işlem her zaman **cross-validated** şekilde yapılmalıdır.
+
+Bunun anlamı şudur: İlk olarak fold'ları oluşturursunuz ve daha sonra bu fold'ları kullanarak veri setindeki farklı sütunlar için target encoding özelliklerini oluşturursunuz; bunu modelinizi fold'lar üzerinde fit ve predict ettiğiniz yöntemle aynı şekilde yaparsınız.
+
+Örneğin 5 fold oluşturduysanız, target encoding işlemini **5 kez** yapmanız gerekir. Böylece sonunda her fold için, encoding değerleri kendi fold'undan türetilmemiş değişkenlere sahip olursunuz.
+
+Daha sonra modelinizi fit ederken yine aynı fold'ları kullanmalısınız.
+
+Görülmemiş test verileri için target encoding, **tam eğitim verisi** kullanılarak oluşturulabilir veya 5 fold'un tamamının ortalaması alınabilir.
+
+Şimdi aynı Adult veri setinde target encoding'i nasıl kullanabileceğimize bakalım ve sonuçları karşılaştıralım.
+
+```
+# target_encoding.py
+import copy
+import pandas as pd
+
+from sklearn import metrics
+from sklearn import preprocessing
+import xgboost as xgb
+
+def mean_target_encoding(data):
+
+# make a copy of dataframe
+df = copy.deepcopy(data)
+
+# list of numerical columns
+num_cols = [
+    "fnlwgt",
+    "age",
+    "capital.gain",
+    "capital.loss",
+    "hours.per.week"
+]
+
+# map targets to 0s and 1s
+target_mapping = {
+    "<=50K": 0,
+    ">50K": 1
+}
+
+df.loc[:, "income"] = df.income.map(target_mapping)
+
+# all columns are features except income and kfold columns
+features = [
+    f for f in df.columns
+    if f not in ("kfold", "income")
+    and f not in num_cols
+]
+
+# all columns are features except kfold & income columns
+features = [
+    f for f in df.columns
+    if f not in ("kfold", "income")
+]
+
+# fill all NaN values with NONE
+# note that I am converting all columns to "strings"
+# it doesn't matter because all are categories
+for col in features:
+
+    # do not encode the numerical columns
+    if col not in num_cols:
+        df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+# now it's time to label encode the features
+for col in features:
+    if col not in num_cols:
+
+        # initialize LabelEncoder for each feature column
+        lbl = preprocessing.LabelEncoder()
+
+        # fit label encoder on all data
+        lbl.fit(df[col])
+
+        # transform all the data
+        df.loc[:, col] = lbl.transform(df[col])
+
+# a list to store 5 validation dataframes
+encoded_dfs = []
+
+# go over all folds
+for fold in range(5):
+
+    # fetch training and validation data
+    df_train = df[
+        df.kfold != fold
+    ].reset_index(drop=True)
+
+    df_valid = df[
+        df.kfold == fold
+    ].reset_index(drop=True)
+
+    # for all feature columns, i.e. categorical columns
+    for column in features:
+
+        # create dict of category:mean target
+        mapping_dict = dict(
+            df_train.groupby(column)["income"].mean()
+        )
+
+        # column_enc is the new column we have with mean encoding
+        df_valid.loc[
+            :, column + "_enc"
+        ] = df_valid[column].map(mapping_dict)
+
+    # append to our list of encoded validation dataframes
+    encoded_dfs.append(df_valid)
+
+# create full data frame again and return
+encoded_df = pd.concat(
+    encoded_dfs,
+    axis=0
+)
+
+return encoded_df
+```
+
+Yukarıdaki kod parçasında kategorik sütunları target encoding işlemi yaptıktan sonra kaldırmadığımı belirtmek gerekir. **Tüm özellikleri korudum ve bunların üzerine target encoded özellikleri ekledim.**
+
+Ayrıca **mean (ortalama)** kullandım. Target değerleri üzerinde mean, median, standard deviation veya başka herhangi bir fonksiyon kullanabilirsiniz.
+
+Sonuçlara bakalım:
+
+```
+❯ python target_encoding.py
+
+Fold = 0, AUC = 0.9332240662017529
+Fold = 1, AUC = 0.9363551625140347
+Fold = 2, AUC = 0.9375013544556173
+Fold = 3, AUC = 0.92237621307625
+Fold = 4, AUC = 0.9292131180445478
+```
+
+Güzel! Görünüşe göre tekrar bir iyileşme elde ettik.
+
+Ancak **target encoding kullanırken çok dikkatli olmalısınız**, çünkü bu yöntem overfitting'e oldukça yatkındır.
+
+Target encoding kullandığımızda, encoded değerlerde bir çeşit **smoothing** uygulamak veya değerlerin üzerine **noise** eklemek daha iyidir.
+
+Scikit-learn'ün contrib repository'sinde smoothing içeren target encoding bulunmaktadır veya kendi smoothing yönteminizi oluşturabilirsiniz. Smoothing, overfitting'i önlemeye yardımcı olan bir tür **regularization** sağlar. Bunu yapmak çok zor değildir.
+
+Kategorik özellikleri ele almak karmaşık bir iştir. Çeşitli kaynaklarda bu konu hakkında çok fazla bilgi bulunmaktadır. Bu bölüm, kategorik değişkenler içeren herhangi bir problemle çalışmaya başlamanıza yardımcı olacaktır.
+
+Ancak problemlerin çoğunda **one-hot encoding ve label encoding'den daha fazlasına ihtiyacınız olmayacaktır.** Modelleri daha da geliştirmek için çok daha fazlasına ihtiyaç duyabilirsiniz!
+
+Bu bölümü veri üzerinde bir **neural network** kullanmadan bitiremeyiz. Bu nedenle **entity embedding** olarak bilinen bir tekniğe bakalım.
+
+Entity embedding'de kategoriler **vektörler olarak temsil edilir.**
+
+Hem binarization hem de one-hot encoding yöntemlerinde kategorileri temsil etmek için vektörler kullanıyoruz. Ancak on binlerce kategorimiz olduğunu düşünün. Bu durumda çok büyük matrisler oluşur ve karmaşık modelleri eğitmek uzun zaman alır.
+
+Bunun yerine kategorileri, **float değerlerinden oluşan vektörlerle** temsil edebiliriz.
+
+Fikir oldukça basittir.
+
+Her kategorik özellik için bir **embedding layer** bulunur. Böylece bir sütundaki her kategori bir embedding'e eşlenebilir; bu, doğal dil işlemede kelimelerin embedding'lere eşlenmesine benzer.
+
+Daha sonra bu embedding'leri kendi boyutlarına göre reshape ederek düzleştirirsiniz (**flatten**). Ardından tüm düzleştirilmiş input embedding'lerini birleştirirsiniz (**concatenate**).
+
+Sonrasında birkaç **dense layer**, bir **output layer** eklediğinizde işlem tamamlanır.
 
 ![resim](img/p0138_fig01_resim.png)
 
-Figure 6: Categories are converted to vectors of float or embeddings 
- 
-For some reason, I find it super easy to do using TF/Keras. So, let’s see how it’s 
-implemented using TF/Keras. Also, this is the only example using TF/Keras in this 
-book and its super easy to convert it to PyTorch. 
- 
-═════════════════════════════════════════════════════════════════════════ 
-# entity_emebddings.py 
-import os 
-import gc 
-import joblib 
-import pandas as pd 
-import numpy as np 
-from sklearn import metrics, preprocessing 
+**Şekil 6: Kategoriler, float vektörlere veya embedding'lere dönüştürülür**
+
+Herhangi bir nedenle bunu **TF/Keras** kullanarak yapmak bana oldukça kolay geliyor. Bu yüzden, bunun TF/Keras kullanılarak nasıl uygulandığına bakalım. Ayrıca bu, kitaptaki **TF/Keras kullanan tek örnek** ve bunu **PyTorch'a çevirmek oldukça kolay**.
+
+```
+# entity_emebddings.py
+
+import os
+import gc
+import joblib
+import pandas as pd
+import numpy as np
+from sklearn import metrics, preprocessing
 from tensorflow.keras import layers
+from tensorflow.keras import optimizers
+from tensorflow.keras.models import Model, load_model
+from tensorflow.keras import callbacks
+from tensorflow.keras import backend as K
+from tensorflow.keras import utils
 
-from tensorflow.keras import optimizers 
-from tensorflow.keras.models import Model, load_model 
-from tensorflow.keras import callbacks 
-from tensorflow.keras import backend as K 
-from tensorflow.keras import utils 
- 
- 
-def create_model(data, catcols): 
-    """ 
-    This function returns a compiled tf.keras model 
-    for entity embeddings 
-    :param data: this is a pandas dataframe 
-    :param catcols: list of categorical column names 
-    :return: compiled tf.keras model 
-    """ 
-    # init list of inputs for embeddings 
-    inputs = [] 
- 
-    # init list of outputs for embeddings 
-    outputs = [] 
- 
-    # loop over all categorical columns 
-    for c in catcols: 
-        # find the number of unique values in the column 
-        num_unique_values = int(data[c].nunique()) 
-        # simple dimension of embedding calculator 
-        # min size is half of the number of unique values 
-        # max size is 50. max size depends on the number of unique 
-        # categories too. 50 is quite sufficient most of the times 
-        # but if you have millions of unique values, you might need 
-        # a larger dimension 
-        embed_dim = int(min(np.ceil((num_unique_values)/2), 50)) 
- 
-        # simple keras input layer with size 1 
-        inp = layers.Input(shape=(1,)) 
- 
-        # add embedding layer to raw input 
-        # embedding size is always 1 more than unique values in input 
-        out = layers.Embedding( 
-            num_unique_values + 1, embed_dim, name=c 
-        )(inp) 
-         
-        # 1-d spatial dropout is the standard for emebedding layers  
-        # you can use it in NLP tasks too 
-        out = layers.SpatialDropout1D(0.3)(out) 
- 
-        # reshape the input to the dimension of embedding
+def create_model(data, catcols):
+    """
+    Bu fonksiyon, entity embeddings için
+    derlenmiş bir tf.keras modeli döndürür.
 
-# this becomes our output layer for current feature 
-        out = layers.Reshape(target_shape=(embed_dim, ))(out) 
- 
-        # add input to input list 
-        inputs.append(inp) 
- 
-        # add output to output list 
-        outputs.append(out) 
-     
-    # concatenate all output layers 
-    x = layers.Concatenate()(outputs) 
- 
-    # add a batchnorm layer. 
-    # from here, everything is up to you 
-    # you can try different architectures 
-    # this is the architecture I like to use 
-    # if you have numerical features, you should add 
-    # them here or in concatenate layer 
-    x = layers.BatchNormalization()(x) 
-     
-    # a bunch of dense layers with dropout. 
-    # start with 1 or two layers only 
-    x = layers.Dense(300, activation="relu")(x) 
-    x = layers.Dropout(0.3)(x) 
-    x = layers.BatchNormalization()(x) 
-     
-    x = layers.Dense(300, activation="relu")(x) 
-    x = layers.Dropout(0.3)(x) 
-    x = layers.BatchNormalization()(x) 
-     
-    # using softmax and treating it as a two class problem 
-    # you can also use sigmoid, then you need to use only one 
-    # output class 
-    y = layers.Dense(2, activation="softmax")(x) 
- 
-    # create final model 
-    model = Model(inputs=inputs, outputs=y) 
- 
-    # compile the model 
-    # we use adam and binary cross entropy. 
-    # feel free to use something else and see how model behaves 
-    model.compile(loss='binary_crossentropy', optimizer='adam') 
-    return model 
- 
- 
-def run(fold): 
-    # load the full training data with folds
+    :param data: bu bir pandas dataframe'dir
+    :param catcols: kategorik sütun isimlerinin listesi
+    :return: derlenmiş tf.keras modeli
+    """
 
-df = pd.read_csv("../input/cat_train_folds.csv") 
- 
-    # all columns are features except id, target and kfold columns 
-    features = [ 
-        f for f in df.columns if f not in ("id", "target", "kfold") 
-    ] 
- 
-    # fill all NaN values with NONE 
-    # note that I am converting all columns to "strings" 
-    # it doesnt matter because all are categories 
-    for col in features: 
-        df.loc[:, col] = df[col].astype(str).fillna("NONE") 
- 
-    # encode all features with label encoder individually 
-    # in a live setting you need to save all label encoders 
-    for feat in features: 
-        lbl_enc = preprocessing.LabelEncoder() 
-        df.loc[:, feat] = lbl_enc.fit_transform(df[feat].values) 
- 
-    # get training data using folds 
-    df_train = df[df.kfold != fold].reset_index(drop=True) 
- 
-    # get validation data using folds 
-    df_valid = df[df.kfold == fold].reset_index(drop=True) 
- 
-    # create tf.keras model 
-    model = create_model(df, features) 
- 
-    # our features are lists of lists 
-    xtrain = [ 
-        df_train[features].values[:, k] for k in range(len(features)) 
-    ] 
-    xvalid = [ 
-        df_valid[features].values[:, k] for k in range(len(features)) 
-    ] 
-    # fetch target columns 
-    ytrain = df_train.target.values 
-    yvalid = df_valid.target.values 
- 
-    # convert target columns to categories 
-    # this is just binarization 
-    ytrain_cat = utils.to_categorical(ytrain) 
-    yvalid_cat = utils.to_categorical(yvalid) 
-     
-    # fit the model 
-    model.fit(xtrain, 
-              ytrain_cat,
+    # embedding'ler için input listesini başlat
+    inputs = []
 
-validation_data=(xvalid, yvalid_cat), 
-              verbose=1, 
-              batch_size=1024, 
-              epochs=3 
-             ) 
- 
-    # generate validation predictions 
-    valid_preds = model.predict(xvalid)[:, 1] 
- 
-    # print roc auc score 
-    print(metrics.roc_auc_score(yvalid, valid_preds)) 
- 
-    # clear session to free up some GPU memory 
-    K.clear_session() 
- 
-if __name__ == "__main__": 
-    run(0) 
-    run(1) 
-    run(2) 
-    run(3) 
-    run(4) 
-═════════════════════════════════════════════════════════════════════════ 
- 
-You will notice that this approach gives the best results and is also super-fast if you 
-have a GPU! This can also be improved further, and you don’t need to worry about 
-feature engineering as neural network handles it on its own. This is definitely worth 
-a try when dealing with a large dataset of categorical features. When embedding 
-size is the same as the number of unique categories, we have one-hot-encoding. 
- 
-This chapter is basically all about feature engineering. Let’s see how you can do 
-some more feature engineering when it comes to numerical features and 
-combination of different types of features in the next chapter.
+    # embedding'ler için output listesini başlat
+    outputs = []
+
+    # tüm kategorik sütunlar üzerinde döngü
+    for c in catcols:
+
+        # sütundaki benzersiz değerlerin sayısını bul
+        num_unique_values = int(data[c].nunique())
+
+        # embedding boyutu için basit bir hesaplama
+        # minimum boyut, benzersiz değerlerin sayısının yarısıdır
+        # maksimum boyut 50'dir.
+        # maksimum boyut aynı zamanda benzersiz kategori sayısına da bağlıdır.
+        # 50 çoğu durumda yeterlidir,
+        # ancak milyonlarca benzersiz değeriniz varsa
+        # daha büyük bir boyuta ihtiyacınız olabilir.
+        embed_dim = int(
+            min(np.ceil((num_unique_values) / 2), 50)
+        )
+
+        # boyutu 1 olan basit bir keras input katmanı
+        inp = layers.Input(shape=(1,))
+
+        # ham input'a embedding katmanı ekle
+        # embedding boyutu, input'taki benzersiz değerlerden
+        # her zaman 1 daha fazladır
+        out = layers.Embedding(
+            num_unique_values + 1,
+            embed_dim,
+            name=c
+        )(inp)
+
+        # 1-boyutlu Spatial Dropout,
+        # embedding katmanları için standart yöntemdir.
+        # NLP görevlerinde de kullanabilirsiniz.
+        out = layers.SpatialDropout1D(0.3)(out)
+
+        # input'u embedding boyutuna yeniden şekillendir
+
+        # bu, mevcut feature için output katmanımız olur
+        out = layers.Reshape(
+            target_shape=(embed_dim,)
+        )(out)
+
+        # input'u input listesine ekle
+        inputs.append(inp)
+
+        # output'u output listesine ekle
+        outputs.append(out)
+
+    # tüm output katmanlarını birleştir
+    x = layers.Concatenate()(outputs)
+
+    # bir batch normalization katmanı ekle.
+    # buradan sonrası tamamen size bağlı.
+    # farklı mimariler deneyebilirsiniz.
+    # benim kullanmayı sevdiğim mimari bu.
+    # eğer sayısal feature'larınız varsa,
+    # onları burada veya concatenate katmanında eklemelisiniz.
+    x = layers.BatchNormalization()(x)
+
+    # dropout içeren birkaç dense katmanı.
+    # başlangıçta yalnızca 1 veya 2 katmanla başlayın.
+    x = layers.Dense(300, activation="relu")(x)
+    x = layers.Dropout(0.3)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Dense(300, activation="relu")(x)
+    x = layers.Dropout(0.3)(x)
+    x = layers.BatchNormalization()(x)
+
+    # softmax kullanılıyor ve problem iki sınıflı
+    # bir problem olarak ele alınıyor.
+    # sigmoid de kullanabilirsiniz; bu durumda
+    # yalnızca bir output class kullanmanız gerekir.
+    y = layers.Dense(2, activation="softmax")(x)
+
+    # final modeli oluştur
+    model = Model(inputs=inputs, outputs=y)
+
+    # modeli derle
+    # adam ve binary cross entropy kullanıyoruz.
+    # başka bir şey kullanmaktan ve modelin
+    # nasıl davrandığını görmekten çekinmeyin.
+    model.compile(
+        loss='binary_crossentropy',
+        optimizer='adam'
+    )
+
+    return model
+
+def run(fold):
+
+    # fold'ları içeren tüm training verisini yükle
+    df = pd.read_csv("../input/cat_train_folds.csv")
+
+    # id, target ve kfold sütunları dışındaki
+    # tüm sütunlar feature'dır.
+    features = [
+        f for f in df.columns
+        if f not in ("id", "target", "kfold")
+    ]
+
+    # tüm NaN değerlerini NONE ile doldur
+    # tüm sütunları "string"e çevirdiğime dikkat edin.
+    # hepsi kategori olduğu için bunun bir önemi yok.
+    for col in features:
+        df.loc[:, col] = df[col].astype(str).fillna("NONE")
+
+    # tüm feature'ları ayrı ayrı LabelEncoder ile encode et
+    # gerçek/live bir ortamda tüm label encoder'ları
+    # kaydetmeniz gerekir.
+    for feat in features:
+        lbl_enc = preprocessing.LabelEncoder()
+
+        df.loc[:, feat] = lbl_enc.fit_transform(
+            df[feat].values
+        )
+
+    # fold'ları kullanarak training verisini al
+    df_train = df[
+        df.kfold != fold
+    ].reset_index(drop=True)
+
+    # fold'ları kullanarak validation verisini al
+    df_valid = df[
+        df.kfold == fold
+    ].reset_index(drop=True)
+
+    # tf.keras modelini oluştur
+    model = create_model(df, features)
+
+    # feature'larımız listelerden oluşan listelerdir
+    xtrain = [
+        df_train[features].values[:, k]
+        for k in range(len(features))
+    ]
+
+    xvalid = [
+        df_valid[features].values[:, k]
+        for k in range(len(features))
+    ]
+
+    # target sütunlarını al
+    ytrain = df_train.target.values
+    yvalid = df_valid.target.values
+
+    # target sütunlarını kategorilere dönüştür
+    # bu sadece binarization işlemidir
+    ytrain_cat = utils.to_categorical(ytrain)
+    yvalid_cat = utils.to_categorical(yvalid)
+
+    # modeli eğit
+    model.fit(
+        xtrain,
+        ytrain_cat,
+        validation_data=(xvalid, yvalid_cat),
+        verbose=1,
+        batch_size=1024,
+        epochs=3
+    )
+
+    # validation tahminlerini oluştur
+    valid_preds = model.predict(xvalid)[:, 1]
+
+    # ROC AUC skorunu yazdır
+    print(
+        metrics.roc_auc_score(
+            yvalid,
+            valid_preds
+        )
+    )
+
+    # GPU belleğini boşaltmak için session'ı temizle
+    K.clear_session()
+
+if __name__ == "__main__":
+    run(0)
+    run(1)
+    run(2)
+    run(3)
+    run(4)
+```
+
+Bu yaklaşımın **en iyi sonuçları verdiğini** ve GPU'nuz varsa aynı zamanda **son derece hızlı** olduğunu göreceksiniz! Bu yaklaşım daha da geliştirilebilir ve **feature engineering konusunda endişelenmenize gerek kalmaz**, çünkü neural network bunu kendi başına halleder. Büyük miktarda kategorik feature ile çalışırken kesinlikle denenmeye değer.
+
+**Embedding boyutu benzersiz kategori sayısıyla aynı olduğunda, one-hot encoding elde ederiz.**
+
+Bu bölüm temel olarak **feature engineering** hakkındaydı. Bir sonraki bölümde, sayısal feature'lar söz konusu olduğunda nasıl daha fazla feature engineering yapabileceğinizi ve farklı feature türlerini nasıl birleştirebileceğinizi görelim.
 
 Feature engineering
 
